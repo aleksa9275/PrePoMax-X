@@ -1,0 +1,501 @@
+{
+  "limitations": "Static textual inventory; includes unused imports/comments/generated code; no compile or runtime guarantee.",
+  "pattern_definitions": {
+    "drawing_operations": "\\b(Bitmap|Graphics|Font|Image|Icon)\\b",
+    "gmsh_interop": "GmshCommon|msclr|public ref class",
+    "legacy_serialization": "BinaryFormatter|\\.DumpToFile\\(|\\.DumpToStream\\(|LoadDumpFromFile|DeepClone\\(",
+    "native_import": "DllImport\\(",
+    "process": "ProcessStartInfo|Process\\.Start|ChildProcessJob|KillAllProcessesSpawnedBy",
+    "vtk": "Kitware|using vtkControl|\\bvtk[A-Z]\\w*",
+    "windows_api": "user32\\.dll|kernel32\\.dll|hid\\.dll|Microsoft\\.Win32|System\\.Management|WindowsIdentity|PipeSecurity|DirectorySecurity",
+    "winforms": "System\\.Windows\\.Forms|\\bApplication\\.DoEvents\\(",
+    "wpf": "System\\.Windows\\.(Input|Media)|using System\\.Windows;|WindowsBase"
+  },
+  "projects": [
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "3MF/ThreeMF.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\GmshCommon\\GmshCommon.vcxproj",
+        "..\\vtkControl\\vtkControl.csproj"
+      ],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Drawing",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Net.Http",
+        "System.Xml"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "APIs/APIs.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeJob\\CaeJob.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\CaeModel\\CaeModel.csproj",
+        "..\\CaeResults\\CaeResults.csproj"
+      ],
+      "references": [
+        "Python.Runtime, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd, processorArchitecture=MSIL",
+        "System",
+        "System.Drawing",
+        "System.Core",
+        "Microsoft.CSharp"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "CaeGlobals/CaeGlobals.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [],
+      "references": [
+        "ExtendedNumerics.BigDecimal, Version=2025.1001.2.129, Culture=neutral, PublicKeyToken=65f1315a45ad8949, processorArchitecture=MSIL",
+        "Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "NCalc, Version=1.3.8.0, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL",
+        "Parlot, Version=0.0.28.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL",
+        "System",
+        "System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Collections.Immutable, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
+        "System.Core",
+        "System.Design",
+        "System.Drawing",
+        "System.Drawing.Design",
+        "System.Management",
+        "System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Numerics",
+        "System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
+        "System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
+        "System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Windows.Forms",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml",
+        "System.Xml.Serialization",
+        "UnitsNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=f8601875a1f041da, processorArchitecture=MSIL"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "CaeJob/CaeJob.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj"
+      ],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Management",
+        "System.Windows.Forms",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml",
+        "WindowsBase"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "CaeMesh/CaeMesh.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\GmshCommon\\GmshCommon.vcxproj"
+      ],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Drawing",
+        "System.Windows.Forms",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml",
+        "WindowsBase"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "CaeModel/CaeModel.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\3MF\\ThreeMF.csproj",
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\CaeResults\\CaeResults.csproj",
+        "..\\STL\\STL.csproj",
+        "..\\vtkControl\\vtkControl.csproj"
+      ],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Drawing",
+        "System.Numerics",
+        "System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml",
+        "WindowsBase"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "CaeResults/CaeResults.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\vtkControl\\vtkControl.csproj"
+      ],
+      "references": [
+        "PriorityQueue, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5e136dbf0437dacd, processorArchitecture=MSIL",
+        "System",
+        "System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Core",
+        "System.Drawing",
+        "System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL",
+        "System.Numerics",
+        "System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
+        "System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "GmshCaller/GmshCaller.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\GmshCommon\\GmshCommon.vcxproj"
+      ],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Net.Http",
+        "System.Xml"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "GmshCommon/GmshCommon.vcxproj",
+      "platforms": [],
+      "project_references": [],
+      "references": [
+        "System",
+        "System.Data",
+        "System.Xml"
+      ],
+      "toolsets": [
+        "v145",
+        "v143"
+      ]
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "PrePoMax/PrePoMax.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\APIs\\APIs.csproj",
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeJob\\CaeJob.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\CaeModel\\CaeModel.csproj",
+        "..\\CaeResults\\CaeResults.csproj",
+        "..\\UserControls\\UserControls.csproj",
+        "..\\vtkControl\\vtkControl.csproj"
+      ],
+      "references": [
+        "CommandLine, Version=2.9.1.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL",
+        "FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL",
+        "Python.Runtime, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd, processorArchitecture=MSIL",
+        "System",
+        "System.Core",
+        "System.Design",
+        "System.Drawing.Design",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Deployment",
+        "System.Drawing",
+        "System.Windows.Forms",
+        "System.Xml"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "PrePoMaxCmd/PrePoMaxCmd.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [],
+      "references": [
+        "System",
+        "System.Core"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "STL/STL.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [],
+      "references": [
+        "System",
+        "System.Core",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "UserControls/UserControls.csproj",
+      "platforms": [],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeJob\\CaeJob.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj",
+        "..\\CaeModel\\CaeModel.csproj",
+        "..\\CaeResults\\CaeResults.csproj"
+      ],
+      "references": [
+        "FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL",
+        "System",
+        "System.Core",
+        "System.Drawing",
+        "System.Drawing.Design",
+        "System.Windows.Forms",
+        "System.Xml.Linq",
+        "System.Data.DataSetExtensions",
+        "Microsoft.CSharp",
+        "System.Data",
+        "System.Xml",
+        "ZedGraph, Version=5.2.1.437, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL"
+      ],
+      "toolsets": []
+    },
+    {
+      "framework": [
+        "v4.8"
+      ],
+      "path": "vtkControl/vtkControl.csproj",
+      "platforms": [
+        "x64",
+        "x64"
+      ],
+      "project_references": [
+        "..\\CaeGlobals\\CaeGlobals.csproj",
+        "..\\CaeMesh\\CaeMesh.csproj"
+      ],
+      "references": [
+        "Kitware.mummy.Runtime, Version=1.0.2.599, Culture=neutral, PublicKeyToken=995c7fb9db2c1b44, processorArchitecture=AMD64",
+        "Kitware.VTK, Version=5.8.0.607, Culture=neutral, PublicKeyToken=995c7fb9db2c1b44, processorArchitecture=AMD64",
+        "System",
+        "System.Data",
+        "System.Drawing",
+        "System.Management",
+        "System.Windows.Forms",
+        "System.Xml",
+        "WindowsBase"
+      ],
+      "toolsets": []
+    }
+  ],
+  "scanned_files_by_directory": {
+    "3MF": 3,
+    "APIs": 259,
+    "CaeGlobals": 178,
+    "CaeJob": 8,
+    "CaeMesh": 228,
+    "CaeModel": 266,
+    "CaeResults": 61,
+    "GmshCaller": 3,
+    "GmshCommon": 10,
+    "PrePoMax": 752,
+    "PrePoMaxCmd": 3,
+    "STL": 7,
+    "ThirdParty": 52,
+    "UserControls": 118,
+    "vtkControl": 50
+  },
+  "signal_file_counts_by_directory": {
+    "3MF": {
+      "gmsh_interop": 1,
+      "native_import": 1,
+      "vtk": 1
+    },
+    "APIs": {
+      "legacy_serialization": 35,
+      "vtk": 5
+    },
+    "CaeGlobals": {
+      "drawing_operations": 2,
+      "legacy_serialization": 3,
+      "native_import": 6,
+      "process": 2,
+      "vtk": 10,
+      "windows_api": 7,
+      "winforms": 14
+    },
+    "CaeJob": {
+      "process": 2,
+      "windows_api": 3,
+      "winforms": 2,
+      "wpf": 2
+    },
+    "CaeMesh": {
+      "gmsh_interop": 24,
+      "legacy_serialization": 6,
+      "native_import": 1,
+      "process": 2,
+      "vtk": 22,
+      "windows_api": 1,
+      "winforms": 5,
+      "wpf": 3
+    },
+    "CaeModel": {
+      "legacy_serialization": 3,
+      "vtk": 2,
+      "wpf": 1
+    },
+    "CaeResults": {
+      "legacy_serialization": 2,
+      "vtk": 5
+    },
+    "GmshCaller": {
+      "gmsh_interop": 1,
+      "legacy_serialization": 1
+    },
+    "GmshCommon": {
+      "drawing_operations": 1,
+      "gmsh_interop": 6
+    },
+    "PrePoMax": {
+      "drawing_operations": 57,
+      "gmsh_interop": 1,
+      "legacy_serialization": 133,
+      "native_import": 3,
+      "process": 2,
+      "vtk": 34,
+      "windows_api": 6,
+      "winforms": 139
+    },
+    "PrePoMaxCmd": {
+      "process": 1
+    },
+    "ThirdParty": {
+      "drawing_operations": 5
+    },
+    "UserControls": {
+      "drawing_operations": 41,
+      "legacy_serialization": 1,
+      "native_import": 7,
+      "process": 1,
+      "windows_api": 7,
+      "winforms": 81
+    },
+    "vtkControl": {
+      "drawing_operations": 3,
+      "native_import": 2,
+      "vtk": 50,
+      "windows_api": 4,
+      "winforms": 9,
+      "wpf": 3
+    }
+  },
+  "tracked_files": 2938,
+  "upstream_baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a"
+}

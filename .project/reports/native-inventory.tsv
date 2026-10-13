@@ -1,0 +1,51 @@
+path	format	sha256	bytes
+ThirdParty/QuadMesher/lib/md/qmorph_gmsh.lib	current ar archive	30569cd9eddbe2d8cf635b4ea51f4476b7c0935f5909258b0588ba403f0795e1	1834862
+ThirdParty/QuadMesher/lib/md/qmorph_static.lib	current ar archive	a08cc3081d157c9e5e879d6a0ad0ea3266755204c22c521ebb05b601ca2b5ae2	4112570
+ThirdParty/QuadMesher/lib/mdd/qmorph_gmsh.lib	current ar archive	389c1bdcb3cf80a618aaed91c64f62cb2a6345441c7799dea7e2f9d8ca66f38f	4190392
+ThirdParty/QuadMesher/lib/mdd/qmorph_static.lib	current ar archive	367c102029ce361cc664024ca8fc474f08df071af0ff724a3af971ae6b8c2ddd	9433536
+ThirdParty/gmsh-4.13.0-Windows64-sdk/lib/gmsh-4.13.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	74d499bba258e403a3b8beac0424c8cea0273e764c74a4aa1deecb235894cdc8	35533824
+ThirdParty/gmsh-4.13.0-Windows64-sdk/lib/gmsh.lib	current ar archive	0a153c3ee0029c35d9b5269870306869f73ccf8d073d0dd1a61d64f93393880a	41737910
+ThirdParty/lpsolve/lpsolve55.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	ad323a1563f77e6e044c7b9cdd7d28b81e8a7b4694d4547aa83eefb0d71a2c21	723456
+ThirdParty/mmg/mmg3d.exe	PE32+ executable (console) x86-64, for MS Windows	617a6d31f2bd7fa3c583246e986395fc84b3165a7debe862085ba896a5e958ff	691712
+ThirdParty/mmg/mmgs.exe	PE32 executable (console) Intel 80386, for MS Windows	9e2d8fd854c808780d969afea0ec2a9d434345a4b87af10be199906c597f8be8	314368
+ThirdParty/mmg/vcruntime140.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7	178616
+ThirdParty/netgen/NetGenMesher.exe	PE32+ executable (console) x86-64, for MS Windows	1a09dbe76f91ef72f5d305b5d99d37f8d6218a258cb60c221962d539e61f64c4	267264
+ThirdParty/netgen/TKBO.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	a7b7650420393bce8f27186e031f5eca2f22a64924db09a9682afe876716c276	1918976
+ThirdParty/netgen/TKBRep.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	815e275193c05b2093c8fcaf181e4f79cbaf373851e4cc224970e291626cef16	2038272
+ThirdParty/netgen/TKBool.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	c4e9530a196bf3e5ab1b69f5e12e8df0c81b35ddfcde5283efc61b58c5096e9e	3384320
+ThirdParty/netgen/TKCAF.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	3ff2e65992c0be566f8863b7841b744c4e12da3bd3da9b9bd029da1b52bb9fcc	468992
+ThirdParty/netgen/TKCDF.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	e3a97c180e612b031acad03a7b0cd6cd9f11071ad9ba93c1195631c26e577b35	260608
+ThirdParty/netgen/TKDE.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	f2e3ba6eabe19fa0f33114c081013c872f7249976aaabe17407318b9aedaebaa	174592
+ThirdParty/netgen/TKDEIGES.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	a0fa8256da952e117ab87bb7dc04853acc94d6d05a17fff943a870ca07a26135	2785792
+ThirdParty/netgen/TKDESTEP.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	f4124c6b1f147afbbbe0a23095804e5c1d11bf81975655c4576cf24f82ba09b4	5423104
+ThirdParty/netgen/TKDESTL.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	bdb2f5e9957848eb395c8c12ab59762b1977d9d41992adba3d3c713cc011e1f1	126464
+ThirdParty/netgen/TKFillet.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	394ea46cf43a92d4d3862d386c1d62c27f1b5727194bb45cf04c48202cb6b6ad	2130944
+ThirdParty/netgen/TKG2d.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	571579062002f6a2a0c71d51e5e80d1687711725358dd3049e750d44903f8e00	417792
+ThirdParty/netgen/TKG3d.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	431bd9da81fd67cb2a332f306330004a72cb5ef3f1ba3a90861e484857fcc372	1310208
+ThirdParty/netgen/TKGeomAlgo.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	633df9b5803a70ac0e293b6ddb30aa6c56adba5320d60776732aaff97e7ac95d	3990016
+ThirdParty/netgen/TKGeomBase.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	425fe6a8e862d52b6925fb4a26b78823eb696a0e61065fafbc7530d0714f9331	4200960
+ThirdParty/netgen/TKHLR.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	922bfc968fbcf07c6ce42e7257909f27120b50d8f0b296e029534898aec19a4e	920576
+ThirdParty/netgen/TKLCAF.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	1e07b5a77adaee3430ab57557174651462982a80db2937bba6e336763db6c03e	630784
+ThirdParty/netgen/TKMath.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	a528bbc5cdfa673874c5afab83a5c7df3428ef13ae3f5124c50cb2099b01aabc	1393664
+ThirdParty/netgen/TKMesh.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	1cd8f944665bee9db11b9b70e9c8cf0f95d0d9cfd5b1ef84251b6db027aa5205	620032
+ThirdParty/netgen/TKMeshVS.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	bfc319cd128ae4730051aa1511fce48acd8b15c99e1e067dbb34eca0a7bc489c	293888
+ThirdParty/netgen/TKOffset.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	9c2ad740a4ed14ad834ce990fb954874733e867b44b3a3467753d03a9db71ca3	1689088
+ThirdParty/netgen/TKPrim.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	0a6e9e684ba3d8e28c804cf1607188ddca4244d71acc08963cb352a4e09132a4	302080
+ThirdParty/netgen/TKService.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	71e88ccf7d94a9b0e7bca2b363d40f7babaf42c6b62665dac065a844ac0f7770	990720
+ThirdParty/netgen/TKShHealing.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	f75f507c07e60fd2f93fb1753e92ef5c882cf1129927d694d5180a0cc70c1c4e	2411008
+ThirdParty/netgen/TKTopAlgo.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	c19731d478c858b72f3d5fd36b4dd041c5d16c1883dfd91bf90cdbe1ca9b09c6	2327552
+ThirdParty/netgen/TKV3d.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	739e077976e9070cfec774dcdf30a9a4fb10df1c800941561674db49a18951f4	2484736
+ThirdParty/netgen/TKVCAF.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	b9a7a0199a985b8b699bd06c88c43718ace363ad1cc923c302d1af39058adb39	202240
+ThirdParty/netgen/TKXCAF.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	7b2fe0aadf953e2363c28fd98bdd9571a443f88f8e48aeab2b610a1f98b5f107	778240
+ThirdParty/netgen/TKXSBase.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	6fbd4d65c9298e8db528a79af557f67b1dc87b8d647cb04c9ebc11a171b1ca69	1526272
+ThirdParty/netgen/TKernel.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	546558e6534b9104f3ff205922e403b205527492577f7da8732d66118a56db67	1553408
+ThirdParty/netgen/msvcp140.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca	643512
+ThirdParty/netgen/msvcr100.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	f4994b634e081ed1bb374480c9d70e01ba5f17c07806fe0c5360d33df019e324	829264
+ThirdParty/netgen/nglib.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	d65e08883a3c57dfd54898d3a7a5cbe6d5a3d699ffc3927a23328ac45812039d	2325504
+ThirdParty/netgen/pthreadVC2.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	0e6af724609ef6846982ef717013426c359c455fff324e906d8d55c8bb88d16e	82944
+ThirdParty/netgen/vcomp140.dll	PE32+ executable (DLL) (GUI) x86-64, for MS Windows	95d4ce4a6802d1e18b5e0e1722cc30ea72ca7e033f83828f05c0b7b993fe7cbf	212920
+ThirdParty/netgen/vcruntime140.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7	178616
+ThirdParty/netgen/vcruntime140_1.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e	50112
+ThirdParty/netgen/zlib.dll	PE32+ executable (DLL) (console) x86-64, for MS Windows	519940326dabd0c3250a39964fdf0374ed2396b9b4478c826242aa69ffd90de5	86528
+ThirdParty/quadwild-bimdf/quad_from_patches.exe	PE32+ executable (console) x86-64, for MS Windows	98e0217d92e1539d9db8dffbf2f88a93a93b69e408cae128816935dfdc0c8dfe	2717696
+ThirdParty/quadwild-bimdf/quadwild.exe	PE32+ executable (console) x86-64, for MS Windows	c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b	3686912
