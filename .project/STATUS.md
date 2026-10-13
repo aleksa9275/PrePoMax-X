@@ -17,3 +17,5 @@ Primary blockers to future parity: legacy serialization/deep clones and type ide
 Recommended proposal: shared behavior/core and separate frontends during transition, retaining original Windows frontend and isolating adapters. No GUI/renderer/serializer framework commitment made.
 
 Next authorized work ends at Phase 0. Proposed first implementation tasks after approval: managed .NET slice feasibility (1.1), PMX/history/type compatibility (1.2), interactive native VTK proof (2.1); start native-source recovery (5.1) alongside them. [Roadmap](ROADMAP.md), [pending decisions](DECISIONS.md).
+
+Concrete kickoff proposal: [task 0002](tasks/0002-core-feasibility.md), an upstream-source STL/vector/node command-line probe with Mac/Linux checks and upstream replay. Pending approval of implementation and separate promotion of the Phase 0 records into `x/main`. PyQt/Python VTK + shared C# backend is now explicitly a production frontend candidate; no framework selected. The published `origin/feature/project-initialization` was observed at naming commit `0b9fa81f`; this proposal stays on the local initialization branch for review.

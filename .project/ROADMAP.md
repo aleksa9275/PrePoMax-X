@@ -2,6 +2,8 @@
 
 All phases after 0 are proposals requiring authorization. The first implementation work should establish facts, not commit the product to a GUI. Phase 5 source recovery begins early because it can block the entire migration. Regression work begins in Phase 1 and becomes the release matrix in Phase 6.
 
+Start with [task 0002](tasks/0002-core-feasibility.md): a runnable source-linked STL/vector/node probe on Mac ARM64 and Linux x64, with an upstream-revision replay and explicit portability limits. This is the first bounded increment of task 1.1, not a replacement for the later model/results/file-compatibility gates. It leaves GUI choice open between a C# frontend and PyQt/Python VTK over the shared C# behavior.
+
 Dependencies:
 
 ```mermaid

@@ -14,7 +14,7 @@ Phase 0 changes documentation and non-invasive maintenance tooling only. Impleme
 
 | Record | Responsibility |
 |---|---|
-| [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md) | Current state, verification and handoff |
+| [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md), [proposed task 0002](tasks/0002-core-feasibility.md) | Current state, verification, handoff and first runnable milestone |
 | [initial audit](reports/initial-audit.md) | Repository/baseline facts and investigation limits |
 | [ARCHITECTURE](ARCHITECTURE.md) | Existing project graph and reuse evidence |
 | [DEPENDENCIES](DEPENDENCIES.md), [dependency matrix](reports/dependency-matrix.md) | Native/managed inventory and supply-chain gaps |
