@@ -1,18 +1,18 @@
 # Task 0002 — First runnable upstream-source feasibility milestone
 
-Status: proposed; implementation authorization pending. Proposed: 2026-10-13 (Europe/Belgrade).
+Status: authorized and implemented locally; macOS checks passed, Linux execution pending. Authorized: 2026-10-13 (Europe/Belgrade).
 
 ## Objective
 
 Produce a small native command-line probe using the actual upstream C# source, with reproducible checks on macOS ARM64 and Linux x64. Establish a repeatable upstream-update test before broad core/controller extraction. This proves a bounded source slice, not that the whole engineering core is portable.
 
-Proposed working branch: `feature/core-feasibility`. Proposed .NET target: net10.0 for this experiment, subject to dependency findings; no GUI framework selection is included. The experiment must not alter production algorithms or make its exploratory assembly a new persistent file-format identity.
+Working branch: `feature/core-feasibility`. Experiment target: net10.0; no GUI framework selection is included. The experiment does not alter production algorithms or make its exploratory assembly a new persistent file-format identity.
 
 ## Authorization and repository preparation
 
-Before implementation, obtain maintainer approval of this task. Separately approve promoting the existing Phase 0 documentation/maintenance commits into `x/main` so new feature work can start from the documented integration branch. No automatic merge or public push is authorized by this proposal.
+The maintainer approved the recommended approach/new branch and promotion of the existing Phase 0 records. `x/main` was fast-forwarded to c840aceb and `feature/core-feasibility` created from it. Public push and feature-implementation integration remain separately gated.
 
-Once approved: inspect working tree/remotes, run guarded upstream synchronization, identify the exact current analysis commit and release state, and record it in the task result. If upstream has changed since the audit, inspect relevant source/dependency changes before proceeding. Preserve `master` as upstream-only and keep all work on the dedicated feature branch.
+Preparation performed: clean working-tree/remotes inspected, guarded sync found zero new upstream commits, baseline de8f73032a72746e3d6d9afd53d9fbd289eb310a retained and release listing still RC1. `master` stayed upstream-only. The source-linked probe is under `X/Feasibility/Core/`; original application source/projects remain unchanged.
 
 ## Scope and source components
 
@@ -56,3 +56,9 @@ For a new upstream release: update clean mirror, classify changes, replay probes
 - Native-source recovery: identify matching NetGenMesher/Netgen, modified QuadWild/Gmsh and QuadMesher sources/build recipes now; missing sources can block parity independently of managed-core progress. Contacting maintainers remains a separately authorized action.
 
 Review after completion: approve the next source slice/services based on measured dependency boundaries, verify file-compatibility work can proceed, and select rendering experiments. A small successful probe is the start of the project, not proof of a finished portable core.
+
+## Execution record
+
+See [core-feasibility report](../reports/core-feasibility.md). Seven-source closure builds unchanged on native Mac ARM64, no NuGet packages. Baseline and isolated pinned v2.6.0 replay each pass 23 format/analytical checks plus two CLI error contracts. All seven files are identical across those commits; this is a replay-mechanics result, not changed-code adaptation evidence.
+
+Prepared Linux x64 GitLab job, not run. Its runner endpoint requires credentials; no local Linux execution route found. Acceptance 4 and Linux part of 5 remain pending. No Windows oracle, PMX, controller, mesher/solver or rendering equivalence claim. Three source-parser limitations and three build warnings are documented, with no production patches. No additional implementation phase or GUI framework selected.

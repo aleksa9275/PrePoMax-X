@@ -1,21 +1,27 @@
 # Project status
 
-Updated: 2026-10-13 (Europe/Belgrade). **Phase 0 deliverables complete; cross-platform implementation has not begun.** Await maintainer review/authorization.
+Updated: 2026-10-13 (Europe/Belgrade). **Phase 0 complete; task 0002 authorized and implemented locally, with macOS ARM64 checks passed and Linux execution pending.**
 
-Maintainer naming update: project records, maintenance tooling and the local integration branch now use `X`/`x`, with `x/main` as the integration branch.
+## Repository
 
-Repository: origin is the PrePoMax-X fork, upstream is official PrePoMax. Detected default `master`; clean mirror and x/main pinned at de8f73032a72746e3d6d9afd53d9fbd289eb310a. Documentation/maintenance scripts are on `feature/project-initialization` only, locally committed. No remote push or x/main merge. Exact feature commit: `git log -1 feature/project-initialization`.
+`origin` is the maintainer's PrePoMax-X fork; `upstream` is official PrePoMax. Synchronization on this date found zero new commits. Clean `master` remains equivalent to upstream at `de8f73032a72746e3d6d9afd53d9fbd289eb310a`. No upstream writes occurred.
 
-Release: latest download 3.0.0 RC1 (12 October); latest stable 2.6.0 (1 September). No upstream tags advertised/fetched. Stable 3.0 commit/tag not established. [Baseline and evidence](reports/initial-audit.md).
+The maintainer authorized the recommended approach, promotion of reviewed Phase 0 records and a new branch. `x/main` was fast-forwarded to documentation commit `c840aceb8cc007e1a151b5e35fed2f413f6451e4`; `feature/core-feasibility` was created from it. Probe implementation remains on this feature branch. No feature implementation merge or public push has been performed by the agent. Exact feature commit: `git log -1 feature/core-feasibility`.
 
-Verification: 37 existing offline runner tests and two source/API audits passed. Nine isolated Git sync-safety tests passed. Unchanged solution build failed with 11 errors for absent Visual C++ targets and net48 reference assemblies on macOS ARM64. No numerical/meshing/live-app/PMX/VTK/Windows acceptance test performed.
+Naming remains PrePoMax-X and X/x throughout. Latest official download remains 3.0.0 RC1; stable 2.6.0 is a reference branch, not a tag. Stable 3.0 correspondence remains unestablished. Phase 0 history/evidence is preserved in [initial audit](reports/initial-audit.md).
 
-Maintenance live checks: dirty checkout correctly refused before fetch. After initial local commit `4856ca5c0e36e9be8cbe646fb19bed6ca2cb2510`, both `upstream-sync.py --dry-run` and normal mode succeeded against official upstream: detected master, zero new commits, mirror already equivalent. Verified mirror difference `0 0`, x/main unchanged at baseline and clean feature checkout. The final verification record is a separate local follow-up commit; use Git for its exact hash. No public branch was created remotely.
+## Actual verification
 
-Primary blockers to future parity: legacy serialization/deep clones and type identities; Windows/native assembly dependency closure; unavailable custom native sources; VTK binding/host/license/selection feasibility. See [portability audit](PORTABILITY_AUDIT.md) and [dependency matrix](reports/dependency-matrix.md).
+The new experiment links seven unchanged upstream source files: five STL implementation files, Vec3D and FeNode. The net10.0 build has zero package or original-project references, zero errors and three retained upstream-source warnings. Original engineering/application source and project files are unchanged.
 
-Recommended proposal: shared behavior/core and separate frontends during transition, retaining original Windows frontend and isolating adapters. No GUI/renderer/serializer framework commitment made.
+On native macOS ARM64, both the audit baseline and isolated stable 2.6.0 replay passed **23 analytical/STL checks and two CLI process contracts each**. Cube inspection returns 12 triangles and bounds [0,0,0]–[1,1,1]. Source/fixture hashes and build/runtime evidence are in [core report](reports/core-feasibility.md) and its JSON records. The two commits have identical selected source; replay mechanics are verified, adaptation to changed source is not.
 
-Next authorized work ends at Phase 0. Proposed first implementation tasks after approval: managed .NET slice feasibility (1.1), PMX/history/type compatibility (1.2), interactive native VTK proof (2.1); start native-source recovery (5.1) alongside them. [Roadmap](ROADMAP.md), [pending decisions](DECISIONS.md).
+Linux: no local Docker/Podman/Linux VM/QEMU route found. GitLab hosted Linux x64 job is prepared, YAML parsed, but not executed or published. Runner access/enablement/quota cannot be verified anonymously: project runner endpoint returned 401. **Task 0002's Linux acceptance gate is pending; do not call this a completed cross-platform milestone.** Windows/reference comparisons, whole-core, PMX, Controller, VTK, CAD/meshing and solver execution remain untested here.
 
-Concrete kickoff proposal: [task 0002](tasks/0002-core-feasibility.md), an upstream-source STL/vector/node command-line probe with Mac/Linux checks and upstream replay. Pending approval of implementation and separate promotion of the Phase 0 records into `x/main`. PyQt/Python VTK + shared C# backend is now explicitly a production frontend candidate; no framework selected. The published `origin/feature/project-initialization` was observed at naming commit `0b9fa81f`; this proposal stays on the local initialization branch for review.
+Existing Phase 0 results remain: 37 offline runner tests, two API/source audits and nine Git sync safety tests passed; original Windows solution build failed on Mac due to missing VC/net48 targets. Those are historical results, not rerun as part of the bounded probe.
+
+## Scope and next gate
+
+[Task 0002](tasks/0002-core-feasibility.md) is authorized for local implementation/commits. Public fork pushes still require approval of concrete branch/diff; no automatic publishing or integration. The next concrete gate is publishing `feature/core-feasibility` to origin, executing its Linux x64 CI checks for both source revisions and reviewing the resulting artifacts.
+
+After that, review the next managed source slice and begin PMX/history corpus/type-identity investigation before assembly separation. PyQt/Python VTK + shared C# and a C# frontend remain production candidates; no GUI/binding/serializer commitment made. Native-source recovery remains an independent parity prerequisite. [Roadmap](ROADMAP.md), [decision register](DECISIONS.md).

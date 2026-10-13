@@ -1,8 +1,8 @@
 # Dependency-aware roadmap
 
-All phases after 0 are proposals requiring authorization. The first implementation work should establish facts, not commit the product to a GUI. Phase 5 source recovery begins early because it can block the entire migration. Regression work begins in Phase 1 and becomes the release matrix in Phase 6.
+Task 0002, the first bounded increment of Phase 1, is now authorized and implemented locally. Its Mac ARM64 gate passes; Linux execution remains pending. Later tasks/phases still require authorization. First implementation work establishes facts without choosing a GUI. Phase 5 source recovery begins early because it can block the entire migration. Regression work begins in Phase 1 and becomes the release matrix in Phase 6.
 
-Start with [task 0002](tasks/0002-core-feasibility.md): a runnable source-linked STL/vector/node probe on Mac ARM64 and Linux x64, with an upstream-revision replay and explicit portability limits. This is the first bounded increment of task 1.1, not a replacement for the later model/results/file-compatibility gates. It leaves GUI choice open between a C# frontend and PyQt/Python VTK over the shared C# behavior.
+The first result is [task 0002](tasks/0002-core-feasibility.md): source-linked STL/vector/node probe, Mac checks, pinned upstream-revision replay and prepared Linux x64 CI. See [execution evidence](reports/core-feasibility.md). This bounded increment of task 1.1 does not replace later model/results/file-compatibility gates. GUI choice remains open between a C# frontend and PyQt/Python VTK over shared C# behavior.
 
 Dependencies:
 

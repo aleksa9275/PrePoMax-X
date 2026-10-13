@@ -4,9 +4,9 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
-Phase 0 permits repository inspection, local safe Git operations, documentation, maintenance scripts and their verification. **Stop after Phase 0. Cross-platform application implementation requires the maintainer's authorization.** Proposals in the specification are not approved architectural commitments.
+Phase 0 is complete. On 2026-10-13 the maintainer authorized the recommended first milestone, a new implementation branch and promotion of the reviewed Phase 0 records into `x/main`. Task `.project/tasks/0002-core-feasibility.md` defines the bounded scope: source-linked STL/vector/node probe, tests/provenance, upstream replay and Linux CI preparation on `feature/core-feasibility`.
 
-Do not modify production source or project files, introduce production dependencies, rewrite algorithms, merge into `x/main`, push, publish releases or submit upstream merge requests in Phase 0. Local documentation commits on `feature/project-initialization` are authorized. Public fork pushes need approval of the concrete diff and target branches. Never force-push, delete branches or overwrite uncommitted work.
+Local implementation and commits for task 0002 are authorized. Preserve existing application source/project files and algorithms; do not introduce production dependencies, begin broad controller/GUI/serialization refactoring or select a frontend. Further implementation or feature integration into `x/main` requires authorization. Public fork pushes need approval of the concrete diff and target branches. Never push to official upstream, force-push, delete branches or overwrite uncommitted work. Proposals in the broader specification remain unapproved commitments.
 
 ## Repository conventions
 

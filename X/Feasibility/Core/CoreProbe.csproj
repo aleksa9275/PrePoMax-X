@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>PrePoMaxX.CoreProbe</AssemblyName>
+    <RootNamespace>PrePoMaxX.CoreProbe</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <UpstreamSourceRoot Condition="'$(UpstreamSourceRoot)' == ''">$(MSBuildThisFileDirectory)../../..</UpstreamSourceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Explicit source closure: no project references, copies, adapters or native libraries. -->
+    <Compile Include="$(UpstreamSourceRoot)/STL/Extensions.cs" Link="Upstream/STL/Extensions.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/STL/Facet.cs" Link="Upstream/STL/Facet.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/STL/Normal.cs" Link="Upstream/STL/Normal.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/STL/STLDocument.cs" Link="Upstream/STL/STLDocument.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/STL/Vertex.cs" Link="Upstream/STL/Vertex.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeGlobals/CommonClasses/Vec3D.cs" Link="Upstream/CaeGlobals/Vec3D.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeMesh/Nodes/FeNode.cs" Link="Upstream/CaeMesh/FeNode.cs" />
+    <None Include="../../../APIs/Python/Test_Scripts/Models/cube.stl" Link="Fixtures/cube.stl" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

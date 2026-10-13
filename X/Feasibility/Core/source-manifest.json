@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "upstreamRepository": "https://gitlab.com/MatejB/PrePoMax.git",
+  "baselineCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "replayCommit": "9e91252563739ee5304cea16c34863dfb17a74d5",
+  "targetFramework": "net10.0",
+  "nugetPackages": [],
+  "sourceFiles": [
+    {
+      "path": "STL/Extensions.cs",
+      "sha256": "279cb8505c12b34c50f21cbff29e21734c8c52f4e9368103b153a6c9a1f446d6"
+    },
+    {
+      "path": "STL/Facet.cs",
+      "sha256": "9a3f222746699f3eb7b737f22108be53bfa12e8e472596455cc08df745e73478"
+    },
+    {
+      "path": "STL/Normal.cs",
+      "sha256": "c69baf3ab567ad825fa03b956a8715d37cfd181a4dd2eea9f39da900724a26ee"
+    },
+    {
+      "path": "STL/STLDocument.cs",
+      "sha256": "d4fb76ad6402cc7496618dac1356d276c55b67b8d9845f03e15fd471077ef793"
+    },
+    {
+      "path": "STL/Vertex.cs",
+      "sha256": "dd2bcd77c50f7b9031b7447ff9a7604802717d0afdbc4c8ee3ed6a6f584d2d10"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be"
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a"
+    }
+  ],
+  "fixture": {
+    "path": "APIs/Python/Test_Scripts/Models/cube.stl",
+    "sha256": "d116e9c54a499025a6d7bc98e5f73f5a0e6e8a7c7923c44238ec70b89c8ed09a"
+  },
+  "excludedComponents": {
+    "STL/Properties/AssemblyInfo.cs": "Legacy assembly metadata omitted from exploratory executable; this does not change production assembly identity.",
+    "CaeGlobals/CaeGlobals.csproj": "Full globals assembly contains WinForms/editors/hooks/Windows APIs and serialization.",
+    "CaeMesh/CaeMesh.csproj": "Full mesh assembly depends on C++/CLI GmshCommon and Windows APIs.",
+    "CaeModel, CaeResults, Controller": "Not in this bounded slice; model/commands/results/PMX compatibility remains unproved.",
+    "vtkControl and native tools": "No rendering, meshing, CAD or solver integration in this probe."
+  }
+}
