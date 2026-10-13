@@ -6,7 +6,9 @@ PrePoMax-X is an open-source cross-platform adaptation of [PrePoMax](https://git
 
 Required release targets: Windows x64, macOS ARM64, macOS x64, Linux x64. Linux ARM64 is desirable after the required targets. Native operation is the goal; Wine, Windows VMs and Rosetta do not qualify as final portability solutions.
 
-Phase 0 changes documentation and non-invasive maintenance tooling only. Implementation, production dependencies, architecture commitments, `cp/main` merges and public pushes remain pending approval. Preserve all existing history and uncommitted work. Root GPL v3 license and Matej Borovinšek's attribution remain authoritative; third-party notices and corresponding-source obligations travel with distributed components.
+Naming convention: **PrePoMax-X**, with `X`/`x` for project-specific cross-platform names and prefixes. The long-lived integration branch is `x/main`.
+
+Phase 0 changes documentation and non-invasive maintenance tooling only. Implementation, production dependencies, architecture commitments, `x/main` merges and public pushes remain pending approval. Preserve all existing history and uncommitted work. Root GPL v3 license and Matej Borovinšek's attribution remain authoritative; third-party notices and corresponding-source obligations travel with distributed components.
 
 ## Where to start
 

@@ -28,7 +28,7 @@ class SyncTests(unittest.TestCase):
         self.git(self.local, "remote", "add", "upstream", OFFICIAL)
         # Exact official URL is redirected to a local fixture only within this temporary repo.
         self.git(self.local, "config", "url." + str(self.remote) + ".insteadOf", OFFICIAL)
-        self.git(self.local, "branch", "cp/main")
+        self.git(self.local, "branch", "x/main")
         self.git(self.local, "switch", "-c", "feature/audit")
         self.original = self.git(self.local, "rev-parse", "trunk")
 
@@ -58,7 +58,7 @@ class SyncTests(unittest.TestCase):
 
     def unchanged_development(self):
         self.assertEqual("feature/audit", self.git(self.local, "branch", "--show-current"))
-        self.assertEqual(self.original, self.git(self.local, "rev-parse", "cp/main"))
+        self.assertEqual(self.original, self.git(self.local, "rev-parse", "x/main"))
 
     def refused(self, message):
         result = self.run_sync()
@@ -109,7 +109,7 @@ class SyncTests(unittest.TestCase):
         self.assertEqual(0, self.run_sync().returncode)
         self.assertEqual("upstream update", (self.local / "fixture.txt").read_text())
         self.assertEqual(new, self.git(self.local, "rev-parse", "HEAD"))
-        self.assertEqual(self.original, self.git(self.local, "rev-parse", "cp/main"))
+        self.assertEqual(self.original, self.git(self.local, "rev-parse", "x/main"))
 
     def test_mirror_in_other_worktree_is_refused(self):
         self.advance()

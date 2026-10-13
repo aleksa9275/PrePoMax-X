@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch and fast-forward the clean upstream mirror; never push or integrate cp/main."""
+"""Fetch and fast-forward the clean upstream mirror; never push or integrate x/main."""
 import argparse
 import os
 from pathlib import Path
@@ -39,7 +39,7 @@ def main():
     if len(defaults) != 1:
         raise ValueError("Cannot identify one advertised upstream default branch.")
     branch = defaults[0].removeprefix("refs/heads/")
-    if branch.startswith(("cp/", "feature/", "integration/", "research/")):
+    if branch.startswith(("x/", "feature/", "integration/", "research/")):
         raise ValueError("Upstream default collides with a development branch namespace.")
     git("check-ref-format", "refs/heads/" + branch)
     # No pruning or forced tag replacement. The local-mirror ancestry check below
@@ -80,7 +80,7 @@ def main():
         print("Local upstream mirror updated by fast-forward.")
     else:
         print("Local upstream mirror already equivalent.")
-    print("cp/main untouched; no checkout, merge into development, or push performed.")
+    print("x/main untouched; no checkout, merge into development, or push performed.")
 
 
 if __name__ == "__main__":

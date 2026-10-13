@@ -6,13 +6,14 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 Phase 0 permits repository inspection, local safe Git operations, documentation, maintenance scripts and their verification. **Stop after Phase 0. Cross-platform application implementation requires the maintainer's authorization.** Proposals in the specification are not approved architectural commitments.
 
-Do not modify production source or project files, introduce production dependencies, rewrite algorithms, merge into `cp/main`, push, publish releases or submit upstream merge requests in Phase 0. Local documentation commits on `feature/project-initialization` are authorized. Public fork pushes need approval of the concrete diff and target branches. Never force-push, delete branches or overwrite uncommitted work.
+Do not modify production source or project files, introduce production dependencies, rewrite algorithms, merge into `x/main`, push, publish releases or submit upstream merge requests in Phase 0. Local documentation commits on `feature/project-initialization` are authorized. Public fork pushes need approval of the concrete diff and target branches. Never force-push, delete branches or overwrite uncommitted work.
 
 ## Repository conventions
 
+- The project is **PrePoMax-X**. Use `X`/`x` for project-specific cross-platform naming and prefixes, including `x/main`.
 - `origin`: maintainer's fork. `upstream`: official `https://gitlab.com/MatejB/PrePoMax.git`. Detect the default each time; currently `master`.
 - `master`: exact upstream mirror, fast-forward only. No PrePoMax-X commits here.
-- `cp/main`: reviewed cross-platform integration. `feature/*`, `integration/*`, `research/*`: scoped work. These user-requested prefixes override generic agent branch conventions.
+- `x/main`: reviewed cross-platform integration. `feature/*`, `integration/*`, `research/*`: scoped work. These user-requested prefixes override generic agent branch conventions.
 - Read `.project/UPSTREAM_SYNC.md` before synchronization. Git merge success is not compatibility evidence.
 - Preserve upstream paths, type and assembly identities, command semantics, units, numbering and file formats wherever possible. Keep platform adapters at boundaries; preserve attribution and licenses.
 
