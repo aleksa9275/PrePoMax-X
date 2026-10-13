@@ -82,3 +82,13 @@ flowchart TD
 WinForms forms/dialogs and custom controls live in PrePoMax and UserControls; property editors leak into CaeGlobals. Settings live in `PrePoMax/Settings/`, with binary settings files by `Application.StartupPath`. Rendering is embedded as a WinForms user control with native window handles. The Python engine uses pythonnet 3.1.0 and a CPython 3.12 DLL loaded relative to startup; GIL management and thread lifetime are explicit.
 
 `RpcUiThread` marshals calls with `FrmMain.BeginInvoke`, and current picking reads VTK state on the rendering/UI thread (commit `0648a3c0`). Batch `-g No` still instantiates `FrmMain`, positions it offscreen and runs `Application.Run` (`Program.cs:163–177`). Preserve serialized mutation, busy/prompt refusal, cancellation and UI-thread pick semantics in a new host; “headless” currently means unattended Windows UI.
+
+## Python and MCP execution
+
+`PythonEngineManager.SetPrePoMaxAPI` supplies the `pmx` object to a persistent Python scope; APIs construct their model/job/mesh/view/selection services with Controller-backed gateways. CLI script execution, interactive console, recorded-script commands and Python journal emission all share this behavior. CPython is embedded with pythonnet, not an external Python process issuing a new independent FEM implementation. Reuse service/API contracts, enum vocabulary, unit semantics and errors.
+
+`PrePoMax/Mcp/McpHttpServer.cs` serves loopback `/mcp`, normally port 8756 with a bounded next-free-port probe. Tools include `get_guide`, `get_status`, `describe_api`, `read_model`, `read_topology`, `run_python`, `eval_expression`, `get_call`, `cancel_call`, history, screenshots, jobs and session inspection. The MCP protocol server advertises versions 2024-11-05/2025-03-26/2025-06-18; the named-pipe/session-discovery protocol is separately versioned 1.0. Large operations return running/callId for collection rather than requiring a repeated mutation.
+
+The automation server needs a folder-specific generated bearer token, rejects Origin headers, and supports read-only/busy/prompt refusal. Settings/first-run logic clears redistributed tokens; session files and named pipes are restricted using Windows ACLs. Preserve these behaviors with platform-appropriate private storage and transport permissions. No session token was read or recorded by this audit.
+
+Most script/API work executes on connection/thread-pool workers, with FrmMain methods marshaling their own UI updates; `RpcUiThread` explicitly warns that routing all work to the UI thread can deadlock long/asynchronous operations. Rendering/picking and idle checks are the special UI-thread cases. A future dispatcher must preserve this distinction, not blanket-dispatch every API call onto the render thread.

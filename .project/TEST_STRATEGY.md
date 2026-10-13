@@ -14,7 +14,7 @@ Actual Phase 0 results on macOS ARM64:
 | `python3 APIs/Python/Test_Scripts/Audit_API_Coverage.py` | exit 0; no missing replacements/unmapped commands/missing ToPython/emitted-name drift; documented exclusions remain |
 | `python3 APIs/Python/Test_Scripts/Audit_API_Documentation.py` | exit 0; 462 argument strings, 484 signature rows, 126 example calls, 47 agent paths checked; zero drift, one documented exception |
 | `dotnet build PrePoMax.sln --no-restore -p:Configuration=Release -p:Platform=x64 -v:minimal` | failed: MSB4278 missing Visual C++ targets; MSB3644 missing net48 reference assemblies, 11 errors. Initial sandbox invocations stalled and were terminated; outside-sandbox diagnostic completed in 0.42 s |
-| Phase 0 maintenance tooling | See STATUS/task record for script safety checks and real upstream sync validation |
+| Phase 0 maintenance tooling | Nine disposable-Git safety tests passed; real dirty-tree refusal plus committed-tree dry-run and normal no-op sync succeeded; master difference 0/0 and cp/main unchanged |
 | Live FEM, meshing, solver, persistence, UI, rendering and selection | **Not run.** No native PrePoMax host exists here yet; Windows VTK/toolchain/runtime and pinned solver are absent |
 
 ## Regression tiers
