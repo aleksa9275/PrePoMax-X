@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "source-level inventory, not observed serialized payload graph",
+  "baselineCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "assemblies": [
+    {
+      "project": "PrePoMax/PrePoMax.csproj",
+      "assemblyName": "PrePoMax",
+      "declaredVersionLine": [
+        "[assembly: AssemblyVersion(\"3.0.0\")]"
+      ],
+      "assemblyInfoSha256": "93a07c09c818b9e3019d84cbd1afa2043002075abb34800b78c13dab61e8004c",
+      "notRuntimeVerified": true
+    },
+    {
+      "project": "CaeGlobals/CaeGlobals.csproj",
+      "assemblyName": "CaeGlobals",
+      "declaredVersionLine": [
+        "[assembly: AssemblyVersion(\"1.0.0.0\")]"
+      ],
+      "assemblyInfoSha256": "3d40b6c755e8d055382ea8ce198c20b70b8f72f6ddf38054f63764a2fa439338",
+      "notRuntimeVerified": true
+    },
+    {
+      "project": "CaeMesh/CaeMesh.csproj",
+      "assemblyName": "CaeMesh",
+      "declaredVersionLine": [
+        "[assembly: AssemblyVersion(\"1.0.0.0\")]"
+      ],
+      "assemblyInfoSha256": "120546e3fc44ec08ac3119190393e25a21f0c292a3be02ecd0ae503539755935",
+      "notRuntimeVerified": true
+    },
+    {
+      "project": "CaeModel/CaeModel.csproj",
+      "assemblyName": "CaeModel",
+      "declaredVersionLine": [
+        "[assembly: AssemblyVersion(\"1.0.0.0\")]"
+      ],
+      "assemblyInfoSha256": "34ef139b35cc9e73c5c0e15f71cfd5fa58fc8b81bddbcf4c5760d94843415cf7",
+      "notRuntimeVerified": true
+    },
+    {
+      "project": "CaeResults/CaeResults.csproj",
+      "assemblyName": "CaeResults",
+      "declaredVersionLine": [
+        "[assembly: AssemblyVersion(\"1.0.0.0\")]"
+      ],
+      "assemblyInfoSha256": "1f96d96ad088af8e183cc1884ece3355d08f73f7485c349b8a96aabaed0625ff",
+      "notRuntimeVerified": true
+    }
+  ],
+  "sourceHashes": {
+    "PrePoMax/Controller.cs": "6d00909e096c0339dd6782b6632b42a348d5feba429e557a68a1fc6fe22eb75f",
+    "PrePoMax/Commands/CommandsCollection.cs": "d182353f92be71f0978ef2bd69e4ae77a351cfe1fb32c508cd798a7098f235ca",
+    "CaeGlobals/Tools.cs": "e271a93b95f57b3305101d6959511c206d3e734670465bb274cff1e95980c679",
+    "CaeGlobals/Extensions.cs": "9ff888b875dd9a08aebcc4deaef888ccfbe37bcb57426cd40013cbe7b8240616",
+    "CaeGlobals/RenamedTypeSerializationBinder.cs": "7f6b6ec08cbf96d2324fbcdeb691379bf2cbab898592b539ca84eced92907c82",
+    "CaeModel/FeModel.cs": "0efada6cd4cdfd3a038858f4ffea0106e5e196cc90f496a8581ee58ef3f2b8d4",
+    "CaeMesh/FeMesh.cs": "9847c6de767a400f03056d99a53c8a6b79dd78b983e52d1f902d6bfb6253f38b",
+    "CaeResults/FeResults.cs": "fff0b830939e3131cb865df5ffff33a2aee6e73ea2f7b76768a6f0e5be0e2a0c",
+    "CaeResults/ResultsCollection.cs": "b87688e78085daf7187242239f28801013057bc1fad06381f61fd539696a9ccd",
+    "CaeMesh/GeometryMetadata/GeometryMetadata.cs": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f"
+  },
+  "rootTypes": [
+    "PrePoMax.Controller, PrePoMax",
+    "PrePoMax.Commands.CommandsCollection, PrePoMax",
+    "CaeModel.FeModel, CaeModel",
+    "CaeMesh.FeMesh, CaeMesh",
+    "CaeResults.FeResults, CaeResults",
+    "CaeResults.ResultsCollection, CaeResults",
+    "CaeMesh.GeometryMetadata, CaeMesh"
+  ],
+  "framing": {
+    "pmx": "Controller.SaveToPmx: 32-byte program/version header + compressed block length + Deflate graph/FeModel block + separate ResultsCollection stream",
+    "pmh": "CommandsCollection.WriteToFile: dumped List<Command> through Extensions.DumpToFile",
+    "graphRoots": "object[] {Controller, jobs, tree state bool[][], SidePanelsState}; Controller includes model, results, commands, annotations; many runtime fields marked NonSerialized",
+    "legacy": "Before/after 2_0_6 compressed readers and uncompressed fallback; rename binder maps selected identities"
+  },
+  "limitations": "Selected source identities only; no complete transitive graph, actual Windows payload, migration reader/writer, assembly split or production compatibility claim."
+}

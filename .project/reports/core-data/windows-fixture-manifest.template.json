@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "status": "template; capture pending",
+  "application": {
+    "sourceCommit": null,
+    "version": null,
+    "binaryHashes": {},
+    "captureRoute": null
+  },
+  "nativeToolsActuallyUsed": {},
+  "fixtures": [
+    {
+      "case": "mesh-only",
+      "inputPath": "cube.inp",
+      "inputSha256": null,
+      "outputPaths": [
+        "cube-mesh.pmx",
+        "cube-export.inp"
+      ],
+      "outputSha256": {},
+      "windowsReopenVerified": false,
+      "expected": {
+        "nodeIds": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "elementId": 1,
+        "connectivity": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "elementType": "C3D8",
+        "bounds": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        "units": "MM_TON_S_C"
+      }
+    },
+    {
+      "case": "history",
+      "paths": [],
+      "sha256": {},
+      "commands": [],
+      "windowsRegenerationVerified": false
+    }
+  ],
+  "serializedPayloadTypeGraphInspected": false,
+  "notes": "No settings/token files; populate actual identities rather than infer source pin from assembly version."
+}

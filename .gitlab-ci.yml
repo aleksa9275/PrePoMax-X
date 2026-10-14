@@ -1,3 +1,4 @@
 # PrePoMax-X additive checks; the upstream Windows solution is untouched.
 include:
   - local: X/Feasibility/Core/gitlab-ci.yml
+  - local: X/Feasibility/Data/gitlab-ci.yml

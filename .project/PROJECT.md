@@ -1,6 +1,6 @@
 # PrePoMax-X project charter
 
-Record updated: 2026-10-14, Europe/Belgrade. Phase 0 and the first bounded core-feasibility milestone (task 0002) are complete; feature integration and follow-on implementation require authorization.
+Record updated: 2026-10-14, Europe/Belgrade. Phase 0 and the first bounded core-feasibility milestone (task 0002) are complete; task 0003 engineering data/PMX fixture preparation is authorized. Feature integration and broader implementation remain gated.
 
 PrePoMax-X is an open-source cross-platform adaptation of [PrePoMax](https://gitlab.com/MatejB/PrePoMax). Preserve FEM functionality, numerical meaning, file compatibility and the ability to follow upstream releases. Minimize permanent divergence; this project is not an independently developed FEM application.
 
@@ -14,7 +14,7 @@ The maintainer authorized task 0002 and promotion of the reviewed Phase 0 docume
 
 | Record | Responsibility |
 |---|---|
-| [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md), [proposed task 0002](tasks/0002-core-feasibility.md) | Current state, verification, handoff and first runnable milestone |
+| [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md), [completed task 0002](tasks/0002-core-feasibility.md), [task 0003](tasks/0003-core-data-feasibility.md) | Current state, verification, handoff and first runnable milestone |
 | [initial audit](reports/initial-audit.md) | Repository/baseline facts and investigation limits |
 | [ARCHITECTURE](ARCHITECTURE.md) | Existing project graph and reuse evidence |
 | [DEPENDENCIES](DEPENDENCIES.md), [dependency matrix](reports/dependency-matrix.md) | Native/managed inventory and supply-chain gaps |

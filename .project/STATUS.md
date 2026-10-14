@@ -1,6 +1,6 @@
 # Project status
 
-Updated: 2026-10-14 (Europe/Belgrade). **Phase 0 and bounded task 0002 complete. macOS ARM64, Podman Linux ARM64 and GitLab native Linux x64 passed. Feature integration and further implementation remain pending authorization.**
+Updated: 2026-10-14 (Europe/Belgrade). **Phase 0 and bounded task 0002 complete. macOS ARM64, Podman Linux ARM64 and GitLab native Linux x64 passed. Task 0003 is authorized and in progress; feature integration/broader refactoring remain gated.**
 
 ## Repository
 
@@ -28,4 +28,4 @@ Existing Phase 0 results remain: 37 offline runner tests, two API/source audits 
 
 Task 0002 is complete within its seven-file scope. Review the newly retained native x64 evidence and uncommitted handoff updates. Feature implementation remains on `feature/core-feasibility`; integrating it into `x/main` and beginning a further bounded implementation task require authorization. The maintainer has now explicitly authorized agent commits/origin pushes for this continuation, covering the closing evidence and next bounded dependency/probe/PMX identity investigation. Windows reference access is available; capture still needs to occur.
 
-After that, review the next managed source slice and begin PMX/history corpus/type-identity investigation before assembly separation. PyQt/Python VTK + shared C# and a C# frontend remain production candidates; no GUI/binding/serializer commitment made. Native-source recovery remains an independent parity prerequisite. [Roadmap](ROADMAP.md), [decision register](DECISIONS.md).
+Task 0003 is now running on `feature/core-data-feasibility` from evidence commit 0020d0d8. The six-file unchanged Matrix/metadata/scaling/FRD-stream probe passes 30 checks plus two CLI contracts on Mac ARM64; native Linux verification is pending. GeometryTools hits a measured WinForms compile boundary while Matrix builds unchanged. Source-only PMX identity inventory and Windows capture instructions are prepared; actual Windows payload graphs/round-trip remain pending. See [task 0003](tasks/0003-core-data-feasibility.md) and [data report](reports/core-data-feasibility.md). PyQt/Python VTK + shared C# and a C# frontend remain production candidates; no GUI/binding/serializer commitment made. Native-source recovery remains an independent parity prerequisite. [Roadmap](ROADMAP.md), [decision register](DECISIONS.md).

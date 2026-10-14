@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "targetFramework": "net10.0",
+  "sourceFiles": [
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+      "sha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f"
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+      "sha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8"
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+      "sha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79"
+    },
+    {
+      "path": "CaeMesh/Elements/IntegrationScale.cs",
+      "sha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32"
+    },
+    {
+      "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+      "sha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53"
+    }
+  ],
+  "replayAvailability": "Five selected newer files absent at task-0002 v2.6.0 pin; Matrix exists there. No six-file replay claimed.",
+  "excluded": {
+    "full INP/FRD/DAT readers": "FeModel/FeMesh/FeResults and unit/serialization/native closures",
+    "BinaryFormatter/PMX": "Not invoked; custom metadata block only",
+    "GeometryTools": "Unchanged candidate fails CS0234 WinForms import; no import removal/stubs"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "records": [
+    {
+      "candidate": "matrix",
+      "command": [
+        "dotnet",
+        "build",
+        "<temporary>/Boundary.csproj",
+        "--disable-build-servers",
+        "-v:minimal"
+      ],
+      "exitCode": 0,
+      "sourceFiles": [
+        {
+          "path": "CaeGlobals/CommonClasses/Matrix.cs",
+          "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53"
+        }
+      ],
+      "sourceEdits": false,
+      "packages": [],
+      "log": "  Determining projects to restore...\n  Restored <temporary>/Boundary.csproj (in 21 ms).\n  Boundary -> <temporary>/bin/Debug/net10.0/Boundary.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:00.97\nCSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    },
+    {
+      "candidate": "element-geometry",
+      "command": [
+        "dotnet",
+        "build",
+        "<temporary>/Boundary.csproj",
+        "--disable-build-servers",
+        "-v:minimal"
+      ],
+      "exitCode": 1,
+      "sourceFiles": [
+        {
+          "path": "CaeMesh/GeometryTools.cs",
+          "sha256": "955f6b2825f69041ec8cdbbdee74652c71feb2160aa7daa787cc49f0f1a423a7"
+        },
+        {
+          "path": "CaeMesh/Nodes/FeNode.cs",
+          "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a"
+        },
+        {
+          "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+          "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be"
+        }
+      ],
+      "sourceEdits": false,
+      "packages": [],
+      "log": "  Determining projects to restore...\n  Restored <temporary>/Boundary.csproj (in 22 ms).\n<repository>/CaeMesh/GeometryTools.cs(15,22): error CS0234: The type or namespace name 'Forms' does not exist in the namespace 'System.Windows' (are you missing an assembly reference?) [<temporary>/Boundary.csproj]\n\nBuild FAILED.\n\n<repository>/CaeMesh/GeometryTools.cs(15,22): error CS0234: The type or namespace name 'Forms' does not exist in the namespace 'System.Windows' (are you missing an assembly reference?) [<temporary>/Boundary.csproj]\n    0 Warning(s)\n    1 Error(s)\n\nTime Elapsed 00:00:00.81\nCSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    }
+  ]
+}

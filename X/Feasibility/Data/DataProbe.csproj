@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>PrePoMaxX.DataProbe</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <UpstreamSourceRoot Condition="'$(UpstreamSourceRoot)' == ''">$(MSBuildThisFileDirectory)../../..</UpstreamSourceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(UpstreamSourceRoot)/CaeMesh/GeometryMetadata/GeometryMetadata.cs" Link="Upstream/GeometryMetadata.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs" Link="Upstream/GeometryMetadataEntity.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs" Link="Upstream/GeometryMetadataProperty.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeMesh/Elements/IntegrationScale.cs" Link="Upstream/IntegrationScale.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs" Link="Upstream/FrdStreamReader.cs" />
+    <Compile Include="$(UpstreamSourceRoot)/CaeGlobals/CommonClasses/Matrix.cs" Link="Upstream/Matrix.cs" />
+  </ItemGroup>
+</Project>
