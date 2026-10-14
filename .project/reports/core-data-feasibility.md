@@ -3,7 +3,10 @@
 Updated 2026-10-14, Europe/Belgrade. Baseline
 `de8f73032a72746e3d6d9afd53d9fbd289eb310a`.
 **Verified observation: six unchanged source files build on native macOS ARM64;
-30 data/math/stream checks and two CLI usage contracts pass. Linux x64 pending.**
+30 data/math/stream checks and two CLI usage contracts pass on Mac ARM64 and
+native GitLab Linux x64, with exact portable-observation matches. Task 0003
+probe/inventory/capture preparation is complete; Windows payload/round-trip
+validation remains pending.**
 
 ## Authorization and branch
 
@@ -96,11 +99,36 @@ round-trip remain pending. No settings/token file is requested.
 
 ## Linux verification and remaining gates
 
-Prepared native hosted job `core-data-linux-x64` for the new feature branch.
+Verified execution: [push pipeline #2947730759](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2947730759)
+and [job #17178539405](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17178539405)
+passed at `da264eefa817fb41a40c17b8007f2a239665e108`. Runner #54907241 is
+linux/amd64; the log identifies an Intel Xeon Platinum 8581C host and
+docker+machine executor. SDK 10.0.402, .NET 10.0.13, process/OS X64 and host
+x86_64. All 30 data checks/two CLI contracts match Mac exactly; six core
+regressions and both 23-check/two-CLI-contract source probes pass again.
+
+Downloaded [data JSON](core-data/gitlab/linux-x64.json),
+[core baseline](core-data/gitlab/core-baseline.json),
+[core replay](core-data/gitlab/core-v2.6.0.json) and
+[sanitized log](core-data/gitlab/job-17178539405-rendered-log.txt) are retained.
+Source/tool/reference SHA-256, commit/job/pipeline identifiers and portable
+observations were independently verified locally for the data report; both
+core reports were recomputed against their Mac references. Archive and
+retained-evidence hashes, actual resolved SDK image digest and CPU/runner
+identity are in [provenance](core-data/gitlab/pipeline-2947730759-provenance.json).
+No emulated x64 route or source patch was selected. The
+[passed pipeline screenshot](core-data/gitlab/pipeline-2947730759.png) retains
+the visible outcome.
+
+The preceding evidence-closing branch also passed push pipeline #2947646455
+at 0020d0d8, establishing push-trigger behavior for that branch. No retry or
+manual pipeline was needed for task 0003.
+
+The implemented native hosted job `core-data-linux-x64` for the new feature branch.
 It reruns task 0002's comparison regressions and both source revisions, then
 runs task 0003 with Linux/X64 assertions and the Mac reference. Reports retain
 tool/source/runtime/CI identifiers; image digest and native CPU evidence must
-be retained from the actual log. Preparation is not a Linux pass.
+be retained from the actual log. Actual execution above establishes the native Linux result; configuration alone was not counted as a pass.
 
 Additional local validation: a deliberately changed metadata face-ID observation
 was used as the reference for `run-data.py --reference`; it returned exit 1,
@@ -114,5 +142,5 @@ point to modified Netgen/NetGenMesher, QuadWild, Gmsh and QuadMesher sources.
 This task does not recover/build/substitute those tools or contact maintainers.
 No GUI, VTK, model/controller extraction or production dependency change is
 included. Task 0003 completes its bounded probe/inventory/capture preparation
-after native Linux evidence; the broader Windows/file/native/rendering gates
+with native Linux evidence; the broader Windows/file/native/rendering gates
 remain separate work.

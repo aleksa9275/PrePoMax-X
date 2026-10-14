@@ -1,6 +1,6 @@
 # Task 0003 — Engineering data boundaries and PMX fixture preparation
 
-Status: authorized 2026-10-14; in progress. Branch: `feature/core-data-feasibility`.
+Status: bounded probe/inventory/Windows capture preparation complete on 2026-10-14. Mac ARM64 and native GitLab Linux x64 pass 30 checks plus two CLI contracts with matching observations. Actual Windows capture/type graphs/PMX round-trip remain pending. Branch: `feature/core-data-feasibility`.
 
 The maintainer approved proceeding with the recommended next bounded dependency
 analysis/source-linked probe and PMX identity investigation, and explicitly
@@ -54,3 +54,16 @@ Task 0003 completes this bounded probe/inventory/capture preparation, not the
 larger roadmap's managed-core, PMX compatibility or rendering gates. Stop at a
 documented boundary if preserving the selected sources requires broader edits.
 Normal maintainer commit/push workflow resumes after this continuation.
+
+## Execution and handoff
+
+Implementation published as da264eef. Push pipeline #2947730759/job #17178539405
+passed on native hosted amd64/Intel Xeon. Both original source probes and six
+regressions passed before the new 30-check/two-CLI-contract probe. Downloaded
+JSON/tool/source/reference hashes and portable observations were independently
+verified. See [execution report](../reports/core-data-feasibility.md).
+Windows access is available; [capture instructions](../reports/windows-fixture-capture.md)
+and a manifest template are ready. No Windows fixture was generated or read
+on this Mac; this task's completion does not close PMX compatibility.
+The agent commits/pushes final evidence under the current explicit exception;
+normal maintainer workflow resumes after this continuation.

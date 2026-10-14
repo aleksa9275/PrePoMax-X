@@ -1,6 +1,6 @@
 # PrePoMax-X project charter
 
-Record updated: 2026-10-14, Europe/Belgrade. Phase 0 and the first bounded core-feasibility milestone (task 0002) are complete; task 0003 engineering data/PMX fixture preparation is authorized. Feature integration and broader implementation remain gated.
+Record updated: 2026-10-14, Europe/Belgrade. Phase 0 and the first bounded core-feasibility milestone (task 0002) are complete; task 0003 engineering data/PMX fixture preparation is complete within its bounded scope. Feature integration and broader implementation remain gated.
 
 PrePoMax-X is an open-source cross-platform adaptation of [PrePoMax](https://gitlab.com/MatejB/PrePoMax). Preserve FEM functionality, numerical meaning, file compatibility and the ability to follow upstream releases. Minimize permanent divergence; this project is not an independently developed FEM application.
 

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "original downloaded JSON plus sanitized rendered job log and native CPU/runner evidence",
+  "pipelineId": 2947730759,
+  "jobId": 17178539405,
+  "pipelineSource": "push",
+  "featureCommit": "da264eefa817fb41a40c17b8007f2a239665e108",
+  "pipelineUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2947730759",
+  "jobUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17178539405",
+  "runner": {
+    "CI_COMMIT_SHA": "da264eefa817fb41a40c17b8007f2a239665e108",
+    "CI_JOB_ID": "17178539405",
+    "CI_JOB_URL": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17178539405",
+    "CI_PIPELINE_ID": "2947730759",
+    "CI_PIPELINE_URL": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2947730759",
+    "CI_RUNNER_ID": "54907241",
+    "CI_RUNNER_DESCRIPTION": "k8s.saas-linux-small-amd64.runners-manager.gitlab.com/default ",
+    "CI_RUNNER_EXECUTABLE_ARCH": "linux/amd64",
+    "CI_JOB_IMAGE": "mcr.microsoft.com/dotnet/sdk:10.0"
+  },
+  "sdk": "10.0.402",
+  "runtime": {
+    "os": "Linux",
+    "architecture": "X64",
+    "osArchitecture": "X64",
+    "framework": ".NET 10.0.13"
+  },
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8581C CPU @ 2.10GHz (avx, avx2, avx512f)",
+  "sdkImageId": "sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd",
+  "sdkImageDigest": "sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa",
+  "dataChecksPassed": 30,
+  "dataCliContractsPassed": 2,
+  "coreRegressionTestsPassed": 6,
+  "coreProbeChecksPassedPerRevision": 23,
+  "coreCliContractsPassedPerRevision": 2,
+  "observationsMatchMac": true,
+  "artifactArchiveSha256": "563b95f0c9dac962e095958eb17f721ed5fa8c1eaee4cbe1eec1963ee69a3319",
+  "retainedEvidence": {
+    "linux-x64.json": "8b1ce8447471f385022805ae6825fa0ecce2ac08a7d55f85798d8a36c24b5f10",
+    "core-baseline.json": "9a5d4bca5165237de99c4c8b2cf524b614939728550dd93dde8f5000282787eb",
+    "core-v2.6.0.json": "d09f64221930f7059f194e564a740c3c73ff48543aea3da52cd584681b31f185",
+    "job-17178539405-rendered-log.txt": "a148c7afe65c9549d04e1f27693ec0014272cf4f10cab9c1125ad8300b65ed5a",
+    "pipeline-2947730759.png": "20fdadd2a5533661306f87fe243dbc5e500003e1b79d4ce79456d7c430b12aec"
+  },
+  "limitations": "Six-file data slice, not full reader/PMX/NRBF/Windows oracle; five newer selected source files absent at old replay pin. No production source or identity changes.",
+  "createdLocal": "2026-10-14T19:57:22+02:00",
+  "pipelineFinishedLocal": "2026-10-14T19:58:49+02:00"
+}

@@ -32,7 +32,8 @@ regressions and both pinned source probes, then executes this probe and compares
 source hashes, checks, observations and CLI contracts with the tracked Mac
 record. Reports are retained on failure; artifacts expire after 30 days.
 Runner/SDK/runtime/tooling identity is recorded; image digest/CPU evidence comes
-from the execution log. A prepared job is not a verified hosted pass.
+from the execution log. Push pipeline #2947730759/job #17178539405 passed at da264eef on a native
+amd64 Intel Xeon host; downloaded reports match Mac observations exactly.
 
 Full reader candidates are documented in the [dependency report](../../../.project/reports/core-data-feasibility.md).
 Windows capture instructions are [here](../../../.project/reports/windows-fixture-capture.md).
