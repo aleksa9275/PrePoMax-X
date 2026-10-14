@@ -1,5 +1,10 @@
 # Task 0002 — Local Podman verification
 
+Current follow-up: native Linux x64 acceptance subsequently passed in GitLab
+pipeline #2947482796 at `822bae25`, completing task 0002. See
+[native x64 acceptance](gitlab-linux-x64.md). Pending-x64 statements below are
+historical observations from the Podman adjustment.
+
 Date: 2026-10-14, Europe/Belgrade. Verified observation: both pinned source revisions pass on native-architecture Linux ARM64 in Podman's applehv VM, matching the recorded macOS ARM64 observations. Native Linux x64 acceptance remains pending. This report supplements the [2026-10-13 execution record](core-feasibility.md).
 
 Later on the same date, the maintainer authorized complementary GitLab native

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "outcome": "passed; native Linux x64 task 0002 acceptance complete",
+  "pipelineId": 2947482796,
+  "jobId": 17176590675,
+  "pipelineUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2947482796",
+  "jobUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17176590675",
+  "featureCommit": "822bae2528be6e38df6d472fc979c36b9f3e4d27",
+  "pipelineSource": "web",
+  "createdLocal": "2026-10-14T19:10:46+02:00",
+  "jobStartedLocal": "2026-10-14T19:12:37+02:00",
+  "jobLogSuccessLocal": "2026-10-14T19:13:37+02:00",
+  "pipelineFinishedLocal": "2026-10-14T19:13:46+02:00",
+  "runnerId": 54907241,
+  "runnerArchitecture": "linux/amd64",
+  "runnerDescription": "k8s.saas-linux-small-amd64.runners-manager.gitlab.com/default",
+  "executor": "docker+machine",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8581C CPU @ 2.10GHz",
+  "sdkImage": "mcr.microsoft.com/dotnet/sdk:10.0",
+  "sdkImageDigest": "sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa",
+  "sdkImageId": "sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd",
+  "regressionTestsPassed": 6,
+  "artifactArchiveSha256": "7187f6602becdc0afb6212a44597cba26b396571bb3325e5f663004655f90c88",
+  "retainedEvidence": {
+    "linux-x64-baseline.json": "9effaf7cc752d6441ca84e3440c2456efac7f7ebf826501e5e47ac6df2954ca5",
+    "linux-x64-v2.6.0.json": "bd8d549de7cbd4120cd7be05d3c0d92b1e9d0ecedd214a8dd18c4094cf38d73c",
+    "job-17176590675-rendered-log.txt": "463e320c85230ee7c3d16d0b325e4c1b2d5b99fbe94d4350dcacff8d76e8ec5e",
+    "pipeline-2947482796.png": "5a0eee55fbc9f72da9c97a4296f3e21599affb96977f12318a6ef61ab4a634a5"
+  },
+  "verification": "Original artifact bytes retained; source pins, Linux/X64/host x86_64, commit/job/pipeline IDs, tool/reference SHA256 and portable observations independently checked against local published files.",
+  "limitations": "Seven-source compute slice; identical source across replay pins; no Windows oracle, PMX, whole-core, controller, VTK, CAD, mesher or solver parity; no x/main integration."
+}

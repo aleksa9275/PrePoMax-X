@@ -1,6 +1,6 @@
 # PrePoMax-X project charter
 
-Record updated: 2026-10-14, Europe/Belgrade. Phase 0 is complete; the first bounded core-feasibility milestone is authorized.
+Record updated: 2026-10-14, Europe/Belgrade. Phase 0 and the first bounded core-feasibility milestone (task 0002) are complete; feature integration and follow-on implementation require authorization.
 
 PrePoMax-X is an open-source cross-platform adaptation of [PrePoMax](https://gitlab.com/MatejB/PrePoMax). Preserve FEM functionality, numerical meaning, file compatibility and the ability to follow upstream releases. Minimize permanent divergence; this project is not an independently developed FEM application.
 
@@ -8,7 +8,7 @@ Required release targets: Windows x64, macOS ARM64, macOS x64, Linux x64. Linux 
 
 Naming convention: **PrePoMax-X**, with `X`/`x` for project-specific cross-platform names and prefixes. The long-lived integration branch is `x/main`.
 
-The maintainer authorized task 0002 and promotion of the reviewed Phase 0 documentation into `x/main`. Implementation stays on `feature/core-feasibility` and is limited to additive source-linked probes, tests/provenance and Linux verification. On 2026-10-14 local Podman tests replaced GitLab CI by maintainer request; later that day the maintainer authorized retaining Podman and preparing complementary GitLab native Linux x64 verification. Existing application code/projects and engineering algorithms remain unchanged. Broader architecture commitments, production dependencies and subsequent integration remain pending approval. The maintainer handles all pushes and normally commits; leave changes uncommitted unless explicitly asked. Preserve history and uncommitted work. Root GPL v3 license and Matej Borovinšek's attribution remain authoritative; third-party notices and corresponding-source obligations travel with distributed components.
+The maintainer authorized task 0002 and promotion of the reviewed Phase 0 documentation into `x/main`. Implementation stays on `feature/core-feasibility` and is limited to additive source-linked probes, tests/provenance and Linux verification. On 2026-10-14 local Podman tests replaced GitLab CI by maintainer request; later that day the maintainer authorized retaining Podman and preparing complementary GitLab native Linux x64 verification. Existing application code/projects and engineering algorithms remain unchanged. Broader architecture commitments, production dependencies and subsequent integration remain pending approval. The maintainer normally handles commits/pushes. On 2026-10-14 the current continuation explicitly authorizes the agent to commit/push closing evidence and the next bounded probe/investigation to origin; it does not authorize x/main integration or broader refactoring. Preserve history and uncommitted work. Root GPL v3 license and Matej Borovinšek's attribution remain authoritative; third-party notices and corresponding-source obligations travel with distributed components.
 
 ## Where to start
 

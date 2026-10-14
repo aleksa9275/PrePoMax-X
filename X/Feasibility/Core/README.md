@@ -97,8 +97,10 @@ is native: also inspect the actual hosted runner and job log. Configuration,
 local YAML parsing and a Mac rehearsal are not a native x64 pass. Authenticated inspection confirms instance runners are enabled, the requested
 amd64 runner is online/active, and October usage is 0/400 compute minutes. The
 earlier pipeline was blocked by identity verification before creating any jobs.
-Whether that restriction is now cleared, GitLab semantic lint and hosted
-execution remain unverified.
+The new manual pipeline #2947482796/job #17176590675 passed on native x64 at
+822bae25, clearing the execution gate for both source pins. See
+[native x64 evidence](../../../.project/reports/gitlab-linux-x64.md). Separate
+GitLab semantic lint and automatic push-trigger behavior were not verified.
 
 For a local rehearsal of CI orchestration on this Mac:
 

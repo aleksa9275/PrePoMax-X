@@ -1,5 +1,11 @@
 # Task 0002 — Complementary GitLab verification preparation
 
+Current follow-up: the maintainer published this preparation at `822bae25`.
+Manual GitLab pipeline #2947482796/job #17176590675 subsequently passed native
+Linux x64 on both source pins, with independently verified downloaded artifacts.
+Task 0002 is complete; see [native x64 acceptance](gitlab-linux-x64.md). The
+preparation/access narrative below preserves the earlier handoff state.
+
 Date: 2026-10-14, Europe/Belgrade. **Verified observation: both pinned revisions
 pass CI orchestration locally on macOS ARM64 and match the saved observations.
 Native Linux x64 and hosted CI execution remain pending.**

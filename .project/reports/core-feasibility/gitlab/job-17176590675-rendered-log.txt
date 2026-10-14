@@ -1,0 +1,507 @@
+1
+17:12:37
+Running with gitlab-runner 19.5.0~pre.2316.g3c07c5b0 (3c07c5b0)
+2
+17:12:37
+  on k8s.saas-linux-small-amd64.runners-manager.gitlab.com/default nezyxEJex, system ID: r_lD5E9w0snEFL
+3
+17:12:37
+  UUID: 019fd6c6-56c4-78a2-8961-bbb53e204387
+4
+17:12:37
+  feature flags: FF_USE_GIT_PROACTIVE_AUTH:true, FF_HASH_CACHE_KEYS:true, FF_USE_JOB_ROUTER:true, FF_MACHINE_OPTIONS_EXPAND_ENV:true, FF_DOCKER_MACHINE_JSON_OUTPUT:true
+5
+17:12:37
+Preparing the "docker+machine" executor
+00:17
+6
+17:12:37
+Using Docker executor with image mcr.microsoft.com/dotnet/sdk:10.0 ...
+7
+17:12:37
+Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.5.0 )
+8
+17:12:37
+Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0
+9
+17:12:37
+Authenticating with credentials from job payload (GitLab Registry)
+10
+17:12:37
+Pulling docker image registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0 ...
+11
+17:12:39
+Using docker image sha256:652d11c53dc5dee9295dde4944709c29f26da1fa2e74ff92419292051a588f68 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:fed86d4463d47c3bf1395b99bc3e1e4b5a3893853dd0b279e11781e5b4cfba6e ...
+12
+17:12:41
+Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.5.0 )
+13
+17:12:41
+Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0
+14
+17:12:41
+Using docker image sha256:652d11c53dc5dee9295dde4944709c29f26da1fa2e74ff92419292051a588f68 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:fed86d4463d47c3bf1395b99bc3e1e4b5a3893853dd0b279e11781e5b4cfba6e ...
+15
+17:12:41
+Using effective pull policy of [always] for container mcr.microsoft.com/dotnet/sdk:10.0
+16
+17:12:41
+Pulling docker image mcr.microsoft.com/dotnet/sdk:10.0 ...
+17
+17:12:54
+Using docker image sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd for mcr.microsoft.com/dotnet/sdk:10.0 with digest mcr.microsoft.com/dotnet/sdk@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa ...
+18
+17:12:54
+Preparing environment
+00:03
+19
+17:12:54
+Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.5.0 )
+20
+17:12:54
+Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0
+21
+17:12:54
+Using docker image sha256:652d11c53dc5dee9295dde4944709c29f26da1fa2e74ff92419292051a588f68 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-3c07c5b0 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:fed86d4463d47c3bf1395b99bc3e1e4b5a3893853dd0b279e11781e5b4cfba6e ...
+22
+17:12:54
+Using effective pull policy of [always] for container sha256:652d11c53dc5dee9295dde4944709c29f26da1fa2e74ff92419292051a588f68
+23
+17:12:57
+Running on runner-nezyxejex-project-87574049-concurrent-0 via runner-nezyxejex-s-l-s-amd64-1791997919-1640abcb...
+24
+17:12:57
+Running on CPU: INTEL(R) XEON(R) PLATINUM 8581C CPU @ 2.10GHz (avx, avx2, avx512f)
+25
+17:12:57
+Getting source from Git repository
+00:19
+26
+17:12:58
+Gitaly correlation ID: b35167c9bf9342ecbc65c139327c04de
+27
+17:12:58
+Fetching changes...
+28
+17:12:58
+Initialized empty Git repository in /builds/aleksa9275/pre-po-max-x/.git/
+29
+17:12:58
+Created fresh repository.
+30
+17:13:13
+Checking out 822bae25 as detached HEAD (ref is feature/core-feasibility)...
+31
+17:13:14
+Skipping Git submodules setup
+32
+17:13:14
+$ git remote set-url origin "${CI_REPOSITORY_URL}" || echo 'Not a git repository; skipping'
+33
+17:13:16
+Executing "step_script" stage of the job script
+00:19
+34
+17:13:16
+Using effective pull policy of [always] for container mcr.microsoft.com/dotnet/sdk:10.0
+35
+17:13:16
+Using docker image sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd for mcr.microsoft.com/dotnet/sdk:10.0 with digest mcr.microsoft.com/dotnet/sdk@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa ...
+36
+17:13:16
+$ apt-get update
+37
+17:13:17
+Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+38
+17:13:17
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+39
+17:13:17
+Get:3 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [55.6 kB]
+40
+17:13:17
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+41
+17:13:17
+Get:5 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1548 kB]
+42
+17:13:17
+Get:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+43
+17:13:17
+Get:7 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+44
+17:13:18
+Get:8 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+45
+17:13:18
+Get:9 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+46
+17:13:18
+Get:10 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1409 kB]
+47
+17:13:18
+Get:11 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2122 kB]
+48
+17:13:19
+Get:12 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+49
+17:13:19
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2166 kB]
+50
+17:13:19
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1729 kB]
+51
+17:13:19
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [61.7 kB]
+52
+17:13:19
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2231 kB]
+53
+17:13:19
+Get:17 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]
+54
+17:13:19
+Get:18 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [669 B]
+55
+17:13:19
+Get:19 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+56
+17:13:20
+Fetched 33.6 MB in 3s (9840 kB/s)
+57
+17:13:20
+Reading package lists...
+58
+17:13:21
+$ apt-get install -y --no-install-recommends python3 git
+59
+17:13:21
+Reading package lists...
+60
+17:13:21
+Building dependency tree...
+61
+17:13:22
+Reading state information...
+62
+17:13:22
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+63
+17:13:22
+The following additional packages will be installed:
+64
+17:13:22
+  libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib libreadline8t64
+65
+17:13:22
+  libsqlite3-0 media-types netbase python3-minimal python3.12
+66
+17:13:22
+  python3.12-minimal readline-common
+67
+17:13:22
+Suggested packages:
+68
+17:13:22
+  python3-doc python3-tk python3-venv python3.12-venv python3.12-doc binutils
+69
+17:13:22
+  binfmt-support readline-doc
+70
+17:13:22
+The following NEW packages will be installed:
+71
+17:13:22
+  libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib libreadline8t64
+72
+17:13:22
+  libsqlite3-0 media-types netbase python3 python3-minimal python3.12
+73
+17:13:22
+  python3.12-minimal readline-common
+74
+17:13:22
+0 upgraded, 12 newly installed, 0 to remove and 4 not upgraded.
+75
+17:13:22
+Need to get 6906 kB of archives.
+76
+17:13:22
+After this operation, 26.1 MB of additional disk space will be used.
+77
+17:13:22
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-minimal amd64 3.12.3-1ubuntu0.17 [839 kB]
+78
+17:13:23
+Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12-minimal amd64 3.12.3-1ubuntu0.17 [2335 kB]
+79
+17:13:23
+Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3-minimal amd64 3.12.3-0ubuntu2.1 [27.4 kB]
+80
+17:13:23
+Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 media-types all 10.1.0 [27.5 kB]
+81
+17:13:23
+Get:5 http://archive.ubuntu.com/ubuntu noble/main amd64 netbase all 6.4 [13.1 kB]
+82
+17:13:23
+Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 readline-common all 8.2-4build1 [56.5 kB]
+83
+17:13:23
+Get:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libreadline8t64 amd64 8.2-4build1 [153 kB]
+84
+17:13:23
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsqlite3-0 amd64 3.45.1-1ubuntu2.8 [702 kB]
+85
+17:13:23
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-stdlib amd64 3.12.3-1ubuntu0.17 [2071 kB]
+86
+17:13:23
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12 amd64 3.12.3-1ubuntu0.17 [651 kB]
+87
+17:13:23
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3-stdlib amd64 3.12.3-0ubuntu2.1 [10.1 kB]
+88
+17:13:23
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3 amd64 3.12.3-0ubuntu2.1 [23.0 kB]
+89
+17:13:23
+debconf: delaying package configuration, since apt-utils is not installed
+90
+17:13:23
+Fetched 6906 kB in 1s (5174 kB/s)
+91
+17:13:23
+Selecting previously unselected package libpython3.12-minimal:amd64.
+92
+17:13:23
+(Reading database ... 9345 files and directories currently installed.)
+93
+17:13:23
+Preparing to unpack .../libpython3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+94
+17:13:23
+Unpacking libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+95
+17:13:23
+Selecting previously unselected package python3.12-minimal.
+96
+17:13:23
+Preparing to unpack .../python3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+97
+17:13:23
+Unpacking python3.12-minimal (3.12.3-1ubuntu0.17) ...
+98
+17:13:24
+Setting up libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+99
+17:13:24
+Setting up python3.12-minimal (3.12.3-1ubuntu0.17) ...
+100
+17:13:24
+Selecting previously unselected package python3-minimal.
+101
+17:13:24
+(Reading database ... 9656 files and directories currently installed.)
+102
+17:13:24
+Preparing to unpack .../0-python3-minimal_3.12.3-0ubuntu2.1_amd64.deb ...
+103
+17:13:24
+Unpacking python3-minimal (3.12.3-0ubuntu2.1) ...
+104
+17:13:24
+Selecting previously unselected package media-types.
+105
+17:13:24
+Preparing to unpack .../1-media-types_10.1.0_all.deb ...
+106
+17:13:24
+Unpacking media-types (10.1.0) ...
+107
+17:13:24
+Selecting previously unselected package netbase.
+108
+17:13:24
+Preparing to unpack .../2-netbase_6.4_all.deb ...
+109
+17:13:24
+Unpacking netbase (6.4) ...
+110
+17:13:24
+Selecting previously unselected package readline-common.
+111
+17:13:24
+Preparing to unpack .../3-readline-common_8.2-4build1_all.deb ...
+112
+17:13:24
+Unpacking readline-common (8.2-4build1) ...
+113
+17:13:24
+Selecting previously unselected package libreadline8t64:amd64.
+114
+17:13:24
+Preparing to unpack .../4-libreadline8t64_8.2-4build1_amd64.deb ...
+115
+17:13:24
+Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'
+116
+17:13:24
+Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2 to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'
+117
+17:13:24
+Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'
+118
+17:13:24
+Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'
+119
+17:13:24
+Unpacking libreadline8t64:amd64 (8.2-4build1) ...
+120
+17:13:25
+Selecting previously unselected package libsqlite3-0:amd64.
+121
+17:13:25
+Preparing to unpack .../5-libsqlite3-0_3.45.1-1ubuntu2.8_amd64.deb ...
+122
+17:13:25
+Unpacking libsqlite3-0:amd64 (3.45.1-1ubuntu2.8) ...
+123
+17:13:25
+Selecting previously unselected package libpython3.12-stdlib:amd64.
+124
+17:13:25
+Preparing to unpack .../6-libpython3.12-stdlib_3.12.3-1ubuntu0.17_amd64.deb ...
+125
+17:13:25
+Unpacking libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+126
+17:13:25
+Selecting previously unselected package python3.12.
+127
+17:13:25
+Preparing to unpack .../7-python3.12_3.12.3-1ubuntu0.17_amd64.deb ...
+128
+17:13:25
+Unpacking python3.12 (3.12.3-1ubuntu0.17) ...
+129
+17:13:25
+Selecting previously unselected package libpython3-stdlib:amd64.
+130
+17:13:25
+Preparing to unpack .../8-libpython3-stdlib_3.12.3-0ubuntu2.1_amd64.deb ...
+131
+17:13:25
+Unpacking libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+132
+17:13:25
+Setting up python3-minimal (3.12.3-0ubuntu2.1) ...
+133
+17:13:25
+Selecting previously unselected package python3.
+134
+17:13:25
+(Reading database ... 10133 files and directories currently installed.)
+135
+17:13:25
+Preparing to unpack .../python3_3.12.3-0ubuntu2.1_amd64.deb ...
+136
+17:13:25
+Unpacking python3 (3.12.3-0ubuntu2.1) ...
+137
+17:13:25
+Setting up media-types (10.1.0) ...
+138
+17:13:25
+Setting up libsqlite3-0:amd64 (3.45.1-1ubuntu2.8) ...
+139
+17:13:25
+Setting up netbase (6.4) ...
+140
+17:13:25
+Setting up readline-common (8.2-4build1) ...
+141
+17:13:25
+Setting up libreadline8t64:amd64 (8.2-4build1) ...
+142
+17:13:25
+Setting up libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+143
+17:13:25
+Setting up python3.12 (3.12.3-1ubuntu0.17) ...
+144
+17:13:26
+Setting up libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+145
+17:13:26
+Setting up python3 (3.12.3-0ubuntu2.1) ...
+146
+17:13:26
+running python rtupdate hooks for python3.12...
+147
+17:13:26
+running python post-rtupdate hooks for python3.12...
+148
+17:13:26
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+149
+17:13:26
+$ git fetch --no-tags https://gitlab.com/MatejB/PrePoMax.git refs/heads/v2.6.0
+150
+17:13:26
+From https://gitlab.com/MatejB/PrePoMax
+151
+17:13:26
+ * branch              v2.6.0     -> FETCH_HEAD
+152
+17:13:26
+$ python3 X/Feasibility/Core/test_probe_evidence.py
+153
+17:13:27
+{"report": "/tmp/tmp0ddow4d2/baseline.json", "success": false, "runtime": {"os": "macOS", "architecture": "Arm64", "osArchitecture": "Arm64", "framework": ".NET 10.0.12"}, "matchesMacReference": false}
+154
+17:13:27
+{"report": "/tmp/tmp_n1i6o7l/baseline.json", "success": false, "runtime": null, "matchesMacReference": false}
+155
+17:13:27
+......
+156
+17:13:27
+----------------------------------------------------------------------
+157
+17:13:27
+Ran 6 tests in 0.010s
+158
+17:13:27
+OK
+159
+17:13:27
+$ python3 X/Feasibility/Core/run-ci.py
+160
+17:13:30
+{"report": "/builds/aleksa9275/pre-po-max-x/X/Feasibility/Core/artifacts/ci/baseline.json", "success": true, "runtime": {"os": "Linux", "architecture": "X64", "osArchitecture": "X64", "framework": ".NET 10.0.13"}, "matchesMacReference": true}
+161
+17:13:34
+{"report": "/builds/aleksa9275/pre-po-max-x/X/Feasibility/Core/artifacts/ci/v2.6.0.json", "success": true, "runtime": {"os": "Linux", "architecture": "X64", "osArchitecture": "X64", "framework": ".NET 10.0.13"}, "matchesMacReference": true}
+162
+17:13:35
+Uploading artifacts for successful job
+00:01
+163
+17:13:35
+Uploading artifacts...
+164
+17:13:35
+X/Feasibility/Core/artifacts/ci/*.json: found 2 matching artifact files and directories 
+165
+17:13:36
+Uploading artifacts as "archive" to coordinator... 201 Created  correlation_id=7a54c8d3eed449a0b8477e6327258dea id=17176590675 status=201 token=<redacted>
+166
+17:13:36
+Cleaning up project directory and file based variables
+00:01
+167
+17:13:37
+Job succeeded
