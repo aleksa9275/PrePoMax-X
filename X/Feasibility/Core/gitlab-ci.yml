@@ -1,38 +1,37 @@
+# Podman remains the local route; this job supplies native Linux x64 evidence.
 core-feasibility-linux-x64:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:10.0
   tags:
     - saas-linux-small-amd64
+  timeout: 15m
   variables:
     GIT_DEPTH: "0"
     DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+    DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE: "1"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "feature/core-feasibility"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "feature/core-feasibility"'
       changes:
         - X/Feasibility/Core/**/*
         - STL/**/*
         - CaeGlobals/CommonClasses/Vec3D.cs
         - CaeMesh/Nodes/FeNode.cs
         - APIs/Python/Test_Scripts/Models/cube.stl
+        - .project/reports/core-feasibility/**/*
         - .gitlab-ci.yml
-    - if: '$CI_COMMIT_BRANCH'
-      changes:
-        - X/Feasibility/Core/**/*
-        - STL/**/*
-        - CaeGlobals/CommonClasses/Vec3D.cs
-        - CaeMesh/Nodes/FeNode.cs
-        - APIs/Python/Test_Scripts/Models/cube.stl
-        - .gitlab-ci.yml
+    - when: never
   before_script:
     - apt-get update
     - apt-get install -y --no-install-recommends python3 git
-    # GitLab's feature-branch checkout may omit the divergent upstream release branch.
+    # Full feature history may omit the divergent pinned release commit.
     - git fetch --no-tags https://gitlab.com/MatejB/PrePoMax.git refs/heads/v2.6.0
   script:
-    - python3 X/Feasibility/Core/run-probe.py --expect-os Linux --expect-architecture X64 --output X/Feasibility/Core/artifacts/linux-x64-baseline.json
-    - python3 X/Feasibility/Core/run-probe.py --revision 9e91252563739ee5304cea16c34863dfb17a74d5 --expect-os Linux --expect-architecture X64 --output X/Feasibility/Core/artifacts/linux-x64-v2.6.0.json
+    - python3 X/Feasibility/Core/test_probe_evidence.py
+    - python3 X/Feasibility/Core/run-ci.py
   artifacts:
     when: always
     expire_in: 30 days
     paths:
-      - X/Feasibility/Core/artifacts/*.json
+      - X/Feasibility/Core/artifacts/ci/*.json

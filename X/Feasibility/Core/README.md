@@ -37,10 +37,80 @@ Actual raw-parser observations are emitted separately:
 
 The current build reports two CS0108 hiding warnings in Normal and CA2022 for STLDocument's header read. They are retained in evidence logs; no warning suppression or production patch was applied.
 
-## Linux and subsequent upstream updates
+## Local Linux tests with Podman
 
-The root `.gitlab-ci.yml` includes this directory's Linux x64 job. It uses the documented `saas-linux-small-amd64` hosted-runner tag, a .NET 10 SDK container, and ephemeral Python/Git installation. It fetches the official release branch for replay objects, verifies both revisions and records JSON artifacts. The SDK image follows the .NET 10 patch line; each report records actual SDK/runtime versions. This is not a pinned container-digest release build.
+The maintainer added local Podman tests on 2026-10-14, then authorized complementary native Linux x64 GitLab checks. Podman remains the local route and requires no publication. Install Podman and start its Linux engine; on macOS, initialize its VM once:
 
-Rules run checks for relevant X/source/fixture changes. The source manifest enforces the explicit closure and baseline hashes; when upstream changes that slice, review/adapt the manifest and expectations on an integration branch. No GitLab job can merge or push development work.
+```sh
+podman machine init --cpus 4 --memory 4096 --disk-size 30  # once, if no machine exists
+podman machine start                                    # when stopped
+python3 X/Feasibility/Core/run-podman.py
+```
 
-No local Docker/Podman/Linux VM or QEMU installation was found on the initial Mac. The job is prepared but has not run; GitLab's project runner endpoint returned 401 without credentials, so project runner enablement/quota remains unverified. Publishing to the origin fork and successful Linux job execution are required before calling task 0002 cross-platform complete. See `.project/reports/core-feasibility.md` for actual execution evidence and remaining gates.
+The default selects the Podman Linux engine's native architecture. For explicit architectures or offline reruns:
+
+```sh
+python3 X/Feasibility/Core/run-podman.py --platform linux/arm64
+python3 X/Feasibility/Core/run-podman.py --platform linux/amd64
+python3 X/Feasibility/Core/run-podman.py --skip-build
+```
+
+The image recipe uses Microsoft's .NET 10 SDK and installs Python/Git during preparation. Only the Containerfile is sent as build context. Tests run with networking disabled, a read-only repository and container root, and disposable `/tmp` build artifacts. JSON reports are captured and written by the host to ignored `artifacts/podman/` by default; use `--output-dir` to retain evidence elsewhere. A container/probe failure writes `success: false` and diagnostic text in that revision's report, returns nonzero and stops before the next revision. Image acquisition/build failures return nonzero before probe reports exist. No Git objects are fetched, branches changed, or files committed/pushed. The checkout must already contain both manifest-pinned source commits. Git worktrees whose object database is outside the mounted repository are not supported by this runner.
+
+Each run verifies both pinned revisions and compares source/fixture hashes, per-check outcomes, raw parser observations, CLI contracts and cube geometry against the recorded macOS results. Image ID/digest, recipe hash, actual SDK/runtime, Podman versions, client/server architecture and cross-architecture status are retained. The tested immutable local image ID is used for execution; the base image follows .NET 10's patch line, so this is not a locked release build. `--skip-build` reuses the cached image only when its build label matches the current recipe hash.
+
+On Apple Silicon, Linux ARM64 uses a hardware-virtualized Linux VM. Linux amd64 containers require translation/emulation; a passing translated run is supplemental evidence and does not satisfy native Linux x64 acceptance. No automatic VM creation, start, stop, resource changes or translation installation is performed by the runner. Podman Desktop is optional for these CLI tests. See `.project/reports/core-feasibility.md` for actual results and remaining platform gates.
+
+## Complementary GitLab native Linux x64 checks
+
+The root CI include selects `core-feasibility-linux-x64` on the documented
+`saas-linux-small-amd64` hosted runner. It runs for relevant pushes to
+`feature/core-feasibility`, or a manual **Run pipeline** on that branch. Other
+branches, schedules, tags and merge-request pipelines are outside this task's
+CI scope. The maintainer commits/pushes the reviewed changes; the agent does not
+publish them. No account credentials or project variables need to be added to
+this job: GitLab handles checkout, and the upstream release fetch is public.
+
+The job uses the .NET 10 SDK image, installs Python/Git in its ephemeral
+container, fetches the official release branch to obtain the divergent pinned
+commit, runs comparison regression checks, then invokes:
+
+```sh
+python3 X/Feasibility/Core/run-ci.py
+```
+
+This enforces Linux/X64 in both probe runs and compares source/fixture hashes,
+individual checks, parser observations, CLI contracts and cube geometry with
+the recorded Mac results. Podman and CI share `probe_evidence.py`. Outputs are
+`artifacts/ci/baseline.json` and `artifacts/ci/v2.6.0.json`, uploaded even on
+failure and retained for 30 days. Build/probe failures retain diagnostics;
+comparison failures retain the complete measured report; replay stops after a
+baseline failure. Old output files are replaced with explicit pending records
+before execution, preventing stale successful replay evidence.
+
+Reports retain actual SDK/runtime versions, runner/job/pipeline identifiers,
+image reference and tooling hashes, using only selected non-secret environment
+fields. The image tag follows .NET 10 patch releases; the runner log's resolved
+image digest must accompany downloaded evidence before acceptance. Python and
+.NET process architecture assertions alone cannot prove the underlying host
+is native: also inspect the actual hosted runner and job log. Configuration,
+local YAML parsing and a Mac rehearsal are not a native x64 pass. Authenticated inspection confirms instance runners are enabled, the requested
+amd64 runner is online/active, and October usage is 0/400 compute minutes. The
+earlier pipeline was blocked by identity verification before creating any jobs.
+Whether that restriction is now cleared, GitLab semantic lint and hosted
+execution remain unverified.
+
+For a local rehearsal of CI orchestration on this Mac:
+
+```sh
+python3 X/Feasibility/Core/run-ci.py --expect-os macOS --expect-architecture Arm64 --output-dir X/Feasibility/Core/artifacts/ci-rehearsal
+python3 X/Feasibility/Core/test_probe_evidence.py
+```
+
+Explicit local overrides are labelled `local rehearsal`; the GitLab job uses
+the strict defaults. See [CI preparation](../../../.project/reports/gitlab-verification.md)
+for actual checks and the remaining native x64 gate.
+
+## Subsequent upstream updates
+
+The source manifest enforces the explicit closure and baseline hashes. When upstream changes that slice, review/adapt the manifest and expectations on an integration branch, then rerun the native host and Podman checks. Review the recorded comparison references deliberately when accepting changed behavior.

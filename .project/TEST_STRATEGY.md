@@ -2,6 +2,8 @@
 
 The original Windows application, pinned to the same upstream commit and exact native/solver versions, is the oracle. A successful build or Git merge proves neither engineering equivalence nor file compatibility.
 
+Maintainer-directed local workflow (2026-10-14): retain Podman for local Linux compute checks and prepare complementary GitLab CI on a native Linux x64 hosted runner (later authorization supersedes the earlier local-only instruction). Task 0002's runnable entry point is `python3 X/Feasibility/Core/run-podman.py`; its [README](../X/Feasibility/Core/README.md) describes setup, offline reuse and architecture selection. Keep actual image/runtime/source evidence. An ARM64 Linux VM on Apple Silicon establishes native Linux ARM64 behavior; translated amd64 is supplemental and does not replace native x64 acceptance. Container compute tests do not establish GUI/GPU behavior. The maintainer handles commits/pushes; local test execution must not depend on publication; hosted CI requires the maintainer to publish the reviewed feature-branch changes. See [CI preparation](reports/gitlab-verification.md); a local rehearsal or YAML parse cannot close the hosted/native x64 gate.
+
 ## Existing assets and actual execution
 
 `APIs/Python/Test_Scripts/Run_Tests.py` discovers command headers, expected exit codes, TEST PASSED markers and run JSON expectations. It handles multiple filters and adds `Test_Analysis.py` when a results test needs its output. `Models/` contains CAD/BREP/STL/INP fixtures. Broad suites cover materials/sections/loads/BCs/steps/constraints/outputs/geometry/mesh validity, jobs, results, selection and RPC/MCP. There is no standalone C# test project or repository CI pipeline at the audited baseline.

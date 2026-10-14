@@ -1,6 +1,6 @@
 # Task 0002 — First runnable upstream-source feasibility milestone
 
-Status: authorized and implemented locally; macOS checks passed, Linux execution pending. Authorized: 2026-10-13 (Europe/Belgrade).
+Status: authorized and implemented locally; macOS ARM64 and Podman Linux ARM64 checks passed, native Linux x64 pending. Authorized: 2026-10-13; local Podman adjustment and subsequent complementary GitLab native x64 preparation authorized 2026-10-14 (Europe/Belgrade).
 
 ## Objective
 
@@ -10,7 +10,7 @@ Working branch: `feature/core-feasibility`. Experiment target: net10.0; no GUI f
 
 ## Authorization and repository preparation
 
-The maintainer approved the recommended approach/new branch and promotion of the existing Phase 0 records. `x/main` was fast-forwarded to c840aceb and `feature/core-feasibility` created from it. Public push and feature-implementation integration remain separately gated.
+The maintainer approved the recommended approach/new branch and promotion of the existing Phase 0 records. `x/main` was fast-forwarded to c840aceb and `feature/core-feasibility` created from it. Initial implementation was committed locally as 92a491cd. The maintainer subsequently pushed it and reported a failed GitLab pipeline. On 2026-10-14 the maintainer authorized removing the pipeline configuration and using newly installed Podman locally. Later on 2026-10-14 the maintainer approved the recommendation to retain Podman, prepare complementary GitLab native Linux x64 verification, and investigate the prior failure if access is available. The maintainer handles all pushes and normally commits; these adjustments stay uncommitted. Feature integration remains separately gated.
 
 Preparation performed: clean working-tree/remotes inspected, guarded sync found zero new upstream commits, baseline de8f73032a72746e3d6d9afd53d9fbd289eb310a retained and release listing still RC1. `master` stayed upstream-only. The source-linked probe is under `X/Feasibility/Core/`; original application source/projects remain unchanged.
 
@@ -26,7 +26,7 @@ The probe should read a supplied STL and report triangle count and bounds, and e
 
 - Additive experiment build configuration, CLI and meaningful fixture checks; no production dependency changes.
 - A source-closure manifest listing included upstream paths, source hashes and excluded/blocked components with reasons. Verify included files remain byte-identical to the recorded upstream commit.
-- A Linux check job if a suitable GitLab runner is available, or an explicitly documented native Linux/VM test route. Check infrastructure availability rather than claiming a job passed because configuration exists.
+- A local Podman Linux test route with pinned-source replay and recorded architecture/image provenance. Check actual execution rather than claiming a pass because configuration exists. Complementary GitLab native Linux x64 CI is prepared under the later 2026-10-14 authorization; hosted execution remains pending.
 - Result report with commands, native architecture, pinned source/dependency/runtime versions, actual test outcomes and required future adapters.
 - Update STATUS, task record and decision entries with evidence; no GUI/serializer commitment.
 
@@ -61,4 +61,4 @@ Review after completion: approve the next source slice/services based on measure
 
 See [core-feasibility report](../reports/core-feasibility.md). Seven-source closure builds unchanged on native Mac ARM64, no NuGet packages. Baseline and isolated pinned v2.6.0 replay each pass 23 format/analytical checks plus two CLI error contracts. All seven files are identical across those commits; this is a replay-mechanics result, not changed-code adaptation evidence.
 
-Prepared Linux x64 GitLab job, not run. Its runner endpoint requires credentials; no local Linux execution route found. Acceptance 4 and Linux part of 5 remain pending. No Windows oracle, PMX, controller, mesher/solver or rendering equivalence claim. Three source-parser limitations and three build warnings are documented, with no production patches. No additional implementation phase or GUI framework selected.
+Verified observation after authenticated inspection: original pipeline #2944154347 at 92a491cd failed because GitLab required identity verification, before any jobs were created (zero jobs, no probe execution). Hosted instance runners are enabled, the requested small amd64 runner is online/active and namespace quota shows 0/400 compute minutes used. Current identity eligibility is still unconfirmed by execution. Local verification uses `Containerfile` and `run-podman.py`. Under the later 2026-10-14 authorization, complementary GitLab native Linux x64 CI is prepared with a shared observation comparison and `run-ci.py`; see [CI preparation](../reports/gitlab-verification.md). Its local Mac rehearsal does not close the native Linux x64 gate. Both pinned revisions pass 23 checks plus two CLI contracts on native-architecture Podman Linux ARM64, matching macOS's structured observations. See [Podman report](../reports/podman-verification.md) for commands, image/runtime provenance, infrastructure details and any supplemental architecture attempts. Acceptance 4 and the native Linux x64 part of 5 remain pending; ARM64 or translated amd64 cannot satisfy that gate. No Windows oracle, PMX, controller, mesher/solver or rendering equivalence claim. Original sources and the three known parser limitations/build warnings remain unchanged. No additional implementation phase or GUI framework selected.

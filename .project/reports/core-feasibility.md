@@ -2,6 +2,8 @@
 
 Date: 2026-10-13, Europe/Belgrade. Outcome: **bounded Mac ARM64 source reuse proved; Linux verification pending**. No full application/core/file-compatibility claim.
 
+Historical execution snapshot. On 2026-10-14 the maintainer replaced the GitLab CI route with local Podman testing. See [Podman verification](podman-verification.md) and [current status](../STATUS.md) for subsequent results; the CI preparation below records the original work. Later that day complementary native Linux x64 GitLab preparation was authorized alongside Podman; see [CI preparation](gitlab-verification.md).
+
 ## Authorized work and Git state
 
 The maintainer authorized starting the recommended approach on a new branch. Reviewed Phase 0 documentation fast-forwarded into `x/main` at c840aceb; implementation branch `feature/core-feasibility` created from it. Guarded upstream sync returned zero new commits, leaving master at `de8f73032a72746e3d6d9afd53d9fbd289eb310a`. Original production source/solution/projects are unchanged relative to that upstream baseline.

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "success": false,
+  "status": "not run",
+  "sourceCommit": "9e91252563739ee5304cea16c34863dfb17a74d5",
+  "verificationEnvironment": {
+    "environment": "local rehearsal",
+    "hostOS": "Darwin",
+    "hostArchitecture": "arm64",
+    "expectedOS": "Linux",
+    "expectedArchitecture": "X64",
+    "recordedAtUtc": "2026-10-14T16:50:06.855638+00:00",
+    "identifiers": {},
+    "toolHashes": {
+      "run-ci.py": "4c97e4197b9452d82b6846cceba972faf51404c715e980f272206f211c9804b4",
+      "run-probe.py": "51b683316d339db344e433daf82f15f1637ea71e9fab8da9d9cb22af9becd319",
+      "probe_evidence.py": "945eea7bde102e1f3391e7ef1d9d3fa2549d8ea1bc073f97a702963181158993",
+      "gitlab-ci.yml": "1457ffe713ab3f3f280f778ed9493805de78901a81c41a4e7d62c2699a69eb4c"
+    }
+  }
+}

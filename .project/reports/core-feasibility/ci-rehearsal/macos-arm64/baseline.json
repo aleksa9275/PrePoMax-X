@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "baselineCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sourceMode": "unchanged working-tree links",
+  "targetFramework": "net10.0",
+  "sdk": "10.0.401",
+  "sourceFiles": [
+    {
+      "path": "STL/Extensions.cs",
+      "sha256": "279cb8505c12b34c50f21cbff29e21734c8c52f4e9368103b153a6c9a1f446d6",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "STL/Facet.cs",
+      "sha256": "9a3f222746699f3eb7b737f22108be53bfa12e8e472596455cc08df745e73478",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "STL/Normal.cs",
+      "sha256": "c69baf3ab567ad825fa03b956a8715d37cfd181a4dd2eea9f39da900724a26ee",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "STL/STLDocument.cs",
+      "sha256": "d4fb76ad6402cc7496618dac1356d276c55b67b8d9845f03e15fd471077ef793",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "STL/Vertex.cs",
+      "sha256": "dd2bcd77c50f7b9031b7447ff9a7604802717d0afdbc4c8ee3ed6a6f584d2d10",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+      "changedFromBaseline": false
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+      "changedFromBaseline": false
+    }
+  ],
+  "fixture": {
+    "path": "APIs/Python/Test_Scripts/Models/cube.stl",
+    "sha256": "d116e9c54a499025a6d7bc98e5f73f5a0e6e8a7c7923c44238ec70b89c8ed09a"
+  },
+  "tests": {
+    "schemaVersion": 1,
+    "runtime": {
+      "os": "macOS",
+      "architecture": "Arm64",
+      "osArchitecture": "Arm64",
+      "framework": ".NET 10.0.12"
+    },
+    "passed": 23,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "existing_cube_triangle_count_and_bounds",
+        "status": "passed"
+      },
+      {
+        "name": "independent_ascii_coordinates_and_winding",
+        "status": "passed"
+      },
+      {
+        "name": "independent_binary_coordinates_and_attributes",
+        "status": "passed"
+      },
+      {
+        "name": "ascii_round_trip_preserves_vertex_order_and_normals",
+        "status": "passed"
+      },
+      {
+        "name": "binary_round_trip_and_independent_wire_layout",
+        "status": "passed"
+      },
+      {
+        "name": "binary_solid_header_uses_upstream_fallback",
+        "status": "passed"
+      },
+      {
+        "name": "ascii_numbers_are_culture_independent",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_binary_count_mismatch",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_solid_binary_count_mismatch",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_truncated_binary_triangle",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_empty_stream",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_incomplete_ascii_triangle",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_invalid_ascii_numeric_token",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_rejects_nonfinite_coordinates",
+        "status": "passed"
+      },
+      {
+        "name": "node_translation_preserves_identity",
+        "status": "passed"
+      },
+      {
+        "name": "node_rotation_around_nonorigin_center",
+        "status": "passed"
+      },
+      {
+        "name": "node_mirror_about_offset_plane",
+        "status": "passed"
+      },
+      {
+        "name": "node_mirror_about_oblique_plane",
+        "status": "passed"
+      },
+      {
+        "name": "node_anisotropic_scale_around_nonorigin_center",
+        "status": "passed"
+      },
+      {
+        "name": "vector_normalization_known_length",
+        "status": "passed"
+      },
+      {
+        "name": "zero_vector_normalization_is_finite",
+        "status": "passed"
+      },
+      {
+        "name": "vector_cross_product_orientation",
+        "status": "passed"
+      },
+      {
+        "name": "circle_from_three_analytic_points",
+        "status": "passed"
+      }
+    ],
+    "observations": [
+      {
+        "name": "raw_binary_declared_count",
+        "declared": 2,
+        "parsed": 1
+      },
+      {
+        "name": "raw_solid_header_default",
+        "parsed": 0
+      },
+      {
+        "name": "raw_invalid_numeric_token",
+        "exceptionType": "NullReferenceException"
+      }
+    ]
+  },
+  "cliContracts": [
+    {
+      "name": "malformed_input_is_json_failure",
+      "status": "passed",
+      "exitCode": 1
+    },
+    {
+      "name": "missing_arguments_are_json_usage_error",
+      "status": "passed",
+      "exitCode": 2
+    }
+  ],
+  "inspection": {
+    "schemaVersion": 1,
+    "success": true,
+    "runtime": {
+      "os": "macOS",
+      "architecture": "Arm64",
+      "osArchitecture": "Arm64",
+      "framework": ".NET 10.0.12"
+    },
+    "geometry": {
+      "triangleCount": 12,
+      "bounds": {
+        "min": [
+          0,
+          0,
+          0
+        ],
+        "max": [
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "buildLog": "  Determining projects to restore...\nCSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n  Restored <repository>/X/Feasibility/Core/CoreProbe.csproj (in 21 ms).\n<repository>/STL/Normal.cs(38,30): warning CS0108: 'Normal.Read(StreamReader)' hides inherited member 'Vertex.Read(StreamReader)'. Use the new keyword if hiding was intended. [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n<repository>/STL/Normal.cs(45,30): warning CS0108: 'Normal.Read(BinaryReader)' hides inherited member 'Vertex.Read(BinaryReader)'. Use the new keyword if hiding was intended. [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n<repository>/STL/STLDocument.cs(128,13): warning CA2022: Avoid inexact read with 'System.IO.Stream.Read(byte[], int, int)' (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2022) [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n  CoreProbe -> <temporary>/artifacts/bin/CoreProbe/release/PrePoMaxX.CoreProbe.dll\n\nBuild succeeded.\n\n<repository>/STL/Normal.cs(38,30): warning CS0108: 'Normal.Read(StreamReader)' hides inherited member 'Vertex.Read(StreamReader)'. Use the new keyword if hiding was intended. [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n<repository>/STL/Normal.cs(45,30): warning CS0108: 'Normal.Read(BinaryReader)' hides inherited member 'Vertex.Read(BinaryReader)'. Use the new keyword if hiding was intended. [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n<repository>/STL/STLDocument.cs(128,13): warning CA2022: Avoid inexact read with 'System.IO.Stream.Read(byte[], int, int)' (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2022) [<repository>/X/Feasibility/Core/CoreProbe.csproj]\n    3 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.10\n",
+  "limitations": "Bounded source slice; no Windows-reference, PMX, whole-core, controller, VTK, mesher or solver equivalence claim.",
+  "success": true,
+  "comparison": {
+    "reference": ".project/reports/core-feasibility/macos-arm64-baseline.json",
+    "referenceSha256": "06367b42a7dbc67b1f9c20a53975a3d8fb89f27639faa4c3d436b949ad2f098b",
+    "matches": true,
+    "scope": "source/fixture hashes, checks, parser observations, CLI contracts and cube geometry"
+  },
+  "verificationEnvironment": {
+    "environment": "local rehearsal",
+    "hostOS": "Darwin",
+    "hostArchitecture": "arm64",
+    "expectedOS": "macOS",
+    "expectedArchitecture": "Arm64",
+    "recordedAtUtc": "2026-10-14T16:49:28.886123+00:00",
+    "identifiers": {},
+    "toolHashes": {
+      "run-ci.py": "4c97e4197b9452d82b6846cceba972faf51404c715e980f272206f211c9804b4",
+      "run-probe.py": "51b683316d339db344e433daf82f15f1637ea71e9fab8da9d9cb22af9becd319",
+      "probe_evidence.py": "945eea7bde102e1f3391e7ef1d9d3fa2549d8ea1bc073f97a702963181158993",
+      "gitlab-ci.yml": "4bb05c0df0b2331d398e58edf4bb58c4eac89ce236e863f8810de24039b6ae4d"
+    }
+  }
+}
