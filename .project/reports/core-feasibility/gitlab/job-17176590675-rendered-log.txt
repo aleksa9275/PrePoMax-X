@@ -494,7 +494,7 @@ Uploading artifacts for successful job
 Uploading artifacts...
 164
 17:13:35
-X/Feasibility/Core/artifacts/ci/*.json: found 2 matching artifact files and directories 
+X/Feasibility/Core/artifacts/ci/*.json: found 2 matching artifact files and directories
 165
 17:13:36
 Uploading artifacts as "archive" to coordinator... 201 Created  correlation_id=7a54c8d3eed449a0b8477e6327258dea id=17176590675 status=201 token=<redacted>

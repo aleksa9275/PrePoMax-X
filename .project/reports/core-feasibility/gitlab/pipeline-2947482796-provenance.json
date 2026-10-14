@@ -24,9 +24,10 @@
   "retainedEvidence": {
     "linux-x64-baseline.json": "9effaf7cc752d6441ca84e3440c2456efac7f7ebf826501e5e47ac6df2954ca5",
     "linux-x64-v2.6.0.json": "bd8d549de7cbd4120cd7be05d3c0d92b1e9d0ecedd214a8dd18c4094cf38d73c",
-    "job-17176590675-rendered-log.txt": "463e320c85230ee7c3d16d0b325e4c1b2d5b99fbe94d4350dcacff8d76e8ec5e",
+    "job-17176590675-rendered-log.txt": "fb12c7135725c79eeffc7320d40694bc8842e84d18608eb1a46ad9c239113a24",
     "pipeline-2947482796.png": "5a0eee55fbc9f72da9c97a4296f3e21599affb96977f12318a6ef61ab4a634a5"
   },
   "verification": "Original artifact bytes retained; source pins, Linux/X64/host x86_64, commit/job/pipeline IDs, tool/reference SHA256 and portable observations independently checked against local published files.",
-  "limitations": "Seven-source compute slice; identical source across replay pins; no Windows oracle, PMX, whole-core, controller, VTK, CAD, mesher or solver parity; no x/main integration."
+  "limitations": "Seven-source compute slice; identical source across replay pins; no Windows oracle, PMX, whole-core, controller, VTK, CAD, mesher or solver parity; no x/main integration.",
+  "renderedLogNormalization": "Uploader token fragment redacted; trailing whitespace removed from rendered text. Original downloaded JSON bytes unchanged."
 }

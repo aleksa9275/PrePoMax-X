@@ -89,7 +89,8 @@ Artifact SHA-256:
 
 The [rendered execution log](core-feasibility/gitlab/job-17176590675-rendered-log.txt)
 retains line numbers/timestamps and the resolved image/CPU evidence. The
-artifact uploader's token fragment is redacted before retention. The
+artifact uploader's token fragment is redacted and trailing whitespace removed
+from the rendered text before final retention. The
 [pipeline screenshot](core-feasibility/gitlab/pipeline-2947482796.png) supports
 the visible outcome; JSON and source/runtime evidence are decisive.
 
