@@ -1,0 +1,10 @@
+{
+  "sourceUrl": "https://raw.githubusercontent.com/cgg-bern/quadwild-bimdf/eef4fc390f071c4194196b0bea3b6fc243893adf/CMakeLists.txt",
+  "upstreamPeeledTagCommit": "eef4fc390f071c4194196b0bea3b6fc243893adf",
+  "tagObject": "1a24854abf7b17e5c9c0fba0f3c8c1930fd43957",
+  "observedHead": "e722c7e961982cf61db7c10812329dd0fc7d60df",
+  "file": "quadwild-v0.0.2-CMakeLists.txt",
+  "sha256": "47c5631bd5e60b1cfda59cf9f5d070ea450ba5359f939657014086fe93d5e647",
+  "matchesModifiedPrePoMaxBinarySource": false,
+  "retrieval": "Approved curl from public immutable URL, 2026-10-14"
+}

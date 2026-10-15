@@ -1,5 +1,9 @@
 # Native dependency and integration matrix
 
+Target scope corrected 2026-10-15: Windows x64, Linux x64/ARM64 and Apple
+M-series macOS ARM64 are required; Intel Macs are excluded. Historical upstream
+platform-availability notes below do not add project targets.
+
 Evidence: local project files, ThirdParty READMEs, Licenses notices, source calls, and official sources linked below. “Portable upstream” means the library's claim or build route, not verified PrePoMax integration. Exact ABI/architecture artifacts for required targets remain an implementation gate. Vendored native file signatures and SHA-256 are in [native inventory](native-inventory.tsv).
 
 | Dependency / pinned evidence | Actual integration and formats | Platform/binary/build route | License / packaging / unresolved items |

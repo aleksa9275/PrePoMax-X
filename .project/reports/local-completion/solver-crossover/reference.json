@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-10-15T14:16:04.932318+00:00",
+  "evidenceKind": "Bundled Windows CalculiX through CrossOver; not native Mac/Linux solver parity",
+  "toolSha256": "29b64edd1eeb26c0fc8f8cf6625136b1f31517d6d64f217f2e5da62563611de2",
+  "fixtureSha256": "901f416fe08f3091b07bbeac008fbe7233567cf890a55b83865441cc2452ecf7",
+  "solverFiles": {
+    "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+    "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+    "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+    "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+    "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+    "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+  },
+  "threads": 1,
+  "exitCode": 0,
+  "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Sun Aug  4 19:44:24     2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:            8\n   elements:            1\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            8\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            4\n   single point constraints:           12\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:            5\n   terms in all sets:           29\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            2\n   data points in all amplitudes:            2\n   print requests:            3\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 12\n number of nonzero lower triangular matrix elements\n 66\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\nNot reusing csc.\n+-------------------------------------------------+\n+     PaStiX : Parallel Sparse matriX package     +\n+-------------------------------------------------+\n  Version:                                   6.0.1\n  Schedulers:\n    sequential:                            Enabled\n    thread static:                         Started\n    thread dynamic:                       Disabled\n    PaRSEC:                               Disabled\n    StarPU:                               Disabled\n  Number of MPI processes:                       1\n  Number of threads per process:                 1\n  Number of GPUs:                                0\n  MPI communication support:              Disabled\n  Distribution level:                     2D( 128)\n  Blocking size (min/max):             1024 / 2048\n\n  Matrix type:  General\n  Arithmetic:   Float\n  Format:       CSC\n  N:            12\n  nnz:          144\n\n+-------------------------------------------------+\n  Ordering step :\n    Ordering method is: Scotch\n    Time to compute ordering:              0.0059 \n+-------------------------------------------------+\n  Symbolic factorization step:\n    Symbol factorization using: Fax Direct\n    Number of nonzeroes in L structure:         66\n    Fill-in of L:                         0.458333\n    Time to compute symbol matrix:        0.0007 \n+-------------------------------------------------+\n  Reordering step:\n    Split level:                                 0\n    Stoping criteria:                           -1\n    Time for reordering:                  0.0006 \n+-------------------------------------------------+\n  Analyse step:\n    Number of non-zeroes in blocked L:         132\n    Fill-in:                              0.916667\n    Number of operations in full-rank LU   :     1.06 KFlops\n    Prediction:\n      Model:                             AMD 6180  MKL\n      Time to factorize:                  0.0000 \n    Time for analyze:                     0.0015 \n+-------------------------------------------------+\n  Factorization step:\n    Factorization used: LU\n    Time to initialize internal csc:      0.0009 \n    Time to initialize coeftab:           0.0001 \n    Time to factorize:                    0.0004  ( 2.44 MFlop/s)\n    Number of operations:                       1.06 KFlops\n    Number of static pivots:                     0\n    Time to solve:                        0.0010 \n    - iteration 1 :\n         total iteration time                   0.000134 \n         error                                  5.8157e-15\n    Time for refinement:                  0.0009 \n    Time for refinement:                  0.0000 \n________________________________________\n\nCSC Conversion Time: 0.000857\nInit Time: 0.025230\nFactorize Time: 0.001858\nSolve Time: 0.002338\nClean up Time: 0.000000\n---------------------------------\nSum: 0.030286\n\nTotal PaStiX Time: 0.030286\nCCX without PaStiX Time: 0.022117\nShare of PaStiX Time: 0.577943\nTotal Time: 0.052403\nReusability: 0 : 1 \n________________________________________\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.059398\n________________________________________\n",
+  "stderr": "",
+  "solverVersion": "2.22",
+  "checks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    }
+  ],
+  "negativeControlRejected": true,
+  "outputHashes": {
+    "uniaxial.dat": "66d53fb27701221d968bff3f707142c0217c5d6e8e87b715f70ec38971fe936e",
+    "uniaxial.cvg": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+    "uniaxial.frd": "8c7b185dca3de8025bcea7ac43e5ad65427e918e1a3b65ab223fe8dce89e262d",
+    "uniaxial.sta": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d"
+  }
+}

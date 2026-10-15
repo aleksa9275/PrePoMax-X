@@ -1,9 +1,22 @@
 # Windows PMX/history reference capture
 
+Next session entry point (2026-10-15): [Windows handoff](../handoffs/windows-next-session.md)
+and [task 0011](../tasks/0011-windows-reference-validation.md). Windows will be
+available; native capture remains pending. Use research/native-feasibility
+containing task 0012's publication when changing machines, not the default
+upstream mirror branch. Required Windows target is x64.
+
 Task 0003 preparation, 2026-10-14. Maintainer confirms a Windows machine can run
 PrePoMax. **Live capture has not run.** Use a disposable working directory and
 repository-owned example models. No personal models or settings/token files are
 needed. This is fixture preparation, not a production serializer decision.
+
+2026-10-15 update: the scripted cube capture below remains unrun, but a supplied
+legacy PMX was [inspected as records](pmx-record-inspection.md) and original
+PrePoMax 2.6.0 completed a human-confirmed read/save/reopen through
+[CrossOver](crossover-reference.md). That binary lacks newer --script/--rpc
+options; use its actual CLI/UI. This supplementary cycle does not satisfy native
+Windows execution or complete file-compatibility gates.
 
 ## Pin the reference
 

@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "productionSourcesUnchangedAgainst": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "privateInputsAndBundledBinariesExcluded": true,
+  "currentResearchToolHashesMatchEvidence": true,
+  "documentsAndJsonValidated": true,
+  "requiredTargets": [
+    "Windows x64",
+    "Linux x64",
+    "Linux ARM64",
+    "macOS ARM64 (Apple M-series)"
+  ],
+  "defaultLinuxArm64VectorFailureRetained": true,
+  "nativeWindowsAndHistoryCapturePending": true,
+  "originDefaultVerified": "master",
+  "originResearchBranchAbsentBeforePublication": true
+}

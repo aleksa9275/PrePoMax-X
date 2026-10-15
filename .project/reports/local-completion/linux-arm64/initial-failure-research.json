@@ -1,0 +1,55 @@
+{
+  "success": false,
+  "recordedAtUtc": "2026-10-15T14:23:31.551018+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "aarch64",
+    "python": "3.12.3"
+  },
+  "toolSha256": "ca8c37c941ed5ba17d751d56e37adda09846a06bd26a313cef4b660d2b6205f1",
+  "commands": [
+    {
+      "command": [
+        "g++",
+        "-dumpmachine"
+      ],
+      "exitCode": 0,
+      "stdout": "aarch64-linux-gnu\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/PmxValues/test-values.py"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"checks\": [{\"name\": \"same scalar bindings\", \"passed\": true}, {\"name\": \"scalar mutation rejected\", \"passed\": true}, {\"name\": \"member binding swap rejected\", \"passed\": true}], \"privateInputUsed\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/ShellJunction/check-fixtures.py",
+        "--output",
+        "<output>/shell-fixtures.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"cases\": 4, \"regressions\": 2, \"error\": null}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/Meshing/run-meshing.py",
+        "--output",
+        "<output>/meshing.json"
+      ],
+      "exitCode": 1,
+      "stdout": "{\"success\": false, \"vectors\": null, \"nativeChecks\": null, \"managedChecks\": null, \"comparison\": null, \"error\": \"Unexpected process result: {'command': ['<temporary>/original-check', '<repository>/CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt'], 'exitCode': 1, 'stdout': 'FAILED  right_45_45  quads 135  deviation 0.0617397\\\\nok      equilateral  quads 108  deviation 2.84217e-14\\\\nok      diagonal_34  quads 134  deviation 3.55271e-14\\\\nok      sharp_10  quads 141  deviation 2.84217e-14\\\\nok      sharp_5  quads 86  deviation 1.42109e-14\\\\nok      quarter_disk  quads 96  deviation 1.42109e-14\\\\nok      deltoid_10  quads 29  deviation 3.55271e-15\\\\nok      deltoid_30  quads 29  deviation 7.10543e-15\\\\nok      deltoid_all  quads 3  deviation 0\\\\nok      graded_34  quads 134  deviation 2.84217e-14\\\\nok      chained_34  quads 235  deviation 4.9738e-14\\\\nok      cylinder  quads 121  deviation 2.13163e-14\\\\nok      sphere  quads 128  deviation 5.55112e-16\\\\n12 of 13 cases agree\\\\n', 'stderr': ''}\"}\n",
+      "stderr": ""
+    }
+  ],
+  "privateInputUsed": false,
+  "compilerTarget": "aarch64-linux-gnu",
+  "error": "Research command failed: /usr/bin/python3"
+}

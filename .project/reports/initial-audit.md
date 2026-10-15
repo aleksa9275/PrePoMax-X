@@ -1,5 +1,10 @@
 # Phase 0 initial repository audit
 
+Historical scope note, 2026-10-15: the target-priority statements below are
+superseded by D021 and [PROJECT.md](../PROJECT.md). Intel Macs are excluded;
+Linux ARM64 is required alongside Linux x64, Windows x64 and Apple M-series Macs.
+Original audit observations are retained.
+
 Audit date: **2026-10-13 (Europe/Belgrade)**. Source baseline: **de8f73032a72746e3d6d9afd53d9fbd289eb310a**. Recommendations are reviewable proposals; implementation has not begun.
 
 ## Repository inspection and safe changes

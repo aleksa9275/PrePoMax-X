@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "recordedAtUtc": "2026-10-14T19:10:46.512188+00:00",
+  "host": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]"
+  },
+  "checks": [
+    {
+      "name": "pinned VTK 9.5.2 native ARM64 host",
+      "status": "passed"
+    },
+    {
+      "name": "nonsequential FEM global IDs retained",
+      "status": "passed"
+    },
+    {
+      "name": "global-ID cell extraction maps to original FEM element",
+      "status": "passed"
+    },
+    {
+      "name": "extracted cell retains its four FEM node IDs",
+      "status": "passed"
+    },
+    {
+      "name": "deformation applies independently specified scale",
+      "status": "passed"
+    },
+    {
+      "name": "deformation preserves FEM global IDs",
+      "status": "passed"
+    },
+    {
+      "name": "clipping keeps the specified half-plane",
+      "status": "passed"
+    },
+    {
+      "name": "renderer cell pick returns FEM ID 7001",
+      "status": "passed"
+    },
+    {
+      "name": "renderer cell pick returns FEM ID 9007",
+      "status": "passed"
+    },
+    {
+      "name": "renderer point pick returns FEM node 61",
+      "status": "passed"
+    },
+    {
+      "name": "rectangle frustum returns exact FEM node IDs",
+      "status": "passed"
+    },
+    {
+      "name": "native render contains mesh pixels",
+      "status": "passed"
+    },
+    {
+      "name": "deformation changes the rendered image",
+      "status": "passed"
+    },
+    {
+      "name": "actor removal clears mesh pixels",
+      "status": "passed"
+    }
+  ],
+  "observations": {
+    "clippedGlobalIds": {
+      "points": null,
+      "cells": null,
+      "note": "Cut vertices need provenance mapping; filter ID presence alone is not a FEM selection guarantee"
+    },
+    "cellPicks": [
+      7001,
+      9007
+    ],
+    "pointPick": 61,
+    "rectangleNodeIds": [
+      61,
+      200
+    ]
+  },
+  "scriptSha256": "5f014bd044b5786396463ed356d5eb8dc646ed1bbbc9153a33d4962f9c1051f9",
+  "runtime": {
+    "vtk": "9.5.2",
+    "numpy": "2.3.5"
+  },
+  "wheel": [
+    {
+      "url": "https://files.pythonhosted.org/packages/e5/1a/a5d5ef2a5a55512158cad83524bab7a4a451f917aee342f117144d53c6eb/vtk-9.5.2-cp312-cp312-macosx_11_0_arm64.whl",
+      "archive": {
+        "hashes": {
+          "sha256": "cce212b911d13fb0ca36d339f658c9db1ff27a5a730cdddd5d0c6b2ec24c15b1"
+        },
+        "hash": "sha256=cce212b911d13fb0ca36d339f658c9db1ff27a5a730cdddd5d0c6b2ec24c15b1"
+      },
+      "name": "vtk",
+      "version": "9.5.2"
+    }
+  ],
+  "nativeModule": {
+    "path": "vtkCommonCore.cpython-312-darwin.so",
+    "sha256": "46096794fa2762fa0f21a146c49fd0226b03a600779d36ec5279eac422872605"
+  },
+  "renderWindowClass": "vtkCocoaRenderWindow",
+  "renderCapabilities": "OpenGL vendor string:  Apple\nOpenGL renderer string:  Apple M5 Pro\nOpenGL version string:  4.1 Metal - 90.5\nOpenGL extensions:  \n  GL_ARB_blend_func_extended\n  GL_ARB_draw_buffers_blend\n  GL_ARB_draw_indirect\n  GL_ARB_ES2_compatibility\n  GL_ARB_explicit_attrib_location\n  GL_ARB_gpu_shader_fp64\n  GL_ARB_gpu_shader5\n  GL_ARB_instanced_arrays\n  GL_ARB_internalformat_query\n  GL_ARB_occlusion_query2\n  GL_ARB_sample_shading\n  GL_ARB_sampler_objects\n  GL_ARB_separate_shader_objects\n  GL_ARB_shader_bit_encoding\n  GL_ARB_shader_subroutine\n  GL_ARB_shading_language_include\n  GL_ARB_tessellation_shader\n  GL_ARB_texture_buffer_object_rgb32\n  GL_ARB_texture_cube_map_array\n  GL_ARB_texture_gather\n  GL_ARB_texture_query_lod\n  GL_ARB_texture_rgb10_a2ui\n  GL_ARB_texture_storage\n  GL_ARB_texture_swizzle\n  GL_ARB_timer_query\n  GL_ARB_transform_feedback2\n  GL_ARB_transform_feedback3\n  GL_ARB_vertex_attrib_64bit\n  GL_ARB_vertex_type_2_10_10_10_rev\n  GL_ARB_viewport_array\n  GL_EXT_debug_label\n  GL_EXT_debug_marker\n  GL_EXT_framebuffer_multisample_blit_scaled\n  GL_EXT_texture_compression_s3tc\n  GL_EXT_texture_filter_anisotropic\n  GL_EXT_texture_sRGB_decode\n  GL_APPLE_client_storage\n  GL_APPLE_container_object_shareable\n  GL_APPLE_flush_render\n  GL_APPLE_rgb_422\n  GL_APPLE_row_bytes\n  GL_APPLE_texture_range\n  GL_NV_texture_barrier\nPixelFormat Descriptor:\n  colorSize:  32\n  alphaSize:  8\n  stencilSize:  0\n  depthSize:  32\n  accumSize:  0\n  double buffer:  Yes\n  stereo:  No\n  stencil:  0\n  hardware acceleration:  Yes\n  profile version:  0x4100\n",
+  "images": [
+    {
+      "file": "synthetic-original.png",
+      "sha256": "d16fb3d8a28964a2a18c59940c646b53df696dd726a8b2895bbf55e53a386aed",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "file": "synthetic-deformed.png",
+      "sha256": "4a703106277e35b91f5754152e5875e7abe9e061a85062e1f4dda3547a4ce52e",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "file": "synthetic-released.png",
+      "sha256": "88cee640172407ec72b73d6c4ca2cff3dc26c91310f41b9c9adfaa256d04b4a1",
+      "width": 640,
+      "height": 480
+    }
+  ],
+  "limits": [
+    "Synthetic modern Python VTK candidate, not execution of original vtkControl",
+    "Programmatic renderer picks, not genuine pointer/UI/DPI interaction",
+    "No Windows/rendering parity or frontend decision",
+    "Clipping can create new geometry needing explicit FEM ID provenance"
+  ],
+  "passed": 14
+}

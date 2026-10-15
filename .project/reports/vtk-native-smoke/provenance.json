@@ -1,0 +1,36 @@
+{
+  "sourceBaseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sourceContext": [
+    {
+      "path": "vtkControl/vtkControl.cs",
+      "sha256": "9695458ff2c6c202e76b32484ed65d7375556b41d36edc36e42ec124a094eb86",
+      "matchesBaseline": true
+    },
+    {
+      "path": "vtkControl/vtkMax/Actor/vtkMaxActor.cs",
+      "sha256": "7e384c52f9aaa1a4b9d68f6251ccbb78f97cb23da4b3f3a87500c0c38fa116a1",
+      "matchesBaseline": true
+    },
+    {
+      "path": "vtkControl/vtkControl.csproj",
+      "sha256": "962c79e181a6cdd2da04f219d5949bd6bda97173d9e539f8e66dc736f8853907",
+      "matchesBaseline": true
+    }
+  ],
+  "sourceContextOnly": true,
+  "probeSha256": "5f014bd044b5786396463ed356d5eb8dc646ed1bbbc9153a33d4962f9c1051f9",
+  "matchesExecutionProbeHash": true,
+  "command": [
+    "/Users/aleksa/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "X/Feasibility/Rendering/vtk-smoke.py",
+    "--module-dir",
+    "/tmp/prepomaxx-vtk-runtime",
+    "--install-report",
+    "/tmp/prepomaxx-vtk-install.json",
+    "--output-dir",
+    ".project/reports/vtk-native-smoke"
+  ],
+  "exitCode": 0,
+  "nativeModuleFileObservation": "Mach-O 64-bit bundle arm64",
+  "visualInspection": "All three images viewed: adjoining quads, upward displacement, background after actor removal"
+}

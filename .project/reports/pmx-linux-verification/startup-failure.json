@@ -1,0 +1,12 @@
+{
+  "success": false,
+  "recordedAtUtc": "2026-10-15T13:16:48.129645+00:00",
+  "evidenceKind": "Linux ARM64 PMX record inspection, not application/semantic parity",
+  "network": "none",
+  "checkoutMount": "read-only",
+  "inputMount": "read-only",
+  "commands": [],
+  "comparisons": [],
+  "toolSha256": "cf5a15089a03a77afa1184aa147b51c6707c0b7c4ee7418629a3ee940044e9ff",
+  "error": "Command '['podman', 'image', 'inspect', 'e2c86cca5b654054858118e3fe6e4cbdeb34c4f09ce762a36fd4f26a495f5567']' returned non-zero exit status 125."
+}

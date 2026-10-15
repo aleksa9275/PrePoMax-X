@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-15 Europe/Belgrade",
+  "crossoverVersion": "26.2",
+  "bottle": "PrePoMax-X-reference-2.6",
+  "bottleTemplate": "win10_64",
+  "bundle": {
+    "url": "https://prepomax.fs.um.si/Files/Downloads/PrePoMax%20v2.6.0.zip",
+    "bytes": 209028866,
+    "sha256": "7a08995fb776d3e962f859ee576078bf34d13f2b59d81c8012cddf8e69b1c384"
+  },
+  "files": [
+    {
+      "path": "PrePoMax.exe",
+      "sha256": "1ab759129444c080752997b2b661227f5274d9cbb7efa02af2d83de109d80dce",
+      "bytes": 1910784,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "PrePoMax.com",
+      "sha256": "46ec7fa4d79bdf9df756776eeb4e4c5b8d734b7388d9f926529d4b533cdf66b6",
+      "bytes": 1910784,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/CaeGlobals.dll",
+      "sha256": "83c1b9a5211a7e487126b150c9a84c17f81aadc893e301e0f0d1f7b861c2742a",
+      "bytes": 265216,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/CaeMesh.dll",
+      "sha256": "023acddcd59aa08d95940f5f771719de892b63148418a6f2265d92946ad50be5",
+      "bytes": 451072,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/CaeModel.dll",
+      "sha256": "d849eea007d47e159742729211537537e364d25938a17b403bce35d7435bdd16",
+      "bytes": 471552,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/CaeResults.dll",
+      "sha256": "ab9710d58b864c9b2d6d9cdd47a61a159631efac7bce361e8cd9f0d074c3f556",
+      "bytes": 244224,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/Kitware.VTK.dll",
+      "sha256": "d6591d92646412613fa0621b53a2ea00fbc1947b743f7f10d85b133e10434fd1",
+      "bytes": 7172096,
+      "matchesOfficialArchive": true
+    },
+    {
+      "path": "lib/Kitware.mummy.Runtime.dll",
+      "sha256": "25f60152e96cb1cce045cda5b8586c7ede7f9503e9ee7fef20e5f8fd3007daed",
+      "bytes": 19456,
+      "matchesOfficialArchive": true
+    }
+  ],
+  "helpProbe": {
+    "exitCode": 255,
+    "observedVersion": "PrePoMax 2.6.0.0",
+    "scriptOptionAvailable": false,
+    "automationRpcOptionAvailable": false
+  },
+  "guiLaunch": {
+    "exitObserved": false,
+    "consoleObserved": [
+      "File name: disposable reference.pmx",
+      "Warning: The opened file is from an incompatible version: PrePoMax v2.5.1 dev"
+    ],
+    "observationMethod": "user-confirmed native desktop window; agent did not capture desktop UI"
+  },
+  "userObservations": [
+    "The model is visible after opening original copy",
+    "Saved separate roundtrip-2.6.0.pmx",
+    "Reopened saved file: Model and results display"
+  ],
+  "persistence": {
+    "applicationWindowsPath": "C:\\PrePoMax-X-reference\\App\\PrePoMax.exe",
+    "workWindowsPath": "C:\\PrePoMax-X-reference\\Work",
+    "applicationFilesVerified": 217,
+    "referenceCopiesVerified": 2
+  },
+  "limits": [
+    "Windows x64 application through CrossOver on Mac; not native Windows/Mac parity",
+    "No mesher or solver executed; no history regeneration",
+    "No exact producer source SHA for public release proven",
+    "No additional .NET redistributable installed by this attempt"
+  ],
+  "crossOverCliProduct": {
+    "publicVersion": "26.2.0",
+    "productVersion": "26.2.0.39821",
+    "buildTag": "cxoffice-26.2.0rc2",
+    "buildTimestamp": "20260604T163056Z"
+  },
+  "commands": {
+    "createBottle": [
+      "cxbottle",
+      "--bottle",
+      "PrePoMax-X-reference-2.6",
+      "--create",
+      "--template",
+      "win10_64"
+    ],
+    "help": [
+      "wine",
+      "--bottle",
+      "PrePoMax-X-reference-2.6",
+      "PrePoMax.com",
+      "--help"
+    ],
+    "openCopy": [
+      "wine",
+      "--bottle",
+      "PrePoMax-X-reference-2.6",
+      "PrePoMax.exe",
+      "-f",
+      "Z:\\private\\tmp\\prepomaxx-crossover-work\\reference.pmx",
+      "-w",
+      "Z:\\private\\tmp\\prepomaxx-crossover-work"
+    ]
+  },
+  "persistToolSha256": "148210bf45f158b53fa1f332a6082112660fa78146278e5459e31ea696274a5d",
+  "originalInputUnchanged": true,
+  "framingSourceContext": [
+    {
+      "path": "CaeResults/FeResults.cs",
+      "sha256": "fff0b830939e3131cb865df5ffff33a2aee6e73ea2f7b76768a6f0e5be0e2a0c",
+      "matchesBaseline": true
+    },
+    {
+      "path": "CaeResults/ResultsCollection.cs",
+      "sha256": "b87688e78085daf7187242239f28801013057bc1fad06381f61fd539696a9ccd",
+      "matchesBaseline": true
+    },
+    {
+      "path": "CaeResults/FieldOutput/Field.cs",
+      "sha256": "72546ea32a174c057d2e6414295ef88850e03acb06c36e71dd4b357ea6e79fbb",
+      "matchesBaseline": true
+    },
+    {
+      "path": "CaeResults/FieldOutput/FieldData.cs",
+      "sha256": "bf6f86c64aeb73ce2e7ca809b5f8e67d0e6785a352b1f923418e1ac0c4b162f8",
+      "matchesBaseline": true
+    }
+  ]
+}

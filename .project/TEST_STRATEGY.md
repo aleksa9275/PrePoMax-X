@@ -50,8 +50,11 @@ Classify every failure: numerical drift, application/command error, unsupported 
 |---|---|---|
 | Windows x64 | Legacy reference builds/runs; new services preserve old UI and suite results; new frontend, if offered, meets same parity | Windows VS/MSBuild C++ tools, net48 pack, ActiViz 5.8, released base folders and exact solver; not available on this Mac |
 | macOS ARM64 | Native ARM64 process and native tools (no Wine/Rosetta), PMX round-trip, all required numerical/mesh workflows, interactive selection and Retina lifecycle | Current Mac can run offline checks and later feasibility experiments; native dependency/source gaps unresolved |
-| macOS x64 | Same contracts under native x64 with matching tools; no assumption that ARM success establishes Intel support | Intel Mac or suitable native runner required; current ARM Mac is not proof |
 | Linux x64 | Same core/native workflows; documented X11/Wayland support and interactive picking; headless tests truly avoid WinForms | Linux runner/container for compute and physical/virtual display+GPU for rendering |
-| Linux ARM64 | Same gates when supported; otherwise explicit lower-priority status with no unsupported parity claim | ARM Linux runner; every native dependency must be rebuilt/validated |
+| Linux ARM64 | Required: same core/native workflows, interactive picking and file/numerical parity as Linux x64 | ARM Linux runner; every native dependency must be rebuilt/validated; current Podman compute checks do not establish GUI/GPU behavior |
+
+Maintainer correction, 2026-10-15: required targets are Windows x64, Linux x64,
+Linux ARM64 and Apple M-series macOS ARM64. “x86” was explicitly clarified as
+64-bit Intel/AMD; 32-bit x86 and Intel Macs are outside the target matrix.
 
 Public release requires zero unexplained failures in mandatory corpus, complete bidirectional same-baseline file tests, passing required feature workflows and no required silent skips. Windows-only optional solver integrations (Abaqus/FEMaster) need an explicit support policy, not accidental loss. Capture a feature matrix before presenting a release as preserving all functionality.

@@ -1,0 +1,2 @@
+# Preserve this downloaded upstream provenance file byte-for-byte.
+quadwild-v0.0.2-CMakeLists.txt -text -whitespace

@@ -20,6 +20,14 @@ WinForms/WPF/WindowsBase/System.Management, drawing and designer assemblies are 
 
 ## Native source gaps
 
+2026-10-14 follow-up: [task 0004 investigation](reports/native-feasibility.md)
+retains measured headers/interop boundaries, shipped binary hashes and source
+access results. Patched Gmsh's published branch returns 404 in the authenticated
+browser; no corresponding SHA could be obtained. Public QuadWild v0.0.2 is pinned
+as an upstream reference, not the modified fork. A QuadWild README checksum
+disagrees with the actual patch executable and its license notice. Matching
+custom sources/full native builds remain open; no stock tools were substituted.
+
 `ThirdParty/netgen/README.md` says NetGenMesher is built from the author's local `C:\Pc\Programiranje\NetgenMesher`, outside this repository. It implements extensive CAD commands and modified Netgen pyramid/optimization behavior. Public Netgen supports other platforms, but does not replace this integration.
 
 `Licenses/quadwild/NOTICE.md` describes many modifications and a `prescribed_nodes.patch` in an external local fork. Matching sources/patches are not in this checkout. Upstream QuadWild binaries are therefore not interchangeable with PrePoMax's binaries.

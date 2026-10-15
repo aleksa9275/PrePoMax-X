@@ -1,0 +1,36 @@
+{
+  "comparisonCompleted": true,
+  "semanticEquivalenceEstablished": false,
+  "beforeSha256": "80e3c303a0719317af9d23016a4f70fe5f5acb91d731e704ec45dcbbfe2e0379",
+  "afterSha256": "79f8f17be53fcbdde22e2f40ea7ca1ce129e574599abd58e1b793d7256727341",
+  "resultMeshAndNodeLookupIdentical": true,
+  "fieldFrames": [
+    {
+      "kind": "field-0",
+      "originalBytesPreservedWithDatatypeInsertion": true,
+      "addedDataType": 2
+    },
+    {
+      "kind": "field-1",
+      "originalBytesPreservedWithDatatypeInsertion": true,
+      "addedDataType": 3
+    },
+    {
+      "kind": "field-2",
+      "originalBytesPreservedWithDatatypeInsertion": true,
+      "addedDataType": 3
+    },
+    {
+      "kind": "field-3",
+      "originalBytesPreservedWithDatatypeInsertion": true,
+      "addedDataType": 2
+    }
+  ],
+  "allOriginalFieldBytesPreservedWithDatatypeInsertion": true,
+  "opaqueHistoryTrailerIdentical": true,
+  "limits": [
+    "Version-gated byte comparison, not a solver calculation or full document semantic comparison",
+    "Changed NRBF members and removed types still need review"
+  ],
+  "toolSha256": "744d60f2bfad70870db8e62bec66c76d84bead2c677afa3d79420630c59820cb"
+}

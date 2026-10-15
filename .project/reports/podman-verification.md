@@ -1,5 +1,9 @@
 # Task 0002 — Local Podman verification
 
+Historical scope note, 2026-10-15: [current targets](../PROJECT.md) exclude Intel
+Macs and require Linux ARM64. Older macOS x64 gate references below are superseded;
+execution evidence is unchanged.
+
 Current follow-up: native Linux x64 acceptance subsequently passed in GitLab
 pipeline #2947482796 at `822bae25`, completing task 0002. See
 [native x64 acceptance](gitlab-linux-x64.md). Pending-x64 statements below are

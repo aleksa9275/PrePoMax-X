@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "sourceCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sourceFiles": [
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+      "sha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f"
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+      "sha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8"
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+      "sha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79"
+    },
+    {
+      "path": "CaeMesh/Elements/IntegrationScale.cs",
+      "sha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32"
+    },
+    {
+      "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+      "sha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53"
+    }
+  ],
+  "sdk": "10.0.402",
+  "environment": {
+    "kind": "native host",
+    "hostOS": "Linux",
+    "hostArchitecture": "aarch64",
+    "recordedAtUtc": "2026-10-15T14:28:11.275780+00:00",
+    "ci": {}
+  },
+  "toolHashes": {
+    "Program.cs": "565f666727a44362898504854801316f479306926760612b5f3ca75b9c275f8c",
+    "DataProbe.csproj": "5056c6489f6d18344b80f6518bd6c4e5ecaaf980bd6fbb7f32885f477c7c2f1e",
+    "run-data.py": "e7e84257643de0467b10fe28d4ebddf47ebef73ff622a93bd8a087d837fd6d4e",
+    "source-manifest.json": "22e2cab5e4895fcee44a18be54725fb0be4e794d8db87c983876e900d88f38d1",
+    "NuGet.Config": "4e9499bd29cea30b5c6e678b6f472d74079d014efa6859900aeedd0d8687a623",
+    "gitlab-ci.yml": "fdad42ac57318ecba01e5cfb4a279709ec290d6e8766a9a583af05847de6a911"
+  },
+  "buildLog": "  Determining projects to restore...\n  Restored <repository>/X/Feasibility/Data/DataProbe.csproj (in 25 ms).\n<repository>/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n  DataProbe -> <temporary>/bin/DataProbe/release/PrePoMaxX.DataProbe.dll\n\nBuild succeeded.\n\n<repository>/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Feasibility/Data/DataProbe.csproj]\n    4 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:01.03\n",
+  "tests": {
+    "schemaVersion": 1,
+    "success": true,
+    "runtime": {
+      "os": "Linux",
+      "architecture": "Arm64",
+      "osArchitecture": "Arm64",
+      "framework": ".NET 10.0.13"
+    },
+    "passed": 30,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "matrix_inverse_matches_independent_two_by_two_solution",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_inverse_pivots_zero_leading_diagonal",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_rectangular_product_matches_independent_values",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_transpose_and_scalar_product_preserve_input",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_nonconformable_product_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "singular_matrix_raw_nonfinite_result_is_recorded",
+        "status": "passed"
+      },
+      {
+        "name": "metadata_preserves_nonsequential_ids_units_and_coordinate_system",
+        "status": "passed"
+      },
+      {
+        "name": "duplicate_entity_id_replaces_without_renumbering",
+        "status": "passed"
+      },
+      {
+        "name": "numeric_and_text_constructors_copy_input_arrays",
+        "status": "passed"
+      },
+      {
+        "name": "deep_copy_is_independent",
+        "status": "passed"
+      },
+      {
+        "name": "fill_missing_preserves_existing_values_and_copies_new_values",
+        "status": "passed"
+      },
+      {
+        "name": "canonical_measurements_require_explicit_geometry_access",
+        "status": "passed"
+      },
+      {
+        "name": "mesh_metadata_omits_canonical_values_and_preserves_topology_ids",
+        "status": "passed"
+      },
+      {
+        "name": "face_edge_import_flags_preserve_other_entity_kinds",
+        "status": "passed"
+      },
+      {
+        "name": "serialized_field_names_preserve_upstream_contract",
+        "status": "passed"
+      },
+      {
+        "name": "single_face_binary_block_matches_independent_wire_bytes",
+        "status": "passed"
+      },
+      {
+        "name": "metadata_block_preserves_numbers_unicode_null_and_empty_text",
+        "status": "passed"
+      },
+      {
+        "name": "truncated_metadata_block_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "unknown_serialized_field_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "default_and_none_scale_are_unity",
+        "status": "passed"
+      },
+      {
+        "name": "thickness_scale_is_constant",
+        "status": "passed"
+      },
+      {
+        "name": "axisymmetric_scale_is_full_circumference",
+        "status": "passed"
+      },
+      {
+        "name": "unknown_scale_enum_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "negative_scale_inputs_are_preserved_raw_observation",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_handles_crlf_empty_line_utf8_and_final_line",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_handles_single_byte_partial_reads",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_grows_past_one_megabyte_boundary",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_interleaves_text_binary_and_text_without_loss",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_partial_binary_eof_returns_count_and_null",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_zero_bytes_empty_stream_and_carriage_return",
+        "status": "passed"
+      }
+    ],
+    "observations": {
+      "axisymmetricAtRadius2": 12.566370614359172,
+      "matrixInverse": [
+        [
+          0.6000000000000001,
+          -0.7000000000000001
+        ],
+        [
+          -0.2,
+          0.4
+        ]
+      ],
+      "metadata": {
+        "version": 2,
+        "unit": "mm",
+        "coordinates": "global",
+        "faceIds": [
+          7,
+          41
+        ],
+        "edgeIds": [
+          8
+        ]
+      },
+      "mixedBinaryHex": "00FF0A0D2A",
+      "rawNegativeScaleInputs": {
+        "thickness": -2,
+        "axisymmetric": -6.283185307179586
+      },
+      "rawSingularInverse": [
+        [
+          "-Infinity",
+          "Infinity"
+        ],
+        [
+          "Infinity",
+          "-Infinity"
+        ]
+      ],
+      "rectangularProduct": [
+        [
+          58,
+          64
+        ],
+        [
+          139,
+          154
+        ]
+      ],
+      "serializedFields": [
+        "_formatVersion",
+        "_coordinateSystem",
+        "_lengthUnit",
+        "_entityData"
+      ],
+      "singleFaceBlockHex": "0100000004666163650100000004666163652900000001000000046172656101010000000000000000002940",
+      "thicknessWeight": 0.125
+    },
+    "exploratoryTypeIdentity": "CaeMesh.GeometryMetadata, PrePoMaxX.DataProbe, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "limitations": "Six-file slice; no full reader, CAD, element integration, PMX/NRBF/Windows-oracle or whole-core equivalence. Probe assembly is not a persistent type owner."
+  },
+  "cliContracts": [
+    {
+      "name": "missing_arguments",
+      "status": "passed",
+      "exitCode": 2
+    },
+    {
+      "name": "unknown_command",
+      "status": "passed",
+      "exitCode": 2
+    }
+  ],
+  "comparison": {
+    "reference": "/workspace/.project/reports/core-data/macos-arm64.json",
+    "referenceSha256": "dbb052be0ed8b31fa6d0abec2a30e28bf5b4629ec5a9fc3ce86d9a1e3499cdd2",
+    "matches": true
+  }
+}

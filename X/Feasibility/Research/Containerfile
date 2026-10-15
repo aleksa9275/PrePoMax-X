@@ -1,0 +1,5 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+# Research-only compiler layer over the already verified SDK/Python/Git image.
+RUN apt-get update && apt-get install -y --no-install-recommends g++ && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["python3", "X/Feasibility/Research/run-research.py"]

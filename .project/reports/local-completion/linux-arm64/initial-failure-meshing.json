@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "success": false,
+  "recordedAtUtc": "2026-10-15T14:23:36.602072+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "aarch64"
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/g++",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dotnet",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "10.0.402\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "<repository>/CaeMesh/Meshing/Transfinite/Cpp/three_block_mapping_check.cpp",
+        "-o",
+        "<temporary>/original-check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "<temporary>/original-check",
+        "<repository>/CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt"
+      ],
+      "exitCode": 1,
+      "stdout": "FAILED  right_45_45  quads 135  deviation 0.0617397\nok      equilateral  quads 108  deviation 2.84217e-14\nok      diagonal_34  quads 134  deviation 3.55271e-14\nok      sharp_10  quads 141  deviation 2.84217e-14\nok      sharp_5  quads 86  deviation 1.42109e-14\nok      quarter_disk  quads 96  deviation 1.42109e-14\nok      deltoid_10  quads 29  deviation 3.55271e-15\nok      deltoid_30  quads 29  deviation 7.10543e-15\nok      deltoid_all  quads 3  deviation 0\nok      graded_34  quads 134  deviation 2.84217e-14\nok      chained_34  quads 235  deviation 4.9738e-14\nok      cylinder  quads 121  deviation 2.13163e-14\nok      sphere  quads 128  deviation 5.55112e-16\n12 of 13 cases agree\n",
+      "stderr": ""
+    }
+  ],
+  "sourceCommit": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sources": [
+    {
+      "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+      "sha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+      "sha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+      "sha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2"
+    },
+    {
+      "path": "CaeGlobals/ExceptionTools.cs",
+      "sha256": "b2ff33b130d432544b9090f5eec3a4de534982be662eff566779c4808104a439"
+    },
+    {
+      "path": "CaeGlobals/MessageBoxes.cs",
+      "sha256": "778182c7f1f93d90e028147b8c4d206acad27abeec0f27146e414597d3593f1b"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/Cpp/three_block_mapping.h",
+      "sha256": "4c4bf050d6d464b3c80037aca54b025a195e44e9f75f43386e8b400a2db9fe19"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/Cpp/three_block_mapping_check.cpp",
+      "sha256": "79b000462fb372fcecfa473a83439398271797d9220b20da06258738963eee6f"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt",
+      "sha256": "1206ed563d48cd733d59de9255023c60018d858954b7570bfd80ba8576b32618"
+    }
+  ],
+  "toolHashes": {
+    "Program.cs": "515780eaa5ac8430ce2227d03f5da8fd3f391994ed6282c193d0de08319cd734",
+    "geometry-check.cpp": "e30284ab478261436710afa929bd61e93db49908e19dedf7f7c2cc2c00ca3341",
+    "MeshingProbe.csproj": "620fc17e2b4cd7e8626e4366359d77c46a0d5693c5419670ee10e3a3c1c8f1c8",
+    "run-meshing.py": "b424911fd38150de9fb89d308b4e041252ce74568097aa9ae189e6fed48cbd12",
+    "source-manifest.json": "2f17c02703c3c196e8693040ce7e50b3b739c0b432c9e6061d094ccb0b534475",
+    "NuGet.Config": "2142cfb2dfa2c7feefbe40fabcc68b0dfecadafa99a1db9b70239d977cf2a7ef"
+  },
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "sdk": "10.0.402",
+  "error": "Unexpected process result: {'command': ['<temporary>/original-check', '<repository>/CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt'], 'exitCode': 1, 'stdout': 'FAILED  right_45_45  quads 135  deviation 0.0617397\\nok      equilateral  quads 108  deviation 2.84217e-14\\nok      diagonal_34  quads 134  deviation 3.55271e-14\\nok      sharp_10  quads 141  deviation 2.84217e-14\\nok      sharp_5  quads 86  deviation 1.42109e-14\\nok      quarter_disk  quads 96  deviation 1.42109e-14\\nok      deltoid_10  quads 29  deviation 3.55271e-15\\nok      deltoid_30  quads 29  deviation 7.10543e-15\\nok      deltoid_all  quads 3  deviation 0\\nok      graded_34  quads 134  deviation 2.84217e-14\\nok      chained_34  quads 235  deviation 4.9738e-14\\nok      cylinder  quads 121  deviation 2.13163e-14\\nok      sphere  quads 128  deviation 5.55112e-16\\n12 of 13 cases agree\\n', 'stderr': ''}"
+}

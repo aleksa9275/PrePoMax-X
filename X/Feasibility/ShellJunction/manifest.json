@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "feature": "F001",
+  "unitsOnImport": "MM_TON_S_C",
+  "inputDeckHasUnits": false,
+  "geometry": {
+    "plateMidsurface": {
+      "xRange": [
+        -100,
+        100
+      ],
+      "yRange": [
+        0,
+        200
+      ],
+      "z": 0
+    },
+    "webMidsurface": {
+      "x": 0,
+      "yRange": [
+        0,
+        200
+      ],
+      "zRange": [
+        0,
+        100
+      ]
+    },
+    "attachmentLine": {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0,
+        200,
+        0
+      ]
+    },
+    "areaUnits": "mm^2",
+    "note": "Midsurface geometry only; no thickness, material, weld, contact, BC, load or analysis step assigned"
+  },
+  "cases": [
+    {
+      "file": "connected.inp",
+      "sha256": "4fb968764a2ffd471488c0172d7a6a872a60cc2c947497d22537b40d801cf5e3",
+      "connectionIntent": "continuous",
+      "purpose": "hand-authored connected reference",
+      "expected": {
+        "nodeCount": 8,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [
+          2,
+          5
+        ],
+        "sharedEdges": [
+          [
+            2,
+            5
+          ]
+        ],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0
+      }
+    },
+    {
+      "file": "coincident-disconnected.inp",
+      "sha256": "29e2bce425ecf97b17c8b3c49d61bb82d6229c8b8a6c621ea2a79bd98c5521eb",
+      "connectionIntent": "continuous",
+      "purpose": "negative: coincidence without shared IDs",
+      "expected": {
+        "nodeCount": 10,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [
+          [
+            2,
+            9
+          ],
+          [
+            5,
+            10
+          ]
+        ],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0
+      }
+    },
+    {
+      "file": "unsplit-plate.inp",
+      "sha256": "24fc5c3b789aa162e21ee730a99fd5103ade516c0ddac4e757a2b26949adb507",
+      "connectionIntent": "continuous",
+      "purpose": "negative: missing plate attachment edge",
+      "expected": {
+        "nodeCount": 8,
+        "elementIds": [
+          11,
+          21
+        ],
+        "plateElementIds": [
+          11
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0
+      }
+    },
+    {
+      "file": "intentional-gap.inp",
+      "sha256": "52e9ac7b70a96d84e87392631bfa2537494ec4c8befb4faae9dcd5fa5816468a",
+      "connectionIntent": "separate",
+      "purpose": "intentional 0.1 mm gap",
+      "expected": {
+        "nodeCount": 10,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0.1
+      }
+    }
+  ],
+  "windowsObserved": false,
+  "cadGeometryCreated": false,
+  "automaticMesherRan": false
+}

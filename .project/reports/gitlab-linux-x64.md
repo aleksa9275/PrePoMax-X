@@ -103,7 +103,8 @@ across the replay pins: replay mechanics, not adaptation to changed source,
 were demonstrated. The retained three upstream-source warnings and parser
 limitations remain unchanged.
 
-This is a seven-file compute feasibility result. Windows oracle, Mac x64,
+This is a seven-file compute feasibility result. Windows oracle, Mac x64
+(outside current scope per the maintainer's 2026-10-15 target correction),
 whole-core, PMX/history, controller, rendering/selection, CAD/meshing and solver
 parity remain unproved. No production source/project changes were made.
 No x/main integration or further implementation phase is authorized by this

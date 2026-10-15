@@ -23,3 +23,53 @@ Use accepted/proposed/deferred labels; a proposal in a spec is not an architectu
 | D016 | Bounded proof complete 2026-10-14 | Task 0003 on feature/core-data-feasibility: dependency/compiler boundaries, unchanged six-file Matrix/metadata/scaling/FRD-stream probe and PMX source-identity/Windows capture preparation. Mac ARM64 and native Linux x64 pass 30 checks plus two CLI contracts with matching observations; actual Windows capture/PMX compatibility remain pending. No full reader, production serializer or x/main integration commitment |
 
 Review requested at handoff: approve/adjust D004 and the bounded feasibility tasks 1.1/1.2/2.1 plus source recovery 5.1. D005–D008 remain gates rather than immediate commitments. The maintainer handles commits and pushes; agents must not ask to push as a prerequisite for local verification.
+
+D017 — Bounded pre-Windows investigation authorized and audit completed,
+2026-10-14: maintainer authorized progressing through the proposed steps,
+starting with native source/build feasibility and stopping at completed task
+boundaries before usage runs out. Task 0004 records native header/interop checks
+and matching-source gaps; native-source recovery/full builds remain open.
+No production dependencies, frontend/interop decision, F001 implementation,
+x/main integration or commit/push permission follows from this continuation.
+
+D018 — Bounded proofs complete 2026-10-14: task 0005's native structured kernel
+and unchanged managed count/grid slice pass on Mac ARM64; task 0006's isolated
+Python VTK 9.5.2 synthetic rendering/picking passes 14 checks and exposes clipping
+ID loss; task 0007 defines four checked shell-junction fixtures. These establish
+specific contracts, not whole-core/native-tool/UI parity. Full C# mapping reaches
+the ExceptionTools/MessageBoxes boundary. GUI/binding and F001 implementation
+choices remain deferred; Windows/native source/platform gates stay open.
+
+D019 — Research authorization and legacy evidence, 2026-10-15: maintainer
+supplied a PMX and accepts investigating an adjusted cross-platform schema with
+eventual upstream contribution in mind. Task 0008 decodes actual 2.5.1-dev
+records without application reconstruction; production schema remains undecided.
+Task 0009's isolated CrossOver Windows 2.6.0 read/save/reopen is human-confirmed,
+with guarded byte comparisons and explicit NRBF changes. Native platform/full
+semantics remain open. No commits/pushes, messages or PR publication authorized.
+
+D020 — Bounded Linux PMX repetition complete, 2026-10-15: task 0010 passes
+24 synthetic tests and both private record inventories on native-architecture
+Linux ARM64 in Podman. Portable observations match Mac exactly; one additional
+runtime support assembly is guarded separately. No semantic persistence, history,
+Windows/Linux x64 or production-format conclusion follows. Preparation exit
+gates define next research, with semantic snapshots/history as the next priority.
+
+D021 — Accepted maintainer target correction and next-session handoff,
+2026-10-15: required targets are Windows x64, Linux x64, Linux ARM64 and Apple
+M-series macOS ARM64. Maintainer explicitly clarified “x86” as 64-bit Intel/AMD.
+Intel Macs and 32-bit x86 are excluded; Linux ARM64 is required. This supersedes
+the initial target matrix and lower-priority ARM Linux statements in historical
+reports. Windows is expected next session; task 0011/handoff are prepared with
+capture pending. Uncommitted research must be carried to that checkout; no new
+commit/push/integration or architectural-choice authorization.
+
+D022 — Accepted local completion/publication instruction, 2026-10-15: maintainer
+explicitly authorizes completing feasible local preparation then committing and
+pushing reviewed research to origin. Task 0012 includes hosted evidence follow-up
+and ends this exception; later commits/pushes need a new instruction. No upstream
+write, force push, x/main integration, frontend/default-format choice or broad
+production change. Selected PMX scalar comparisons expose job settings drift;
+Linux ARM64 mapping is contraction-sensitive; VTK provenance/lifecycle and the
+bundled 2.22 analytical solver reference pass within bounded scopes. None closes
+native Windows, full semantics/history, native-source or production-policy gates.

@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "checks": [
+    {
+      "name": "same scalar bindings",
+      "passed": true
+    },
+    {
+      "name": "scalar mutation rejected",
+      "passed": true
+    },
+    {
+      "name": "member binding swap rejected",
+      "passed": true
+    }
+  ],
+  "privateInputUsed": false
+}

@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "inputSha256": "80e3c303a0719317af9d23016a4f70fe5f5acb91d731e704ec45dcbbfe2e0379",
+  "header": "PrePoMax v2.5.1 dev",
+  "resultCount": 1,
+  "resultNameSha256": "c942c5846ea92275b5851cdb2c969289ff952327b6060733dd9ba7a6f97fd5b7",
+  "fieldFrameCount": 4,
+  "chunks": [
+    {
+      "kind": "mesh-and-node-lookup",
+      "offset": 1910457,
+      "compressedBytes": 3986653,
+      "inflatedBytes": 11793681,
+      "inflatedSha256": "bca9f1531ef015c8232336726d9d88a9737370489de3bc5c88f53bcc3a814872"
+    },
+    {
+      "kind": "field-0",
+      "offset": 5897122,
+      "compressedBytes": 1533229,
+      "inflatedBytes": 1937483,
+      "inflatedSha256": "a9099f3f1b9ae96714a290cdb7037e2179d48915aee38b2434e05bf2b85da05b"
+    },
+    {
+      "kind": "field-1",
+      "offset": 7430355,
+      "compressedBytes": 3632771,
+      "inflatedBytes": 3874905,
+      "inflatedSha256": "1cd114ca45e72ef26d5fa5efac2aaef1e3a7b80c537389b34a3c68bf4df75084"
+    },
+    {
+      "kind": "field-2",
+      "offset": 11063130,
+      "compressedBytes": 3491977,
+      "inflatedBytes": 3874909,
+      "inflatedSha256": "bf4eaaffe37a0dba9100945ed5c1d112326793939220733c91ca5ebf7660716d"
+    },
+    {
+      "kind": "field-3",
+      "offset": 14555111,
+      "compressedBytes": 1819128,
+      "inflatedBytes": 1937483,
+      "inflatedSha256": "00bfee649fedee989e1d927ce5b2638c25c918e714457effa044ae8c9730d26a"
+    }
+  ],
+  "opaqueHistoryTrailerBytes": 33,
+  "opaqueHistoryTrailerSha256": "83487e0884f72628eb8a75bea4f3b0b72beab6439ad9f163ceb152d99bb6a72e",
+  "limits": [
+    "Observed single-result versions only",
+    "Mesh/field payloads fingerprinted, not interpreted",
+    "History trailer remains opaque; no numerical or command equivalence claim"
+  ],
+  "toolSha256": "744d60f2bfad70870db8e62bec66c76d84bead2c677afa3d79420630c59820cb"
+}

@@ -1,5 +1,9 @@
 # Task 0002 core-feasibility execution report
 
+Historical scope note, 2026-10-15: references below to outstanding Intel Mac
+acceptance are superseded by [the current targets](../PROJECT.md). Intel Macs
+are excluded; Linux ARM64 is required. Execution evidence is unchanged.
+
 Date: 2026-10-13, Europe/Belgrade. Outcome: **bounded Mac ARM64 source reuse proved; Linux verification pending**. No full application/core/file-compatibility claim.
 
 Historical execution snapshot. On 2026-10-14 the maintainer replaced the GitLab CI route with local Podman testing. See [Podman verification](podman-verification.md) and [current status](../STATUS.md) for subsequent results; the CI preparation below records the original work. Later that day complementary native Linux x64 GitLab preparation was authorized alongside Podman; see [CI preparation](gitlab-verification.md). Native Linux x64 subsequently passed both pins in pipeline #2947482796 at 822bae25; see [acceptance evidence](gitlab-linux-x64.md).

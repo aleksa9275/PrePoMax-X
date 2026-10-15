@@ -1,0 +1,89 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-10-15T14:23:57.371526+00:00",
+  "vtk": "9.5.2",
+  "os": "Darwin",
+  "architecture": "arm64",
+  "toolSha256": "d3921ac8be4b8555c2e55a25d8f84bc623cb71e5de4ea21b937aba2d848ac7a4",
+  "checks": [
+    {
+      "name": "pinned native Mac ARM64 runtime",
+      "passed": true
+    },
+    {
+      "name": "mixed linear quad/quadratic quad/tetra types",
+      "passed": true
+    },
+    {
+      "name": "surface subdivision maps all generated faces to original elements",
+      "passed": true
+    },
+    {
+      "name": "clip children retain explicit parent element ID",
+      "passed": true
+    },
+    {
+      "name": "new clipping vertices remain distinct from original FEM nodes",
+      "passed": true
+    },
+    {
+      "name": "unknown parent ID negative control rejected",
+      "passed": true
+    },
+    {
+      "name": "mixed-order deformation preserves exact element provenance",
+      "passed": true
+    },
+    {
+      "name": "deformation applies to all corner and midside nodes",
+      "passed": true
+    },
+    {
+      "name": "20 create/render/pick/remove/finalize cycles return the quadratic element ID",
+      "passed": true
+    }
+  ],
+  "renderWindowClass": "vtkCocoaRenderWindow",
+  "renderCapabilities": "OpenGL vendor string:  Apple\nOpenGL renderer string:  Apple M5 Pro\nOpenGL version string:  4.1 Metal - 90.5\nOpenGL extensions:  \n  GL_ARB_blend_func_extended\n  GL_ARB_draw_buffers_blend\n  GL_ARB_draw_indirect\n  GL_ARB_ES2_compatibility\n  GL_ARB_explicit_attrib_location\n  GL_ARB_gpu_shader_fp64\n  GL_ARB_gpu_shader5\n  GL_ARB_instanced_arrays\n  GL_ARB_internalformat_query\n  GL_ARB_occlusion_query2\n  GL_ARB_sample_shading\n  GL_ARB_sampler_objects\n  GL_ARB_separate_shader_objects\n  GL_ARB_shader_bit_encoding\n  GL_ARB_shader_subroutine\n  GL_ARB_shading_language_include\n  GL_ARB_tessellation_shader\n  GL_ARB_texture_buffer_object_rgb32\n  GL_ARB_texture_cube_map_array\n  GL_ARB_texture_gather\n  GL_ARB_texture_query_lod\n  GL_ARB_texture_rgb10_a2ui\n  GL_ARB_texture_storage\n  GL_ARB_texture_swizzle\n  GL_ARB_timer_query\n  GL_ARB_transform_feedback2\n  GL_ARB_transform_feedback3\n  GL_ARB_vertex_attrib_64bit\n  GL_ARB_vertex_type_2_10_10_10_rev\n  GL_ARB_viewport_array\n  GL_EXT_debug_label\n  GL_EXT_debug_marker\n  GL_EXT_framebuffer_multisample_blit_scaled\n  GL_EXT_texture_compression_s3tc\n  GL_EXT_texture_filter_anisotropic\n  GL_EXT_texture_sRGB_decode\n  GL_APPLE_client_storage\n  GL_APPLE_container_object_shareable\n  GL_APPLE_flush_render\n  GL_APPLE_rgb_422\n  GL_APPLE_row_bytes\n  GL_APPLE_texture_range\n  GL_NV_texture_barrier\nPixelFormat Descriptor:\n  colorSize:  32\n  alphaSize:  8\n  stencilSize:  0\n  depthSize:  32\n  accumSize:  0\n  double buffer:  Yes\n  stereo:  No\n  stencil:  0\n  hardware acceleration:  Yes\n  profile version:  0x4100\n",
+  "observations": {
+    "surfaceFaces": 29,
+    "clippedCells": 2,
+    "originalNodeIdsOnCut": [
+      146,
+      163,
+      214
+    ],
+    "generatedCutVertexCount": 3,
+    "lifecycleCycles": 20,
+    "cellPicks": [
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007,
+      9007
+    ]
+  },
+  "limits": [
+    "Synthetic candidate only; production vtkControl unchanged",
+    "Cell array carries parent element identity; generated points are not FEM nodes",
+    "Coordinate lookup only justified for this fixture; production needs topology/parametric provenance",
+    "Programmatic picks, no genuine pointer/DPI/framework embedding",
+    "Bounded lifecycle execution, not proof of no memory/resource leaks",
+    "No native Windows/Linux rendering acceptance or frontend decision"
+  ]
+}

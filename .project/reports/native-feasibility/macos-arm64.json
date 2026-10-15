@@ -1,0 +1,695 @@
+{
+  "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "host": {
+    "os": "Darwin",
+    "architecture": "arm64"
+  },
+  "audit_tool_sha256": "ab5a31b10c3540f5b5a3a177f713ebc5b6bc6d127a515cb10b58288798027a5d",
+  "compiler": {
+    "command": [
+      "/usr/bin/clang++",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+    "stderr": ""
+  },
+  "tooling": {
+    "cmake": null,
+    "ninja": null,
+    "clang": "/usr/bin/clang",
+    "clang++": "/usr/bin/clang++"
+  },
+  "binaries": [
+    {
+      "path": "ThirdParty/gmsh-4.13.0-Windows64-sdk/lib/gmsh-4.13.dll",
+      "bytes": 35533824,
+      "sha256": "74d499bba258e403a3b8beac0424c8cea0273e764c74a4aa1deecb235894cdc8",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/NetGenMesher.exe",
+      "bytes": 267264,
+      "sha256": "1a09dbe76f91ef72f5d305b5d99d37f8d6218a258cb60c221962d539e61f64c4",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/nglib.dll",
+      "bytes": 2325504,
+      "sha256": "d65e08883a3c57dfd54898d3a7a5cbe6d5a3d699ffc3927a23328ac45812039d",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/quadwild-bimdf/quadwild.exe",
+      "bytes": 3686912,
+      "sha256": "c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/quadwild-bimdf/quad_from_patches.exe",
+      "bytes": 2717696,
+      "sha256": "98e0217d92e1539d9db8dffbf2f88a93a93b69e408cae128816935dfdc0c8dfe",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKBO.dll",
+      "bytes": 1918976,
+      "sha256": "a7b7650420393bce8f27186e031f5eca2f22a64924db09a9682afe876716c276",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKBRep.dll",
+      "bytes": 2038272,
+      "sha256": "815e275193c05b2093c8fcaf181e4f79cbaf373851e4cc224970e291626cef16",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKBool.dll",
+      "bytes": 3384320,
+      "sha256": "c4e9530a196bf3e5ab1b69f5e12e8df0c81b35ddfcde5283efc61b58c5096e9e",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKCAF.dll",
+      "bytes": 468992,
+      "sha256": "3ff2e65992c0be566f8863b7841b744c4e12da3bd3da9b9bd029da1b52bb9fcc",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKCDF.dll",
+      "bytes": 260608,
+      "sha256": "e3a97c180e612b031acad03a7b0cd6cd9f11071ad9ba93c1195631c26e577b35",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKDE.dll",
+      "bytes": 174592,
+      "sha256": "f2e3ba6eabe19fa0f33114c081013c872f7249976aaabe17407318b9aedaebaa",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKDEIGES.dll",
+      "bytes": 2785792,
+      "sha256": "a0fa8256da952e117ab87bb7dc04853acc94d6d05a17fff943a870ca07a26135",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKDESTEP.dll",
+      "bytes": 5423104,
+      "sha256": "f4124c6b1f147afbbbe0a23095804e5c1d11bf81975655c4576cf24f82ba09b4",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKDESTL.dll",
+      "bytes": 126464,
+      "sha256": "bdb2f5e9957848eb395c8c12ab59762b1977d9d41992adba3d3c713cc011e1f1",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKFillet.dll",
+      "bytes": 2130944,
+      "sha256": "394ea46cf43a92d4d3862d386c1d62c27f1b5727194bb45cf04c48202cb6b6ad",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKG2d.dll",
+      "bytes": 417792,
+      "sha256": "571579062002f6a2a0c71d51e5e80d1687711725358dd3049e750d44903f8e00",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKG3d.dll",
+      "bytes": 1310208,
+      "sha256": "431bd9da81fd67cb2a332f306330004a72cb5ef3f1ba3a90861e484857fcc372",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKGeomAlgo.dll",
+      "bytes": 3990016,
+      "sha256": "633df9b5803a70ac0e293b6ddb30aa6c56adba5320d60776732aaff97e7ac95d",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKGeomBase.dll",
+      "bytes": 4200960,
+      "sha256": "425fe6a8e862d52b6925fb4a26b78823eb696a0e61065fafbc7530d0714f9331",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKHLR.dll",
+      "bytes": 920576,
+      "sha256": "922bfc968fbcf07c6ce42e7257909f27120b50d8f0b296e029534898aec19a4e",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKLCAF.dll",
+      "bytes": 630784,
+      "sha256": "1e07b5a77adaee3430ab57557174651462982a80db2937bba6e336763db6c03e",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKMath.dll",
+      "bytes": 1393664,
+      "sha256": "a528bbc5cdfa673874c5afab83a5c7df3428ef13ae3f5124c50cb2099b01aabc",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKMesh.dll",
+      "bytes": 620032,
+      "sha256": "1cd8f944665bee9db11b9b70e9c8cf0f95d0d9cfd5b1ef84251b6db027aa5205",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKMeshVS.dll",
+      "bytes": 293888,
+      "sha256": "bfc319cd128ae4730051aa1511fce48acd8b15c99e1e067dbb34eca0a7bc489c",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKOffset.dll",
+      "bytes": 1689088,
+      "sha256": "9c2ad740a4ed14ad834ce990fb954874733e867b44b3a3467753d03a9db71ca3",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKPrim.dll",
+      "bytes": 302080,
+      "sha256": "0a6e9e684ba3d8e28c804cf1607188ddca4244d71acc08963cb352a4e09132a4",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKService.dll",
+      "bytes": 990720,
+      "sha256": "71e88ccf7d94a9b0e7bca2b363d40f7babaf42c6b62665dac065a844ac0f7770",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKShHealing.dll",
+      "bytes": 2411008,
+      "sha256": "f75f507c07e60fd2f93fb1753e92ef5c882cf1129927d694d5180a0cc70c1c4e",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKTopAlgo.dll",
+      "bytes": 2327552,
+      "sha256": "c19731d478c858b72f3d5fd36b4dd041c5d16c1883dfd91bf90cdbe1ca9b09c6",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKV3d.dll",
+      "bytes": 2484736,
+      "sha256": "739e077976e9070cfec774dcdf30a9a4fb10df1c800941561674db49a18951f4",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKVCAF.dll",
+      "bytes": 202240,
+      "sha256": "b9a7a0199a985b8b699bd06c88c43718ace363ad1cc923c302d1af39058adb39",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKXCAF.dll",
+      "bytes": 778240,
+      "sha256": "7b2fe0aadf953e2363c28fd98bdd9571a443f88f8e48aeab2b610a1f98b5f107",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKXSBase.dll",
+      "bytes": 1526272,
+      "sha256": "6fbd4d65c9298e8db528a79af557f67b1dc87b8d647cb04c9ebc11a171b1ca69",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/netgen/TKernel.dll",
+      "bytes": 1553408,
+      "sha256": "546558e6534b9104f3ff205922e403b205527492577f7da8732d66118a56db67",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/QuadMesher/lib/md/qmorph_gmsh.lib",
+      "bytes": 1834862,
+      "sha256": "30569cd9eddbe2d8cf635b4ea51f4476b7c0935f5909258b0588ba403f0795e1",
+      "format": "ar archive (inspect member objects separately)"
+    },
+    {
+      "path": "ThirdParty/QuadMesher/lib/md/qmorph_static.lib",
+      "bytes": 4112570,
+      "sha256": "a08cc3081d157c9e5e879d6a0ad0ea3266755204c22c521ebb05b601ca2b5ae2",
+      "format": "ar archive (inspect member objects separately)"
+    },
+    {
+      "path": "ThirdParty/QuadMesher/lib/mdd/qmorph_gmsh.lib",
+      "bytes": 4190392,
+      "sha256": "389c1bdcb3cf80a618aaed91c64f62cb2a6345441c7799dea7e2f9d8ca66f38f",
+      "format": "ar archive (inspect member objects separately)"
+    },
+    {
+      "path": "ThirdParty/QuadMesher/lib/mdd/qmorph_static.lib",
+      "bytes": 9433536,
+      "sha256": "367c102029ce361cc664024ca8fc474f08df071af0ff724a3af971ae6b8c2ddd",
+      "format": "ar archive (inspect member objects separately)"
+    },
+    {
+      "path": "ThirdParty/mmg/mmg3d.exe",
+      "bytes": 691712,
+      "sha256": "617a6d31f2bd7fa3c583246e986395fc84b3165a7debe862085ba896a5e958ff",
+      "format": "PE/COFF",
+      "machine": "0x8664",
+      "architecture": "x64",
+      "optional_header_magic": "0x20b"
+    },
+    {
+      "path": "ThirdParty/mmg/mmgs.exe",
+      "bytes": 314368,
+      "sha256": "9e2d8fd854c808780d969afea0ec2a9d434345a4b87af10be199906c597f8be8",
+      "format": "PE/COFF",
+      "machine": "0x14c",
+      "architecture": "x86",
+      "optional_header_magic": "0x10b"
+    }
+  ],
+  "sources": [
+    {
+      "path": "GmshCommon/GmshCommon.h",
+      "sha256": "c0ed41040886cc895a33a5459be049c5639d2537e5b84718b57dc6b4f5b05ca1",
+      "baseline_sha256": "c0ed41040886cc895a33a5459be049c5639d2537e5b84718b57dc6b4f5b05ca1",
+      "matches_baseline": true
+    },
+    {
+      "path": "GmshCommon/QMorph.h",
+      "sha256": "b9649f383bbf531d407446fbbaa2ade1f314ce2cd15ab3e1953259d98530221f",
+      "baseline_sha256": "b9649f383bbf531d407446fbbaa2ade1f314ce2cd15ab3e1953259d98530221f",
+      "matches_baseline": true
+    },
+    {
+      "path": "GmshCommon/GmshCommon.vcxproj",
+      "sha256": "e2acd4b0745c22c2c89c613e38d4facec263af0fafd7b6310d534de4411d7f4f",
+      "baseline_sha256": "e2acd4b0745c22c2c89c613e38d4facec263af0fafd7b6310d534de4411d7f4f",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/gmsh-4.13.0-Windows64-sdk/include/gmsh.h",
+      "sha256": "c3dc08c156d14a1e99737c4d8667ea7830236170edc79a953877b57a3e2889d6",
+      "baseline_sha256": "c3dc08c156d14a1e99737c4d8667ea7830236170edc79a953877b57a3e2889d6",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/gmsh-4.13.0-Windows64-sdk/include/gmsh.h_original",
+      "sha256": "311e30c47b24f3910ae50c59c3b0073087b4624faeebd4074e127e59968ec1dd",
+      "baseline_sha256": "311e30c47b24f3910ae50c59c3b0073087b4624faeebd4074e127e59968ec1dd",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/gmsh-4.13.0-Windows64-sdk/include/gmshc.h",
+      "sha256": "9617c1da723b25ffe22eba8eab95cf0764f259abf023f32105156d41d0ab58a3",
+      "baseline_sha256": "9617c1da723b25ffe22eba8eab95cf0764f259abf023f32105156d41d0ab58a3",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/QuadMesher/include/qmorph/qmorph.h",
+      "sha256": "be8c4fbad3d07cb6998ddf3faa9d4d691bddb05cad1a70402ca692208c1a7c9e",
+      "baseline_sha256": "be8c4fbad3d07cb6998ddf3faa9d4d691bddb05cad1a70402ca692208c1a7c9e",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/QuadMesher/include/qmorph/qmorph_gmsh.h",
+      "sha256": "e82506f7f6030559d597104774e3d1a4b57fdd7e019c0deace14f0da99e35be5",
+      "baseline_sha256": "e82506f7f6030559d597104774e3d1a4b57fdd7e019c0deace14f0da99e35be5",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/QuadMesher/THIRD_PARTY_NOTICES.md",
+      "sha256": "bcbe714a55ba508067e16a01e210e31cf4306fcc5a82f77270a3785511c5a858",
+      "baseline_sha256": "bcbe714a55ba508067e16a01e210e31cf4306fcc5a82f77270a3785511c5a858",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/netgen/README.md",
+      "sha256": "4cdbf4123cc568fb1b3d5fa0bd11b3562b88a2afbb2a16078da8900b1a444743",
+      "baseline_sha256": "4cdbf4123cc568fb1b3d5fa0bd11b3562b88a2afbb2a16078da8900b1a444743",
+      "matches_baseline": true
+    },
+    {
+      "path": "ThirdParty/quadwild-bimdf/README.md",
+      "sha256": "43c22387476a9954de1cb0c98ad3328867185331c31a69164422ff06d70ea12f",
+      "baseline_sha256": "43c22387476a9954de1cb0c98ad3328867185331c31a69164422ff06d70ea12f",
+      "matches_baseline": true
+    },
+    {
+      "path": "Licenses/quadwild/NOTICE.md",
+      "sha256": "f43273f9d6e263d0e396ec4afd14a9b3ab19f16173a1d3ada0bc09c8f63160b0",
+      "baseline_sha256": "f43273f9d6e263d0e396ec4afd14a9b3ab19f16173a1d3ada0bc09c8f63160b0",
+      "matches_baseline": true
+    },
+    {
+      "path": "Licenses/README.md",
+      "sha256": "0ab4bfa07bb3093669064572e95a2fc4060ecabc62c8dd72329fc8a304efcf9d",
+      "baseline_sha256": "0ab4bfa07bb3093669064572e95a2fc4060ecabc62c8dd72329fc8a304efcf9d",
+      "matches_baseline": true
+    },
+    {
+      "path": "PrePoMax/Meshing/Base/IMesherRunner.cs",
+      "sha256": "74352890ca6f44b54c14eec822b26d000c6d07dd27dedda3eaf3610e0b338d05",
+      "baseline_sha256": "74352890ca6f44b54c14eec822b26d000c6d07dd27dedda3eaf3610e0b338d05",
+      "matches_baseline": true
+    },
+    {
+      "path": "PrePoMax/Common/ExecutableJobRunner.cs",
+      "sha256": "cab49bfb72cc739c92067f54c7349a465308d350a18e5dd9e14642ed76dbad41",
+      "baseline_sha256": "cab49bfb72cc739c92067f54c7349a465308d350a18e5dd9e14642ed76dbad41",
+      "matches_baseline": true
+    },
+    {
+      "path": "GmshCaller/Program.cs",
+      "sha256": "320acddb3be753bad3474ff97f76b1fec28c81fe814ac5c711cec7d83f5f3fb3",
+      "baseline_sha256": "320acddb3be753bad3474ff97f76b1fec28c81fe814ac5c711cec7d83f5f3fb3",
+      "matches_baseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/QuadWild/QuadWildRuntime.cs",
+      "sha256": "b974248520d09cc00dd1303281e36ec7aac2c0a38cc5741964dc255e8245e7c4",
+      "baseline_sha256": "b974248520d09cc00dd1303281e36ec7aac2c0a38cc5741964dc255e8245e7c4",
+      "matches_baseline": true
+    }
+  ],
+  "quadwild_checksum_claims": [
+    {
+      "notice": "Licenses/quadwild/NOTICE.md",
+      "binary": "quadwild.exe",
+      "declared_sha256": "c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b",
+      "actual_sha256": "c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b",
+      "matches": true
+    },
+    {
+      "notice": "Licenses/quadwild/NOTICE.md",
+      "binary": "quad_from_patches.exe",
+      "declared_sha256": "98e0217d92e1539d9db8dffbf2f88a93a93b69e408cae128816935dfdc0c8dfe",
+      "actual_sha256": "98e0217d92e1539d9db8dffbf2f88a93a93b69e408cae128816935dfdc0c8dfe",
+      "matches": true
+    },
+    {
+      "notice": "ThirdParty/quadwild-bimdf/README.md",
+      "binary": "quadwild.exe",
+      "declared_sha256": "c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b",
+      "actual_sha256": "c7d7d412de7cdc58d3b07fb645c8dc141ece1aaf76a15c1153e7c19fe2659b9b",
+      "matches": true
+    },
+    {
+      "notice": "ThirdParty/quadwild-bimdf/README.md",
+      "binary": "quad_from_patches.exe",
+      "declared_sha256": "445195a01b34873a111b96752c605409b187506de9c71c1ebe90ffc0b2337021",
+      "actual_sha256": "98e0217d92e1539d9db8dffbf2f88a93a93b69e408cae128816935dfdc0c8dfe",
+      "matches": false
+    }
+  ],
+  "gmsh_wrapper_calls": [
+    "clear",
+    "finalize",
+    "initialize",
+    "isInitialized",
+    "logger::get",
+    "logger::getLastError",
+    "logger::start",
+    "logger::stop",
+    "logger::write",
+    "merge",
+    "model::add",
+    "model::addDiscreteEntity",
+    "model::addPhysicalGroup",
+    "model::geo::addSurfaceLoop",
+    "model::geo::addVolume",
+    "model::geo::synchronize",
+    "model::getAdjacencies",
+    "model::getBoundary",
+    "model::getBoundingBox",
+    "model::getClosestPoint",
+    "model::getCurrent",
+    "model::getEntities",
+    "model::getEntitiesForPhysicalGroup",
+    "model::getEntityName",
+    "model::getNormal",
+    "model::getParametrization",
+    "model::getParametrizationBounds",
+    "model::getPhysicalGroups",
+    "model::getPhysicalName",
+    "model::getType",
+    "model::getValue",
+    "model::isInside",
+    "model::mesh::addElements",
+    "model::mesh::addFaces",
+    "model::mesh::addNodes",
+    "model::mesh::affineTransform",
+    "model::mesh::classifySurfaces",
+    "model::mesh::clear",
+    "model::mesh::createFaces",
+    "model::mesh::createGeometry",
+    "model::mesh::createTopology",
+    "model::mesh::embed",
+    "model::mesh::generate",
+    "model::mesh::getAllFaces",
+    "model::mesh::getElement",
+    "model::mesh::getElementProperties",
+    "model::mesh::getElementQualities",
+    "model::mesh::getElementTypes",
+    "model::mesh::getElements",
+    "model::mesh::getIntegrationPoints",
+    "model::mesh::getJacobians",
+    "model::mesh::getMaxElementTag",
+    "model::mesh::getMaxNodeTag",
+    "model::mesh::getNodes",
+    "model::mesh::getSizes",
+    "model::mesh::optimize",
+    "model::mesh::recombine",
+    "model::mesh::refine",
+    "model::mesh::removeConstraints",
+    "model::mesh::removeDuplicateElements",
+    "model::mesh::removeDuplicateNodes",
+    "model::mesh::removeElements",
+    "model::mesh::removeSizeCallback",
+    "model::mesh::renumberElements",
+    "model::mesh::setAlgorithm",
+    "model::mesh::setCompound",
+    "model::mesh::setNode",
+    "model::mesh::setOrder",
+    "model::mesh::setOutwardOrientation",
+    "model::mesh::setRecombine",
+    "model::mesh::setSizeCallback",
+    "model::mesh::setSizeFromBoundary",
+    "model::mesh::setSmoothing",
+    "model::mesh::setTransfiniteAutomatic",
+    "model::mesh::setTransfiniteCurve",
+    "model::mesh::setTransfiniteSurface",
+    "model::mesh::setTransfiniteVolume",
+    "model::occ::addBSpline",
+    "model::occ::addBSplineSurface",
+    "model::occ::addCircleArc",
+    "model::occ::addCurveLoop",
+    "model::occ::addLine",
+    "model::occ::addPlaneSurface",
+    "model::occ::addPoint",
+    "model::occ::addSurfaceLoop",
+    "model::occ::addVolume",
+    "model::occ::addWire",
+    "model::occ::copy",
+    "model::occ::defeature",
+    "model::occ::extrude",
+    "model::occ::fragment",
+    "model::occ::getCenterOfMass",
+    "model::occ::getDistance",
+    "model::occ::getEntities",
+    "model::occ::getEntitiesInBoundingBox",
+    "model::occ::getMass",
+    "model::occ::healShapes",
+    "model::occ::importShapes",
+    "model::occ::intersect",
+    "model::occ::mesh::setSize",
+    "model::occ::remove",
+    "model::occ::removeAllDuplicates",
+    "model::occ::revolve",
+    "model::occ::synchronize",
+    "model::occ::translate",
+    "model::removeEntities",
+    "model::removePhysicalGroups",
+    "model::setCurrent",
+    "model::setEntityName",
+    "model::setPhysicalName",
+    "model::setVisibility",
+    "open",
+    "option::getNumber",
+    "option::getString",
+    "option::setNumber",
+    "option::setString",
+    "vectorpair",
+    "write"
+  ],
+  "gmsh_wrapper_call_count": 118,
+  "compile_measurements": [
+    {
+      "command": [
+        "/usr/bin/clang",
+        "-std=c11",
+        "-Werror",
+        "-fsyntax-only",
+        "-I",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/gmsh-4.13.0-Windows64-sdk/include",
+        "/var/folders/9w/gw0k0ytd4c349yhwhxgkc5lh0000gn/T/prepomaxx-native-06l_ao3j/c-api.c"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "label": "gmsh-c-api-syntax",
+      "expected_success": true,
+      "outcome_matches_expected": true,
+      "probe_source": "#include \"gmshc.h\"\n_Static_assert(sizeof(size_t) == sizeof(void *), \"size_t pointer width\");\nvoid signatures(void) {\n  int ierr = 0; gmshInitialize(0, 0, 0, 0, &ierr);\n  void *p = gmshMalloc(8); gmshFree(p);\n  (void)&gmshModelOccFragment; (void)&gmshModelMeshGetNodes;\n  (void)&gmshModelMeshGetElements; (void)&gmshModelMeshSetSizeCallback;\n  gmshFinalize(&ierr);\n}\n"
+    },
+    {
+      "command": [
+        "/usr/bin/clang++",
+        "-std=c++17",
+        "-Werror",
+        "-fsyntax-only",
+        "-I",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/gmsh-4.13.0-Windows64-sdk/include",
+        "-I",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/QuadMesher/include",
+        "/var/folders/9w/gw0k0ytd4c349yhwhxgkc5lh0000gn/T/prepomaxx-native-06l_ao3j/cpp-api.cpp"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "label": "gmsh-qmorph-cpp-declarations",
+      "expected_success": true,
+      "outcome_matches_expected": true,
+      "probe_source": "#include \"gmsh.h\"\n#include \"qmorph/qmorph_gmsh.h\"\nstatic_assert(sizeof(std::size_t) == sizeof(void *), \"tag pointer width\");\nvoid signatures() {\n  gmsh::initialize(); gmsh::model::mesh::generate(2); gmsh::finalize();\n  qm::InputMesh input; qm::Options options;\n  (void)qm::qmorph(input, options);\n  (void)qmg::quadMeshSurfaces(std::vector<int>{1}, options);\n}\n"
+    },
+    {
+      "command": [
+        "/usr/bin/clang++",
+        "-std=c++17",
+        "-fsyntax-only",
+        "-ferror-limit=3",
+        "-I",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/gmsh-4.13.0-Windows64-sdk/include",
+        "-I",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/GmshCommon",
+        "/var/folders/9w/gw0k0ytd4c349yhwhxgkc5lh0000gn/T/prepomaxx-native-06l_ao3j/cli.cpp"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "In file included from /var/folders/9w/gw0k0ytd4c349yhwhxgkc5lh0000gn/T/prepomaxx-native-06l_ao3j/cli.cpp:1:\n/Users/aleksa/Documents/GitLab/pre-po-max-x/GmshCommon/GmshCommon.h:5:10: fatal error: 'msclr\\marshal_cppstd.h' file not found\n    5 | #include <msclr\\marshal_cppstd.h>\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n",
+      "label": "original-cpp-cli-boundary",
+      "expected_success": false,
+      "outcome_matches_expected": true,
+      "probe_source": "#include \"GmshCommon.h\"\n"
+    }
+  ],
+  "limits": [
+    "Header syntax/declarations only: no linking or native mesher execution",
+    "Wrapper call list is a textual inventory, not executed API coverage",
+    "Binary hashes do not establish source-to-binary correspondence",
+    "No original files modified; no native tool substituted"
+  ],
+  "checks_passed": true
+}

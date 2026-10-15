@@ -34,7 +34,7 @@ In parallel inspect real PMX/PMH payloads produced by pinned Windows versions. I
 
 ## Smallest meaningful VTK proof of concept
 
-Separate research executable; no production changes or frontend commitment. Compare one feasible open-source binding route with supported ActiViz only if licensing permits evaluation. Start on this Mac ARM64, then Windows x64/Linux x64/macOS x64 before choosing a production host.
+Separate research executable; no production changes or frontend commitment. Compare one feasible open-source binding route with supported ActiViz only if licensing permits evaluation. Start on this Mac ARM64, then Windows x64/Linux x64/Linux ARM64 before choosing a production host. Intel Macs are outside the maintainer's target scope (2026-10-15 clarification).
 
 Use a fixture with two distinguishable parts, triangular/quadrilateral faces, at least one second-order cell, explicit FEM node/element/face IDs and nodal scalar values. Preserve mapping through a deformed result view. Embed in a resizable GUI candidate with a real native render surface and event loop.
 

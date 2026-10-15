@@ -1,0 +1,48 @@
+{
+  "os": "Linux",
+  "architecture": "aarch64",
+  "toolSha256": "623f486cd56b2e2f45a7779035a1268c368cd55924b6c845981fee01c43a913d",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "target": "aarch64-linux-gnu",
+  "cases": [
+    {
+      "flags": [
+        "-O0"
+      ],
+      "exitCode": 0,
+      "stdout": "ok      right_45_45  quads 135  deviation 0\nok      equilateral  quads 108  deviation 0\nok      diagonal_34  quads 134  deviation 0\nok      sharp_10  quads 141  deviation 0\nok      sharp_5  quads 86  deviation 0\nok      quarter_disk  quads 96  deviation 0\nok      deltoid_10  quads 29  deviation 0\nok      deltoid_30  quads 29  deviation 0\nok      deltoid_all  quads 3  deviation 0\nok      graded_34  quads 134  deviation 0\nok      chained_34  quads 235  deviation 0\nok      cylinder  quads 121  deviation 0\nok      sphere  quads 128  deviation 0\n13 of 13 cases agree\n",
+      "stderr": ""
+    },
+    {
+      "flags": [
+        "-O2"
+      ],
+      "exitCode": 1,
+      "stdout": "FAILED  right_45_45  quads 135  deviation 0.0617397\nok      equilateral  quads 108  deviation 2.84217e-14\nok      diagonal_34  quads 134  deviation 3.55271e-14\nok      sharp_10  quads 141  deviation 2.84217e-14\nok      sharp_5  quads 86  deviation 1.42109e-14\nok      quarter_disk  quads 96  deviation 1.42109e-14\nok      deltoid_10  quads 29  deviation 3.55271e-15\nok      deltoid_30  quads 29  deviation 7.10543e-15\nok      deltoid_all  quads 3  deviation 0\nok      graded_34  quads 134  deviation 2.84217e-14\nok      chained_34  quads 235  deviation 4.9738e-14\nok      cylinder  quads 121  deviation 2.13163e-14\nok      sphere  quads 128  deviation 5.55112e-16\n12 of 13 cases agree\n",
+      "stderr": ""
+    },
+    {
+      "flags": [
+        "-O2",
+        "-ffp-contract=off"
+      ],
+      "exitCode": 0,
+      "stdout": "ok      right_45_45  quads 135  deviation 0\nok      equilateral  quads 108  deviation 0\nok      diagonal_34  quads 134  deviation 0\nok      sharp_10  quads 141  deviation 0\nok      sharp_5  quads 86  deviation 0\nok      quarter_disk  quads 96  deviation 0\nok      deltoid_10  quads 29  deviation 0\nok      deltoid_30  quads 29  deviation 0\nok      deltoid_all  quads 3  deviation 0\nok      graded_34  quads 134  deviation 0\nok      chained_34  quads 235  deviation 0\nok      cylinder  quads 121  deviation 0\nok      sphere  quads 128  deviation 0\n13 of 13 cases agree\n",
+      "stderr": ""
+    },
+    {
+      "flags": [
+        "-O2",
+        "-ffp-contract=fast"
+      ],
+      "exitCode": 1,
+      "stdout": "FAILED  right_45_45  quads 135  deviation 0.0617397\nok      equilateral  quads 108  deviation 2.84217e-14\nok      diagonal_34  quads 134  deviation 3.55271e-14\nok      sharp_10  quads 141  deviation 2.84217e-14\nok      sharp_5  quads 86  deviation 1.42109e-14\nok      quarter_disk  quads 96  deviation 1.42109e-14\nok      deltoid_10  quads 29  deviation 3.55271e-15\nok      deltoid_30  quads 29  deviation 7.10543e-15\nok      deltoid_all  quads 3  deviation 0\nok      graded_34  quads 134  deviation 2.84217e-14\nok      chained_34  quads 235  deviation 4.9738e-14\nok      cylinder  quads 121  deviation 2.13163e-14\nok      sphere  quads 128  deviation 5.55112e-16\n12 of 13 cases agree\n",
+      "stderr": ""
+    }
+  ],
+  "sourceHashes": {
+    "three_block_mapping_check.cpp": "79b000462fb372fcecfa473a83439398271797d9220b20da06258738963eee6f",
+    "three_block_mapping.h": "4c4bf050d6d464b3c80037aca54b025a195e44e9f75f43386e8b400a2db9fe19",
+    "three_block_vectors.txt": "1206ed563d48cd733d59de9255023c60018d858954b7570bfd80ba8576b32618"
+  }
+}

@@ -1,0 +1,236 @@
+[
+     {
+          "Id": "27c38b4417f399491c60ba15f35bf450ffcea6d57c78ccbc5ce3c9fb05cfcc88",
+          "Digest": "sha256:8e7419c4bb020cb0303227d5afc29c22f34f5fc5ce4d6a8fc245c8054ceec5af",
+          "RepoTags": [
+               "localhost/prepomaxx-research:linux-arm64"
+          ],
+          "RepoDigests": [
+               "localhost/prepomaxx-research@sha256:8e7419c4bb020cb0303227d5afc29c22f34f5fc5ce4d6a8fc245c8054ceec5af"
+          ],
+          "Parent": "7f23d047b3136ac23d23db64b351dda888bf0dfd6f39d65b438a104c58733c85",
+          "Comment": "",
+          "Created": "2026-10-15T14:23:31.303132747Z",
+          "Config": {
+               "Env": [
+                    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                    "APP_UID=1654",
+                    "ASPNETCORE_HTTP_PORTS=8080",
+                    "DOTNET_RUNNING_IN_CONTAINER=true",
+                    "DOTNET_VERSION=10.0.13",
+                    "ASPNET_VERSION=10.0.13",
+                    "DOTNET_GENERATE_ASPNET_CERTIFICATE=false",
+                    "DOTNET_NOLOGO=true",
+                    "DOTNET_SDK_VERSION=10.0.402",
+                    "DOTNET_USE_POLLING_FILE_WATCHER=true",
+                    "NUGET_XMLDOC_MODE=skip",
+                    "POWERSHELL_DISTRIBUTION_CHANNEL=PSDocker-DotnetSDK-Ubuntu-24.04-arm64",
+                    "DOTNET_CLI_TELEMETRY_OPTOUT=1",
+                    "DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1",
+                    "DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE=1",
+                    "DOTNET_CLI_HOME=/tmp/dotnet",
+                    "HOME=/tmp",
+                    "GIT_CONFIG_COUNT=1",
+                    "GIT_CONFIG_KEY_0=safe.directory",
+                    "GIT_CONFIG_VALUE_0=/workspace"
+               ],
+               "Entrypoint": [
+                    "python3",
+                    "X/Feasibility/Research/run-research.py"
+               ],
+               "WorkingDir": "/workspace",
+               "Labels": {
+                    "io.buildah.version": "1.45.2",
+                    "org.opencontainers.image.version": "24.04",
+                    "org.prepomaxx.core-probe.recipe-sha256": "238f3fff27f50a1c70db2094703609e1b445601224c9034976c9343087bd6945"
+               }
+          },
+          "Version": "",
+          "Author": "",
+          "Architecture": "arm64",
+          "Os": "linux",
+          "Size": 1255469123,
+          "VirtualSize": 1255469123,
+          "GraphDriver": {
+               "Name": "overlay",
+               "Data": {
+                    "LowerDir": "/var/home/core/.local/share/containers/storage/overlay/76b5520c7fc0e720f6533db98ce37cdd1d8ed74fd9891fe52763cbfcbad8a6b4/diff:/var/home/core/.local/share/containers/storage/overlay/f09f729be2a704f5d152fcc577a0f703a12799e7909e100d8aa7c284eaadffa7/diff:/var/home/core/.local/share/containers/storage/overlay/6362ff33cfdd8e3bf6259827dedefcfd6ac6f00366868d8602f7b340f8d60363/diff:/var/home/core/.local/share/containers/storage/overlay/e1e1bf601eeaef3a6581d2ed8367f7763b4d0ad65cf88634f223cd590da9a90c/diff:/var/home/core/.local/share/containers/storage/overlay/327f9b3d1ea19c0c6a26026b5c1d905139839e2ebdefaaf79a8211a1d9fee8f5/diff:/var/home/core/.local/share/containers/storage/overlay/49773d697a114f12a0769594eebc71182801afa496494252efceabaaa86650b0/diff:/var/home/core/.local/share/containers/storage/overlay/2f6326a6bc47b8603152275477b186814b1e28b23d2a1c9832c855b7c6e0e55a/diff:/var/home/core/.local/share/containers/storage/overlay/038f0639653761915edaac3af1fa2ff1972ceca0f5ba42017d17bc7c5c4e425b/diff:/var/home/core/.local/share/containers/storage/overlay/8d8035d9dad5faf44640ce605236d4393439437f4014e2435c2a58b7aa2c807f/diff:/var/home/core/.local/share/containers/storage/overlay/5179c1b1eaab767ab822775d679f344ddc3ebe3259c66647b14770d22cdd34aa/diff:/var/home/core/.local/share/containers/storage/overlay/06f25dc3c75f3e204494c32853ee35d0b781f7bda38344ee49c5f75898cea8d0/diff:/var/home/core/.local/share/containers/storage/overlay/9a354992483c962fa69075527e7a2690fd9103f53d2c10af083fb31f24335256/diff",
+                    "UpperDir": "/var/home/core/.local/share/containers/storage/overlay/8a34426c58759d73bbf4d3ab33a78844e15b6f87f38556c1de8c5e11a0db8bbe/diff",
+                    "WorkDir": "/var/home/core/.local/share/containers/storage/overlay/8a34426c58759d73bbf4d3ab33a78844e15b6f87f38556c1de8c5e11a0db8bbe/work"
+               }
+          },
+          "RootFS": {
+               "Type": "layers",
+               "Layers": [
+                    "sha256:9a354992483c962fa69075527e7a2690fd9103f53d2c10af083fb31f24335256",
+                    "sha256:4d23bd53be1ba051e5220bc1771692ef982e935f4bb0ff5d5796d357821cb86b",
+                    "sha256:eeeca93416f2a234fd92c5c93b2f7c8e6dfad57c72b9a76dacd96fca6126d203",
+                    "sha256:9a0f6f7d391412d222e9535691852380acd176e6621e2432eabdca7ff021c38f",
+                    "sha256:1753fda4b85ab4e8611575b242efdcc952bcba8e3a5f6540df7f23576e2abf19",
+                    "sha256:b44d29b4be4a7ce81b81442096b676185f385358b6978762060696219d37dc6a",
+                    "sha256:d80956e78ae32f48aef23fda91c32db5c1c26ae87d3cf24101835a4c99359f7a",
+                    "sha256:14b547744d0b3251d75bcca77de26d77be3b425bdd404d99eba4b780416904d5",
+                    "sha256:7b14d6e7d9471674edad0ae06f6bfb6f600bbc8838afb1500b54fad9400ef993",
+                    "sha256:bb603dd8a64f69f3bfca12175a3115d7f3a3ec3248aaa39b20cab113183efbbf",
+                    "sha256:f60f8eeefb5c99f0a5680f74a0efb3e3aea29a50fe3c75d12b3f6ab0f750d5b6",
+                    "sha256:9dd4746d727a10354fb8257ad720576fe466a18a7a2a4c02bca5e3608d1b2962",
+                    "sha256:70284ffa6cfb05e3a80c4b7721a18b7cd13c12a845b91f7e7ee3ed9dc0406a95"
+               ]
+          },
+          "Labels": {
+               "io.buildah.version": "1.45.2",
+               "org.opencontainers.image.version": "24.04",
+               "org.prepomaxx.core-probe.recipe-sha256": "238f3fff27f50a1c70db2094703609e1b445601224c9034976c9343087bd6945"
+          },
+          "Annotations": {
+               "org.opencontainers.image.base.digest": "sha256:3271dcd9dd3b32dd6c3fc01b5f810dda3d4474b3fbfc9f303bd5c3d47ff03c69",
+               "org.opencontainers.image.base.name": "localhost/prepomax-x-core-probe:arm64",
+               "org.opencontainers.image.created": "2026-10-15T14:23:31.303132747Z"
+          },
+          "ManifestType": "application/vnd.oci.image.manifest.v1+json",
+          "User": "",
+          "History": [
+               {
+                    "created": "2026-10-02T08:10:23.611274251Z",
+                    "created_by": "/bin/sh -c #(nop)  ARG RELEASE",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-02T08:10:23.652428415Z",
+                    "created_by": "/bin/sh -c #(nop)  ARG LAUNCHPAD_BUILD_ARCH",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-02T08:10:23.689941749Z",
+                    "created_by": "/bin/sh -c #(nop)  LABEL org.opencontainers.image.version=24.04",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-02T08:10:25.882803293Z",
+                    "created_by": "/bin/sh -c #(nop) ADD file:41d2e63ceb0b90641106340bc81ee11125254db51ee5a9d49e666bcf0388814f in / "
+               },
+               {
+                    "created": "2026-10-02T08:10:26.157815299Z",
+                    "created_by": "/bin/sh -c #(nop)  CMD [\"/bin/bash\"]",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-13T20:46:44.766757579Z",
+                    "created_by": "ENV APP_UID=1654 ASPNETCORE_HTTP_PORTS=8080 DOTNET_RUNNING_IN_CONTAINER=true",
+                    "comment": "buildkit.dockerfile.v0",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-13T20:46:44.766757579Z",
+                    "created_by": "RUN /bin/sh -c apt-get update     && apt-get install -y --no-install-recommends         ca-certificates                 libc6         libgcc-s1         libicu74         libssl3t64         libstdc++6         tzdata         tzdata-legacy     && rm -rf /var/lib/apt/lists/* # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:46:46.421106614Z",
+                    "created_by": "RUN /bin/sh -c groupadd         --gid=$APP_UID         app     && useradd --no-log-init         --uid=$APP_UID         --gid=$APP_UID         --create-home         app # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:48:30.564664568Z",
+                    "created_by": "ENV DOTNET_VERSION=10.0.13",
+                    "comment": "buildkit.dockerfile.v0",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-13T20:48:30.564664568Z",
+                    "created_by": "COPY /dotnet /usr/share/dotnet # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:48:31.594552634Z",
+                    "created_by": "RUN /bin/sh -c ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:48:56.393122816Z",
+                    "created_by": "ENV ASPNET_VERSION=10.0.13",
+                    "comment": "buildkit.dockerfile.v0",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-13T20:48:56.393122816Z",
+                    "created_by": "COPY /dotnet /usr/share/dotnet # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:49:54.964575999Z",
+                    "created_by": "ENV DOTNET_GENERATE_ASPNET_CERTIFICATE=false DOTNET_NOLOGO=true DOTNET_SDK_VERSION=10.0.402 DOTNET_USE_POLLING_FILE_WATCHER=true NUGET_XMLDOC_MODE=skip POWERSHELL_DISTRIBUTION_CHANNEL=PSDocker-DotnetSDK-Ubuntu-24.04-arm64",
+                    "comment": "buildkit.dockerfile.v0",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-13T20:49:54.964575999Z",
+                    "created_by": "RUN /bin/sh -c apt-get update     && apt-get install -y --no-install-recommends         curl         git         libatomic1         wget     && rm -rf /var/lib/apt/lists/* # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:50:05.963766322Z",
+                    "created_by": "COPY /dotnet /usr/share/dotnet # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:50:06.849396285Z",
+                    "created_by": "COPY /PowerShell.Linux.arm64.7.6.7.nupkg / # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:50:08.314132532Z",
+                    "created_by": "RUN /bin/sh -c ln -s /usr/share/dotnet/dnx /usr/bin/dnx     && dotnet help # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-13T20:50:12.01754173Z",
+                    "created_by": "RUN /bin/sh -c powershell_version=7.6.7     && mkdir --parents /usr/share/powershell     && dotnet tool install --add-source / --tool-path /usr/share/powershell --version $powershell_version PowerShell.Linux.arm64     && dotnet nuget locals all --clear     && rm PowerShell.Linux.arm64.$powershell_version.nupkg     && ln -s /usr/share/powershell/pwsh /usr/bin/pwsh     && chmod 755 /usr/share/powershell/pwsh     && chmod 755 /usr/share/powershell/.store/powershell.linux.arm64/$powershell_version/powershell.linux.arm64/$powershell_version/tools/*/any/pwsh     && find /usr/share/powershell -print | grep -i '.*[.]nupkg$' | xargs rm # buildkit",
+                    "comment": "buildkit.dockerfile.v0"
+               },
+               {
+                    "created": "2026-10-14T09:04:53.37514521Z",
+                    "created_by": "/bin/sh -c apt-get update     && apt-get install -y --no-install-recommends python3 git     && rm -rf /var/lib/apt/lists/*",
+                    "comment": "FROM mcr.microsoft.com/dotnet/sdk:10.0"
+               },
+               {
+                    "created": "2026-10-14T09:12:09.202818253Z",
+                    "created_by": "/bin/sh -c #(nop) ARG PREPOMAX_X_RECIPE_SHA256",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-14T09:12:09.21380617Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL org.prepomaxx.core-probe.recipe-sha256=$PREPOMAX_X_RECIPE_SHA256",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-14T09:12:09.222656878Z",
+                    "created_by": "/bin/sh -c #(nop) ENV DOTNET_CLI_TELEMETRY_OPTOUT=1     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1     DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE=1     DOTNET_CLI_HOME=/tmp/dotnet     HOME=/tmp     GIT_CONFIG_COUNT=1     GIT_CONFIG_KEY_0=safe.directory     GIT_CONFIG_VALUE_0=/workspace",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-14T09:12:09.256270587Z",
+                    "created_by": "/bin/sh -c #(nop) WORKDIR /workspace",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-14T09:12:09.285578337Z",
+                    "created_by": "/bin/sh -c #(nop) ENTRYPOINT [\"python3\", \"X/Feasibility/Core/run-probe.py\"]",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2026-10-15T14:23:30.59702646Z",
+                    "created_by": "/bin/sh -c apt-get update && apt-get install -y --no-install-recommends g++ && rm -rf /var/lib/apt/lists/*",
+                    "comment": "FROM localhost/prepomax-x-core-probe:arm64"
+               },
+               {
+                    "created": "2026-10-15T14:23:31.30330124Z",
+                    "created_by": "/bin/sh -c #(nop) ENTRYPOINT [\"python3\", \"X/Feasibility/Research/run-research.py\"]",
+                    "empty_layer": true
+               }
+          ],
+          "NamesHistory": [
+               "localhost/prepomaxx-research:linux-arm64"
+          ]
+     }
+]

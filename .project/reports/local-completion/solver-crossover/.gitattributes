@@ -1,0 +1,2 @@
+# Preserve exact solver output bytes so recorded SHA-256 survives checkout.
+uniaxial.* -text -whitespace

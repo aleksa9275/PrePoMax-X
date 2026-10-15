@@ -1,0 +1,17 @@
+** F001 mesh-only negative case; coincident coordinates have distinct IDs.
+*NODE
+1, -100, 0, 0
+2, 0, 0, 0
+3, 100, 0, 0
+4, -100, 200, 0
+5, 0, 200, 0
+6, 100, 200, 0
+7, 0, 0, 100
+8, 0, 200, 100
+9, 0, 0, 0
+10, 0, 200, 0
+*ELEMENT, TYPE=S4, ELSET=PLATE
+11, 1, 2, 5, 4
+12, 2, 3, 6, 5
+*ELEMENT, TYPE=S4, ELSET=WEB
+21, 9, 7, 8, 10
