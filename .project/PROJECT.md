@@ -2,7 +2,7 @@
 
 Record updated: 2026-10-15, Europe/Belgrade. Phase 0 and bounded tasks 0002–0010
 are complete within their scopes; task 0012 completes further local preparation
-with publication/hosted follow-up recorded in STATUS. Task 0011 awaits Windows.
+and research publication, including native Linux x64 hosted evidence. Task 0011 awaits Windows.
 Later tasks establish native source/build
 boundaries, structured-kernel execution, synthetic native VTK behavior and
 shell-junction fixture contracts. Windows compatibility and full application/
@@ -38,6 +38,7 @@ attribution remain authoritative; notices/source obligations travel with compone
 |---|---|
 | [Next Windows session](handoffs/windows-next-session.md), [task 0011](tasks/0011-windows-reference-validation.md) | Resume here when Windows becomes available; prepared, execution pending |
 | [Task 0012](tasks/0012-local-preparation-completion.md), [local completion](reports/local-preparation-completion.md) | Scalar PMX comparisons, compiler sensitivity, VTK provenance/lifecycle, analytical solver and research publication |
+| [Research Linux x64 acceptance](reports/research-linux-x64.md) | Passed native hosted suite on 24c790ac; implementation/artifact identities checked |
 | [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md), [completed task 0002](tasks/0002-core-feasibility.md), [task 0003](tasks/0003-core-data-feasibility.md) | Current state, verification, handoff and first runnable milestone |
 | [initial audit](reports/initial-audit.md) | Repository/baseline facts and investigation limits |
 | [ARCHITECTURE](ARCHITECTURE.md) | Existing project graph and reuse evidence |

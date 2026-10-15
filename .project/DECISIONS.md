@@ -73,3 +73,11 @@ production change. Selected PMX scalar comparisons expose job settings drift;
 Linux ARM64 mapping is contraction-sensitive; VTK provenance/lifecycle and the
 bundled 2.22 analytical solver reference pass within bounded scopes. None closes
 native Windows, full semantics/history, native-source or production-policy gates.
+
+D023 — Verified research publication/native x64 evidence, 2026-10-15:
+24c790ac published to origin/research/native-feasibility; push pipeline
+#2951491552/job #17205619186 passes on AMD EPYC 9B45 with compiler defaults.
+Six downloaded artifacts independently checked. Task 0012 is complete within
+its bounded investigation/publication scope; closing evidence publication ends
+the scoped agent commit/push exception. Task 0011 remains the next native Windows
+checkpoint; no production/integration/format/GUI decision follows.

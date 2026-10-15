@@ -1,0 +1,92 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-10-15T14:35:50.820654+00:00",
+  "host": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "python": "3.12.3"
+  },
+  "toolSha256": "f17bd76ed1367fb7e93e32e2bc9c33a5baefa86dfdfae09a86a92cc30a17f7c2",
+  "commands": [
+    {
+      "command": [
+        "g++",
+        "-dumpmachine"
+      ],
+      "exitCode": 0,
+      "stdout": "x86_64-linux-gnu\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/PmxValues/test-values.py"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"checks\": [{\"name\": \"same scalar bindings\", \"passed\": true}, {\"name\": \"scalar mutation rejected\", \"passed\": true}, {\"name\": \"member binding swap rejected\", \"passed\": true}], \"privateInputUsed\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/ShellJunction/check-fixtures.py",
+        "--output",
+        "<output>/shell-fixtures.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"cases\": 4, \"regressions\": 2, \"error\": null}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/Meshing/run-meshing.py",
+        "--output",
+        "<output>/meshing.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"vectors\": 13, \"nativeChecks\": 17, \"managedChecks\": 7, \"comparison\": {\"matches\": true, \"cases\": 1728}, \"error\": null}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "X/Feasibility/Data/run-data.py",
+        "--expect-os",
+        "Linux",
+        "--expect-architecture",
+        "X64",
+        "--reference",
+        "<repository>/.project/reports/core-data/macos-arm64.json",
+        "--output",
+        "<output>/core-data.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"report\": \"X/Feasibility/Research/artifacts/linux-x64/core-data.json\", \"success\": true, \"passed\": 30, \"failed\": 0, \"runtime\": {\"os\": \"Linux\", \"architecture\": \"X64\", \"osArchitecture\": \"X64\", \"framework\": \".NET 10.0.13\"}, \"matchesReference\": true}\n",
+      "stderr": ""
+    }
+  ],
+  "privateInputUsed": false,
+  "ci": {
+    "CI_PIPELINE_ID": "2951491552",
+    "CI_PIPELINE_URL": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2951491552",
+    "CI_JOB_ID": "17205619186",
+    "CI_JOB_URL": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17205619186",
+    "CI_COMMIT_SHA": "24c790ac5f40f976ad8d606a509d5ec9ce3509d8",
+    "CI_COMMIT_REF_NAME": "research/native-feasibility",
+    "CI_RUNNER_DESCRIPTION": "k8s.saas-linux-small-amd64.runners-manager.gitlab.com/default ",
+    "CI_RUNNER_EXECUTABLE_ARCH": "linux/amd64",
+    "CI_JOB_IMAGE": "mcr.microsoft.com/dotnet/sdk:10.0"
+  },
+  "cpuModel": "AMD EPYC 9B45",
+  "compilerTarget": "x86_64-linux-gnu",
+  "floatingPointContraction": "compiler default",
+  "meshingMacComparison": {
+    "upstreamVectors": true,
+    "sources": true,
+    "nativeChecks": true,
+    "managedChecks": true,
+    "countSignatures": true,
+    "triangleAreaWithin1eMinus12": true
+  }
+}

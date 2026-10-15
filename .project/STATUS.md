@@ -10,7 +10,7 @@ full application/UI/platform parity and production integration remain open.
 Actual legacy PMX inventory and a user-confirmed CrossOver read/save/reopen cycle
 are now available; native Windows validation remains pending.**
 
-## Current continuation — local work complete, publication follow-up
+## Current continuation — local preparation and hosted verification complete
 
 Maintainer now explicitly authorizes commit/push of completed research to origin
 (task 0012), superseding earlier uncommitted-only instructions for this one
@@ -27,8 +27,13 @@ publication. [Local completion report](reports/local-preparation-completion.md):
 - Mac data/structured checks and native/header audit rerun successfully within
   their scopes; matching custom source recovery remains blocked on availability.
 
-The additive native Linux x64 research job is prepared for publication. Hosted
-outcome/remote identity will be recorded after push. Earlier milestone paragraphs
+Research commit **24c790ac** is published on origin/research/native-feasibility.
+Push pipeline **#2951491552/job #17205619186 passed** on native AMD EPYC 9B45
+x64. All public research checks pass with compiler defaults; six downloaded
+artifacts independently checked. [Hosted evidence](reports/research-linux-x64.md).
+Closing evidence publication completes task 0012 and ends this commit/push
+exception; future agent commits/pushes require a new instruction. Task 0011 is
+the next Windows continuation. Earlier milestone paragraphs
 below retain their historical authorization/publication state; this section
 defines the current continuation. Production sources/x/main remain unchanged.
 

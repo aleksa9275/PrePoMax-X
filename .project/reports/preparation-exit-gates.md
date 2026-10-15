@@ -15,6 +15,8 @@ solver reference, VTK parent-ID/lifecycle checks and Linux compiler controls.
 The ARM64 default -O2 failure is retained; diagnostic contraction-off passes.
 These findings narrow the remaining gates without closing semantic/history,
 native source/tool, genuine UI or production-policy requirements.
+Native Linux x64 public research execution subsequently
+[passed](research-linux-x64.md); private legacy-file execution there remains open.
 
 | Priority | Verified observation now | Next bounded work and exit criterion |
 |---|---|---|

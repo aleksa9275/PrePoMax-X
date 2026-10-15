@@ -14,7 +14,9 @@ No Intel Mac or 32-bit x86 work is required. Linux ARM64 is a required target.
 Research branch: **research/native-feasibility**, originally based on c11a73d9.
 The maintainer subsequently authorized task 0012 to complete local preparation
 and commit/push all reviewed research. Check STATUS and the remote branch for
-the publication result. A fresh clone's default branch is still the upstream
+the publication result: implementation 24c790ac is pushed and native Linux x64
+pipeline #2951491552 passed; closing evidence follows on the same branch.
+A fresh clone's default branch is still the upstream
 mirror, so explicitly use the research branch containing task 0012/tools and
 these instructions. First inspect checkout/status; preserve local work. Do not
 reset/stash away work or reconstruct it from conversational memory. The scoped

@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "pipelineId": 2951491552,
+  "jobId": 17205619186,
+  "testedCommit": "24c790ac5f40f976ad8d606a509d5ec9ce3509d8",
+  "publicArtifactArchiveSha256": "8e9bb2eecf36ab47d050ac666621ff064b2ad7b84957b51b7d4dad30fd8a5c84",
+  "artifacts": {
+    "pmx-values-synthetic.json": "4e644e608627dc10bbfa55dd2168d6e4c0046f585bd4959a982301803a7a43a5",
+    "shell-fixtures.json": "b30243146b1e325de65274e66fe6366d96c3afcf4c3773f67da3f8409b98e89e",
+    "pmx-synthetic.json": "adbf19516f0e230562213ccae494803f65c72fa114952f2bbae7c6478ebeb81e",
+    "meshing.json": "33f717cf14d5e9122d352aee3ed8dfc41e1f00f97d5faf236a3cf621917b6bbc",
+    "research.json": "5500914e3e29d333f5c328eb67bfdbbbbb3001bc5bf2d5bbd2bbd1f0a6dc0256",
+    "core-data.json": "1c3c32b31e9343cbebea5266e08f5247fe54b1a76670ff22736b350328432b47"
+  },
+  "cpuModel": "AMD EPYC 9B45",
+  "actualNativeProcessArchitecture": "x86_64",
+  "compilerTarget": "x86_64-linux-gnu",
+  "floatingPointContraction": "compiler default",
+  "originalVectorsPassed": 13,
+  "pmxSyntheticTestsPassed": 24,
+  "privateModelsUsed": false,
+  "independentArtifactChecksPassed": true,
+  "sdkImageId": "sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd",
+  "sdkImageDigest": "mcr.microsoft.com/dotnet/sdk@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa",
+  "imageIdentityEvidence": "Rendered job log, same image identity in setup and script sections"
+}

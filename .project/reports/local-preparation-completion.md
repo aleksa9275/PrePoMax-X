@@ -72,8 +72,9 @@ controls, all structured checks and the unchanged data probe's 30 checks/two CLI
 contracts. Structured portable observations match Mac (native area tolerance
 1e-12, source/count signatures/check outcomes exact). The earlier full C# mapping
 boundary remains CS0103/MessageBoxes; no full mapping extraction was attempted.
-The additive native Linux x64 CI job uses compiler defaults; hosted outcome is
-recorded separately after publishing. A local rehearsal is not a hosted pass.
+The additive native Linux x64 CI job uses compiler defaults and passed after
+publication: [pipeline/job and independently verified artifacts](research-linux-x64.md).
+A local rehearsal alone was not counted as a hosted pass.
 
 ## VTK provenance and lifecycle
 

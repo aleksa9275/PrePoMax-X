@@ -1,6 +1,6 @@
 # Task 0012 — Remaining local preparation and research publication
 
-Status: local checks complete, publication/hosted follow-up pending, 2026-10-15. Maintainer authorized completing feasible
+Status: bounded local work/publication/hosted evidence complete, 2026-10-15. Maintainer authorized completing feasible
 testing/preparation on this Mac, followed by commit/push to the origin fork.
 Preserve all previous work on research/native-feasibility. No production source/
 algorithm changes, architecture commitment, F001 implementation, x/main merge,
@@ -36,3 +36,10 @@ the full public research suite passes. Nine Mac VTK provenance/lifecycle checks
 and seven exact-bundle CalculiX 2.22 analytical checks pass. Original production
 sources are unchanged. Windows/history/semantic snapshots, matching native
 sources, real UI input/DPI and numerical production build policy remain open.
+
+Publication: research implementation/evidence commit 24c790ac pushed to origin.
+Native Linux x64 push pipeline #2951491552/job #17205619186 passes with compiler
+defaults on AMD EPYC 9B45. Six downloaded artifacts independently verified;
+[hosted report](../reports/research-linux-x64.md). Closing evidence publication
+ends the scoped agent commit/push exception. Task 0011 remains prepared for Windows;
+no global preparation/release-parity completion is claimed.

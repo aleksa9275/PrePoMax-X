@@ -11,6 +11,10 @@ bounds this continuation. This supersedes earlier leave-uncommitted instructions
 for this publication only. No production refactoring, frontend/default serializer
 choice, F001 integration, x/main merge, upstream write or force push is authorized.
 The exception ends after task 0012 publication and its hosted evidence follow-up.
+Task 0012's research is published at 24c790ac; native Linux x64 pipeline
+#2951491552 passed. This closing evidence publication ends that exception.
+Resume prepared task 0011 on Windows; future agent commits/pushes need a new
+explicit instruction. The older uncommitted-only statements below are historical.
 
 Phase 0 is complete. On 2026-10-13 the maintainer authorized the recommended first milestone, a new implementation branch and promotion of the reviewed Phase 0 records into `x/main`. Task `.project/tasks/0002-core-feasibility.md` defines the bounded scope: source-linked STL/vector/node probe, tests/provenance, upstream replay, local Podman verification and complementary GitLab native Linux x64 CI on `feature/core-feasibility`.
 

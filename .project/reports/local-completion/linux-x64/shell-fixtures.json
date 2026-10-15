@@ -1,0 +1,148 @@
+{
+  "success": true,
+  "cases": [
+    {
+      "file": "connected.inp",
+      "sha256": "4fb968764a2ffd471488c0172d7a6a872a60cc2c947497d22537b40d801cf5e3",
+      "status": "passed",
+      "observations": {
+        "nodeCount": 8,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [
+          2,
+          5
+        ],
+        "sharedEdges": [
+          [
+            2,
+            5
+          ]
+        ],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0.0
+      }
+    },
+    {
+      "file": "coincident-disconnected.inp",
+      "sha256": "29e2bce425ecf97b17c8b3c49d61bb82d6229c8b8a6c621ea2a79bd98c5521eb",
+      "status": "passed",
+      "observations": {
+        "nodeCount": 10,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [
+          [
+            2,
+            9
+          ],
+          [
+            5,
+            10
+          ]
+        ],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0.0
+      }
+    },
+    {
+      "file": "unsplit-plate.inp",
+      "sha256": "24fc5c3b789aa162e21ee730a99fd5103ade516c0ddac4e757a2b26949adb507",
+      "status": "passed",
+      "observations": {
+        "nodeCount": 8,
+        "elementIds": [
+          11,
+          21
+        ],
+        "plateElementIds": [
+          11
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0.0
+      }
+    },
+    {
+      "file": "intentional-gap.inp",
+      "sha256": "52e9ac7b70a96d84e87392631bfa2537494ec4c8befb4faae9dcd5fa5816468a",
+      "status": "passed",
+      "observations": {
+        "nodeCount": 10,
+        "elementIds": [
+          11,
+          12,
+          21
+        ],
+        "plateElementIds": [
+          11,
+          12
+        ],
+        "webElementIds": [
+          21
+        ],
+        "sharedNodeIds": [],
+        "sharedEdges": [],
+        "coincidentDistinctIdPairs": [],
+        "areas": {
+          "PLATE": 40000.0,
+          "WEB": 20000.0
+        },
+        "webMinimumZ": 0.1
+      }
+    }
+  ],
+  "regressions": [
+    {
+      "name": "wrong web attachment rejected",
+      "status": "passed"
+    },
+    {
+      "name": "closed intentional gap rejected",
+      "status": "passed"
+    }
+  ],
+  "toolSha256": "792e6187dc3d752a89242833049c70ed828a4cff2732cc8eccc16235eff4bb1f",
+  "manifestSha256": "23414d7ced4026aa25b823f777ee0684c8f0b0b93f3ef805100754db5e8324ae",
+  "limits": [
+    "Hand-authored mesh fixtures only",
+    "Not a general INP reader, CAD mesh generation, solver or Windows readback"
+  ]
+}
