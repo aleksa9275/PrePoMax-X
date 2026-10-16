@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "scope": "Shared source slice compiled against installed .NET Framework runtime assemblies; not full Windows solution",
+  "sdk": "10.0.402",
+  "smoke": {
+    "success": true,
+    "geometry": true,
+    "domainError": true,
+    "typeIdentity": true,
+    "clr": "4.0.30319.42000"
+  },
+  "compilerSha256": "6af1a88cd6c79d9483dfc278984f9ed508359ba8a04c01ccffab26996e9a6833",
+  "assemblyHashes": {
+    "Smoke.exe": "3e886857bbea8a06ff4a88ac6e324179f1ccff6190b34d0512ebeea3765feac9",
+    "CaeMesh.dll": "58956918659287acaad39db94ccc5456c3ffb9ab47e03fc0df708a564cf2d314",
+    "CaeGlobals.dll": "b95917848fc09116e454e3b5d6d69cab8a7cc4478a2a77fe694637be3990a34e"
+  }
+}

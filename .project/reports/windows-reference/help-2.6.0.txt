@@ -1,0 +1,60 @@
+
+PrePoMax 2.6.0.0
+Copyright (C) 2026 Matej BorovinÃƒâ€¦Ã‚Â¡ek
+
+  -f, --file                     File name to be opened/imported.
+
+  -g, --showGui                  (Default: Yes) Show graphical user interface:
+                                 Yes | No. No can only be used for regeneration.
+
+  -o, --overwrite                (Default: No) Overwrite the .pmx file after
+                                 regeneration: Yes | No. Can only be used for
+                                 regeneration.
+
+  -p, --parameters               Overwrite the model parameters. To overwrite
+                                 parameter p1 use p1=1.2. To overwrite
+                                 parameters p1 and p2 use quotations and
+                                 semicolons "a=1.2; b=31.4". To overwrite
+                                 parameters by importing a parameters file,
+                                 specify the .pmp file name.Can only be used for
+                                 regeneration.
+
+  --parametersExport             The .pmp file name to be used for exporting
+                                 parameters from the .pmx file defined by the -r
+                                 switch.
+
+  -r, --regenerate               The .pmx file name to be used for regeneration.
+                                 Use r1, r2 or r3 to only regenerate the
+                                 pre-processing commands, the analysis commands
+                                 or the post-processing commands.A work
+                                 directory -w can be defined for regeneration.
+                                 If no work directory is defined the current
+                                 directory is used. All files needed during
+                                 regeneration (geometry, mesh) must be located
+                                 in the work directory.
+
+  --r0                           Regeneration of all history commands. See
+                                 option -r.
+
+  --r1                           Regeneration of pre-processing history commands
+                                 only.
+
+  --r2                           Regeneration of analysis history commands only.
+
+  --r3                           Regeneration of post-processing history
+                                 commands only.
+
+  -u, --unitSystem               Unit system type to be used when importing:
+                                 M_KG_S_C | MM_TON_S_C | M_TON_S_C | IN_LB_S_F |
+                                 UNIT_LESS.
+
+  -w, --workDirectory            The directory path to be used as work
+                                 directory.
+
+  -x, --exitAfterRegeneration    (Default: Yes) Exit PrePoMax after
+                                 regeneration: Yes | No.
+
+  --help                         Display this help screen.
+
+  --version                      Display version information.
+

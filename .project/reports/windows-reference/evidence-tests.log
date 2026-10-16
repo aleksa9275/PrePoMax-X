@@ -1,0 +1,7 @@
+{"report": "<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\tmpu9q49tga\\baseline.json", "success": false, "runtime": {"os": "macOS", "architecture": "Arm64", "osArchitecture": "Arm64", "framework": ".NET 10.0.12"}, "matchesMacReference": false}
+{"report": "<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\tmp4ih1c0d0\\baseline.json", "success": false, "runtime": null, "matchesMacReference": false}
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.202s
+
+OK

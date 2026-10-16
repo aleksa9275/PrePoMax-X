@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PrePoMaxX.CoreTests</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Legacy/**/*.cs" />
+    <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
+    <None Include="../../../CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt" Link="three_block_vectors.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

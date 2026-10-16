@@ -1,0 +1,7 @@
+{"report": "<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\tmp3loszr9m\\baseline.json", "success": false, "runtime": {"os": "macOS", "architecture": "Arm64", "osArchitecture": "Arm64", "framework": ".NET 10.0.12"}, "matchesMacReference": false}
+{
+  "subprocessCalls": [
+    "call('ver', stdout=-1, timeout=None, check=True, stdin=-3, stderr=-3, text=True, encoding='locale', shell=True)",
+    "call(['<user-profile>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\python\\\\python.exe', '<user-profile>\\\\Documents\\\\GitLab\\\\pre-po-max-x\\\\X\\\\Feasibility\\\\Core\\\\run-probe.py', '--expect-os', 'Linux', '--expect-architecture', 'X64'], cwd=WindowsPath('<repository>'), text=True, capture_output=True, timeout=240)"
+  ]
+}

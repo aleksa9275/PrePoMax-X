@@ -1,0 +1,37 @@
+test_decoder_cli_contract (__main__.InspectionTests.test_decoder_cli_contract) ... ok
+test_decoder_rejects_trailing_records (__main__.InspectionTests.test_decoder_rejects_trailing_records) ... ok
+test_decoder_rejects_truncated_records (__main__.InspectionTests.test_decoder_rejects_truncated_records) ... ok
+test_decompression_limit (__main__.InspectionTests.test_decompression_limit) ... ok
+test_deflate_trailing_bytes (__main__.InspectionTests.test_deflate_trailing_bytes) ... ok
+test_envelope_exact_ranges (__main__.InspectionTests.test_envelope_exact_ranges) ... ok
+test_field_data_mutation_is_not_metadata_only (__main__.InspectionTests.test_field_data_mutation_is_not_metadata_only) ... ok
+test_invalid_deflate (__main__.InspectionTests.test_invalid_deflate) ... ok
+test_invalid_nrbf_header (__main__.InspectionTests.test_invalid_nrbf_header) ... ok
+test_legacy_version_explicitly_unsupported (__main__.InspectionTests.test_legacy_version_explicitly_unsupported) ... ok
+test_negative_compressed_length (__main__.InspectionTests.test_negative_compressed_length) ... ok
+test_negative_graph_length (__main__.InspectionTests.test_negative_graph_length) ... ok
+test_output_hardlink_is_refused_without_input_mutation (__main__.InspectionTests.test_output_hardlink_is_refused_without_input_mutation) ... ERROR
+test_oversized_compressed_length (__main__.InspectionTests.test_oversized_compressed_length) ... ok
+test_oversized_graph_length (__main__.InspectionTests.test_oversized_graph_length) ... ok
+test_result_chunk_fingerprints (__main__.InspectionTests.test_result_chunk_fingerprints) ... ok
+test_result_chunk_negative_length_rejected (__main__.InspectionTests.test_result_chunk_negative_length_rejected) ... ok
+test_result_multicollection_explicitly_unsupported (__main__.InspectionTests.test_result_multicollection_explicitly_unsupported) ... ok
+test_string_record_without_value_disclosure (__main__.InspectionTests.test_string_record_without_value_disclosure) ... ok
+test_truncated_deflate (__main__.InspectionTests.test_truncated_deflate) ... ok
+test_truncated_file (__main__.InspectionTests.test_truncated_file) ... ok
+test_unknown_application_type_cycle_without_loading (__main__.InspectionTests.test_unknown_application_type_cycle_without_loading) ... ok
+test_unknown_header (__main__.InspectionTests.test_unknown_header) ... ok
+test_versioned_field_metadata_insertion (__main__.InspectionTests.test_versioned_field_metadata_insertion) ... ok
+
+======================================================================
+ERROR: test_output_hardlink_is_refused_without_input_mutation (__main__.InspectionTests.test_output_hardlink_is_refused_without_input_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\X\Feasibility\Pmx\test-inspection.py", line 107, in test_output_hardlink_is_refused_without_input_mutation
+    os.link(source,output)
+PermissionError: [WinError 5] Access is denied: '<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\prepomaxx-pmx-tests-q30wsjdr\\source.pmx' -> '<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\prepomaxx-pmx-tests-q30wsjdr\\hardlink.json'
+
+----------------------------------------------------------------------
+Ran 24 tests in 19.837s
+
+FAILED (errors=1)

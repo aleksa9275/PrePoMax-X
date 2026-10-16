@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CaeGlobals</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CaeException.cs" Link="CaeException.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Matrix.cs" Link="Matrix.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Vec3D.cs" Link="Vec3D.cs" />
+  </ItemGroup>
+</Project>

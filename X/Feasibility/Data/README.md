@@ -39,3 +39,18 @@ Full reader candidates are documented in the [dependency report](../../../.proje
 Windows capture instructions are [here](../../../.project/reports/windows-fixture-capture.md).
 The five newer source files are absent at the v2.6.0 replay pin; no six-file
 replay is claimed. Task 0002's existing seven-file replay remains unchanged.
+
+Task 0011's controlled native Windows cube exports can be checked with:
+
+```powershell
+python X/Feasibility/Data/check-windows-capture.py --capture-dir 'C:\capture' --output 'C:\evidence\semantics.json'
+```
+
+This checker expects exactly the mesh-only, reopened, and regenerated deck names
+documented in `.project/reports/windows-reference-validation.md`. It checks
+explicit node IDs/coordinates, connectivity, units, named sets, material values,
+section associations, static time values, displacement constraints and loads.
+Three altered-fixture controls reject changed connectivity/material/association.
+It is a reader for this controlled export subset, not a general INP parser or
+a full PMX semantic reconstruction test. Live UI observations and producer hashes
+must accompany its output.

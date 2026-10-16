@@ -1,8 +1,27 @@
 # PrePoMax-X project charter
 
-Record updated: 2026-10-15, Europe/Belgrade. Phase 0 and bounded tasks 0002–0010
+Current entry point: [MacBook continuation](handoffs/macbook-next-session.md),
+[task 0014](tasks/0014-windows-publication-mac-handoff.md). The maintainer now
+authorizes committing/pushing the reviewed Windows/shared-core work and its
+handoff. Native Windows C++ tests also pass both measured compiler modes.
+Publication must be verified: Windows sandbox credential access is denied.
+The handoff includes an exact-range Git-bundle fallback if necessary.
+
+2026-10-16 implementation update: maintainer requested finishing the supplied
+PMX comparison and beginning building. Native Windows now reproduces the
+CrossOver model/results payload observations. [Task 0013](tasks/0013-shared-core-first-slice.md)
+delivers the first partial shared libraries and mapping host, with bounded
+existing-source changes; see [implementation evidence](reports/shared-core-first-slice.md).
+This supersedes older research-only scope for that slice. Whole-application,
+GUI/schema and release parity decisions remain separate. Work stays uncommitted
+on research/native-feasibility; the maintainer controls publication.
+
+Record updated: 2026-10-16, Europe/Budapest. Task 0011 now has a controlled native
+Windows cube/import-history checkpoint; see its updated task and
+[Windows report](reports/windows-reference-validation.md). Full Windows
+acceptance remains open. Phase 0 and bounded tasks 0002–0010
 are complete within their scopes; task 0012 completes further local preparation
-and research publication, including native Linux x64 hosted evidence. Task 0011 awaits Windows.
+and research publication, including native Linux x64 hosted evidence.
 Later tasks establish native source/build
 boundaries, structured-kernel execution, synthetic native VTK behavior and
 shell-junction fixture contracts. Windows compatibility and full application/
@@ -36,6 +55,7 @@ attribution remain authoritative; notices/source obligations travel with compone
 
 | Record | Responsibility |
 |---|---|
+| [MacBook continuation](handoffs/macbook-next-session.md), [task 0014](tasks/0014-windows-publication-mac-handoff.md) | Start here: shared-library native Mac/Linux runs, publication state and next bounded implementation |
 | [Next Windows session](handoffs/windows-next-session.md), [task 0011](tasks/0011-windows-reference-validation.md) | Resume here when Windows becomes available; prepared, execution pending |
 | [Task 0012](tasks/0012-local-preparation-completion.md), [local completion](reports/local-preparation-completion.md) | Scalar PMX comparisons, compiler sensitivity, VTK provenance/lifecycle, analytical solver and research publication |
 | [Research Linux x64 acceptance](reports/research-linux-x64.md) | Passed native hosted suite on 24c790ac; implementation/artifact identities checked |

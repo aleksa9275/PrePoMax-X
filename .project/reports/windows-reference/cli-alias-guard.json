@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "exitCode": 2,
+  "inputSha256": "82f7197dd9b28b2a9ad0d6242d1febd655c16ae45fb40ba01bbdb149a3a2b0b8",
+  "inputUnchanged": true,
+  "route": "same-file output refusal; does not replace hardlink test"
+}

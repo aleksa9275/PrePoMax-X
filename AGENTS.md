@@ -4,6 +4,30 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+2026-10-16 Windows closeout/publication: the maintainer explicitly requested
+committing and pushing this work, completing useful remaining Windows checks,
+and preparing immediate MacBook continuation. Task 0014 covers this publication
+and handoff. It supersedes earlier leave-uncommitted restrictions for the
+reviewed Windows/reference/shared-core changes and their closing evidence.
+Publish only to origin/research/native-feasibility, without force; do not merge
+x/main, write upstream or select a frontend/serializer. Windows Credential
+Manager currently returns Access denied inside the execution sandbox; do not
+claim a push succeeded without remote verification. Preserve private files
+outside Git. Read .project/handoffs/macbook-next-session.md for the next work.
+
+2026-10-16 implementation continuation: the maintainer supplied the original
+private PMX and explicitly requested finishing testing and proceeding to build.
+Task 0013 authorizes the first bounded shared-library implementation on the
+planned research/native-feasibility branch. It supersedes historical
+research-only restrictions for this slice: mechanically separate CaeException,
+keep its original net48 project inclusion/type identity, source-link existing
+math/node/structured-mapping code into partial portable libraries, add a small
+callable host and regression checks. Do not widen this into a full Controller,
+frontend, serializer, CAD bridge or F001 rewrite. No commit/push, x/main merge
+or upstream communication was requested. Preserve all existing local work.
+Native private-model/results comparison is now recorded in the Windows report;
+remaining release gates do not prevent this approved bounded implementation.
+
 2026-10-15 local completion instruction: the maintainer explicitly authorized
 completing remaining feasible testing/preparation with resources on this Mac,
 then committing and pushing the reviewed research to the origin fork. Task 0012
@@ -46,10 +70,10 @@ gates are recorded separately; no broader implementation/commit authorization.
 
 ## Repository conventions
 
-- Next Windows session: read `.project/handoffs/windows-next-session.md` and task
-  `.project/tasks/0011-windows-reference-validation.md`. Windows will be available; capture is
-  pending. Check publication status in STATUS before transfer; task 0012 now
-  authorizes publishing the research branch so it can be fetched on Windows.
+- Current continuation: read `.project/handoffs/macbook-next-session.md` and
+  tasks 0013/0014. Native Windows model/results and structured-kernel capture
+  are completed within scope; do not restart the earlier Windows preparation.
+  Check publication status in STATUS and the actual remote before transfer.
 - Required targets (maintainer correction, 2026-10-15): Windows x64, Linux x64,
   Linux ARM64 and Apple M-series macOS ARM64. “x86” explicitly means 64-bit
   Intel/AMD. Intel Macs and 32-bit x86 are outside scope; Linux ARM64 is required.

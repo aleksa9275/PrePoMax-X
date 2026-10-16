@@ -1,0 +1,235 @@
+{
+  "inspectionComparisonCompleted": true,
+  "semanticEquivalenceEstablished": false,
+  "beforeHeader": "PrePoMax v2.5.1 dev",
+  "afterHeader": "PrePoMax v2.6.0",
+  "beforeSha256": "80e3c303a0719317af9d23016a4f70fe5f5acb91d731e704ec45dcbbfe2e0379",
+  "afterSha256": "4a6d6adab9afddee5d22a5ead436e2e0f7a1011886ead0cfe706338aaff936d8",
+  "modelBinaryBlockIdentical": true,
+  "remainingTailIdentical": false,
+  "controllerCommandCyclePresentInBoth": true,
+  "records": {
+    "before": 1638,
+    "after": 1573
+  },
+  "types": {
+    "before": 215,
+    "after": 205,
+    "addedIgnoringAssemblyVersion": [
+      "FileInOut.Output.Calculix.CalculixKeywordOverride[], CaeModel, Culture=neutral, PublicKeyToken=null",
+      "System.Collections.Generic.List`1[[FileInOut.Output.Calculix.CalculixKeywordOverride, CaeModel, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+    ],
+    "removedIgnoringAssemblyVersion": [
+      "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.ResultFieldOutput, CaeResults, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.ResultHistoryOutput, CaeResults, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "CaeJob.EnvironmentVariable, CaeJob, Culture=neutral, PublicKeyToken=null",
+      "CaeJob.EnvironmentVariable[], CaeJob, Culture=neutral, PublicKeyToken=null",
+      "CaeMesh.ResultPart, CaeMesh, Culture=neutral, PublicKeyToken=null",
+      "CaeResults.ComplexResultTypeEnum, CaeResults, Culture=neutral, PublicKeyToken=null",
+      "CaeResults.FeResults, CaeResults, Culture=neutral, PublicKeyToken=null",
+      "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.ResultFieldOutput, CaeResults, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.ResultHistoryOutput, CaeResults, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Culture=neutral, PublicKeyToken=null]][], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "System.Collections.Generic.List`1[[CaeJob.EnvironmentVariable, CaeJob, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+    ]
+  },
+  "memberChanges": [
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeJob.AnalysisJob, CaeJob, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.BasePart, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.CoordinateSystem, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeElementSet, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeNodeSet, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeReferencePoint, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeSurface, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.MeshSetupItem, CaeMesh, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Amplitude, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.BoundaryCondition, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Constraint, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.ContactPair, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.DefinedField, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Distribution, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.EquationParameter, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.FieldOutput, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.HistoryOutput, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.InitialCondition, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Load, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.SurfaceInteraction, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.UserViewParameters, CaeModel, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_itemLayout"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "CaeModel.FeModel, CaeModel, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_calculixKeywordOverrides"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "PrePoMax.Commands.CCreateMesh, PrePoMax, Culture=neutral, PublicKeyToken=null",
+      "addedMembers": [
+        "_partNames",
+        "_successfulPartNames"
+      ],
+      "removedMembers": []
+    },
+    {
+      "typeIgnoringAssemblyVersion": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Culture=neutral, PublicKeyToken=null]], mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "addedMembers": [],
+      "removedMembers": [
+        "KeyValuePairs"
+      ]
+    }
+  ],
+  "limits": [
+    "Assembly version normalization is used only to pair records, not to declare compatibility",
+    "Primitive/string values and custom result semantics are not compared",
+    "Model-block byte identity proves only that block"
+  ],
+  "toolSha256": "f6f57a7eda5b204d1adb1212ce7249020792ebf129ae59b7516382abcf0dc55a"
+}

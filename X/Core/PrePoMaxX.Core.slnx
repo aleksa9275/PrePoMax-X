@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CaeGlobals/CaeGlobals.csproj" />
+  <Project Path="CaeMesh/CaeMesh.csproj" />
+  <Project Path="MapFace/MapFace.csproj" />
+  <Project Path="Tests/CoreTests.csproj" />
+</Solution>

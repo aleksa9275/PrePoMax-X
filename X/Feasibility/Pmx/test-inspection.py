@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import struct
 import subprocess
+import sys
 import tempfile
 import unittest
 import zlib
@@ -104,7 +105,7 @@ class InspectionTests(unittest.TestCase):
     def test_output_hardlink_is_refused_without_input_mutation(self):
         source=self.folder/"source.pmx"; source.write_bytes(envelope()); output=self.folder/"hardlink.json"
         os.link(source,output)
-        result=subprocess.run(["python3",str(HERE/"inspect-pmx.py"),str(source),"--output",str(output)],text=True,capture_output=True,timeout=15)
+        result=subprocess.run([sys.executable,str(HERE/"inspect-pmx.py"),str(source),"--output",str(output)],text=True,capture_output=True,timeout=15)
         self.assertEqual(result.returncode,2); self.assertEqual(source.read_bytes(),envelope())
     def test_result_chunk_fingerprints(self):
         def compressed(value):

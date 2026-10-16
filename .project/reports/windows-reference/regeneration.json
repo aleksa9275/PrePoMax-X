@@ -1,0 +1,20 @@
+{
+  "originalSha256": "870efb88009612d478b672d7075caeb2288292a8db77d052d20aac1d3e8ea8a6",
+  "command": [
+    "<reference>/PrePoMax.com",
+    "--r1",
+    "<capture>/definitions-regenerated.pmx",
+    "-g",
+    "No",
+    "-o",
+    "Yes",
+    "-w",
+    "<capture>"
+  ],
+  "exitCode": 4294967295,
+  "stdout": "\n----------Parameters----------\nShow GUI: No\nOverwrite .pmx file: Yes\nRegeneration file name: <workspace>\\capture\\definitions-regenerated.pmx\nWork directory: <workspace>\\capture\nExit after regeneration : Yes\n\nStarting regeneration\nSet new model properties: Model space: 3D, Unit system: mm, ton, s, \u00c2\u00b0C\nImport file: <workspace>\\capture\\definitions.inp\nReading keyword line: *NODE,NSET=NALL\nReading keyword line: *ELEMENT,TYPE=C3D8,ELSET=XSOLID\nReading keyword line: *NODE,NSET=NALL\nReading keyword line: *ELEMENT,TYPE=C3D8,ELSET=XSOLID\nReading keyword line: *NSET,NSET=X0\nReading keyword line: *NSET,NSET=Y0\nReading keyword line: *NSET,NSET=Z0\nReading keyword line: *NSET,NSET=X1\nReading keyword line: *MATERIAL,NAME=XSTEEL\nReading keyword line: *SOLID SECTION,ELSET=XSOLID,MATERIAL=XSTEEL\nReading keyword line: *STEP,NAME=XSTATIC\nOverwrite: <workspace>\\capture\\definitions-regenerated.pmx\nClose application.\n----------Finished------------\nProcess finished successfully.\n\n",
+  "stderr": "",
+  "success": false,
+  "originalUnchanged": true,
+  "regeneratedSha256": "dc72fb20b80914f39d8ba1d47bfc12a47c79655335460ea061de5e167722ddc8"
+}

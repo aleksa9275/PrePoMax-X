@@ -1,0 +1,9 @@
+{
+  "cause": "Initial CRLF checkout differs from exact Git bytes; source manifests unchanged",
+  "coreConsoleObservation": "PROBE FAILED: Shared fixture changed; review/update the baseline manifest first.",
+  "shellError": "Fixture hash changed: connected.inp",
+  "pmxError": "Source context differs from pinned baseline",
+  "solverError": "Solver/runtime/fixture differs from the pinned reference; no substitute accepted",
+  "solverHashesMatched": true,
+  "initialSolverFixtureSha256": "4bdae23d8b3f91a55a3d929fa6cda9b63dbbb24e4acaaaa85b5b8aa1267bec3c"
+}

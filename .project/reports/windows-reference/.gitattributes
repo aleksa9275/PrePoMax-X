@@ -1,0 +1,5 @@
+# Preserve original captured bytes, including fixed-column spaces and CRLF.
+fixtures/*.inp -text -whitespace
+solver/uniaxial.* -text -whitespace
+diagnostics/*.log -whitespace
+help-2.6.0.txt -whitespace

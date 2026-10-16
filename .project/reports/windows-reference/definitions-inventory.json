@@ -1,0 +1,2655 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "recordedAtUtc": "2026-10-16T10:44:52.092159+00:00",
+  "commands": [
+    {
+      "kind": "decoder build",
+      "exitCode": 0,
+      "log": "  Determining projects to restore...\n  Restored <repository>\\X\\Feasibility\\Pmx\\NrbfInventory.csproj (in 339 ms).\n  NrbfInventory -> <temporary>\\bin\\NrbfInventory\\release\\PrePoMaxX.NrbfInventory.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:13.61\n"
+    }
+  ],
+  "sourceBaseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "inputPathOmitted": true,
+  "evidenceKind": "PMX framing and NRBF records, not application deserialization",
+  "framing": {
+    "inputSha256": "870efb88009612d478b672d7075caeb2288292a8db77d052d20aac1d3e8ea8a6",
+    "fileBytes": 10142,
+    "header": "PrePoMax v2.6.0",
+    "versionNumbers": [
+      2,
+      6,
+      0
+    ],
+    "mainFrame": {
+      "offset": 36,
+      "compressedBytes": 10102,
+      "inflatedBytes": 65847,
+      "nrbfBytes": 64622,
+      "nrbfSha256": "48cf7ef3f461a69e21abf185f8779ae0626c7597c6d5dcad5eb7c6f5f5cb872e",
+      "opaqueModelBytes": 1217,
+      "opaqueModelSha256": "967f292e79f0c378c1c25e9f233c7a6ef4d3725691d77c1c54b2045d617a53c2"
+    },
+    "opaqueTail": {
+      "offset": 10138,
+      "bytes": 4,
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    "inputUnchanged": true
+  },
+  "graphInventory": {
+    "success": true,
+    "rootType": "System.Object[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+    "rootKind": "ArraySingleObject",
+    "decodedBytes": 64622,
+    "recordCount": 431,
+    "types": [
+      {
+        "type": "BinaryLibraryRecord",
+        "records": 7,
+        "recordKinds": [
+          "BinaryLibrary"
+        ],
+        "members": [],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.EquationContainer, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 35,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_constant",
+          "_constantValue",
+          "_equation",
+          "_stringDoubleConverterType"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.EquationContainer[], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "type": "CaeGlobals.EquationContainer[][], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[FileInOut.Output.Calculix.CalculixUserKeyword, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeJob.AnalysisJob, CaeJob, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.BasePart, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.CoordinateSystem, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeElementSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeNodeSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeReferencePoint, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeSurface, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.MeshSetupItem, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Amplitude, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.BoundaryCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Constraint, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.ContactPair, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.DefinedField, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Distribution, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.EquationParameter, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.FieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.HistoryOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.InitialCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Load, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.SurfaceInteraction, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.UserViewParameters, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_dictionary",
+          "_itemLayout",
+          "_list",
+          "_name"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.RegionTypeEnum, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 5,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.UnitSystem, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_unitSystemType"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeGlobals.UnitSystemType, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.BoundingBox, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 3,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "MaxX",
+          "MaxY",
+          "MaxZ",
+          "MinX",
+          "MinY",
+          "MinZ",
+          "Tag"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "FeGroup+_active",
+          "FeGroup+_additionalCharacters",
+          "FeGroup+_checkName",
+          "FeGroup+_internal",
+          "FeGroup+_labels",
+          "FeGroup+_modified",
+          "FeGroup+_name",
+          "FeGroup+_valid",
+          "FeGroup+_visible",
+          "NamedClass+_active",
+          "NamedClass+_additionalCharacters",
+          "NamedClass+_checkName",
+          "NamedClass+_internal",
+          "NamedClass+_modified",
+          "NamedClass+_name",
+          "NamedClass+_valid",
+          "NamedClass+_visible",
+          "ParentMultiRegion",
+          "_active",
+          "_additionalCharacters",
+          "_checkName",
+          "_createdFromParts",
+          "_creationData",
+          "_creationIds",
+          "_internal",
+          "_labels",
+          "_modified",
+          "_name",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearBeam, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearHexa, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearPyramid, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearQuad, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearTetra, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearTria, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeLinearWedge, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicBeam, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicHexa, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicPyramid, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicQuad, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicTetra, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicTria, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeElementTypeParabolicWedge, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeMesh, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_boundingBox",
+          "_coordinateSystems",
+          "_elementSets",
+          "_maxElementId",
+          "_maxNodeId",
+          "_meshRepresentation",
+          "_meshSetupItems",
+          "_nodeSets",
+          "_parts",
+          "_referencePoints",
+          "_surfaces"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.FeNodeSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 5,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "FeGroup+_active",
+          "FeGroup+_additionalCharacters",
+          "FeGroup+_checkName",
+          "FeGroup+_internal",
+          "FeGroup+_labels",
+          "FeGroup+_modified",
+          "FeGroup+_name",
+          "FeGroup+_valid",
+          "FeGroup+_visible",
+          "NamedClass+_active",
+          "NamedClass+_additionalCharacters",
+          "NamedClass+_checkName",
+          "NamedClass+_internal",
+          "NamedClass+_modified",
+          "NamedClass+_name",
+          "NamedClass+_valid",
+          "NamedClass+_visible",
+          "ParentMultiRegion",
+          "_active",
+          "_additionalCharacters",
+          "_boundingBox",
+          "_centerOfGravity",
+          "_checkName",
+          "_creationData",
+          "_creationIds",
+          "_internal",
+          "_labels",
+          "_modified",
+          "_name",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.MeshPart, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "BasePart+_active",
+          "BasePart+_additionalCharacters",
+          "BasePart+_boundingBox",
+          "BasePart+_checkName",
+          "BasePart+_color",
+          "BasePart+_elementTypes",
+          "BasePart+_internal",
+          "BasePart+_labels",
+          "BasePart+_massProperties",
+          "BasePart+_modified",
+          "BasePart+_name",
+          "BasePart+_nodeLabels",
+          "BasePart+_offset",
+          "BasePart+_partId",
+          "BasePart+_partType",
+          "BasePart+_smoothShaded",
+          "BasePart+_valid",
+          "BasePart+_visible",
+          "FeGroup+_active",
+          "FeGroup+_additionalCharacters",
+          "FeGroup+_checkName",
+          "FeGroup+_internal",
+          "FeGroup+_labels",
+          "FeGroup+_modified",
+          "FeGroup+_name",
+          "FeGroup+_valid",
+          "FeGroup+_visible",
+          "NamedClass+_active",
+          "NamedClass+_additionalCharacters",
+          "NamedClass+_checkName",
+          "NamedClass+_internal",
+          "NamedClass+_modified",
+          "NamedClass+_name",
+          "NamedClass+_valid",
+          "NamedClass+_visible",
+          "ParentMultiRegion",
+          "_active",
+          "_additionalCharacters",
+          "_boundingBox",
+          "_checkName",
+          "_color",
+          "_createdFromBasePart",
+          "_elementTypes",
+          "_internal",
+          "_labels",
+          "_linearBeamType",
+          "_linearHexaType",
+          "_linearPyramidType",
+          "_linearQuadType",
+          "_linearTetraType",
+          "_linearTriaType",
+          "_linearWedgeType",
+          "_massProperties",
+          "_modified",
+          "_name",
+          "_nodeLabels",
+          "_offset",
+          "_parabolicBeamType",
+          "_parabolicHexaType",
+          "_parabolicPyramidType",
+          "_parabolicQuadType",
+          "_parabolicTetraType",
+          "_parabolicTriaType",
+          "_parabolicWedgeType",
+          "_partId",
+          "_partType",
+          "_smoothShaded",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.MeshRepresentation, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.PartMassProperties, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Area",
+          "CenterOfMass",
+          "InertiaMatrixCG",
+          "InertiaMatrixOrigin",
+          "Volume"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeMesh.PartType, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.CLoad, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_amplitudeName",
+          "_checkName",
+          "_color",
+          "_complex",
+          "_coordinateSystemName",
+          "_creationData",
+          "_creationIds",
+          "_f1",
+          "_f2",
+          "_f3",
+          "_internal",
+          "_magnitude",
+          "_modified",
+          "_name",
+          "_nodeId",
+          "_phaseDeg",
+          "_regionName",
+          "_regionType",
+          "_twoD",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.Density, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_densityTemp"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.DisplacementRotation, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 3,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_amplitudeName",
+          "_checkName",
+          "_color",
+          "_complex",
+          "_coordinateSystemName",
+          "_creationData",
+          "_creationIds",
+          "_internal",
+          "_modified",
+          "_name",
+          "_phaseDeg",
+          "_regionName",
+          "_regionType",
+          "_twoD",
+          "_u1",
+          "_u2",
+          "_u3",
+          "_ur1",
+          "_ur2",
+          "_ur3",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.Elastic, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_youngsPoissonsTemp"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.ElementFieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_checkName",
+          "_contactElements",
+          "_global",
+          "_internal",
+          "_lastIterations",
+          "_modified",
+          "_name",
+          "_output",
+          "_valid",
+          "_variables",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.ElementFieldOutputOutputEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.ElementFieldVariable, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.EquationParameterCollection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_overriddenParameters",
+          "_parameters"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.FeModel, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_amplitudes",
+          "_calculixKeywordOverrides",
+          "_calculixUserKeywords",
+          "_constraints",
+          "_contactPairs",
+          "_distributions",
+          "_geometry",
+          "_hashName",
+          "_initialConditions",
+          "_materials",
+          "_mesh",
+          "_name",
+          "_parameters",
+          "_properties",
+          "_sections",
+          "_stepCollection",
+          "_surfaceInteractions",
+          "_unitSystem",
+          "_userViews"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.IncrementationTypeEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "NamedClass+_active",
+          "NamedClass+_additionalCharacters",
+          "NamedClass+_checkName",
+          "NamedClass+_internal",
+          "NamedClass+_modified",
+          "NamedClass+_name",
+          "NamedClass+_valid",
+          "NamedClass+_visible",
+          "_active",
+          "_additionalCharacters",
+          "_checkName",
+          "_description",
+          "_internal",
+          "_modified",
+          "_name",
+          "_properties",
+          "_temperatureDependent",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.MaterialProperty[], CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "4"
+        ]
+      },
+      {
+        "type": "CaeModel.ModelProperties, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "AbsoluteZero",
+          "GlobalResultsFileName",
+          "ModelSpace",
+          "ModelType",
+          "NewtonGravity",
+          "SlipWearResults",
+          "StefanBoltzmann",
+          "_bdmRemeshing",
+          "_cyclesIncrement",
+          "_numOfSmoothingSteps",
+          "_numberOfCycles"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.ModelSpaceEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.ModelType, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.NodalFieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_checkName",
+          "_contactElements",
+          "_global",
+          "_internal",
+          "_lastIterations",
+          "_modified",
+          "_name",
+          "_valid",
+          "_variables",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.NodalFieldVariable, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.SolidSection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_checkName",
+          "_creationData",
+          "_creationIds",
+          "_internal",
+          "_materialName",
+          "_modified",
+          "_name",
+          "_regionName",
+          "_regionType",
+          "_thickness",
+          "_twoD",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.SolverTypeEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.StaticStep, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_active",
+          "_additionalCharacters",
+          "_boundaryConditions",
+          "_checkName",
+          "_definedFields",
+          "_direct",
+          "_fieldOutputs",
+          "_historyOutputs",
+          "_incrementationType",
+          "_initialTimeIncrement",
+          "_internal",
+          "_loads",
+          "_maxIncrements",
+          "_maxTimeIncrement",
+          "_minTimeIncrement",
+          "_modified",
+          "_name",
+          "_nlgeom",
+          "_outputFrequency",
+          "_perturbation",
+          "_runAnalysis",
+          "_solverType",
+          "_stepControls",
+          "_timePeriod",
+          "_valid",
+          "_visible"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.StepCollection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_onlyCheckModel",
+          "_steps"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.StepControlParameter[], CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "0"
+        ]
+      },
+      {
+        "type": "CaeModel.StepControls, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_parameters"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeModel.Step[], CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "4"
+        ]
+      },
+      {
+        "type": "CaeResults.ResultsCollection, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_currentResult",
+          "_results"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "CaeResults.SlipWearResultsEnum, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "FileInOut.Output.Calculix.CalculixKeywordOverride[], CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "0"
+        ]
+      },
+      {
+        "type": "PrePoMax.AnnotationContainer, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_allResultsAnnotations",
+          "_geometryAnnotations",
+          "_modelAnnotations",
+          "_suppressed"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Commands.CClear, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Command+_dateCreated",
+          "Command+_name",
+          "Command+_timeSpan",
+          "PreprocessCommand+_dateCreated",
+          "PreprocessCommand+_name",
+          "PreprocessCommand+_timeSpan",
+          "_dateCreated",
+          "_name",
+          "_timeSpan"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Commands.CImportFile, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Command+_dateCreated",
+          "Command+_name",
+          "Command+_timeSpan",
+          "PreprocessCommand+_dateCreated",
+          "PreprocessCommand+_name",
+          "PreprocessCommand+_timeSpan",
+          "_dateCreated",
+          "_fileName",
+          "_name",
+          "_onlyMaterials",
+          "_timeSpan"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Commands.CSaveToPmx, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Command+_dateCreated",
+          "Command+_name",
+          "Command+_timeSpan",
+          "SaveCommand+_dateCreated",
+          "SaveCommand+_name",
+          "SaveCommand+_timeSpan",
+          "_dateCreated",
+          "_fileName",
+          "_hash",
+          "_name",
+          "_timeSpan"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Commands.CSetNewModelProperties, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Command+_dateCreated",
+          "Command+_name",
+          "Command+_timeSpan",
+          "PreprocessCommand+_dateCreated",
+          "PreprocessCommand+_name",
+          "PreprocessCommand+_timeSpan",
+          "_dateCreated",
+          "_modelSpace",
+          "_name",
+          "_timeSpan",
+          "_unitSystemType"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Commands.Command[], PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "8"
+        ]
+      },
+      {
+        "type": "PrePoMax.Commands.CommandsCollection, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "EnableDisableUndoRedo",
+          "_commands",
+          "_controller",
+          "_currPositionIndex",
+          "_errors",
+          "_historyFileNameBin",
+          "_previousView"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.Controller, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_allResults",
+          "_annotations",
+          "_commands",
+          "_model",
+          "_results"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "PrePoMax.ViewGeometryModelResults, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null",
+        "records": 1,
+        "recordKinds": [
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "value__"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Boolean[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 3,
+        "recordKinds": [
+          "ArraySinglePrimitive"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "12",
+          "2",
+          "41"
+        ]
+      },
+      {
+        "type": "System.Boolean[][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "3"
+        ]
+      },
+      {
+        "type": "System.Char[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ArraySinglePrimitive"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[FileInOut.Output.Calculix.CalculixUserKeyword, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeJob.AnalysisJob, CaeJob, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.BasePart, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.CoordinateSystem, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeElementSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeNodeSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeReferencePoint, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeSurface, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.MeshSetupItem, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Amplitude, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.BoundaryCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Constraint, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.ContactPair, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.DefinedField, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Distribution, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.EquationParameter, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.FieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.HistoryOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.InitialCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Load, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "KeyValuePairs",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.SurfaceInteraction, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.UserViewParameters, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[PrePoMax.AnnotationBase, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[PrePoMax.AnnotationBase, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Comparer",
+          "HashSize",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.GenericEqualityComparer`1[[System.Char, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.HashSet`1[[System.Char, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Capacity",
+          "Comparer",
+          "Elements",
+          "Version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.BasePart, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.BasePart, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeElementSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeElementSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeNodeSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 5,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeMesh.FeNodeSet, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "5"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.BoundaryCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 3,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.BoundaryCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "3"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.FieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.FieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "2"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Load, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Load, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "key",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[CaeModel.MaterialProperty, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[CaeModel.Step, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[CaeModel.StepControlParameter, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[FileInOut.Output.Calculix.CalculixKeywordOverride, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[PrePoMax.Commands.Command, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 33,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_items",
+          "_size",
+          "_version"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Collections.Generic.ObjectEqualityComparer`1[[System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.DelegateSerializationHolder+DelegateEntry, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "assembly",
+          "delegateEntry",
+          "methodName",
+          "target",
+          "targetTypeAssembly",
+          "targetTypeName",
+          "type"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.DelegateSerializationHolder, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "Delegate",
+          "method0",
+          "target0"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Double[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 18,
+        "recordKinds": [
+          "ArraySinglePrimitive"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "type": "System.Double[][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 4,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "3"
+        ]
+      },
+      {
+        "type": "System.Drawing.Color, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "records": 6,
+        "recordKinds": [
+          "ClassWithId",
+          "ClassWithMembersAndTypes"
+        ],
+        "members": [
+          "knownColor",
+          "name",
+          "state",
+          "value"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 8,
+        "recordKinds": [
+          "ArraySinglePrimitive"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1",
+          "4",
+          "8"
+        ]
+      },
+      {
+        "type": "System.Int32[][], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "0"
+        ]
+      },
+      {
+        "type": "System.Object[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "ArraySingleObject"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "3"
+        ]
+      },
+      {
+        "type": "System.OrdinalComparer, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 2,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "_ignoreCase"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.Reflection.MemberInfoSerializationHolder, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "AssemblyName",
+          "ClassName",
+          "GenericArguments",
+          "MemberType",
+          "Name",
+          "Signature",
+          "Signature2"
+        ],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 99,
+        "recordKinds": [
+          "BinaryObjectString"
+        ],
+        "members": [],
+        "arrayShapes": []
+      },
+      {
+        "type": "System.String[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 10,
+        "recordKinds": [
+          "ArraySingleString"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "0",
+          "4",
+          "8"
+        ]
+      },
+      {
+        "type": "System.Type[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 1,
+        "recordKinds": [
+          "BinaryArray"
+        ],
+        "members": [],
+        "arrayShapes": [
+          "1"
+        ]
+      },
+      {
+        "type": "System.UnitySerializationHolder, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "records": 11,
+        "recordKinds": [
+          "ClassWithId",
+          "SystemClassWithMembersAndTypes"
+        ],
+        "members": [
+          "AssemblyName",
+          "Data",
+          "UnityType"
+        ],
+        "arrayShapes": []
+      }
+    ],
+    "referenceEdges": [
+      {
+        "source": "PrePoMax.Controller",
+        "sourceOrdinal": 4,
+        "member": "_annotations",
+        "target": "PrePoMax.AnnotationContainer",
+        "targetOrdinal": 9
+      },
+      {
+        "source": "PrePoMax.Controller",
+        "sourceOrdinal": 4,
+        "member": "_model",
+        "target": "CaeModel.FeModel",
+        "targetOrdinal": 11
+      },
+      {
+        "source": "PrePoMax.Controller",
+        "sourceOrdinal": 4,
+        "member": "_allResults",
+        "target": "CaeResults.ResultsCollection",
+        "targetOrdinal": 14
+      },
+      {
+        "source": "PrePoMax.Controller",
+        "sourceOrdinal": 4,
+        "member": "_commands",
+        "target": "PrePoMax.Commands.CommandsCollection",
+        "targetOrdinal": 15
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_geometry",
+        "target": "CaeMesh.FeMesh",
+        "targetOrdinal": 26
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_mesh",
+        "target": "CaeMesh.FeMesh",
+        "targetOrdinal": 28
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_userViews",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.UserViewParameters, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 30
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_parameters",
+        "target": "CaeModel.EquationParameterCollection",
+        "targetOrdinal": 32
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_materials",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 33
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_sections",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Section, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 35
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_constraints",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Constraint, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 37
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_surfaceInteractions",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.SurfaceInteraction, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 39
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_contactPairs",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.ContactPair, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 41
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_distributions",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Distribution, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 43
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_amplitudes",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.Amplitude, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 45
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_initialConditions",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeModel.InitialCondition, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 47
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_stepCollection",
+        "target": "CaeModel.StepCollection",
+        "targetOrdinal": 49
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_calculixUserKeywords",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.Int32[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[FileInOut.Output.Calculix.CalculixUserKeyword, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 50
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_calculixKeywordOverrides",
+        "target": "System.Collections.Generic.List`1[[FileInOut.Output.Calculix.CalculixKeywordOverride, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 52
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_properties",
+        "target": "CaeModel.ModelProperties",
+        "targetOrdinal": 53
+      },
+      {
+        "source": "CaeModel.FeModel",
+        "sourceOrdinal": 11,
+        "member": "_unitSystem",
+        "target": "CaeGlobals.UnitSystem",
+        "targetOrdinal": 57
+      },
+      {
+        "source": "CaeResults.ResultsCollection",
+        "sourceOrdinal": 14,
+        "member": "_results",
+        "target": "CaeGlobals.OrderedDictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[CaeResults.FeResults, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 59
+      },
+      {
+        "source": "PrePoMax.Commands.CommandsCollection",
+        "sourceOrdinal": 15,
+        "member": "_controller",
+        "target": "PrePoMax.Controller",
+        "targetOrdinal": 4
+      },
+      {
+        "source": "PrePoMax.Commands.CommandsCollection",
+        "sourceOrdinal": 15,
+        "member": "_commands",
+        "target": "System.Collections.Generic.List`1[[PrePoMax.Commands.Command, PrePoMax, Version=2.6.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "targetOrdinal": 61
+      },
+      {
+        "source": "PrePoMax.Commands.CommandsCollection",
+        "sourceOrdinal": 15,
+        "member": "_previousView",
+        "target": "PrePoMax.ViewGeometryModelResults",
+        "targetOrdinal": 17
+      },
+      {
+        "source": "PrePoMax.Commands.CommandsCollection",
+        "sourceOrdinal": 15,
+        "member": "_errors",
+        "target": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]",
+        "targetOrdinal": 62
+      },
+      {
+        "source": "PrePoMax.Commands.CommandsCollection",
+        "sourceOrdinal": 15,
+        "member": "EnableDisableUndoRedo",
+        "target": "System.DelegateSerializationHolder",
+        "targetOrdinal": 63
+      }
+    ],
+    "runtime": {
+      "os": "Windows",
+      "architecture": "X64",
+      "osArchitecture": "X64",
+      "framework": ".NET 10.0.13"
+    },
+    "decoder": {
+      "assembly": "System.Formats.Nrbf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51",
+      "informationalVersion": "10.0.13+4099f83977f4d29604a9aeb971fb0a7bc1d5f699",
+      "sha256": "e91a20e33dcff1abc38873b487c6c416b74252f8a74a91bbe6084e40d725b451"
+    },
+    "loadedAssemblyNames": [
+      "PrePoMaxX.NrbfInventory",
+      "System.Collections",
+      "System.Collections.Immutable",
+      "System.Console",
+      "System.Formats.Nrbf",
+      "System.Linq",
+      "System.Memory",
+      "System.Numerics.Vectors",
+      "System.Private.CoreLib",
+      "System.Reflection.Metadata",
+      "System.Runtime",
+      "System.Runtime.InteropServices",
+      "System.Security.Cryptography",
+      "System.Text.Encoding.Extensions",
+      "System.Text.Json"
+    ],
+    "unsafeFormatterSwitchEnabled": false,
+    "limits": [
+      "No application instances, payload type loading or BinaryFormatter invocation",
+      "No array materialization or primitive/string values emitted",
+      "Input/record checks are not an OS memory quota"
+    ]
+  },
+  "toolHashes": {
+    "Program.cs": "20f6970858200877cafb771e7cfcf34c0f94469e18c9c5effdb05600d96d0c66",
+    "NrbfInventory.csproj": "58c9c13a28fd6238c4ff3d868c53ee458b833428d549eec32dd57af2fb07d229",
+    "inspect-pmx.py": "749cbcbe8766e45c7bac48592c518e5a59525c254c36ab69c0bbf49673e246b1",
+    "NuGet.Config": "2142cfb2dfa2c7feefbe40fabcc68b0dfecadafa99a1db9b70239d977cf2a7ef"
+  },
+  "sourceContext": [
+    {
+      "path": "PrePoMax/Controller.cs",
+      "sha256": "6d00909e096c0339dd6782b6632b42a348d5feba429e557a68a1fc6fe22eb75f",
+      "contextOnly": true
+    },
+    {
+      "path": "CaeGlobals/Extensions.cs",
+      "sha256": "9ff888b875dd9a08aebcc4deaef888ccfbe37bcb57426cd40013cbe7b8240616",
+      "contextOnly": true
+    },
+    {
+      "path": "CaeGlobals/Tools.cs",
+      "sha256": "e271a93b95f57b3305101d6959511c206d3e734670465bb274cff1e95980c679",
+      "contextOnly": true
+    },
+    {
+      "path": "CaeModel/FeModel.cs",
+      "sha256": "0efada6cd4cdfd3a038858f4ffea0106e5e196cc90f496a8581ee58ef3f2b8d4",
+      "contextOnly": true
+    },
+    {
+      "path": "CaeResults/ResultsCollection.cs",
+      "sha256": "b87688e78085daf7187242239f28801013057bc1fad06381f61fd539696a9ccd",
+      "contextOnly": true
+    }
+  ],
+  "limits": [
+    "No payload type loading, application object construction, or BinaryFormatter invocation",
+    "Version header is file metadata, not a verified producer binary/source identity",
+    "Custom model block and remaining file tail are opaque; no result field interpretation",
+    "No model string/primitive values or source file path emitted",
+    "Not an original-application reopen, history replay or round-trip proof",
+    "Byte caps and child timeout are not an OS memory quota"
+  ]
+}

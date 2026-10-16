@@ -1,5 +1,64 @@
 # Project status
 
+## Latest — native private-model comparison and first shared libraries
+
+2026-10-16: maintainer supplied the same 2.5.1-dev PMX (hash verified) and
+explicitly requested proceeding to building. Native original 2.6.0 read/save/
+reopen displays the model and embedded results. Model/mesh bytes are unchanged;
+inflated result mesh and all four field payloads exactly match the CrossOver
+save. All non-string type-inventory rows match CrossOver; only the string-record
+count differs (210 native / 228 CrossOver). The same 27/29 shallow engineering
+types match the original; job/settings and new keyword member changes recur.
+The stable 2.6 source's unconditional application of solver settings explains
+the observed job-field policy as a source-based inference. A separate save with
+results disabled reopens with the model, no result fields and identical model
+bytes. The supplied original remains unchanged and outside Git.
+
+[Task 0013](tasks/0013-shared-core-first-slice.md) begins implementation on the
+planned branch: partial CaeGlobals/CaeMesh .NET 10 libraries, an executable
+mapping host and 25 mapping checks (including all 13 upstream vectors), plus
+nine CLI checks. Existing algorithms are source-linked unchanged. Only
+CaeException moves into a separate source file, included in the original net48
+project. The shared slice also compiles/runs geometry/error/type-identity checks
+under the legacy Windows CLR. [Report](reports/shared-core-first-slice.md).
+
+Mac ARM64/Linux ARM64/native Linux x64 runs of the new library remain next;
+a complementary Linux x64 CI job is prepared, not executed. The Windows C++17
+gap is now closed for the synthetic kernel: pinned portable LLVM-MinGW 20261006
+(Clang 23.1.3) passes 13 vectors, 17 native/seven managed checks and all 1,728
+count comparisons, with defaults and explicit contraction off. Production
+compiler policy is unchanged. Sandbox hardlink, full histories/CAD/VTK and release gates remain explicit.
+They are not represented as passing and do not hold up this approved slice.
+The maintainer now authorizes commit/push of this work and immediate MacBook
+handoff (task 0014). Publication status and exact commits are recorded in that
+task/handoff; do not infer a remote push from the earlier implementation checks.
+No frontend/serializer selection or integration. Older sections below retain
+historical checkpoints and authorization.
+
+## Current Windows continuation — 2026-10-16
+
+Maintainer authorized the planned Windows work on research/native-feasibility.
+[Task 0011](tasks/0011-windows-reference-validation.md) now has a controlled
+native cube/import-history checkpoint and
+[retained evidence](reports/windows-reference-validation.md). Original 2.6.0
+reference hashes match CrossOver. Save/reopen, undo/redo and regenerated exports
+pass 30 explicit semantic checks and three negative controls. Legacy regeneration
+prints success but exits 0xFFFFFFFF; that process contract remains a limitation.
+
+Both core pins and data pass on native Windows x64 and exactly match Mac portable
+observations. Six evidence regressions, three PMX scalar controls and four shell
+fixtures/two controls pass. The exact bundled CalculiX 2.22 passes seven native
+analytical checks plus its negative control. PMX record inspections pass; its
+24-test suite has 23 passes and one sandbox hardlink-creation error. C++17 is
+absent, so structured-kernel Windows execution remains open. Broader history,
+private-model/job policy, saved-results, CAD and VTK/DPI gates remain pending.
+
+Repository-local LF configuration/source-byte restoration and two measured
+research-test portability fixes are recorded. New controlled export/native
+solver checkers and evidence remain uncommitted; no production source/project,
+dependency, GUI/schema policy, integration or publication change. The following
+2026-10-15 sections retain historical state.
+
 Updated: 2026-10-15 (Europe/Belgrade). **Phase 0 and bounded tasks 0002–0010
 complete within their recorded scopes. New tasks 0004–0007 add native-source/
 build-boundary audit, structured kernel execution, native VTK smoke evidence

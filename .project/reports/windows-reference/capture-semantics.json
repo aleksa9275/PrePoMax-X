@@ -1,0 +1,1457 @@
+{
+  "success": true,
+  "toolSha256": "ee5144b5ef161f7216515588c75a848c930501436d0d8718e42d551315eab9e6",
+  "evidenceScope": "Controlled export semantics only",
+  "cases": {
+    "cube-export.inp": {
+      "sha256": "f4a735da8ba88fa96f8b5005c6b40a793e2b388318b1acba3e9e3507308fa6f5",
+      "checks": [
+        {
+          "name": "node IDs and coordinates",
+          "passed": true,
+          "expected": {
+            "1": [
+              0,
+              0,
+              0
+            ],
+            "2": [
+              1,
+              0,
+              0
+            ],
+            "3": [
+              1,
+              1,
+              0
+            ],
+            "4": [
+              0,
+              1,
+              0
+            ],
+            "5": [
+              0,
+              0,
+              1
+            ],
+            "6": [
+              1,
+              0,
+              1
+            ],
+            "7": [
+              1,
+              1,
+              1
+            ],
+            "8": [
+              0,
+              1,
+              1
+            ]
+          },
+          "observed": {
+            "1": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "2": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "3": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "4": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "5": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "6": [
+              1.0,
+              0.0,
+              1.0
+            ],
+            "7": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "8": [
+              0.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "name": "element ID, type and connectivity",
+          "passed": true,
+          "expected": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          },
+          "observed": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          }
+        },
+        {
+          "name": "units",
+          "passed": true,
+          "expected": "MM_TON_S_C",
+          "observed": "MM_TON_S_C"
+        },
+        {
+          "name": "mesh-only definitions absent",
+          "passed": true,
+          "expected": [
+            {},
+            [],
+            []
+          ],
+          "observed": [
+            {},
+            [],
+            []
+          ]
+        }
+      ],
+      "snapshot": {
+        "nodes": {
+          "1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "2": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "3": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "5": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "6": [
+            1.0,
+            0.0,
+            1.0
+          ],
+          "7": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "8": [
+            0.0,
+            1.0,
+            1.0
+          ]
+        },
+        "elements": {
+          "1": {
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        },
+        "nodeSets": {},
+        "elementSets": {
+          "CUBE": [
+            1
+          ]
+        },
+        "materials": {},
+        "sections": [],
+        "steps": [],
+        "units": "MM_TON_S_C"
+      }
+    },
+    "cube-reopened-export.inp": {
+      "sha256": "f4a735da8ba88fa96f8b5005c6b40a793e2b388318b1acba3e9e3507308fa6f5",
+      "checks": [
+        {
+          "name": "node IDs and coordinates",
+          "passed": true,
+          "expected": {
+            "1": [
+              0,
+              0,
+              0
+            ],
+            "2": [
+              1,
+              0,
+              0
+            ],
+            "3": [
+              1,
+              1,
+              0
+            ],
+            "4": [
+              0,
+              1,
+              0
+            ],
+            "5": [
+              0,
+              0,
+              1
+            ],
+            "6": [
+              1,
+              0,
+              1
+            ],
+            "7": [
+              1,
+              1,
+              1
+            ],
+            "8": [
+              0,
+              1,
+              1
+            ]
+          },
+          "observed": {
+            "1": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "2": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "3": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "4": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "5": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "6": [
+              1.0,
+              0.0,
+              1.0
+            ],
+            "7": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "8": [
+              0.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "name": "element ID, type and connectivity",
+          "passed": true,
+          "expected": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          },
+          "observed": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          }
+        },
+        {
+          "name": "units",
+          "passed": true,
+          "expected": "MM_TON_S_C",
+          "observed": "MM_TON_S_C"
+        },
+        {
+          "name": "mesh-only definitions absent",
+          "passed": true,
+          "expected": [
+            {},
+            [],
+            []
+          ],
+          "observed": [
+            {},
+            [],
+            []
+          ]
+        }
+      ],
+      "snapshot": {
+        "nodes": {
+          "1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "2": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "3": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "5": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "6": [
+            1.0,
+            0.0,
+            1.0
+          ],
+          "7": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "8": [
+            0.0,
+            1.0,
+            1.0
+          ]
+        },
+        "elements": {
+          "1": {
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        },
+        "nodeSets": {},
+        "elementSets": {
+          "CUBE": [
+            1
+          ]
+        },
+        "materials": {},
+        "sections": [],
+        "steps": [],
+        "units": "MM_TON_S_C"
+      }
+    },
+    "definitions-reopened-export.inp": {
+      "sha256": "a68f359f37d09a11142785a1bb6adda58ec10e73bcb9bf4cfd6c14355730c27b",
+      "checks": [
+        {
+          "name": "node IDs and coordinates",
+          "passed": true,
+          "expected": {
+            "1": [
+              0,
+              0,
+              0
+            ],
+            "2": [
+              1,
+              0,
+              0
+            ],
+            "3": [
+              1,
+              1,
+              0
+            ],
+            "4": [
+              0,
+              1,
+              0
+            ],
+            "5": [
+              0,
+              0,
+              1
+            ],
+            "6": [
+              1,
+              0,
+              1
+            ],
+            "7": [
+              1,
+              1,
+              1
+            ],
+            "8": [
+              0,
+              1,
+              1
+            ]
+          },
+          "observed": {
+            "1": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "2": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "3": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "4": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "5": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "6": [
+              1.0,
+              0.0,
+              1.0
+            ],
+            "7": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "8": [
+              0.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "name": "element ID, type and connectivity",
+          "passed": true,
+          "expected": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          },
+          "observed": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          }
+        },
+        {
+          "name": "units",
+          "passed": true,
+          "expected": "MM_TON_S_C",
+          "observed": "MM_TON_S_C"
+        },
+        {
+          "name": "named node sets",
+          "passed": true,
+          "expected": {
+            "NALL": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "X0": [
+              1,
+              4,
+              5,
+              8
+            ],
+            "Y0": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "Z0": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "X1": [
+              2,
+              3,
+              6,
+              7
+            ]
+          },
+          "observed": {
+            "NALL": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "X0": [
+              1,
+              4,
+              5,
+              8
+            ],
+            "Y0": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "Z0": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "X1": [
+              2,
+              3,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "name": "named element set",
+          "passed": true,
+          "expected": [
+            1
+          ],
+          "observed": [
+            1
+          ]
+        },
+        {
+          "name": "material values in MPa and ton/mm3",
+          "passed": true,
+          "expected": {
+            "XSTEEL": {
+              "elastic": [
+                210000,
+                0.3
+              ],
+              "density": [
+                7.85e-09
+              ]
+            }
+          },
+          "observed": {
+            "XSTEEL": {
+              "elastic": [
+                210000.0,
+                0.3
+              ],
+              "density": [
+                7.85e-09
+              ]
+            }
+          }
+        },
+        {
+          "name": "section-to-material-and-region association",
+          "passed": true,
+          "expected": [
+            {
+              "elementSet": "XSOLID",
+              "material": "XSTEEL"
+            }
+          ],
+          "observed": [
+            {
+              "elementSet": "XSOLID",
+              "material": "XSTEEL"
+            }
+          ]
+        },
+        {
+          "name": "one static step",
+          "passed": true,
+          "expected": [
+            "Static"
+          ],
+          "observed": [
+            "Static"
+          ]
+        },
+        {
+          "name": "initial increment and total time",
+          "passed": true,
+          "expected": [
+            1,
+            1
+          ],
+          "observed": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "region, DOF and displacement values",
+          "passed": true,
+          "expected": [
+            [
+              "X0",
+              1,
+              1,
+              0
+            ],
+            [
+              "Y0",
+              2,
+              2,
+              0
+            ],
+            [
+              "Z0",
+              3,
+              3,
+              0
+            ]
+          ],
+          "observed": [
+            [
+              "X0",
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              "Y0",
+              2.0,
+              2.0,
+              0.0
+            ],
+            [
+              "Z0",
+              3.0,
+              3.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "name": "load region, DOF and force per node",
+          "passed": true,
+          "expected": [
+            [
+              "X1",
+              1,
+              25
+            ]
+          ],
+          "observed": [
+            [
+              "X1",
+              1.0,
+              25.0
+            ]
+          ]
+        }
+      ],
+      "snapshot": {
+        "nodes": {
+          "1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "2": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "3": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "5": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "6": [
+            1.0,
+            0.0,
+            1.0
+          ],
+          "7": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "8": [
+            0.0,
+            1.0,
+            1.0
+          ]
+        },
+        "elements": {
+          "1": {
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        },
+        "nodeSets": {
+          "NALL": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "X0": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "Y0": [
+            1,
+            2,
+            5,
+            6
+          ],
+          "Z0": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "X1": [
+            2,
+            3,
+            6,
+            7
+          ]
+        },
+        "elementSets": {
+          "XSOLID": [
+            1
+          ]
+        },
+        "materials": {
+          "XSTEEL": {
+            "elastic": [
+              210000.0,
+              0.3
+            ],
+            "density": [
+              7.85e-09
+            ]
+          }
+        },
+        "sections": [
+          {
+            "elementSet": "XSOLID",
+            "material": "XSTEEL"
+          }
+        ],
+        "steps": [
+          {
+            "type": "Static",
+            "static": [
+              1.0,
+              1.0,
+              1e-05,
+              1e+30
+            ],
+            "boundaries": [
+              [
+                "X0",
+                1.0,
+                1.0,
+                0.0
+              ],
+              [
+                "Y0",
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                "Z0",
+                3.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "loads": [
+              [
+                "X1",
+                1.0,
+                25.0
+              ]
+            ]
+          }
+        ],
+        "units": "MM_TON_S_C"
+      }
+    },
+    "definitions-regenerated-export.inp": {
+      "sha256": "494178f5854798c5f09465811373d6cdcdb7cfc8f6f561fbee428bda152b67df",
+      "checks": [
+        {
+          "name": "node IDs and coordinates",
+          "passed": true,
+          "expected": {
+            "1": [
+              0,
+              0,
+              0
+            ],
+            "2": [
+              1,
+              0,
+              0
+            ],
+            "3": [
+              1,
+              1,
+              0
+            ],
+            "4": [
+              0,
+              1,
+              0
+            ],
+            "5": [
+              0,
+              0,
+              1
+            ],
+            "6": [
+              1,
+              0,
+              1
+            ],
+            "7": [
+              1,
+              1,
+              1
+            ],
+            "8": [
+              0,
+              1,
+              1
+            ]
+          },
+          "observed": {
+            "1": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "2": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "3": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "4": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "5": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "6": [
+              1.0,
+              0.0,
+              1.0
+            ],
+            "7": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "8": [
+              0.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "name": "element ID, type and connectivity",
+          "passed": true,
+          "expected": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          },
+          "observed": {
+            "1": {
+              "type": "C3D8",
+              "connectivity": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          }
+        },
+        {
+          "name": "units",
+          "passed": true,
+          "expected": "MM_TON_S_C",
+          "observed": "MM_TON_S_C"
+        },
+        {
+          "name": "named node sets",
+          "passed": true,
+          "expected": {
+            "NALL": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "X0": [
+              1,
+              4,
+              5,
+              8
+            ],
+            "Y0": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "Z0": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "X1": [
+              2,
+              3,
+              6,
+              7
+            ]
+          },
+          "observed": {
+            "NALL": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "X0": [
+              1,
+              4,
+              5,
+              8
+            ],
+            "Y0": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "Z0": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "X1": [
+              2,
+              3,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "name": "named element set",
+          "passed": true,
+          "expected": [
+            1
+          ],
+          "observed": [
+            1
+          ]
+        },
+        {
+          "name": "material values in MPa and ton/mm3",
+          "passed": true,
+          "expected": {
+            "XSTEEL": {
+              "elastic": [
+                210000,
+                0.3
+              ],
+              "density": [
+                7.85e-09
+              ]
+            }
+          },
+          "observed": {
+            "XSTEEL": {
+              "elastic": [
+                210000.0,
+                0.3
+              ],
+              "density": [
+                7.85e-09
+              ]
+            }
+          }
+        },
+        {
+          "name": "section-to-material-and-region association",
+          "passed": true,
+          "expected": [
+            {
+              "elementSet": "XSOLID",
+              "material": "XSTEEL"
+            }
+          ],
+          "observed": [
+            {
+              "elementSet": "XSOLID",
+              "material": "XSTEEL"
+            }
+          ]
+        },
+        {
+          "name": "one static step",
+          "passed": true,
+          "expected": [
+            "Static"
+          ],
+          "observed": [
+            "Static"
+          ]
+        },
+        {
+          "name": "initial increment and total time",
+          "passed": true,
+          "expected": [
+            1,
+            1
+          ],
+          "observed": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "region, DOF and displacement values",
+          "passed": true,
+          "expected": [
+            [
+              "X0",
+              1,
+              1,
+              0
+            ],
+            [
+              "Y0",
+              2,
+              2,
+              0
+            ],
+            [
+              "Z0",
+              3,
+              3,
+              0
+            ]
+          ],
+          "observed": [
+            [
+              "X0",
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              "Y0",
+              2.0,
+              2.0,
+              0.0
+            ],
+            [
+              "Z0",
+              3.0,
+              3.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "name": "load region, DOF and force per node",
+          "passed": true,
+          "expected": [
+            [
+              "X1",
+              1,
+              25
+            ]
+          ],
+          "observed": [
+            [
+              "X1",
+              1.0,
+              25.0
+            ]
+          ]
+        }
+      ],
+      "snapshot": {
+        "nodes": {
+          "1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "2": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "3": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "5": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "6": [
+            1.0,
+            0.0,
+            1.0
+          ],
+          "7": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "8": [
+            0.0,
+            1.0,
+            1.0
+          ]
+        },
+        "elements": {
+          "1": {
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        },
+        "nodeSets": {
+          "NALL": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "X0": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "Y0": [
+            1,
+            2,
+            5,
+            6
+          ],
+          "Z0": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "X1": [
+            2,
+            3,
+            6,
+            7
+          ]
+        },
+        "elementSets": {
+          "XSOLID": [
+            1
+          ]
+        },
+        "materials": {
+          "XSTEEL": {
+            "elastic": [
+              210000.0,
+              0.3
+            ],
+            "density": [
+              7.85e-09
+            ]
+          }
+        },
+        "sections": [
+          {
+            "elementSet": "XSOLID",
+            "material": "XSTEEL"
+          }
+        ],
+        "steps": [
+          {
+            "type": "Static",
+            "static": [
+              1.0,
+              1.0,
+              1e-05,
+              1e+30
+            ],
+            "boundaries": [
+              [
+                "X0",
+                1.0,
+                1.0,
+                0.0
+              ],
+              [
+                "Y0",
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                "Z0",
+                3.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "loads": [
+              [
+                "X1",
+                1.0,
+                25.0
+              ]
+            ]
+          }
+        ],
+        "units": "MM_TON_S_C"
+      }
+    }
+  },
+  "regeneratedSemanticSnapshotMatches": true,
+  "regeneratedAllNonvolatileDeckLinesMatch": true,
+  "negativeControls": [
+    {
+      "name": "connectivity",
+      "rejected": true
+    },
+    {
+      "name": "material",
+      "rejected": true
+    },
+    {
+      "name": "association",
+      "rejected": true
+    }
+  ]
+}

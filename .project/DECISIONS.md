@@ -2,6 +2,25 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D025 — Accepted Windows closeout/publication instruction, 2026-10-16:
+maintainer explicitly authorizes committing/pushing reviewed Windows/reference/
+shared-core work to origin/research/native-feasibility and preparing immediate
+MacBook continuation. Task 0014 includes closing evidence and transfer fallback.
+No force push, upstream write, x/main integration or frontend/serializer choice.
+Windows-only checks needed for this increment are complete; Mac/Linux execution
+of the new libraries is next. Remote publication and hosted CI must be verified,
+not inferred from local commits or configuration.
+
+D024 — Bounded implementation authorized, 2026-10-16: maintainer requested
+finishing supplied-model testing and proceeding to build. Task 0013 starts
+partial source-linked shared libraries and a callable mapping host on the
+planned branch. Mechanical CaeException separation removes the proven Windows
+presentation dependency while retaining existing code/type/assembly identity.
+The tested PMX comparison supports proceeding with this limited slice; it does
+not establish a portable serializer or complete platform acceptance. Frontend,
+full Controller extraction, native integration, x/main and publication stay
+outside the current implementation. Preserve remaining release gates.
+
 | ID | Status | Decision / rationale / revisit condition |
 |---|---|---|
 | D001 | Phase 0 completed; scoped authorization advanced | Phase 0 stayed documentation/repository maintenance only. Maintainer authorized task 0002 on 2026-10-13; broader implementation still requires review |

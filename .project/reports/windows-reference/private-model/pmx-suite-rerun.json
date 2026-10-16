@@ -1,0 +1,8 @@
+{
+  "tests": 24,
+  "passed": 23,
+  "errors": 1,
+  "failure": "Windows sandbox denies os.link before the alias guard executes",
+  "wasSkipped": false,
+  "fullSuitePassed": false
+}

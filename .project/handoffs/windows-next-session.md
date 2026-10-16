@@ -1,5 +1,32 @@
 # Next session — native Windows reference validation
 
+Closeout entry point is now [MacBook continuation](macbook-next-session.md)
+and task 0014. Native structured-kernel checks now pass with a pinned portable
+compiler; its earlier absence is historical. The maintainer authorizes reviewed
+commit/push and session transfer. Windows sandbox credential/hardlink limits
+are recorded separately; no further Windows-only check blocks the next slice.
+
+Latest continuation 2026-10-16: supplied private PMX/results comparison is now
+executed natively, including results-enabled/disabled saves and readback. Model
+and result payloads match CrossOver's observed preservation. The maintainer
+authorized proceeding to building: [task 0013](../tasks/0013-shared-core-first-slice.md)
+now provides partial shared libraries and a runnable mapping host. Begin with
+that task and its report; do not restart earlier preparation. Changes remain
+uncommitted on the planned branch. Mac/Linux execution of the new shared slice
+is next; remaining full-application/native-tool gates stay recorded separately.
+
+2026-10-16 continuation: the controlled native Windows cube/import-history
+checkpoint has been executed on research/native-feasibility. Start with
+[the Windows report](../reports/windows-reference-validation.md) and updated
+[task 0011](../tasks/0011-windows-reference-validation.md) before repeating work.
+Evidence and research-only runner fixes are uncommitted. Remaining gates are
+the sandbox-denied hardlink test, a pinned native C++17 toolchain, individual
+entity-edit histories, private legacy/job-policy comparisons, results-save
+variants, CAD meshing and interactive rendering. The exact bundled native
+CalculiX analytical slice and core/data portable comparisons already pass.
+Original PMX/PMH/app/SDK copies remain in the session's disposable workspace,
+outside Git. The instructions below document the initial handoff.
+
 Prepared 2026-10-15. Maintainer says Windows will be available next session.
 Start here when work resumes; this is a saved handoff, not a scheduled task.
 Read AGENTS.md, PROJECT.md, STATUS.md, DECISIONS.md and

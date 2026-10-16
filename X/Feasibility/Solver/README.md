@@ -20,5 +20,18 @@ axial stress 1e-4 MPa, transverse/shear/reaction 1e-5 in their units). Altered
 displacement is a negative control. Records solver/dependency/input/output hashes
 and actual reported version. Only synthetic DAT/FRD/STA/CVG are retained.
 The DAT parser is specific to this fixture's requested output, not a general
-production results parser. Native Windows/Linux/Mac solves, production FRD
-reading, repeated-run tolerances and nonlinear/contact cases remain open.
+production results parser. Native Linux/Mac solves, production FRD reading,
+repeated-run tolerances and nonlinear/contact cases remain open.
+
+Task 0011 adds a native Windows x64 repetition using exactly the same solver,
+runtime DLLs, fixture and analytical checker:
+
+```powershell
+python X/Feasibility/Solver/run-native.py --solver 'C:\reference\Solver\ccx_dynamic.exe' --output-dir 'C:\capture\new-native-results'
+```
+
+The output directory must not already exist. The runner refuses a different
+solver/runtime/fixture hash, retains the real exit status, repeats all seven
+checks and the negative control, and compares DAT IDs and numerical values
+with the CrossOver reference. See `.project/reports/windows-reference-validation.md`
+for the observed Windows results and limits.

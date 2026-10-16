@@ -34,9 +34,29 @@ def main():
         manifest = json.loads((HERE / "source-manifest.json").read_text())
         report["sourceCommit"] = manifest["baselineCommit"]
         report["sources"] = manifest["sourceFiles"]
+        baseline_exception = None
         for source in manifest["sourceFiles"]:
             original = subprocess.check_output(["git", "show", manifest["baselineCommit"]+":"+source["path"]], cwd=ROOT)
-            if sha(original)!=source["sha256"] or (ROOT/source["path"]).read_bytes()!=original:
+            actual = (ROOT/source["path"]).read_bytes()
+            if source["path"] == "CaeGlobals/ExceptionTools.cs":
+                baseline_exception = original
+                if actual != original:
+                    # Task 0013 only moves the existing domain exception out of
+                    # Windows presentation. This historical experiment continues
+                    # to measure its original, pinned compilation boundary below.
+                    text = original.decode("utf-8")
+                    start = text.index("    public class CaeException : Exception\n")
+                    end = text.index("    //\n    public static class ExceptionTools", start)
+                    body = text[start:end]
+                    expected = (text[:start] + text[end+7:]).encode("utf-8")
+                    moved = ROOT/"CaeGlobals/CaeException.cs"
+                    if actual != expected or not moved.exists() or body not in moved.read_text():
+                        raise ValueError("Unexpected exception-boundary source adaptation")
+                    report["sourceAdaptations"] = [{"kind":"Mechanical CaeException file separation", "path":source["path"],
+                        "currentSha256":sha(actual), "exceptionSha256":sha(moved.read_bytes()),
+                        "boundaryUses":"original Git bytes, not adapted portable library"}]
+                    actual = original
+            if sha(original)!=source["sha256"] or actual!=original:
                 raise ValueError("Source differs from pinned baseline: "+source["path"])
         tree=ET.parse(HERE/"MeshingProbe.csproj")
         expected={"CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs", "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs"}
@@ -102,7 +122,9 @@ def main():
             names=["CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",*sorted(expected),"CaeGlobals/ExceptionTools.cs"]
             project=work/"boundary/Boundary.csproj"; project.parent.mkdir()
             (project.parent/"NuGet.Config").write_bytes((HERE/"NuGet.Config").read_bytes())
-            project.write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems><NuGetAudit>false</NuGetAudit></PropertyGroup><ItemGroup>'+''.join('<Compile Include="'+str(ROOT/name)+'" />' for name in names)+'</ItemGroup></Project>')
+            original_exception=project.parent/"ExceptionTools.cs"
+            original_exception.write_bytes(baseline_exception)
+            project.write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems><NuGetAudit>false</NuGetAudit></PropertyGroup><ItemGroup>'+''.join('<Compile Include="'+str(original_exception if name=="CaeGlobals/ExceptionTools.cs" else ROOT/name)+'" />' for name in names)+'</ItemGroup></Project>')
             boundary=run(["dotnet","build",str(project),"--disable-build-servers","-v:minimal"],1)
             if "CS0103" not in boundary.stdout or "MessageBoxes" not in boundary.stdout:
                 raise ValueError("Unexpected full mapping boundary")

@@ -3,3 +3,4 @@ include:
   - local: X/Feasibility/Core/gitlab-ci.yml
   - local: X/Feasibility/Data/gitlab-ci.yml
   - local: X/Feasibility/Research/gitlab-ci.yml
+  - local: X/Core/gitlab-ci.yml

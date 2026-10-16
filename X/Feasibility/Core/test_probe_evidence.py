@@ -63,6 +63,8 @@ class EvidenceTests(unittest.TestCase):
             (output / "v2.6.0.json").write_text('{"success": true}')
             failed = subprocess.CompletedProcess([], 1, "", "probe build failed")
             with patch("sys.argv", ["run-ci.py", "--output-dir", folder]), \
+                    patch.object(CI_RUNNER.platform, "system", return_value="Linux"), \
+                    patch.object(CI_RUNNER.platform, "machine", return_value="x86_64"), \
                     patch.object(CI_RUNNER.subprocess, "run", return_value=failed) as child, \
                     patch.dict(CI_RUNNER.os.environ, {"CI_JOB_TOKEN": "secret-sentinel"}):
                 with self.assertRaises(RuntimeError):
@@ -82,6 +84,8 @@ class EvidenceTests(unittest.TestCase):
         changed = subprocess.CompletedProcess([], 0, json.dumps(recorded), "")
         with tempfile.TemporaryDirectory() as folder:
             with patch("sys.argv", ["run-ci.py", "--output-dir", folder]), \
+                    patch.object(CI_RUNNER.platform, "system", return_value="Linux"), \
+                    patch.object(CI_RUNNER.platform, "machine", return_value="x86_64"), \
                     patch.object(CI_RUNNER.subprocess, "run", return_value=changed) as child:
                 with self.assertRaises(RuntimeError):
                     CI_RUNNER.main()

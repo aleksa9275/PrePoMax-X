@@ -1,0 +1,15 @@
+{"report": "<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\tmpy3gfgcxq\\baseline.json", "success": false, "runtime": {"os": "macOS", "architecture": "Arm64", "osArchitecture": "Arm64", "framework": ".NET 10.0.12"}, "matchesMacReference": false}
+{"report": "<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\tmp_w_io9uh\\baseline.json", "success": false, "runtime": null, "matchesMacReference": false}
+.F....
+======================================================================
+FAIL: test_comparison_failure_retains_measured_report_and_stops_replay (__main__.EvidenceTests.test_comparison_failure_retains_measured_report_and_stops_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>\X\Feasibility\Core\test_probe_evidence.py", line 92, in test_comparison_failure_retains_measured_report_and_stops_replay
+    self.assertEqual(child.call_count, 1)
+AssertionError: 2 != 1
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.498s
+
+FAILED (failures=1)

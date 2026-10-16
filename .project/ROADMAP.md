@@ -1,5 +1,14 @@
 # Dependency-aware roadmap
 
+2026-10-16: maintainer explicitly authorized moving from reference testing to
+the first bounded shared-library build. Native private PMX/results comparison
+now matches the earlier CrossOver payload observations. [Task 0013](tasks/0013-shared-core-first-slice.md)
+starts the narrow 3.1 exception/framework boundary with reusable partial
+libraries and an executable mapping host. This is a deliberate bounded advance;
+the wider Phase 1.2/2.1/5.1 and release gates remain open. Repeat this new library
+on Mac ARM64/Linux ARM64 and native Linux x64 next, then expand one measured
+model/deck dependency boundary at a time rather than repeating completed audits.
+
 Task 0002, the first bounded increment of Phase 1, is complete within its seven-file scope. Mac ARM64, Podman Linux ARM64 and GitLab native Linux x64 checks pass both source pins with matching portable observations. Task 0003 completed the next bounded engineering data/math/stream probe and PMX source-identity/Windows capture preparation, with Mac ARM64/Linux x64 passing; broader tasks/phases remain gated. First implementation work establishes facts without choosing a GUI. Phase 5 source recovery begins early because it can block the entire migration. Regression work begins in Phase 1 and becomes the release matrix in Phase 6.
 
 The first result is [task 0002](tasks/0002-core-feasibility.md): source-linked STL/vector/node probe, Mac checks, pinned upstream-revision replay and local Podman Linux verification plus complementary GitLab native Linux x64 verification. See [initial execution evidence](reports/core-feasibility.md), [Podman evidence](reports/podman-verification.md) and [native x64 verification](reports/gitlab-linux-x64.md). This bounded increment of task 1.1 does not replace later model/results/file-compatibility gates. GUI choice remains open between a C# frontend and PyQt/Python VTK over shared C# behavior.

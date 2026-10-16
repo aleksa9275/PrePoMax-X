@@ -1,0 +1,14 @@
+PROBE FAILED: Command failed (1): ['dotnet', 'build', '<user-profile>\\Documents\\GitLab\\pre-po-max-x\\X\\Feasibility\\Core\\CoreProbe.csproj', '-c', 'Release', '--disable-build-servers', '--no-incremental', '--artifacts-path', '<user-profile>\\Documents\\Codex\\2026-10-16\\https-gitlab-com-aleksa9275-pre-po\\work\\windows-reference\\tmp\\prepomax-x-core-9tdnawsh\\artifacts', '-p:UpstreamSourceRoot=<user-profile>\\Documents\\GitLab\\pre-po-max-x', '-v:minimal']
+  Determining projects to restore...
+<workspace>\dotnet\sdk\10.0.402\NuGet.targets(782,5): error : Failed to read NuGet.Config due to unauthorized access. Path: '<user-profile>\AppData\Roaming\NuGet\NuGet.Config'. [<repository>\X\Feasibility\Core\CoreProbe.csproj]
+<workspace>\dotnet\sdk\10.0.402\NuGet.targets(782,5): error :   Access to the path '<user-profile>\AppData\Roaming\NuGet' is denied. [<repository>\X\Feasibility\Core\CoreProbe.csproj]
+
+Build FAILED.
+
+<workspace>\dotnet\sdk\10.0.402\NuGet.targets(782,5): error : Failed to read NuGet.Config due to unauthorized access. Path: '<user-profile>\AppData\Roaming\NuGet\NuGet.Config'. [<repository>\X\Feasibility\Core\CoreProbe.csproj]
+<workspace>\dotnet\sdk\10.0.402\NuGet.targets(782,5): error :   Access to the path '<user-profile>\AppData\Roaming\NuGet' is denied. [<repository>\X\Feasibility\Core\CoreProbe.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:02.18
+

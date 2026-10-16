@@ -1,0 +1,430 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-10-16T15:17:15.981599+00:00",
+  "host": {
+    "os": "Windows",
+    "architecture": "AMD64"
+  },
+  "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "commands": [
+    {
+      "arguments": [
+        "dotnet",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "10.0.402\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "build",
+        "<repository>\\X\\Core\\PrePoMaxX.Core.slnx",
+        "-c",
+        "Release",
+        "--disable-build-servers",
+        "-m:1",
+        "--artifacts-path",
+        "<temporary>\\build",
+        "-p:RestoreConfigFile=<repository>\\X\\Core\\NuGet.Config",
+        "-v:minimal"
+      ],
+      "exitCode": 0,
+      "stdout": "  Determining projects to restore...\n  Restored <repository>\\X\\Core\\MapFace\\MapFace.csproj (in 393 ms).\n  Restored <repository>\\X\\Core\\CaeMesh\\CaeMesh.csproj (in 392 ms).\n  Restored <repository>\\X\\Core\\Tests\\CoreTests.csproj (in 393 ms).\n  Restored <repository>\\X\\Core\\CaeGlobals\\CaeGlobals.csproj (in 346 ms).\n  CaeGlobals -> <temporary>\\build\\bin\\CaeGlobals\\release\\CaeGlobals.dll\n  CaeMesh -> <temporary>\\build\\bin\\CaeMesh\\release\\CaeMesh.dll\n  MapFace -> <temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll\n  CoreTests -> <temporary>\\build\\bin\\CoreTests\\release\\PrePoMaxX.CoreTests.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:26.35\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\CoreTests\\release\\PrePoMaxX.CoreTests.dll"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"passed\":25,\"failed\":0,\"runtime\":{\"os\":\"Microsoft Windows 10.0.26300\",\"architecture\":\"X64\"},\"checks\":[{\"name\":\"type and assembly identities retained\",\"passed\":true},{\"name\":\"upstream vector right_45_45\",\"passed\":true},{\"name\":\"upstream vector equilateral\",\"passed\":true},{\"name\":\"upstream vector diagonal_34\",\"passed\":true},{\"name\":\"upstream vector sharp_10\",\"passed\":true},{\"name\":\"upstream vector sharp_5\",\"passed\":true},{\"name\":\"upstream vector quarter_disk\",\"passed\":true},{\"name\":\"upstream vector deltoid_10\",\"passed\":true},{\"name\":\"upstream vector deltoid_30\",\"passed\":true},{\"name\":\"upstream vector deltoid_all\",\"passed\":true},{\"name\":\"upstream vector graded_34\",\"passed\":true},{\"name\":\"upstream vector chained_34\",\"passed\":true},{\"name\":\"upstream vector cylinder\",\"passed\":true},{\"name\":\"upstream vector sphere\",\"passed\":true},{\"name\":\"all 13 upstream vectors executed\",\"passed\":true},{\"name\":\"independent equilateral centroid and counts\",\"passed\":true},{\"name\":\"area, manifold edges and Euler disk topology\",\"passed\":true},{\"name\":\"boundary node numbering closes and round trips\",\"passed\":true},{\"name\":\"host surface evaluator places inner coordinates\",\"passed\":true},{\"name\":\"bad evaluator output raises domain exception\",\"passed\":true},{\"name\":\"mismatched geometry raises domain exception\",\"passed\":true},{\"name\":\"invalid block counts raise domain exception\",\"passed\":true},{\"name\":\"uniform scale and translation preserve topology\",\"passed\":true},{\"name\":\"changed coordinates and connectivity fail comparison\",\"passed\":true},{\"name\":\"portable libraries have no Windows or presentation references\",\"passed\":true}],\"vectors\":[{\"name\":\"right_45_45\",\"maxDeviation\":0,\"quads\":135},{\"name\":\"equilateral\",\"maxDeviation\":0,\"quads\":108},{\"name\":\"diagonal_34\",\"maxDeviation\":0,\"quads\":134},{\"name\":\"sharp_10\",\"maxDeviation\":0,\"quads\":141},{\"name\":\"sharp_5\",\"maxDeviation\":0,\"quads\":86},{\"name\":\"quarter_disk\",\"maxDeviation\":0,\"quads\":96},{\"name\":\"deltoid_10\",\"maxDeviation\":0,\"quads\":29},{\"name\":\"deltoid_30\",\"maxDeviation\":0,\"quads\":29},{\"name\":\"deltoid_all\",\"maxDeviation\":0,\"quads\":3},{\"name\":\"graded_34\",\"maxDeviation\":0,\"quads\":134},{\"name\":\"chained_34\",\"maxDeviation\":0,\"quads\":235},{\"name\":\"cylinder\",\"maxDeviation\":0,\"quads\":121},{\"name\":\"sphere\",\"maxDeviation\":0,\"quads\":128}]}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<repository>\\X\\Core\\MapFace\\equilateral.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"SideCounts\":[2,2,2],\"NumberOfBoundaryNodes\":6,\"InnerUv\":[[1,0.5773502691896257]],\"Quads\":[[0,1,6,5],[2,3,6,1],[4,5,6,3]],\"NumberOfFoldedQuads\":0}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll"
+      ],
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "Usage: PrePoMaxX.MapFace <face.json>\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\missing.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Could not find file \\u0027<temporary>\\\\missing.json\\u0027.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"A face object is required.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Exactly three UV and XYZ sides are required.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Every side needs matching UV/XYZ points, including both corners.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Input exceeds 1 MiB.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Side endpoints must form one closed boundary.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>\\build\\bin\\MapFace\\release\\PrePoMaxX.MapFace.dll",
+        "<temporary>\\invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"The sides of the face carry 1, 1, 1 elements, which three blocks of quads cannot fill.\"}\n"
+    }
+  ],
+  "sources": [
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+      "sha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+      "sha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+      "sha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CaeException.cs",
+      "sha256": "024ac7385a2cc6d7f0298f97c4b45a92431af61324ab1a42392b0642b3a6d268",
+      "originalClassBodyUnchanged": true
+    }
+  ],
+  "toolHashes": {
+    "Directory.Build.props": "9d7bca443f69df896f9e28377afad229ce8ac0b42c9d2148f83ff8923a071cdd",
+    "NuGet.Config": "964302159308872b9729e1828a1ba897f30634f7bd751cde11ea8e6fed8cfb97",
+    "PrePoMaxX.Core.slnx": "a30f93d1ef51f45649b720d110b7bd8546acfe6ab2a027dbba9fe707a88c555a",
+    "verify.py": "1f1aef0289896acbb6f1ef6773f72772aea25ca035065775005090b2179f8627",
+    "CaeGlobals/CaeGlobals.csproj": "83ef8ad259cc4af70a6f8a5a39f32b58d31783d02b3e62e82d3fe7fcf9a05ca2",
+    "CaeMesh/CaeMesh.csproj": "242da6ce0464538617d33c33d4112df58eed9537a2ab688a635b2b7a9a3a657f",
+    "MapFace/equilateral.json": "6313d0e88a2b35f088641c908a67e63323078fe7ffb8197b80a7d2cabd0f8e3a",
+    "MapFace/MapFace.csproj": "5bf3ea5ad28c49f77f71413511dbbd32940822f0d91f0d11f604b63504418a79",
+    "MapFace/Program.cs": "4482edfc1ed2975287b96ef120d2d46116a9e79e3a5db929235ec290e582345d",
+    "Tests/CoreTests.csproj": "6a883d38381121ac7289f38f40d17f316d861bfbc416eda3cf0f0db01a8d3c17",
+    "Tests/Program.cs": "557a6f86e2e78faf3ccedc340a6755c43b7002640c750d8b30af7d57335457af",
+    "Tests/Legacy/Smoke.cs": "dc4294ee29447690e5266f27d3c7bf26054d0b286afd8eb3fe2a4ad668430ee0"
+  },
+  "sdk": "10.0.402",
+  "mappingTests": {
+    "success": true,
+    "passed": 25,
+    "failed": 0,
+    "runtime": {
+      "os": "Microsoft Windows 10.0.26300",
+      "architecture": "X64"
+    },
+    "checks": [
+      {
+        "name": "type and assembly identities retained",
+        "passed": true
+      },
+      {
+        "name": "upstream vector right_45_45",
+        "passed": true
+      },
+      {
+        "name": "upstream vector equilateral",
+        "passed": true
+      },
+      {
+        "name": "upstream vector diagonal_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sharp_10",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sharp_5",
+        "passed": true
+      },
+      {
+        "name": "upstream vector quarter_disk",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_10",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_30",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_all",
+        "passed": true
+      },
+      {
+        "name": "upstream vector graded_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector chained_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector cylinder",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sphere",
+        "passed": true
+      },
+      {
+        "name": "all 13 upstream vectors executed",
+        "passed": true
+      },
+      {
+        "name": "independent equilateral centroid and counts",
+        "passed": true
+      },
+      {
+        "name": "area, manifold edges and Euler disk topology",
+        "passed": true
+      },
+      {
+        "name": "boundary node numbering closes and round trips",
+        "passed": true
+      },
+      {
+        "name": "host surface evaluator places inner coordinates",
+        "passed": true
+      },
+      {
+        "name": "bad evaluator output raises domain exception",
+        "passed": true
+      },
+      {
+        "name": "mismatched geometry raises domain exception",
+        "passed": true
+      },
+      {
+        "name": "invalid block counts raise domain exception",
+        "passed": true
+      },
+      {
+        "name": "uniform scale and translation preserve topology",
+        "passed": true
+      },
+      {
+        "name": "changed coordinates and connectivity fail comparison",
+        "passed": true
+      },
+      {
+        "name": "portable libraries have no Windows or presentation references",
+        "passed": true
+      }
+    ],
+    "vectors": [
+      {
+        "name": "right_45_45",
+        "maxDeviation": 0,
+        "quads": 135
+      },
+      {
+        "name": "equilateral",
+        "maxDeviation": 0,
+        "quads": 108
+      },
+      {
+        "name": "diagonal_34",
+        "maxDeviation": 0,
+        "quads": 134
+      },
+      {
+        "name": "sharp_10",
+        "maxDeviation": 0,
+        "quads": 141
+      },
+      {
+        "name": "sharp_5",
+        "maxDeviation": 0,
+        "quads": 86
+      },
+      {
+        "name": "quarter_disk",
+        "maxDeviation": 0,
+        "quads": 96
+      },
+      {
+        "name": "deltoid_10",
+        "maxDeviation": 0,
+        "quads": 29
+      },
+      {
+        "name": "deltoid_30",
+        "maxDeviation": 0,
+        "quads": 29
+      },
+      {
+        "name": "deltoid_all",
+        "maxDeviation": 0,
+        "quads": 3
+      },
+      {
+        "name": "graded_34",
+        "maxDeviation": 0,
+        "quads": 134
+      },
+      {
+        "name": "chained_34",
+        "maxDeviation": 0,
+        "quads": 235
+      },
+      {
+        "name": "cylinder",
+        "maxDeviation": 0,
+        "quads": 121
+      },
+      {
+        "name": "sphere",
+        "maxDeviation": 0,
+        "quads": 128
+      }
+    ]
+  },
+  "cli": {
+    "sample": {
+      "success": true,
+      "SideCounts": [
+        2,
+        2,
+        2
+      ],
+      "NumberOfBoundaryNodes": 6,
+      "InnerUv": [
+        [
+          1,
+          0.5773502691896257
+        ]
+      ],
+      "Quads": [
+        [
+          0,
+          1,
+          6,
+          5
+        ],
+        [
+          2,
+          3,
+          6,
+          1
+        ],
+        [
+          4,
+          5,
+          6,
+          3
+        ]
+      ],
+      "NumberOfFoldedQuads": 0
+    },
+    "negativeControls": [
+      "usage",
+      "missing input",
+      "malformed",
+      "null root",
+      "missing sides",
+      "null side",
+      "size limit",
+      "open boundary",
+      "invalid block counts"
+    ],
+    "inputUnchanged": true
+  },
+  "limits": [
+    "First source-linked library slice, not the full application or PMX reader",
+    "Required Mac/Linux platform runs and CAD/VTK integration remain separate"
+  ]
+}

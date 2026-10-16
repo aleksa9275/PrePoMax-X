@@ -1,0 +1,61 @@
+{
+  "recordedAtUtc": "2026-10-16T15:07:08.774702+00:00",
+  "scope": "Native original Windows 2.6.0 private read/save/reopen; not complete application equivalence",
+  "originalUnchanged": true,
+  "originalSha256": "80e3c303a0719317af9d23016a4f70fe5f5acb91d731e704ec45dcbbfe2e0379",
+  "nativeSavedSha256": "b28c4c7927cc081b66706b61d03fb365266474befd212ac00e46d9707f86e80b",
+  "nativeSavedBytes": 16374353,
+  "producerExeSha256": "1ab759129444c080752997b2b661227f5274d9cbb7efa02af2d83de109d80dce",
+  "inputIsSameCrossOverFixture": true,
+  "ui": {
+    "modelDisplayed": true,
+    "resultsDisplayedBeforeAndAfterReopen": true,
+    "fieldOutputs": 4,
+    "olderVersionWarningObserved": true,
+    "resultsDisabledVariantModelDisplayed": true,
+    "resultsDisabledVariantHasNoFieldOutputs": true
+  },
+  "crossoverPayloadComparison": {
+    "resultCount": true,
+    "resultNameSha256": true,
+    "fieldFrameCount": true,
+    "opaqueHistoryTrailerSha256": true,
+    "inflatedPayloadsIdentical": true
+  },
+  "nativeVsCrossoverInventoryChanges": [
+    {
+      "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+      "nativeRecords": 210,
+      "crossoverRecords": 228
+    }
+  ],
+  "otherTypeInventoryRowsIdentical": true,
+  "shallowEngineeringTypeMatches": {
+    "matched": 27,
+    "total": 29,
+    "changedMembersSameAsCrossOver": true
+  },
+  "jobPolicy": {
+    "evidenceKind": "Inference from stable 2.6 source, consistent with native and CrossOver observations",
+    "sourceCommit": "9e91252563739ee5304cea16c34863dfb17a74d5",
+    "sourcePath": "PrePoMax/Controller.cs",
+    "sourceLines": [
+      12273,
+      12302
+    ],
+    "behavior": "Assign solver settings to job executable, work directory, CPU count and environment list",
+    "exactSourceForBinaryEstablished": false
+  },
+  "modelOnly": {
+    "sha256": "4a6d6adab9afddee5d22a5ead436e2e0f7a1011886ead0cfe706338aaff936d8",
+    "bytes": 1559989,
+    "modelBlockIdentical": true,
+    "trailerIsZeroResultCount": true
+  },
+  "limits": [
+    "Private PMX and UI data remain outside Git",
+    "No private history regeneration or new solve",
+    "No complete NRBF graph/association/clone equivalence claim",
+    "Only string record count differs in inventories; individual string values were not compared"
+  ]
+}

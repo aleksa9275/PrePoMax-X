@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-10-16T10:50:18.290594+00:00",
+  "branch": "research/native-feasibility",
+  "startingCommit": "f1e757f15b80bb3f615c887b420180ae1a918ed5",
+  "host": {
+    "os": "Windows 11 (user supplied)",
+    "DisplayVersion": "26H2",
+    "CurrentBuild": "26300",
+    "UBR": 9457,
+    "osArchitecture": "X64",
+    "processArchitecture": "X64",
+    "cpu": "AMD Ryzen 5 3450U",
+    "python": "3.12.14",
+    "sdk": "10.0.402",
+    "runtime": ".NET 10.0.13"
+  },
+  "availableApplicationVersions": {
+    "PrePoMax v2.5.1 dev": {
+      "exeSha256": "af05b2bd6a0bf848f2e61e16b39f5582c49b26a939897e95da20ef0268efc4b6",
+      "exeBytes": 1763840
+    },
+    "PrePoMax v2.6.0": {
+      "exeSha256": "1ab759129444c080752997b2b661227f5274d9cbb7efa02af2d83de109d80dce",
+      "exeBytes": 1910784
+    },
+    "PrePoMax v2.6.1 dev": {
+      "exeSha256": "77c8e51803e588f274fa4b45727ad02467dffa321e29d9280cbbac9b77d7ecb7",
+      "exeBytes": 1985024
+    },
+    "PrePoMax v2.6.2 dev": {
+      "exeSha256": "98353ec0d96f6d91c426b284551fa8ab35f774ae38cd266367f7e71ce8a11fac",
+      "exeBytes": 2033664
+    },
+    "PrePoMax v3.0.0 RC1": {
+      "exeSha256": "28d67276bc03b25b074c656c38391a03e3c1c102a8e85797b38a4b6e9ae89aac",
+      "exeBytes": 2837504
+    }
+  },
+  "application": {
+    "version": "2.6.0.0",
+    "sourceCommit": null,
+    "sourceCorrespondence": "Release source is context only; exact producer commit not independently established",
+    "captureRoute": "Original GUI File/Import, Save, Open, Export, Undo, Redo; native --r1 regeneration",
+    "binaryHashes": [
+      {
+        "path": "PrePoMax.exe",
+        "sha256": "1ab759129444c080752997b2b661227f5274d9cbb7efa02af2d83de109d80dce",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "PrePoMax.com",
+        "sha256": "46ec7fa4d79bdf9df756776eeb4e4c5b8d734b7388d9f926529d4b533cdf66b6",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/CaeGlobals.dll",
+        "sha256": "83c1b9a5211a7e487126b150c9a84c17f81aadc893e301e0f0d1f7b861c2742a",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/CaeMesh.dll",
+        "sha256": "023acddcd59aa08d95940f5f771719de892b63148418a6f2265d92946ad50be5",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/CaeModel.dll",
+        "sha256": "d849eea007d47e159742729211537537e364d25938a17b403bce35d7435bdd16",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/CaeResults.dll",
+        "sha256": "ab9710d58b864c9b2d6d9cdd47a61a159631efac7bce361e8cd9f0d074c3f556",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/Kitware.VTK.dll",
+        "sha256": "d6591d92646412613fa0621b53a2ea00fbc1947b743f7f10d85b133e10434fd1",
+        "matchesCrossOverOfficialReference": true
+      },
+      {
+        "path": "lib/Kitware.mummy.Runtime.dll",
+        "sha256": "25f60152e96cb1cce045cda5b8586c7ede7f9503e9ee7fef20e5f8fd3007daed",
+        "matchesCrossOverOfficialReference": true
+      }
+    ],
+    "originalInstallationUnchanged": true,
+    "copiedUserSettingsOrTokens": false
+  },
+  "fixtures": [
+    {
+      "path": "cube-export.inp",
+      "bytes": 1789,
+      "sha256": "f4a735da8ba88fa96f8b5005c6b40a793e2b388318b1acba3e9e3507308fa6f5",
+      "tracked": true
+    },
+    {
+      "path": "cube-mesh.pmx",
+      "bytes": 6732,
+      "sha256": "82f7197dd9b28b2a9ad0d6242d1febd655c16ae45fb40ba01bbdb149a3a2b0b8",
+      "tracked": false
+    },
+    {
+      "path": "cube-reopened-export.inp",
+      "bytes": 1789,
+      "sha256": "f4a735da8ba88fa96f8b5005c6b40a793e2b388318b1acba3e9e3507308fa6f5",
+      "tracked": true
+    },
+    {
+      "path": "cube.inp",
+      "bytes": 200,
+      "sha256": "058c8cc1e07d4cf52f6d0e29453192ac77eadfe96ff1303b9c15b15849fbe72e",
+      "tracked": true
+    },
+    {
+      "path": "definitions-history.pmh",
+      "bytes": 2671,
+      "sha256": "261ef92e1f7375d08d031cfe685aab0b3a9a6041c6cf3729be6c30ac1960468d",
+      "tracked": false
+    },
+    {
+      "path": "definitions-regenerated-export.inp",
+      "bytes": 3057,
+      "sha256": "494178f5854798c5f09465811373d6cdcdb7cfc8f6f561fbee428bda152b67df",
+      "tracked": true
+    },
+    {
+      "path": "definitions-regenerated.pmx",
+      "bytes": 10136,
+      "sha256": "dc72fb20b80914f39d8ba1d47bfc12a47c79655335460ea061de5e167722ddc8",
+      "tracked": false
+    },
+    {
+      "path": "definitions-reopened-export.inp",
+      "bytes": 3057,
+      "sha256": "a68f359f37d09a11142785a1bb6adda58ec10e73bcb9bf4cfd6c14355730c27b",
+      "tracked": true
+    },
+    {
+      "path": "definitions.inp",
+      "bytes": 507,
+      "sha256": "8907182b3956e5f084e66dcf479464cc8d7a88470740ac3e13930c8e12800095",
+      "tracked": true
+    },
+    {
+      "path": "definitions.pmx",
+      "bytes": 10142,
+      "sha256": "870efb88009612d478b672d7075caeb2288292a8db77d052d20aac1d3e8ea8a6",
+      "tracked": false
+    },
+    {
+      "path": "mesh-history.pmh",
+      "bytes": 2676,
+      "sha256": "04fb9465e48653e7f49b9f01b9c51c657fd06a4d93d18fb36775a49635b96231",
+      "tracked": false
+    }
+  ],
+  "expectedObservedSemanticEvidence": "capture-semantics.json",
+  "history": {
+    "commands": [
+      "Clear: All",
+      "Set new model properties: 3D, MM_TON_S_C",
+      "Import definitions.inp",
+      "Save to file: definitions.pmx",
+      "Export model to Calculix: definitions-regenerated-export.inp"
+    ],
+    "undoObserved": "Import removed: mesh/sets/materials/sections/steps empty; cursor after model-properties command",
+    "redoObserved": "Import restored: one part, five node sets, one material/section/static step, three BCs, one load",
+    "regeneration": "Original native --r1 rebuilt saved copy; retained original unchanged",
+    "nativeReopenVerified": true,
+    "exportMatches": "All nonvolatile deck lines and explicit semantic snapshots",
+    "legacyExitCode": 4294967295,
+    "legacyExitContractPassed": false,
+    "finalCursorObservation": "Undo targets final export; Redo disabled; all five commands active",
+    "nativeReopenAfterWorkFolderSetup": "Regenerated model opened without work-directory error"
+  },
+  "limits": [
+    "24-test PMX suite has 23 passes and one hardlink creation infrastructure error; no skipped pass",
+    "C++17 compiler absent; structured-kernel Windows execution unrun",
+    "Definitions imported as one command; individual material/BC/load GUI edit histories not covered",
+    "Private production-model comparison, results-in-PMX variants and CAD meshing remain open",
+    "No production source/dependency/frontend/schema change, commit, push or integration"
+  ]
+}

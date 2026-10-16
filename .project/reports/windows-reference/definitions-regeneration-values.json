@@ -1,0 +1,228 @@
+{
+  "success": true,
+  "evidenceKind": "Exact scalar bindings and reference-type/shape summaries per record; not full semantic equivalence",
+  "comparedTypes": 23,
+  "matchingTypes": 22,
+  "comparisons": [
+    {
+      "type": "CaeGlobals.EquationContainer, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 35,
+      "afterRecords": 35,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeGlobals.UnitSystem, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.CLoad, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.Density, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.DisplacementRotation, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 3,
+      "afterRecords": 3,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.Elastic, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ElementFieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ElementFieldOutputOutputEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ElementFieldVariable, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.EquationParameterCollection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.FeModel, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": false,
+      "changedMembers": [
+        "_hashName"
+      ]
+    },
+    {
+      "type": "CaeModel.IncrementationTypeEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ModelProperties, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ModelSpaceEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 2,
+      "afterRecords": 2,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.ModelType, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.NodalFieldOutput, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.NodalFieldVariable, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.SolidSection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.SolverTypeEnum, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.StaticStep, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.StepCollection, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    },
+    {
+      "type": "CaeModel.StepControls, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "beforeRecords": 1,
+      "afterRecords": 1,
+      "exactShallowRecordMultisetMatch": true,
+      "changedMembers": []
+    }
+  ],
+  "jobEnvironmentListSizes": {
+    "before": [],
+    "after": []
+  },
+  "knownEnvironmentKinds": {
+    "before": [],
+    "after": []
+  },
+  "runtime": {
+    "os": "Microsoft Windows 10.0.26300",
+    "architecture": "X64",
+    "framework": ".NET 10.0.13"
+  },
+  "decoderSha256": "e91a20e33dcff1abc38873b487c6c416b74252f8a74a91bbe6084e40d725b451",
+  "loadedAssemblyNames": [
+    "PmxValues",
+    "System.Collections",
+    "System.Collections.Concurrent",
+    "System.Collections.Immutable",
+    "System.Console",
+    "System.Formats.Nrbf",
+    "System.IO.Pipelines",
+    "System.Linq",
+    "System.Memory",
+    "System.Numerics.Vectors",
+    "System.Private.CoreLib",
+    "System.Private.Uri",
+    "System.Reflection.Emit.ILGeneration",
+    "System.Reflection.Emit.Lightweight",
+    "System.Reflection.Metadata",
+    "System.Reflection.Primitives",
+    "System.Runtime",
+    "System.Runtime.InteropServices",
+    "System.Security.Cryptography",
+    "System.Text.Encoding.Extensions",
+    "System.Text.Encodings.Web",
+    "System.Text.Json",
+    "System.Threading"
+  ],
+  "unsafeFormatterSwitchEnabled": false,
+  "limits": [
+    "Private values and ephemeral keyed fingerprints omitted",
+    "No array materialization, payload type loading or application instances",
+    "Reference types/shapes compared, not target identity or array contents; association/order/aliasing and custom blocks not proved",
+    "Exact scalar record multisets do not prove full engineering semantics or history replay"
+  ],
+  "inputSha256": [
+    "870efb88009612d478b672d7075caeb2288292a8db77d052d20aac1d3e8ea8a6",
+    "dc72fb20b80914f39d8ba1d47bfc12a47c79655335460ea061de5e167722ddc8"
+  ],
+  "inputUnchanged": true,
+  "toolHashes": {
+    "compare-values.py": "e8829c340e724c0819d070abb7340cd8e5bf074315955921ea8237f4fd6c517f",
+    "Program.cs": "59d3ef18247ae1f23edc6187abdf3e10b4f0cef5f17a4f10839b738d7bc223d2",
+    "PmxValues.csproj": "a1d6354d3201c9f06873ea3070c36ffc46251fe56365c29ad22f74c983b45c65",
+    "NuGet.Config": "9508cae5f76364f56e80eb97cb16493977243cf38e5cca6284e3d74f83b20a2c"
+  }
+}
