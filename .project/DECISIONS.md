@@ -2,6 +2,13 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D028 — Verified data-slice publication/native x64 acceptance, 2026-10-16:
+236b1a2e is pushed and remote-verified. Pipeline #2956740201 passes both jobs;
+the downloaded shared-core artifact independently matches published source/tool
+hashes and ARM64 mapping/data/type/CLI outcomes. Native Windows execution of
+this new assembly slice is still pending; earlier probe data agreement is not
+a substitute. Task 0016 includes this closing evidence publication.
+
 D027 — Accepted publication/implementation continuation, 2026-10-16: maintainer
 requests committing/pushing completed task 0015 and continuing toward a working
 build. Task 0016 publishes the reviewed increment and its hosted evidence to

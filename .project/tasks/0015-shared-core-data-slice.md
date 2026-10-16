@@ -1,7 +1,9 @@
 # Task 0015 — Mac acceptance and shared engineering data increment
 
 Publication update: maintainer now explicitly requests commit/push in task
-0016. Earlier uncommitted-only statements below describe the completed local
+0016. Published at 236b1a2e; pipeline #2956740201 passes both native x64 jobs,
+with independent downloaded artifact verification. Native Windows new-assembly
+execution remains pending. Earlier uncommitted-only statements below describe the completed local
 checkpoint; they no longer prohibit publishing this reviewed increment.
 
 2026-10-16, Europe/Belgrade. Maintainer explicitly requests importing/publishing

@@ -4,6 +4,12 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+Task 0016 publication is now verified at 236b1a2e; exact-commit native x64
+pipeline #2956740201 passes both jobs and downloaded shared-core evidence
+matches source/tool/outcome fingerprints. Closing evidence publication completes
+that task. Subsequent bounded engineering work is authorized locally; keep its
+implementation uncommitted unless the maintainer requests its publication.
+
 2026-10-16 publication and implementation continuation: maintainer explicitly
 requests committing/pushing the completed task 0015 work and continuing toward
 a working build. Task 0016 covers this publication and hosted evidence follow-up.

@@ -1,11 +1,14 @@
 # Project status
 
-## Current publication — task 0016
+## Current publication — task 0016 complete
 
 2026-10-16: maintainer explicitly requests committing/pushing task 0015 and
 continuing bounded shared-core implementation toward a working build. The
-reviewed local data slice/evidence will be published to the origin research
-branch and verified by its exact-commit native x64 CI. Expanded native Windows
+reviewed local data slice/evidence is published at **236b1a2e** on the origin
+research branch. Exact-commit **pipeline #2956740201 passed both jobs**; downloaded
+shared-core JSON matches published source/tool hashes and all Mac/Linux ARM64
+portable outcomes (25 mapping/30 data/seven type contracts/11 CLI/four controls).
+[Publication evidence](reports/shared-core-data-publication.md). Expanded native Windows
 and the existing full-application release gates remain pending. Older
 uncommitted-only statements below describe the prior checkpoint.
 

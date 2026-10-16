@@ -1,5 +1,10 @@
 # Shared-core Mac acceptance and engineering data increment
 
+Publication update: this increment is now committed/pushed at 236b1a2e;
+exact-commit native Linux x64 pipeline #2956740201 passed with independently
+verified downloaded evidence. [Current publication report](shared-core-data-publication.md).
+Uncommitted/pending-x64 statements below retain the earlier local checkpoint.
+
 2026-10-16, Europe/Belgrade; research/native-feasibility. Task 0015 executes the
 MacBook handoff after completed native Windows tasks 0013/0014. All new changes
 in this report remain uncommitted. The only published range is the reviewed

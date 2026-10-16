@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "sourceCommit": "236b1a2e54fe49a218f040b6aebff33217f8722d",
+  "pipelineId": 2956740201,
+  "sharedCoreJobId": 17245079896,
+  "researchJobId": 17245079895,
+  "artifactSha256": "c6004b005cb1d64a4eafe4e1f16ff6a7c0a9610c932b2ba0047b1d690ad60c86",
+  "sourceAndToolHashesMatchPublishedCommit": true,
+  "portableMappingDataTypeAndCliOutcomesMatchArm64": true,
+  "mappingChecks": 25,
+  "dataChecks": 30,
+  "typeContracts": 7,
+  "mappingCliControls": 9,
+  "dataCliControls": 2,
+  "rejectionControls": 4
+}

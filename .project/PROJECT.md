@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+Publication checkpoint: task 0015 is now committed/pushed as 236b1a2e;
+pipeline #2956740201 passed both native Linux x64 jobs, with downloaded source/
+tool/outcome verification. Task 0016 closes this publication; expanded native
+Windows remains pending. [Evidence](reports/shared-core-data-publication.md).
+The maintainer requests continued bounded engineering implementation toward
+a working build; frontend/default format/integration/release gates remain.
+
 Current checkpoint, 2026-10-16 Europe/Belgrade: reviewed Windows ac51fc77 is
 published and exact-commit pipeline #2956616374 passed both native x64 jobs.
 The first shared slice now passes all four required platforms. [Task 0015](tasks/0015-shared-core-data-slice.md)

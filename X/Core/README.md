@@ -16,7 +16,8 @@ the actual native runner. `-m:1` avoids worker-process failures in restricted
 Windows execution environments. The verifier builds in a temporary directory.
 The first mapping slice at ac51fc77 passed native Windows x64, Mac ARM64,
 Linux ARM64 and hosted Linux x64 (pipeline #2956616374). The expanded data slice
-passes Mac/Linux ARM64 locally; native Windows and hosted x64 reruns are pending.
+passes Mac/Linux ARM64 and hosted x64 at 236b1a2e (pipeline #2956740201);
+native Windows execution of the expanded assembly slice is pending.
 
 The `CaeGlobals` assembly contains the existing CaeException, Matrix and Vec3D.
 `CaeMesh` references it and contains FeNode, TransfiniteSideTriple,
