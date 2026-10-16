@@ -2,6 +2,23 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D030 — Accepted bounded publication/build-delivery task, 2026-10-16: maintainer
+requests committing/pushing task 0017 and a small task within 20% of the
+five-hour allowance. Task 0018 delivers the existing framework-dependent core
+ZIP through native x64 CI with checksum/source-rebuild/CLI/gate verification.
+Retain the two numerical/classifier failures; no algorithm, frontend/default
+format, native-tool or integration policy is selected. Stop at this boundary.
+
+D029 — Local element-kernel increment, 2026-10-16: under the maintainer's
+continued-build instruction, task 0017 source-links original element families
+and GeometryTools with one exact unused WinForms import removal, preserving
+algorithms/type ownership. Mac/Linux ARM64 accepted-scope checks pass, but two
+strict original-source correctness failures remain: quadratic tetra integration
+bias and missing pyramid classification. Retain failures/source-moment evidence;
+gate quadratic tetrahedra in the development host instead of changing numerical
+code/tolerances. This is not full element acceptance. The runnable CLI/source
+bundle is local; new Windows/x64 and existing release gates remain pending.
+
 D028 — Verified data-slice publication/native x64 acceptance, 2026-10-16:
 236b1a2e is pushed and remote-verified. Pipeline #2956740201 passes both jobs;
 the downloaded shared-core artifact independently matches published source/tool

@@ -7,5 +7,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/CaeException.cs" Link="CaeException.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Matrix.cs" Link="Matrix.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Vec3D.cs" Link="Vec3D.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Comparers/CompareIntArray.cs" Link="CompareIntArray.cs" />
   </ItemGroup>
 </Project>

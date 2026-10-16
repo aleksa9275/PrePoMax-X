@@ -1,0 +1,13 @@
+{
+  "sourcePin": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "originalSourceUnchanged": true,
+  "expectedConstantMoment": 0.16666666666666666,
+  "actualConstantMoment": 0.1666666666666666,
+  "expectedFirstMoment": 0.041666666666666664,
+  "actualFirstMoments": {
+    "xi": 0.03915606399552952,
+    "eta": 0.03915606399552952,
+    "zeta": 0.03915606399552952
+  },
+  "fullAnalyticalTestPassed": false
+}

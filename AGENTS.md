@@ -4,6 +4,20 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+2026-10-16 bounded publication request: maintainer explicitly authorizes commit/
+push of task 0017 and selection of a small task within 20% of the five-hour
+allowance. Task 0018 packages the existing development ZIP as a verified native
+Linux x64 CI artifact and covers this publication/closing evidence. Retain the
+two correctness failures and host gate; no numerical algorithm change, frontend/
+default serializer, upstream write, force push or x/main integration.
+
+Current local checkpoint is task 0017: original element kernel and a runnable
+development CLI/source bundle pass their bounded Mac/Linux ARM64 checks. Two
+strict original-source correctness checks remain failed and recorded; quadratic
+tetrahedra are gated by the host. Do not silently change algorithms/tolerances or
+claim full acceptance. Task 0017 stays uncommitted. Published data slice is
+236b1a2e, closing evidence 1f1f51c4 (both hosted pipelines passed).
+
 Task 0016 publication is now verified at 236b1a2e; exact-commit native x64
 pipeline #2956740201 passes both jobs and downloaded shared-core evidence
 matches source/tool/outcome fingerprints. Closing evidence publication completes

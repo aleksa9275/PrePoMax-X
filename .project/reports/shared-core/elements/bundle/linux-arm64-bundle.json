@@ -1,0 +1,78 @@
+{
+  "success": true,
+  "archiveSha256": "5a6d295877443826a00866c33009833701420db3ec83f089138f71ae01ada347",
+  "host": {
+    "os": "Linux",
+    "architecture": "aarch64"
+  },
+  "manifestEntriesVerified": 87,
+  "publishedSmoke": {
+    "MapFace": {
+      "success": true,
+      "SideCounts": [
+        2,
+        2,
+        2
+      ],
+      "NumberOfBoundaryNodes": 6,
+      "InnerUv": [
+        [
+          1,
+          0.5773502691896257
+        ]
+      ],
+      "Quads": [
+        [
+          0,
+          1,
+          6,
+          5
+        ],
+        [
+          2,
+          3,
+          6,
+          1
+        ],
+        [
+          4,
+          5,
+          6,
+          3
+        ]
+      ],
+      "NumberOfFoldedQuads": 0
+    },
+    "MeasureMesh": {
+      "success": true,
+      "elements": [
+        {
+          "Id": 101,
+          "PartId": 8,
+          "Type": "LinearTetraElement",
+          "Dimension": 3,
+          "Measure": 0.16666666666666666,
+          "Centroid": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "Integral": 0.3333333333333333,
+          "VtkCellType": 10,
+          "VtkNodeIds": [
+            11,
+            29,
+            43,
+            71
+          ],
+          "GmshNodeIds": [
+            11,
+            29,
+            43,
+            71
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,17 @@
 # PrePoMax-X project charter
 
+Publication continuation: maintainer requests commit/push of task 0017 and
+one small task within the stated allowance. Task 0018 makes the runnable core
+ZIP available as a verified native x64 CI artifact, without changing numerical
+algorithms or release gates. Earlier uncommitted-only statements are historical.
+
+Local build checkpoint: [task 0017](tasks/0017-shared-element-kernel.md) delivers
+a runnable measurement/mapping CLI bundle and original finite-element source
+closure, tested on Mac/Linux ARM64. It remains uncommitted. Two original-source
+correctness checks fail and remain explicit; quadratic tetrahedra are gated in
+the host. [Current evidence](reports/shared-element-kernel.md). This is progress
+toward the native application, not a full GUI/CAD/persistence/release build.
+
 Publication checkpoint: task 0015 is now committed/pushed as 236b1a2e;
 pipeline #2956740201 passed both native Linux x64 jobs, with downloaded source/
 tool/outcome verification. Task 0016 closes this publication; expanded native

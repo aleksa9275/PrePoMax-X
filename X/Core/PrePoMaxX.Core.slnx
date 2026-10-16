@@ -3,6 +3,8 @@
   <Project Path="CaeMesh/CaeMesh.csproj" />
   <Project Path="CaeResults/CaeResults.csproj" />
   <Project Path="MapFace/MapFace.csproj" />
+  <Project Path="MeasureMesh/MeasureMesh.csproj" />
+  <Project Path="Tests/Elements/ElementTests.csproj" />
   <Project Path="Tests/CoreTests.csproj" />
   <Project Path="Tests/Data/CoreDataTests.csproj" />
 </Solution>

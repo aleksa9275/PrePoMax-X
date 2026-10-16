@@ -15,7 +15,12 @@ shared-core-linux-x64:
     - apt-get install -y --no-install-recommends python3 git
   script:
     - python3 X/Core/verify.py --expect-os Linux --expect-architecture X64 --output X/Core/artifacts/linux-x64.json
+    - python3 X/Core/package.py
+    - python3 X/Core/check-package.py --archive X/Core/artifacts/development-build/PrePoMaxX-Core-development.zip --report X/Core/artifacts/development-build/verification.json --expect-os Linux --expect-architecture X64
   artifacts:
     when: always
     expire_in: 30 days
-    paths: [X/Core/artifacts/*.json]
+    paths:
+      - X/Core/artifacts/*.json
+      - X/Core/artifacts/development-build/*.zip
+      - X/Core/artifacts/development-build/*.json

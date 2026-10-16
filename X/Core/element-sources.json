@@ -1,0 +1,106 @@
+{
+  "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sources": [
+    {
+      "path": "CaeGlobals/Comparers/CompareIntArray.cs",
+      "baselineSha256": "ff318a3db1efc40741b150e89d0350af1802df9e710fee24171a752dc4a38092"
+    },
+    {
+      "path": "CaeMesh/GeometryTools.cs",
+      "baselineSha256": "955f6b2825f69041ec8cdbbdee74652c71feb2160aa7daa787cc49f0f1a423a7",
+      "onlyRemovedUnusedImport": "using System.Windows.Forms.VisualStyles;"
+    },
+    {
+      "path": "CaeMesh/Elements/FeElement.cs",
+      "baselineSha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6"
+    },
+    {
+      "path": "CaeMesh/Elements/VtkCellType.cs",
+      "baselineSha256": "9364609fc2fb07cb6073c109d8ebf71a14b6d0f5d22b0d43b1f39237133225ca"
+    },
+    {
+      "path": "CaeMesh/Elements/0D/FeElement0D.cs",
+      "baselineSha256": "31a8b27cfdfeea6db394637b2ae3bc6865f2fe3d03d5caf2aecc2c87eac4185a"
+    },
+    {
+      "path": "CaeMesh/Elements/0D/MassElement.cs",
+      "baselineSha256": "212adde4479a3cc614ab509c751ad129b1888c75199e022890d3bd62e4fe9a52"
+    },
+    {
+      "path": "CaeMesh/Elements/1D/FeElement1D.cs",
+      "baselineSha256": "de526da44f008453b815b4efc4a75c7625968521fe1c2cc5e162422f50f3126d"
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearBeamElement.cs",
+      "baselineSha256": "65d7750f236cbf432ddc7458e28d4edfef31b3342520e8ce5d9438e7566905f2"
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearGapElement.cs",
+      "baselineSha256": "f32d816558143a0f5960587dcb9bcd9c01929e7ee08a97da7301463c1e749409"
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearSpringElement.cs",
+      "baselineSha256": "4a5a23e2a7e955a94bb5738510ac91d80b4e79b0382827b6b11331a7a9934483"
+    },
+    {
+      "path": "CaeMesh/Elements/1D/ParabolicBeamElement.cs",
+      "baselineSha256": "f31ecae6b29def2d68d15550e309111a431b822e6b21ee28bd916cd539cad761"
+    },
+    {
+      "path": "CaeMesh/Elements/2D/FeElement2D.cs",
+      "baselineSha256": "0156d7b85338a59ba9f5200da3af726f9bb30397ec8b40829853ce4ae25b3102"
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearQuadrilateralElement.cs",
+      "baselineSha256": "5938a33ee4f3d154ee7bcd67753e206c38c2d107df5760b5dd6c5834f03a61f5"
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearTriangleElement.cs",
+      "baselineSha256": "a6a999b5af8a27283dd438bc253f39f208c4e5c9545598eabf242fdc756ea611"
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicQuadrilateralElement.cs",
+      "baselineSha256": "d7f63dc27482507160bc5634685a3cb4d2165149f82fdeb49b18460d267c0dbe"
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicTriangleElement.cs",
+      "baselineSha256": "4741a0e4288a992e71fee2f2a9a67d521c783cf99b5d02c94d7cddab6b3b2fe1"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/FeElement3D.cs",
+      "baselineSha256": "db47b38645a866a5c25071ef248654ea575541b6dedc7a173eb0c8fc42f4d877"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearHexaElement.cs",
+      "baselineSha256": "6b03579ae1cd8215ac32ef3bf0648d89a23f6c71cc5e5bfdfdcc76935c40ac0b"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearPyramidElement.cs",
+      "baselineSha256": "320454ff6846a839a27bd9ce2f37b343b83e9cba4d0784ccc29f3fa41ee74b3d"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearTetraElement.cs",
+      "baselineSha256": "2073c73562d274231e14229df0f8a5486c6f22c9432c5e4cf7c0b1b96635b3ce"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearWedgeElement.cs",
+      "baselineSha256": "5e01663260f288732c047048dddc5e96896294f49329126d55d1a0f27a26c072"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicHexaElement.cs",
+      "baselineSha256": "847ee2417c410fd96beb6ed156e5993fdf3925217fb56d72cac9cdacbe271144"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicPyramidElement.cs",
+      "baselineSha256": "2e74f928f8b4c8e97e13ee1f55d6535084d8558ec697fcb39607029ab17ab1b0"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicTetraElement.cs",
+      "baselineSha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919"
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicWedgeElement.cs",
+      "baselineSha256": "d08fa37e91b84e7ac5d638df89882db66e8875e197e37d6c6b5b91ad2f967027"
+    }
+  ]
+}

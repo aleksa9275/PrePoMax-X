@@ -1,5 +1,41 @@
 # Project status
 
+## Current publication — task 0018
+
+2026-10-16: maintainer explicitly requests committing/pushing task 0017 and
+choosing one small task within 20% of the five-hour allowance. Task 0018 adds
+downloadable native Linux x64 CI development bundles with manifest/hash checks,
+extracted-source rebuild, published CLI samples/tetrahedron gate and three
+tamper controls. Initial account usage was 72%; no reset used. Publication and
+exact-commit hosted artifact verification are in progress. Existing numerical
+algorithms and the two open correctness checks remain unchanged.
+
+## Latest local work — task 0017 finite-element kernel and runnable CLI bundle
+
+2026-10-16: completed the next bounded local build after publishing task 0015.
+Original dimensional/linear/parabolic element families and GeometryTools now
+compile in partial CaeMesh; CompareIntArray stays in CaeGlobals. The only added
+production-source edit removes an unused WinForms VisualStyles import. All
+37 selected engineering-source identities/bytes are guarded. New MeasureMesh
+calls existing geometry/integration/connectivity methods and preserves IDs.
+
+Mac/native Linux ARM64 each pass 95 accepted element/host checks, the prior 55
+mapping/data checks, 28 CLI controls and four evidence-rejection controls.
+**Two independent correctness checks remain failed** in original source:
+quadratic tetrahedron affine integral 26.794910717854155 versus expected 28,
+and quadratic-pyramid IsParabolic classification false. Initial failures and
+quadrature-moment diagnosis are retained. No algorithm/tolerance changed;
+quadratic tetrahedra are blocked in the new host. Full element acceptance is
+false. [Report](reports/shared-element-kernel.md).
+
+A runnable local .NET 10 development ZIP contains MapFace/MeasureMesh,
+examples, corresponding source and license. Published examples run on Mac and
+Linux ARM64; extracted source rebuilds. Task 0017 is **uncommitted**. Native
+Windows/new-commit x64, correctness resolution and GUI/full persistence/CAD/VTK/
+native-source/compiler-policy gates remain. Podman is stopped. Last published
+closing evidence is 1f1f51c4; its pipeline #2956771332 also passed. No new
+frontend/default serializer or integration decision was made.
+
 ## Current publication — task 0016 complete
 
 2026-10-16: maintainer explicitly requests committing/pushing task 0015 and

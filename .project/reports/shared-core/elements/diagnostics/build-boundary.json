@@ -1,0 +1,11 @@
+{
+  "success": false,
+  "stage": "initial optional enum inclusion",
+  "errors": 35,
+  "source": "CaeMesh/Elements/FeElementType.cs",
+  "compilerDiagnostics": [
+    "CS0246 DynamicTypeDescriptor",
+    "CS0246 StandardValueAttribute/StandardValue"
+  ],
+  "resolution": "Removed this unnecessary UI-annotated enum file from portable Compile items; original file unchanged. No stub or new dependency."
+}

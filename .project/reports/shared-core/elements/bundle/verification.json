@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "archive": "X/Core/artifacts/development-build/PrePoMaxX-Core-development.zip",
+  "archiveSha256": "5a6d295877443826a00866c33009833701420db3ec83f089138f71ae01ada347",
+  "bytes": 386742,
+  "manifestEntries": 87,
+  "allPackagedSourcesMatchWorkingTree": true,
+  "extractedSourceRebuild": true,
+  "publishedSmokeNativeTargets": [
+    "Mac ARM64",
+    "Linux ARM64"
+  ],
+  "requiresNativeDotNetRuntime": "10.0",
+  "nativeWindowsAndLinuxX64BundleExecution": "pending",
+  "fullApplicationAcceptance": false
+}

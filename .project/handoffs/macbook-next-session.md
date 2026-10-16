@@ -1,5 +1,20 @@
 # MacBook continuation — start here
 
+Task 0018 now covers the maintainer-authorized publication of task 0017 and
+a small native x64 CI ZIP-delivery increment. The two original-source correctness
+failures/host gate remain; no numerical fix is included. Consult STATUS and
+task 0018 for actual remote/hosted-artifact state before using older checklists.
+
+Latest continuation: task 0015/0016 data slice is published at 236b1a2e with
+closing evidence 1f1f51c4; both pipelines passed. [Task 0017](../tasks/0017-shared-element-kernel.md)
+now contains **uncommitted** element-kernel/measurement-host work and a runnable
+local CLI/source ZIP. [Current report](../reports/shared-element-kernel.md)
+defines its commands, 95 accepted element/host checks and two retained strict
+correctness failures. Preserve this working tree. Next Windows/new-commit x64
+verification must include this new source slice; earlier bundles/pipelines do
+not contain it. Quadratic tetrahedra are blocked in the host until reviewed
+correctness work; do not loosen tests or silently patch numerical algorithms.
+
 Mac continuation completed, 2026-10-16 Europe/Belgrade: reviewed ac51fc77 is
 published and pipeline #2956616374 passed both native x64 jobs. Exact original
 mapping slice passed Mac/Linux ARM64 as requested. [Task 0015](../tasks/0015-shared-core-data-slice.md)

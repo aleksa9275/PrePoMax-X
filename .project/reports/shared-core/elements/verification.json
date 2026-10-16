@@ -1,0 +1,35 @@
+{
+  "successWithinAcceptedScope": true,
+  "fullElementAcceptance": false,
+  "nativeTargets": [
+    "macOS ARM64",
+    "Linux ARM64"
+  ],
+  "sourceFiles": 37,
+  "acceptedElementChecks": 95,
+  "priorMappingDataChecks": 55,
+  "openCorrectnessFailures": [
+    {
+      "name": "quadratic tetrahedron affine integral",
+      "passed": false,
+      "expected": 28,
+      "actual": 26.794910717854155,
+      "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+    },
+    {
+      "name": "quadratic pyramid classification",
+      "passed": false,
+      "expected": true,
+      "actual": false,
+      "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+    }
+  ],
+  "measurementCliControls": 17,
+  "sourceAndToolHashesMatchAcrossArm64": true,
+  "elementChecksObservationsOpenFailuresAndCliMatchAcrossArm64": true,
+  "toolHashesMatchWorkingTree": true,
+  "artifactHashes": {
+    "macos-arm64.json": "fd9aed2135b7c79d991424fd463fdec3c5183aac17b86ddb68016d1e228c360a",
+    "linux-arm64.json": "9f2b089e6fc872c46a0fe5a302593e95e6f66843c179f83264268021de47555b"
+  }
+}

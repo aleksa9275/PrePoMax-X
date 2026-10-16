@@ -38,14 +38,31 @@ def sources():
                 "CaeMesh/GeometryMetadata/GeometryMetadata.cs", "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
                 "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs", "CaeMesh/Elements/IntegrationScale.cs",
                 "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs"}
+    manifest = json.loads((HERE / "element-sources.json").read_text())
+    additional = {row["path"]: row for row in manifest["sources"]}
+    if manifest["baseline"] != BASELINE or len(additional) != 25:
+        raise ValueError("Element source manifest changed unexpectedly")
+    expected.update(additional)
     if paths != expected:
         raise ValueError("Shared library source closure changed")
     rows = []
     for name in sorted(paths - {"CaeGlobals/CaeException.cs"}):
         original = subprocess.check_output(["git", "show", BASELINE + ":" + name], cwd=ROOT)
-        if original != (ROOT / name).read_bytes():
+        current = (ROOT / name).read_bytes()
+        if name in additional and sha(original) != additional[name]["baselineSha256"]:
+            raise ValueError("Element manifest differs from pinned source: " + name)
+        allowed = original
+        if name == "CaeMesh/GeometryTools.cs":
+            line = b"using System.Windows.Forms.VisualStyles;\n"
+            if original.count(line) != 1:
+                raise ValueError("Unexpected original GeometryTools import boundary")
+            allowed = original.replace(line, b"")
+        if allowed != current:
             raise ValueError("Engineering source changed: " + name)
-        rows.append({"path": name, "sha256": sha(original), "unchangedFromBaseline": True})
+        row = {"path": name, "sha256": sha(current), "unchangedFromBaseline": original == current}
+        if original != current:
+            row.update(baselineSha256=sha(original), onlyRemovedUnusedImport="using System.Windows.Forms.VisualStyles;")
+        rows.append(row)
     original = subprocess.check_output(["git", "show", BASELINE + ":CaeGlobals/ExceptionTools.cs"], cwd=ROOT).decode()
     start = original.index("    public class CaeException : Exception\n")
     end = original.index("    //\n    public static class ExceptionTools", start)
@@ -177,6 +194,48 @@ def main():
                 report["dataCliControls"].append({"name": name, "status": "passed", "exitCode": 2})
             if report["dataCliControls"] != reference["cliContracts"]:
                 raise ValueError("Shared data CLI controls differ from Windows reference")
+            element_tests = work / "build/bin/ElementTests/release/PrePoMaxX.ElementTests.dll"
+            report["elementTests"] = json.loads(run(["dotnet", element_tests]).stdout)
+            elements = report["elementTests"]
+            if not elements["success"] or elements["passed"] != 95 or elements["failed"] or elements["runtime"]["architecture"] != native_arch:
+                raise ValueError("Accepted element-kernel checks failed or did not all execute")
+            if len(elements["openCorrectnessChecks"]) != 2 or elements["fullyAccepted"] or any(c["passed"] for c in elements["openCorrectnessChecks"]):
+                raise ValueError("Unresolved original-source correctness checks must remain explicit")
+            measure_cli = work / "build/bin/MeasureMesh/release/PrePoMaxX.MeasureMesh.dll"
+            measure_sample = HERE / "MeasureMesh/unit-tetra.json"
+            measured = json.loads(run(["dotnet", measure_cli, measure_sample]).stdout)
+            cell = measured["elements"][0]
+            if not measured["success"] or len(measured["elements"]) != 1 or cell["Id"] != 101 or cell["PartId"] != 8:
+                raise ValueError("Measurement CLI identity contract failed")
+            if abs(cell["Measure"] - 1 / 6) > 1e-12 or abs(cell["Integral"] - 1 / 3) > 1e-12 or cell["Centroid"] != [0.25] * 3:
+                raise ValueError("Measurement CLI independent tetrahedron contract failed")
+            report["measurementCli"] = {"sample": measured, "controls": []}
+            for arguments, code, name in [([], 2, "usage"), ([work / "missing-mesh.json"], 1, "missing input")]:
+                run(["dotnet", measure_cli, *arguments], code)
+                report["measurementCli"]["controls"].append(name)
+            sample_mesh = json.loads(measure_sample.read_text())
+            invalid_meshes = {"malformed": "{", "null root": "null", "missing arrays": "{}", "size limit": " " * (4*1024*1024+1)}
+            for name in ("unknown property", "duplicate node", "duplicate element", "wrong node count", "missing node", "duplicate connectivity", "unsupported type", "quadratic tetrahedron gate", "invalid scale", "nonfinite value", "degenerate geometry"):
+                altered = copy.deepcopy(sample_mesh)
+                if name == "unknown property": altered["unexpected"] = 1
+                elif name == "duplicate node": altered["nodes"][1]["id"] = 11
+                elif name == "duplicate element": altered["elements"].append(copy.deepcopy(altered["elements"][0]))
+                elif name == "wrong node count": altered["elements"][0]["nodeIds"].pop()
+                elif name == "missing node": altered["elements"][0]["nodeIds"][0] = 999
+                elif name == "duplicate connectivity": altered["elements"][0]["nodeIds"][0] = 29
+                elif name == "unsupported type": altered["elements"][0]["type"] = "UnknownElement"
+                elif name == "quadratic tetrahedron gate": altered["elements"][0]["type"] = "ParabolicTetraElement"
+                elif name == "invalid scale": altered["scale"] = "unknown"
+                elif name == "nonfinite value": altered["nodes"][0]["value"] = "NaN"
+                else:
+                    for node in altered["nodes"]: node.update(x=0,y=0,z=0)
+                invalid_meshes[name] = json.dumps(altered)
+            for name, content in invalid_meshes.items():
+                path = work / "invalid-mesh.json"; path.write_text(content)
+                rejected = run(["dotnet", measure_cli, path], 1)
+                if rejected.stdout or json.loads(rejected.stderr)["success"]:
+                    raise ValueError("Measurement CLI rejection contract failed: " + name)
+                report["measurementCli"]["controls"].append(name)
             cli = work / "build/bin/MapFace/release/PrePoMaxX.MapFace.dll"
             sample = HERE / "MapFace/equilateral.json"
             sample_hash = sha(sample.read_bytes())
@@ -212,11 +271,14 @@ def main():
         report["error"] = str(error).replace(str(ROOT), "<repository>").replace(folder or "<unused>", "<temporary>")
     report["limits"] = ["Partial source-linked libraries, not the full application, FRD or PMX reader",
                         "Full persistence/history/clone, CAD/interactive VTK and native-source release gates remain open",
-                        "New data assembly slice still requires native Windows and exact-commit Linux x64 execution"]
+                        "Element slice still needs native Windows and exact-commit Linux x64 execution",
+                        "Two original-source analytical/classifier checks remain unresolved; quadratic tetrahedra are gated in the host"]
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({"success": report["success"], "mappingChecks": report.get("mappingTests", {}).get("passed"),
                       "dataChecks": report.get("dataTests", {}).get("passed"),
+                      "elementChecks": report.get("elementTests", {}).get("passed"),
+                      "openCorrectnessChecks": len(report.get("elementTests", {}).get("openCorrectnessChecks", [])),
                       "cliControls": len(report.get("cli", {}).get("negativeControls", [])), "error": report.get("error")}))
     return 0 if report["success"] else 1
 

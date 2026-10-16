@@ -1,6 +1,35 @@
 # Partial shared engineering libraries
 
-Tasks 0013/0015: callable mapping and engineering data slices targeting .NET 10. The projects
+Task 0017 local development build: original finite-element families and geometry
+methods now compile into CaeMesh. A measurement CLI reports length/area/signed
+volume, centroids, scalar field integrals and VTK/Gmsh connectivity. This is a
+core command-line build; GUI, full mesh/result readers and CAD are still separate.
+
+```sh
+dotnet run --project X/Core/MeasureMesh -c Release -- X/Core/MeasureMesh/unit-tetra.json
+python3 X/Core/package.py
+python3 X/Core/check-package.py --archive X/Core/artifacts/development-build/PrePoMaxX-Core-development.zip --report X/Core/artifacts/development-build/verification.json
+```
+
+The package is written under `X/Core/artifacts/development-build/` and includes
+both CLI tools, examples, matching source, license and a hash manifest. It
+requires an installed native .NET 10 runtime. Its two published examples pass
+Mac/Linux ARM64, and its extracted source rebuilds independently.
+The native Linux x64 CI job also publishes this ZIP with package/verification
+reports. Use that exact commit's job artifacts to download it. Archive verification
+checks every manifest entry, rebuilds extracted source, runs both published
+examples and the quadratic-tetrahedron gate, and rejects three altered archives.
+
+The element suite has 95 accepted checks plus **two open correctness failures**
+in unchanged original code: quadratic-tetrahedron affine integration gives
+26.794910717854155 rather than 28; the quadratic-pyramid IsParabolic helper
+returns false. The measurement host rejects quadratic tetrahedra and uses
+explicit factories for the other 13 families. `elementTests.fullyAccepted`
+stays false. Initial strict failure evidence is retained; no tolerance or
+engineering algorithm was changed. Curved-element/full native Windows behavior
+still requires follow-up. See `.project/reports/shared-element-kernel.md`.
+
+Tasks 0013/0015/0017: callable engineering slices targeting .NET 10. The projects
 source-link existing engineering files; they do not copy or rewrite algorithms.
 Build with a .NET 10 SDK. No external packages or feeds are required.
 
@@ -23,6 +52,10 @@ The `CaeGlobals` assembly contains the existing CaeException, Matrix and Vec3D.
 `CaeMesh` references it and contains FeNode, TransfiniteSideTriple,
 ThreeBlockGrid and the full ThreeBlockMapping implementation, plus
 GeometryMetadata/Entity/Property and IntegrationScale/IntegrationScaleType.
+It also contains FeElement, the dimensional base classes, 17 original concrete
+element classes, vtkCellType and internal GeometryTools. CompareIntArray stays
+in CaeGlobals. The solver element-name enums with DynamicTypeDescriptor UI
+metadata and ElementTypeCount's full-mesh closure are not included yet.
 The partial `CaeResults` assembly contains the original internal FrdStreamReader.
 It stays internal; only `PrePoMaxX.CoreDataTests` is a friend assembly for tests.
 This is the buffered stream utility, not the complete FRD results reader. Namespaces,
@@ -30,10 +63,13 @@ type names and assembly versions remain unchanged. These are partial libraries
 for a separate portable host, **not replacements to copy into the existing
 Windows application's folder**. They are not a PMX reader or complete core.
 
-The only existing application-source change moves the unchanged CaeException
+The first existing application-source change moves the unchanged CaeException
 class from ExceptionTools.cs into its own file, included by the original net48
 project. ExceptionTools and MessageBoxes remain in the Windows build. The
 portable build can now report domain errors without referencing Windows forms.
+Task 0017 additionally removes one unused WinForms VisualStyles import from
+GeometryTools. Every other byte in that file is verified against the baseline;
+all other added element/comparer sources are linked unchanged.
 
 MapFace reads a JSON object with three `sideUv` and matching `sideXyz` point
 arrays. Sides include both endpoints and form a closed loop. It returns inner
