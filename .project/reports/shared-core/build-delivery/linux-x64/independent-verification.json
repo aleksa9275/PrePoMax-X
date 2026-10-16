@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "sourceCommit": "b83fa49f96559c1aeb583d7c527647aab0342354",
+  "pipeline": 2956835416,
+  "job": 17245732139,
+  "archiveSha256": "bd409d1a9d54694bcccbfe0d7c3b3659ba077452c2d638497ac919823a42ee51",
+  "archiveBytes": 389052,
+  "manifestEntries": 88,
+  "allPackagedSourceBytesMatchPublishedGitObjects": true,
+  "coreSourceAndToolHashesMatchArm64AndPublishedCommit": true,
+  "acceptedElementChecksAndBothOpenFailuresMatchArm64": true,
+  "hostedSourceRebuildPublishedSamplesGateAndThreeTamperControls": true
+}

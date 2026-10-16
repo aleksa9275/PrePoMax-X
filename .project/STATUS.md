@@ -1,5 +1,20 @@
 # Project status
 
+## Latest — task 0018 publication and downloadable CI build complete
+
+Task 0017/0018 published at **b83fa49f**; remote SHA verified. Native x64
+pipeline **#2956835416 passed both jobs**: 25 mapping/30 data/95 accepted element
+checks, CLI/gate controls and actual ZIP source-rebuild/manifest/tamper checks.
+Both known correctness failures remain explicit; no numerical fix is claimed.
+Downloaded ZIP/source/tool fingerprints independently verified against the
+published commit. The x64-produced bundle also rebuilds/runs on native Mac ARM64.
+[Pinned download/evidence](reports/shared-core-build-delivery.md).
+
+This closes the requested small task. Usage rose from 72% to 87% before closing
+records; no reset used. No further feature work in this budgeted continuation.
+Native Windows new-slice and existing GUI/persistence/CAD/VTK/native-source/
+compiler-policy gates remain. Podman is stopped. Older checkpoints follow.
+
 ## Current publication — task 0018
 
 2026-10-16: maintainer explicitly requests committing/pushing task 0017 and

@@ -2,6 +2,13 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D031 — Verified element/build publication, 2026-10-16: b83fa49f is pushed and
+remote-verified; pipeline #2956835416 passes both native x64 jobs. Downloaded
+framework-dependent ZIP has verified source/tool fingerprints and rebuilds/runs
+on Mac ARM64. Both open original-source correctness failures remain, with the
+tetrahedron host gate. Task 0018 closes within its budgeted scope; no broader
+feature, numerical-policy, frontend/serializer or integration decision follows.
+
 D030 — Accepted bounded publication/build-delivery task, 2026-10-16: maintainer
 requests committing/pushing task 0017 and a small task within 20% of the
 five-hour allowance. Task 0018 delivers the existing framework-dependent core

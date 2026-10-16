@@ -1,5 +1,11 @@
 # PrePoMax-X project charter
 
+Current checkpoint: task 0017/0018 is published at b83fa49f and pipeline
+#2956835416 passes both native x64 jobs. A verified CLI/source development ZIP
+is downloadable from its job; actual downloaded source/hash checks and Mac
+execution also pass. [Evidence](reports/shared-core-build-delivery.md).
+Stop at this task boundary; native Windows/new correctness/release gates remain.
+
 Publication continuation: maintainer requests commit/push of task 0017 and
 one small task within the stated allowance. Task 0018 makes the runnable core
 ZIP available as a verified native x64 CI artifact, without changing numerical

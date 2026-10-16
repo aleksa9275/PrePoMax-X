@@ -1,0 +1,137 @@
+{
+  "success": true,
+  "host": {
+    "os": "Darwin",
+    "architecture": "arm64"
+  },
+  "commands": [
+    {
+      "arguments": [
+        "dotnet",
+        "build",
+        "<extracted>/source/X/Core/PrePoMaxX.Core.slnx",
+        "-c",
+        "Release",
+        "--disable-build-servers",
+        "-m:1",
+        "--artifacts-path",
+        "<extracted>/build",
+        "-p:RestoreConfigFile=<extracted>/source/X/Core/NuGet.Config",
+        "-v:minimal"
+      ],
+      "exitCode": 0,
+      "stdout": "  Determining projects to restore...\n  Restored <extracted>/source/X/Core/MeasureMesh/MeasureMesh.csproj (in 36 ms).\n  Restored /private<extracted>/source/X/Core/CaeGlobals/CaeGlobals.csproj (in 32 ms).\n  Restored /private<extracted>/source/X/Core/CaeResults/CaeResults.csproj (in 32 ms).\n  Restored <extracted>/source/X/Core/CaeMesh/CaeMesh.csproj (in 36 ms).\n  Restored <extracted>/source/X/Core/Tests/CoreTests.csproj (in 36 ms).\n  Restored <extracted>/source/X/Core/MapFace/MapFace.csproj (in 36 ms).\n  Restored <extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj (in 36 ms).\n  Restored <extracted>/source/X/Core/Tests/Elements/ElementTests.csproj (in 36 ms).\n  CaeGlobals -> <extracted>/build/bin/CaeGlobals/release/CaeGlobals.dll\n  CaeGlobals -> <extracted>/build/bin/CaeGlobals/debug/CaeGlobals.dll\n<extracted>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<extracted>/source/X/Core/CaeMesh/CaeMesh.csproj]\n  CaeMesh -> <extracted>/build/bin/CaeMesh/release/CaeMesh.dll\n  CaeResults -> <extracted>/build/bin/CaeResults/release/CaeResults.dll\n<extracted>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<extracted>/source/X/Core/CaeMesh/CaeMesh.csproj]\n  CaeMesh -> <extracted>/build/bin/CaeMesh/debug/CaeMesh.dll\n  MapFace -> <extracted>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll\n  MeasureMesh -> <extracted>/build/bin/MeasureMesh/release/PrePoMaxX.MeasureMesh.dll\n  CoreTests -> <extracted>/build/bin/CoreTests/release/PrePoMaxX.CoreTests.dll\n  CaeResults -> <extracted>/build/bin/CaeResults/debug/CaeResults.dll\n/private<extracted>/source/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n  CoreDataTests -> <extracted>/build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll\n  MeasureMesh -> <extracted>/build/bin/MeasureMesh/debug/PrePoMaxX.MeasureMesh.dll\n  ElementTests -> <extracted>/build/bin/ElementTests/release/PrePoMaxX.ElementTests.dll\n\nBuild succeeded.\n\n<extracted>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<extracted>/source/X/Core/CaeMesh/CaeMesh.csproj]\n<extracted>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<extracted>/source/X/Core/CaeMesh/CaeMesh.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n/private<extracted>/source/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<extracted>/source/X/Core/Tests/Data/CoreDataTests.csproj]\n    6 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:06.86\n",
+      "stderr": "CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<extracted>/MapFace/PrePoMaxX.MapFace.dll",
+        "<extracted>/examples/equilateral.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"SideCounts\":[2,2,2],\"NumberOfBoundaryNodes\":6,\"InnerUv\":[[1,0.5773502691896257]],\"Quads\":[[0,1,6,5],[2,3,6,1],[4,5,6,3]],\"NumberOfFoldedQuads\":0}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<extracted>/MeasureMesh/PrePoMaxX.MeasureMesh.dll",
+        "<extracted>/examples/unit-tetra.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"elements\":[{\"Id\":101,\"PartId\":8,\"Type\":\"LinearTetraElement\",\"Dimension\":3,\"Measure\":0.16666666666666666,\"Centroid\":[0.25,0.25,0.25],\"Integral\":0.3333333333333333,\"VtkCellType\":10,\"VtkNodeIds\":[11,29,43,71],\"GmshNodeIds\":[11,29,43,71]}]}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<extracted>/MeasureMesh/PrePoMaxX.MeasureMesh.dll",
+        "<extracted>/gated.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Quadratic tetrahedron measurement/integration is gated by an unresolved analytical discrepancy in the original kernel.\"}\n"
+    }
+  ],
+  "archiveSha256": "bd409d1a9d54694bcccbfe0d7c3b3659ba077452c2d638497ac919823a42ee51",
+  "sourceCommit": "b83fa49f96559c1aeb583d7c527647aab0342354",
+  "workingTreeChangesIncluded": false,
+  "manifestEntriesVerified": 88,
+  "rejectionControls": [
+    "changed binary",
+    "unmanifested file",
+    "parent traversal"
+  ],
+  "sourceRebuild": true,
+  "publishedSmoke": {
+    "MapFace": {
+      "success": true,
+      "SideCounts": [
+        2,
+        2,
+        2
+      ],
+      "NumberOfBoundaryNodes": 6,
+      "InnerUv": [
+        [
+          1,
+          0.5773502691896257
+        ]
+      ],
+      "Quads": [
+        [
+          0,
+          1,
+          6,
+          5
+        ],
+        [
+          2,
+          3,
+          6,
+          1
+        ],
+        [
+          4,
+          5,
+          6,
+          3
+        ]
+      ],
+      "NumberOfFoldedQuads": 0
+    },
+    "MeasureMesh": {
+      "success": true,
+      "elements": [
+        {
+          "Id": 101,
+          "PartId": 8,
+          "Type": "LinearTetraElement",
+          "Dimension": 3,
+          "Measure": 0.16666666666666666,
+          "Centroid": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "Integral": 0.3333333333333333,
+          "VtkCellType": 10,
+          "VtkNodeIds": [
+            11,
+            29,
+            43,
+            71
+          ],
+          "GmshNodeIds": [
+            11,
+            29,
+            43,
+            71
+          ]
+        }
+      ]
+    }
+  },
+  "quadraticTetrahedronGate": true
+}

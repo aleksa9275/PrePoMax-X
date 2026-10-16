@@ -1,6 +1,9 @@
 # Task 0017 — Callable finite-element geometry and integration kernel
 
 Publication update: maintainer explicitly requests commit/push in task 0018.
+Published at b83fa49f; pipeline #2956835416 passes native Linux x64 engineering
+and bundle checks, including both retained correctness failures. Native
+Windows new-slice execution remains pending. See task 0018 for download/evidence.
 Earlier uncommitted-only statements below describe the previous local checkpoint.
 
 2026-10-16, Europe/Belgrade. Maintainer requests continuing shared-core work

@@ -4,6 +4,12 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+Task 0018 is complete: task 0017/CI build-delivery published at b83fa49f,
+pipeline #2956835416 passes both native x64 jobs, downloaded ZIP/source/tool
+checks and Mac execution verified. Closing evidence publication is included.
+Stop at this boundary. Further feature work/commits/pushes require a new
+maintainer instruction. Both correctness failures and release gates remain.
+
 2026-10-16 bounded publication request: maintainer explicitly authorizes commit/
 push of task 0017 and selection of a small task within 20% of the five-hour
 allowance. Task 0018 packages the existing development ZIP as a verified native

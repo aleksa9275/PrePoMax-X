@@ -19,7 +19,12 @@ push, upstream write or x/main merge. The earlier uncommitted-only restriction
 is superseded for this requested publication. Native Windows new-slice checks
 and all existing release gates remain pending.
 
-Status: implementation/publication in progress. Stop at this task boundary.
+Status: complete within bounded scope. Task 0017 and build-delivery increment
+are published at b83fa49f96559c1aeb583d7c527647aab0342354, remote SHA verified.
+Pipeline #2956835416 passes both native x64 jobs. Actual downloaded ZIP/source/
+tool hashes independently verified; that x64-produced bundle also rebuilds/runs
+on native Mac ARM64. [Evidence/download](../reports/shared-core-build-delivery.md).
+Usage 72% to 87% before closing records; no reset used. Stop at this boundary.
 
 Local verification passed on Mac and native Linux ARM64: prior 25 mapping/30
 data checks, 95 accepted element/host checks, 28 CLI controls, four data-evidence

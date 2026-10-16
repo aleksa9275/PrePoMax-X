@@ -1,5 +1,11 @@
 # MacBook continuation — start here
 
+Latest: task 0017/0018 published at b83fa49f; pipeline #2956835416 passes both
+native x64 jobs. [Downloadable build/current evidence](../reports/shared-core-build-delivery.md)
+contains exact ZIP checksum and independent published-source/Mac execution
+verification. Requested bounded task is complete; stop here pending a new
+instruction. Native Windows new-slice and both correctness failures remain open.
+
 Task 0018 now covers the maintainer-authorized publication of task 0017 and
 a small native x64 CI ZIP-delivery increment. The two original-source correctness
 failures/host gate remain; no numerical fix is included. Consult STATUS and
