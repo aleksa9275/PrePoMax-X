@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "ac51fc77449da26d9c25ddedd924feda2a55e7db",
+  "reports": {
+    "macos-arm64": {
+      "success": true,
+      "sha256": "78a5cf1787bd626c6b094263c52d1d3ddcf209e04cd1672e07dd34521cefd549",
+      "toolHashesMatchPublishedCommit": true,
+      "sourceChecksVectorsAndCliMatchWindows": true
+    },
+    "linux-arm64": {
+      "success": true,
+      "sha256": "8e67404dd72aa5d9f96d57a55d21d3e7ece8637c64c3e427042638b418186153",
+      "toolHashesMatchPublishedCommit": true,
+      "sourceChecksVectorsAndCliMatchWindows": true
+    },
+    "linux-x64": {
+      "success": true,
+      "sha256": "3793b60fd3d10c31307217820ed7acd38aef2a1dbbc9a1136c6361ad522ff611",
+      "toolHashesMatchPublishedCommit": true,
+      "sourceChecksVectorsAndCliMatchWindows": true
+    }
+  }
+}

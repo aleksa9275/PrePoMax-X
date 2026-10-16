@@ -1,5 +1,13 @@
 # Task 0013 — First callable shared engineering slice
 
+2026-10-16 Mac closeout: exact ac51fc77 first slice also passes native Mac ARM64
+and Podman Linux ARM64, 25 mapping checks/nine CLI controls each. Hosted Linux
+x64 job #17244123735 in pipeline #2956616374 passes the same checks. Portable
+results/source/tool hashes independently match the retained Windows report and
+published commit. First-slice required-platform execution is complete within
+scope; [evidence](../reports/shared-core/platforms/verification.json). Task 0015
+tracks the next bounded data increment; older pending statements below are history.
+
 Status: first Windows implementation checkpoint complete, 2026-10-16. Maintainer
 explicitly supplied the private PMX and requested completing testing and moving
 to building. Continue on research/native-feasibility, preserve existing work,

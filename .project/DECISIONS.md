@@ -2,6 +2,24 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D027 — Accepted publication/implementation continuation, 2026-10-16: maintainer
+requests committing/pushing completed task 0015 and continuing toward a working
+build. Task 0016 publishes the reviewed increment and its hosted evidence to
+origin/research/native-feasibility. Continue shared engineering implementation
+incrementally; no frontend/default serializer, x/main, upstream write, forced
+history or silent native-tool substitution is selected. The encouraging earlier
+CrossOver/native Windows payload agreement remains scoped evidence.
+
+D026 — Accepted Mac continuation, 2026-10-16: maintainer authorizes exact-range
+Windows bundle import/publication and the handoff's bounded shared data increment.
+Reviewed ac51fc77 is remotely verified; both hosted native x64 jobs pass.
+First shared mapping libraries now pass all four targets within scope. Task
+0015 retains metadata/scaling in CaeMesh and the internal FRD utility in CaeResults;
+existing 30 data checks match Windows observations on native Mac/Linux ARM64.
+New increment stays uncommitted and needs native Windows/new-commit x64 follow-up.
+This does not choose serialization/UI or close full persistence/history/CAD/VTK/
+native-source/compiler-policy gates. No further implementation push is authorized.
+
 D025 — Accepted Windows closeout/publication instruction, 2026-10-16:
 maintainer explicitly authorizes committing/pushing reviewed Windows/reference/
 shared-core work to origin/research/native-feasibility and preparing immediate

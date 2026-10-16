@@ -4,6 +4,23 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+2026-10-16 publication and implementation continuation: maintainer explicitly
+requests committing/pushing the completed task 0015 work and continuing toward
+a working build. Task 0016 covers this publication and hosted evidence follow-up.
+Continue bounded shared-core implementation on research/native-feasibility;
+preserve existing algorithms/type ownership and documented release gates.
+The instruction does not select a frontend/default serializer or authorize
+x/main integration, upstream writes, force pushes or silent native-tool changes.
+
+2026-10-16 Mac continuation: maintainer explicitly authorized importing the
+verified Windows bundle and publishing reviewed ac51fc77 to origin/research/native-feasibility.
+That publication and exact-commit hosted CI are now verified. Task 0015 bounds
+the next geometry-metadata/IntegrationScale/FRD-stream shared-library increment
+and Mac/native Linux ARM64 checks. Its implementation remains uncommitted;
+future implementation commits/pushes require a new instruction. Preserve original
+source algorithms/type ownership and all release gates. No x/main integration,
+upstream write, force push, frontend/default serializer or F001 decision.
+
 2026-10-16 Windows closeout/publication: the maintainer explicitly requested
 committing and pushing this work, completing useful remaining Windows checks,
 and preparing immediate MacBook continuation. Task 0014 covers this publication

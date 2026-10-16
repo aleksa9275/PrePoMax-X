@@ -1,0 +1,245 @@
+2026-10-16T18:34:05.573552Z 00O Running with gitlab-runner 19.6.0~pre.2336.g77694893 (77694893)
+2026-10-16T18:34:05.573572Z 00O   on k8s.saas-linux-small-amd64.runners-manager.gitlab.com/default nezyxEJex, system ID: r_6nH58VFEQGnN
+2026-10-16T18:34:05.573574Z 00O   UUID: 019fd6c6-56c4-78a2-8961-bbb53e204387
+2026-10-16T18:34:05.573582Z 00O   feature flags: FF_USE_GIT_PROACTIVE_AUTH:true, FF_HASH_CACHE_KEYS:true, FF_USE_JOB_ROUTER:true, FF_MACHINE_OPTIONS_EXPAND_ENV:true, FF_DOCKER_MACHINE_JSON_OUTPUT:true
+2026-10-16T18:34:05.573636Z 00O section_start:1792175645:prepare_executor
+
+2026-10-16T18:34:05.573640Z 00O+Preparing the "docker+machine" executor
+2026-10-16T18:34:05.667873Z 00O Using Docker executor with image mcr.microsoft.com/dotnet/sdk:10.0 ...
+2026-10-16T18:34:05.667945Z 00O Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.6.0 )
+2026-10-16T18:34:05.667971Z 00O Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893
+2026-10-16T18:34:05.668703Z 00O Authenticating with credentials from job payload (GitLab Registry)
+2026-10-16T18:34:05.668712Z 00O Pulling docker image registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893 ...
+2026-10-16T18:34:07.459777Z 00O Using docker image sha256:4cf9a813803cfc19ab4a7f9b53b33fbe779a534e6377cfa58a59631d43305fe0 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:bbd561f968a58d7d020be43d872b907ce7f7cfab05430fa462a41093a793ed70 ...
+2026-10-16T18:34:09.197047Z 00O Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.6.0 )
+2026-10-16T18:34:09.197061Z 00O Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893
+2026-10-16T18:34:09.198033Z 00O Using docker image sha256:4cf9a813803cfc19ab4a7f9b53b33fbe779a534e6377cfa58a59631d43305fe0 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:bbd561f968a58d7d020be43d872b907ce7f7cfab05430fa462a41093a793ed70 ...
+2026-10-16T18:34:09.198046Z 00O Using effective pull policy of [always] for container mcr.microsoft.com/dotnet/sdk:10.0
+2026-10-16T18:34:09.199429Z 00O Pulling docker image mcr.microsoft.com/dotnet/sdk:10.0 ...
+2026-10-16T18:34:42.980777Z 00O Using docker image sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd for mcr.microsoft.com/dotnet/sdk:10.0 with digest mcr.microsoft.com/dotnet/sdk@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa ...
+2026-10-16T18:34:42.980867Z 00O section_end:1792175682:prepare_executor
+
+2026-10-16T18:34:42.981002Z 00O+section_start:1792175682:prepare_script
+
+2026-10-16T18:34:42.981007Z 00O+Preparing environment
+2026-10-16T18:34:42.981044Z 00O Using helper image:  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v19.6.0 )
+2026-10-16T18:34:42.981059Z 00O Using effective pull policy of [always] for container registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893
+2026-10-16T18:34:42.981934Z 00O Using docker image sha256:4cf9a813803cfc19ab4a7f9b53b33fbe779a534e6377cfa58a59631d43305fe0 for registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-77694893 with digest registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper@sha256:bbd561f968a58d7d020be43d872b907ce7f7cfab05430fa462a41093a793ed70 ...
+2026-10-16T18:34:42.981949Z 00O Using effective pull policy of [always] for container sha256:4cf9a813803cfc19ab4a7f9b53b33fbe779a534e6377cfa58a59631d43305fe0
+2026-10-16T18:34:47.489073Z 01O Running on runner-nezyxejex-project-87574049-concurrent-0 via runner-nezyxejex-s-l-s-amd64-1792175599-95e7ffcc...
+2026-10-16T18:34:47.491735Z 01O Running on CPU: INTEL(R) XEON(R) PLATINUM 8581C CPU @ 2.10GHz (avx, avx2, avx512f)
+2026-10-16T18:34:47.647583Z 00O section_end:1792175687:prepare_script
+
+2026-10-16T18:34:47.648085Z 00O+section_start:1792175687:get_sources
+
+2026-10-16T18:34:47.648091Z 00O+Getting source from Git repository
+2026-10-16T18:34:48.001483Z 01O Gitaly correlation ID: ef33351784274e9aabc27e468f09e23f
+2026-10-16T18:34:48.006629Z 01O Fetching changes...
+2026-10-16T18:34:48.009653Z 01O Initialized empty Git repository in /builds/aleksa9275/pre-po-max-x/.git/
+2026-10-16T18:34:48.011574Z 01O Created fresh repository.
+2026-10-16T18:35:03.103947Z 01O Checking out ac51fc77 as detached HEAD (ref is research/native-feasibility)...
+2026-10-16T18:35:04.328318Z 01O
+2026-10-16T18:35:04.328322Z 01O Skipping Git submodules setup
+2026-10-16T18:35:04.328323Z 01O $ git remote set-url origin "${CI_REPOSITORY_URL}" || echo 'Not a git repository; skipping'
+2026-10-16T18:35:05.880677Z 00O section_end:1792175705:get_sources
+
+2026-10-16T18:35:05.881458Z 00O+section_start:1792175705:step_script
+
+2026-10-16T18:35:05.881468Z 00O+Executing "step_script" stage of the job script
+2026-10-16T18:35:05.881479Z 00O Using effective pull policy of [always] for container mcr.microsoft.com/dotnet/sdk:10.0
+2026-10-16T18:35:05.886112Z 00O Using docker image sha256:9cd0d6fa04def99891bf4d5a29eb9a3878b6041f9cc25cb389ea0df2177d23fd for mcr.microsoft.com/dotnet/sdk:10.0 with digest mcr.microsoft.com/dotnet/sdk@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa ...
+2026-10-16T18:35:06.228022Z 01O $ apt-get update
+2026-10-16T18:35:06.465031Z 01O Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+2026-10-16T18:35:06.491712Z 01O Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-16T18:35:07.086663Z 01O Get:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-16T18:35:07.095139Z 01O Get:4 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1549 kB]
+2026-10-16T18:35:07.236014Z 01O Get:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-16T18:35:07.386484Z 01O Get:6 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+2026-10-16T18:35:07.499757Z 01O Get:7 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+2026-10-16T18:35:07.709227Z 01O Get:8 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [55.6 kB]
+2026-10-16T18:35:07.711671Z 01O Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1409 kB]
+2026-10-16T18:35:07.785550Z 01O Get:10 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2122 kB]
+2026-10-16T18:35:08.422482Z 01O Get:11 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+2026-10-16T18:35:08.485286Z 01O Get:12 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+2026-10-16T18:35:08.488784Z 01O Get:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2168 kB]
+2026-10-16T18:35:08.568823Z 01O Get:14 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [61.7 kB]
+2026-10-16T18:35:08.570556Z 01O Get:15 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2231 kB]
+2026-10-16T18:35:08.651301Z 01O Get:16 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1729 kB]
+2026-10-16T18:35:08.712670Z 01O Get:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [669 B]
+2026-10-16T18:35:08.713023Z 01O Get:18 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]
+2026-10-16T18:35:08.713846Z 01O Get:19 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+2026-10-16T18:35:09.483198Z 01O Fetched 33.6 MB in 3s (10.4 MB/s)
+2026-10-16T18:35:09.483203Z 01O Reading package lists...
+2026-10-16T18:35:10.315438Z 01O $ apt-get install -y --no-install-recommends python3 git
+2026-10-16T18:35:10.319932Z 01O Reading package lists...
+2026-10-16T18:35:11.170001Z 01O Building dependency tree...
+2026-10-16T18:35:11.337394Z 01O Reading state information...
+2026-10-16T18:35:11.522480Z 01O git is already the newest version (1:2.43.0-1ubuntu7.3).
+2026-10-16T18:35:11.522485Z 01O The following additional packages will be installed:
+2026-10-16T18:35:11.522727Z 01O   libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib libreadline8t64
+2026-10-16T18:35:11.523167Z 01O   libsqlite3-0 media-types netbase python3-minimal python3.12
+2026-10-16T18:35:11.523185Z 01O   python3.12-minimal readline-common
+2026-10-16T18:35:11.523974Z 01O Suggested packages:
+2026-10-16T18:35:11.523979Z 01O   python3-doc python3-tk python3-venv python3.12-venv python3.12-doc binutils
+2026-10-16T18:35:11.523980Z 01O   binfmt-support readline-doc
+2026-10-16T18:35:11.571177Z 01O The following NEW packages will be installed:
+2026-10-16T18:35:11.571443Z 01O   libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib libreadline8t64
+2026-10-16T18:35:11.571836Z 01O   libsqlite3-0 media-types netbase python3 python3-minimal python3.12
+2026-10-16T18:35:11.571884Z 01O   python3.12-minimal readline-common
+2026-10-16T18:35:11.649493Z 01O 0 upgraded, 12 newly installed, 0 to remove and 7 not upgraded.
+2026-10-16T18:35:11.649498Z 01O Need to get 6906 kB of archives.
+2026-10-16T18:35:11.649499Z 01O After this operation, 26.1 MB of additional disk space will be used.
+2026-10-16T18:35:11.649500Z 01O Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-minimal amd64 3.12.3-1ubuntu0.17 [839 kB]
+2026-10-16T18:35:12.448200Z 01O Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12-minimal amd64 3.12.3-1ubuntu0.17 [2335 kB]
+2026-10-16T18:35:12.514495Z 01O Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3-minimal amd64 3.12.3-0ubuntu2.1 [27.4 kB]
+2026-10-16T18:35:12.514779Z 01O Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 media-types all 10.1.0 [27.5 kB]
+2026-10-16T18:35:12.515239Z 01O Get:5 http://archive.ubuntu.com/ubuntu noble/main amd64 netbase all 6.4 [13.1 kB]
+2026-10-16T18:35:12.515502Z 01O Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 readline-common all 8.2-4build1 [56.5 kB]
+2026-10-16T18:35:12.516217Z 01O Get:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libreadline8t64 amd64 8.2-4build1 [153 kB]
+2026-10-16T18:35:12.517543Z 01O Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsqlite3-0 amd64 3.45.1-1ubuntu2.8 [702 kB]
+2026-10-16T18:35:12.522839Z 01O Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-stdlib amd64 3.12.3-1ubuntu0.17 [2071 kB]
+2026-10-16T18:35:12.545047Z 01O Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12 amd64 3.12.3-1ubuntu0.17 [651 kB]
+2026-10-16T18:35:12.550582Z 01O Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3-stdlib amd64 3.12.3-0ubuntu2.1 [10.1 kB]
+2026-10-16T18:35:12.550873Z 01O Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3 amd64 3.12.3-0ubuntu2.1 [23.0 kB]
+2026-10-16T18:35:12.665368Z 01E debconf: delaying package configuration, since apt-utils is not installed
+2026-10-16T18:35:12.695356Z 01O Fetched 6906 kB in 1s (7123 kB/s)
+2026-10-16T18:35:12.716161Z 01O Selecting previously unselected package libpython3.12-minimal:amd64.
+2026-10-16T18:35:12.716196Z 01O (Reading database ...
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+2026-10-16T18:35:12.716234Z 01O+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ...
+2026-10-16T18:35:12.716238Z 01O+70%
+2026-10-16T18:35:12.717645Z 01O+(Reading database ... 75%
+2026-10-16T18:35:12.718062Z 01O+(Reading database ... 80%
+2026-10-16T18:35:12.718295Z 01O+(Reading database ... 85%
+2026-10-16T18:35:12.718520Z 01O+(Reading database ... 90%
+2026-10-16T18:35:12.719752Z 01O+(Reading database ... 95%
+2026-10-16T18:35:12.720370Z 01O+(Reading database ... 100%
+(Reading database ... 9345 files and directories currently installed.)
+2026-10-16T18:35:12.720982Z 01O Preparing to unpack .../libpython3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+2026-10-16T18:35:12.723611Z 01O Unpacking libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:12.791462Z 01O Selecting previously unselected package python3.12-minimal.
+2026-10-16T18:35:12.791472Z 01O Preparing to unpack .../python3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+2026-10-16T18:35:12.796503Z 01O Unpacking python3.12-minimal (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:12.860094Z 01O Setting up libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:12.870758Z 01O Setting up python3.12-minimal (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:13.599196Z 01O Selecting previously unselected package python3-minimal.
+2026-10-16T18:35:13.599200Z 01O (Reading database ...
+2026-10-16T18:35:13.599679Z 01O+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+2026-10-16T18:35:13.599749Z 01O+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+2026-10-16T18:35:13.601053Z 01O+(Reading database ... 75%
+2026-10-16T18:35:13.601386Z 01O+(Reading database ... 80%
+2026-10-16T18:35:13.601641Z 01O+(Reading database ... 85%
+2026-10-16T18:35:13.601812Z 01O+(Reading database ... 90%
+2026-10-16T18:35:13.602885Z 01O+(Reading database ... 95%
+2026-10-16T18:35:13.603560Z 01O+(Reading database ... 100%
+(Reading database ... 9656 files and directories currently installed.)
+2026-10-16T18:35:13.604050Z 01O Preparing to unpack .../0-python3-minimal_3.12.3-0ubuntu2.1_amd64.deb ...
+2026-10-16T18:35:13.606984Z 01O Unpacking python3-minimal (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:13.629912Z 01O Selecting previously unselected package media-types.
+2026-10-16T18:35:13.629914Z 01O Preparing to unpack .../1-media-types_10.1.0_all.deb ...
+2026-10-16T18:35:13.633012Z 01O Unpacking media-types (10.1.0) ...
+2026-10-16T18:35:13.657443Z 01O Selecting previously unselected package netbase.
+2026-10-16T18:35:13.658472Z 01O Preparing to unpack .../2-netbase_6.4_all.deb ...
+2026-10-16T18:35:13.660994Z 01O Unpacking netbase (6.4) ...
+2026-10-16T18:35:13.683730Z 01O Selecting previously unselected package readline-common.
+2026-10-16T18:35:13.683733Z 01O Preparing to unpack .../3-readline-common_8.2-4build1_all.deb ...
+2026-10-16T18:35:13.686555Z 01O Unpacking readline-common (8.2-4build1) ...
+2026-10-16T18:35:13.712121Z 01O Selecting previously unselected package libreadline8t64:amd64.
+2026-10-16T18:35:13.713250Z 01O Preparing to unpack .../4-libreadline8t64_8.2-4build1_amd64.deb ...
+2026-10-16T18:35:13.721159Z 01O Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'
+2026-10-16T18:35:13.726486Z 01O Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2 to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'
+2026-10-16T18:35:13.730615Z 01O Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'
+2026-10-16T18:35:13.734614Z 01O Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'
+2026-10-16T18:35:13.738175Z 01O Unpacking libreadline8t64:amd64 (8.2-4build1) ...
+2026-10-16T18:35:13.765822Z 01O Selecting previously unselected package libsqlite3-0:amd64.
+2026-10-16T18:35:13.765825Z 01O Preparing to unpack .../5-libsqlite3-0_3.45.1-1ubuntu2.8_amd64.deb ...
+2026-10-16T18:35:13.768558Z 01O Unpacking libsqlite3-0:amd64 (3.45.1-1ubuntu2.8) ...
+2026-10-16T18:35:13.797137Z 01O Selecting previously unselected package libpython3.12-stdlib:amd64.
+2026-10-16T18:35:13.798267Z 01O Preparing to unpack .../6-libpython3.12-stdlib_3.12.3-1ubuntu0.17_amd64.deb ...
+2026-10-16T18:35:13.801163Z 01O Unpacking libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:13.889316Z 01O Selecting previously unselected package python3.12.
+2026-10-16T18:35:13.890546Z 01O Preparing to unpack .../7-python3.12_3.12.3-1ubuntu0.17_amd64.deb ...
+2026-10-16T18:35:13.893659Z 01O Unpacking python3.12 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:13.915530Z 01O Selecting previously unselected package libpython3-stdlib:amd64.
+2026-10-16T18:35:13.916784Z 01O Preparing to unpack .../8-libpython3-stdlib_3.12.3-0ubuntu2.1_amd64.deb ...
+2026-10-16T18:35:13.919639Z 01O Unpacking libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:13.942864Z 01O Setting up python3-minimal (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:14.092854Z 01O Selecting previously unselected package python3.
+2026-10-16T18:35:14.092859Z 01O (Reading database ...
+2026-10-16T18:35:14.093466Z 01O+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+2026-10-16T18:35:14.093490Z 01O+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+2026-10-16T18:35:14.094701Z 01O+(Reading database ... 75%
+2026-10-16T18:35:14.095127Z 01O+(Reading database ... 80%
+2026-10-16T18:35:14.095403Z 01O+(Reading database ... 85%
+2026-10-16T18:35:14.095611Z 01O+(Reading database ... 90%
+2026-10-16T18:35:14.096705Z 01O+(Reading database ... 95%
+2026-10-16T18:35:14.097396Z 01O+(Reading database ... 100%
+(Reading database ... 10133 files and directories currently installed.)
+2026-10-16T18:35:14.097959Z 01O Preparing to unpack .../python3_3.12.3-0ubuntu2.1_amd64.deb ...
+2026-10-16T18:35:14.102713Z 01O Unpacking python3 (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:14.127274Z 01O Setting up media-types (10.1.0) ...
+2026-10-16T18:35:14.138376Z 01O Setting up libsqlite3-0:amd64 (3.45.1-1ubuntu2.8) ...
+2026-10-16T18:35:14.145815Z 01O Setting up netbase (6.4) ...
+2026-10-16T18:35:14.166098Z 01O Setting up readline-common (8.2-4build1) ...
+2026-10-16T18:35:14.175721Z 01O Setting up libreadline8t64:amd64 (8.2-4build1) ...
+2026-10-16T18:35:14.182785Z 01O Setting up libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:14.192466Z 01O Setting up python3.12 (3.12.3-1ubuntu0.17) ...
+2026-10-16T18:35:15.005373Z 01O Setting up libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:15.013324Z 01O Setting up python3 (3.12.3-0ubuntu2.1) ...
+2026-10-16T18:35:15.021724Z 01O running python rtupdate hooks for python3.12...
+2026-10-16T18:35:15.021740Z 01O running python post-rtupdate hooks for python3.12...
+2026-10-16T18:35:15.098373Z 01O Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-16T18:35:15.127577Z 01O $ python3 X/Core/verify.py --expect-os Linux --expect-architecture X64 --output X/Core/artifacts/linux-x64.json
+2026-10-16T18:35:26.850764Z 01O {"success": true, "mappingChecks": 25, "cliControls": 9, "error": null}
+2026-10-16T18:35:27.513652Z 00O section_end:1792175727:step_script
+
+2026-10-16T18:35:27.514377Z 00O+section_start:1792175727:upload_artifacts_on_success
+
+2026-10-16T18:35:27.514383Z 00O+Uploading artifacts for successful job
+2026-10-16T18:35:27.902169Z 01O Uploading artifacts...
+2026-10-16T18:35:27.954415Z 01E X/Core/artifacts/*.json: found 1 matching artifact files and directories
+2026-10-16T18:35:28.794632Z 01E Uploading artifacts as "archive" to coordinator... 201 Created  correlation_id=b2cabe880cab4a21b6cc3521fada8f65 id=17244123735 status=201 token=<redacted>
+2026-10-16T18:35:28.950242Z 00O section_end:1792175728:upload_artifacts_on_success
+
+2026-10-16T18:35:28.950808Z 00O+section_start:1792175728:cleanup_file_variables
+
+2026-10-16T18:35:28.950817Z 00O+Cleaning up project directory and file based variables
+2026-10-16T18:35:29.454776Z 00O section_end:1792175729:cleanup_file_variables
+
+2026-10-16T18:35:29.510385Z 00O Job succeeded

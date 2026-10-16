@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "parentCommit": "ac51fc77449da26d9c25ddedd924feda2a55e7db",
+  "implementationUncommitted": true,
+  "dataAssertionsUnchangedFromWindowsCommit": true,
+  "sharedDataChecksObservationsTypeContractsMatchAcrossArm64": true,
+  "mappingChecksVectorsCliMatchAcrossArm64": true,
+  "engineeringSourceAndToolHashesMatchAcrossArm64": true,
+  "toolHashesMatchWorkingTree": true,
+  "reports": {
+    "isolated-data-macos-arm64.json": "853e2d416552aed2adbde3675ac6571f6a8f87a15802e8b4ede359783d69619a",
+    "data-macos-arm64.json": "ec877e088d19b47815744061c5e8db04f3d4d35a1ecbd86e00ca675d687f616d",
+    "data-linux-arm64.json": "5ff0555e8e083593d464dc0ce7f71a6233590eb715c076afa45bacdb4eafaace"
+  }
+}

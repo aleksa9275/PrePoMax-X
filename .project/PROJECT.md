@@ -1,5 +1,14 @@
 # PrePoMax-X project charter
 
+Current checkpoint, 2026-10-16 Europe/Belgrade: reviewed Windows ac51fc77 is
+published and exact-commit pipeline #2956616374 passed both native x64 jobs.
+The first shared slice now passes all four required platforms. [Task 0015](tasks/0015-shared-core-data-slice.md)
+adds unchanged metadata/scaling/FRD-stream source to their original partial
+assemblies and passes existing data contracts on Mac/Linux ARM64. Its changes
+remain uncommitted; native Windows/new-commit x64 follow-up is pending.
+[Current evidence and next steps](reports/shared-core-data-slice.md).
+Earlier publication/pending paragraphs below retain historical checkpoints.
+
 Current entry point: [MacBook continuation](handoffs/macbook-next-session.md),
 [task 0014](tasks/0014-windows-publication-mac-handoff.md). The maintainer now
 authorizes committing/pushing the reviewed Windows/shared-core work and its

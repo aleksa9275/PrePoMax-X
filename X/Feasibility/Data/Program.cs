@@ -197,7 +197,13 @@ internal static class Program
         Run();
         var result=new {schemaVersion=1,success=failed==0,runtime=new {os=RuntimeInformation.IsOSPlatform(OSPlatform.OSX)?"macOS":RuntimeInformation.IsOSPlatform(OSPlatform.Linux)?"Linux":"Windows",architecture=RuntimeInformation.ProcessArchitecture.ToString(),osArchitecture=RuntimeInformation.OSArchitecture.ToString(),framework=RuntimeInformation.FrameworkDescription},passed=Checks.Count-failed,failed,checks=Checks,observations=Observations,
             exploratoryTypeIdentity=typeof(GeometryMetadata).AssemblyQualifiedName,
-            limitations="Six-file slice; no full reader, CAD, element integration, PMX/NRBF/Windows-oracle or whole-core equivalence. Probe assembly is not a persistent type owner."};
+#if SHARED_CORE
+            sharedTypeContracts=TypeContracts.Capture(),
+            limitations="Partial shared libraries; no full FRD reader, element integration, PMX/NRBF, history/clone, CAD/VTK or whole-core equivalence. Original type owners retained."
+#else
+            limitations="Six-file slice; no full reader, CAD, element integration, PMX/NRBF/Windows-oracle or whole-core equivalence. Probe assembly is not a persistent type owner."
+#endif
+        };
         Console.WriteLine(JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true}));return failed==0?0:1;
     }
 }

@@ -1,5 +1,15 @@
 # MacBook continuation — start here
 
+Mac continuation completed, 2026-10-16 Europe/Belgrade: reviewed ac51fc77 is
+published and pipeline #2956616374 passed both native x64 jobs. Exact original
+mapping slice passed Mac/Linux ARM64 as requested. [Task 0015](../tasks/0015-shared-core-data-slice.md)
+and [current report](../reports/shared-core-data-slice.md) now define the next
+handoff: expanded shared data libraries pass locally and remain uncommitted.
+The current verifier includes 30 data checks as well as the original 25 mapping
+checks/nine CLI controls. Preserve this working tree; do not re-import/fetch over
+it or re-publish the old range. New native Windows/new-commit x64 follow-up is
+pending. The original transfer checklist below is retained as provenance.
+
 Prepared on native Windows x64, 2026-10-16. The maintainer requests continuing
 on one MacBook, after committing/pushing the Windows work. The next useful
 engineering step needs the Mac/Linux environments. Do not repeat the completed

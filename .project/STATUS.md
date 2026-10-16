@@ -1,5 +1,45 @@
 # Project status
 
+## Current publication — task 0016
+
+2026-10-16: maintainer explicitly requests committing/pushing task 0015 and
+continuing bounded shared-core implementation toward a working build. The
+reviewed local data slice/evidence will be published to the origin research
+branch and verified by its exact-commit native x64 CI. Expanded native Windows
+and the existing full-application release gates remain pending. Older
+uncommitted-only statements below describe the prior checkpoint.
+
+## Latest — Mac continuation and shared data libraries
+
+2026-10-16 (Europe/Belgrade): inspected clean Mac checkout at f1e757f1 before
+fetching. Bundle prerequisite/checksum verified; imported auxiliary ref and
+fast-forwarded to **ac51fc77449da26d9c25ddedd924feda2a55e7db**. Authorized push
+to origin/research/native-feasibility succeeded; remote SHA verified.
+[Pipeline #2956616374](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2956616374)
+passed both research and shared-core native Linux x64 jobs. The exact first
+slice passes Mac ARM64/Linux ARM64 (25 mapping checks/nine CLI controls each),
+matching retained Windows outcomes, vectors, source and tool fingerprints.
+The hosted shared-core JSON and sanitized job traces are retained locally.
+
+[Task 0015](tasks/0015-shared-core-data-slice.md) completes the bounded local
+data increment: partial CaeMesh now owns unchanged geometry metadata and
+IntegrationScale; partial CaeResults owns the unchanged internal FrdStreamReader.
+Mac/native Linux ARM64 pass 30 reused data checks, seven type contracts,
+two data CLI controls and four verifier rejection controls, retaining 25 mapping
+checks/nine mapping CLI controls. Data checks and observations match the native
+Windows source-linked reference. Four existing SYSLIB0050 metadata-test warnings
+are retained; no unsafe serialization is enabled. The isolated old DataProbe
+also still passes 30 checks/two CLI controls on Mac.
+
+New implementation/evidence remain **uncommitted**. Native Windows and exact
+new-commit Linux x64 execution of the expanded assembly slice remain pending;
+the ac51fc77 pipeline does not cover these edits. [Report/commands](reports/shared-core-data-slice.md).
+No additional production source/project edits, frontend/default serializer,
+F001, x/main/upstream or release-policy changes. Private transfer untouched
+outside Git. Podman VM is stopped. CAD/interactive VTK, full persistence/history/
+clone, matching custom native-source recovery and Linux ARM64 GCC default -O2
+contraction sensitivity remain explicit gates. Older sections are historical.
+
 ## Latest — native private-model comparison and first shared libraries
 
 2026-10-16: maintainer supplied the same 2.5.1-dev PMX (hash verified) and

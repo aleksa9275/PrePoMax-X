@@ -1,0 +1,799 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-10-16T18:40:36.553148+00:00",
+  "host": {
+    "os": "Darwin",
+    "architecture": "arm64"
+  },
+  "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "commands": [
+    {
+      "arguments": [
+        "dotnet",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "10.0.401\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "build",
+        "<repository>/X/Core/PrePoMaxX.Core.slnx",
+        "-c",
+        "Release",
+        "--disable-build-servers",
+        "-m:1",
+        "--artifacts-path",
+        "<temporary>/build",
+        "-p:RestoreConfigFile=<repository>/X/Core/NuGet.Config",
+        "-v:minimal"
+      ],
+      "exitCode": 0,
+      "stdout": "  Determining projects to restore...\n  Restored <repository>/X/Core/CaeGlobals/CaeGlobals.csproj (in 30 ms).\n  Restored <repository>/X/Core/CaeMesh/CaeMesh.csproj (in 33 ms).\n  Restored <repository>/X/Core/CaeResults/CaeResults.csproj (in 30 ms).\n  Restored <repository>/X/Core/Tests/CoreTests.csproj (in 33 ms).\n  Restored <repository>/X/Core/MapFace/MapFace.csproj (in 33 ms).\n  Restored <repository>/X/Core/Tests/Data/CoreDataTests.csproj (in 33 ms).\n  CaeGlobals -> <temporary>/build/bin/CaeGlobals/release/CaeGlobals.dll\n  CaeMesh -> <temporary>/build/bin/CaeMesh/release/CaeMesh.dll\n  CaeResults -> <temporary>/build/bin/CaeResults/release/CaeResults.dll\n  MapFace -> <temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll\n  CoreTests -> <temporary>/build/bin/CoreTests/release/PrePoMaxX.CoreTests.dll\n<repository>/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n  CoreDataTests -> <temporary>/build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll\n\nBuild succeeded.\n\n<repository>/X/Feasibility/Data/Program.cs(49,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(49,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,72): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n<repository>/X/Feasibility/Data/Program.cs(59,20): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Core/Tests/Data/CoreDataTests.csproj]\n    4 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:03.57\n",
+      "stderr": "CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/CoreTests/release/PrePoMaxX.CoreTests.dll"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"passed\":25,\"failed\":0,\"runtime\":{\"os\":\"macOS 26.7.1\",\"architecture\":\"Arm64\"},\"checks\":[{\"name\":\"type and assembly identities retained\",\"passed\":true},{\"name\":\"upstream vector right_45_45\",\"passed\":true},{\"name\":\"upstream vector equilateral\",\"passed\":true},{\"name\":\"upstream vector diagonal_34\",\"passed\":true},{\"name\":\"upstream vector sharp_10\",\"passed\":true},{\"name\":\"upstream vector sharp_5\",\"passed\":true},{\"name\":\"upstream vector quarter_disk\",\"passed\":true},{\"name\":\"upstream vector deltoid_10\",\"passed\":true},{\"name\":\"upstream vector deltoid_30\",\"passed\":true},{\"name\":\"upstream vector deltoid_all\",\"passed\":true},{\"name\":\"upstream vector graded_34\",\"passed\":true},{\"name\":\"upstream vector chained_34\",\"passed\":true},{\"name\":\"upstream vector cylinder\",\"passed\":true},{\"name\":\"upstream vector sphere\",\"passed\":true},{\"name\":\"all 13 upstream vectors executed\",\"passed\":true},{\"name\":\"independent equilateral centroid and counts\",\"passed\":true},{\"name\":\"area, manifold edges and Euler disk topology\",\"passed\":true},{\"name\":\"boundary node numbering closes and round trips\",\"passed\":true},{\"name\":\"host surface evaluator places inner coordinates\",\"passed\":true},{\"name\":\"bad evaluator output raises domain exception\",\"passed\":true},{\"name\":\"mismatched geometry raises domain exception\",\"passed\":true},{\"name\":\"invalid block counts raise domain exception\",\"passed\":true},{\"name\":\"uniform scale and translation preserve topology\",\"passed\":true},{\"name\":\"changed coordinates and connectivity fail comparison\",\"passed\":true},{\"name\":\"portable libraries have no Windows or presentation references\",\"passed\":true}],\"vectors\":[{\"name\":\"right_45_45\",\"maxDeviation\":0,\"quads\":135},{\"name\":\"equilateral\",\"maxDeviation\":0,\"quads\":108},{\"name\":\"diagonal_34\",\"maxDeviation\":0,\"quads\":134},{\"name\":\"sharp_10\",\"maxDeviation\":0,\"quads\":141},{\"name\":\"sharp_5\",\"maxDeviation\":0,\"quads\":86},{\"name\":\"quarter_disk\",\"maxDeviation\":0,\"quads\":96},{\"name\":\"deltoid_10\",\"maxDeviation\":0,\"quads\":29},{\"name\":\"deltoid_30\",\"maxDeviation\":0,\"quads\":29},{\"name\":\"deltoid_all\",\"maxDeviation\":0,\"quads\":3},{\"name\":\"graded_34\",\"maxDeviation\":0,\"quads\":134},{\"name\":\"chained_34\",\"maxDeviation\":0,\"quads\":235},{\"name\":\"cylinder\",\"maxDeviation\":0,\"quads\":121},{\"name\":\"sphere\",\"maxDeviation\":0,\"quads\":128}]}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll",
+        "--self-test"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"success\": true,\n  \"runtime\": {\n    \"os\": \"macOS\",\n    \"architecture\": \"Arm64\",\n    \"osArchitecture\": \"Arm64\",\n    \"framework\": \".NET 10.0.12\"\n  },\n  \"passed\": 30,\n  \"failed\": 0,\n  \"checks\": [\n    {\n      \"name\": \"matrix_inverse_matches_independent_two_by_two_solution\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"matrix_inverse_pivots_zero_leading_diagonal\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"matrix_rectangular_product_matches_independent_values\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"matrix_transpose_and_scalar_product_preserve_input\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"matrix_nonconformable_product_is_rejected\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"singular_matrix_raw_nonfinite_result_is_recorded\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"metadata_preserves_nonsequential_ids_units_and_coordinate_system\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"duplicate_entity_id_replaces_without_renumbering\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"numeric_and_text_constructors_copy_input_arrays\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"deep_copy_is_independent\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"fill_missing_preserves_existing_values_and_copies_new_values\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"canonical_measurements_require_explicit_geometry_access\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"mesh_metadata_omits_canonical_values_and_preserves_topology_ids\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"face_edge_import_flags_preserve_other_entity_kinds\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"serialized_field_names_preserve_upstream_contract\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"single_face_binary_block_matches_independent_wire_bytes\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"metadata_block_preserves_numbers_unicode_null_and_empty_text\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"truncated_metadata_block_is_rejected\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"unknown_serialized_field_is_rejected\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"default_and_none_scale_are_unity\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"thickness_scale_is_constant\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"axisymmetric_scale_is_full_circumference\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"unknown_scale_enum_is_rejected\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"negative_scale_inputs_are_preserved_raw_observation\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_handles_crlf_empty_line_utf8_and_final_line\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_handles_single_byte_partial_reads\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_grows_past_one_megabyte_boundary\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_interleaves_text_binary_and_text_without_loss\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_partial_binary_eof_returns_count_and_null\",\n      \"status\": \"passed\"\n    },\n    {\n      \"name\": \"frd_reader_zero_bytes_empty_stream_and_carriage_return\",\n      \"status\": \"passed\"\n    }\n  ],\n  \"observations\": {\n    \"axisymmetricAtRadius2\": 12.566370614359172,\n    \"matrixInverse\": [\n      [\n        0.6000000000000001,\n        -0.7000000000000001\n      ],\n      [\n        -0.2,\n        0.4\n      ]\n    ],\n    \"metadata\": {\n      \"version\": 2,\n      \"unit\": \"mm\",\n      \"coordinates\": \"global\",\n      \"faceIds\": [\n        7,\n        41\n      ],\n      \"edgeIds\": [\n        8\n      ]\n    },\n    \"mixedBinaryHex\": \"00FF0A0D2A\",\n    \"rawNegativeScaleInputs\": {\n      \"thickness\": -2,\n      \"axisymmetric\": -6.283185307179586\n    },\n    \"rawSingularInverse\": [\n      [\n        \"-Infinity\",\n        \"Infinity\"\n      ],\n      [\n        \"Infinity\",\n        \"-Infinity\"\n      ]\n    ],\n    \"rectangularProduct\": [\n      [\n        58,\n        64\n      ],\n      [\n        139,\n        154\n      ]\n    ],\n    \"serializedFields\": [\n      \"_formatVersion\",\n      \"_coordinateSystem\",\n      \"_lengthUnit\",\n      \"_entityData\"\n    ],\n    \"singleFaceBlockHex\": \"0100000004666163650100000004666163652900000001000000046172656101010000000000000000002940\",\n    \"thicknessWeight\": 0.125\n  },\n  \"exploratoryTypeIdentity\": \"CaeMesh.GeometryMetadata, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n  \"sharedTypeContracts\": {\n    \"types\": [\n      {\n        \"name\": \"CaeGlobals.Matrix\",\n        \"identity\": \"CaeGlobals.Matrix, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": false\n      },\n      {\n        \"name\": \"CaeMesh.GeometryMetadata\",\n        \"identity\": \"CaeMesh.GeometryMetadata, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": true\n      },\n      {\n        \"name\": \"CaeMesh.GeometryMetadataEntity\",\n        \"identity\": \"CaeMesh.GeometryMetadataEntity, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": true\n      },\n      {\n        \"name\": \"CaeMesh.GeometryMetadataProperty\",\n        \"identity\": \"CaeMesh.GeometryMetadataProperty, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": true\n      },\n      {\n        \"name\": \"CaeMesh.IntegrationScale\",\n        \"identity\": \"CaeMesh.IntegrationScale, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": true\n      },\n      {\n        \"name\": \"CaeMesh.IntegrationScaleType\",\n        \"identity\": \"CaeMesh.IntegrationScaleType, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": true,\n        \"serializable\": true\n      },\n      {\n        \"name\": \"CaeResults.FrdStreamReader\",\n        \"identity\": \"CaeResults.FrdStreamReader, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\n        \"isPublic\": false,\n        \"serializable\": false\n      }\n    ],\n    \"metadataImplementsOriginalInterfaces\": true,\n    \"assemblies\": [\n      {\n        \"name\": \"CaeGlobals\",\n        \"references\": [\n          \"System.Collections\",\n          \"System.Runtime\"\n        ],\n        \"exportedTypes\": [\n          \"CaeGlobals.CaeException\",\n          \"CaeGlobals.Matrix\",\n          \"CaeGlobals.Vec3D\"\n        ]\n      },\n      {\n        \"name\": \"CaeMesh\",\n        \"references\": [\n          \"CaeGlobals\",\n          \"System.Collections\",\n          \"System.Linq\",\n          \"System.Runtime\"\n        ],\n        \"exportedTypes\": [\n          \"CaeMesh.FeNode\",\n          \"CaeMesh.GeometryMetadata\",\n          \"CaeMesh.GeometryMetadataEntity\",\n          \"CaeMesh.GeometryMetadataProperty\",\n          \"CaeMesh.IntegrationScale\",\n          \"CaeMesh.IntegrationScaleType\",\n          \"CaeMesh.ThreeBlockGrid\",\n          \"CaeMesh.ThreeBlockMapping\",\n          \"CaeMesh.TransfiniteSideTriple\"\n        ]\n      },\n      {\n        \"name\": \"CaeResults\",\n        \"references\": [\n          \"System.Runtime\"\n        ],\n        \"exportedTypes\": []\n      }\n    ]\n  },\n  \"limitations\": \"Partial shared libraries; no full FRD reader, element integration, PMX/NRBF, history/clone, CAD/VTK or whole-core equivalence. Original type owners retained.\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll"
+      ],
+      "exitCode": 2,
+      "stdout": "{\"success\":false,\"error\":\"Usage: DataProbe --self-test\"}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll",
+        "unknown"
+      ],
+      "exitCode": 2,
+      "stdout": "{\"success\":false,\"error\":\"Usage: DataProbe --self-test\"}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<repository>/X/Core/MapFace/equilateral.json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"SideCounts\":[2,2,2],\"NumberOfBoundaryNodes\":6,\"InnerUv\":[[1,0.5773502691896257]],\"Quads\":[[0,1,6,5],[2,3,6,1],[4,5,6,3]],\"NumberOfFoldedQuads\":0}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll"
+      ],
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "Usage: PrePoMaxX.MapFace <face.json>\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/missing.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Could not find file \\u0027<temporary>/missing.json\\u0027.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 1.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"A face object is required.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Exactly three UV and XYZ sides are required.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Every side needs matching UV/XYZ points, including both corners.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Input exceeds 1 MiB.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"Side endpoints must form one closed boundary.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/MapFace/release/PrePoMaxX.MapFace.dll",
+        "<temporary>/invalid.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"error\":\"The sides of the face carry 1, 1, 1 elements, which three blocks of quads cannot fill.\"}\n"
+    }
+  ],
+  "sources": [
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/IntegrationScale.cs",
+      "sha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+      "sha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+      "sha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+      "sha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+      "sha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+      "sha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+      "sha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+      "sha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CaeException.cs",
+      "sha256": "024ac7385a2cc6d7f0298f97c4b45a92431af61324ab1a42392b0642b3a6d268",
+      "originalClassBodyUnchanged": true
+    }
+  ],
+  "repository": {
+    "head": "ac51fc77449da26d9c25ddedd924feda2a55e7db",
+    "dirty": true
+  },
+  "toolHashes": {
+    "NuGet.Config": "964302159308872b9729e1828a1ba897f30634f7bd751cde11ea8e6fed8cfb97",
+    "Directory.Build.props": "9d7bca443f69df896f9e28377afad229ce8ac0b42c9d2148f83ff8923a071cdd",
+    "gitlab-ci.yml": "047b172259a8999a9de227440dfde7ee7b71ff488843abe0fea6bab0ce6777e5",
+    "PrePoMaxX.Core.slnx": "d8cdfdfa24f2e96018405ff501726a1c316a10a4170bbd79e367a37176632dde",
+    "verify.py": "4544cbacd98805f14adc77ba43fd02f7cf6387bcc6f03a73e55f15176813a7f9",
+    "MapFace/MapFace.csproj": "5bf3ea5ad28c49f77f71413511dbbd32940822f0d91f0d11f604b63504418a79",
+    "MapFace/equilateral.json": "6313d0e88a2b35f088641c908a67e63323078fe7ffb8197b80a7d2cabd0f8e3a",
+    "MapFace/Program.cs": "4482edfc1ed2975287b96ef120d2d46116a9e79e3a5db929235ec290e582345d",
+    "Tests/CoreTests.csproj": "d36e17751e68c8eeb8c5cb2e6ca3693949da189ba9d0636e1579dddb084a1dbc",
+    "Tests/Program.cs": "557a6f86e2e78faf3ccedc340a6755c43b7002640c750d8b30af7d57335457af",
+    "CaeGlobals/CaeGlobals.csproj": "83ef8ad259cc4af70a6f8a5a39f32b58d31783d02b3e62e82d3fe7fcf9a05ca2",
+    "CaeMesh/CaeMesh.csproj": "48419f343d626b6b8f19f81f805affc8ec0e319b7562453558c60805256cf80b",
+    "CaeResults/CaeResults.csproj": "15c888d97ab42073620b50b2e9d38827640515ab27531675a58d0a8390ee3f36",
+    "Tests/Legacy/Smoke.cs": "dc4294ee29447690e5266f27d3c7bf26054d0b286afd8eb3fe2a4ad668430ee0",
+    "Tests/Data/CoreDataTests.csproj": "06729f2fe2c8553fcc14a099987aee57f3e1ed7499b9e58bf5f19e24ee6b9191",
+    "Tests/Data/TypeContracts.cs": "4b6fd7e0d97b02ca57051e26df01a4370c8ad4854ba2e11e29b02c2c67727a4d",
+    "../Feasibility/Data/Program.cs": "978594d2066bb730a86338ca4b2f4bb4a25c94e3b0e53511625bd2dd8ca1e931"
+  },
+  "sdk": "10.0.401",
+  "mappingTests": {
+    "success": true,
+    "passed": 25,
+    "failed": 0,
+    "runtime": {
+      "os": "macOS 26.7.1",
+      "architecture": "Arm64"
+    },
+    "checks": [
+      {
+        "name": "type and assembly identities retained",
+        "passed": true
+      },
+      {
+        "name": "upstream vector right_45_45",
+        "passed": true
+      },
+      {
+        "name": "upstream vector equilateral",
+        "passed": true
+      },
+      {
+        "name": "upstream vector diagonal_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sharp_10",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sharp_5",
+        "passed": true
+      },
+      {
+        "name": "upstream vector quarter_disk",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_10",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_30",
+        "passed": true
+      },
+      {
+        "name": "upstream vector deltoid_all",
+        "passed": true
+      },
+      {
+        "name": "upstream vector graded_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector chained_34",
+        "passed": true
+      },
+      {
+        "name": "upstream vector cylinder",
+        "passed": true
+      },
+      {
+        "name": "upstream vector sphere",
+        "passed": true
+      },
+      {
+        "name": "all 13 upstream vectors executed",
+        "passed": true
+      },
+      {
+        "name": "independent equilateral centroid and counts",
+        "passed": true
+      },
+      {
+        "name": "area, manifold edges and Euler disk topology",
+        "passed": true
+      },
+      {
+        "name": "boundary node numbering closes and round trips",
+        "passed": true
+      },
+      {
+        "name": "host surface evaluator places inner coordinates",
+        "passed": true
+      },
+      {
+        "name": "bad evaluator output raises domain exception",
+        "passed": true
+      },
+      {
+        "name": "mismatched geometry raises domain exception",
+        "passed": true
+      },
+      {
+        "name": "invalid block counts raise domain exception",
+        "passed": true
+      },
+      {
+        "name": "uniform scale and translation preserve topology",
+        "passed": true
+      },
+      {
+        "name": "changed coordinates and connectivity fail comparison",
+        "passed": true
+      },
+      {
+        "name": "portable libraries have no Windows or presentation references",
+        "passed": true
+      }
+    ],
+    "vectors": [
+      {
+        "name": "right_45_45",
+        "maxDeviation": 0,
+        "quads": 135
+      },
+      {
+        "name": "equilateral",
+        "maxDeviation": 0,
+        "quads": 108
+      },
+      {
+        "name": "diagonal_34",
+        "maxDeviation": 0,
+        "quads": 134
+      },
+      {
+        "name": "sharp_10",
+        "maxDeviation": 0,
+        "quads": 141
+      },
+      {
+        "name": "sharp_5",
+        "maxDeviation": 0,
+        "quads": 86
+      },
+      {
+        "name": "quarter_disk",
+        "maxDeviation": 0,
+        "quads": 96
+      },
+      {
+        "name": "deltoid_10",
+        "maxDeviation": 0,
+        "quads": 29
+      },
+      {
+        "name": "deltoid_30",
+        "maxDeviation": 0,
+        "quads": 29
+      },
+      {
+        "name": "deltoid_all",
+        "maxDeviation": 0,
+        "quads": 3
+      },
+      {
+        "name": "graded_34",
+        "maxDeviation": 0,
+        "quads": 134
+      },
+      {
+        "name": "chained_34",
+        "maxDeviation": 0,
+        "quads": 235
+      },
+      {
+        "name": "cylinder",
+        "maxDeviation": 0,
+        "quads": 121
+      },
+      {
+        "name": "sphere",
+        "maxDeviation": 0,
+        "quads": 128
+      }
+    ]
+  },
+  "dataTests": {
+    "schemaVersion": 1,
+    "success": true,
+    "runtime": {
+      "os": "macOS",
+      "architecture": "Arm64",
+      "osArchitecture": "Arm64",
+      "framework": ".NET 10.0.12"
+    },
+    "passed": 30,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "matrix_inverse_matches_independent_two_by_two_solution",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_inverse_pivots_zero_leading_diagonal",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_rectangular_product_matches_independent_values",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_transpose_and_scalar_product_preserve_input",
+        "status": "passed"
+      },
+      {
+        "name": "matrix_nonconformable_product_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "singular_matrix_raw_nonfinite_result_is_recorded",
+        "status": "passed"
+      },
+      {
+        "name": "metadata_preserves_nonsequential_ids_units_and_coordinate_system",
+        "status": "passed"
+      },
+      {
+        "name": "duplicate_entity_id_replaces_without_renumbering",
+        "status": "passed"
+      },
+      {
+        "name": "numeric_and_text_constructors_copy_input_arrays",
+        "status": "passed"
+      },
+      {
+        "name": "deep_copy_is_independent",
+        "status": "passed"
+      },
+      {
+        "name": "fill_missing_preserves_existing_values_and_copies_new_values",
+        "status": "passed"
+      },
+      {
+        "name": "canonical_measurements_require_explicit_geometry_access",
+        "status": "passed"
+      },
+      {
+        "name": "mesh_metadata_omits_canonical_values_and_preserves_topology_ids",
+        "status": "passed"
+      },
+      {
+        "name": "face_edge_import_flags_preserve_other_entity_kinds",
+        "status": "passed"
+      },
+      {
+        "name": "serialized_field_names_preserve_upstream_contract",
+        "status": "passed"
+      },
+      {
+        "name": "single_face_binary_block_matches_independent_wire_bytes",
+        "status": "passed"
+      },
+      {
+        "name": "metadata_block_preserves_numbers_unicode_null_and_empty_text",
+        "status": "passed"
+      },
+      {
+        "name": "truncated_metadata_block_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "unknown_serialized_field_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "default_and_none_scale_are_unity",
+        "status": "passed"
+      },
+      {
+        "name": "thickness_scale_is_constant",
+        "status": "passed"
+      },
+      {
+        "name": "axisymmetric_scale_is_full_circumference",
+        "status": "passed"
+      },
+      {
+        "name": "unknown_scale_enum_is_rejected",
+        "status": "passed"
+      },
+      {
+        "name": "negative_scale_inputs_are_preserved_raw_observation",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_handles_crlf_empty_line_utf8_and_final_line",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_handles_single_byte_partial_reads",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_grows_past_one_megabyte_boundary",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_interleaves_text_binary_and_text_without_loss",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_partial_binary_eof_returns_count_and_null",
+        "status": "passed"
+      },
+      {
+        "name": "frd_reader_zero_bytes_empty_stream_and_carriage_return",
+        "status": "passed"
+      }
+    ],
+    "observations": {
+      "axisymmetricAtRadius2": 12.566370614359172,
+      "matrixInverse": [
+        [
+          0.6000000000000001,
+          -0.7000000000000001
+        ],
+        [
+          -0.2,
+          0.4
+        ]
+      ],
+      "metadata": {
+        "version": 2,
+        "unit": "mm",
+        "coordinates": "global",
+        "faceIds": [
+          7,
+          41
+        ],
+        "edgeIds": [
+          8
+        ]
+      },
+      "mixedBinaryHex": "00FF0A0D2A",
+      "rawNegativeScaleInputs": {
+        "thickness": -2,
+        "axisymmetric": -6.283185307179586
+      },
+      "rawSingularInverse": [
+        [
+          "-Infinity",
+          "Infinity"
+        ],
+        [
+          "Infinity",
+          "-Infinity"
+        ]
+      ],
+      "rectangularProduct": [
+        [
+          58,
+          64
+        ],
+        [
+          139,
+          154
+        ]
+      ],
+      "serializedFields": [
+        "_formatVersion",
+        "_coordinateSystem",
+        "_lengthUnit",
+        "_entityData"
+      ],
+      "singleFaceBlockHex": "0100000004666163650100000004666163652900000001000000046172656101010000000000000000002940",
+      "thicknessWeight": 0.125
+    },
+    "exploratoryTypeIdentity": "CaeMesh.GeometryMetadata, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "sharedTypeContracts": {
+      "types": [
+        {
+          "name": "CaeGlobals.Matrix",
+          "identity": "CaeGlobals.Matrix, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": false
+        },
+        {
+          "name": "CaeMesh.GeometryMetadata",
+          "identity": "CaeMesh.GeometryMetadata, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": true
+        },
+        {
+          "name": "CaeMesh.GeometryMetadataEntity",
+          "identity": "CaeMesh.GeometryMetadataEntity, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": true
+        },
+        {
+          "name": "CaeMesh.GeometryMetadataProperty",
+          "identity": "CaeMesh.GeometryMetadataProperty, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": true
+        },
+        {
+          "name": "CaeMesh.IntegrationScale",
+          "identity": "CaeMesh.IntegrationScale, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": true
+        },
+        {
+          "name": "CaeMesh.IntegrationScaleType",
+          "identity": "CaeMesh.IntegrationScaleType, CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": true,
+          "serializable": true
+        },
+        {
+          "name": "CaeResults.FrdStreamReader",
+          "identity": "CaeResults.FrdStreamReader, CaeResults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "isPublic": false,
+          "serializable": false
+        }
+      ],
+      "metadataImplementsOriginalInterfaces": true,
+      "assemblies": [
+        {
+          "name": "CaeGlobals",
+          "references": [
+            "System.Collections",
+            "System.Runtime"
+          ],
+          "exportedTypes": [
+            "CaeGlobals.CaeException",
+            "CaeGlobals.Matrix",
+            "CaeGlobals.Vec3D"
+          ]
+        },
+        {
+          "name": "CaeMesh",
+          "references": [
+            "CaeGlobals",
+            "System.Collections",
+            "System.Linq",
+            "System.Runtime"
+          ],
+          "exportedTypes": [
+            "CaeMesh.FeNode",
+            "CaeMesh.GeometryMetadata",
+            "CaeMesh.GeometryMetadataEntity",
+            "CaeMesh.GeometryMetadataProperty",
+            "CaeMesh.IntegrationScale",
+            "CaeMesh.IntegrationScaleType",
+            "CaeMesh.ThreeBlockGrid",
+            "CaeMesh.ThreeBlockMapping",
+            "CaeMesh.TransfiniteSideTriple"
+          ]
+        },
+        {
+          "name": "CaeResults",
+          "references": [
+            "System.Runtime"
+          ],
+          "exportedTypes": []
+        }
+      ]
+    },
+    "limitations": "Partial shared libraries; no full FRD reader, element integration, PMX/NRBF, history/clone, CAD/VTK or whole-core equivalence. Original type owners retained."
+  },
+  "dataComparison": {
+    "reference": ".project/reports/windows-reference/data-windows-x64.json",
+    "sha256": "3e2ef000b2daf226720c799f7f0c815b02e80cdb839e69c0c2937cd91f41c87f",
+    "matches": true
+  },
+  "dataRejectionControls": [
+    "moved serialized type",
+    "changed metadata wire bytes",
+    "missing data check",
+    "desktop dependency"
+  ],
+  "dataCliControls": [
+    {
+      "name": "missing_arguments",
+      "status": "passed",
+      "exitCode": 2
+    },
+    {
+      "name": "unknown_command",
+      "status": "passed",
+      "exitCode": 2
+    }
+  ],
+  "cli": {
+    "sample": {
+      "success": true,
+      "SideCounts": [
+        2,
+        2,
+        2
+      ],
+      "NumberOfBoundaryNodes": 6,
+      "InnerUv": [
+        [
+          1,
+          0.5773502691896257
+        ]
+      ],
+      "Quads": [
+        [
+          0,
+          1,
+          6,
+          5
+        ],
+        [
+          2,
+          3,
+          6,
+          1
+        ],
+        [
+          4,
+          5,
+          6,
+          3
+        ]
+      ],
+      "NumberOfFoldedQuads": 0
+    },
+    "negativeControls": [
+      "usage",
+      "missing input",
+      "malformed",
+      "null root",
+      "missing sides",
+      "null side",
+      "size limit",
+      "open boundary",
+      "invalid block counts"
+    ],
+    "inputUnchanged": true
+  },
+  "limits": [
+    "Partial source-linked libraries, not the full application, FRD or PMX reader",
+    "Full persistence/history/clone, CAD/interactive VTK and native-source release gates remain open",
+    "New data assembly slice still requires native Windows and exact-commit Linux x64 execution"
+  ]
+}

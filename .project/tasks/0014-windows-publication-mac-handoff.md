@@ -1,5 +1,14 @@
 # Task 0014 — Windows closeout, publication and MacBook handoff
 
+Completed publication closeout on Mac, 2026-10-16: bundle SHA-256
+4e6ea00ce6a6a961f35bb7afc7e24da39fe9d99186be4cea7c0f6c5b727c070d verified,
+clean f1e757f1 checkout fast-forwarded to ac51fc77449da26d9c25ddedd924feda2a55e7db.
+Normal push and subsequent ls-remote confirm that exact origin research SHA.
+Push pipeline #2956616374 passes research job #17244123734 and new shared-core
+job #17244123735 on native Linux x64; [report](../reports/shared-core-data-slice.md).
+Publication exception is complete. New task 0015 implementation is uncommitted.
+Historical Windows credential limitations and transfer instructions follow.
+
 2026-10-16: maintainer explicitly requests committing/pushing the reviewed work,
 finishing useful remaining Windows checks and providing immediate MacBook
 continuation. Destination is origin/research/native-feasibility only; no force,

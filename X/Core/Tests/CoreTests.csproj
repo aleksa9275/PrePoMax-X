@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Legacy/**/*.cs" />
+    <Compile Remove="Data/**/*.cs" />
     <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
     <None Include="../../../CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt" Link="three_block_vectors.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

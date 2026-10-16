@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Build the shared libraries and verify mapping, source and host contracts."""
+"""Build partial shared libraries and verify mapping, data, source and host contracts."""
 import argparse
+import copy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -22,14 +23,21 @@ def sha(data):
 
 def sources():
     paths = set()
-    for project in (HERE / "CaeGlobals/CaeGlobals.csproj", HERE / "CaeMesh/CaeMesh.csproj"):
+    for owner in ("CaeGlobals", "CaeMesh", "CaeResults"):
+        project = HERE / owner / (owner + ".csproj")
         tree = ET.parse(project)
         if tree.findall(".//PackageReference"):
-            raise ValueError("The first shared slice has no package dependencies")
-        paths.update(item.attrib["Include"].replace("$(RepositoryRoot)", "") for item in tree.findall(".//Compile"))
+            raise ValueError("The shared slice has no package dependencies")
+        owned = {item.attrib["Include"].replace("$(RepositoryRoot)", "") for item in tree.findall(".//Compile")}
+        if any(not path.startswith(owner + "/") for path in owned):
+            raise ValueError("Shared source moved to a different assembly owner")
+        paths.update(owned)
     expected = {"CaeGlobals/CaeException.cs", "CaeGlobals/CommonClasses/Matrix.cs", "CaeGlobals/CommonClasses/Vec3D.cs",
                 "CaeMesh/Nodes/FeNode.cs", "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
-                "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs", "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs"}
+                "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs", "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+                "CaeMesh/GeometryMetadata/GeometryMetadata.cs", "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+                "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs", "CaeMesh/Elements/IntegrationScale.cs",
+                "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs"}
     if paths != expected:
         raise ValueError("Shared library source closure changed")
     rows = []
@@ -53,6 +61,40 @@ def sources():
     return rows
 
 
+def validate_data(result, reference):
+    if not result["success"] or result["passed"] != 30 or result["failed"]:
+        raise ValueError("Shared data checks failed or were not all executed")
+    if result["checks"] != reference["tests"]["checks"] or result["observations"] != reference["tests"]["observations"]:
+        raise ValueError("Shared data contracts differ from retained native Windows observations")
+    contracts = result["sharedTypeContracts"]
+    owners = {"CaeGlobals.Matrix": ("CaeGlobals", True, False),
+              "CaeMesh.GeometryMetadata": ("CaeMesh", True, True),
+              "CaeMesh.GeometryMetadataEntity": ("CaeMesh", True, True),
+              "CaeMesh.GeometryMetadataProperty": ("CaeMesh", True, True),
+              "CaeMesh.IntegrationScale": ("CaeMesh", True, True),
+              "CaeMesh.IntegrationScaleType": ("CaeMesh", True, True),
+              "CaeResults.FrdStreamReader": ("CaeResults", False, False)}
+    if len(contracts["types"]) != len(owners) or {row["name"] for row in contracts["types"]} != set(owners):
+        raise ValueError("Shared data type closure changed")
+    for row in contracts["types"]:
+        owner, public, serializable = owners[row["name"]]
+        identity = row["name"] + ", " + owner + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        if row["identity"] != identity or row["isPublic"] != public or row["serializable"] != serializable:
+            raise ValueError("Shared type identity/visibility/serialization marker changed: " + row["name"])
+    if not contracts["metadataImplementsOriginalInterfaces"]:
+        raise ValueError("Metadata serialization interfaces changed")
+    if {row["name"] for row in contracts["assemblies"]} != {"CaeGlobals", "CaeMesh", "CaeResults"}:
+        raise ValueError("Shared data assembly closure changed")
+    for assembly in contracts["assemblies"]:
+        if any(not (name in {"CaeGlobals", "CaeMesh", "CaeResults", "netstandard", "mscorlib"} or
+                    name == "System" or name.startswith("System.")) or
+               any(token in name for token in ("Windows", "Presentation", "Drawing.Common", "Microsoft.Win32"))
+               for name in assembly["references"]):
+            raise ValueError("Unexpected platform/package reference: " + assembly["name"])
+        if assembly["name"] == "CaeResults" and assembly["exportedTypes"]:
+            raise ValueError("Internal FRD reader was exposed publicly")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
@@ -70,9 +112,12 @@ def main():
         if args.expect_architecture and native_arch != args.expect_architecture:
             raise ValueError("Unexpected native architecture")
         report["sources"] = sources()
+        report["repository"] = {"head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+                                "dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT))}
         report["toolHashes"] = {str(p.relative_to(HERE)).replace("\\", "/"): sha(p.read_bytes())
                                 for p in HERE.rglob("*") if p.is_file() and not {"bin", "obj", "artifacts", "__pycache__"}.intersection(p.parts)
-                                and p.suffix in {".py", ".cs", ".csproj", ".props", ".slnx", ".json", ".Config"}}
+                                and p.suffix in {".py", ".cs", ".csproj", ".props", ".slnx", ".json", ".Config", ".yml"}}
+        report["toolHashes"]["../Feasibility/Data/Program.cs"] = sha((HERE.parent / "Feasibility/Data/Program.cs").read_bytes())
         with tempfile.TemporaryDirectory(prefix="prepomaxx-core-") as folder:
             work = Path(folder)
             def run(command, code=0):
@@ -96,6 +141,42 @@ def main():
                 raise ValueError("Shared mapping checks failed or were not all executed")
             if result["runtime"]["architecture"] != native_arch:
                 raise ValueError("Managed process differs from native host architecture")
+            data = work / "build/bin/CoreDataTests/release/PrePoMaxX.CoreDataTests.dll"
+            report["dataTests"] = json.loads(run(["dotnet", data, "--self-test"]).stdout)
+            reference_path = ROOT / ".project/reports/windows-reference/data-windows-x64.json"
+            reference = json.loads(reference_path.read_text())
+            validate_data(report["dataTests"], reference)
+            runtime = report["dataTests"]["runtime"]
+            expected_os = {"Darwin": "macOS", "Linux": "Linux", "Windows": "Windows"}[platform.system()]
+            if runtime["architecture"] != native_arch or runtime["osArchitecture"] != native_arch or runtime["os"] != expected_os:
+                raise ValueError("Shared data process differs from native host")
+            report["dataComparison"] = {"reference": str(reference_path.relative_to(ROOT)),
+                                        "sha256": sha(reference_path.read_bytes()), "matches": True}
+            report["dataRejectionControls"] = []
+            for name in ("moved serialized type", "changed metadata wire bytes", "missing data check", "desktop dependency"):
+                altered = copy.deepcopy(report["dataTests"])
+                if name == "moved serialized type":
+                    altered["sharedTypeContracts"]["types"][1]["identity"] = "CaeMesh.GeometryMetadata, PrePoMaxX.CoreDataTests"
+                elif name == "changed metadata wire bytes":
+                    altered["observations"]["singleFaceBlockHex"] = "00"
+                elif name == "missing data check":
+                    altered["checks"].pop()
+                else:
+                    altered["sharedTypeContracts"]["assemblies"][0]["references"].append("System.Windows.Forms")
+                try:
+                    validate_data(altered, reference)
+                except ValueError:
+                    report["dataRejectionControls"].append(name)
+                else:
+                    raise ValueError("Data verifier accepted control: " + name)
+            report["dataCliControls"] = []
+            for name, arguments in (("missing_arguments", []), ("unknown_command", ["unknown"])):
+                usage = json.loads(run(["dotnet", data, *arguments], 2).stdout)
+                if usage.get("success") is not False:
+                    raise ValueError("Shared data CLI usage contract failed")
+                report["dataCliControls"].append({"name": name, "status": "passed", "exitCode": 2})
+            if report["dataCliControls"] != reference["cliContracts"]:
+                raise ValueError("Shared data CLI controls differ from Windows reference")
             cli = work / "build/bin/MapFace/release/PrePoMaxX.MapFace.dll"
             sample = HERE / "MapFace/equilateral.json"
             sample_hash = sha(sample.read_bytes())
@@ -127,13 +208,15 @@ def main():
             if not report["cli"]["inputUnchanged"]:
                 raise ValueError("CLI modified input")
             report["success"] = True
-    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+    except (OSError, KeyError, TypeError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         report["error"] = str(error).replace(str(ROOT), "<repository>").replace(folder or "<unused>", "<temporary>")
-    report["limits"] = ["First source-linked library slice, not the full application or PMX reader",
-                        "Required Mac/Linux platform runs and CAD/VTK integration remain separate"]
+    report["limits"] = ["Partial source-linked libraries, not the full application, FRD or PMX reader",
+                        "Full persistence/history/clone, CAD/interactive VTK and native-source release gates remain open",
+                        "New data assembly slice still requires native Windows and exact-commit Linux x64 execution"]
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({"success": report["success"], "mappingChecks": report.get("mappingTests", {}).get("passed"),
+                      "dataChecks": report.get("dataTests", {}).get("passed"),
                       "cliControls": len(report.get("cli", {}).get("negativeControls", [])), "error": report.get("error")}))
     return 0 if report["success"] else 1
 
