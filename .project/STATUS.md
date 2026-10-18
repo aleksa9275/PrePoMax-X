@@ -1,5 +1,19 @@
 # Project status
 
+## Current — tasks 0030/0031 published; task 0032 closes evidence
+
+2026-10-18: implementation **62c7de1b** is independently verified on origin
+research/native-feasibility. Exact-commit pipeline **#2960686368 passes all five
+native Linux x64 jobs**. Three actual hosted results previews identify clean SHA,
+78 checks/nine CLI controls per pin and matching ten source/tool/dependency/FRD/
+DAT/test groups against both ARM64 hosts. Archive retrieval failed; semantic
+preview verification is retained without claiming raw-byte/archive verification.
+[Publication and next work](reports/results-publication.md). Closing changes are
+records/evidence only; task 0032 ends here and normal publication policy resumes.
+Both correctness failures/tetra gate and all native solver/Windows/net48/RC2/
+full-graph/persistence/UI/CAD/source/four-target/installers/Homebrew gates remain.
+Earlier uncommitted wording is historical after this publication.
+
 ## Current — task 0031 DAT inspection / 0032 publication
 
 2026-10-18: maintainer authorizes next bounded task and committing/pushing current

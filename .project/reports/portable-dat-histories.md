@@ -74,3 +74,8 @@ model/history/persistence/UI/CAD parity, corresponding third-party source,
 four-target acceptance and installers/Homebrew remain. Next engineering priority
 is a reproducible native CPU solver/toolchain and a real deck → solve → FRD/DAT
 comparison, while full results graph and interactive host integration remain.
+
+Published implementation **62c7de1b** passes exact-commit Linux x64 pipeline
+#2960686368 (all five jobs). Three results artifact previews independently verify
+ten matching groups against both ARM64 hosts. Archive download unavailable; see
+[actual publication/method/limits](results-publication.md).

@@ -1,5 +1,15 @@
 # Next session — native Windows reference validation
 
+2026-10-18 transfer checkpoint: original FRD/DAT implementation **62c7de1b**
+is verified on origin research; exact-commit pipeline #2960686368 passes five
+native x64 jobs. [Publication and preview-evidence method](../reports/results-publication.md)
+records matching Mac/Linux ARM64 content; archive download is unverified. Task
+0032 closing changes are records only; use Git for transfer rather than old ZIPs.
+Next Windows checks are native X/Results 78 checks/nine CLI controls, all pins,
+then original full net48/RC2 comparison. Legacy source/ownership is mechanically
+preserved; neither Linux x64 nor ARM64 closes Windows/full-graph acceptance.
+Both correctness failures/tetra gate and all release requirements remain.
+
 2026-10-18 new FRD/DAT slices: tasks 0030/0031 are being published under explicit
 task 0032 authorization; read [actual remote/CI](../reports/results-publication.md)
 before transfer. New X/Results uses original FRD/DAT methods, field math and

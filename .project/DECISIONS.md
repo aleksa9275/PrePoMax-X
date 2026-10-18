@@ -1,5 +1,16 @@
 # Decision register
 
+D048 — Verified results publication and bounded evidence transport, 2026-10-18:
+tasks 0030/0031 publish normally to origin research at 62c7de1b; remote verified,
+master unchanged. Exact-commit pipeline #2960686368 passes all five native Linux
+x64 jobs. Actual hosted artifact preview JSON identifies clean commit and ten
+source/tool/package/test/FRD/DAT groups match both ARM64 hosts for all three pins,
+78 checks/nine CLI controls each. Archive downloads unavailable; semantic preview
+hash comparison is independently reproduced, not described as archive verification.
+Task 0032 closes with records only. Normal maintainer publication policy resumes;
+no correctness/release gate closure or native solver/default/frontend/format choice.
+[Evidence and method](reports/results-publication.md).
+
 D047 — Accepted bounded DAT implementation and scoped publication, 2026-10-18:
 maintainer asks the next task then commit/push within remaining usage. Task 0031
 reuses original DAT splitter/repair/numeric decoding and HistoryResultEntries,

@@ -1,5 +1,15 @@
 # MacBook continuation — start here
 
+2026-10-18 published results checkpoint: **62c7de1b**, exact-commit pipeline
+**#2960686368 passes all five native x64 jobs**. Three FRD/DAT result previews
+verify clean SHA and matching ten source/tool/dependency/engineering groups with
+Mac/Linux ARM64 (78 checks/nine CLI controls per pin). Archive retrieval failed;
+preview semantic verification is separately recorded. [Start here](../reports/results-publication.md).
+All implementation is now in Git; earlier uncommitted paragraphs are historical.
+Task 0032 closes records only. Next: reproducible native CPU solver/source build
+and actual deck → solve → FRD/DAT; full results/interactive host follow. Normal
+publication policy and both correctness failures/all release gates remain.
+
 2026-10-18 latest tasks 0031/0032: original DAT static-shaped histories and
 inspect-dat complement the FRD slice, preserving original methods/type ownership
 and net48 orchestration/persistence. Maintainer explicitly authorizes publication

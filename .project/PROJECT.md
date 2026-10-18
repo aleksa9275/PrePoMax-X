@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-10-18 results publication: tasks 0030/0031 implementation **62c7de1b** is
+on origin research; exact-commit pipeline **#2960686368** passes all five native
+Linux x64 jobs. Hosted FRD/DAT artifact previews verify against Mac/Linux ARM64
+sources/tools/engineering outcomes, 78 checks/nine CLI controls per pin. Archive
+transport was unavailable; do not claim archive-byte checks. [Publication/evidence](reports/results-publication.md)
+closes task 0032 without feature expansion. Both correctness failures/tetra gate
+and all native solver/Windows/net48/RC2/full-desktop/release requirements remain.
+
 2026-10-18 task 0031/0032: maintainer requests the next bounded task and explicit
 commit/push. Original DAT parsing/history entries now support stored static-shaped
 component histories/inspect-dat, preserving net48 orchestration/persistence. DAT

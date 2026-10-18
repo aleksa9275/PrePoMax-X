@@ -1,5 +1,18 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-10-18 publication verified: tasks 0030/0031 FRD/DAT implementation is on
+origin/research/native-feasibility at 62c7de1bea234acc7aea16ee7c11283822f86501.
+Exact-commit pipeline #2960686368 passes all five native Linux x64 jobs. Three
+hosted results JSON previews identify clean SHA and match ten source/tool/package/
+field/history/test groups against retained Mac/Linux ARM64 evidence (78 checks,
+nine CLI controls per pin). Archive download was unavailable; do not claim raw
+archive verification. Read .project/reports/results-publication.md and task 0032.
+This closing publication is documentation/evidence only; normal maintainer commit/
+push policy resumes. Both correctness failures/tetra gate and all native solver/
+Windows/net48/RC2/full-graph/UI/persistence/CAD/source/four-target/installer gates
+remain. Next engineering priority is reproducible native CPU solver recovery and
+a real deck → solve → FRD/DAT workflow. No further feature work in task 0032.
+
 2026-10-18 current instruction: maintainer explicitly requests the next bounded
 task and then commit/push current code to GitLab within remaining usage. Task
 0031 adds original DAT static-shaped history inspection; task 0032 reviews and
