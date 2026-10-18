@@ -217,6 +217,10 @@
     <Compile Include="Steps\FieldOutputs\FieldOutput.cs" />
     <Compile Include="FileInOut\Common\InpFeDescriptor.cs" />
     <Compile Include="FileInOut\Input\InpModel\InpFileReader.cs" />
+    <Compile Include="FileInOut\Input\InpModel\InpFileReader.MeshParsing.cs" />
+    <Compile Include="FileInOut\Input\InpModel\InpFileReader.MeshData.cs" />
+    <Compile Include="FileInOut\Input\InpModel\InpMeshData.cs" />
+    <Compile Include="FileInOut\Output\Calculix\MeshDeckWriter.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.cs" />
     <Compile Include="FileInOut\Input\Netgen\NetgenVolKeywords.cs" />

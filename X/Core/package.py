@@ -33,21 +33,26 @@ def main():
                 if done.returncode: raise RuntimeError("Development publish/smoke failed; see command evidence")
                 return done.stdout
             report["sdk"] = run(["dotnet", "--version"]).strip()
-            for host in ("MapFace", "MeasureMesh"):
+            for host in ("MapFace", "MeasureMesh", "MeshDeck"):
                 run(["dotnet", "publish", HERE / host / (host + ".csproj"), "-c", "Release", "--self-contained", "false",
                      "--disable-build-servers", "-m:1", "-p:UseAppHost=false", "--artifacts-path", work / "build",
                      "-p:RestoreConfigFile=" + str(HERE / "NuGet.Config"), "-o", bundle / host, "-v:minimal"])
             examples = bundle / "examples"; examples.mkdir()
             shutil.copyfile(HERE / "MapFace/equilateral.json", examples / "equilateral.json")
             shutil.copyfile(HERE / "MeasureMesh/unit-tetra.json", examples / "unit-tetra.json")
+            shutil.copyfile(HERE / "MeshDeck/unit-cube.inp", examples / "unit-cube.inp")
             map_result = json.loads(run(["dotnet", bundle / "MapFace/PrePoMaxX.MapFace.dll", examples / "equilateral.json"]))
             measure_result = json.loads(run(["dotnet", bundle / "MeasureMesh/PrePoMaxX.MeasureMesh.dll", examples / "unit-tetra.json"]))
+            mesh_result = json.loads(run(["dotnet", bundle / "MeshDeck/PrePoMaxX.MeshDeck.dll", "measure", examples / "unit-cube.inp"]))
             cell = measure_result["elements"][0]
             if not map_result["success"] or map_result["NumberOfBoundaryNodes"] != 6 or len(map_result["Quads"]) != 3:
                 raise ValueError("Published MapFace sample failed")
             if not measure_result["success"] or abs(cell["Measure"] - 1/6) > 1e-12 or abs(cell["Integral"] - 1/3) > 1e-12:
                 raise ValueError("Published MeasureMesh sample failed")
             report["publishedSmoke"] = {"mapFace": map_result, "measureMesh": measure_result}
+            if not mesh_result["success"] or abs(mesh_result["measurements"][0]["Measure"] - 1) > 1e-12:
+                raise ValueError("Published mesh workflow cube failed")
+            report["publishedSmoke"]["meshDeck"] = mesh_result
             sources = {ROOT / "LICENSE", ROOT / "X/Feasibility/Data/Program.cs",
                        ROOT / "CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt",
                        ROOT / ".project/reports/windows-reference/data-windows-x64.json"}
@@ -69,6 +74,17 @@ From the extracted directory:
 
     dotnet MapFace/PrePoMaxX.MapFace.dll examples/equilateral.json
     dotnet MeasureMesh/PrePoMaxX.MeasureMesh.dll examples/unit-tetra.json
+    dotnet MeshDeck/PrePoMaxX.MeshDeck.dll inspect examples/unit-cube.inp
+    dotnet MeshDeck/PrePoMaxX.MeshDeck.dll measure examples/unit-cube.inp
+    dotnet MeshDeck/PrePoMaxX.MeshDeck.dll export-mesh examples/unit-cube.inp new-mesh.inp
+
+MeshDeck reads standalone INP mesh data with the original node/connectivity/set
+parser. Mesh-only export preserves IDs and formulations through the original
+element writer and lists omitted model keywords. It is not a full model/deck
+or solver/results workflow. Includes, coordinate transforms and scoped assemblies
+are rejected. Formulation fallbacks are reported and refused for export; pyramid
+export requires --pyramids wedges or --pyramids hexahedrons. Existing output files
+are never overwritten. Measurement retains the quadratic-tetrahedron gate.
 
 MapFace calls the original structured mapping. MeasureMesh reports original
 element measures/centroids, field integrals and VTK/Gmsh connectivity for 13

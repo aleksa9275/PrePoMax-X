@@ -8,7 +8,8 @@
     <Compile Remove="Legacy/**/*.cs" />
     <Compile Remove="Data/**/*.cs" />
     <Compile Remove="Elements/**/*.cs" />
+    <Compile Remove="MeshDeck/**/*.cs" />
     <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
-    <None Include="../../../CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt" Link="three_block_vectors.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt" Link="three_block_vectors.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

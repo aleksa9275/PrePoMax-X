@@ -1,5 +1,27 @@
 # PrePoMax-X project charter
 
+2026-10-18 publication: maintainer requests committing/pushing completed RC2
+replay and mesh workflow work under [task 0021](tasks/0021-mesh-workflow-publication.md).
+Verify the remote/CI/artifacts and publish closing evidence, then explain the
+proposed next steps and wait for approval before new implementation. Existing
+correctness and release gates remain. [Publication state](reports/mesh-workflow-publication.md).
+
+2026-10-18 implementation: [task 0020](tasks/0020-portable-mesh-deck-workflow.md)
+adds reusable original INP mesh input, a CaeModel library slice and an actual
+mesh inspect/measure/export CLI. Native Mac/Linux ARM64 and both upstream pins
+pass 218 accepted checks per run, with both correctness failures retained.
+[Current behavior, source boundaries and Windows follow-up](reports/portable-mesh-deck-workflow.md).
+Implementation remains uncommitted; the complete solve/results/native UI/
+persistence/CAD workflow remains under development and release gates stay open.
+
+2026-10-18: maintainer authorizes a fresh RC2 fork sync/impact review and faster
+implementation toward upstream 3.0.0. Task 0019 supersedes the prior stop for
+this continuation. Local/origin master now mirror f6273e39 (22 new commits,
+including 12 through RC2 and ten afterward). Both source pins pass the selected
+shared slice on native Mac/Linux ARM64 with existing correctness failures retained.
+Implementation/evidence stays local; no x/main/frontend/serializer/release
+decision follows. [Current impact and priorities](reports/upstream-3.0.0-rc2.md).
+
 Current checkpoint: task 0017/0018 is published at b83fa49f and pipeline
 #2956835416 passes both native x64 jobs. A verified CLI/source development ZIP
 is downloadable from its job; actual downloaded source/hash checks and Mac

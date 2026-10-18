@@ -1,0 +1,69 @@
+{
+  "success": true,
+  "sameToolHashes": true,
+  "sameMappingDataElementAndCliOutcomes": true,
+  "nativeHost": "macOS ARM64 and Linux ARM64",
+  "sdk": "10.0.402",
+  "sourceCount": 37,
+  "acceptedChecks": {
+    "mapping": 25,
+    "data": 30,
+    "elements": 95
+  },
+  "cliControls": 28,
+  "dataRejectionControls": 4,
+  "openCorrectnessChecks": [
+    {
+      "name": "quadratic tetrahedron affine integral",
+      "passed": false,
+      "expected": 28,
+      "actual": 26.794910717854155,
+      "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+    },
+    {
+      "name": "quadratic pyramid classification",
+      "passed": false,
+      "expected": true,
+      "actual": false,
+      "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+    }
+  ],
+  "replayGuardTests": {
+    "exitCode": 0,
+    "output": ".......\n----------------------------------------------------------------------\nRan 7 tests in 2.631s\n\nOK\n"
+  },
+  "reports": {
+    "current-linux-arm64.json": "6f036682f50a4387e3253a104e1f58d879233d290c53ed6424e33fcd71699b17",
+    "current-macos-arm64.json": "4ee2c9d4b4cc39505ce35db7fd346cc618cb056b0683313bd6b51769b782ab85",
+    "macos-arm64.json": "47ca5885cdc9560144fc89ffd5d690ce74b66b48aefde14047fdddb0b2f15cf6",
+    "post-rc2-linux-arm64.json": "61019c41894d752958766a4710ec9b45813e05bb1e555fb26d815ca15db91ad9",
+    "post-rc2-macos-arm64.json": "a5eef40f364b4b8d230f77a999f1e41af5f1ae897b8f345baca028ffe2b4572d",
+    "rc2-linux-arm64.json": "74fde96f26ea790f4cda8b108e6cdbfd1f47fa52a8c7822a0a320662dfdbe54b"
+  },
+  "pending": [
+    "Native Windows x64 replay",
+    "Hosted native Linux x64 replay"
+  ],
+  "linuxInfrastructure": {
+    "attempted": true,
+    "testProcessStarted": false,
+    "error": "Existing Podman VM connection refused; second start failed connecting gvproxy socket",
+    "cleanup": "podman machine stop succeeded",
+    "newVmCreated": false,
+    "retry": {
+      "success": true,
+      "maintainerStartedVm": true,
+      "vmLeftRunning": true,
+      "image": "27c38b4417f399491c60ba15f35bf450ffcea6d57c78ccbc5ce3c9fb05cfcc88",
+      "network": "none",
+      "rootAndRepository": "read-only"
+    }
+  },
+  "linuxSdk": "10.0.402",
+  "samePortableOutcomesAcrossMacAndLinux": true,
+  "linuxReplayGuardTests": {
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 1.150s\n\nOK\n"
+  }
+}

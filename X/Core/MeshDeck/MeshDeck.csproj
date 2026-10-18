@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PrePoMaxX.MeshDeck</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CaeModel/CaeModel.csproj" />
+    <ProjectReference Include="../MeasureMesh/MeasureMesh.csproj" />
+  </ItemGroup>
+</Project>

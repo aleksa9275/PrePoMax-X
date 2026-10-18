@@ -1,0 +1,16 @@
+** PrePoMax-X standalone unit cube mesh; IDs and solver formulation retained.
+*NODE, NSET=ALL
+11, 0, 0, 0
+23, 1, 0, 0
+37, 1, 1, 0
+41, 0, 1, 0
+59, 0, 0, 1
+61, 1, 0, 1
+73, 1, 1, 1
+89, 0, 1, 1
+*ELEMENT, TYPE=C3D8, ELSET=CUBE
+101, 11, 23, 37, 41, 59, 61, 73, 89
+*NSET, NSET=FIXED
+11, 41, 59, 89
+*ELSET, ELSET=SOLIDS
+CUBE

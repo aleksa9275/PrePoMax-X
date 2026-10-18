@@ -4,6 +4,8 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/NamedClass.cs" Link="NamedClass.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs" Link="StandardValueAttribute.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CaeException.cs" Link="CaeException.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Matrix.cs" Link="Matrix.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Vec3D.cs" Link="Vec3D.cs" />

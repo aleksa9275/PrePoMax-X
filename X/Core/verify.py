@@ -11,6 +11,8 @@ import platform
 import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
+import source_layout
+import mesh_workflow_checks
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -23,7 +25,7 @@ def sha(data):
 
 def sources():
     paths = set()
-    for owner in ("CaeGlobals", "CaeMesh", "CaeResults"):
+    for owner in ("CaeGlobals", "CaeMesh", "CaeResults", "CaeModel"):
         project = HERE / owner / (owner + ".csproj")
         tree = ET.parse(project)
         if tree.findall(".//PackageReference"):
@@ -43,10 +45,13 @@ def sources():
     if manifest["baseline"] != BASELINE or len(additional) != 25:
         raise ValueError("Element source manifest changed unexpectedly")
     expected.update(additional)
+    workflow_rows = source_layout.source_rows(ROOT)
+    workflow_paths = {row["path"] for row in workflow_rows}
+    expected.update(workflow_paths)
     if paths != expected:
         raise ValueError("Shared library source closure changed")
     rows = []
-    for name in sorted(paths - {"CaeGlobals/CaeException.cs"}):
+    for name in sorted(paths - {"CaeGlobals/CaeException.cs"} - workflow_paths):
         original = subprocess.check_output(["git", "show", BASELINE + ":" + name], cwd=ROOT)
         current = (ROOT / name).read_bytes()
         if name in additional and sha(original) != additional[name]["baselineSha256"]:
@@ -75,6 +80,7 @@ def sources():
     if sum(item.attrib.get("Include") == "CaeException.cs" for item in items) != 1:
         raise ValueError("Legacy Windows project must include the separated class exactly once")
     rows.append({"path": "CaeGlobals/CaeException.cs", "sha256": sha(moved.encode()), "originalClassBodyUnchanged": True})
+    rows.extend(workflow_rows)
     return rows
 
 
@@ -112,11 +118,81 @@ def validate_data(result, reference):
             raise ValueError("Internal FRD reader was exposed publicly")
 
 
+def prepare_upstream_sources(revision, destination, source_rows):
+    """Replay reviewed Git bytes; refuse changed engineering code until separately adapted."""
+    manifest = json.loads((HERE / "upstream-replays.json").read_text())
+    if manifest["baseline"] != BASELINE:
+        raise ValueError("Upstream replay baseline differs from the guarded shared slice")
+    matches = [row for row in manifest["revisions"] if revision in (row["name"], row["commit"])]
+    if len(matches) != 1:
+        raise ValueError("Upstream revision is not a reviewed immutable replay pin")
+    pin = matches[0]
+    commit = pin["commit"]
+    if len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit):
+        raise ValueError("Upstream replay requires a full immutable commit SHA")
+    subprocess.run(["git", "merge-base", "--is-ancestor", BASELINE, commit], cwd=ROOT, check=True,
+                   capture_output=True)
+    extracted = source_layout.verify_layout(ROOT, commit)
+    rows = []
+    for row in source_rows:
+        name = row["path"]
+        if name in (source_layout.PARSING, source_layout.ATTRIBUTE_FILE) or name in source_layout.ADDED:
+            selected = (ROOT / name).read_bytes()
+            upstream_name = source_layout.INP if name == source_layout.PARSING else source_layout.ATTRIBUTE
+            upstream = (subprocess.check_output(["git", "show", commit + ":" + upstream_name], cwd=ROOT)
+                        if name in extracted else None)
+            if sha(selected) != row["sha256"]:
+                raise ValueError("Reviewed mesh boundary changed before replay: " + name)
+            path = destination / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(selected)
+            rows.append({"path": name, "upstreamPath": upstream_name if upstream else None,
+                         "upstreamSha256": sha(upstream) if upstream else None, "compiledSha256": sha(selected),
+                         "adapter": "verified mechanical source extraction" if upstream else "new portable mesh boundary"})
+            continue
+        upstream_name = "CaeGlobals/ExceptionTools.cs" if name == "CaeGlobals/CaeException.cs" else name
+        upstream = subprocess.check_output(["git", "show", commit + ":" + upstream_name], cwd=ROOT)
+        selected = upstream
+        adapter = None
+        if name == "CaeGlobals/CaeException.cs":
+            baseline = subprocess.check_output(["git", "show", BASELINE + ":" + upstream_name], cwd=ROOT)
+            if upstream != baseline:
+                raise ValueError("Upstream exception boundary changed; review extraction before replay")
+            # sources() has already proven the existing extraction preserves the original class body.
+            selected = (ROOT / name).read_bytes()
+            adapter = "existing verified CaeException extraction"
+        elif name == "CaeMesh/GeometryTools.cs":
+            line = b"using System.Windows.Forms.VisualStyles;\n"
+            if upstream.count(line) != 1:
+                raise ValueError("Upstream GeometryTools import boundary changed")
+            selected = upstream.replace(line, b"")
+            adapter = "remove existing unused WinForms import"
+        if sha(selected) != row["sha256"]:
+            raise ValueError("Upstream engineering source changed; review before replay: " + name)
+        path = destination / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(selected)
+        rows.append({"path": name, "upstreamPath": upstream_name, "upstreamSha256": sha(upstream),
+                     "compiledSha256": sha(selected), "adapter": adapter})
+    fixture = "CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt"
+    data = subprocess.check_output(["git", "show", commit + ":" + fixture], cwd=ROOT)
+    if data != (ROOT / fixture).read_bytes():
+        raise ValueError("Upstream mapping vectors changed; review expectations before replay")
+    path = destination / fixture
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+    return {"name": pin["name"], "commit": commit, "sources": rows,
+            "fixture": {"path": fixture, "sha256": sha(data)},
+            "mode": "temporary Git source snapshot with the two existing boundary adapters",
+            "engineeringBytesMatchCurrentSlice": True}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--expect-os", choices=["Windows", "Linux", "Darwin"])
     parser.add_argument("--expect-architecture", choices=["X64", "Arm64"])
+    parser.add_argument("--upstream-revision", help="Reviewed name or full SHA from upstream-replays.json")
     args = parser.parse_args()
     report = {"success": False, "recordedAtUtc": datetime.now(timezone.utc).isoformat(),
               "host": {"os": platform.system(), "architecture": platform.machine()},
@@ -133,7 +209,7 @@ def main():
                                 "dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT))}
         report["toolHashes"] = {str(p.relative_to(HERE)).replace("\\", "/"): sha(p.read_bytes())
                                 for p in HERE.rglob("*") if p.is_file() and not {"bin", "obj", "artifacts", "__pycache__"}.intersection(p.parts)
-                                and p.suffix in {".py", ".cs", ".csproj", ".props", ".slnx", ".json", ".Config", ".yml"}}
+                                and p.suffix in {".py", ".cs", ".csproj", ".props", ".slnx", ".json", ".Config", ".yml", ".inp"}}
         report["toolHashes"]["../Feasibility/Data/Program.cs"] = sha((HERE.parent / "Feasibility/Data/Program.cs").read_bytes())
         with tempfile.TemporaryDirectory(prefix="prepomaxx-core-") as folder:
             work = Path(folder)
@@ -149,8 +225,14 @@ def main():
                     raise RuntimeError("Unexpected exit code; see retained command output")
                 return done
             report["sdk"] = run(["dotnet", "--version"]).stdout.strip()
+            source_options = []
+            if args.upstream_revision:
+                snapshot = work / "upstream"
+                report["upstreamReplay"] = prepare_upstream_sources(args.upstream_revision, snapshot, report["sources"])
+                source_options = ["-p:RepositoryRoot=" + snapshot.as_posix() + "/"]
             run(["dotnet", "build", HERE / "PrePoMaxX.Core.slnx", "-c", "Release", "--disable-build-servers",
-                 "-m:1", "--artifacts-path", work / "build", "-p:RestoreConfigFile=" + str(HERE / "NuGet.Config"), "-v:minimal"])
+                 "-m:1", "--artifacts-path", work / "build", "-p:RestoreConfigFile=" + str(HERE / "NuGet.Config"),
+                 *source_options, "-v:minimal"])
             test = work / "build/bin/CoreTests/release/PrePoMaxX.CoreTests.dll"
             result = json.loads(run(["dotnet", test]).stdout)
             report["mappingTests"] = result
@@ -266,6 +348,7 @@ def main():
             report["cli"] = {"sample": output, "negativeControls": controls, "inputUnchanged": sha(sample.read_bytes()) == sample_hash}
             if not report["cli"]["inputUnchanged"]:
                 raise ValueError("CLI modified input")
+            report["meshWorkflow"] = mesh_workflow_checks.verify(run, work, native_arch)
             report["success"] = True
     except (OSError, KeyError, TypeError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         report["error"] = str(error).replace(str(ROOT), "<repository>").replace(folder or "<unused>", "<temporary>")
@@ -278,6 +361,7 @@ def main():
     print(json.dumps({"success": report["success"], "mappingChecks": report.get("mappingTests", {}).get("passed"),
                       "dataChecks": report.get("dataTests", {}).get("passed"),
                       "elementChecks": report.get("elementTests", {}).get("passed"),
+                      "meshWorkflowChecks": report.get("meshWorkflow", {}).get("tests", {}).get("passed"),
                       "openCorrectnessChecks": len(report.get("elementTests", {}).get("openCorrectnessChecks", [])),
                       "cliControls": len(report.get("cli", {}).get("negativeControls", [])), "error": report.get("error")}))
     return 0 if report["success"] else 1

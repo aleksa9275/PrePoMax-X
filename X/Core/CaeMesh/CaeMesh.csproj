@@ -5,6 +5,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/InpElementSet.cs" Link="InpElementSet.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Enums/ConvertPyramidsToEnum.cs" Link="ConvertPyramidsToEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Nodes/FeNode.cs" Link="FeNode.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/GeometryMetadata/GeometryMetadata.cs" Link="GeometryMetadata.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs" Link="GeometryMetadataEntity.cs" />

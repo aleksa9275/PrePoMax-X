@@ -1,10 +1,13 @@
 <Solution>
   <Project Path="CaeGlobals/CaeGlobals.csproj" />
   <Project Path="CaeMesh/CaeMesh.csproj" />
+  <Project Path="CaeModel/CaeModel.csproj" />
   <Project Path="CaeResults/CaeResults.csproj" />
   <Project Path="MapFace/MapFace.csproj" />
   <Project Path="MeasureMesh/MeasureMesh.csproj" />
+  <Project Path="MeshDeck/MeshDeck.csproj" />
   <Project Path="Tests/Elements/ElementTests.csproj" />
   <Project Path="Tests/CoreTests.csproj" />
   <Project Path="Tests/Data/CoreDataTests.csproj" />
+  <Project Path="Tests/MeshDeck/MeshDeckTests.csproj" />
 </Solution>

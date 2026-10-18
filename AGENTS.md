@@ -4,6 +4,37 @@ Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and th
 
 ## Current authorization
 
+2026-10-18 publication and approval boundary: maintainer explicitly requests
+committing/pushing completed task 0019/0020 changes. Task 0021 covers review,
+normal origin/research/native-feasibility publication, exact-commit CI/artifact
+verification and closing evidence. After publishing, explain the proposed next
+steps and STOP for maintainer approval before implementing them. This latest
+instruction supersedes earlier open-ended local implementation continuation.
+Retain both correctness failures/measurement gate and all release requirements;
+no x/main/upstream write, force push or architecture/numerical-policy change.
+
+2026-10-18 implementation continuation: maintainer asks to proceed while
+preparing Windows for GitLab. Task 0020 completes the first portable INP mesh
+input/measurement/export increment with original parser/writer reuse and
+mechanically checked partial extraction/type ownership. Current/RC2/post-RC2
+pass on Mac/Linux ARM64, with both correctness failures/host gate retained.
+All task 0019/0020 changes remain uncommitted. Continue local implementation
+toward the accepted mesh/deck/solve/results workflow; full model/results,
+net48/RC2 Windows and release gates remain. No push/integration or production
+frontend/default serializer/native-tool/numerical-policy change is implied.
+
+2026-10-18 RC2 continuation: maintainer requests syncing the fork with Matej's
+3.0.0 RC2, comparing the code and accelerating implementation toward a native
+3.0.0 release near upstream stable. Task 0019 supersedes the task 0018 stop for
+this continuation. Local/origin master now mirror f6273e39 (normal ff-only
+push, remote verified); RC2 source marker 912fb3d0 is distinct from ten later
+commits. New shared replay/CI tooling and evidence remain uncommitted under
+normal maintainer publication workflow. Continue local implementation toward
+a usable shared mesh/deck/solve/results workflow; preserve source/type ownership,
+both correctness failures/host gate and all release requirements. No x/main
+integration, upstream write, force push, frontend/default serializer choice,
+algorithm/tolerance or silent native-tool substitution is implied.
+
 Task 0018 is complete: task 0017/CI build-delivery published at b83fa49f,
 pipeline #2956835416 passes both native x64 jobs, downloaded ZIP/source/tool
 checks and Mac execution verified. Closing evidence publication is included.

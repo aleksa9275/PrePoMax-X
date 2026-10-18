@@ -27,6 +27,7 @@ def inspect(data):
         required = {"LICENSE", "source/LICENSE", "README.md", "MapFace/PrePoMaxX.MapFace.dll",
                     "MeasureMesh/PrePoMaxX.MeasureMesh.dll", "examples/equilateral.json", "examples/unit-tetra.json",
                     "source/X/Core/PrePoMaxX.Core.slnx", "source/X/Core/NuGet.Config"}
+        required.update({"MeshDeck/PrePoMaxX.MeshDeck.dll", "examples/unit-cube.inp"})
         if not required.issubset(names):
             raise ValueError("Missing development binaries, examples, source or license")
         for name, expected in manifest["files"].items():
@@ -102,6 +103,16 @@ def main():
             rejected = run(["dotnet", work / "MeasureMesh/PrePoMaxX.MeasureMesh.dll", path], 1)
             if rejected.stdout or json.loads(rejected.stderr)["success"]: raise ValueError("Published tetrahedron gate failed")
             report["quadraticTetrahedronGate"] = True
+            mesh_cli = work / "MeshDeck/PrePoMaxX.MeshDeck.dll"
+            sample = work / "examples/unit-cube.inp"
+            mesh = json.loads(run(["dotnet", mesh_cli, "measure", sample]).stdout)
+            export = work / "mesh-export.inp"
+            run(["dotnet", mesh_cli, "export-mesh", sample, export])
+            reopened = json.loads(run(["dotnet", mesh_cli, "inspect", export]).stdout)
+            if abs(mesh["measurements"][0]["Measure"] - 1) > 1e-12 or reopened["mesh"] != mesh["mesh"]:
+                raise ValueError("Published mesh workflow geometry/ID/set roundtrip failed")
+            run(["dotnet", mesh_cli, "export-mesh", sample, export], 1)
+            report["meshWorkflow"] = {"unitCubeMeasured": True, "exportReopened": True, "overwriteRejected": True}
         report["success"] = True
     except (OSError, KeyError, TypeError, ValueError, RuntimeError, zipfile.BadZipFile, subprocess.SubprocessError) as error:
         report["error"] = str(error).replace(folder or "<unused>", "<extracted>")

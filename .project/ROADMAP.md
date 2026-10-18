@@ -1,5 +1,26 @@
 # Dependency-aware roadmap
 
+2026-10-18 implementation checkpoint: [task 0020](tasks/0020-portable-mesh-deck-workflow.md)
+delivers a real standalone INP mesh input/measurement/export workflow in partial
+original assemblies, with a runnable source/binary ZIP and native Mac/Linux
+ARM64 acceptance. [Evidence/next steps](reports/portable-mesh-deck-workflow.md).
+Next expand original material/section/BC/step semantics and deck generation,
+then solver/full result readers, using the existing gateway/job seams. Full
+FeMesh parts/selection and interactive host/persistence/native-source work remain;
+mesh-only export does not close the full vertical-workflow milestone. The
+maintainer is preparing Windows for the new-slice/net48/RC2 differential pass.
+
+2026-10-18: maintainer asks for substantially faster coding toward 3.0.0.
+[Task 0019](tasks/0019-upstream-3.0.0-rc2-sync.md) syncs the fork and adds RC2/
+post-RC2 shared-source replay. [Current impact and prioritized implementation
+route](reports/upstream-3.0.0-rc2.md) recommend the next milestone as an actual
+mesh/deck → model definitions → solve → results → save/reopen workflow, coupled
+with a decisive interactive VTK/host proof and early native-source recovery.
+Use the existing upstream model/gateways/runners/journals and new composite
+contracts; progress from the already measured boundaries. A production
+frontend/default persistence format and any reduced-scope preview remain
+explicit decisions, not assumptions made by this sync.
+
 2026-10-16: maintainer explicitly authorized moving from reference testing to
 the first bounded shared-library build. Native private PMX/results comparison
 now matches the earlier CrossOver payload observations. [Task 0013](tasks/0013-shared-core-first-slice.md)

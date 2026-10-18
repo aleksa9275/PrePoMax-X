@@ -1,5 +1,28 @@
 # MacBook continuation — start here
 
+Latest instruction is [task 0021](../tasks/0021-mesh-workflow-publication.md):
+publish the completed work, verify remote/CI/artifacts and closing evidence,
+then wait for maintainer approval of the next-step explanation. Consult its
+[publication report](../reports/mesh-workflow-publication.md) for actual SHAs.
+Do not resume new feature coding from the older continuation paragraphs below.
+
+Current implementation is [task 0020](../tasks/0020-portable-mesh-deck-workflow.md):
+original standalone INP mesh parsing, mesh export and MeshDeck CLI are local
+and uncommitted, along with task 0019. [Current evidence](../reports/portable-mesh-deck-workflow.md)
+has six native Mac/Linux ARM64 runs, both upstream pins, package and Windows
+follow-up. Preserve all edits. Full model/deck/solve/results is the next direction;
+do not treat the raw mesh increment as whole-application acceptance. The
+maintainer is preparing Windows; its new-slice/net48/RC2 oracle is pending.
+
+2026-10-18 current: [task 0019](../tasks/0019-upstream-3.0.0-rc2-sync.md)
+supersedes the previous stop for RC2 sync and implementation continuation.
+Origin/local master are f6273e39; research remains 2f2eca94 with **uncommitted**
+replay/CI tooling and evidence. Read [RC2 impact/priorities](../reports/upstream-3.0.0-rc2.md)
+and final verification.json before continuing. Don't repeat earlier Windows
+2.6 preparation as proof of RC2. Preserve both correctness failures/host gate,
+new upstream composite/persistence contracts and native-source/release gates.
+Do not publish implementation or merge x/main without a new instruction.
+
 Latest: task 0017/0018 published at b83fa49f; pipeline #2956835416 passes both
 native x64 jobs. [Downloadable build/current evidence](../reports/shared-core-build-delivery.md)
 contains exact ZIP checksum and independent published-source/Mac execution

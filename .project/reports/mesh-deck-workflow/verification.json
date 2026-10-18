@@ -1,0 +1,85 @@
+{
+  "success": true,
+  "nativeTargetsVerified": [
+    "macOS ARM64",
+    "Linux ARM64"
+  ],
+  "sdk": "10.0.402",
+  "engineeringSourceClosure": 48,
+  "acceptedChecksPerRun": {
+    "mapping": 25,
+    "data": 30,
+    "elements": 95,
+    "meshWorkflow": 68
+  },
+  "cliControlsPerRun": {
+    "prior": 28,
+    "meshWorkflow": 11
+  },
+  "dataRejectionControls": 4,
+  "replayGuardTests": {
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 1.684s\n\nOK\n"
+  },
+  "portableEngineeringCliAndWorkflowOutcomesMatch": true,
+  "toolFingerprintsMatch": true,
+  "openCorrectnessChecks": [
+    {
+      "name": "quadratic tetrahedron affine integral",
+      "passed": false,
+      "expected": 28,
+      "actual": 26.794910717854155,
+      "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+    },
+    {
+      "name": "quadratic pyramid classification",
+      "passed": false,
+      "expected": true,
+      "actual": false,
+      "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+    }
+  ],
+  "fullyAccepted": false,
+  "quadraticTetrahedronMeasurementGated": true,
+  "pending": [
+    "Native Windows x64 expanded slice and original net48 application build/oracle",
+    "Hosted native Linux x64 exact new-slice pipeline",
+    "Full model/material/BC/step/deck, solver and FRD results workflow",
+    "Existing persistence/interactive VTK/CAD/native-source release gates"
+  ],
+  "podman": {
+    "image": "27c38b4417f399491c60ba15f35bf450ffcea6d57c78ccbc5ce3c9fb05cfcc88",
+    "network": "none",
+    "rootAndRepository": "read-only",
+    "userStartedVmLeftRunning": true
+  },
+  "reports": {
+    "current-linux-arm64.json": "6c8b45e03e0e59b0b85a7dbd359ced5ac0bacd0354e441e85fe893035d3c7da7",
+    "current-macos-arm64.json": "a9af5418ac499d1425f008af599c46487c84f93c3669df6b376ab4bf924131f1",
+    "post-rc2-linux-arm64.json": "c02366d31dabc22bdf1b64013857e005f444bbb6b95c938c2963a87b5c060ccf",
+    "post-rc2-macos-arm64.json": "e6d23cf6e4d00686902a5c524f7a77ccaf7b0b6b852c9936cf379ffda78f6489",
+    "rc2-linux-arm64.json": "d411bffa20452ef921a49b5303c8b37c8f71f72763af52d7f344c0fff2a83f02",
+    "rc2-macos-arm64.json": "8c39532ca0e28639d1ae8dc66a4a3bc69f243c827e522032890692eb6335e6d2"
+  },
+  "package": {
+    "archive": "X/Core/artifacts/mesh-workflow/development-build/PrePoMaxX-Core-development.zip",
+    "sha256": "067890ed977219f0c56ee969f2a9115c605049fae04267c9a7a86488dd6b2c83",
+    "bytes": 587643,
+    "manifestEntries": 125,
+    "sourceFiles": 90,
+    "verifiedNativeTargets": [
+      "macOS ARM64",
+      "Linux ARM64"
+    ],
+    "sourceRebuild": true,
+    "meshExportReopen": true,
+    "rejectionControls": [
+      "changed binary",
+      "unmanifested file",
+      "parent traversal"
+    ],
+    "workingTreeChangesIncluded": true
+  },
+  "retainedWindowsFixtureReads": 6
+}

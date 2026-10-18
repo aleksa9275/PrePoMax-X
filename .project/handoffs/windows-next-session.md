@@ -1,5 +1,68 @@
 # Next session — native Windows reference validation
 
+Latest instruction: [task 0021](../tasks/0021-mesh-workflow-publication.md)
+authorizes publishing completed task 0019/0020 work. Check its
+[publication report](../reports/mesh-workflow-publication.md) for verified remote
+SHA/hosted state before transfer; the earlier uncommitted-only paragraph below
+is historical once publication is confirmed. No Windows execution is claimed.
+New feature work waits for maintainer approval of the proposed next steps.
+
+## Current continuation — 2026-10-18, task 0020
+
+Start with [task 0020](../tasks/0020-portable-mesh-deck-workflow.md) and
+[current mesh workflow evidence](../reports/portable-mesh-deck-workflow.md).
+Do not restart the completed task 0011/Windows 2.6 preparation below. The
+maintainer is preparing a Windows machine for GitLab; this new slice needs
+native Windows x64/.NET 10 execution and a full original net48 build/oracle.
+
+Origin/master is the upstream mirror at f6273e39. Published development is
+research/native-feasibility at 2f2eca94. **Task 0019/0020 changes are uncommitted
+on the Mac and will not arrive through Git pull alone.** Do not reset the Mac
+or Windows checkout, assume the mirror contains our portable host, or publish
+implementation without a new instruction. Manual transfer of the verified
+development ZIP provides a runnable/source test route while publication waits.
+
+Current local archive:
+`X/Core/artifacts/mesh-workflow/development-build/PrePoMaxX-Core-development.zip`.
+SHA-256: `067890ed977219f0c56ee969f2a9115c605049fae04267c9a7a86488dd6b2c83`.
+It contains the three portable CLIs, examples, corresponding partial-build
+source and license; no runtime, solver or GUI. Use a fresh non-repository
+directory and a native x64 .NET 10 SDK/Python installation. In PowerShell,
+from the directory containing the transferred archive:
+
+```powershell
+Get-FileHash ./PrePoMaxX-Core-development.zip -Algorithm SHA256
+Expand-Archive ./PrePoMaxX-Core-development.zip ./PrePoMaxX-Core-development
+python ./PrePoMaxX-Core-development/source/X/Core/check-package.py --archive ./PrePoMaxX-Core-development.zip --report ./windows-x64-package.json --expect-os Windows --expect-architecture X64
+dotnet run --project ./PrePoMaxX-Core-development/source/X/Core/Tests/MeshDeck -c Release
+dotnet ./PrePoMaxX-Core-development/MeshDeck/PrePoMaxX.MeshDeck.dll measure ./PrePoMaxX-Core-development/examples/unit-cube.inp
+```
+
+Expected: 125 manifest entries, source rebuild and published mesh export/reopen/
+overwrite/gate checks pass; all 68 new mesh workflow checks pass on X64; cube
+volume/integral 1 and centroid [0.5,0.5,0.5] within existing tolerance. The
+original two correctness failures remain explicit. Preserve actual reports and
+failures; do not loosen assertions or treat this as full application parity.
+
+After the complete working-tree changes are available in a Git checkout, run:
+
+```powershell
+python X/Core/verify.py --expect-os Windows --expect-architecture X64 --output X/Core/artifacts/windows-task0020/current.json
+python X/Core/verify.py --upstream-revision 3.0.0-rc2 --expect-os Windows --expect-architecture X64 --output X/Core/artifacts/windows-task0020/rc2.json
+python X/Core/verify.py --upstream-revision post-rc2-2026-10-17 --expect-os Windows --expect-architecture X64 --output X/Core/artifacts/windows-task0020/post-rc2.json
+```
+
+Expect 25 mapping/30 data/95 accepted elements plus 68 mesh checks, 39 CLI/four
+data controls and the two retained correctness failures. Compare source/tool
+hashes and portable outcomes with the Mac/Linux reports. Compile the original
+net48 application to check the preserved private reader wrappers and separated
+metadata attribute in their complete Windows context. Obtain/hash the actual
+RC2 distribution and identify its source correspondence before an RC2 oracle:
+the source marker and ten later commits still share the RC2 label. Begin with
+synthetic cube/definitions input, read/export/reopen and new source identities;
+do not treat earlier 2.6 PMX results as RC2 acceptance. CAD/UI/new composites/
+persistence and remaining native-source gates stay open. Historical notes follow.
+
 Closeout entry point is now [MacBook continuation](macbook-next-session.md)
 and task 0014. Native structured-kernel checks now pass with a pinned portable
 compiler; its earlier absence is historical. The maintainer authorizes reviewed

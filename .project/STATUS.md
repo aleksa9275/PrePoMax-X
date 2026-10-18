@@ -1,5 +1,55 @@
 # Project status
 
+## Current — task 0021 authorized publication
+
+2026-10-18: maintainer explicitly requests commit/push of completed task 0019/
+0020 changes to origin/research/native-feasibility. Publication/remote and exact
+native x64 CI/artifact verification are in progress. Existing Mac/Linux ARM64
+evidence and both correctness failures/gate remain. [Publication report](reports/mesh-workflow-publication.md).
+After publication/closing evidence, explain next steps and wait for maintainer
+approval before new feature work; this supersedes prior continuation wording.
+
+## Latest — task 0020 portable mesh input/export implemented locally
+
+2026-10-18: maintainer requests proceeding while preparing Windows. New
+MeshDeck inspect/measure/export-mesh loads actual standalone INP node/element/
+set data through the mechanically separated original parser and reuses the
+original CalElement writer. Partial CaeModel and the unchanged enum metadata
+attribute retain original assembly/net48 ownership. Source closure is 48 files.
+Current/RC2/post-RC2 snapshots each pass native Mac/Linux ARM64: previous 150
+accepted checks plus 68 mesh checks, 39 CLI controls/four data controls and ten
+source/replay tests. Both correctness failures/measurement gate remain.
+Portable outcomes/tool fingerprints match across all six runs.
+
+Runnable three-tool source/binary ZIP and Windows instructions are prepared;
+full evidence/package checks: [mesh workflow report](reports/portable-mesh-deck-workflow.md).
+All task 0019/0020 changes remain **uncommitted**; no new publication/integration.
+Native Windows/new-commit hosted x64 and full net48/RC2 oracle remain pending.
+This is mesh-only, not complete material/BC/step/deck/solve/results or persistence/
+CAD/VTK parity. User-started Podman remains running. Next work expands original
+model/deck behavior toward the accepted workflow; remaining gates stay explicit.
+
+## Latest — task 0019 RC2 sync and portable replay
+
+2026-10-18: new maintainer instruction supersedes task 0018's stop boundary.
+Local/origin master fast-forwarded de8f7303 → f6273e39, remotely verified;
+research branch remains 2f2eca94. RC2 marker is 912fb3d0; ten later commits
+already add composite model/results/API/UI behavior. Selected engineering
+bytes/vectors are unchanged. Both new pins and the working slice pass native
+Mac ARM64: 25 mapping/30 data/95 accepted elements, 28 CLI/four data controls;
+seven replay guard tests pass. Both original correctness failures/host gate
+remain. New pinned replay/CI tooling and records are **uncommitted**.
+
+After the maintainer started Podman, native Linux ARM64 retry also passes all
+three builds and seven replay guard tests; portable engineering/CLI outcomes
+and tooling fingerprints match Mac exactly. The user-started VM remains running.
+[Current report](reports/upstream-3.0.0-rc2.md) and verification.json retain all
+six reports and comparisons. Native Windows/hosted x64 replay remains pending.
+Git-object merge rehearsal has no conflicts; no branch integration performed.
+Patched Netgen DLL and new model/results serialization fields need explicit
+parity work. [Impact, evidence and faster implementation route](reports/upstream-3.0.0-rc2.md).
+Older task boundaries below are historical.
+
 ## Latest — task 0018 publication and downloadable CI build complete
 
 Task 0017/0018 published at **b83fa49f**; remote SHA verified. Native x64

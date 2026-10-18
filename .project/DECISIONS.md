@@ -2,6 +2,38 @@
 
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
+D034 — Accepted publication, new implementation awaits approval, 2026-10-18:
+maintainer requests committing/pushing task 0019/0020 work and receiving a next-
+step explanation afterward. Task 0021 authorizes normal origin research-branch
+publication plus exact-commit CI/artifact verification and closing evidence.
+Do not start proposed model/deck/solver/results or host/persistence features
+until the maintainer reads and approves them. Keep both correctness failures/
+measurement gate, source ownership and remaining release gates unchanged.
+
+D033 — Accepted local implementation continuation, 2026-10-18: maintainer asks
+to proceed while preparing Windows for GitLab. Task 0020 delivers original INP
+mesh parsing through a mechanically checked partial reader and a CaeModel
+library slice, original element deck formatting, explicit input/output adapters
+and a usable mesh CLI. Preserve original assembly/net48 ownership and algorithms;
+separate framework-only StandardValueAttribute unchanged from its UI editor.
+Mac/Linux ARM64 current/RC2/post-RC2 pass 218 accepted checks/39 CLI controls
+with two original correctness failures retained. New source/binary package and
+Windows follow-up are prepared. All implementation stays uncommitted; no frontend/
+default serializer, x/main, publication, native-tool or numerical-policy change.
+Mesh-only completion does not establish full model/deck/solve/results parity.
+
+D032 — Accepted RC2 sync/implementation continuation, 2026-10-18: maintainer
+requests syncing the fork, comparing Matej's 3.0.0 RC2 and accelerating coding
+toward a cross-platform release near upstream stable. Task 0019 supersedes the
+0018 stop for this continuation. Sync origin/master by normal ff-only update
+to f6273e39; preserve RC2 marker 912fb3d0 separately from later composites work.
+Add reviewed snapshot replay while retaining baseline/source/behavior gates.
+Further implementation/evidence remains uncommitted under normal workflow;
+no x/main merge, upstream write, force push, frontend/default serializer or
+numerical/tolerance/native-tool substitution is selected. Whole-application
+release parity remains open. Use a real mesh/deck/solve/results workflow as the
+recommended next implementation milestone; host/persistence choices need proof.
+
 D031 — Verified element/build publication, 2026-10-16: b83fa49f is pushed and
 remote-verified; pipeline #2956835416 passes both native x64 jobs. Downloaded
 framework-dependent ZIP has verified source/tool fingerprints and rebuilds/runs
