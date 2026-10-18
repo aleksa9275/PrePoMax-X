@@ -1,5 +1,24 @@
 # MacBook continuation — start here
 
+2026-10-18 latest tasks 0031/0032: original DAT static-shaped histories and
+inspect-dat complement the FRD slice, preserving original methods/type ownership
+and net48 orchestration/persistence. Maintainer explicitly authorizes publication
+of both increments. [Actual publication/remote/CI](../reports/results-publication.md)
+and [DAT scope/evidence](../reports/portable-dat-histories.md) are authoritative;
+older uncommitted wording becomes historical only after remote verification.
+Next: native CPU source/build recovery and actual deck → solve → FRD/DAT, full
+results graph and interactive host proof. DAT parsing is not job completion.
+Both correctness failures/tetra gate and every Windows/net48/RC2/release gate stay.
+
+2026-10-18 latest local task 0030: maintainer resumed after reset; original FRD
+static mesh/fields/invariants and inspect-frd now pass Mac/Linux ARM64 all three
+pins (39 results checks/five CLI controls plus rerun 331 analysis checks). Both
+known correctness failures/tetra gate remain. [Start here](../reports/portable-frd-fields.md).
+Changes are uncommitted; published remote is still 6c51ced6. Preserve/transfer
+local work explicitly rather than assuming Git includes it. Original net48
+orchestration remains in legacy partials; new x64 CI is prepared, not run.
+Continue DAT/results/native CPU source/build work; no new publication/policy.
+
 2026-10-18 published checkpoint: **993f9263**, pipeline #2960594131 passes all
 four native x64 jobs. Downloaded analysis/execution evidence verifies against
 published source/tools/dependencies and Mac outcomes. Closing task 0029 is

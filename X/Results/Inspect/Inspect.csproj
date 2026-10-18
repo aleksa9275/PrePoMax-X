@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.InspectResults</AssemblyName><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+ <ItemGroup><ProjectReference Include="../CaeResults/CaeResults.csproj" /></ItemGroup>
+</Project>

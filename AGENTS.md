@@ -1,5 +1,31 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-10-18 current instruction: maintainer explicitly requests the next bounded
+task and then commit/push current code to GitLab within remaining usage. Task
+0031 adds original DAT static-shaped history inspection; task 0032 reviews and
+publishes tasks 0030/0031 normally to origin/research/native-feasibility and
+records exact-commit hosted/artifact evidence. This supersedes earlier uncommitted
+wording for this publication only. Read .project/reports/portable-dat-histories.md
+and .project/reports/results-publication.md for actual completion/publication.
+Preserve both correctness failures/tetra gate and all Windows/net48/RC2/native
+solver/full-graph/UI/persistence/CAD/source/four-target/installer gates. No upstream,
+x/main/release write, force push, frontend/default serializer/backend/precision/
+GPU decision. DAT parsing alone cannot establish solver completion. Finish this
+publication task without widening feature scope; normal publication policy resumes.
+
+2026-10-18 latest continuation: maintainer explicitly resumes after reset,
+lifting task 0029's feature stop for accepted local implementation. Task 0030
+adds original FRD decoding/field types/invariants in their original assemblies,
+a bounded raw C3D8 static snapshot and inspect-frd CLI. Original FeResults/
+FeMesh orchestration stays in net48 legacy partials; original Tools helpers are
+mechanically extracted. All three source pins pass Mac/Linux ARM64: 39 results
+checks/five CLI controls plus rerun 331 accepted analysis checks; both known
+correctness failures/tetra gate retained. Read .project/reports/portable-frd-fields.md.
+Source/tool/package/field outcomes match across hosts. New x64 CI is prepared,
+not run; native Windows/full net48/RC2 and all release gates remain. Task 0030
+stays uncommitted; no new publication/default/solver/GPU/serializer decision.
+Continue original DAT/results and reproducible native CPU solver recovery.
+
 2026-10-18 publication complete: implementation tasks 0022–0028 are published at
 993f9263f8770bee5b75d2cca3b07baaf2c1097e on origin/research/native-feasibility.
 Exact-commit pipeline #2960594131 passes all four native Linux x64 jobs.

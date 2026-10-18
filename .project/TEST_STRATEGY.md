@@ -1,5 +1,24 @@
 # Functional equivalence and platform acceptance
 
+2026-10-18 task 0031 DAT adds canonical displacement/force/stress/strain history
+checks using original parsing/entries, including independent cube expectations,
+multiple increments/steps, exponent repair, identity/order/culture/path/concurrency
+and malformed/unsupported input. Combined FRD/DAT target: 78 checks/nine CLI
+rejections on all three pins, Mac/Linux ARM64 and exact-commit native x64 CI.
+DAT has no completion trailer: parsing complete stored rows alone is not job/
+coverage acceptance. Original analysis 331 accepted checks and both correctness
+failures/tetra gate remain; full Windows/net48/RC2 and release gates remain.
+[Evidence](reports/portable-dat-histories.md), [hosted publication](reports/results-publication.md).
+
+2026-10-18 task 0030: 39 original FRD/field checks and five CLI controls pass
+all three source pins on native Mac/Linux ARM64; prior 331 analysis checks rerun
+with both known correctness failures retained. Six results source guards verify
+extraction/ownership and reject decoder/math/helper edits. Original Windows cube,
+independent binary float/double fixtures, explicit ID order, culture, malformed/
+truncated controls and pure-shear invariants are covered. Full net48/Windows,
+other analysis/result families and actual native solver acceptance remain open.
+[Evidence](reports/portable-frd-fields.md).
+
 2026-10-18 release delivery requirement: [RELEASE.md](RELEASE.md) defines the
 required native installer/Homebrew matrix and install/upgrade/uninstall/
 clean-machine acceptance. [Task 0022 evidence](reports/analysis-material-foundation.md)

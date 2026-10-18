@@ -59,7 +59,7 @@ def source_rows(revision=BASELINE):
     for path, expected in mechanical.items():
         if (ROOT/path).read_bytes() != expected:
             raise ValueError('Mechanical static-deck source extraction changed: '+path)
-        if path.endswith('.Legacy.cs') or path.endswith('Tools.Equations.cs'):
+        if path.endswith('.Legacy.cs') or path.endswith(('Tools.Equations.cs','Tools.Results.cs')):
             owner=path.split('/')[0]
             ns={'m':'http://schemas.microsoft.com/developer/msbuild/2003'}
             project=ET.parse(ROOT/owner/(owner+'.csproj'))

@@ -1,5 +1,25 @@
 # Next session — native Windows reference validation
 
+2026-10-18 new FRD/DAT slices: tasks 0030/0031 are being published under explicit
+task 0032 authorization; read [actual remote/CI](../reports/results-publication.md)
+before transfer. New X/Results uses original FRD/DAT methods, field math and
+history entries; run its source guards/build/tests/inspection commands on native
+Windows, then full original net48/RC2 differential checks. Legacy parser/history
+orchestration/persistence remain in mechanically checked partials. Mac/Linux
+ARM64 success does not close Windows acceptance. DAT cannot establish job
+completion. Preserve private fixtures and all known correctness/release gates.
+
+2026-10-18 latest local task 0030 adds original FRD static decoding/field math
+and inspect-frd, with Mac/Linux ARM64 all-three-pin acceptance (39 checks/five
+CLI controls and 331 prior analysis checks). [Evidence/limits](../reports/portable-frd-fields.md).
+This task is uncommitted on Mac; remote 6c51ced6 does not contain it. Preserve/
+transfer explicitly. After transfer, verify X/Results/verify-results.py for
+current/RC2/post-RC2 with Windows/X64 expectations, and full original net48 build:
+FrdFileReader.Legacy.cs and Tools.Results.cs must retain original API/type/math/
+scaling behavior. Stored FRD stress 99.996 must not be rounded to DAT 100. Both
+correctness failures/tetra gate and all Windows/RC2/full-workflow/release gates
+remain. No solver/default/GPU/serializer change or new publication is implied.
+
 2026-10-18 transfer checkpoint: **993f9263** implementation is published on
 origin/research/native-feasibility; pipeline #2960594131 passes all four native
 Linux x64 jobs. Three-pin downloaded analysis/execution fingerprints/outcomes

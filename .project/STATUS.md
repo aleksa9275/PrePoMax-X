@@ -1,5 +1,37 @@
 # Project status
 
+## Current — task 0031 DAT inspection / 0032 publication
+
+2026-10-18: maintainer authorizes next bounded task and committing/pushing current
+work. Original DAT block/numeric/component decoding and history entries now power
+bounded static-shaped inspect-dat histories, retaining step/increment/time and
+node/element/integration-point identities. Full net48 orchestration/persistence
+remain mechanically preserved. DAT parsing cannot establish job completion.
+[Scope/tests/evidence](reports/portable-dat-histories.md), [actual publication/CI](reports/results-publication.md).
+Publish tasks 0030/0031 under task 0032; earlier uncommitted wording is historical
+after remote verification. Both correctness failures/tetra gate and all native
+solver/Windows/net48/RC2/full-graph/persistence/UI/CAD/source/four-target/installer
+gates remain. No backend/default/precision/GPU/frontend/format decision.
+
+## Current — task 0030 portable original FRD fields complete locally
+
+2026-10-18: maintainer resumes after reset. Original FRD/Field/FieldData/
+FieldComponent and invariant helpers now support a callable bounded C3D8 static
+snapshot and inspect-frd CLI, preserving original ownership and legacy net48
+orchestration. Current/RC2/post-RC2 each pass 39 results checks/five CLI controls
+and rerun 331 accepted analysis checks on Mac/Linux ARM64. Six results, nine
+analysis, four job and ten replay source guards pass. Source/tool/package/field/
+CLI outcomes match across hosts; both known correctness failures/tetra gate
+remain. [Report/evidence/limits](reports/portable-frd-fields.md).
+
+No solver executes; no fresh numerical/native Windows/net48/RC2/full workflow
+or release acceptance. Full FeResults/part/material graph, DAT histories and
+native CPU solver/source recovery remain next. X64 CI is prepared but not run;
+all changes stay uncommitted, with no new publication/default/backend/precision/
+GPU/frontend/serializer decision. Published checkpoint remains 6c51ced6; closing
+pipeline #2960615926 passed. The earlier feature stop is lifted for this local
+continuation; normal maintainer publication workflow resumes.
+
 ## Current — task 0029 publication and exact-commit evidence verified
 
 2026-10-18: implementation **993f9263** is on origin/research/native-feasibility;

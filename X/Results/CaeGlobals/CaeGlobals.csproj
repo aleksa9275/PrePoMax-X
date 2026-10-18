@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>CaeGlobals</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/NamedClass.cs" Link="CommonClasses/NamedClass.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs" Link="DynamicTypeDescriptor/StandardValueAttribute.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CaeException.cs" Link="CaeException.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Matrix.cs" Link="CommonClasses/Matrix.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/Vec3D.cs" Link="CommonClasses/Vec3D.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Comparers/CompareIntArray.cs" Link="Comparers/CompareIntArray.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Equation/EquationContainer.cs" Link="Equation/EquationContainer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Equation/EquationString.cs" Link="Equation/EquationString.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/NCalc/MyNCalc.cs" Link="NCalc/MyNCalc.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/IContainsEquations.cs" Link="IContainsEquations.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/OrderedDictionary.cs" Link="CommonClasses/OrderedDictionary.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/OrderedDictionaryItemLayout.cs" Link="CommonClasses/OrderedDictionaryItemLayout.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/MyUnit.cs" Link="UnitSystem/MyUnit.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringPressureConverter.cs" Link="UnitSystem/StringToDouble/StringPressureConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringTemperatureConverter.cs" Link="UnitSystem/StringToDouble/StringTemperatureConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringDoubleConverter.cs" Link="UnitSystem/StringToDouble/StringDoubleConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringDensityConverter.cs" Link="UnitSystem/StringToDouble/StringDensityConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringThermalExpansionConverter.cs" Link="UnitSystem/StringToDouble/StringThermalExpansionConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringThermalConductivityConverter.cs" Link="UnitSystem/StringToDouble/StringThermalConductivityConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringSpecificHeatConverter.cs" Link="UnitSystem/StringToDouble/StringSpecificHeatConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringStefanBoltzmannUndefinedConverter.cs" Link="UnitSystem/StringToDouble/StringStefanBoltzmannUndefinedConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringNewtonGravityUndefinedConverter.cs" Link="UnitSystem/StringToDouble/StringNewtonGravityUndefinedConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Extensions.Calculix.cs" Link="Extensions.Calculix.cs" />
+    <PackageReference Include="ncalc" Version="[1.3.8]" />
+    <PackageReference Include="UnitsNet" Version="[4.89.1]" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringPowerPerAreaConverter.cs" Link="UnitSystem/StringToDouble/StringPowerPerAreaConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringPowerPerVolumeConverter.cs" Link="UnitSystem/StringToDouble/StringPowerPerVolumeConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAreaConverter.cs" Link="UnitSystem/StringToDouble/StringAreaConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringEnergyConverter.cs" Link="UnitSystem/StringToDouble/StringEnergyConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringForceConverter.cs" Link="UnitSystem/StringToDouble/StringForceConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthConverter.cs" Link="UnitSystem/StringToDouble/StringLengthConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringMassConverter.cs" Link="UnitSystem/StringToDouble/StringMassConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringPowerConverter.cs" Link="UnitSystem/StringToDouble/StringPowerConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringTimeConverter.cs" Link="UnitSystem/StringToDouble/StringTimeConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringVolumeConverter.cs" Link="UnitSystem/StringToDouble/StringVolumeConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/IMultiRegion.cs" Link="IMultiRegion.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/RegionType.cs" Link="CommonClasses/RegionType.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/AffineTransform.cs" Link="CommonClasses/AffineTransform.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.Equations.cs" Link="Tools.Equations.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNodeIds.cs" Link="Selection/SelectionNodeIds.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Selection.cs" Link="Selection/Selection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNodeInvert.cs" Link="Selection/SelectionNodeInvert.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNode.cs" Link="Selection/SelectionNode.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNodeMouse.cs" Link="Selection/SelectionNodeMouse.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/vtkSelectBy.cs" Link="Selection/Enums/vtkSelectBy.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/GeometrySelectModeEnum.cs" Link="Selection/Enums/GeometrySelectModeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/vtkSelectItem.cs" Link="Selection/Enums/vtkSelectItem.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/vtkSelectOperation.cs" Link="Selection/Enums/vtkSelectOperation.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleDegConverter.cs" Link="UnitSystem/StringToDouble/StringAngleDegConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleDOFConverter.cs" Link="UnitSystem/StringToDouble/StringAngleDOFConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs" Link="UnitSystem/StringToDouble/StringLengthDOFConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleConverter.cs" Link="UnitSystem/StringToDouble/StringAngleConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.Results.cs" />
+  </ItemGroup>
+</Project>

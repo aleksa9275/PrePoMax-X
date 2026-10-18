@@ -8,6 +8,7 @@ Native installer/Homebrew requirements: [release delivery](../.project/RELEASE.m
 | --- | --- |
 | [Analysis](Analysis/README.md) | Original engineering data, complete bounded C3D8 static deck and regression checks |
 | [Execution](Execution/README.md) | Native process lifecycle, pinned solver preflight/run seam; matching macOS/Linux solver build remains pending |
+| [Results](Results/README.md) | Original ASCII/binary FRD C3D8 static mesh/field inspection and invariants; full FeResults/DAT graph remains pending |
 | [Core](Core/README.md) | Earlier offline mapping/data/element/mesh checkpoint and development ZIP |
 | Feasibility | Historical scoped experiments and reference-capture tools |
 

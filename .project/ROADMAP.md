@@ -1,5 +1,18 @@
 # Dependency-aware roadmap
 
+2026-10-18 task 0031 adds original DAT static-shaped component histories and
+inspect-dat; task 0032 publishes both results increments under explicit request.
+Full results graph and actual native solver remain open. Next critical workflow
+proof is reproducible native CPU build → actual solve → FRD/DAT comparison;
+interactive VTK host/frontend/persistence/CAD and release parity follow.
+[Evidence](reports/portable-dat-histories.md), [publication](reports/results-publication.md).
+
+2026-10-18 task 0030 completes bounded original FRD static mesh/field inspection
+with original invariants and ASCII/binary tests on Mac/Linux ARM64. Work remains
+local/uncommitted. Next: original DAT/full results integration and reproducible
+native CPU solver builds; both correctness failures and all release gates remain.
+[Current evidence](reports/portable-frd-fields.md).
+
 2026-10-18 accepted continuation: implement the original model/deck → native
 solve → results sequence in tested increments. Task 0022 completes its equation/
 material component on native Mac/Linux ARM64; complete static analysis decks

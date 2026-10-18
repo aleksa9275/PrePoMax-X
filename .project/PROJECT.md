@@ -1,5 +1,23 @@
 # PrePoMax-X project charter
 
+2026-10-18 task 0031/0032: maintainer requests the next bounded task and explicit
+commit/push. Original DAT parsing/history entries now support stored static-shaped
+component histories/inspect-dat, preserving net48 orchestration/persistence. DAT
+cannot establish job completion. Publish together with task 0030 FRD work under
+the scoped [publication task](tasks/0032-results-publication.md). [DAT evidence](reports/portable-dat-histories.md)
+and [actual publication/CI](reports/results-publication.md) distinguish local and
+hosted acceptance. Both correctness failures/tetra gate and all release gates
+remain; no solver/frontend/default/format/GPU choice follows.
+
+2026-10-18 resumed implementation: task 0030 provides original-owned FRD
+C3D8 static mesh/field inspection and original derived invariants. ASCII and
+binary float/double checks pass all three pins on native Mac/Linux ARM64:
+39 results checks/five CLI controls plus 331 accepted analysis regressions per
+build; both known correctness failures/tetra gate remain. [Evidence](reports/portable-frd-fields.md).
+Legacy net48 orchestration is preserved; full FeResults/DAT/native solver remain
+next. Work is local/uncommitted; no new publication or policy choice. The older
+task 0029 stop is lifted by the maintainer's explicit post-reset continuation.
+
 2026-10-18 publication verified: tasks 0022–0028 implementation is published at
 993f9263; exact-commit pipeline #2960594131 passes all four native Linux x64
 jobs. Downloaded three-pin analysis/execution reports match published source/

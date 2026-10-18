@@ -1,0 +1,6 @@
+artifacts/
+!Tests/
+!Tests/**
+**/bin/
+**/obj/
+__pycache__/

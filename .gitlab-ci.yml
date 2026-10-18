@@ -6,3 +6,4 @@ include:
   - local: X/Core/gitlab-ci.yml
   - local: X/Analysis/gitlab-ci.yml
   - local: X/Execution/gitlab-ci.yml
+  - local: X/Results/gitlab-ci.yml

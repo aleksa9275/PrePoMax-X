@@ -159,19 +159,6 @@ namespace CaeGlobals
             }
             return newKey;
         }
-        public static string GetNextNumberedKey(this HashSet<string> hashSet, string key,
-                                                string postFix = "", string separator = "-")
-        {
-            int n = 0;
-            string newKey;
-            while (true)
-            {
-                n++;
-                newKey = key + separator + n + postFix;
-                if (!hashSet.Contains(newKey)) break;
-            }
-            return newKey;
-        }
         public static string GetNextNumberedKey(this List<string> list, string key, string postFix = "")
         {
             return new HashSet<string>(list).GetNextNumberedKey(key, postFix);

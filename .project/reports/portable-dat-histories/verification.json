@@ -1,0 +1,113 @@
+{
+  "success": true,
+  "scope": "Stored bounded FRD fields/DAT histories; no native solve or DAT completion acceptance",
+  "comparisons": [
+    {
+      "mode": "current",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "datFixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "datInspection",
+        "cliControls"
+      ],
+      "matchingAnalysisGroups": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "resultsChecksPerBuild": 78,
+      "cliRejectionsPerBuild": 9,
+      "acceptedAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 163
+    },
+    {
+      "mode": "rc2",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "datFixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "datInspection",
+        "cliControls"
+      ],
+      "matchingAnalysisGroups": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "resultsChecksPerBuild": 78,
+      "cliRejectionsPerBuild": 9,
+      "acceptedAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 163
+    },
+    {
+      "mode": "post-rc2",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "datFixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "datInspection",
+        "cliControls"
+      ],
+      "matchingAnalysisGroups": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "resultsChecksPerBuild": 78,
+      "cliRejectionsPerBuild": 9,
+      "acceptedAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 164
+    }
+  ],
+  "reports": {
+    "current-macos-arm64.json": "c5cd8e1e0fd7f2e7d9cde818b989ff845607a756819164d8c12d86bb9435b9af",
+    "current-linux-arm64.json": "6cdffb658254e1d5fad6b2ee0370b407a29a7db899c23fc4f5271398538dac06",
+    "analysis-current-macos-arm64.json": "d3a70190c4f7f618615f5631980a2ceb8ecfa0f8c7da3704d79e50d73069bdd8",
+    "analysis-current-linux-arm64.json": "67da94ec4b1d5be39672f827e6789101ad2beb75b2b595b9eb41c4de6cba58c7",
+    "rc2-macos-arm64.json": "fa5ae7cee0158ee05fcc4f63b2aaac826f4992408dcdeb04c1db61259a5b1cfd",
+    "rc2-linux-arm64.json": "cd07b1c3ff99657e30dd0c69341e0718483d0b378bbfff7074d4f221b7d5957a",
+    "analysis-rc2-macos-arm64.json": "16e9d8296c52e1e12385e10d5f8c603be8c829255d2ef35fc2637ca5d0b9a34e",
+    "analysis-rc2-linux-arm64.json": "8552da1b721e675d79fd5454c79dfbf2fb82250f12c4dc5d5248f710d797f25f",
+    "post-rc2-macos-arm64.json": "8e4d1c4a96c28b28db778154ef13cfbed3867bfe77a690eee2d8f1c22a6b56ad",
+    "post-rc2-linux-arm64.json": "64307c0aaf472543c1c1a7761c086fae7b8eba651ad54a99f2397754473c1b19",
+    "analysis-post-rc2-macos-arm64.json": "5c3bdf2df87be8f046dd2d527fb6b7232b16803f32d077af834c471655a885c9",
+    "analysis-post-rc2-linux-arm64.json": "2967e3b284663ecc1887d7414a32f616d395721c8265712c1e92520574c542b2"
+  }
+}

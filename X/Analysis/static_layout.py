@@ -33,11 +33,12 @@ def span(text,start,end):
 def render_extensions(text):
     blocks=[]
     for start,end in [('        public static string ToCalculiX16String(', '        // String[]'),
+                      ('        public static string GetNextNumberedKey(this HashSet<string>', '        public static string GetNextNumberedKey(this List<string>'),
                       ('        public static bool IsGeometryBased(', '        // Double'),
                       ('        public static string GetDisplayedName<', '        // NamedClass[]')]:
         body,text=span(text,start,end);blocks.append(body)
     legacy=text.replace('public static class ExtensionMethods','public static partial class ExtensionMethods',1)
-    imports=header(text)[:header(text).index('using System;')]+'using System;\nusing System.Reflection;\n\n'
+    imports=header(text)[:header(text).index('using System;')]+'using System;\nusing System.Collections.Generic;\nusing System.Reflection;\n\n'
     core=imports+'namespace CaeGlobals\n{\n    public static partial class ExtensionMethods\n    {\n'+''.join(blocks)+'    }\n}\n'
     return {'CaeGlobals/Extensions.cs':legacy,'CaeGlobals/Extensions.Calculix.cs':core}
 
@@ -136,6 +137,15 @@ def render(root,revision=BASELINE):
     legacy=legacy.replace('    [Serializable]\n    public static class Tools','    public static partial class Tools',1)
     result[path]=legacy
     result['CaeGlobals/Tools.Equations.cs']=text[:text.index('using System;')]+'using System;\n\nnamespace CaeGlobals\n{\n    [Serializable]\n    public static partial class Tools\n    {\n'+body+'    }\n}\n'
+    # Original IO helpers and field-invariant math stay in one implementation.
+    # Results builds include this partial; the existing analysis slice need not.
+    legacy=result[path];blocks=[]
+    for start,end in [('        private static readonly float _oneThird', '        //\n'),
+                      ('        public static bool IsFileLocked(', '        public static string[] ReadAllLines('),
+                      ('        public static string GetRandomString(', '        public static float Sin(')]:
+        block,legacy=span(legacy,start,end);blocks.append(block)
+    result[path]=legacy
+    result['CaeGlobals/Tools.Results.cs']=text[:text.index('using System;')]+'using System;\nusing System.IO;\n\nnamespace CaeGlobals\n{\n    public static partial class Tools\n    {\n'+''.join(blocks)+'    }\n}\n'
     result.update(render_extensions(read('CaeGlobals/Extensions.cs')))
     for path,lines in REMOVED.items():
         text=result.get(path,read(path))

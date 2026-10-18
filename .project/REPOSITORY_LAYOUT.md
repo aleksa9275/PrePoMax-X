@@ -14,6 +14,7 @@ or redistribute incomplete dependencies.
 | X/Core | Earlier offline partial-build tools and regression baseline |
 | X/Analysis | Expanded model/deck build, strict input tools, fixtures and checks |
 | X/Execution | Modern CaeJob platform boundary, native process tests, pinned solver preflight/run command |
+| X/Results | Original-owned bounded FRD static mesh/field inspection, invariant calculations and regression tools |
 | X/Feasibility | Historical bounded experiments and reference capture tools; not the end-user product |
 | ThirdParty/Sources/<component>/<version> | Unchanged corresponding third-party source, own license, per-file/archive pins and provenance |
 | ThirdParty/Patches and ThirdParty/Build | Final reviewed patches and reproducible RID-specific build recipes, separate from pristine source; added as recovered/verified |

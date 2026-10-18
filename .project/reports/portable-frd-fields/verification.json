@@ -1,0 +1,76 @@
+{
+  "success": true,
+  "scope": "Original-owned bounded C3D8 static FRD mesh/fields; ASCII and binary 2/3, original invariants",
+  "comparisons": [
+    {
+      "mode": "current",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "cliControls"
+      ],
+      "frdChecksPerBuild": 39,
+      "cliRejectionsPerBuild": 5,
+      "priorAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 155
+    },
+    {
+      "mode": "rc2",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "cliControls"
+      ],
+      "frdChecksPerBuild": 39,
+      "cliRejectionsPerBuild": 5,
+      "priorAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 155
+    },
+    {
+      "mode": "post-rc2",
+      "matchingResultGroups": [
+        "sources",
+        "tools",
+        "analysisTools",
+        "fixtureSha256",
+        "packageArchives",
+        "tests",
+        "inspection",
+        "cliControls"
+      ],
+      "frdChecksPerBuild": 39,
+      "cliRejectionsPerBuild": 5,
+      "priorAnalysisChecksPerBuild": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "sourceSnapshotRows": 156
+    }
+  ],
+  "reports": {
+    "current-macos-arm64.json": "53a6043e9055be80c00b213e4dd576252304e07291990e860ad63929f6397d9e",
+    "current-linux-arm64.json": "bd3cf131611dc0c9b0ce004d9e845ba96a13b66137fb8b402e262b63fa8d6e51",
+    "analysis-current-macos-arm64.json": "ff626da4f08eaff973d11882479a3a12a902edaeeedfc07a3f3ee1378732c68e",
+    "analysis-current-linux-arm64.json": "8782944cf216cca3df5da8cd1fb34b743832148723869c8ddf975399e5f062f9",
+    "rc2-macos-arm64.json": "2d90633c6a0d9d4ad4e001ebe51c8d3b1dd498ab7446eddc38eb6884e6dd0ed6",
+    "rc2-linux-arm64.json": "276195f5447b44dee1babba574b8b5a68264eb760f946c6c4eba9464b1fbdd15",
+    "analysis-rc2-macos-arm64.json": "65ef7142ea12c08bdb0541fcc81042d5be984c3710cd731eb71188fecc6902c4",
+    "analysis-rc2-linux-arm64.json": "3548133edc19305a6d1923bd81831272590561a94b1ca1c6aa6577a67c4ff64c",
+    "post-rc2-macos-arm64.json": "b20bc85560e982ab1e89fd752b71fecaee0ca0d8d2dce88a7aeff7ccab3fc1b1",
+    "post-rc2-linux-arm64.json": "acf0dd9a58790a544f5f5515a3603f0c7e81229fd89b8ccfdcf78d6c9d4e96c5",
+    "analysis-post-rc2-macos-arm64.json": "5fd93c387795207a05149e225ff54aaf7bf074e3e1efd57c33543279887cba0a",
+    "analysis-post-rc2-linux-arm64.json": "e640a7e56812d94ca392cdf250a741ed1678663fb91ee24773adde0f8cfda384"
+  },
+  "solverExecuted": false,
+  "nativeWindowsNet48Pending": true
+}

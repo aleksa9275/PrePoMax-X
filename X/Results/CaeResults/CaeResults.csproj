@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><AssemblyName>CaeResults</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
+ <ItemGroup>
+  <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+  <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/Field.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FieldOutputNames.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/FrdFileReader.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/FrdDataSet.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/FrdFeDescriptorId.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/FieldData.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/FieldComponent.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/DatFileReader.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputs/HistoryResultEntries.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/DatDataSet.cs" />
+  <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputNames.cs" />
+  <Compile Include="FrdSnapshot.Portable.cs" />
+  <Compile Include="DatSnapshot.Portable.cs" />
+ </ItemGroup>
+</Project>

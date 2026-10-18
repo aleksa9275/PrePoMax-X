@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.ResultsTests</AssemblyName><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+ <ItemGroup>
+  <ProjectReference Include="../CaeResults/CaeResults.csproj" />
+  <None Include="../../../.project/reports/windows-reference/solver/uniaxial.dat" Link="uniaxial.dat" CopyToOutputDirectory="PreserveNewest" />
+  <None Include="../../../.project/reports/windows-reference/solver/uniaxial.frd" Link="uniaxial.frd" CopyToOutputDirectory="PreserveNewest" />
+ </ItemGroup>
+</Project>

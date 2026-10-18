@@ -1,5 +1,30 @@
 # Decision register
 
+D047 — Accepted bounded DAT implementation and scoped publication, 2026-10-18:
+maintainer asks the next task then commit/push within remaining usage. Task 0031
+reuses original DAT splitter/repair/numeric decoding and HistoryResultEntries,
+mechanically preserving net48 orchestration/persistence. Static-shaped history
+inspection keeps raw values and metadata with explicit guards; DAT completion
+is not inferable. Task 0032 publishes completed tasks 0030/0031 and verifies
+exact-commit hosted/artifact evidence normally on origin research only. Prior
+uncommitted wording is superseded for this publication; no upstream/x/main/
+release write/force or solver/default/precision/GPU/frontend/serializer choice.
+Both correctness failures/tetra gate and all remaining release requirements stay.
+[Implementation](reports/portable-dat-histories.md), [publication](reports/results-publication.md).
+
+D046 — Accepted post-reset local results implementation, 2026-10-18: maintainer
+explicitly resumes, lifting task 0029's stop. Task 0030 preserves original FRD
+ASCII/binary decoding, field types/math and assembly ownership through mechanical
+partials; bounded 3D C3D8 static snapshot/CLI rejects unsupported/incomplete/
+ambiguous fields. Full legacy net48 orchestration remains; no unit inference or
+global converter mutation. All three pins pass Mac/Linux ARM64: 39 results
+checks/five CLI controls plus 331 accepted analysis regressions. Six results
+source guards and prior guards pass; fingerprints/outcomes match. Both strict
+correctness failures/tetra gate remain. Work stays uncommitted; no new publication
+or native solver/default/GPU/serializer selection. Continue original DAT/full
+results and reproducible native CPU solver work, retaining all release gates.
+[Evidence](reports/portable-frd-fields.md).
+
 D045 — Verified analysis/execution publication, 2026-10-18: tasks 0022–0028
 published normally to origin/research/native-feasibility at 993f9263; remote
 verified, master unchanged. Exact-commit pipeline #2960594131 passes all four

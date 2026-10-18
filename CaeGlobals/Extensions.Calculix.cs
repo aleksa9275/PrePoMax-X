@@ -8,6 +8,7 @@
 // Contributors:
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace CaeGlobals
@@ -26,6 +27,19 @@ namespace CaeGlobals
                 else result += ".";
             }
             return result;
+        }
+        public static string GetNextNumberedKey(this HashSet<string> hashSet, string key,
+                                                string postFix = "", string separator = "-")
+        {
+            int n = 0;
+            string newKey;
+            while (true)
+            {
+                n++;
+                newKey = key + separator + n + postFix;
+                if (!hashSet.Contains(newKey)) break;
+            }
+            return newKey;
         }
         public static bool IsGeometryBased(this vtkSelectBy selectBy)
         {

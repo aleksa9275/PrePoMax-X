@@ -1,0 +1,27 @@
+{
+  "scope": "Tasks 0030/0031 original FRD/DAT inspection; no native numerical solve",
+  "branch": "research/native-feasibility",
+  "parent": "6c51ced620c43da38c262f18c7f2f7ae0a23e44f",
+  "sourceGuards": {
+    "results": 9,
+    "analysis": 9,
+    "execution": 4,
+    "coreReplay": 10
+  },
+  "resultsChecksPerPin": 78,
+  "cliRejectionsPerPin": 9,
+  "acceptedAnalysisChecksPerPin": 331,
+  "knownCorrectnessFailuresRetained": 2,
+  "platforms": [
+    "macOS ARM64",
+    "Podman Linux ARM64 (native architecture, offline, read-only)"
+  ],
+  "sourcePins": [
+    "current",
+    "3.0.0-rc2",
+    "post-rc2-2026-10-17"
+  ],
+  "releaseGatesRetained": true,
+  "nativeSolverExecuted": false,
+  "artifactManifestSha256": "4c0d0dda1ad19e798a7ae2349afe7155595f6fac02216e3176375d244e3ef5b4"
+}
