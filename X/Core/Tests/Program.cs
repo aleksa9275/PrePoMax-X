@@ -164,7 +164,14 @@ internal static class Program
         });
         Check("portable libraries have no Windows or presentation references", () => {
             foreach (var assembly in new[] {typeof(CaeException).Assembly, typeof(ThreeBlockMapping).Assembly})
-                Require(!assembly.GetReferencedAssemblies().Any(a => a.Name.Contains("Windows") || a.Name.Contains("Drawing") || a.Name.Contains("VTK")));
+                Require(!assembly.GetReferencedAssemblies().Any(a => a.Name.Contains("Windows") || a.Name.Contains("VTK") ||
+#if ANALYSIS_SLICE
+                    // Original region/coordinate-system state retains managed Color data; GDI remains excluded.
+                    (a.Name.Contains("Drawing") && a.Name != "System.Drawing.Primitives")
+#else
+                    a.Name.Contains("Drawing")
+#endif
+                    ));
         });
         Console.WriteLine(JsonSerializer.Serialize(new { success = Failed == 0, passed = Checks.Count - Failed, failed = Failed,
             runtime = new {os = RuntimeInformation.OSDescription, architecture = RuntimeInformation.ProcessArchitecture.ToString()},

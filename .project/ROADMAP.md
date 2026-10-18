@@ -1,5 +1,14 @@
 # Dependency-aware roadmap
 
+2026-10-18 accepted continuation: implement the original model/deck → native
+solve → results sequence in tested increments. Task 0022 completes its equation/
+material component on native Mac/Linux ARM64; complete static analysis decks
+remain next. Packaging was already Phase 7; [release delivery](RELEASE.md) now
+makes EXE/MSI, DMG, DEB/RPM or equivalent and Homebrew explicit, with install/
+upgrade/uninstall/clean-machine acceptance and Apple Developer ID available.
+A development CLI ZIP is not the release objective. Work remains uncommitted;
+no new frontend/default format, numerical/native-tool or integration decision.
+
 2026-10-18 implementation checkpoint: [task 0020](tasks/0020-portable-mesh-deck-workflow.md)
 delivers a real standalone INP mesh input/measurement/export workflow in partial
 original assemblies, with a runnable source/binary ZIP and native Mac/Linux

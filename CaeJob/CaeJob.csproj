@@ -50,6 +50,8 @@
     <Compile Include="CalculixMonitorData.cs" />
     <Compile Include="EnvironmentVariable.cs" />
     <Compile Include="ExecutableJob.cs" />
+    <Compile Include="ExecutableJob.Legacy.cs" />
+    <Compile Include="JobStatus.cs" />
     <Compile Include="AnalysisJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,0 +1,83 @@
+{
+  "success": true,
+  "scope": "Non-mutating portable CPU thread planning and existing native process/monitor regression",
+  "comparisons": [
+    {
+      "mode": "current",
+      "acceptedChecksPerBuild": 47,
+      "cliRejectionControls": 13,
+      "positiveCliPlans": 2,
+      "matchingAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "monitor",
+        "cliControls",
+        "tests excluding runtime"
+      ],
+      "hostAvailableCpus": [
+        18,
+        4
+      ]
+    },
+    {
+      "mode": "rc2",
+      "acceptedChecksPerBuild": 47,
+      "cliRejectionControls": 13,
+      "positiveCliPlans": 2,
+      "matchingAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "monitor",
+        "cliControls",
+        "tests excluding runtime"
+      ],
+      "hostAvailableCpus": [
+        18,
+        4
+      ]
+    },
+    {
+      "mode": "post-rc2",
+      "acceptedChecksPerBuild": 47,
+      "cliRejectionControls": 13,
+      "positiveCliPlans": 2,
+      "matchingAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "monitor",
+        "cliControls",
+        "tests excluding runtime"
+      ],
+      "hostAvailableCpus": [
+        18,
+        4
+      ]
+    }
+  ],
+  "reports": {
+    "current-macos-arm64.json": "095b39185064a4a830a27a5162d9156afe639e1f0e6d7a72ff61fc26604d5800",
+    "current-linux-arm64.json": "877c79710aad3c895653e0182fc55913442a0d56b52d09333b5d483a31029992",
+    "rc2-macos-arm64.json": "6c3fb44d807826b0363f9b909a90c5b9111f6921a0c47e81b7c59ed692302275",
+    "rc2-linux-arm64.json": "c88dc8f31daf3e7a03e4348f913dd102e7c85b9273d50941616c0470a40644d5",
+    "post-rc2-macos-arm64.json": "e496bee596e714aff4711918ad45bf6b3f578e464afcf5f148fb1674a85c3a10",
+    "post-rc2-linux-arm64.json": "221832eb3af1e12cd34f1899672a14515ceb317fd0ecbf85eea0bb3c0672cb39"
+  },
+  "solverExecuted": false,
+  "settingsChanged": false,
+  "reservationEnforced": false
+}

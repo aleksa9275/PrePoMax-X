@@ -1,0 +1,68 @@
+{
+  "success": true,
+  "materialChecksPerRun": 44,
+  "existingAcceptedChecksPerRun": 218,
+  "totalAcceptedChecksPerRun": 262,
+  "materialCliControlsPerRun": 8,
+  "sourceGuardTestsMac": 7,
+  "existingReplayGuardTestsMac": 10,
+  "reports": {
+    "current-macos-arm64.json": {
+      "sha256": "193d7cad0738785fe23fe9b9a623bee046b22283866bcb9f250fe66665db788d",
+      "sourceFiles": 90,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    },
+    "current-linux-arm64.json": {
+      "sha256": "8ca18b7fed4bbb4cb3c31874779d8a400860f486f3cb6c5f99b6013015299d77",
+      "sourceFiles": 90,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    },
+    "rc2-macos-arm64.json": {
+      "sha256": "c843391364212e43a54caaacea530e7be3db36caa7190d0a9a15e94450e3efca",
+      "sourceFiles": 90,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    },
+    "rc2-linux-arm64.json": {
+      "sha256": "f82af2fc6c283701e357a6862675ae38253224792f38893bd49b2696443d339f",
+      "sourceFiles": 90,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    },
+    "post-rc2-macos-arm64.json": {
+      "sha256": "af4c8640715f2dc03e602950ae92b9564db364b76418b77b2a8efaf5e3f9cd77",
+      "sourceFiles": 91,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    },
+    "post-rc2-linux-arm64.json": {
+      "sha256": "6676c00e852e14aece9d85986f7951eb2d65576858a11f2f8839fb6ec5f375d9",
+      "sourceFiles": 91,
+      "tests": 262,
+      "openCorrectnessFailures": 2,
+      "materialCliControls": 8
+    }
+  },
+  "comparisons": {
+    "current": {
+      "macLinuxPortableTestsRegressionCliSourcesDependenciesAndToolsEqual": true,
+      "postRc2BehaviorDistinguished": false
+    },
+    "rc2": {
+      "macLinuxPortableTestsRegressionCliSourcesDependenciesAndToolsEqual": true,
+      "postRc2BehaviorDistinguished": false
+    },
+    "post-rc2": {
+      "macLinuxPortableTestsRegressionCliSourcesDependenciesAndToolsEqual": true,
+      "postRc2BehaviorDistinguished": true
+    }
+  },
+  "offlineCoreRegressionSha256": "e131e9dfdafe396d5f85ad4ea99d1168d9430b33ce7fdcdc8944b46f6d003e50"
+}

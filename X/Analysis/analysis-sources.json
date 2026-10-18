@@ -1,0 +1,504 @@
+{
+  "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+  "sources": [
+    {
+      "path": "CaeGlobals/Equation/EquationContainer.cs",
+      "sha256": "649fa23d3ebd462b7260fb4376739069ec6b1b4dff45ba24a1bedcb77406ee89",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/Equation/EquationString.cs",
+      "sha256": "7c95b4760467ca218137a337a823c56e4a4f64b6bfa9aca91b511ff84c5e1ea0",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/NCalc/MyNCalc.cs",
+      "sha256": "c73d1acd0549793c4cb992dfc165b3883492ea9d5a7f98f28ea12409eda46d9e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/IContainsEquations.cs",
+      "sha256": "e4ca9d074fe57c10fb7a3fcd16f5a0b8d9de28ed9d2f14f1b6a0e1ba3483f402",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionary.cs",
+      "sha256": "9ccffa79b5c89fd8394216d3dd0da3456bc1d10e6150717f63b6a72ec1ceeac3",
+      "removedUnusedImport": "using System.Runtime.InteropServices.WindowsRuntime;"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionaryItemLayout.cs",
+      "sha256": "46de143ec5c8cc1040d74a0b2a9094877a3ab3d73b0e0f1602291fe472e6bdf2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/MyUnit.cs",
+      "sha256": "2ab434907d184e323175ae3bfca7897d0f52ca40ef116459162bd338464d155e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticLamina.cs",
+      "sha256": "029c929fdc9d60f17d279c3aabd2edc737d724cf695dd49de4c7469db6426ded",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticWithDensity.cs",
+      "sha256": "dd0098fd750ac603b6fae9f44cf9b2e857640764197cce9b4aa931c1836c5112",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/MaterialProperty.cs",
+      "sha256": "545463178ea451089369e1fd6493d7a1d8f9993c63d22f8bb95c0b1eb2913ccb",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SlipWear.cs",
+      "sha256": "aedc0ebfc5bae070647d0e6f9a67a0825ff8de174d3c97c17865eeefd16c9631",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SpecificHeat.cs",
+      "sha256": "9733bfceb6915be534aad07ea7ec8cb58d8366f7346fd35a9d2e96878b0882c9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Material.cs",
+      "sha256": "754cdd9de0972656a0306c7e4838a229ea764989d4090e8924e303926168c1b0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalExpansion.cs",
+      "sha256": "ca189eb1805e953ac9ec16fb8270e4bca761106e022c19ed6df7669db2d3f225",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalConductivity.cs",
+      "sha256": "b0335bf71a03101dc9333173e73cab5e043d9d55f7e391bf2c2ab07d59b2aac2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Plastic.cs",
+      "sha256": "c269a83581f75a0b4d3101f8cee355961d00b7d8290bf7482bd7662e8c7bdcec",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Density.cs",
+      "sha256": "61c7ca14a23d0421f30317d3e4c4de6fbf5cc1f7070f78c6aa0ad9536e436dc3",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Elastic.cs",
+      "sha256": "0a4c6b5d3ea5eb6d0862d2fd1a08c41a2862fa7f4a1e17f8fa2bcdec0bc96e1f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticEngineeringConstants.cs",
+      "sha256": "038e99e9b848fc1336bb6492398ab54c0325d2afb427e44cc7b0777ea0703cd0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalMaterial.cs",
+      "sha256": "15c976c529cd6bf56835370eb2e784a0fb0e62e8d335d4894715a79930602853",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalElastic.cs",
+      "sha256": "2fac17219584789452b237d2ed17cefe89f448fdc742345cc785a20a81c28367",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPressureConverter.cs",
+      "sha256": "8a38185cf274dc42839d5465fb279b4bf0d80c4f06bf271c1c1d01522ed5672f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTemperatureConverter.cs",
+      "sha256": "386f2b87aa25de9f1e0268978a4928590381cb5a85e683e6ad840254909208f5",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDoubleConverter.cs",
+      "sha256": "5008e21d081ae6cdfd298b1a249c9a57b3d5b742f363873a7f2bf504a3075f0d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDensityConverter.cs",
+      "sha256": "a435819eb1facf8f02bd2af540d4d61c5de56a7646bc8c9b1e863b20c3d79387",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalExpansionConverter.cs",
+      "sha256": "16e85da94c4d5ede1b9b142286451c3d93e45e78f11f8d4b391d7b5c6dd0f530",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalConductivityConverter.cs",
+      "sha256": "a4d910204e1ba7824fe0f76ff13b610d1baaa76fa3cea4bfe0fad9e0923f785d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringSpecificHeatConverter.cs",
+      "sha256": "dc695f606067b4cee8f979b7c65d7cc37d1a2aab5291fcb4c32262466de3b80d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringStefanBoltzmannUndefinedConverter.cs",
+      "sha256": "79290796a304fa94d4f08bfe8f721a961c399381f07c6971f123bd6ce4c4e0d8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringNewtonGravityUndefinedConverter.cs",
+      "sha256": "7c650c9d48becfe34269d0cdf41f353cdd49ca26f93502ab76f7d789abac5ab5",
+      "kind": "removed unused import",
+      "removedUnusedImport": "using System.Windows.Forms;"
+    },
+    {
+      "path": "CaeGlobals/Extensions.Calculix.cs",
+      "sha256": "55a421e8a2e0454042b4e8188632781de3a7587f8ab63e48600b0f9c838b105e",
+      "kind": "mechanical extraction",
+      "originalPath": "CaeGlobals/Extensions.cs"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerAreaConverter.cs",
+      "sha256": "b999ecfb832f2a0f048b949dd3d4db6ab34c9ee07bb5433254d92ffd5b4edfbd",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerVolumeConverter.cs",
+      "sha256": "c63aea66fee2f37c1abf7083728ac72fb14bc2a1587b8ecfb1bbf2921849e47d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAreaConverter.cs",
+      "sha256": "a2ea27864c2e00bcdd2df200eaa706f0b38947c60428c18edded1c0342fe3c49",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringEnergyConverter.cs",
+      "sha256": "326ffa1791957b9e68e395b19eb7d398b36867ac7ab7f666f15e5eaa1a689f8e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringForceConverter.cs",
+      "sha256": "a80e718fa787e6a789e22202432a2b71eb48a494c4aac072adf2a483ac9f43ff",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringLengthConverter.cs",
+      "sha256": "d6c76cfe0d5de825e9b99852a1ebea7a6e23400993b6710150823f7ca1abfdc0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringMassConverter.cs",
+      "sha256": "e7fba8958f8b1a2521417bd20a6481218b275c9784aac293720361316be615a7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerConverter.cs",
+      "sha256": "c9962c29d5b2a3502e7af2c2b6973c596f92388bf9719a55038701a3eed9b3a8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTimeConverter.cs",
+      "sha256": "6af9a89b7da335b6fe670c1c4f741ff43668279eb72e52d7d176c806f4ab9488",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringVolumeConverter.cs",
+      "sha256": "fc3fe972ea51c132bd28a0866fe3768a05afb3a463c9f8ae9175420528f8e96d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs",
+      "sha256": "515de6faa17d2477c392858af5e5336bac802fca287fe156d846bf3205b77cf5",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeGlobals/IMultiRegion.cs",
+      "sha256": "e86f72b83833fc75f31c5cc697f59f61301c043624c009d53031c02d9f8d117a",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/RegionType.cs",
+      "sha256": "46655f13a3c5f689cc96fa16a85be68d91607d59cfff960c18ca415f82dca7be",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/AffineTransform.cs",
+      "sha256": "987bb6d8eee10683ab26031824148ecc86a38174a9bd19029b0d5912d933a043",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Tools.Equations.cs",
+      "sha256": "b008ca129371f9eaccb10de74012980b7dbcdd5ce0c0f0cb82b1a545b1d5948b",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeMesh/CoordinateSystem.cs",
+      "sha256": "470eb910f068114b230ea0760572bfe4ee38406ee2d4641d1632bfb5747d7e0e",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Sections/Section.cs",
+      "sha256": "80dd473debffb9de353f7355bce6f7b10c0f2102ec5f6ccea6ba51054074b55e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/SolidSection.cs",
+      "sha256": "ec7a73182b3fcf1e7f58934c8dd26f27edca692f73046c5ae83ef754460bc486",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/ShellSection.cs",
+      "sha256": "4b68915f87e2e6fc0f9b93d1411baeea0eed76ff0119763eb0edf754f0b80802",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/MembraneSection.cs",
+      "sha256": "d58e453290669a42f312113e6e1ed99294214f92787ce31ce11edd7d640b01fa",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Amplitudes/Amplitude.cs",
+      "sha256": "1e018aef3957e401a44914e507652f1180a26f98cd3088eedee70bf86c98caab",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Step.cs",
+      "sha256": "715984921525c59483d13cc1f8e178bb274a060f8570dcc82bb685e6d37fba0c",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/StaticStep.cs",
+      "sha256": "9f9bf97dbbef904b0ac22fc49f401978a2e00cce5c76055f3e9694bef95fce8a",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/BoundaryConditions/BoundaryCondition.cs",
+      "sha256": "bc0464f5ac9072eb361efebaf0984394b5d653c1a9bb16e7a81a627d95d3346f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/BoundaryConditions/DisplacementRotation.cs",
+      "sha256": "d35f91ea09c3cb1e96601203844ad0d84030ad8a2da142a2114864a35e33b8c6",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/Load.cs",
+      "sha256": "b5ae3a3554583d002b1d6f10b931faf117816de2688f14b8da5b5b303c6ba542",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/CLoad.cs",
+      "sha256": "6d054964a2e4bec795b7ecb392726ed02abbe9adbf3fb072909e8ab7170ffbd5",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/DefinedFields/DefinedField.cs",
+      "sha256": "461214b7795c446cb3b0404557acb71dc6fe1efbe5c537a0028612a1904522af",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Controls/StepControls.cs",
+      "sha256": "63d2129430194d4d81095a573fa4e42b4f55a098dc76c3d49d32a088c6074c34",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Controls/StepControlParameter.cs",
+      "sha256": "5a60760eb13d8b01acdb7e6e5a6be39bc25cae3930db08bf65e4ffb46ee01a08",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/CalReferencePoint.cs",
+      "sha256": "049e1a2c00dfc81d21a7a86756329f9a4b7bce1c87429dd47d78c7e18220afd6",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeIds.cs",
+      "sha256": "0c4c0efa37ac685d21e5137353d287b6d9bd9a6586025c0b86bab8d05864716d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Selection.cs",
+      "sha256": "05899109ace298684af51564d2f6b335f7a8e6ccd532fbff047d841a66055c72",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeInvert.cs",
+      "sha256": "5d3b6c6a3fb912ae83e302dbdefb3230aa68bcd1dfc5316aaf6253dd12c4d759",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNode.cs",
+      "sha256": "81be9259e806f9eccf3623b0cd631f8d8053468e3a0372f76ae4b3697fa17537",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeMouse.cs",
+      "sha256": "256ca40a6c26ed93fc8174d0c3a5507e891033cc9bd1f8fb3ca37a87968fbce0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectBy.cs",
+      "sha256": "d9b85b78f68faae2f243a8a2febc7e8f482214d7e2f95465acb00ef5ac64282e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/GeometrySelectModeEnum.cs",
+      "sha256": "7743723efb0024ecfffe01de9ef46a4142e6bf4c0fe4415829f08839b6e35bec",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectItem.cs",
+      "sha256": "f661544593f1ee3b643bb212be580794e38ccb57e6dbe575e09e4c8e83210d9e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectOperation.cs",
+      "sha256": "9e0d657ea21781a008ffa1c82d5f69fb14f128ad5a7f78b25443ad2c7793a382",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/ElementFieldOutput.cs",
+      "sha256": "68bffdee95fb5d2289696646347a3c65c84f3d8df527906bb105c71449334f10",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/FieldOutput.cs",
+      "sha256": "2b9a370ed5f5fa61ffd9cf2d0a57c35346e5895b7de1b957d0483b2995151c45",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/NodalFieldOutput.cs",
+      "sha256": "92c43c17d932058e0a4c623402dc579ffc5c83a47cae13bd84128fa8cc0aa457",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/HistoryOutput.cs",
+      "sha256": "d671a72849f6824b46005a4f19a5d1b2a66a6c0d45170b63754d44275ec6d1a8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/NodalHistoryOutput.cs",
+      "sha256": "037952297b25f0c93c459ae0a675cb2e88c2e6de259dd5368ebad330ce466b65",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/ElementHistoryOutput.cs",
+      "sha256": "7636906f8c7c4be1f8270aa95df32eecba53fb08648ee254245a404af0f60dcf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalSolidSection.cs",
+      "sha256": "2ed431d560a8dd24b1f9dce9f767189fd08f4f9ccac840c76daa06858cd0e568",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStep.cs",
+      "sha256": "2cdaaebcaf77d2812dcf23a6ce63d63c8736abac6dd5c006e0156630947c40ef",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStaticStep.cs",
+      "sha256": "5c6bf739dbea577e2708d7c24ed14d63ea40814c40c6510b53862f31916a6537",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStepHeader.cs",
+      "sha256": "41be3d8e2dad442e05c1105c5fd3f4c80537753345383b7bc4329c7e90602d3b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalEndStep.cs",
+      "sha256": "ad98cc0eea0c3c1f7d2e106defe99909cd76aeb113f3291a6cf6d1c9fbb24d00",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalOutputFrequency.cs",
+      "sha256": "c26f5ec8901ff880de00641e09f9c68f5653eecdcb64fa3b9f00e459eae8ccb0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalBC.cs",
+      "sha256": "7361e60d8099e3ff356d227845160f39491307458dfbec3a9f508b4b823b70cf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalDisplacementRotation.cs",
+      "sha256": "c6124beb53ecf5057943c00ac8b986bef577d8a81bfd8d8f296930ef2b5893ad",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoad.cs",
+      "sha256": "baa39f10cfd326f1e2bf4d5ab098cb1094a33d401dcd4a052cef4e1161fd3de2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.cs",
+      "sha256": "349df8fdcc900d143686840c0b3ec994e0bbe18c179dfa4c58c0a5495ec0e010",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/FieldOutput/CalNodeFile.cs",
+      "sha256": "4d650e55926ac9a072632557915fd67c6fa61ec98e4090c960cf2bc0fec1869f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/FieldOutput/CalElFile.cs",
+      "sha256": "43c60488b08aff1fb2512056d77873dcf341f41d4a69d5b42cc49528762ab084",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/HistoryOutput/CalNodePrint.cs",
+      "sha256": "62e8ee40c3f0e6f09a9b44d182a4e06e1343bed172f29c44b1e027307de99827",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/HistoryOutput/CalElPrint.cs",
+      "sha256": "d0941e2378da7b6b1bf4b450378fa5d8135da502609342269d40778e7862972c",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleDegConverter.cs",
+      "sha256": "052fc0ea272d291d8540e5ae0b7454341786f7957551a094cd189f161f230e78",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleDOFConverter.cs",
+      "sha256": "b150fde3ceb14b2a95bfa7e526f4c40a7b0d867cc894f0c00480d81de5e5dc29",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs",
+      "sha256": "5fb5fe5d662cf1d3d6b1ba9a1ff62619342ca9aa3e612a83e9b069e139dcc8c9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleConverter.cs",
+      "sha256": "140deabea1d61459be13869da29eed83ed16f7988a858b1fb6e233644c80b8ac",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalOpParameter.cs",
+      "sha256": "7962f37067d59bed4a72f19c5a5535381358565e2d90f3ab1a614c392b56ec4f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Distributions/Distribution.cs",
+      "sha256": "f57fe5a6ad2961e19e0743bddd3f7a3d3a1f1c4534e4180e4be610aecc351e9f",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs",
+      "sha256": "463bbfa27047bf1821e9444758e32c77cb6e8297cfee671d596e3401604db42b",
+      "kind": "new boundary"
+    }
+  ],
+  "reviewedVariants": {
+    "f6273e39983e06042ae8b06e9a3dd0f729ea4b91": {
+      "CaeModel/Materials/Material.cs": "4ccb44de0c5f902c35bed4e63eb61f7d591fda155923a4d03fd1e8d7d1896927",
+      "CaeModel/Materials/ElasticLamina.cs": "812fc9676cbb172791d67bb528d587ac42782eb1a6d23071a3dcdf962291e93a",
+      "CaeModel/Materials/CompositeStrength.cs": "1f709b698a6acba983b3175cf988e71b83455228757529439ecdafaca624b75a"
+    }
+  }
+}

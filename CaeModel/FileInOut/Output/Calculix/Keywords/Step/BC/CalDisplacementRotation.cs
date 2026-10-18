@@ -19,7 +19,7 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalDisplacementRotation : CalBC
+    internal partial class CalDisplacementRotation : CalBC
     {
         // Variables                                                                                                                
         protected DisplacementRotation _displacementRotation;
@@ -46,16 +46,13 @@ namespace FileInOut.Output.Calculix
         }
         public CalDisplacementRotation(DisplacementRotation displacementRotation,
                                        Dictionary<string, CalReferencePoint> referencePoints,
-                                       string nodeSetNameOfSurface, ComplexLoadTypeEnum complexLoadType,
-                                       FeModel model = null)
+                                       string nodeSetNameOfSurface, ComplexLoadTypeEnum complexLoadType)
         {
             _displacementRotation = displacementRotation;
             _referencePoints = referencePoints;
             _nodeSetNameOfSurface = nodeSetNameOfSurface;
             _complexLoadType = complexLoadType;
             _maxNumberNodeDOFs = 3; // 3 for Calculix and 6 for Abaqus
-            if (model != null)
-                _nodeValues = model.GetNodalValuesFromVariableDisplacementRotation(displacementRotation, out _nodeIds);
         }
 
 

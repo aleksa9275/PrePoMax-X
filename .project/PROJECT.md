@@ -1,5 +1,66 @@
 # PrePoMax-X project charter
 
+2026-10-18 latest: maintainer authorizes bounded task 0028 then committing/pushing
+all tasks 0022–0028 and stopping until continuation after reset. Portable CPU
+planning/CLI passes 47 checks/13 rejection controls per pin on Mac/Linux ARM64;
+no running scheduler/settings/reference-thread change. [Implementation](reports/portable-thread-planning.md).
+Task 0029 [publication/reset record](reports/analysis-execution-publication.md)
+covers normal origin research publication and actual hosted verification. Earlier
+uncommitted-only restrictions are superseded for this publication; no x/main/
+upstream/release write, force push or numerical-policy change. All gates remain.
+
+2026-10-18 latest, task 0027/D043: maintainer requests solver advice by analysis
+and a 75% available-thread default, plus GPU feasibility research. The
+[research/design](reports/solver-guidance-threads-gpu.md) distinguishes existing
+backends from future adapters, proposes explained recommendations/manual override
+and a coordinated thread budget, and documents NVIDIA/AMD/Apple differences.
+No production/default/precision change, new benchmark or publication. CPU-native
+delivery first remains recommended; MUMPS/new adapters conditional under D042.
+Both correctness failures/tetra gate and all release requirements remain.
+
+2026-10-18 latest, task 0026/D042: maintainer excludes machine-bound Panua
+licensing and requires a new alternative only if omitting PARDISO cripples
+functionality. This narrows the earlier all-backend identity requirement below.
+[Assessment](reports/without-pardiso-assessment.md) recommends evaluating existing
+CalculiX SPOOLES/PaStiX before adding another backend. No PARDISO-exclusive
+analysis class was found in reviewed paths; correctness, memory/capacity and
+practical performance remain open. Actual modal/buckling dispatch needs special
+care. Own comparisons are deferred; no production/default/precision change,
+publication or new backend integration occurs. All release gates remain.
+
+2026-10-18 latest: task 0025 exact solver research proves RC2 uses the unchanged
+official CalculiX 2.22 Windows executable and previous five runtime DLLs. Six
+choices pass the synthetic cube through existing Mac CrossOver, not native ARM.
+[Research report](reports/exact-solver-provenance.md) identifies original binary
+provider/core source, PARDISO GUI versus PaStiX executable defaults, missing exact
+static-library build recipe and native ARM Intel MKL/PARDISO gap. Maintainer
+requires complete identical software; no silent solver/backend change or implied
+remote/compatibility architecture choice. This increment is research/report only;
+all work remains uncommitted and existing correctness/release gates remain.
+
+2026-10-18 continuation: task 0024 adds a tested portable native process/solver
+preflight and original STA/CVG boundary, with all three pins passing 33 new
+checks on Mac/Linux ARM64. [Current evidence and native solver blocker](reports/native-job-boundary.md).
+Official CalculiX 2.22 source is recovered; matching native build/patch/runtime
+provenance and actual numerical solve remain pending. All local changes stay
+uncommitted. Maintainer explicitly requires an organized final repository with
+all third-party sources and a public release branch for packages/package managers;
+[repository map](REPOSITORY_LAYOUT.md) records the layout and planned x/release
+lane. Continue accepted original FRD/DAT/results and native-source/build work.
+
+2026-10-18 accepted direction: maintainer approves the next model/deck → native
+solve → results sequence and makes native desktop installation an explicit end
+goal. Required deliverables are Windows x64 EXE/MSI, macOS ARM64 DMG and Linux
+x64/ARM64 DEB/RPM or similar, plus Homebrew installation. See [release delivery](RELEASE.md).
+Apple Developer ID enrollment can be provided. Tasks 0022/0023 now generate a
+bounded complete static deck through original model types/writers. All three
+pins pass on native Mac/Linux ARM64 (331 accepted checks per build); both known
+correctness failures remain. [Current evidence](reports/static-analysis-deck.md).
+Implementation is uncommitted. Continue matching native solve/results locally
+without further approval stops between accepted increments. No new publication
+authorization.
+The task 0021 approval stop and older uncommitted checkpoint text are historical.
+
 Latest checkpoint: task 0019/0020 is published at **47f17be6**; exact-commit
 pipeline #2960334103 passes both native Linux x64 jobs and downloaded evidence/
 source/package independently verify. Task 0021 closes publication. New feature

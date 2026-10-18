@@ -19,23 +19,21 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalCLoad : CalLoad
+    internal partial class CalCLoad : CalLoad
     {
         // Variables                                                                                                                
         private CLoad _load;
         private Dictionary<string, CalReferencePoint> _referencePoints;
         private ComplexLoadTypeEnum _complexLoadType;
-        private FeMesh _mesh;
 
 
         // Properties                                                                                                               
 
 
         // Constructor                                                                                                              
-        public CalCLoad(FeMesh mesh, CLoad load, Dictionary<string, CalReferencePoint> referencePoints,
+        public CalCLoad(CLoad load, Dictionary<string, CalReferencePoint> referencePoints,
                         ComplexLoadTypeEnum complexLoadType)
         {
-            _mesh = mesh;
             _load = load;
             _referencePoints = referencePoints;
             _complexLoadType = complexLoadType;
@@ -57,12 +55,19 @@ namespace FileInOut.Output.Calculix
             //
             return sb.ToString();
         }
+        partial void ResolveCoordinateSystem(ref string result, ref bool hasContext);
         public override string GetDataString()
         {
-            CoordinateSystem coordinateSystem = null;
-            if (_mesh != null) _mesh.CoordinateSystems.TryGetValue(_load.CoordinateSystemName, out coordinateSystem);
-            if (coordinateSystem != null) return GetDataStringInGlobalDirections(coordinateSystem);
-            //
+            string result = null;
+            bool hasContext = false;
+            ResolveCoordinateSystem(ref result, ref hasContext);
+            if (result != null) return result;
+            if (!hasContext && _load.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName)
+                throw new NotSupportedException("Local concentrated-load coordinates require the full mesh context.");
+            return GetGlobalDataString();
+        }
+        internal string GetGlobalDataString()
+        {
             StringBuilder sb = new StringBuilder();
             //
             CalReferencePoint referencePoint = null;
@@ -94,41 +99,5 @@ namespace FileInOut.Output.Calculix
         }
         // A *Transform would rotate every load and boundary condition of the nodes in every step, so the components
         // are rotated here instead; a cylindrical system has directions of its own at every node
-        private string GetDataStringInGlobalDirections(CoordinateSystem coordinateSystem)
-        {
-            int[] nodeIds;
-            if (_load.RegionType == RegionTypeEnum.NodeId) nodeIds = new int[] { _load.NodeId };
-            else if (_load.RegionType == RegionTypeEnum.NodeSetName) nodeIds = _mesh.NodeSets[_load.RegionName].Labels;
-            else if (_load.RegionType == RegionTypeEnum.ReferencePointName)
-                nodeIds = new int[] { _referencePoints[_load.RegionName].ReferenceNodeId };
-            else throw new NotSupportedException();
-            //
-            double ratio = GetComplexRatio(_complexLoadType, _load.PhaseDeg.Value);
-            double[] localForce = new double[] { _load.F1.Value, _load.F2.Value, _load.F3.Value };
-            bool sameAtEveryNode = coordinateSystem.Type == CoordinateSystemTypeEnum.Rectangular &&
-                                   _load.RegionType == RegionTypeEnum.NodeSetName;
-            int numOfDirections = _load.TwoD ? 2 : 3;
-            //
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < nodeIds.Length; i++)
-            {
-                double[] coor;
-                if (_load.RegionType == RegionTypeEnum.ReferencePointName)
-                    coor = _mesh.ReferencePoints[_load.RegionName].Coor();
-                else coor = _mesh.Nodes[nodeIds[i]].Coor;
-                double[] force = coordinateSystem.GetOrientedVectorAtPoint(localForce, coor);
-                string nodeName = sameAtEveryNode ? _load.RegionName : nodeIds[i].ToString();
-                //
-                for (int dir = 1; dir <= numOfDirections; dir++)
-                {
-                    if (force[dir - 1] == 0) continue;
-                    sb.AppendFormat("{0}, {1}, {2}", nodeName, dir, (ratio * force[dir - 1]).ToCalculiX16String());
-                    sb.AppendLine();
-                }
-                if (sameAtEveryNode) break;
-            }
-            //
-            return sb.ToString();
-        }
     }
 }

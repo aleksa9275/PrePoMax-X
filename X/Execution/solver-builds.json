@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "builds": [
+    {
+      "id": "windows-reference-2.22",
+      "os": "Windows",
+      "architecture": "X64",
+      "version": "2.22",
+      "executable": "ccx_dynamic.exe",
+      "files": {
+        "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+        "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+        "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+        "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+        "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+        "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+      },
+      "backend": "PaStiX 6.0.1 / Intel MKL, observed in retained stdout",
+      "sourceMatch": "unproven",
+      "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+      "scope": "Existing native Windows analytical reference only; not a cross-platform release approval"
+    }
+  ],
+  "unavailableTargets": [
+    "macOS ARM64",
+    "Linux x64",
+    "Linux ARM64"
+  ],
+  "policy": "No implicit PATH lookup, version upgrade, backend or binary substitution. New profiles require measured source/build/ABI provenance and analytical differential evidence."
+}

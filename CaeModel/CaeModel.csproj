@@ -63,6 +63,7 @@
     <Compile Include="Distributions\DistributionFromFile.cs" />
     <Compile Include="Distributions\DistributionFromEquation.cs" />
     <Compile Include="Distributions\MappedDistribution.cs" />
+    <Compile Include="Distributions\Distribution.Legacy.cs" />
     <Compile Include="Distributions\Distribution.cs" />
     <Compile Include="FileInOut\Input\Mmg\MmgFileReader.cs" />
     <Compile Include="FileInOut\Input\ObjFileReader\ObjFileReader.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalContactPrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalElPrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalSectionPrint.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalNodePrint.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalNodePrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\CalSubmodel.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalCFlux.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="Steps\BoundaryConditions\TemperatureBC.cs" />
     <Compile Include="Steps\BoundaryConditions\FixedBC.cs" />
     <Compile Include="Steps\BoundaryConditions\SubmodelBC.cs" />
+    <Compile Include="Steps\BoundaryConditions\DisplacementRotation.Legacy.cs" />
     <Compile Include="Steps\BoundaryConditions\DisplacementRotation.cs" />
     <Compile Include="Steps\BoundaryConditions\BoundaryCondition.cs" />
     <Compile Include="Constraints\Tie.cs" />
@@ -221,6 +224,8 @@
     <Compile Include="FileInOut\Input\InpModel\InpFileReader.MeshData.cs" />
     <Compile Include="FileInOut\Input\InpModel\InpMeshData.cs" />
     <Compile Include="FileInOut\Output\Calculix\MeshDeckWriter.cs" />
+    <Compile Include="FileInOut\Output\Calculix\MaterialDeckWriter.cs" />
+    <Compile Include="FileInOut\Output\Calculix\StaticAnalysisDeckWriter.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.cs" />
     <Compile Include="FileInOut\Input\Netgen\NetgenVolKeywords.cs" />
@@ -246,6 +251,7 @@
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalMomentLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\CalculixFileWriter.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\Material\CalDensity.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalCLoad.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalCLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\CalElementSet.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\Material\CalElastic.cs" />
@@ -258,6 +264,7 @@
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\Material\CalMaterial.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\CalStaticStep.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\CalStepHeader.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\BC\CalDisplacementRotation.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\BC\CalDisplacementRotation.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalDLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\CalEndStep.cs" />
@@ -313,7 +320,9 @@
     <Compile Include="Steps\InitialStep.cs" />
     <Compile Include="Steps\FrequencyStep.cs" />
     <Compile Include="Steps\HeatTransferStep.cs" />
+    <Compile Include="Steps\StaticStep.Legacy.cs" />
     <Compile Include="Steps\StaticStep.cs" />
+    <Compile Include="Steps\Step.Legacy.cs" />
     <Compile Include="Steps\Step.cs">
       <SubType>Code</SubType>
     </Compile>

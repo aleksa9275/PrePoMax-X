@@ -1,0 +1,17 @@
+{
+  "analysis": {
+    "command": "python3 -m unittest discover -s X/Analysis -p test_analysis_layout.py",
+    "passed": 9,
+    "failed": 0,
+    "stdout": "",
+    "stderr": ".........\n----------------------------------------------------------------------\nRan 9 tests in 13.161s\n\nOK\n"
+  },
+  "core": {
+    "command": "python3 -m unittest discover -s X/Core -p test_upstream_replay.py",
+    "passed": 10,
+    "failed": 0,
+    "stdout": "",
+    "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 5.791s\n\nOK\n"
+  },
+  "host": "macOS ARM64"
+}

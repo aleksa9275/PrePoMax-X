@@ -1,0 +1,280 @@
+{
+  "success": true,
+  "scope": "research only; Windows binary identity and bounded compatibility execution; no native ARM solver or full parity claim",
+  "archives": {
+    "official": {
+      "url": "https://www.dhondt.de/calculix_2.22_4win.zip",
+      "sha256": "a1f91281944c96d6cd914cc020421e8ae65973b3e15d055dc63a3e3e3066d281",
+      "bytes": 36675939
+    },
+    "prepomaxRC2": {
+      "url": "https://prepomax.fs.um.si/Files/Downloads/PrePoMax%20v3.0.0%20RC2.zip",
+      "sha256": "26d3c6f801651802a399c980c0ca7bab38d7a8433f3860b22832004fc0142fb3",
+      "bytes": 200965011
+    }
+  },
+  "identity": {
+    "executableMatchesOfficial": true,
+    "allSixExecutableRuntimeFilesMatchRecordedNativeWindows": {
+      "ccx_dynamic.exe": true,
+      "libiomp5md.dll": true,
+      "mkl_core.2.dll": true,
+      "mkl_def.2.dll": true,
+      "mkl_intel_thread.2.dll": true,
+      "mkl_rt.2.dll": true
+    },
+    "bundledInstallReadmeMatchesOfficial": true
+  },
+  "sourceArchive": {
+    "path": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+    "sha256": "8dd1b5fad4c0e369903bfea4de009592f7d1790a66aa69de21c4bfa19ea6ea94",
+    "binarySourceCompilationCorrespondence": "Official binary README identifies the recovered official 2.22 archive. Exact compiler flags, local patches, PaStiX/Scotch revisions and full ABI chain remain unverified."
+  },
+  "backendResearch": {
+    "execution": "Existing isolated CrossOver bottle on macOS ARM64; unchanged Windows executable/runtime; not native macOS code",
+    "backends": [
+      "Default",
+      "Pardiso",
+      "PaStiX",
+      "Spooles",
+      "IterativeScaling",
+      "IterativeCholesky"
+    ],
+    "analyticalChecksPerBackend": 7,
+    "allChecksPass": true,
+    "comparisonToRecordedNativeWindows": "All six match existing printed-DAT tolerances, not bitwise-output equality"
+  },
+  "scripts": {
+    ".project/scripts/inspect-exact-solver.py": "c0181c6f096a3b3d1f68f7b558112c9ae5b6b75ed10d2409c495cf2e5a12859e",
+    ".project/scripts/research-solver-backends.py": "94bedf8bc1f6ff523956263e9a7c84b3076514198479820738b57478b86cd926",
+    "X/Feasibility/Solver/run-reference.py": "29b64edd1eeb26c0fc8f8cf6625136b1f31517d6d64f217f2e5da62563611de2"
+  },
+  "sourceSymbols": {
+    "PrePoMax/Settings/SolverSettings.cs": "18f748c1ac8ee83247d05df28a293982fdaede27c83539c8445f27652e65233e",
+    "PrePoMax/Forms/51_Step/FrmStep.cs": "f7f18a8fc15716e09d27a3f0398e379a30e2917c42c2cd0100b9795f3359d033",
+    "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStaticStep.cs": "5c6bf739dbea577e2708d7c24ed14d63ea40814c40c6510b53862f31916a6537",
+    "ThirdParty/Sources/CalculiX/2.22/src/ini_cal.c": "30910a4dfce38c4b7315b3243a947862ec3e8b49442992bd70c544f1e0dca23f",
+    "ThirdParty/Sources/CalculiX/2.22/src/pardiso.c": "daeff8a4820def2d3a743811845c07b55f727649e529634d69b7acd3437a5c59",
+    "ThirdParty/Sources/CalculiX/2.22/src/Makefile_MT": "37ac1da4d3ce053d0702939e1d10fe8f5da80802aedfae46f1ff0930d711b218"
+  },
+  "referenceBuildCandidate": {
+    "fork": "https://github.com/Kabbone/PaStiX4CalculiX/tree/cudaless",
+    "lastCommitBeforeReferenceBuild": "1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+    "date": "2020-08-16T20:11:29Z",
+    "baseVersionObserved": "6.0.1",
+    "confirmedAsExactBinarySource": false
+  },
+  "metadataDownloads": {
+    "prepomaxx-solver-downloads.html": {
+      "sha256": "1875ceae8a09f27c05b748a0b9662fef88a6f79e0302bfcaecf190dde1ee367f",
+      "bytes": 74215
+    },
+    "prepomaxx-omnibus-provenance.md": {
+      "sha256": "e6118a1bfef65d045582f45298717cf2427a4d23aac0569e1329043fde133a4c",
+      "bytes": 16582
+    },
+    "prepomaxx-pastix-cudaless-cmake.txt": {
+      "sha256": "c2c33c44328cc2e1ad25f057e446ce70379b651e7c3855708dab7b19f49c19f8",
+      "bytes": 31065
+    },
+    "prepomaxx-msys-2024-PKGBUILD": {
+      "sha256": "76a4599120f426cf95fc4091172ba39f06b2f2f6b3e74b2aea269e2a583fa878",
+      "bytes": 2239
+    }
+  },
+  "files": {
+    ".gitattributes": {
+      "sha256": "9f8b0e32741c93769c815f3c1430df0f04958e9bf9bde8b3f43da44b148c33dc",
+      "bytes": 78
+    },
+    "archive-comparison.json": {
+      "sha256": "fd61bb3c0c2c6d85f501e2397a13300d65fcd41af1d9cbfc94c444a7fb59c709",
+      "bytes": 8697
+    },
+    "backend-research/Default/result.json": {
+      "sha256": "14155151e87e3648857150a00fe44b779c6cccd1ee5df3d0295b9935d2aa13c8",
+      "bytes": 7152
+    },
+    "backend-research/Default/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/Default/uniaxial.dat": {
+      "sha256": "66d53fb27701221d968bff3f707142c0217c5d6e8e87b715f70ec38971fe936e",
+      "bytes": 1987
+    },
+    "backend-research/Default/uniaxial.frd": {
+      "sha256": "7babfeac26b63a3f808dc2670c1b580ffa61e8ccf257b7b6719d3389d43ff732",
+      "bytes": 4329
+    },
+    "backend-research/Default/uniaxial.inp": {
+      "sha256": "901f416fe08f3091b07bbeac008fbe7233567cf890a55b83865441cc2452ecf7",
+      "bytes": 526
+    },
+    "backend-research/Default/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "backend-research/IterativeCholesky/result.json": {
+      "sha256": "9891018a16ce91ba1a9569e83b94373b3cf628bebe7efab20ab2e01785eadb26",
+      "bytes": 4335
+    },
+    "backend-research/IterativeCholesky/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/IterativeCholesky/uniaxial.dat": {
+      "sha256": "bdc246665301128539202f83ce460fd53280f76741706fc0cf1ba9eef2ebec98",
+      "bytes": 1987
+    },
+    "backend-research/IterativeCholesky/uniaxial.frd": {
+      "sha256": "a676ee810513b6b3b356626919353672284a015ceb5fa99987e58111dbb47c6a",
+      "bytes": 4329
+    },
+    "backend-research/IterativeCholesky/uniaxial.inp": {
+      "sha256": "9d5335a287239fc1f89ffd6c517ee7e5892cdefdd251a367cff8b0eb0d5dc18c",
+      "bytes": 552
+    },
+    "backend-research/IterativeCholesky/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "backend-research/IterativeScaling/result.json": {
+      "sha256": "e9701ad358825473dc6dd7bef35cdd15447892ed12a932295aa4e1da0e81653e",
+      "bytes": 4344
+    },
+    "backend-research/IterativeScaling/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/IterativeScaling/uniaxial.dat": {
+      "sha256": "ac7681f843f05cf438187ac5bba957ea70ee715f4c57bcb55e36be428aa097e9",
+      "bytes": 1987
+    },
+    "backend-research/IterativeScaling/uniaxial.frd": {
+      "sha256": "e3d449e4fddcc557de242c0c66a3bbed4dc3d3138f4b8d4cde40a4549c6e5c10",
+      "bytes": 4329
+    },
+    "backend-research/IterativeScaling/uniaxial.inp": {
+      "sha256": "1fa735f464c29ddd4453eaa3d6e4456d2026e3201c95c483551dc20e4ea7bea5",
+      "bytes": 551
+    },
+    "backend-research/IterativeScaling/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "backend-research/PaStiX/result.json": {
+      "sha256": "ecb8997d2280e09c73c713ba5ac4fd803f56bffd84af3f4828c05e1e6962f191",
+      "bytes": 7151
+    },
+    "backend-research/PaStiX/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/PaStiX/uniaxial.dat": {
+      "sha256": "66d53fb27701221d968bff3f707142c0217c5d6e8e87b715f70ec38971fe936e",
+      "bytes": 1987
+    },
+    "backend-research/PaStiX/uniaxial.frd": {
+      "sha256": "bc23feced15b01f40da818ee01ec36c80912b6bedd73d350ec8f1a73e7f76efd",
+      "bytes": 4329
+    },
+    "backend-research/PaStiX/uniaxial.inp": {
+      "sha256": "8c2408cfa4443aa107feb334ec30205f5f0dcd42fc5a0e583637a956bc64e55e",
+      "bytes": 541
+    },
+    "backend-research/PaStiX/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "backend-research/Pardiso/result.json": {
+      "sha256": "9600d0a6ce4d6f812427823e26bd7fddfc09151c77e5207386f55ed8b8c0e521",
+      "bytes": 4149
+    },
+    "backend-research/Pardiso/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/Pardiso/uniaxial.dat": {
+      "sha256": "4a051575b2fff2364296a0f64dee73ce7b7a69b7d0cee42f86314ddcdfd0a668",
+      "bytes": 1987
+    },
+    "backend-research/Pardiso/uniaxial.frd": {
+      "sha256": "d09e4c9b0fbd6587a771fd3fe540fdbf9ed226fb79eff82c7d87d30e12e3fbb2",
+      "bytes": 4329
+    },
+    "backend-research/Pardiso/uniaxial.inp": {
+      "sha256": "d361afa4d7e3d80f6ca86fbb2921df138eb9cf21d11def521b9b926df7ba2d14",
+      "bytes": 542
+    },
+    "backend-research/Pardiso/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "backend-research/Spooles/result.json": {
+      "sha256": "6b310b6a9210da4a68e5fcec621fd5880b52336773c8cb03a794405989d1ae4d",
+      "bytes": 4160
+    },
+    "backend-research/Spooles/uniaxial.cvg": {
+      "sha256": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+      "bytes": 278
+    },
+    "backend-research/Spooles/uniaxial.dat": {
+      "sha256": "978081536d6b5c2fb25ffb75ce9d0a03ddf0300f4738c741fc63e7bf56d19ef8",
+      "bytes": 1987
+    },
+    "backend-research/Spooles/uniaxial.frd": {
+      "sha256": "7848f8105e9b6950d1b3ee86f630ed49333ac6166f2a11d865c57b867c368b8c",
+      "bytes": 4329
+    },
+    "backend-research/Spooles/uniaxial.inp": {
+      "sha256": "24fd654c2a381cd39bcdeff499ff668fdffb34e0fd9033f648b36d53670fac84",
+      "bytes": 542
+    },
+    "backend-research/Spooles/uniaxial.sta": {
+      "sha256": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d",
+      "bytes": 173
+    },
+    "msys-history-before-reference-build.json": {
+      "sha256": "754c371afc79d7d6ff5d1dd6518f153db116efb57f8ff6a4451e0b4af4ff1173",
+      "bytes": 4803
+    },
+    "official-README_Install.txt": {
+      "sha256": "8f3544135df17b2e3d503d0d26c14a40d1cda44540b655926a4b7c3a60fbf903",
+      "bytes": 4802
+    },
+    "pastix-cudaless-history.json": {
+      "sha256": "b29e8d07604acfcf23cb3e6ec921d997feeb030d2e9f6ec1b61820f2a5cd260d",
+      "bytes": 5127
+    },
+    "prepomaxRC2-README_Install.txt": {
+      "sha256": "8f3544135df17b2e3d503d0d26c14a40d1cda44540b655926a4b7c3a60fbf903",
+      "bytes": 4802
+    },
+    "prepomaxRC2-http.txt.txt": {
+      "sha256": "9ae339bdfcdd8df0e01df937071d9bd6cb53979d6d18c40e2b1ca4c3f2db3532",
+      "bytes": 43
+    },
+    "backend-research/verification.json": {
+      "sha256": "57dbebdeb71bfc586bca500048f627135487c35e5261f4711c61f17117724dc4",
+      "bytes": 34116
+    }
+  },
+  "rc2PinnedDefaultSolverSourceEvidence": {
+    "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0",
+    "files": {
+      "PrePoMax/Settings/SolverSettings.cs": {
+        "rc2Sha256": "18f748c1ac8ee83247d05df28a293982fdaede27c83539c8445f27652e65233e",
+        "requiredBehaviorMarkerPresent": true
+      },
+      "PrePoMax/Forms/51_Step/FrmStep.cs": {
+        "rc2Sha256": "f7f18a8fc15716e09d27a3f0398e379a30e2917c42c2cd0100b9795f3359d033",
+        "requiredBehaviorMarkerPresent": true
+      },
+      "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStaticStep.cs": {
+        "rc2Sha256": "5c6bf739dbea577e2708d7c24ed14d63ea40814c40c6510b53862f31916a6537",
+        "requiredBehaviorMarkerPresent": true
+      }
+    }
+  }
+}

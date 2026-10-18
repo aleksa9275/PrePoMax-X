@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="ExceptionTools.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions.Calculix.cs" />
     <Compile Include="Editors\FilteredFileNameEditor.cs" />
     <Compile Include="IContainsEquations.cs" />
     <Compile Include="IMasterSlaveMultiRegion.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Selection\Enums\vtkSelectItem.cs" />
     <Compile Include="Selection\Enums\vtkSelectOperation.cs" />
     <Compile Include="Selection\Selection.cs" />
+    <Compile Include="Selection\Selection.Legacy.cs" />
     <Compile Include="Selection\SelectionNode.cs" />
     <Compile Include="Selection\SelectionNodeIds.cs" />
     <Compile Include="Selection\SelectionNodeInvert.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="StringSplitter.cs" />
     <Compile Include="MessageBoxes.cs" />
     <Compile Include="RenamedTypeSerializationBinder.cs" />
+    <Compile Include="Tools.Equations.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Comparers\CompareObjects.cs" />
     <Compile Include="CommonClasses\UniqueQueue.cs" />

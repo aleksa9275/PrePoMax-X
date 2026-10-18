@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.CoreTests</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings><DefineConstants>$(DefineConstants);ANALYSIS_SLICE</DefineConstants></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../CaeMesh/CaeMesh.csproj" />
+    <Compile Include="../../../Core/Tests/Program.cs" Link="Program.cs" />
+    <None Include="../../../../CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt" Link="three_block_vectors.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

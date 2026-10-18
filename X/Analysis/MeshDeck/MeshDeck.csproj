@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.MeshDeck</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CaeModel/CaeModel.csproj" />
+    <ProjectReference Include="../MeasureMesh/MeasureMesh.csproj" />
+    <Compile Include="../../Core/MeshDeck/Program.cs" Link="Program.cs" />
+  </ItemGroup>
+</Project>

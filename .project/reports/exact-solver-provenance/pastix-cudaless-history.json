@@ -1,0 +1,84 @@
+[
+  {
+    "sha": "1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+    "node_id": "MDY6Q29tbWl0MjgzNTg5Mjk2OjFiMTVkNzkyYmRmNWM2YWM0ZTg5ZTM3Nzc2NjY2OGYyMjViNWE0ZDQ=",
+    "commit": {
+      "author": {
+        "name": "Kabbone",
+        "email": "tobias@opel-online.de",
+        "date": "2020-08-16T20:11:29Z"
+      },
+      "committer": {
+        "name": "Kabbone",
+        "email": "tobias@opel-online.de",
+        "date": "2021-01-10T11:47:43Z"
+      },
+      "message": "add gitignore for build directory\n\nSigned-off-by: Kabbone <tobias@opel-online.de>",
+      "tree": {
+        "sha": "1d2fde6f30e8d4a7acc929292d1edb4d269885e0",
+        "url": "https://api.github.com/repos/Kabbone/PaStiX4CalculiX/git/trees/1d2fde6f30e8d4a7acc929292d1edb4d269885e0"
+      },
+      "url": "https://api.github.com/repos/Kabbone/PaStiX4CalculiX/git/commits/1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEZtYcfDEO6Ju0QZiydIeHLcrkRSEFAl/66V8ACgkQdIeHLcrk\nRSGi+RAAjsLMW4g76eBV2SfaY5iymQeGRyCDoMgXRVPYHIVyOHN8xAOuDqTDnbCP\nGHzCMd1eFjCx911ac49hHRKBLPgBHgb2xEkhxfeFjq8F1IX5o9obGdbhuD+dxuSk\nyhJlW0Uy5Mh8vjqCdYNeY/b4ViOqRHIDVgbC/JWZfEpX+nrToqiEAktUeTSowBL6\nYp+s106cUKgPx8xxKtkq4Rpxho8waZxrev1P+//+KmlOvES6w/NzWR5UH7T3eVIk\nNXJuMBNdnbABgzNh1L9uXVy4+uusE3XZXCRKKXkvHbdF322dAhCgWKSeMdo9fylC\nKNup2ud+GRyk6l5/PKy+Phhosr60+0mbMeOB7i3d1iBrsdb/cZwmbryfu5lzv4tU\n0pPMcqqT9uVNyVU5zE/4pUd0o/3qbuYUPAikRBVXtJsQFoOCL8IBv1oEMF5QI5wW\nBzYEjSDJio4FCgo2LFTFqGVi9UqdR+s+aGM6XujxY/GsqARo9qwRXwt+fa8iI+fB\nA5zxnz2IFoIxjMdTWJVaO2CA5hLIN9AO3SV4hIwVXP8a6Lsj9th3prrQJANK4OKU\nCQB7A7XxkSwzju3WVFy40AtYeeB4BUTpfRMYHn3ooct2HL3j+mHn5LQCRV8OTumJ\n51Bk6oJVjIVhnm4bByHOBwDIqzM+gCgI7OSNlnYsG0O7af26iqU=\n=8XRQ\n-----END PGP SIGNATURE-----",
+        "payload": "tree 1d2fde6f30e8d4a7acc929292d1edb4d269885e0\nparent 3acbbb8cea41b1956782acde8879bc7349b270df\nauthor Kabbone <tobias@opel-online.de> 1597608689 +0200\ncommitter Kabbone <tobias@opel-online.de> 1610279263 +0100\n\nadd gitignore for build directory\n\nSigned-off-by: Kabbone <tobias@opel-online.de>\n",
+        "verified_at": "2024-11-25T04:20:32Z"
+      }
+    },
+    "url": "https://api.github.com/repos/Kabbone/PaStiX4CalculiX/commits/1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+    "html_url": "https://github.com/Kabbone/PaStiX4CalculiX/commit/1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+    "comments_url": "https://api.github.com/repos/Kabbone/PaStiX4CalculiX/commits/1b15d792bdf5c6ac4e89e377766668f225b5a4d4/comments",
+    "author": {
+      "login": "Kabbone",
+      "id": 58652596,
+      "node_id": "MDQ6VXNlcjU4NjUyNTk2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58652596?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Kabbone",
+      "html_url": "https://github.com/Kabbone",
+      "followers_url": "https://api.github.com/users/Kabbone/followers",
+      "following_url": "https://api.github.com/users/Kabbone/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Kabbone/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Kabbone/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Kabbone/subscriptions",
+      "organizations_url": "https://api.github.com/users/Kabbone/orgs",
+      "repos_url": "https://api.github.com/users/Kabbone/repos",
+      "events_url": "https://api.github.com/users/Kabbone/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Kabbone/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "Kabbone",
+      "id": 58652596,
+      "node_id": "MDQ6VXNlcjU4NjUyNTk2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58652596?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Kabbone",
+      "html_url": "https://github.com/Kabbone",
+      "followers_url": "https://api.github.com/users/Kabbone/followers",
+      "following_url": "https://api.github.com/users/Kabbone/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Kabbone/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Kabbone/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Kabbone/subscriptions",
+      "organizations_url": "https://api.github.com/users/Kabbone/orgs",
+      "repos_url": "https://api.github.com/users/Kabbone/repos",
+      "events_url": "https://api.github.com/users/Kabbone/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Kabbone/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3acbbb8cea41b1956782acde8879bc7349b270df",
+        "url": "https://api.github.com/repos/Kabbone/PaStiX4CalculiX/commits/3acbbb8cea41b1956782acde8879bc7349b270df",
+        "html_url": "https://github.com/Kabbone/PaStiX4CalculiX/commit/3acbbb8cea41b1956782acde8879bc7349b270df"
+      }
+    ]
+  }
+]

@@ -1,0 +1,255 @@
+{
+  "success": true,
+  "toolSha256": "c0181c6f096a3b3d1f68f7b558112c9ae5b6b75ed10d2409c495cf2e5a12859e",
+  "archives": {
+    "official": {
+      "bytes": 36675939,
+      "sha256": "a1f91281944c96d6cd914cc020421e8ae65973b3e15d055dc63a3e3e3066d281",
+      "solverMembers": [
+        {
+          "path": "calculix_2.22_4win/ccx_dynamic.exe",
+          "bytes": 48560044,
+          "sha256": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+          "crc32": "0x6d5cac31",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll",
+              "msvcrt.dll",
+              "mkl_rt.2.dll"
+            ],
+            "fileVersionResources": [
+              [
+                1,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          "markers": {
+            "hwloc": "../../hwloc-2.11.1/hwloc/topology.c",
+            "arpack": "C:/M/B/src/arpack-ng-3.9.1/UTIL/ivout.f",
+            "gfortran": "../../../gcc-14.1.0/libgfortran/generated/matmul_r8.c",
+            "openblas": "OpenBLAS : Program is Terminated. Because you tried to allocate too many memory regions.",
+            "scotch": "SCOTCH_graphLoad: invalid flag parameter",
+            "spoolesMT": "FrontMtx_MT_factorInpMtx",
+            "eigensolver": "dsaupd_c",
+            "pastix": "PASTIX_GPU",
+            "MKL": "mkl_rt.2.dll"
+          },
+          "compilerStrings": [
+            "GCC: (Rev3, Built by MSYS2 project) 14.1.0",
+            "GCC: (Rev2, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev5, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev7, Built by MSYS2 project) 12.2.0",
+            "GCC: (Rev10, Built by MSYS2 project) 12.2.0",
+            "GCC: (Rev1, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev6, Built by MSYS2 project) 13.2.0"
+          ],
+          "defaultBackendBannerReference": "PaStiX 6.0.1 observed in retained execution; symbol strings alone do not establish every build flag/revision"
+        },
+        {
+          "path": "calculix_2.22_4win/README_Install",
+          "bytes": 4802,
+          "sha256": "8f3544135df17b2e3d503d0d26c14a40d1cda44540b655926a4b7c3a60fbf903",
+          "crc32": "0xabaef30c"
+        }
+      ]
+    },
+    "prepomaxRC2": {
+      "bytes": 200965011,
+      "sha256": "26d3c6f801651802a399c980c0ca7bab38d7a8433f3860b22832004fc0142fb3",
+      "solverMembers": [
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/ccx_dynamic.exe",
+          "bytes": 48560044,
+          "sha256": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+          "crc32": "0x6d5cac31",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll",
+              "msvcrt.dll",
+              "mkl_rt.2.dll"
+            ],
+            "fileVersionResources": [
+              [
+                1,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          "markers": {
+            "hwloc": "../../hwloc-2.11.1/hwloc/topology.c",
+            "arpack": "C:/M/B/src/arpack-ng-3.9.1/UTIL/ivout.f",
+            "gfortran": "../../../gcc-14.1.0/libgfortran/generated/matmul_r8.c",
+            "openblas": "OpenBLAS : Program is Terminated. Because you tried to allocate too many memory regions.",
+            "scotch": "SCOTCH_graphLoad: invalid flag parameter",
+            "spoolesMT": "FrontMtx_MT_factorInpMtx",
+            "eigensolver": "dsaupd_c",
+            "pastix": "PASTIX_GPU",
+            "MKL": "mkl_rt.2.dll"
+          },
+          "compilerStrings": [
+            "GCC: (Rev3, Built by MSYS2 project) 14.1.0",
+            "GCC: (Rev2, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev5, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev7, Built by MSYS2 project) 12.2.0",
+            "GCC: (Rev10, Built by MSYS2 project) 12.2.0",
+            "GCC: (Rev1, Built by MSYS2 project) 13.2.0",
+            "GCC: (Rev6, Built by MSYS2 project) 13.2.0"
+          ],
+          "defaultBackendBannerReference": "PaStiX 6.0.1 observed in retained execution; symbol strings alone do not establish every build flag/revision"
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/http.txt",
+          "bytes": 43,
+          "sha256": "9ae339bdfcdd8df0e01df937071d9bd6cb53979d6d18c40e2b1ca4c3f2db3532",
+          "crc32": "0x3dbf6051"
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/libiomp5md.dll",
+          "bytes": 1919904,
+          "sha256": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+          "crc32": "0x8d05126e",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll",
+              "VCRUNTIME140.dll",
+              "api-ms-win-crt-string-l1-1-0.dll",
+              "api-ms-win-crt-runtime-l1-1-0.dll",
+              "api-ms-win-crt-heap-l1-1-0.dll",
+              "api-ms-win-crt-convert-l1-1-0.dll",
+              "api-ms-win-crt-environment-l1-1-0.dll",
+              "api-ms-win-crt-stdio-l1-1-0.dll",
+              "api-ms-win-crt-utility-l1-1-0.dll",
+              "api-ms-win-crt-filesystem-l1-1-0.dll"
+            ],
+            "fileVersionResources": [
+              [
+                5,
+                0,
+                2021,
+                428
+              ]
+            ]
+          }
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/mkl_core.2.dll",
+          "bytes": 78416352,
+          "sha256": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+          "crc32": "0x46746bae",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll"
+            ],
+            "fileVersionResources": [
+              [
+                2022,
+                2,
+                1,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/mkl_def.2.dll",
+          "bytes": 39064080,
+          "sha256": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+          "crc32": "0x7326c881",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll"
+            ],
+            "fileVersionResources": [
+              [
+                2022,
+                1,
+                1,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/mkl_intel_thread.2.dll",
+          "bytes": 54874584,
+          "sha256": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+          "crc32": "0x9e17d1b6",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll"
+            ],
+            "fileVersionResources": [
+              [
+                2022,
+                2,
+                1,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/mkl_rt.2.dll",
+          "bytes": 32539608,
+          "sha256": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb",
+          "crc32": "0x6082ad3c",
+          "pe": {
+            "machineHex": "0x8664",
+            "architecture": "x64",
+            "imports": [
+              "KERNEL32.dll"
+            ],
+            "fileVersionResources": [
+              [
+                2022,
+                2,
+                1,
+                0
+              ]
+            ]
+          }
+        },
+        {
+          "path": "PrePoMax v3.0.0 RC2/Solver/README_Install",
+          "bytes": 4802,
+          "sha256": "8f3544135df17b2e3d503d0d26c14a40d1cda44540b655926a4b7c3a60fbf903",
+          "crc32": "0xabaef30c"
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "executableMatchesOfficial": true,
+    "allSixExecutableRuntimeFilesMatchRecordedNativeWindows": {
+      "ccx_dynamic.exe": true,
+      "libiomp5md.dll": true,
+      "mkl_core.2.dll": true,
+      "mkl_def.2.dll": true,
+      "mkl_intel_thread.2.dll": true,
+      "mkl_rt.2.dll": true
+    },
+    "bundledInstallReadmeMatchesOfficial": true
+  },
+  "limits": [
+    "Byte identity establishes distributed Windows program/runtime identity, not native ARM availability",
+    "No source patch set, PaStiX/Scotch commit, all ABI flags or full cross-platform numerical equivalence inferred from strings",
+    "No binary executed by this inspector"
+  ]
+}

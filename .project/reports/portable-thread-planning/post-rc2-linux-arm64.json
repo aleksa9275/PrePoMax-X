@@ -1,0 +1,1776 @@
+{
+  "success": true,
+  "host": {
+    "os": "Linux",
+    "architecture": "aarch64"
+  },
+  "recordedAtUtc": "2026-10-18T17:23:22.918934+00:00",
+  "commands": [
+    {
+      "arguments": [
+        "python3",
+        "<repository>/ThirdParty/Sources/verify-sources.py"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"success\": true,\n  \"components\": [\n    {\n      \"component\": \"CalculiX CrunchiX\",\n      \"version\": \"2.22\",\n      \"files\": 1188,\n      \"bytes\": 11372771,\n      \"archiveSha256\": \"3a94dcc775a31f570229734b341d6b06301ebdc759863df901c8b9bf1854c0bc\",\n      \"releaseReady\": false\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "build",
+        "<repository>/X/Execution/PrePoMaxX.Execution.slnx",
+        "-c",
+        "Release",
+        "--disable-build-servers",
+        "-m:1",
+        "--artifacts-path",
+        "<temporary>/build",
+        "-p:RepositoryRoot=<temporary>/source/",
+        "-p:RestorePackagesPath=<temporary>/packages",
+        "--source",
+        "<temporary>/feed",
+        "-v:minimal"
+      ],
+      "exitCode": 0,
+      "stdout": "  Determining projects to restore...\n  Restored <repository>/X/Execution/Probe/Probe.csproj (in 33 ms).\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Execution/Solve/Solve.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n  Restored <repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj (in 145 ms).\n  Restored <repository>/X/Analysis/CaeMesh/CaeMesh.csproj (in 145 ms).\n  Restored <repository>/X/Analysis/CaeResults/CaeResults.csproj (in 101 ms).\n<repository>/X/Execution/CaeJob/CaeJob.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n  Restored <repository>/X/Execution/Solve/Solve.csproj (in 145 ms).\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/StaticDeck/StaticDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n  Restored <repository>/X/Execution/CaeJob/CaeJob.csproj (in 1 ms).\n  Restored <repository>/X/Analysis/CaeModel/CaeModel.csproj (in 2 ms).\n<repository>/X/Execution/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n  Restored <repository>/X/Analysis/StaticDeck/StaticDeck.csproj (in 2 ms).\n<repository>/X/Analysis/MeshDeck/MeshDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/MeasureMesh/MeasureMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n  Restored <repository>/X/Analysis/MeshDeck/MeshDeck.csproj (in 8 ms).\n  Restored <repository>/X/Execution/Tests/Tests.csproj (in 8 ms).\n  Restored <repository>/X/Analysis/MeasureMesh/MeasureMesh.csproj (in 8 ms).\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  CaeGlobals -> <temporary>/build/bin/CaeGlobals/release/CaeGlobals.dll\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeMesh/CoordinateSystem.cs(285,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n<temporary>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n  CaeMesh -> <temporary>/build/bin/CaeMesh/release/CaeMesh.dll\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  CaeResults -> <temporary>/build/bin/CaeResults/release/CaeResults.dll\n<temporary>/source/CaeModel/Materials/MaterialProperty.cs(51,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/DefinedFields/DefinedField.cs(115,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/Loads/CLoad.cs(131,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Sections/Section.cs(123,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/Loads/Load.cs(190,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/BoundaryConditions/BoundaryCondition.cs(194,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n  CaeModel -> <temporary>/build/bin/CaeModel/release/CaeModel.dll\n<repository>/X/Analysis/MeasureMesh/MeasureMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  MeasureMesh -> <temporary>/build/bin/MeasureMesh/release/PrePoMaxX.MeasureMesh.dll\n<repository>/X/Analysis/MeshDeck/MeshDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  MeshDeck -> <temporary>/build/bin/MeshDeck/release/PrePoMaxX.MeshDeck.dll\n<repository>/X/Analysis/StaticDeck/StaticDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  StaticDeck -> <temporary>/build/bin/StaticDeck/release/PrePoMaxX.StaticDeck.dll\n<repository>/X/Execution/CaeJob/CaeJob.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  CaeJob -> <temporary>/build/bin/CaeJob/release/CaeJob.dll\n  Probe -> <temporary>/build/bin/Probe/release/PrePoMaxX.ProcessProbe.dll\n<repository>/X/Execution/Solve/Solve.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  Solve -> <temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll\n<repository>/X/Execution/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  Tests -> <temporary>/build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll\n\nBuild succeeded.\n\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Execution/Solve/Solve.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Execution/CaeJob/CaeJob.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/StaticDeck/StaticDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Execution/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/MeshDeck/MeshDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/MeasureMesh/MeasureMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Execution/PrePoMaxX.Execution.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeMesh/CoordinateSystem.cs(285,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n<temporary>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeModel/Materials/MaterialProperty.cs(51,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/DefinedFields/DefinedField.cs(115,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/Loads/CLoad.cs(131,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Sections/Section.cs(123,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/Loads/Load.cs(190,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<temporary>/source/CaeModel/Steps/BoundaryConditions/BoundaryCondition.cs(194,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<repository>/X/Analysis/MeasureMesh/MeasureMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/MeshDeck/MeshDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/StaticDeck/StaticDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Execution/CaeJob/CaeJob.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Execution/Solve/Solve.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Execution/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n    28 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:07.33\n",
+      "stderr": "An issue was encountered verifying workloads. For more information, run \"dotnet workload update\".\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"passed\":47,\"failed\":0,\"checks\":[{\"name\":\"75 percent recommendation examples\",\"passed\":true},{\"name\":\"single available CPU remains usable\",\"passed\":true},{\"name\":\"automatic rounding uses floor\",\"passed\":true},{\"name\":\"manual total can override automatic budget\",\"passed\":true},{\"name\":\"fair remainder and deterministic job ordering\",\"passed\":true},{\"name\":\"manual budget shared rather than multiplied\",\"passed\":true},{\"name\":\"large CPU count does not overflow\",\"passed\":true},{\"name\":\"invalid available CPU counts rejected\",\"passed\":true},{\"name\":\"invalid manual total rejected\",\"passed\":true},{\"name\":\"invalid or excessive planned jobs rejected\",\"passed\":true},{\"name\":\"overcommitted plan rejected instead of zero thread jobs\",\"passed\":true},{\"name\":\"available manual budget allows every CPU one job\",\"passed\":true},{\"name\":\"allocation bounds conservation and fairness across host sizes\",\"passed\":true},{\"name\":\"callers cannot mutate a returned plan\",\"passed\":true},{\"name\":\"native process successful status and exit\",\"passed\":true},{\"name\":\"argument tokens including metacharacters unchanged\",\"passed\":true},{\"name\":\"working directory with spaces and unicode\",\"passed\":true},{\"name\":\"explicit child environment\",\"passed\":true},{\"name\":\"stderr retained separately\",\"passed\":true},{\"name\":\"original progress event and output file\",\"passed\":true},{\"name\":\"no shell side effects\",\"passed\":true},{\"name\":\"asynchronous jobs are one shot\",\"passed\":true},{\"name\":\"nonzero real exit maps to Failed\",\"passed\":true},{\"name\":\"both pipes drain beyond normal pipe capacity\",\"passed\":true},{\"name\":\"deadline returns TimedOut with real stopped process\",\"passed\":true},{\"name\":\"cancellation maps to Killed\",\"passed\":true},{\"name\":\"pre-cancel never launches child\",\"passed\":true},{\"name\":\"tree fixture child actually started\",\"passed\":true},{\"name\":\"deadline stops attached descendant process\",\"passed\":true},{\"name\":\"default concurrent-run flag serializes jobs in this host\",\"passed\":true},{\"name\":\"explicit concurrent-run flag permits independent jobs\",\"passed\":true},{\"name\":\"missing executable recorded as failure\",\"passed\":true},{\"name\":\"existing output evidence never overwritten\",\"passed\":true},{\"name\":\"invalid deadline fails before execution\",\"passed\":true},{\"name\":\"original job type assembly owner\",\"passed\":true},{\"name\":\"original JobStatus names and numbers\",\"passed\":true},{\"name\":\"original persisted job fields retained without platform state\",\"passed\":true},{\"name\":\"unknown solver profile never falls back\",\"passed\":true},{\"name\":\"pinned build file accepted only with exact bytes\",\"passed\":true},{\"name\":\"changed native binary rejected\",\"passed\":true},{\"name\":\"original parser reads recorded Windows status IDs\",\"passed\":true},{\"name\":\"recorded status retains original times and iterations\",\"passed\":true},{\"name\":\"empty recorded convergence is not fabricated\",\"passed\":true},{\"name\":\"original monitor parsing invariant with D exponents\",\"passed\":true},{\"name\":\"original convergence components and record numbering\",\"passed\":true},{\"name\":\"monitor types retain CaeJob ownership\",\"passed\":true},{\"name\":\"portable job has no WMI or Windows desktop dependencies\",\"passed\":true}],\"runtime\":{\"os\":\"Ubuntu 24.04.5 LTS\",\"architecture\":\"Arm64\"},\"solverExecuted\":false}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"plan\":{\"AvailableLogicalProcessors\":4,\"TotalThreadBudget\":3,\"IsAutomatic\":true,\"ThreadsPerJob\":[3]},\"solverExecuted\":false,\"settingsChanged\":false,\"reservationEnforced\":false,\"cpuUtilizationLimit\":false}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "1",
+        "--jobs",
+        "1"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"plan\":{\"AvailableLogicalProcessors\":4,\"TotalThreadBudget\":1,\"IsAutomatic\":false,\"ThreadsPerJob\":[1]},\"solverExecuted\":false,\"settingsChanged\":false,\"reservationEnforced\":false,\"cpuUtilizationLimit\":false}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "availability"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"os\":\"Linux\",\"architecture\":\"Arm64\",\"pinnedBuilds\":[],\"solverAvailable\":false,\"binaryAvailabilityChecked\":false,\"solverExecuted\":false}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "inspect-monitor",
+        "<repository>/.project/reports/windows-reference/solver/uniaxial.sta",
+        "<repository>/.project/reports/windows-reference/solver/uniaxial.cvg"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\":true,\"solverExecuted\":false,\"status\":{\"Steps\":[1],\"Increments\":[1],\"Attempts\":[1],\"TotalTimes\":[1],\"IncrementTimes\":[1],\"IterationCounts\":[1],\"Count\":1},\"convergence\":{\"Steps\":[],\"Increments\":[],\"Attempts\":[],\"Iterations\":[],\"RecordNumbers\":[],\"ContactElementCounts\":[],\"ResidualForces\":[],\"DisplacementCorrections\":[],\"ResidualFluxes\":[],\"TemperatureCorrections\":[],\"Count\":0}}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll"
+      ],
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "Usage: PrePoMaxX.Solve thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "run-static",
+        "unknown",
+        "<temporary>",
+        "<temporary>/mesh",
+        "<temporary>/definition",
+        "<temporary>/should-not-exist",
+        "30"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"No uniquely pinned solver build: unknown\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "run-static",
+        "windows-reference-2.22",
+        "<temporary>",
+        "<temporary>/mesh",
+        "<temporary>/definition",
+        "<temporary>/should-not-exist",
+        "30"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Pinned build does not match native host. Matching native solver source/build provenance remains open; no substitute is selected.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "inspect-monitor",
+        "<temporary>/missing.sta",
+        "<temporary>/missing.cvg"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Could not find file \\u0027<temporary>/missing.sta\\u0027.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--unknown",
+        "1"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"thread-plan accepts unique --threads auto|N and --jobs N pairs.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"thread-plan accepts unique --threads auto|N and --jobs N pairs.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "auto",
+        "--threads",
+        "1"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"thread-plan accepts unique --threads auto|N and --jobs N pairs.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "0"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Thread and job counts must be positive decimal integers.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "+1"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Thread and job counts must be positive decimal integers.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "2147483648"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Thread and job counts must be positive decimal integers.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--jobs",
+        "1025"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Planned jobs must be in [1,1024]. (Parameter \\u0027plannedConcurrentJobs\\u0027)\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--jobs",
+        "0"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"Thread and job counts must be positive decimal integers.\"}\n"
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "<temporary>/build/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "thread-plan",
+        "--threads",
+        "1",
+        "--jobs",
+        "2"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "{\"success\":false,\"solverExecuted\":false,\"error\":\"More simultaneous jobs than the thread budget; reduce concurrency or choose a larger manual budget. (Parameter \\u0027plannedConcurrentJobs\\u0027)\"}\n"
+    }
+  ],
+  "solverExecuted": false,
+  "upstreamRevision": "post-rc2-2026-10-17",
+  "sources": [
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/Comparers/CompareIntArray.cs",
+      "sha256": "ff318a3db1efc40741b150e89d0350af1802df9e710fee24171a752dc4a38092",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/0D/FeElement0D.cs",
+      "sha256": "31a8b27cfdfeea6db394637b2ae3bc6865f2fe3d03d5caf2aecc2c87eac4185a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/0D/MassElement.cs",
+      "sha256": "212adde4479a3cc614ab509c751ad129b1888c75199e022890d3bd62e4fe9a52",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/FeElement1D.cs",
+      "sha256": "de526da44f008453b815b4efc4a75c7625968521fe1c2cc5e162422f50f3126d",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearBeamElement.cs",
+      "sha256": "65d7750f236cbf432ddc7458e28d4edfef31b3342520e8ce5d9438e7566905f2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearGapElement.cs",
+      "sha256": "f32d816558143a0f5960587dcb9bcd9c01929e7ee08a97da7301463c1e749409",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearSpringElement.cs",
+      "sha256": "4a5a23e2a7e955a94bb5738510ac91d80b4e79b0382827b6b11331a7a9934483",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/ParabolicBeamElement.cs",
+      "sha256": "f31ecae6b29def2d68d15550e309111a431b822e6b21ee28bd916cd539cad761",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/FeElement2D.cs",
+      "sha256": "0156d7b85338a59ba9f5200da3af726f9bb30397ec8b40829853ce4ae25b3102",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearQuadrilateralElement.cs",
+      "sha256": "5938a33ee4f3d154ee7bcd67753e206c38c2d107df5760b5dd6c5834f03a61f5",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearTriangleElement.cs",
+      "sha256": "a6a999b5af8a27283dd438bc253f39f208c4e5c9545598eabf242fdc756ea611",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicQuadrilateralElement.cs",
+      "sha256": "d7f63dc27482507160bc5634685a3cb4d2165149f82fdeb49b18460d267c0dbe",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicTriangleElement.cs",
+      "sha256": "4741a0e4288a992e71fee2f2a9a67d521c783cf99b5d02c94d7cddab6b3b2fe1",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/FeElement3D.cs",
+      "sha256": "db47b38645a866a5c25071ef248654ea575541b6dedc7a173eb0c8fc42f4d877",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearHexaElement.cs",
+      "sha256": "6b03579ae1cd8215ac32ef3bf0648d89a23f6c71cc5e5bfdfdcc76935c40ac0b",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearPyramidElement.cs",
+      "sha256": "320454ff6846a839a27bd9ce2f37b343b83e9cba4d0784ccc29f3fa41ee74b3d",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearTetraElement.cs",
+      "sha256": "2073c73562d274231e14229df0f8a5486c6f22c9432c5e4cf7c0b1b96635b3ce",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearWedgeElement.cs",
+      "sha256": "5e01663260f288732c047048dddc5e96896294f49329126d55d1a0f27a26c072",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicHexaElement.cs",
+      "sha256": "847ee2417c410fd96beb6ed156e5993fdf3925217fb56d72cac9cdacbe271144",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicPyramidElement.cs",
+      "sha256": "2e74f928f8b4c8e97e13ee1f55d6535084d8558ec697fcb39607029ab17ab1b0",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicTetraElement.cs",
+      "sha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicWedgeElement.cs",
+      "sha256": "d08fa37e91b84e7ac5d638df89882db66e8875e197e37d6c6b5b91ad2f967027",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/FeElement.cs",
+      "sha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/IntegrationScale.cs",
+      "sha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/VtkCellType.cs",
+      "sha256": "9364609fc2fb07cb6073c109d8ebf71a14b6d0f5d22b0d43b1f39237133225ca",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+      "sha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+      "sha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+      "sha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryTools.cs",
+      "sha256": "372bcfe39e32920d102da734a084bd1f5da0e0032aaac18864994ce162290336",
+      "unchangedFromBaseline": false,
+      "baselineSha256": "955f6b2825f69041ec8cdbbdee74652c71feb2160aa7daa787cc49f0f1a423a7",
+      "onlyRemovedUnusedImport": "using System.Windows.Forms.VisualStyles;"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+      "sha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+      "sha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+      "sha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+      "sha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CaeException.cs",
+      "sha256": "024ac7385a2cc6d7f0298f97c4b45a92431af61324ab1a42392b0642b3a6d268",
+      "originalClassBodyUnchanged": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/NamedClass.cs",
+      "sha256": "047fb7b3bba9a5b67686341f3378790e88110bb456206667080b9b65272c9433",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeMesh/InpElementSet.cs",
+      "sha256": "6f8853c32fa27d123ead1fe2d80df4e2d5805f9a7081288c311f019360e564ab",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeMesh/Enums/ConvertPyramidsToEnum.cs",
+      "sha256": "116fe0f8fbba67a470d2088f5449e4c1aa02026d76a0a57245194c2e4c5ecd35",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/CalculixKeyword.cs",
+      "sha256": "c627ee3e628b0bd7b9abbfd7e2d4b2bcfb20b2d7f2a8b083f782b38cad51c458",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalElement.cs",
+      "sha256": "f5b18ec5f99a9433ec21bdd8ed15ae2cc9a6af0b2e8e1815cbb136d10f00d19b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoadEnums.cs",
+      "sha256": "d07459970f7bfdaf3531f8f115251b79ae559e8840d5a17a24501622586d01e9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshParsing.cs",
+      "sha256": "92c8b8df5f189fe42311fa512ff61548c5d3664e8e6d11492dbb7d2abd7d332d",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs",
+      "sha256": "889f0236a3274508291aedb02e6b2f755577875a99286bb04fa5d20797bc60ea",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpMeshData.cs",
+      "sha256": "95efeb1d49fd62faf5da6f740c67ce9c9738d487bc8f5b1648362dae36e693ad",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshData.cs",
+      "sha256": "35c9a1da5093379cbf69f5172e9cc14374511f59bd9f764cd17ec053443b4239",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/MeshDeckWriter.cs",
+      "sha256": "d2c5039885aec3a65b8812001b2c7ca83d1b01129adbd45a2774375637e1006d",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeGlobals/Equation/EquationContainer.cs",
+      "sha256": "649fa23d3ebd462b7260fb4376739069ec6b1b4dff45ba24a1bedcb77406ee89",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/Equation/EquationString.cs",
+      "sha256": "7c95b4760467ca218137a337a823c56e4a4f64b6bfa9aca91b511ff84c5e1ea0",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/NCalc/MyNCalc.cs",
+      "sha256": "c73d1acd0549793c4cb992dfc165b3883492ea9d5a7f98f28ea12409eda46d9e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/IContainsEquations.cs",
+      "sha256": "e4ca9d074fe57c10fb7a3fcd16f5a0b8d9de28ed9d2f14f1b6a0e1ba3483f402",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionary.cs",
+      "sha256": "9ccffa79b5c89fd8394216d3dd0da3456bc1d10e6150717f63b6a72ec1ceeac3",
+      "removedUnusedImport": "using System.Runtime.InteropServices.WindowsRuntime;"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionaryItemLayout.cs",
+      "sha256": "46de143ec5c8cc1040d74a0b2a9094877a3ab3d73b0e0f1602291fe472e6bdf2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/MyUnit.cs",
+      "sha256": "2ab434907d184e323175ae3bfca7897d0f52ca40ef116459162bd338464d155e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticLamina.cs",
+      "sha256": "812fc9676cbb172791d67bb528d587ac42782eb1a6d23071a3dcdf962291e93a",
+      "kind": "unchanged",
+      "upstreamVariant": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticWithDensity.cs",
+      "sha256": "dd0098fd750ac603b6fae9f44cf9b2e857640764197cce9b4aa931c1836c5112",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/MaterialProperty.cs",
+      "sha256": "545463178ea451089369e1fd6493d7a1d8f9993c63d22f8bb95c0b1eb2913ccb",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SlipWear.cs",
+      "sha256": "aedc0ebfc5bae070647d0e6f9a67a0825ff8de174d3c97c17865eeefd16c9631",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SpecificHeat.cs",
+      "sha256": "9733bfceb6915be534aad07ea7ec8cb58d8366f7346fd35a9d2e96878b0882c9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Material.cs",
+      "sha256": "4ccb44de0c5f902c35bed4e63eb61f7d591fda155923a4d03fd1e8d7d1896927",
+      "kind": "unchanged",
+      "upstreamVariant": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalExpansion.cs",
+      "sha256": "ca189eb1805e953ac9ec16fb8270e4bca761106e022c19ed6df7669db2d3f225",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalConductivity.cs",
+      "sha256": "b0335bf71a03101dc9333173e73cab5e043d9d55f7e391bf2c2ab07d59b2aac2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Plastic.cs",
+      "sha256": "c269a83581f75a0b4d3101f8cee355961d00b7d8290bf7482bd7662e8c7bdcec",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Density.cs",
+      "sha256": "61c7ca14a23d0421f30317d3e4c4de6fbf5cc1f7070f78c6aa0ad9536e436dc3",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Elastic.cs",
+      "sha256": "0a4c6b5d3ea5eb6d0862d2fd1a08c41a2862fa7f4a1e17f8fa2bcdec0bc96e1f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticEngineeringConstants.cs",
+      "sha256": "038e99e9b848fc1336bb6492398ab54c0325d2afb427e44cc7b0777ea0703cd0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalMaterial.cs",
+      "sha256": "15c976c529cd6bf56835370eb2e784a0fb0e62e8d335d4894715a79930602853",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalElastic.cs",
+      "sha256": "2fac17219584789452b237d2ed17cefe89f448fdc742345cc785a20a81c28367",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPressureConverter.cs",
+      "sha256": "8a38185cf274dc42839d5465fb279b4bf0d80c4f06bf271c1c1d01522ed5672f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTemperatureConverter.cs",
+      "sha256": "386f2b87aa25de9f1e0268978a4928590381cb5a85e683e6ad840254909208f5",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDoubleConverter.cs",
+      "sha256": "5008e21d081ae6cdfd298b1a249c9a57b3d5b742f363873a7f2bf504a3075f0d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDensityConverter.cs",
+      "sha256": "a435819eb1facf8f02bd2af540d4d61c5de56a7646bc8c9b1e863b20c3d79387",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalExpansionConverter.cs",
+      "sha256": "16e85da94c4d5ede1b9b142286451c3d93e45e78f11f8d4b391d7b5c6dd0f530",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalConductivityConverter.cs",
+      "sha256": "a4d910204e1ba7824fe0f76ff13b610d1baaa76fa3cea4bfe0fad9e0923f785d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringSpecificHeatConverter.cs",
+      "sha256": "dc695f606067b4cee8f979b7c65d7cc37d1a2aab5291fcb4c32262466de3b80d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringStefanBoltzmannUndefinedConverter.cs",
+      "sha256": "79290796a304fa94d4f08bfe8f721a961c399381f07c6971f123bd6ce4c4e0d8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringNewtonGravityUndefinedConverter.cs",
+      "sha256": "7c650c9d48becfe34269d0cdf41f353cdd49ca26f93502ab76f7d789abac5ab5",
+      "kind": "removed unused import",
+      "removedUnusedImport": "using System.Windows.Forms;"
+    },
+    {
+      "path": "CaeGlobals/Extensions.Calculix.cs",
+      "sha256": "55a421e8a2e0454042b4e8188632781de3a7587f8ab63e48600b0f9c838b105e",
+      "kind": "mechanical extraction",
+      "originalPath": "CaeGlobals/Extensions.cs"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerAreaConverter.cs",
+      "sha256": "b999ecfb832f2a0f048b949dd3d4db6ab34c9ee07bb5433254d92ffd5b4edfbd",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerVolumeConverter.cs",
+      "sha256": "c63aea66fee2f37c1abf7083728ac72fb14bc2a1587b8ecfb1bbf2921849e47d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAreaConverter.cs",
+      "sha256": "a2ea27864c2e00bcdd2df200eaa706f0b38947c60428c18edded1c0342fe3c49",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringEnergyConverter.cs",
+      "sha256": "326ffa1791957b9e68e395b19eb7d398b36867ac7ab7f666f15e5eaa1a689f8e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringForceConverter.cs",
+      "sha256": "a80e718fa787e6a789e22202432a2b71eb48a494c4aac072adf2a483ac9f43ff",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringLengthConverter.cs",
+      "sha256": "d6c76cfe0d5de825e9b99852a1ebea7a6e23400993b6710150823f7ca1abfdc0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringMassConverter.cs",
+      "sha256": "e7fba8958f8b1a2521417bd20a6481218b275c9784aac293720361316be615a7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerConverter.cs",
+      "sha256": "c9962c29d5b2a3502e7af2c2b6973c596f92388bf9719a55038701a3eed9b3a8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTimeConverter.cs",
+      "sha256": "6af9a89b7da335b6fe670c1c4f741ff43668279eb72e52d7d176c806f4ab9488",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringVolumeConverter.cs",
+      "sha256": "fc3fe972ea51c132bd28a0866fe3768a05afb3a463c9f8ae9175420528f8e96d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs",
+      "sha256": "515de6faa17d2477c392858af5e5336bac802fca287fe156d846bf3205b77cf5",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeGlobals/IMultiRegion.cs",
+      "sha256": "e86f72b83833fc75f31c5cc697f59f61301c043624c009d53031c02d9f8d117a",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/RegionType.cs",
+      "sha256": "46655f13a3c5f689cc96fa16a85be68d91607d59cfff960c18ca415f82dca7be",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/AffineTransform.cs",
+      "sha256": "987bb6d8eee10683ab26031824148ecc86a38174a9bd19029b0d5912d933a043",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Tools.Equations.cs",
+      "sha256": "b008ca129371f9eaccb10de74012980b7dbcdd5ce0c0f0cb82b1a545b1d5948b",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeMesh/CoordinateSystem.cs",
+      "sha256": "470eb910f068114b230ea0760572bfe4ee38406ee2d4641d1632bfb5747d7e0e",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Sections/Section.cs",
+      "sha256": "80dd473debffb9de353f7355bce6f7b10c0f2102ec5f6ccea6ba51054074b55e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/SolidSection.cs",
+      "sha256": "ec7a73182b3fcf1e7f58934c8dd26f27edca692f73046c5ae83ef754460bc486",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/ShellSection.cs",
+      "sha256": "4b68915f87e2e6fc0f9b93d1411baeea0eed76ff0119763eb0edf754f0b80802",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Sections/MembraneSection.cs",
+      "sha256": "d58e453290669a42f312113e6e1ed99294214f92787ce31ce11edd7d640b01fa",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Amplitudes/Amplitude.cs",
+      "sha256": "1e018aef3957e401a44914e507652f1180a26f98cd3088eedee70bf86c98caab",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Step.cs",
+      "sha256": "715984921525c59483d13cc1f8e178bb274a060f8570dcc82bb685e6d37fba0c",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/StaticStep.cs",
+      "sha256": "9f9bf97dbbef904b0ac22fc49f401978a2e00cce5c76055f3e9694bef95fce8a",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/BoundaryConditions/BoundaryCondition.cs",
+      "sha256": "bc0464f5ac9072eb361efebaf0984394b5d653c1a9bb16e7a81a627d95d3346f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/BoundaryConditions/DisplacementRotation.cs",
+      "sha256": "d35f91ea09c3cb1e96601203844ad0d84030ad8a2da142a2114864a35e33b8c6",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/Load.cs",
+      "sha256": "b5ae3a3554583d002b1d6f10b931faf117816de2688f14b8da5b5b303c6ba542",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/CLoad.cs",
+      "sha256": "6d054964a2e4bec795b7ecb392726ed02abbe9adbf3fb072909e8ab7170ffbd5",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/Steps/DefinedFields/DefinedField.cs",
+      "sha256": "461214b7795c446cb3b0404557acb71dc6fe1efbe5c537a0028612a1904522af",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Controls/StepControls.cs",
+      "sha256": "63d2129430194d4d81095a573fa4e42b4f55a098dc76c3d49d32a088c6074c34",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/Controls/StepControlParameter.cs",
+      "sha256": "5a60760eb13d8b01acdb7e6e5a6be39bc25cae3930db08bf65e4ffb46ee01a08",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/CalReferencePoint.cs",
+      "sha256": "049e1a2c00dfc81d21a7a86756329f9a4b7bce1c87429dd47d78c7e18220afd6",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeIds.cs",
+      "sha256": "0c4c0efa37ac685d21e5137353d287b6d9bd9a6586025c0b86bab8d05864716d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Selection.cs",
+      "sha256": "05899109ace298684af51564d2f6b335f7a8e6ccd532fbff047d841a66055c72",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeInvert.cs",
+      "sha256": "5d3b6c6a3fb912ae83e302dbdefb3230aa68bcd1dfc5316aaf6253dd12c4d759",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNode.cs",
+      "sha256": "81be9259e806f9eccf3623b0cd631f8d8053468e3a0372f76ae4b3697fa17537",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/SelectionNodeMouse.cs",
+      "sha256": "256ca40a6c26ed93fc8174d0c3a5507e891033cc9bd1f8fb3ca37a87968fbce0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectBy.cs",
+      "sha256": "d9b85b78f68faae2f243a8a2febc7e8f482214d7e2f95465acb00ef5ac64282e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/GeometrySelectModeEnum.cs",
+      "sha256": "7743723efb0024ecfffe01de9ef46a4142e6bf4c0fe4415829f08839b6e35bec",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectItem.cs",
+      "sha256": "f661544593f1ee3b643bb212be580794e38ccb57e6dbe575e09e4c8e83210d9e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/Selection/Enums/vtkSelectOperation.cs",
+      "sha256": "9e0d657ea21781a008ffa1c82d5f69fb14f128ad5a7f78b25443ad2c7793a382",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/ElementFieldOutput.cs",
+      "sha256": "68bffdee95fb5d2289696646347a3c65c84f3d8df527906bb105c71449334f10",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/FieldOutput.cs",
+      "sha256": "2b9a370ed5f5fa61ffd9cf2d0a57c35346e5895b7de1b957d0483b2995151c45",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/FieldOutputs/NodalFieldOutput.cs",
+      "sha256": "92c43c17d932058e0a4c623402dc579ffc5c83a47cae13bd84128fa8cc0aa457",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/HistoryOutput.cs",
+      "sha256": "d671a72849f6824b46005a4f19a5d1b2a66a6c0d45170b63754d44275ec6d1a8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/NodalHistoryOutput.cs",
+      "sha256": "037952297b25f0c93c459ae0a675cb2e88c2e6de259dd5368ebad330ce466b65",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Steps/HistoryOutputs/ElementHistoryOutput.cs",
+      "sha256": "7636906f8c7c4be1f8270aa95df32eecba53fb08648ee254245a404af0f60dcf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalSolidSection.cs",
+      "sha256": "2ed431d560a8dd24b1f9dce9f767189fd08f4f9ccac840c76daa06858cd0e568",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStep.cs",
+      "sha256": "2cdaaebcaf77d2812dcf23a6ce63d63c8736abac6dd5c006e0156630947c40ef",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStaticStep.cs",
+      "sha256": "5c6bf739dbea577e2708d7c24ed14d63ea40814c40c6510b53862f31916a6537",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalStepHeader.cs",
+      "sha256": "41be3d8e2dad442e05c1105c5fd3f4c80537753345383b7bc4329c7e90602d3b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalEndStep.cs",
+      "sha256": "ad98cc0eea0c3c1f7d2e106defe99909cd76aeb113f3291a6cf6d1c9fbb24d00",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalOutputFrequency.cs",
+      "sha256": "c26f5ec8901ff880de00641e09f9c68f5653eecdcb64fa3b9f00e459eae8ccb0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalBC.cs",
+      "sha256": "7361e60d8099e3ff356d227845160f39491307458dfbec3a9f508b4b823b70cf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalDisplacementRotation.cs",
+      "sha256": "c6124beb53ecf5057943c00ac8b986bef577d8a81bfd8d8f296930ef2b5893ad",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoad.cs",
+      "sha256": "baa39f10cfd326f1e2bf4d5ab098cb1094a33d401dcd4a052cef4e1161fd3de2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.cs",
+      "sha256": "349df8fdcc900d143686840c0b3ec994e0bbe18c179dfa4c58c0a5495ec0e010",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/FieldOutput/CalNodeFile.cs",
+      "sha256": "4d650e55926ac9a072632557915fd67c6fa61ec98e4090c960cf2bc0fec1869f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/FieldOutput/CalElFile.cs",
+      "sha256": "43c60488b08aff1fb2512056d77873dcf341f41d4a69d5b42cc49528762ab084",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/HistoryOutput/CalNodePrint.cs",
+      "sha256": "62e8ee40c3f0e6f09a9b44d182a4e06e1343bed172f29c44b1e027307de99827",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/HistoryOutput/CalElPrint.cs",
+      "sha256": "d0941e2378da7b6b1bf4b450378fa5d8135da502609342269d40778e7862972c",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleDegConverter.cs",
+      "sha256": "052fc0ea272d291d8540e5ae0b7454341786f7957551a094cd189f161f230e78",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleDOFConverter.cs",
+      "sha256": "b150fde3ceb14b2a95bfa7e526f4c40a7b0d867cc894f0c00480d81de5e5dc29",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs",
+      "sha256": "5fb5fe5d662cf1d3d6b1ba9a1ff62619342ca9aa3e612a83e9b069e139dcc8c9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAngleConverter.cs",
+      "sha256": "140deabea1d61459be13869da29eed83ed16f7988a858b1fb6e233644c80b8ac",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalOpParameter.cs",
+      "sha256": "7962f37067d59bed4a72f19c5a5535381358565e2d90f3ab1a614c392b56ec4f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Distributions/Distribution.cs",
+      "sha256": "f57fe5a6ad2961e19e0743bddd3f7a3d3a1f1c4534e4180e4be610aecc351e9f",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs",
+      "sha256": "463bbfa27047bf1821e9444758e32c77cb6e8297cfee671d596e3401604db42b",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeModel/Materials/CompositeStrength.cs",
+      "kind": "upstream-only material type",
+      "sha256": "1f709b698a6acba983b3175cf988e71b83455228757529439ecdafaca624b75a",
+      "upstreamVariant": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+    }
+  ],
+  "jobSources": [
+    {
+      "path": "CaeJob/AnalysisJob.cs",
+      "sha256": "6b27c77a054175bbf0f5b463761864e6d39d5f4ec8a5392e8598dd1e65224c08"
+    },
+    {
+      "path": "CaeJob/CalculixMonitorData.cs",
+      "sha256": "e50124f37a37af934000686325973b0fa803ab29d81d4fb8cb47982add4ce9d0"
+    },
+    {
+      "path": "CaeJob/ExecutableJob.Legacy.cs",
+      "sha256": "2efa146a46ec0d2ebfddb55cd4caba4737e6b8f84a12c685d58f3bce76d5a4d9"
+    },
+    {
+      "path": "CaeJob/ExecutableJob.cs",
+      "sha256": "ea21ee7db0ffa3d9f4f83997f4c0ff6fa589bbeceb481b7ada9dd566ee1958a0"
+    },
+    {
+      "path": "CaeJob/JobStatus.cs",
+      "sha256": "998fa69849cb9a89a910d5161207c6280517d433e3d74eefcd60d425d1ef026a"
+    }
+  ],
+  "portableAdapter": {
+    "path": "CaeJob/ExecutableJob.Portable.cs",
+    "sha256": "57c25dfa850a3957959a2098b3a79eb43c65418ea98e4b2136ea7e5fb364efe1"
+  },
+  "repository": {
+    "head": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+    "dirty": true
+  },
+  "tools": {
+    ".gitignore": "d80be262b6e0f107506a3202570ea6156417c1c350aa3fcdab8fa643c96d5525",
+    "CaeJob/CaeJob.csproj": "f4fd989ba5e8518a0a0d05b8a537b7fc6c5d211090d1b04a092ad605c7de082e",
+    "CaeJob/SolverThreadPlan.cs": "f67425061c18d63bb3f2d4cc2e547c6e4161cd96c5ddd7335739a751034f131c",
+    "Directory.Build.props": "84ebd1e1cb2446f8d7b00b7cce7ff89d475b9d451327b42a0d5141ba4406e73f",
+    "PrePoMaxX.Execution.slnx": "b769a0185956e3ea100a35fec9fe2c6fa18a45109c340382074d06abf0381a23",
+    "Probe/Probe.csproj": "244883eafe5c1b240f3672c0c4ff1315b811adf6b10ae786eaf1bab3101ece6a",
+    "Probe/Program.cs": "9955f092d06904c92f9af1c1349f57e6a2704dd3793e291e5652ae0cca1257db",
+    "README.md": "36c84dbbb250c1fff54a85e30e4f5e07a8ecb6f30545eb03fbba8c029cfd5f7c",
+    "Solve/Program.cs": "1e6ca895bb548be0e8dd6a4205c72f2ecf315dbb70ba121a46db5d19f327c6f9",
+    "Solve/Solve.csproj": "d1ae068eebccf4a4c49d8b8d99a2e804419fefeebf402014e61560c27265273a",
+    "Tests/Program.cs": "473de0b6b952803468e2710ad7fd42c58d7ba668d2340d6224b6136b1a21b0aa",
+    "Tests/Tests.csproj": "23bfdf35a2565fa327a0749827aca21d168f7d8c72f1fa6922ae14da5de063af",
+    "gitlab-ci.yml": "082c52b547fb75cfea97ce0fe969e5fc09b715e15c2a91238ee5e6b8862ac005",
+    "job_layout.py": "45c1b505f7da45d4b14398950f4eaf7d4d2cadb04c389b0582cfed5d9fa0c6d8",
+    "run-podman.py": "9ed9b572f27662656f6acd113848f5c098dd8c17eade1b0287bba9535bbefd68",
+    "solver-builds.json": "a8ea1624448f7481c5d430601cee531b93f53621753ee80a7204d8f56f4e5e17",
+    "test_job_layout.py": "bad313c07d1a4dde8c31b1b2d2e0df228415bfbe6137d4573b8aea7cf1ce2319",
+    "verify-execution.py": "09070822306e5df203fd1b9c68282d24b2e20ef633d9f58e0d9a8e3b30f235ef"
+  },
+  "analysisTools": {
+    ".gitignore": "d80be262b6e0f107506a3202570ea6156417c1c350aa3fcdab8fa643c96d5525",
+    "CaeGlobals/CaeGlobals.csproj": "50f6ab1ee98fc89c8d33a4ca3a68a03112b8b86ceaf850db0d859e2b50328fe6",
+    "CaeGlobals/packages.lock.json": "efd66f5b96ceb932d7780915d5ec3d9c9969e546b6c2762741599b5280e16c1d",
+    "CaeMesh/CaeMesh.csproj": "9563e5d5513fb6c710784a06e26833cd0ca5c7891be9bb924a6688d553f2096b",
+    "CaeMesh/packages.lock.json": "98e187dabe9153fda70817b8e11b8c11f0e4b8f3a0886a9ee25fad2cf5cdd404",
+    "CaeModel/CaeModel.csproj": "d2550130050c64de9ff78de3b61142a91fb7eec52c011b59877af9001a0cd750",
+    "CaeModel/packages.lock.json": "7c372ebb2a835d3490ee373b55410e587e0838656ff7373d48d91f529e480eb0",
+    "CaeResults/CaeResults.csproj": "64fa70b30d8238fbb9e147b047bc69558788deb83ee64259aead5f8dd76a833b",
+    "CaeResults/packages.lock.json": "98e187dabe9153fda70817b8e11b8c11f0e4b8f3a0886a9ee25fad2cf5cdd404",
+    "Directory.Build.props": "c928e4924ec1ed3e961fc0fbcc6e3d0de024514cca15e58d13c5d45493f59769",
+    "MaterialDeck/MaterialDeck.csproj": "9a7346e2bed1f83ce295b01aa98926bc39dfe29277c1a5247b6e1873c14d860c",
+    "MaterialDeck/Program.cs": "00563d02f30d0a11d4fd9d0fa8f3d153205d136eb344fd520bdb5f0090ccb124",
+    "MaterialDeck/packages.lock.json": "a62f0c5b5d1a303d82750925916fa0bc5907ceabc640929bae28fe13cb9267bc",
+    "MeasureMesh/MeasureMesh.csproj": "1fb1b7d5e23f4733c21fe9447325440916fe8037c9f024637e60416327a132e6",
+    "MeasureMesh/packages.lock.json": "e3e022d931dfa16ead12f573e8614f4ddf3207947a402684343457fdc9e4697f",
+    "MeshDeck/MeshDeck.csproj": "0c791a7b0632610f159148d3e6e9f86196c7926b27ac6d4f76f820fa5a5b12ee",
+    "MeshDeck/packages.lock.json": "4fecf1a98907cc329bba021b171e255fbc49e5d6cac3b351f5ad016ded592413",
+    "NuGet.Config": "ef18aae73f086bb5fc3e982ce9b14cd85951b0c85871c7f3459dfa7041d5158b",
+    "PrePoMaxX.Analysis.slnx": "261029d9f1f61a890f3e70185695992cd2c9a5b05591e84d94c7a9a419d10c2a",
+    "README.md": "05d556349771a13adb0d9132630c7c86b7e3c0e79ccd553da2da0c3bc91db92a",
+    "Regression/Data/Data.csproj": "67ebc3bacdff028b43e3b4641132e5ca3c1aa656eada5023459e24cdd0bdba2b",
+    "Regression/Data/packages.lock.json": "7c372ebb2a835d3490ee373b55410e587e0838656ff7373d48d91f529e480eb0",
+    "Regression/Elements/Elements.csproj": "0d01d3ef61f610cef479832007c6d404dd8c1caca25b20d6fe0d0e89de1c1426",
+    "Regression/Elements/packages.lock.json": "d58a3764b48a31b4ed53cf58667f66ed5e33ea2850aaa2d9ebb457bbea257344",
+    "Regression/Mapping/Mapping.csproj": "4c01af68bb1dee929101840856be36c1aea57aa1aeefd47b4e8fd98c1b03e3cb",
+    "Regression/Mapping/packages.lock.json": "e3e022d931dfa16ead12f573e8614f4ddf3207947a402684343457fdc9e4697f",
+    "Regression/Mesh/Mesh.csproj": "3cb3899f9cff4aa894dae056e836403566b70533c3dc73d2e269350775af3b25",
+    "Regression/Mesh/packages.lock.json": "574ec56886272a7b5260d372d422fe788a32b2f341f19bbf9fcc091f85a6491f",
+    "StaticChecks/Program.cs": "488751c439cdcd2b72774f7f304e6eef58f4f6adcdfedd3cf0f293b66cb7252a",
+    "StaticChecks/StaticChecks.csproj": "0db4506b177999f9bfe88c672ac98364bde18ab551e3ec1c7a0ef91bbdbe956d",
+    "StaticChecks/packages.lock.json": "e5873c41a84f6907b6a05ee514803647a644a4efbfe8b7896997ab694eaede26",
+    "StaticDeck/Program.cs": "578a3f9d9a97a2fd044cef7f238997c5695ee38baab7099a93f89fe9a87633f9",
+    "StaticDeck/StaticDeck.csproj": "7140a32e909e8f12666d6ab4c01c36d75ec4ac536cd533ba4ca45785edb5b5ea",
+    "StaticDeck/cube-analysis.json": "9fa37616b701236570924eabc85f72e644cf9bbcc31eeda4f60b570e89a9a6c5",
+    "StaticDeck/cube-mesh.inp": "b74dde2612c0a9752b7f3589e3b3657863ee616f0815597ceb827066ffab290a",
+    "StaticDeck/packages.lock.json": "574ec56886272a7b5260d372d422fe788a32b2f341f19bbf9fcc091f85a6491f",
+    "Tests/Program.cs": "067906da885b2c2d4e2a4c54100a97daaa0a7035cde98825779a657ba821fb3d",
+    "Tests/Tests.csproj": "07e54c52ccb835250a58137cc17a1fbc28b8bac5cd1c6e8ae25feffe0cca1502",
+    "Tests/packages.lock.json": "a62f0c5b5d1a303d82750925916fa0bc5907ceabc640929bae28fe13cb9267bc",
+    "analysis-sources.json": "76678f950f690e3ae7f484fb942d2996a4940056fb45af66448f06882e0d5a87",
+    "analysis_layout.py": "dfdea3e53929b465c6d476e4e10d982b638cdf39d039b7dc619d6e8deb6a2817",
+    "dependency-artifacts.json": "36cf259e530b225456f866f3abb3ef5a1b2ecd95586242974e5c77860c2d3ed5",
+    "gitlab-ci.yml": "3903f6aa2cb8eda2a157c3a10dda4c0b0bb25e5616d12ed5af4d09ec57d8e95b",
+    "run-podman.py": "d3ac8de16e84ccea72e29d5923d95ad44cba3813059291a35134c4cf417d4e71",
+    "static_deck_checks.py": "43a30b62aa293694f7c5f8f4a67fdbc35fceff31f7da7503506fd60e1ee9182e",
+    "static_layout.py": "c3228c4eab12c14d8fb5fdbe347176c56e2f10834ba9e35c9504941f6e09ceca",
+    "test_analysis_layout.py": "06676891717b09dfcd4efde0cae8eb78a745bcc99a7dd2cc09869b14d4e9a6a8",
+    "verify-analysis.py": "c4033a838d279802bb6bf7c9cd4540080121016444b2dc0bfb5d50ba8ee34181"
+  },
+  "monitorFixtures": {
+    ".project/reports/windows-reference/solver/uniaxial.cvg": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+    ".project/reports/windows-reference/solver/uniaxial.sta": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d"
+  },
+  "thirdPartySources": {
+    "success": true,
+    "components": [
+      {
+        "component": "CalculiX CrunchiX",
+        "version": "2.22",
+        "files": 1188,
+        "bytes": 11372771,
+        "archiveSha256": "3a94dcc775a31f570229734b341d6b06301ebdc759863df901c8b9bf1854c0bc",
+        "releaseReady": false
+      }
+    ]
+  },
+  "upstreamReplay": {
+    "name": "post-rc2-2026-10-17",
+    "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+    "sources": [
+      {
+        "path": "CaeGlobals/CommonClasses/Matrix.cs",
+        "upstreamPath": "CaeGlobals/CommonClasses/Matrix.cs",
+        "upstreamSha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+        "compiledSha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+        "adapter": null
+      },
+      {
+        "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+        "upstreamPath": "CaeGlobals/CommonClasses/Vec3D.cs",
+        "upstreamSha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+        "compiledSha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+        "adapter": null
+      },
+      {
+        "path": "CaeGlobals/Comparers/CompareIntArray.cs",
+        "upstreamPath": "CaeGlobals/Comparers/CompareIntArray.cs",
+        "upstreamSha256": "ff318a3db1efc40741b150e89d0350af1802df9e710fee24171a752dc4a38092",
+        "compiledSha256": "ff318a3db1efc40741b150e89d0350af1802df9e710fee24171a752dc4a38092",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/0D/FeElement0D.cs",
+        "upstreamPath": "CaeMesh/Elements/0D/FeElement0D.cs",
+        "upstreamSha256": "31a8b27cfdfeea6db394637b2ae3bc6865f2fe3d03d5caf2aecc2c87eac4185a",
+        "compiledSha256": "31a8b27cfdfeea6db394637b2ae3bc6865f2fe3d03d5caf2aecc2c87eac4185a",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/0D/MassElement.cs",
+        "upstreamPath": "CaeMesh/Elements/0D/MassElement.cs",
+        "upstreamSha256": "212adde4479a3cc614ab509c751ad129b1888c75199e022890d3bd62e4fe9a52",
+        "compiledSha256": "212adde4479a3cc614ab509c751ad129b1888c75199e022890d3bd62e4fe9a52",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/1D/FeElement1D.cs",
+        "upstreamPath": "CaeMesh/Elements/1D/FeElement1D.cs",
+        "upstreamSha256": "de526da44f008453b815b4efc4a75c7625968521fe1c2cc5e162422f50f3126d",
+        "compiledSha256": "de526da44f008453b815b4efc4a75c7625968521fe1c2cc5e162422f50f3126d",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/1D/LinearBeamElement.cs",
+        "upstreamPath": "CaeMesh/Elements/1D/LinearBeamElement.cs",
+        "upstreamSha256": "65d7750f236cbf432ddc7458e28d4edfef31b3342520e8ce5d9438e7566905f2",
+        "compiledSha256": "65d7750f236cbf432ddc7458e28d4edfef31b3342520e8ce5d9438e7566905f2",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/1D/LinearGapElement.cs",
+        "upstreamPath": "CaeMesh/Elements/1D/LinearGapElement.cs",
+        "upstreamSha256": "f32d816558143a0f5960587dcb9bcd9c01929e7ee08a97da7301463c1e749409",
+        "compiledSha256": "f32d816558143a0f5960587dcb9bcd9c01929e7ee08a97da7301463c1e749409",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/1D/LinearSpringElement.cs",
+        "upstreamPath": "CaeMesh/Elements/1D/LinearSpringElement.cs",
+        "upstreamSha256": "4a5a23e2a7e955a94bb5738510ac91d80b4e79b0382827b6b11331a7a9934483",
+        "compiledSha256": "4a5a23e2a7e955a94bb5738510ac91d80b4e79b0382827b6b11331a7a9934483",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/1D/ParabolicBeamElement.cs",
+        "upstreamPath": "CaeMesh/Elements/1D/ParabolicBeamElement.cs",
+        "upstreamSha256": "f31ecae6b29def2d68d15550e309111a431b822e6b21ee28bd916cd539cad761",
+        "compiledSha256": "f31ecae6b29def2d68d15550e309111a431b822e6b21ee28bd916cd539cad761",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/2D/FeElement2D.cs",
+        "upstreamPath": "CaeMesh/Elements/2D/FeElement2D.cs",
+        "upstreamSha256": "0156d7b85338a59ba9f5200da3af726f9bb30397ec8b40829853ce4ae25b3102",
+        "compiledSha256": "0156d7b85338a59ba9f5200da3af726f9bb30397ec8b40829853ce4ae25b3102",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/2D/LinearQuadrilateralElement.cs",
+        "upstreamPath": "CaeMesh/Elements/2D/LinearQuadrilateralElement.cs",
+        "upstreamSha256": "5938a33ee4f3d154ee7bcd67753e206c38c2d107df5760b5dd6c5834f03a61f5",
+        "compiledSha256": "5938a33ee4f3d154ee7bcd67753e206c38c2d107df5760b5dd6c5834f03a61f5",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/2D/LinearTriangleElement.cs",
+        "upstreamPath": "CaeMesh/Elements/2D/LinearTriangleElement.cs",
+        "upstreamSha256": "a6a999b5af8a27283dd438bc253f39f208c4e5c9545598eabf242fdc756ea611",
+        "compiledSha256": "a6a999b5af8a27283dd438bc253f39f208c4e5c9545598eabf242fdc756ea611",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/2D/ParabolicQuadrilateralElement.cs",
+        "upstreamPath": "CaeMesh/Elements/2D/ParabolicQuadrilateralElement.cs",
+        "upstreamSha256": "d7f63dc27482507160bc5634685a3cb4d2165149f82fdeb49b18460d267c0dbe",
+        "compiledSha256": "d7f63dc27482507160bc5634685a3cb4d2165149f82fdeb49b18460d267c0dbe",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/2D/ParabolicTriangleElement.cs",
+        "upstreamPath": "CaeMesh/Elements/2D/ParabolicTriangleElement.cs",
+        "upstreamSha256": "4741a0e4288a992e71fee2f2a9a67d521c783cf99b5d02c94d7cddab6b3b2fe1",
+        "compiledSha256": "4741a0e4288a992e71fee2f2a9a67d521c783cf99b5d02c94d7cddab6b3b2fe1",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/FeElement3D.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/FeElement3D.cs",
+        "upstreamSha256": "db47b38645a866a5c25071ef248654ea575541b6dedc7a173eb0c8fc42f4d877",
+        "compiledSha256": "db47b38645a866a5c25071ef248654ea575541b6dedc7a173eb0c8fc42f4d877",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/LinearHexaElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/LinearHexaElement.cs",
+        "upstreamSha256": "6b03579ae1cd8215ac32ef3bf0648d89a23f6c71cc5e5bfdfdcc76935c40ac0b",
+        "compiledSha256": "6b03579ae1cd8215ac32ef3bf0648d89a23f6c71cc5e5bfdfdcc76935c40ac0b",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/LinearPyramidElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/LinearPyramidElement.cs",
+        "upstreamSha256": "320454ff6846a839a27bd9ce2f37b343b83e9cba4d0784ccc29f3fa41ee74b3d",
+        "compiledSha256": "320454ff6846a839a27bd9ce2f37b343b83e9cba4d0784ccc29f3fa41ee74b3d",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/LinearTetraElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/LinearTetraElement.cs",
+        "upstreamSha256": "2073c73562d274231e14229df0f8a5486c6f22c9432c5e4cf7c0b1b96635b3ce",
+        "compiledSha256": "2073c73562d274231e14229df0f8a5486c6f22c9432c5e4cf7c0b1b96635b3ce",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/LinearWedgeElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/LinearWedgeElement.cs",
+        "upstreamSha256": "5e01663260f288732c047048dddc5e96896294f49329126d55d1a0f27a26c072",
+        "compiledSha256": "5e01663260f288732c047048dddc5e96896294f49329126d55d1a0f27a26c072",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/ParabolicHexaElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/ParabolicHexaElement.cs",
+        "upstreamSha256": "847ee2417c410fd96beb6ed156e5993fdf3925217fb56d72cac9cdacbe271144",
+        "compiledSha256": "847ee2417c410fd96beb6ed156e5993fdf3925217fb56d72cac9cdacbe271144",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/ParabolicPyramidElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/ParabolicPyramidElement.cs",
+        "upstreamSha256": "2e74f928f8b4c8e97e13ee1f55d6535084d8558ec697fcb39607029ab17ab1b0",
+        "compiledSha256": "2e74f928f8b4c8e97e13ee1f55d6535084d8558ec697fcb39607029ab17ab1b0",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/ParabolicTetraElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/ParabolicTetraElement.cs",
+        "upstreamSha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919",
+        "compiledSha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/3D/ParabolicWedgeElement.cs",
+        "upstreamPath": "CaeMesh/Elements/3D/ParabolicWedgeElement.cs",
+        "upstreamSha256": "d08fa37e91b84e7ac5d638df89882db66e8875e197e37d6c6b5b91ad2f967027",
+        "compiledSha256": "d08fa37e91b84e7ac5d638df89882db66e8875e197e37d6c6b5b91ad2f967027",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/FeElement.cs",
+        "upstreamPath": "CaeMesh/Elements/FeElement.cs",
+        "upstreamSha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6",
+        "compiledSha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/IntegrationScale.cs",
+        "upstreamPath": "CaeMesh/Elements/IntegrationScale.cs",
+        "upstreamSha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32",
+        "compiledSha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Elements/VtkCellType.cs",
+        "upstreamPath": "CaeMesh/Elements/VtkCellType.cs",
+        "upstreamSha256": "9364609fc2fb07cb6073c109d8ebf71a14b6d0f5d22b0d43b1f39237133225ca",
+        "compiledSha256": "9364609fc2fb07cb6073c109d8ebf71a14b6d0f5d22b0d43b1f39237133225ca",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+        "upstreamPath": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+        "upstreamSha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f",
+        "compiledSha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+        "upstreamPath": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+        "upstreamSha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8",
+        "compiledSha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+        "upstreamPath": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+        "upstreamSha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79",
+        "compiledSha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/GeometryTools.cs",
+        "upstreamPath": "CaeMesh/GeometryTools.cs",
+        "upstreamSha256": "955f6b2825f69041ec8cdbbdee74652c71feb2160aa7daa787cc49f0f1a423a7",
+        "compiledSha256": "372bcfe39e32920d102da734a084bd1f5da0e0032aaac18864994ce162290336",
+        "adapter": "remove existing unused WinForms import"
+      },
+      {
+        "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+        "upstreamPath": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+        "upstreamSha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+        "compiledSha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+        "upstreamPath": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+        "upstreamSha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+        "compiledSha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+        "upstreamPath": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+        "upstreamSha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+        "compiledSha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Nodes/FeNode.cs",
+        "upstreamPath": "CaeMesh/Nodes/FeNode.cs",
+        "upstreamSha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+        "compiledSha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+        "adapter": null
+      },
+      {
+        "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+        "upstreamPath": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+        "upstreamSha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7",
+        "compiledSha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7",
+        "adapter": null
+      },
+      {
+        "path": "CaeGlobals/CaeException.cs",
+        "upstreamPath": "CaeGlobals/ExceptionTools.cs",
+        "upstreamSha256": "b2ff33b130d432544b9090f5eec3a4de534982be662eff566779c4808104a439",
+        "compiledSha256": "024ac7385a2cc6d7f0298f97c4b45a92431af61324ab1a42392b0642b3a6d268",
+        "adapter": "existing verified CaeException extraction"
+      },
+      {
+        "path": "CaeGlobals/CommonClasses/NamedClass.cs",
+        "upstreamPath": "CaeGlobals/CommonClasses/NamedClass.cs",
+        "upstreamSha256": "047fb7b3bba9a5b67686341f3378790e88110bb456206667080b9b65272c9433",
+        "compiledSha256": "047fb7b3bba9a5b67686341f3378790e88110bb456206667080b9b65272c9433",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/InpElementSet.cs",
+        "upstreamPath": "CaeMesh/InpElementSet.cs",
+        "upstreamSha256": "6f8853c32fa27d123ead1fe2d80df4e2d5805f9a7081288c311f019360e564ab",
+        "compiledSha256": "6f8853c32fa27d123ead1fe2d80df4e2d5805f9a7081288c311f019360e564ab",
+        "adapter": null
+      },
+      {
+        "path": "CaeMesh/Enums/ConvertPyramidsToEnum.cs",
+        "upstreamPath": "CaeMesh/Enums/ConvertPyramidsToEnum.cs",
+        "upstreamSha256": "116fe0f8fbba67a470d2088f5449e4c1aa02026d76a0a57245194c2e4c5ecd35",
+        "compiledSha256": "116fe0f8fbba67a470d2088f5449e4c1aa02026d76a0a57245194c2e4c5ecd35",
+        "adapter": null
+      },
+      {
+        "path": "CaeModel/FileInOut/Output/Calculix/Keywords/CalculixKeyword.cs",
+        "upstreamPath": "CaeModel/FileInOut/Output/Calculix/Keywords/CalculixKeyword.cs",
+        "upstreamSha256": "c627ee3e628b0bd7b9abbfd7e2d4b2bcfb20b2d7f2a8b083f782b38cad51c458",
+        "compiledSha256": "c627ee3e628b0bd7b9abbfd7e2d4b2bcfb20b2d7f2a8b083f782b38cad51c458",
+        "adapter": null
+      },
+      {
+        "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalElement.cs",
+        "upstreamPath": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalElement.cs",
+        "upstreamSha256": "f5b18ec5f99a9433ec21bdd8ed15ae2cc9a6af0b2e8e1815cbb136d10f00d19b",
+        "compiledSha256": "f5b18ec5f99a9433ec21bdd8ed15ae2cc9a6af0b2e8e1815cbb136d10f00d19b",
+        "adapter": null
+      },
+      {
+        "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoadEnums.cs",
+        "upstreamPath": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoadEnums.cs",
+        "upstreamSha256": "d07459970f7bfdaf3531f8f115251b79ae559e8840d5a17a24501622586d01e9",
+        "compiledSha256": "d07459970f7bfdaf3531f8f115251b79ae559e8840d5a17a24501622586d01e9",
+        "adapter": null
+      },
+      {
+        "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshParsing.cs",
+        "upstreamPath": "CaeModel/FileInOut/Input/InpModel/InpFileReader.cs",
+        "upstreamSha256": "dcec18669bb8dbedbd605a8c6886f4d393055d6e46c5489e9a912c15fcaf2cb0",
+        "compiledSha256": "92c8b8df5f189fe42311fa512ff61548c5d3664e8e6d11492dbb7d2abd7d332d",
+        "adapter": "verified mechanical source extraction"
+      },
+      {
+        "path": "CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs",
+        "upstreamPath": "CaeGlobals/DynamicTypeDescriptor/DynamicTypeDescriptor.cs",
+        "upstreamSha256": "d08687d69589bfa7e46e3231caf5fed60f64764a7365a87c56af60f2d7a8b87f",
+        "compiledSha256": "889f0236a3274508291aedb02e6b2f755577875a99286bb04fa5d20797bc60ea",
+        "adapter": "verified mechanical source extraction"
+      },
+      {
+        "path": "CaeModel/FileInOut/Input/InpModel/InpMeshData.cs",
+        "upstreamPath": null,
+        "upstreamSha256": null,
+        "compiledSha256": "95efeb1d49fd62faf5da6f740c67ce9c9738d487bc8f5b1648362dae36e693ad",
+        "adapter": "new portable mesh boundary"
+      },
+      {
+        "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshData.cs",
+        "upstreamPath": null,
+        "upstreamSha256": null,
+        "compiledSha256": "35c9a1da5093379cbf69f5172e9cc14374511f59bd9f764cd17ec053443b4239",
+        "adapter": "new portable mesh boundary"
+      },
+      {
+        "path": "CaeModel/FileInOut/Output/Calculix/MeshDeckWriter.cs",
+        "upstreamPath": null,
+        "upstreamSha256": null,
+        "compiledSha256": "d2c5039885aec3a65b8812001b2c7ca83d1b01129adbd45a2774375637e1006d",
+        "adapter": "new portable mesh boundary"
+      }
+    ],
+    "fixture": {
+      "path": "CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt",
+      "sha256": "1206ed563d48cd733d59de9255023c60018d858954b7570bfd80ba8576b32618"
+    },
+    "mode": "temporary Git source snapshot with the two existing boundary adapters",
+    "engineeringBytesMatchCurrentSlice": true
+  },
+  "tests": {
+    "success": true,
+    "passed": 47,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "75 percent recommendation examples",
+        "passed": true
+      },
+      {
+        "name": "single available CPU remains usable",
+        "passed": true
+      },
+      {
+        "name": "automatic rounding uses floor",
+        "passed": true
+      },
+      {
+        "name": "manual total can override automatic budget",
+        "passed": true
+      },
+      {
+        "name": "fair remainder and deterministic job ordering",
+        "passed": true
+      },
+      {
+        "name": "manual budget shared rather than multiplied",
+        "passed": true
+      },
+      {
+        "name": "large CPU count does not overflow",
+        "passed": true
+      },
+      {
+        "name": "invalid available CPU counts rejected",
+        "passed": true
+      },
+      {
+        "name": "invalid manual total rejected",
+        "passed": true
+      },
+      {
+        "name": "invalid or excessive planned jobs rejected",
+        "passed": true
+      },
+      {
+        "name": "overcommitted plan rejected instead of zero thread jobs",
+        "passed": true
+      },
+      {
+        "name": "available manual budget allows every CPU one job",
+        "passed": true
+      },
+      {
+        "name": "allocation bounds conservation and fairness across host sizes",
+        "passed": true
+      },
+      {
+        "name": "callers cannot mutate a returned plan",
+        "passed": true
+      },
+      {
+        "name": "native process successful status and exit",
+        "passed": true
+      },
+      {
+        "name": "argument tokens including metacharacters unchanged",
+        "passed": true
+      },
+      {
+        "name": "working directory with spaces and unicode",
+        "passed": true
+      },
+      {
+        "name": "explicit child environment",
+        "passed": true
+      },
+      {
+        "name": "stderr retained separately",
+        "passed": true
+      },
+      {
+        "name": "original progress event and output file",
+        "passed": true
+      },
+      {
+        "name": "no shell side effects",
+        "passed": true
+      },
+      {
+        "name": "asynchronous jobs are one shot",
+        "passed": true
+      },
+      {
+        "name": "nonzero real exit maps to Failed",
+        "passed": true
+      },
+      {
+        "name": "both pipes drain beyond normal pipe capacity",
+        "passed": true
+      },
+      {
+        "name": "deadline returns TimedOut with real stopped process",
+        "passed": true
+      },
+      {
+        "name": "cancellation maps to Killed",
+        "passed": true
+      },
+      {
+        "name": "pre-cancel never launches child",
+        "passed": true
+      },
+      {
+        "name": "tree fixture child actually started",
+        "passed": true
+      },
+      {
+        "name": "deadline stops attached descendant process",
+        "passed": true
+      },
+      {
+        "name": "default concurrent-run flag serializes jobs in this host",
+        "passed": true
+      },
+      {
+        "name": "explicit concurrent-run flag permits independent jobs",
+        "passed": true
+      },
+      {
+        "name": "missing executable recorded as failure",
+        "passed": true
+      },
+      {
+        "name": "existing output evidence never overwritten",
+        "passed": true
+      },
+      {
+        "name": "invalid deadline fails before execution",
+        "passed": true
+      },
+      {
+        "name": "original job type assembly owner",
+        "passed": true
+      },
+      {
+        "name": "original JobStatus names and numbers",
+        "passed": true
+      },
+      {
+        "name": "original persisted job fields retained without platform state",
+        "passed": true
+      },
+      {
+        "name": "unknown solver profile never falls back",
+        "passed": true
+      },
+      {
+        "name": "pinned build file accepted only with exact bytes",
+        "passed": true
+      },
+      {
+        "name": "changed native binary rejected",
+        "passed": true
+      },
+      {
+        "name": "original parser reads recorded Windows status IDs",
+        "passed": true
+      },
+      {
+        "name": "recorded status retains original times and iterations",
+        "passed": true
+      },
+      {
+        "name": "empty recorded convergence is not fabricated",
+        "passed": true
+      },
+      {
+        "name": "original monitor parsing invariant with D exponents",
+        "passed": true
+      },
+      {
+        "name": "original convergence components and record numbering",
+        "passed": true
+      },
+      {
+        "name": "monitor types retain CaeJob ownership",
+        "passed": true
+      },
+      {
+        "name": "portable job has no WMI or Windows desktop dependencies",
+        "passed": true
+      }
+    ],
+    "runtime": {
+      "os": "Ubuntu 24.04.5 LTS",
+      "architecture": "Arm64"
+    },
+    "solverExecuted": false
+  },
+  "threadPlanning": {
+    "automatic": {
+      "success": true,
+      "plan": {
+        "AvailableLogicalProcessors": 4,
+        "TotalThreadBudget": 3,
+        "IsAutomatic": true,
+        "ThreadsPerJob": [
+          3
+        ]
+      },
+      "solverExecuted": false,
+      "settingsChanged": false,
+      "reservationEnforced": false,
+      "cpuUtilizationLimit": false
+    },
+    "manual": {
+      "success": true,
+      "plan": {
+        "AvailableLogicalProcessors": 4,
+        "TotalThreadBudget": 1,
+        "IsAutomatic": false,
+        "ThreadsPerJob": [
+          1
+        ]
+      },
+      "solverExecuted": false,
+      "settingsChanged": false,
+      "reservationEnforced": false,
+      "cpuUtilizationLimit": false
+    }
+  },
+  "availability": {
+    "success": true,
+    "os": "Linux",
+    "architecture": "Arm64",
+    "pinnedBuilds": [],
+    "solverAvailable": false,
+    "binaryAvailabilityChecked": false,
+    "solverExecuted": false
+  },
+  "monitor": {
+    "success": true,
+    "solverExecuted": false,
+    "status": {
+      "Steps": [
+        1
+      ],
+      "Increments": [
+        1
+      ],
+      "Attempts": [
+        1
+      ],
+      "TotalTimes": [
+        1
+      ],
+      "IncrementTimes": [
+        1
+      ],
+      "IterationCounts": [
+        1
+      ],
+      "Count": 1
+    },
+    "convergence": {
+      "Steps": [],
+      "Increments": [],
+      "Attempts": [],
+      "Iterations": [],
+      "RecordNumbers": [],
+      "ContactElementCounts": [],
+      "ResidualForces": [],
+      "DisplacementCorrections": [],
+      "ResidualFluxes": [],
+      "TemperatureCorrections": [],
+      "Count": 0
+    }
+  },
+  "cliControls": [
+    "usage",
+    "unknown build",
+    "unavailable or missing pinned build",
+    "missing monitor",
+    "thread plan unknown option",
+    "thread plan missing value",
+    "thread plan duplicate option",
+    "thread plan zero threads",
+    "thread plan signed count",
+    "thread plan overflow count",
+    "thread plan excess concurrency",
+    "thread plan zero jobs",
+    "thread plan overcommitted manual budget"
+  ],
+  "container": {
+    "engine": "podman",
+    "serverArchitecture": "arm64",
+    "serverVersion": "6.1.4",
+    "imageId": "27c38b4417f399491c60ba15f35bf450ffcea6d57c78ccbc5ce3c9fb05cfcc88",
+    "imageDigest": "sha256:8e7419c4bb020cb0303227d5afc29c22f34f5fc5ce4d6a8fc245c8054ceec5af",
+    "network": "none",
+    "repositoryMount": "read-only",
+    "initReaper": true,
+    "execution": "native Linux ARM64 container in macOS VM; not native x64 acceptance",
+    "recordedAtUtc": "2026-10-18T17:22:51.809476+00:00"
+  }
+}

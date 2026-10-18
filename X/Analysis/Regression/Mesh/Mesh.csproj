@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.MeshDeckTests</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings><DefineConstants>$(DefineConstants);ANALYSIS_SLICE</DefineConstants></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../MeshDeck/MeshDeck.csproj" />
+    <Compile Include="../../../Core/Tests/MeshDeck/Program.cs" Link="Program.cs" />
+    <None Include="../../../Core/MeshDeck/unit-cube.inp" Link="unit-cube.inp" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

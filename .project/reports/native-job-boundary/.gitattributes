@@ -1,0 +1,2 @@
+# Evidence checksums describe the retained bytes on every platform.
+*.json -text

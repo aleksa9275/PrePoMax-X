@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.ElementTests</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../MeasureMesh/MeasureMesh.csproj" />
+    <Compile Include="../../../Core/Tests/Elements/Program.cs" Link="Program.cs" />
+  </ItemGroup>
+</Project>

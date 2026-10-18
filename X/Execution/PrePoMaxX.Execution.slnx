@@ -1,0 +1,11 @@
+<Solution>
+ <Project Path="../Analysis/CaeGlobals/CaeGlobals.csproj" />
+ <Project Path="../Analysis/CaeMesh/CaeMesh.csproj" />
+ <Project Path="../Analysis/CaeResults/CaeResults.csproj" />
+ <Project Path="../Analysis/CaeModel/CaeModel.csproj" />
+ <Project Path="../Analysis/MeasureMesh/MeasureMesh.csproj" />
+ <Project Path="../Analysis/MeshDeck/MeshDeck.csproj" />
+ <Project Path="../Analysis/StaticDeck/StaticDeck.csproj" />
+ <Project Path="CaeJob/CaeJob.csproj" /><Project Path="Probe/Probe.csproj" />
+ <Project Path="Tests/Tests.csproj" /><Project Path="Solve/Solve.csproj" />
+</Solution>

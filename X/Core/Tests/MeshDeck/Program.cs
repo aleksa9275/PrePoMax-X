@@ -150,7 +150,12 @@ internal static class Program
             var attr = (StandardValueAttribute)typeof(ConvertPyramidsToEnum).GetField("Wedges")!.GetCustomAttributes(typeof(StandardValueAttribute), false).Single();
             Require(attr.DisplayName == "Collapsed wedges" && attr.Visible && attr.Enabled);
             Require(new[] { typeof(InpFileReader).Assembly,typeof(FeNode).Assembly,typeof(StandardValueAttribute).Assembly }.All(a =>
-                a.GetReferencedAssemblies().All(r => r.Name == "CaeGlobals" || r.Name == "CaeMesh" || r.Name == "System" || r.Name.StartsWith("System."))));
+                a.GetReferencedAssemblies().All(r => r.Name == "CaeGlobals" || r.Name == "CaeMesh" || r.Name == "System" || r.Name.StartsWith("System.")
+#if ANALYSIS_SLICE
+                    // The expanded original equation/material build retains these exact upstream dependencies.
+                    || r.Name == "NCalc" || r.Name == "UnitsNet"
+#endif
+                    )));
         });
         Check("concurrent standalone reads retain their own IDs and sets", () => Parallel.For(0,30,index =>
         {

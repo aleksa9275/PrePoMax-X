@@ -1,0 +1,118 @@
+{
+  "success": true,
+  "scope": "native process/preflight/original STA-CVG monitor boundary; actual native solver and FRD/DAT fields remain pending",
+  "repository": {
+    "head": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+    "dirty": true
+  },
+  "comparisons": [
+    {
+      "sourceMode": "current",
+      "nativeChecksPerBuild": 33,
+      "cliControlsPerBuild": 4,
+      "matchedAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "tests",
+        "monitor",
+        "cliControls"
+      ],
+      "solverExecuted": false,
+      "nativeSolverProfileAvailable": false
+    },
+    {
+      "sourceMode": "rc2",
+      "nativeChecksPerBuild": 33,
+      "cliControlsPerBuild": 4,
+      "matchedAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "tests",
+        "monitor",
+        "cliControls"
+      ],
+      "solverExecuted": false,
+      "nativeSolverProfileAvailable": false
+    },
+    {
+      "sourceMode": "post-rc2",
+      "nativeChecksPerBuild": 33,
+      "cliControlsPerBuild": 4,
+      "matchedAcrossHosts": [
+        "sources",
+        "jobSources",
+        "portableAdapter",
+        "tools",
+        "analysisTools",
+        "monitorFixtures",
+        "thirdPartySources",
+        "tests",
+        "monitor",
+        "cliControls"
+      ],
+      "solverExecuted": false,
+      "nativeSolverProfileAvailable": false
+    }
+  ],
+  "runtimeComparison": "Runtime objects excluded from test comparison; availability OS/architecture verified separately; no solver is available on either tested host. Command logs are retained, not compared as portable results.",
+  "oldStaticAnalysisEvidence": {
+    "path": ".project/reports/static-analysis-deck/verification.json",
+    "sourceAndToolFingerprintsUnchanged": true,
+    "acceptedChecksPreviouslyVerifiedPerBuild": 331,
+    "bothCorrectnessFailuresRetained": true
+  },
+  "sourceGuards": {
+    "command": "python3 -m unittest discover -s X/Execution -p test_job_layout.py",
+    "passed": 4,
+    "failed": 0,
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.510s\n\nOK\n"
+  },
+  "thirdPartySourceLockSha256": "9d556f9e48dfab357331d6e317cc41bd5536cd7954b13d0b9efc1bbf42f9f95b",
+  "thirdPartyVerifierSha256": "d422e32983308b232963a8ab416b8ead36d7fcf8a73d307e182276882f06a4c4",
+  "allSixToolFingerprintsMatch": true,
+  "files": {
+    "current-linux-arm64.json": {
+      "sha256": "5bc7a0d8dea2e8de398ba546222ced44211ec92137386933e6cb24d1393b0f5b",
+      "bytes": 71638
+    },
+    "current-macos-arm64.json": {
+      "sha256": "dee65348739926765d2e50be26243d36521fca431d91d5bfa59db1fb59694816",
+      "bytes": 71092
+    },
+    "initial-linux-without-init.json": {
+      "sha256": "f4449a819daa8a1a0b392e0e1baa83996b6f236c77bc8a8b0be541b977450977",
+      "bytes": 63917
+    },
+    "post-rc2-linux-arm64.json": {
+      "sha256": "4085a0133178b3dcc254952f516e20fca0360d614b5a61e82edb8c1e921c95fc",
+      "bytes": 89814
+    },
+    "post-rc2-macos-arm64.json": {
+      "sha256": "be0e27e251ef88e1c5dfcb4c67b9185d8945abad03679195f52f3e0bb74f439d",
+      "bytes": 89268
+    },
+    "rc2-linux-arm64.json": {
+      "sha256": "624f616137216edebd18dce23accc9792d9b7981597da2a69803f41f1ae82680",
+      "bytes": 89387
+    },
+    "rc2-macos-arm64.json": {
+      "sha256": "7e034ccf2c8bfa8d2de2b789a5ac8bf8ac7db61506debfcbafe98983972aa918",
+      "bytes": 88843
+    },
+    ".gitattributes": {
+      "sha256": "036418b974eb3fe3f36404881c6ba6945b9eaf3fe0c2d423b6268ddb7af256dd",
+      "bytes": 81
+    }
+  },
+  "thirdPartySourceAttributesSha256": "0a27f1a7fa96a1ac71a98676011eb484b7cc8a365cee0b9ed200c769654dcaaf"
+}

@@ -1,0 +1,23 @@
+{
+  "source": "https://api.nuget.org/v3/index.json",
+  "packages": [
+    {
+      "id": "ncalc",
+      "version": "1.3.8",
+      "packageSha256": "00a547a6f32c6cfab20067fe6dafc3418fd44a816932ba9d698865da256b8421",
+      "packageSha512": "OAlg7mDUhRLfY12DCGUFusWR5btXkCP5G/a6CKw2O5lPjEGpBeBuLW2/r0u4IuBEcV/TUD19NkqkRix0DRdwuA==",
+      "nugetContentHash": "T3kt6mWc70x3Ex5PxOmuILy563CGAdoAnyknXX7Du2/SXs2T94hNwc5CVwZcwCu5/A2ZBZhnHnc5dpcqCRGQ0A==",
+      "runtimeAsset": "lib/NCalc.dll",
+      "runtimeAssetSha256": "49c354d23416a658b329e3f8668de34c029a7ff8c24f05fac498a572ca215d25"
+    },
+    {
+      "id": "UnitsNet",
+      "version": "4.89.1",
+      "packageSha256": "2403ed20d8bac681c283f96dbe49935a82ef7729a0201d1237643c3851db755c",
+      "packageSha512": "f6x5eN9lbCAcboY9E0VPmMe0CEWtSSuTQmlCC0Eqdj8flQNVwJ9Nx8BvIhvJE7iZlOqBABZ1AFlZ/OKGDOPULw==",
+      "nugetContentHash": "B9+ViJEjcgmwRxRH2lZTc7FolLHHPET9UYPNr5uoFkt80q+iKKO1iPD6+YpG9zrOSBJjKHmDgswb9QnqWolj+g==",
+      "runtimeAsset": "lib/netstandard2.0/UnitsNet.dll",
+      "runtimeAssetSha256": "6eeafa1a6b220d2eeea8228cc39e9212667a6bbaf0a84fcd5a1ce9b9666287ea"
+    }
+  ]
+}

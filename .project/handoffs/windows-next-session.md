@@ -1,5 +1,82 @@
 # Next session — native Windows reference validation
 
+2026-10-18 latest: maintainer authorizes current-work publication under task
+0029 then continuation after reset. [Publication record](../reports/analysis-execution-publication.md)
+is authoritative for actual SHA/hosted status. Expanded X/Execution now expects
+47 accepted checks, two thread plans and 13 rejection controls per pin; native
+Windows remains pending. CPU planning is advisory, not migrated settings or an
+active scheduler; reference OMP/MKL=1 remains. Transfer via verified Git after
+publication; preserve all private models and correctness/net48/RC2/release gates.
+
+2026-10-18 latest: [task 0027 research/design](../reports/solver-guidance-threads-gpu.md)
+records requested solver advice/75% thread direction and GPU differences, with
+no implemented setting/solver/precision change or new benchmark/publication.
+Modern process CPU availability differs from legacy net48; preserve manual user
+settings and reference single-thread controls when later adding automatic mode.
+GPU availability must be established per binary/driver/device/OS; no blanket
+Windows AMD support is claimed. Existing correctness/release gates remain.
+
+2026-10-18 latest: [task 0026 assessment](../reports/without-pardiso-assessment.md)
+and D042 narrow the earlier all-backend requirement. Maintainer excludes Panua
+machine-bound licensing; a new alternative is needed only if omission of PARDISO
+cripples functionality. Own comparisons are deferred. Later Windows reference
+comparisons must establish the actual backend: 2.22 PaStiX modal/buckling source
+branches can use linked PARDISO. Do not treat a labelled PaStiX pass as proof of
+PARDISO-free acceptance. No production/default/precision change or publication;
+preserve uncommitted work and all correctness/Windows/net48/RC2/release gates.
+
+2026-10-18 latest: task 0025 exact solver research proves RC2 uses the unchanged
+official CalculiX 2.22 Windows executable and previous five runtime DLLs. Six
+choices pass the synthetic cube through existing Mac CrossOver, not native ARM.
+[Research report](../reports/exact-solver-provenance.md) identifies original binary
+provider/core source, PARDISO GUI versus PaStiX executable defaults, missing exact
+static-library build recipe and native ARM Intel MKL/PARDISO gap. Maintainer
+requires complete identical software; no silent solver/backend change or implied
+remote/compatibility architecture choice. This increment is research/report only;
+all work remains uncommitted and existing correctness/release gates remain.
+
+Task 0024 adds a modern CaeJob platform partial, original STA/CVG readers and a
+prepared pinned windows-reference-2.22 run-static command. It has not run on
+Windows. Native Mac/Linux ARM64 pass 33 new checks per source mode/four CLI
+controls; all task 0022–0024 edits remain uncommitted on Mac and must be explicitly
+transferred. [Build/limits/evidence](../reports/native-job-boundary.md).
+After transfer, run X/Execution/verify-execution.py with Windows/X64 expectations
+for current/RC2/post-RC2 and retain real results. The known Windows binary/runtime
+profile must match every old fingerprint; it is not proof of RC2 bundle or exact
+source correspondence. Full net48 build must verify the extracted JobStatus and
+ExecutableJob.Legacy members retain all original behavior. Preserve private files
+and all correctness/release gates. [Final repository map](../REPOSITORY_LAYOUT.md).
+
+2026-10-18 update: the maintainer accepted continued local implementation and
+requires installers/Homebrew. Tasks 0022/0023 add a complete bounded C3D8 static
+deck using original model/keyword types. All three source modes pass 331 accepted
+checks on native Mac/Linux ARM64. Changes remain uncommitted on the Mac and are
+not in published ed2dcb4d/47f17be6 or the old CI ZIP. Preserve/transfer them
+explicitly before expanded X/Analysis testing. [Current evidence](../reports/static-analysis-deck.md).
+No new Windows/full net48 build is claimed. Do not repeat completed 2.6 capture
+as RC2 acceptance. Native Windows needs the expanded verifier's three modes,
+source guards and full original net48 compilation, especially legacy partial API
+and original parser/writer differential checks. Existing old mesh instructions
+below remain useful but are not the new analysis build.
+
+After explicit transfer to a clean/preserved research checkout, with native x64
+.NET 10 SDK, Python and original dependency availability:
+
+```powershell
+python -m unittest discover -s X/Analysis -p test_analysis_layout.py
+python X/Analysis/verify-analysis.py --expect-os Windows --expect-architecture X64 --output X/Analysis/artifacts/windows/current.json
+python X/Analysis/verify-analysis.py --upstream-revision 3.0.0-rc2 --expect-os Windows --expect-architecture X64 --output X/Analysis/artifacts/windows/rc2.json
+python X/Analysis/verify-analysis.py --upstream-revision post-rc2-2026-10-17 --expect-os Windows --expect-architecture X64 --output X/Analysis/artifacts/windows/post-rc2.json
+```
+
+Expect 331 accepted checks, eight material/21 static CLI controls and four
+semantic controls per build, plus both explicit correctness failures. Retain
+actual reports/failures and compare portable results/source/dependency hashes;
+never loosen numerical tolerances to force parity. Full net48/RC2 is separate.
+Local Mac continuation is matching native solver execution/results. Earlier
+next-feature approval stops are superseded by acceptance; normal publication
+policy and all release gates remain.
+
 Latest instruction: [task 0021](../tasks/0021-mesh-workflow-publication.md)
 authorizes publishing completed task 0019/0020 work. Check its
 [publication report](../reports/mesh-workflow-publication.md) for verified remote

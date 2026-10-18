@@ -1,5 +1,141 @@
 # Project status
 
+## Current — tasks 0028 complete locally / 0029 publication authorized
+
+2026-10-18: maintainer requests one bounded task then commit/push all current work
+and stop until resumed after reset. Modern-only CPU planner/CLI calculates 75%
+of process-available CPUs, explicit manual total and fair per-job allocation.
+Current/RC2/post-RC2 pass 47 execution/monitor/planning checks, two positive plans
+and 13 CLI rejection controls each on Mac/Linux ARM64. Tools/sources/outcomes
+compare; host counts 18 and 4 yield automatic budgets 13 and 3. No solver launch,
+settings migration, running scheduler or reference-thread change. [Evidence](reports/portable-thread-planning.md).
+
+Publication review passes nine analysis/four execution/ten replay guards,
+unchanged 1188-file CalculiX source verification, current Mac analysis rerun
+(331 accepted checks, both correctness failures retained) and content/whitespace
+checks. Task 0029 publishes tasks 0022–0028 normally to origin research only;
+[actual SHA/hosted state/reset handoff](reports/analysis-execution-publication.md).
+No claim of hosted success until verified. All Windows/net48/RC2/native-solver/
+full-workflow/four-target/installer gates remain. Stop features after publication.
+
+## Historical checkpoint — task 0027 solver advice/threads/GPU research complete
+
+2026-10-18: maintainer requests recommendations by analysis, a 75% available-
+thread default and NVIDIA/AMD/Apple GPU research. [Report/proposed design](reports/solver-guidance-threads-gpu.md)
+documents existing-backend-first advice, conditional MUMPS fallback, automatic
+thread budgeting/manual override and concrete GPU distinctions. NVIDIA CUDA
+routes exist; SuperLU_DIST HIP is a separate AMD integration candidate; no
+reviewed Metal direct-solver route identified. Apple specification 4.1 parsed
+locally confirms no double scalar type. Library availability is not integration.
+No backend/default/precision settings changed and no new benchmark performed.
+
+Task 0022–0027 changes remain uncommitted; no publication authorized. Native CPU
+build/provenance and later regression/scaling comparisons remain necessary.
+D042 licensing/functionality criterion, both correctness failures/tetra gate and
+all Windows/net48/RC2/four-target/full-workflow/installer gates remain.
+
+## Historical checkpoint — task 0026 PARDISO-free assessment complete
+
+2026-10-18: maintainer rejects machine-bound Panua licensing; a new alternative
+is needed only if omitting PARDISO cripples functionality. D042 narrows D041's
+complete proprietary-backend requirement. Located the September 2024 `aleksa`
+forum discussion leading to Matej's PARDISO default recommendation. Published
+observations show both faster PaStiX runs and serious memory/correctness risks;
+no universal slowdown or PARDISO-exclusive analysis category is established.
+Original 2.22 modal/buckling PaStiX branches can call PARDISO in combined builds.
+[Assessment and later comparison scope](reports/without-pardiso-assessment.md).
+
+Recommendation: investigate existing SPOOLES/PaStiX before integrating a new
+backend. No default/precision/profile change or numerical tests in this research
+increment; own comparisons deferred as requested. Native build provenance,
+correctness/capacity and all Windows/net48/RC2/full-workflow/four-target/release
+gates remain. Task 0022–0026 changes are uncommitted; no publication authorized.
+
+## Historical policy checkpoint — task 0025 exact solver research complete
+
+2026-10-18: direct archive verification proves RC2 ccx_dynamic.exe is byte-
+identical to the official CalculiX 2.22 Windows binary. Its five DLLs match the
+prior native Windows reference. No PrePoMax-specific replacement kernel is
+established. The official README identifies Rafał Brzegowy and canonical source.
+PrePoMax GUI defaults to PARDISO; executable-default cube uses PaStiX. All six
+choices pass 7 analytical checks each through the exact Windows program/runtime
+in the existing Mac CrossOver bottle. This is not native ARM/full parity.
+
+[Report and concrete recovery route](reports/exact-solver-provenance.md): exact
+PaStiX/Scotch source/build/ABI/transitive recipe remains missing; native ARM64
+Intel MKL/PARDISO availability is the full-stack blocker. Compatibility/worker
+and native-compute routes are distinct unselected options; no backend/default/
+numerical policy changes. All task 0022–0025 edits remain uncommitted; research
+only in this increment, all existing correctness/release gates retained.
+
+## Current — task 0024 native job boundary/source organization, local and uncommitted
+
+2026-10-18: original CaeJob job/enum ownership and legacy Windows behavior are
+mechanically preserved. Modern native process execution, stdout/stderr, actual
+exit, deadline/cancellation, descendant cleanup, concurrency and pinned solver
+preflight are callable; original STA/CVG monitor data is inspectable. All three
+source modes pass 33 new checks/four CLI controls on native Mac/Linux ARM64;
+four source guards pass and six-run fingerprints/results match. Linux container
+checks use an init reaper. Earlier 331-check analysis source/tool pins are unchanged.
+
+Official CalculiX 2.22 source is recovered under ThirdParty/Sources with original
+license and per-file/archive pins (1188 files). Matching native PaStiX/BLAS/patch/
+compiler/ABI/runtime provenance remains unproven; **no native numerical solve
+or solver substitution occurs**. New hosted x64, native Windows/full net48/RC2
+and all correctness/release gates remain. All task 0022–0024 edits are uncommitted.
+[Task](tasks/0024-native-job-boundary.md), [evidence/blocker/next work](reports/native-job-boundary.md).
+
+Maintainer requires a clean final repository with all third-party corresponding
+source and a public package release branch; [repository map](REPOSITORY_LAYOUT.md)
+records additive source/patch/build layout and planned x/release immutable-artifact
+publication. No public branch/push is performed here. Continue original FRD/DAT
+field import in parallel with matching native-source/build recovery.
+
+## Historical checkpoint — task 0023 complete static analysis deck, local and uncommitted
+
+2026-10-18: original section/BC/load/static-step/output types and writers now
+produce a complete bounded C3D8 linear-elastic deck. Explicit units, named
+regions, exact section coverage and unsupported-definition rejection are exposed
+through a typed boundary and no-overwrite CLI. Generated cube preserves reference
+IDs/material/12 constrained DOFs/four 25 N forces (100 N total) and required
+outputs. No solver has run in this increment.
+
+Current/RC2/post-RC2 pass native Mac/Linux ARM64: **331 accepted checks per
+build**, eight material/21 static CLI controls and four semantic negative
+controls; nine analysis/ten existing replay guards pass. Offline core passes
+independently. Six-run sources, dependencies, tools and portable outcomes match.
+Both known correctness failures and tetra measurement gate remain.
+[Task 0023](tasks/0023-static-analysis-deck.md), [evidence/next increment](reports/static-analysis-deck.md).
+
+All task 0022/0023 changes remain **uncommitted**; no new publication, hosted
+x64/Windows/net48/RC2/full workflow or installer acceptance. Continue accepted
+matching-native-solver execution → original results work. Native installers,
+Homebrew, signing and four-target/release requirements remain explicit.
+Earlier approval stops/material-only checkpoints below are historical.
+
+## Historical checkpoint — task 0022 material foundation complete locally
+
+2026-10-18: maintainer accepts the proposed sequence and requires an installable
+native desktop application. [Installer/Homebrew requirements](RELEASE.md) now
+specify Windows EXE/MSI, macOS DMG, Linux DEB/RPM or equivalent and Homebrew.
+Apple Developer ID can be provided. Task 0021's approval stop is superseded.
+
+[Task 0022](tasks/0022-analysis-material-foundation.md) source-links original
+equations/unit converters/materials and original material keyword writers in an
+expanded partial build. Current/RC2/post-RC2 each pass native Mac/Linux ARM64:
+44 material checks plus all 218 previous checks (262 accepted), eight material
+CLI controls and both correctness failures/measurement gate retained. Post-RC2
+lamina/composite behavior is distinguished using exact upstream overlay bytes.
+Source/dependency/tool/outcome comparisons match across hosts. Seven analysis
+source guards/ten existing replay guards and an independent offline core pass
+on Mac. [Evidence and remaining work](reports/analysis-material-foundation.md).
+
+All task 0022 changes remain **uncommitted**. Native x64 CI is prepared, not run;
+native Windows/full net48/RC2 oracle and remaining release gates stay open.
+The new CLI writes only a material fragment. Continue accepted step 1 with
+original section/BC/load/step and complete analysis deck generation, then native
+solve/results. No new publication/frontend/default format/numerical policy.
+
 ## Current — task 0021 publication verified; next features await approval
 
 2026-10-18: task 0019/0020 implementation is published at **47f17be6** on

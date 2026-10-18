@@ -1,10 +1,13 @@
-# Proposed next implementation — awaiting maintainer approval
+# Accepted next implementation sequence
 
-2026-10-18, Europe/Belgrade. Requested after task 0021 publication. This is a
-proposal, not authorization to begin. The maintainer explicitly requires reading
-and approval before the next feature steps. Windows testing may be deferred
-while portable implementation continues after that approval; its release gates
-remain mandatory. Publication authorization does not extend to future features.
+Accepted by the maintainer on 2026-10-18, Europe/Belgrade. Local implementation
+is authorized in tested increments, with Windows testing deferred during coding.
+[Tasks 0022/0023](../reports/static-analysis-deck.md) implement step 1's bounded
+complete static deck locally. Matching native execution/results remain next;
+frontend/default format and numerical/native-tool decisions retain their gates.
+The end goal is an installable desktop application with native installers and
+Homebrew; see [release requirements](../RELEASE.md). Normal maintainer commit/
+push policy resumes; this acceptance is not a new publication instruction.
 
 ## 1. Complete a first analysis deck through original model behavior
 
@@ -64,9 +67,9 @@ semantics with old/new PMX compatibility, including upstream composite fields.
 Matching patched CAD/mesher sources remain an early release dependency; a
 mesh-based workflow can progress while CAD parity is unresolved.
 
-Recommendation: approve steps 1–3 as the next implementation sequence, working
+Steps 1–3 are accepted as the next implementation sequence, working
 in tested increments. Windows is a later differential check rather than a
 blocker to local Mac/Linux coding; full native Windows/net48/RC2, four-platform,
 correctness, persistence/UI/CAD/source and packaging gates remain before release.
 Both original correctness failures and the tetrahedron measurement gate remain
-until separately reviewed. No next feature work has started under this proposal.
+until separately reviewed. Task 0022 starts the first component; subsequent completion is recorded in STATUS.

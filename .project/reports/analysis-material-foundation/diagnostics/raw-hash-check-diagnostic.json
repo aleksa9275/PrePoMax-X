@@ -1,0 +1,529 @@
+{
+  "success": false,
+  "recordedAtUtc": "2026-10-18T14:20:15.872925+00:00",
+  "host": {
+    "os": "Darwin",
+    "architecture": "arm64"
+  },
+  "commands": [
+    {
+      "arguments": [
+        "dotnet",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "10.0.402\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "dotnet",
+        "build",
+        "<repository>/X/Analysis/PrePoMaxX.Analysis.slnx",
+        "-c",
+        "Release",
+        "--disable-build-servers",
+        "-m:1",
+        "--artifacts-path",
+        "<temporary>/build",
+        "-p:RepositoryRoot=<temporary>/source/",
+        "-p:RestorePackagesPath=<temporary>/packages",
+        "-p:RestoreLockedMode=true",
+        "-p:RestoreConfigFile=<repository>/X/Analysis/NuGet.Config",
+        "-v:minimal",
+        "--source",
+        "<temporary>/feed"
+      ],
+      "exitCode": 0,
+      "stdout": "  Determining projects to restore...\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/MaterialDeck/MaterialDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n  Restored <repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj (in 89 ms).\n  Restored <repository>/X/Analysis/CaeResults/CaeResults.csproj (in 89 ms).\n  Restored <repository>/X/Analysis/CaeMesh/CaeMesh.csproj (in 89 ms).\n  Restored <repository>/X/Analysis/CaeModel/CaeModel.csproj (in 89 ms).\n  Restored <repository>/X/Analysis/Tests/Tests.csproj (in 89 ms).\n  Restored <repository>/X/Analysis/MaterialDeck/MaterialDeck.csproj (in 89 ms).\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  CaeGlobals -> <temporary>/build/bin/CaeGlobals/release/CaeGlobals.dll\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n  CaeMesh -> <temporary>/build/bin/CaeMesh/release/CaeMesh.dll\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  CaeResults -> <temporary>/build/bin/CaeResults/release/CaeResults.dll\n<temporary>/source/CaeModel/Materials/MaterialProperty.cs(51,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n  CaeModel -> <temporary>/build/bin/CaeModel/release/CaeModel.dll\n<repository>/X/Analysis/MaterialDeck/MaterialDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n  MaterialDeck -> <temporary>/build/bin/MaterialDeck/release/PrePoMaxX.MaterialDeck.dll\n<repository>/X/Analysis/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/Tests/Program.cs(106,82): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(106,40): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(111,56): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(111,14): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n  Tests -> <temporary>/build/bin/Tests/release/PrePoMaxX.Tests.dll\n\nBuild succeeded.\n\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/MaterialDeck/MaterialDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project. [<repository>/X/Analysis/PrePoMaxX.Analysis.slnx]\n<repository>/X/Analysis/CaeGlobals/CaeGlobals.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeMesh/CaeMesh.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeMesh/Elements/3D/LinearPyramidElement.cs(23,31): warning CS0414: The field 'LinearPyramidElement._a' is assigned but its value is never used [<repository>/X/Analysis/CaeMesh/CaeMesh.csproj]\n<repository>/X/Analysis/CaeModel/CaeModel.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/CaeResults/CaeResults.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<temporary>/source/CaeModel/Materials/MaterialProperty.cs(51,30): warning CS0168: The variable 'ex' is declared but never used [<repository>/X/Analysis/CaeModel/CaeModel.csproj]\n<repository>/X/Analysis/MaterialDeck/MaterialDeck.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/Tests/Tests.csproj : warning NU1701: Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.\n<repository>/X/Analysis/Tests/Program.cs(106,82): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(106,40): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(111,56): warning SYSLIB0050: 'FormatterConverter' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n<repository>/X/Analysis/Tests/Program.cs(111,14): warning SYSLIB0050: 'SerializationInfo.SerializationInfo(Type, IFormatterConverter)' is obsolete: 'Formatter-based serialization is obsolete and should not be used.' (https://aka.ms/dotnet-warnings/SYSLIB0050) [<repository>/X/Analysis/Tests/Tests.csproj]\n    18 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:03.70\n",
+      "stderr": "CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    }
+  ],
+  "sources": [
+    {
+      "path": "CaeGlobals/CommonClasses/Matrix.cs",
+      "sha256": "dff8b4fb66050cdbf90c96ad5de36f420f32049c12ebe6e6f0b166a6d01e0e53",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/Vec3D.cs",
+      "sha256": "7a6f44db4cc18e05ad8d7a27f7309ca0f09a353d83d0bf62035225e7be1c99be",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/Comparers/CompareIntArray.cs",
+      "sha256": "ff318a3db1efc40741b150e89d0350af1802df9e710fee24171a752dc4a38092",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/0D/FeElement0D.cs",
+      "sha256": "31a8b27cfdfeea6db394637b2ae3bc6865f2fe3d03d5caf2aecc2c87eac4185a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/0D/MassElement.cs",
+      "sha256": "212adde4479a3cc614ab509c751ad129b1888c75199e022890d3bd62e4fe9a52",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/FeElement1D.cs",
+      "sha256": "de526da44f008453b815b4efc4a75c7625968521fe1c2cc5e162422f50f3126d",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearBeamElement.cs",
+      "sha256": "65d7750f236cbf432ddc7458e28d4edfef31b3342520e8ce5d9438e7566905f2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearGapElement.cs",
+      "sha256": "f32d816558143a0f5960587dcb9bcd9c01929e7ee08a97da7301463c1e749409",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/LinearSpringElement.cs",
+      "sha256": "4a5a23e2a7e955a94bb5738510ac91d80b4e79b0382827b6b11331a7a9934483",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/1D/ParabolicBeamElement.cs",
+      "sha256": "f31ecae6b29def2d68d15550e309111a431b822e6b21ee28bd916cd539cad761",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/FeElement2D.cs",
+      "sha256": "0156d7b85338a59ba9f5200da3af726f9bb30397ec8b40829853ce4ae25b3102",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearQuadrilateralElement.cs",
+      "sha256": "5938a33ee4f3d154ee7bcd67753e206c38c2d107df5760b5dd6c5834f03a61f5",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/LinearTriangleElement.cs",
+      "sha256": "a6a999b5af8a27283dd438bc253f39f208c4e5c9545598eabf242fdc756ea611",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicQuadrilateralElement.cs",
+      "sha256": "d7f63dc27482507160bc5634685a3cb4d2165149f82fdeb49b18460d267c0dbe",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/2D/ParabolicTriangleElement.cs",
+      "sha256": "4741a0e4288a992e71fee2f2a9a67d521c783cf99b5d02c94d7cddab6b3b2fe1",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/FeElement3D.cs",
+      "sha256": "db47b38645a866a5c25071ef248654ea575541b6dedc7a173eb0c8fc42f4d877",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearHexaElement.cs",
+      "sha256": "6b03579ae1cd8215ac32ef3bf0648d89a23f6c71cc5e5bfdfdcc76935c40ac0b",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearPyramidElement.cs",
+      "sha256": "320454ff6846a839a27bd9ce2f37b343b83e9cba4d0784ccc29f3fa41ee74b3d",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearTetraElement.cs",
+      "sha256": "2073c73562d274231e14229df0f8a5486c6f22c9432c5e4cf7c0b1b96635b3ce",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/LinearWedgeElement.cs",
+      "sha256": "5e01663260f288732c047048dddc5e96896294f49329126d55d1a0f27a26c072",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicHexaElement.cs",
+      "sha256": "847ee2417c410fd96beb6ed156e5993fdf3925217fb56d72cac9cdacbe271144",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicPyramidElement.cs",
+      "sha256": "2e74f928f8b4c8e97e13ee1f55d6535084d8558ec697fcb39607029ab17ab1b0",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicTetraElement.cs",
+      "sha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/3D/ParabolicWedgeElement.cs",
+      "sha256": "d08fa37e91b84e7ac5d638df89882db66e8875e197e37d6c6b5b91ad2f967027",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/FeElement.cs",
+      "sha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/IntegrationScale.cs",
+      "sha256": "f58ac5c7f6cb98b6b14ccc6d0343a54657c5eabb458199bc65ad888edeac8d32",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Elements/VtkCellType.cs",
+      "sha256": "9364609fc2fb07cb6073c109d8ebf71a14b6d0f5d22b0d43b1f39237133225ca",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadata.cs",
+      "sha256": "a89102eb831793fb75ab1e870e583b6df937d72c2f867b3a87befc0adb7a4d1f",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
+      "sha256": "cd69b0f100bbef9f530fbdc74d1d5dcaa495757a340427c7f460a20a804042c8",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs",
+      "sha256": "9d071c541db8b36ac0832f956c62a06a670d9510916c06c5de95409f8a6fec79",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/GeometryTools.cs",
+      "sha256": "372bcfe39e32920d102da734a084bd1f5da0e0032aaac18864994ce162290336",
+      "unchangedFromBaseline": false,
+      "baselineSha256": "955f6b2825f69041ec8cdbbdee74652c71feb2160aa7daa787cc49f0f1a423a7",
+      "onlyRemovedUnusedImport": "using System.Windows.Forms.VisualStyles;"
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs",
+      "sha256": "2afffd6748cd29ebd746cb7a5bda9ac02cbe73a6c97bde3d3bfd3a919f3c56b9",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
+      "sha256": "e513c69630114f21b506abccb3125b0136ec3f66204168e3f3238678a0c0a9a2",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
+      "sha256": "f25f90e59e9be3f88dba6ab824056051f56dfaf7fc992da82d79851b9d689e98",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeMesh/Nodes/FeNode.cs",
+      "sha256": "e4f2217b94715ae6dd32b124d19365d92ddd91596636929a31f12c79df745e0a",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs",
+      "sha256": "ced5c90b61a3664d62a21c7b938ac96cd4781e0b54878ea6eeca2f53499a28b7",
+      "unchangedFromBaseline": true
+    },
+    {
+      "path": "CaeGlobals/CaeException.cs",
+      "sha256": "024ac7385a2cc6d7f0298f97c4b45a92431af61324ab1a42392b0642b3a6d268",
+      "originalClassBodyUnchanged": true
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/NamedClass.cs",
+      "sha256": "047fb7b3bba9a5b67686341f3378790e88110bb456206667080b9b65272c9433",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeMesh/InpElementSet.cs",
+      "sha256": "6f8853c32fa27d123ead1fe2d80df4e2d5805f9a7081288c311f019360e564ab",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeMesh/Enums/ConvertPyramidsToEnum.cs",
+      "sha256": "116fe0f8fbba67a470d2088f5449e4c1aa02026d76a0a57245194c2e4c5ecd35",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/CalculixKeyword.cs",
+      "sha256": "c627ee3e628b0bd7b9abbfd7e2d4b2bcfb20b2d7f2a8b083f782b38cad51c458",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalElement.cs",
+      "sha256": "f5b18ec5f99a9433ec21bdd8ed15ae2cc9a6af0b2e8e1815cbb136d10f00d19b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalLoadEnums.cs",
+      "sha256": "d07459970f7bfdaf3531f8f115251b79ae559e8840d5a17a24501622586d01e9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshParsing.cs",
+      "sha256": "92c8b8df5f189fe42311fa512ff61548c5d3664e8e6d11492dbb7d2abd7d332d",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs",
+      "sha256": "889f0236a3274508291aedb02e6b2f755577875a99286bb04fa5d20797bc60ea",
+      "kind": "mechanical extraction"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpMeshData.cs",
+      "sha256": "95efeb1d49fd62faf5da6f740c67ce9c9738d487bc8f5b1648362dae36e693ad",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeModel/FileInOut/Input/InpModel/InpFileReader.MeshData.cs",
+      "sha256": "35c9a1da5093379cbf69f5172e9cc14374511f59bd9f764cd17ec053443b4239",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/MeshDeckWriter.cs",
+      "sha256": "d2c5039885aec3a65b8812001b2c7ca83d1b01129adbd45a2774375637e1006d",
+      "kind": "new boundary"
+    },
+    {
+      "path": "CaeGlobals/Equation/EquationContainer.cs",
+      "sha256": "649fa23d3ebd462b7260fb4376739069ec6b1b4dff45ba24a1bedcb77406ee89",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/Equation/EquationString.cs",
+      "sha256": "7c95b4760467ca218137a337a823c56e4a4f64b6bfa9aca91b511ff84c5e1ea0",
+      "removedUnusedImport": "using System.Runtime.Remoting.Contexts;"
+    },
+    {
+      "path": "CaeGlobals/NCalc/MyNCalc.cs",
+      "sha256": "c73d1acd0549793c4cb992dfc165b3883492ea9d5a7f98f28ea12409eda46d9e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/IContainsEquations.cs",
+      "sha256": "e4ca9d074fe57c10fb7a3fcd16f5a0b8d9de28ed9d2f14f1b6a0e1ba3483f402",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionary.cs",
+      "sha256": "9ccffa79b5c89fd8394216d3dd0da3456bc1d10e6150717f63b6a72ec1ceeac3",
+      "removedUnusedImport": "using System.Runtime.InteropServices.WindowsRuntime;"
+    },
+    {
+      "path": "CaeGlobals/CommonClasses/OrderedDictionaryItemLayout.cs",
+      "sha256": "46de143ec5c8cc1040d74a0b2a9094877a3ab3d73b0e0f1602291fe472e6bdf2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/MyUnit.cs",
+      "sha256": "2ab434907d184e323175ae3bfca7897d0f52ca40ef116459162bd338464d155e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticLamina.cs",
+      "sha256": "029c929fdc9d60f17d279c3aabd2edc737d724cf695dd49de4c7469db6426ded",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticWithDensity.cs",
+      "sha256": "dd0098fd750ac603b6fae9f44cf9b2e857640764197cce9b4aa931c1836c5112",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/MaterialProperty.cs",
+      "sha256": "545463178ea451089369e1fd6493d7a1d8f9993c63d22f8bb95c0b1eb2913ccb",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SlipWear.cs",
+      "sha256": "aedc0ebfc5bae070647d0e6f9a67a0825ff8de174d3c97c17865eeefd16c9631",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/SpecificHeat.cs",
+      "sha256": "9733bfceb6915be534aad07ea7ec8cb58d8366f7346fd35a9d2e96878b0882c9",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Material.cs",
+      "sha256": "754cdd9de0972656a0306c7e4838a229ea764989d4090e8924e303926168c1b0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalExpansion.cs",
+      "sha256": "ca189eb1805e953ac9ec16fb8270e4bca761106e022c19ed6df7669db2d3f225",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ThermalConductivity.cs",
+      "sha256": "b0335bf71a03101dc9333173e73cab5e043d9d55f7e391bf2c2ab07d59b2aac2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Plastic.cs",
+      "sha256": "c269a83581f75a0b4d3101f8cee355961d00b7d8290bf7482bd7662e8c7bdcec",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Density.cs",
+      "sha256": "61c7ca14a23d0421f30317d3e4c4de6fbf5cc1f7070f78c6aa0ad9536e436dc3",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/Elastic.cs",
+      "sha256": "0a4c6b5d3ea5eb6d0862d2fd1a08c41a2862fa7f4a1e17f8fa2bcdec0bc96e1f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/Materials/ElasticEngineeringConstants.cs",
+      "sha256": "038e99e9b848fc1336bb6492398ab54c0325d2afb427e44cc7b0777ea0703cd0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalMaterial.cs",
+      "sha256": "15c976c529cd6bf56835370eb2e784a0fb0e62e8d335d4894715a79930602853",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalElastic.cs",
+      "sha256": "2fac17219584789452b237d2ed17cefe89f448fdc742345cc785a20a81c28367",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPressureConverter.cs",
+      "sha256": "8a38185cf274dc42839d5465fb279b4bf0d80c4f06bf271c1c1d01522ed5672f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTemperatureConverter.cs",
+      "sha256": "386f2b87aa25de9f1e0268978a4928590381cb5a85e683e6ad840254909208f5",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDoubleConverter.cs",
+      "sha256": "5008e21d081ae6cdfd298b1a249c9a57b3d5b742f363873a7f2bf504a3075f0d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringDensityConverter.cs",
+      "sha256": "a435819eb1facf8f02bd2af540d4d61c5de56a7646bc8c9b1e863b20c3d79387",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalExpansionConverter.cs",
+      "sha256": "16e85da94c4d5ede1b9b142286451c3d93e45e78f11f8d4b391d7b5c6dd0f530",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringThermalConductivityConverter.cs",
+      "sha256": "a4d910204e1ba7824fe0f76ff13b610d1baaa76fa3cea4bfe0fad9e0923f785d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringSpecificHeatConverter.cs",
+      "sha256": "dc695f606067b4cee8f979b7c65d7cc37d1a2aab5291fcb4c32262466de3b80d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringStefanBoltzmannUndefinedConverter.cs",
+      "sha256": "79290796a304fa94d4f08bfe8f721a961c399381f07c6971f123bd6ce4c4e0d8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringNewtonGravityUndefinedConverter.cs",
+      "sha256": "7c650c9d48becfe34269d0cdf41f353cdd49ca26f93502ab76f7d789abac5ab5",
+      "kind": "removed unused import",
+      "removedUnusedImport": "using System.Windows.Forms;"
+    },
+    {
+      "path": "CaeGlobals/Extensions.Calculix.cs",
+      "sha256": "2fcbe64caaca31284c63e5f6c5737b8724286fd85659c31750f2c51101a7a541",
+      "kind": "mechanical extraction",
+      "originalPath": "CaeGlobals/Extensions.cs"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerAreaConverter.cs",
+      "sha256": "b999ecfb832f2a0f048b949dd3d4db6ab34c9ee07bb5433254d92ffd5b4edfbd",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerPerVolumeConverter.cs",
+      "sha256": "c63aea66fee2f37c1abf7083728ac72fb14bc2a1587b8ecfb1bbf2921849e47d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringAreaConverter.cs",
+      "sha256": "a2ea27864c2e00bcdd2df200eaa706f0b38947c60428c18edded1c0342fe3c49",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringEnergyConverter.cs",
+      "sha256": "326ffa1791957b9e68e395b19eb7d398b36867ac7ab7f666f15e5eaa1a689f8e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringForceConverter.cs",
+      "sha256": "a80e718fa787e6a789e22202432a2b71eb48a494c4aac072adf2a483ac9f43ff",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringLengthConverter.cs",
+      "sha256": "d6c76cfe0d5de825e9b99852a1ebea7a6e23400993b6710150823f7ca1abfdc0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringMassConverter.cs",
+      "sha256": "e7fba8958f8b1a2521417bd20a6481218b275c9784aac293720361316be615a7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringPowerConverter.cs",
+      "sha256": "c9962c29d5b2a3502e7af2c2b6973c596f92388bf9719a55038701a3eed9b3a8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringTimeConverter.cs",
+      "sha256": "6af9a89b7da335b6fe670c1c4f741ff43668279eb72e52d7d176c806f4ab9488",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringVolumeConverter.cs",
+      "sha256": "fc3fe972ea51c132bd28a0866fe3768a05afb3a463c9f8ae9175420528f8e96d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs",
+      "sha256": "515de6faa17d2477c392858af5e5336bac802fca287fe156d846bf3205b77cf5",
+      "kind": "new boundary"
+    }
+  ],
+  "upstreamRevision": "current",
+  "repository": {
+    "head": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+    "dirty": true
+  },
+  "toolHashes": {
+    ".gitignore": "e9d6c52324257756d5451eaf7b1de28d32fb79e8b74a3d58e6f00fefed92a9c2",
+    "CaeGlobals/CaeGlobals.csproj": "4db13284dd804903dd40f5d929f2e9553e0db45a10e8680a51c3afe76090f6a8",
+    "CaeGlobals/packages.lock.json": "efd66f5b96ceb932d7780915d5ec3d9c9969e546b6c2762741599b5280e16c1d",
+    "CaeMesh/CaeMesh.csproj": "2866af6c9537e716e12e862a43a059dbb3bffa2314e7353adb016113b5a4b5b5",
+    "CaeMesh/packages.lock.json": "98e187dabe9153fda70817b8e11b8c11f0e4b8f3a0886a9ee25fad2cf5cdd404",
+    "CaeModel/CaeModel.csproj": "afeaa776d30d67327f5238ef5c014ba05e5d3a82284ff79d1bc660fd5155d635",
+    "CaeModel/packages.lock.json": "7c372ebb2a835d3490ee373b55410e587e0838656ff7373d48d91f529e480eb0",
+    "CaeResults/CaeResults.csproj": "1df0377f433c724ec1a6a129024b29a9d9231354e87f72e6f8982462d868634e",
+    "CaeResults/packages.lock.json": "98e187dabe9153fda70817b8e11b8c11f0e4b8f3a0886a9ee25fad2cf5cdd404",
+    "Directory.Build.props": "c928e4924ec1ed3e961fc0fbcc6e3d0de024514cca15e58d13c5d45493f59769",
+    "MaterialDeck/MaterialDeck.csproj": "9a7346e2bed1f83ce295b01aa98926bc39dfe29277c1a5247b6e1873c14d860c",
+    "MaterialDeck/Program.cs": "00563d02f30d0a11d4fd9d0fa8f3d153205d136eb344fd520bdb5f0090ccb124",
+    "MaterialDeck/packages.lock.json": "a62f0c5b5d1a303d82750925916fa0bc5907ceabc640929bae28fe13cb9267bc",
+    "NuGet.Config": "ef18aae73f086bb5fc3e982ce9b14cd85951b0c85871c7f3459dfa7041d5158b",
+    "PrePoMaxX.Analysis.slnx": "5e062aa241b6cde125de9a84dc53a049a547309f043b643b950f9d2746c5b533",
+    "Tests/Program.cs": "067906da885b2c2d4e2a4c54100a97daaa0a7035cde98825779a657ba821fb3d",
+    "Tests/Tests.csproj": "07e54c52ccb835250a58137cc17a1fbc28b8bac5cd1c6e8ae25feffe0cca1502",
+    "Tests/packages.lock.json": "a62f0c5b5d1a303d82750925916fa0bc5907ceabc640929bae28fe13cb9267bc",
+    "analysis-sources.json": "71c8abc1e8789e75b90c470712da53b3fe8ae64b9319ad7c9675e946215301ce",
+    "analysis_layout.py": "70aa5e6bea44ad1529a8c27023b522f70a8f14365b83a84fcd0408d2a7f0d335",
+    "verify-analysis.py": "0b4f56b67a86c46c3510363656134df4e50ccbfd402e0e93153dccf9879fad9a"
+  },
+  "sdk": "10.0.402",
+  "dependencies": [],
+  "error": "Restored package differs from lock content hash"
+}

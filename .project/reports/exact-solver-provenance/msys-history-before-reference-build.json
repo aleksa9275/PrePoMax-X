@@ -1,0 +1,84 @@
+[
+  {
+    "sha": "3c4e841114024301721809a88e06f054c05615c4",
+    "node_id": "C_kwDOANx0dNoAKDNjNGU4NDExMTQwMjQzMDE3MjE4MDlhODhlMDZmMDU0YzA1NjE1YzQ",
+    "commit": {
+      "author": {
+        "name": "Rafal",
+        "email": "rafal.brzegowy@yahoo.com",
+        "date": "2024-01-08T10:40:52Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-01-08T10:40:52Z"
+      },
+      "message": "calculix-ccx: add new package (#19673)\n\n\r\n---------\r\n\r\nCo-authored-by: مهدي شينون (Mehdi Chinoune) <mehdi.chinoune@hotmail.com>",
+      "tree": {
+        "sha": "39fb1a05e11a2bf7a4dfefc856b7c45212039f70",
+        "url": "https://api.github.com/repos/msys2/MINGW-packages/git/trees/39fb1a05e11a2bf7a4dfefc856b7c45212039f70"
+      },
+      "url": "https://api.github.com/repos/msys2/MINGW-packages/git/commits/3c4e841114024301721809a88e06f054c05615c4",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJlm9E0CRBK7hj4Ov3rIwAAka4IAD4LkTqQUIy7iUaPbqSZfeIR\nzIbGGi+qmD1nsd0OahWLlQ6JQziyEGHJqFIKfTrUUTtbD59AEAdB/3UUVUZPT1Pg\nMBe0O0jMORayxjLHOtj31Wq9FrT89aWyu++Y97lcAvaxO1r+7AUu+sazc7FxOY6T\nXBtBI7IBhVOzMqrksGvoxOyKdqDqpHIzSYPazJCE2oSfwnXpwakXZNZB3i9tzBd2\neoPssVa+idN5s7ms6/+YCXvFgSIvEyfKQB4IDOiTAThCrbR3Ma1PRF+n+orul6Np\nBN3PZHqNt9KQiCL2+I+dx+KvvMNu1wqPngoqrxHC3yKuKHiAyHyxexus2ypqInU=\n=JazG\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 39fb1a05e11a2bf7a4dfefc856b7c45212039f70\nparent 4dcc9c14225cb6648116373a8314fd3367f02775\nauthor Rafal <rafal.brzegowy@yahoo.com> 1704710452 +0100\ncommitter GitHub <noreply@github.com> 1704710452 +0100\n\ncalculix-ccx: add new package (#19673)\n\n\r\n---------\r\n\r\nCo-authored-by: مهدي شينون (Mehdi Chinoune) <mehdi.chinoune@hotmail.com>",
+        "verified_at": "2024-01-16T19:59:59Z"
+      }
+    },
+    "url": "https://api.github.com/repos/msys2/MINGW-packages/commits/3c4e841114024301721809a88e06f054c05615c4",
+    "html_url": "https://github.com/msys2/MINGW-packages/commit/3c4e841114024301721809a88e06f054c05615c4",
+    "comments_url": "https://api.github.com/repos/msys2/MINGW-packages/commits/3c4e841114024301721809a88e06f054c05615c4/comments",
+    "author": {
+      "login": "3rav",
+      "id": 24394573,
+      "node_id": "MDQ6VXNlcjI0Mzk0NTcz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24394573?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/3rav",
+      "html_url": "https://github.com/3rav",
+      "followers_url": "https://api.github.com/users/3rav/followers",
+      "following_url": "https://api.github.com/users/3rav/following{/other_user}",
+      "gists_url": "https://api.github.com/users/3rav/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/3rav/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/3rav/subscriptions",
+      "organizations_url": "https://api.github.com/users/3rav/orgs",
+      "repos_url": "https://api.github.com/users/3rav/repos",
+      "events_url": "https://api.github.com/users/3rav/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/3rav/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4dcc9c14225cb6648116373a8314fd3367f02775",
+        "url": "https://api.github.com/repos/msys2/MINGW-packages/commits/4dcc9c14225cb6648116373a8314fd3367f02775",
+        "html_url": "https://github.com/msys2/MINGW-packages/commit/4dcc9c14225cb6648116373a8314fd3367f02775"
+      }
+    ]
+  }
+]

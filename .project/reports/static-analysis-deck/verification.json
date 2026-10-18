@@ -1,0 +1,145 @@
+{
+  "success": true,
+  "scope": "bounded complete C3D8 static-deck generation; no solver execution",
+  "repository": {
+    "head": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+    "dirty": true
+  },
+  "comparisonRule": "Strip runtime objects only from tests/regression; compare all engineering results, sources, package assets, tools and CLI outputs exactly for each source mode",
+  "comparisons": [
+    {
+      "mode": "current",
+      "matchingAcrossHosts": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "acceptedChecksPerBuild": 331,
+      "materialCliControls": 8,
+      "staticCliControls": 21,
+      "semanticRejectionControls": 4,
+      "knownCorrectnessFailuresRetained": 2,
+      "solverExecuted": false
+    },
+    {
+      "mode": "rc2",
+      "matchingAcrossHosts": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "acceptedChecksPerBuild": 331,
+      "materialCliControls": 8,
+      "staticCliControls": 21,
+      "semanticRejectionControls": 4,
+      "knownCorrectnessFailuresRetained": 2,
+      "solverExecuted": false
+    },
+    {
+      "mode": "post-rc2",
+      "matchingAcrossHosts": [
+        "sources",
+        "toolHashes",
+        "sharedRegressionToolHashes",
+        "dependencies",
+        "tests",
+        "regression",
+        "staticTests",
+        "staticWorkflow",
+        "cli"
+      ],
+      "acceptedChecksPerBuild": 331,
+      "materialCliControls": 8,
+      "staticCliControls": 21,
+      "semanticRejectionControls": 4,
+      "knownCorrectnessFailuresRetained": 2,
+      "solverExecuted": false
+    }
+  ],
+  "toolFingerprintsIdenticalAcrossAllSixRuns": true,
+  "retainedReference": {
+    "path": "X/Feasibility/Solver/uniaxial-cube.inp",
+    "sha256": "901f416fe08f3091b07bbeac008fbe7233567cf890a55b83865441cc2452ecf7",
+    "comparison": {
+      "matchesRetainedReference": true,
+      "nodeIdsAndCoordinates": true,
+      "elementIdsAndConnectivity": true,
+      "elasticConstantsAndSectionReferences": true,
+      "expandedConstraints": 12,
+      "expandedConcentratedForces": 4,
+      "totalAxialForce": 100.0,
+      "requiredFieldAndHistoryOutputsPreserved": true,
+      "originalDefaultAdditionalElementFields": [
+        "E",
+        "NOE"
+      ],
+      "explicitStaticTimePeriod": 1,
+      "solverExecuted": false
+    }
+  },
+  "sourceGuards": {
+    "analysis": 9,
+    "core": 10
+  },
+  "oldOfflineCore": {
+    "success": true,
+    "acceptedChecks": 218,
+    "knownCorrectnessFailuresRetained": 2,
+    "report": "offline-core-current-macos-arm64.json"
+  },
+  "publication": "all task 0022/0023 changes remain uncommitted; no new hosted x64 or Windows result",
+  "files": {
+    "cube-generated.inp": {
+      "sha256": "e7323f8f1b037a39ce81af06913b9dff91bfd0e76f75b709719e656f115680a1",
+      "bytes": 789
+    },
+    "current-linux-arm64.json": {
+      "sha256": "aca9b8cc497a651569b5fa9b1f708c26bf0560246ed395dfdd83de5f18289388",
+      "bytes": 195008
+    },
+    "current-macos-arm64.json": {
+      "sha256": "ae90e2d7bc06e64cb032ffdf5b0f9eae1b84061e9cf19af7dfc1749a5383b54f",
+      "bytes": 194479
+    },
+    "initial-color-reference-rejection.json": {
+      "sha256": "e8d873aaafed7a95ae81470af61494cd3e74615ed9d3211d1c648ac61f5e8a98",
+      "bytes": 91967
+    },
+    "offline-core-current-macos-arm64.json": {
+      "sha256": "a125b4ed69f672748d50e2f641c791703bdee8210b889e83dc44f2ce8bf26664",
+      "bytes": 107052
+    },
+    "post-rc2-linux-arm64.json": {
+      "sha256": "9770d43b2fb291039825f574ef3fae0500b50ea135ce27de1264dc2c4d381ea9",
+      "bytes": 213204
+    },
+    "post-rc2-macos-arm64.json": {
+      "sha256": "d4409f2f692e8dd5e09221e9f3d01277464e8d61b1daa5a43d00e2d668b3d2ec",
+      "bytes": 212675
+    },
+    "rc2-linux-arm64.json": {
+      "sha256": "241122fdf79e3434fea0e386cf1011abc5d4da7bebc6de02979519da8ffb388d",
+      "bytes": 212759
+    },
+    "rc2-macos-arm64.json": {
+      "sha256": "256a041b98f37eac955ca6024a048c1826b94d358537b02721ce9e3ab00fd114",
+      "bytes": 212230
+    },
+    "source-guards.json": {
+      "sha256": "8747a60f96ca91a0b008b6ce4980a1655a8cd5368de87fff1226d0dbb13425d1",
+      "bytes": 604
+    }
+  }
+}

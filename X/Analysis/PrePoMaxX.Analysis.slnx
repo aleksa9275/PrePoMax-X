@@ -1,0 +1,16 @@
+<Solution>
+  <Project Path="CaeGlobals/CaeGlobals.csproj" />
+  <Project Path="CaeMesh/CaeMesh.csproj" />
+  <Project Path="CaeResults/CaeResults.csproj" />
+  <Project Path="CaeModel/CaeModel.csproj" />
+  <Project Path="MaterialDeck/MaterialDeck.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+  <Project Path="MeasureMesh/MeasureMesh.csproj" />
+  <Project Path="MeshDeck/MeshDeck.csproj" />
+  <Project Path="Regression/Mapping/Mapping.csproj" />
+  <Project Path="Regression/Data/Data.csproj" />
+  <Project Path="Regression/Elements/Elements.csproj" />
+  <Project Path="Regression/Mesh/Mesh.csproj" />
+  <Project Path="StaticDeck/StaticDeck.csproj" />
+  <Project Path="StaticChecks/StaticChecks.csproj" />
+</Solution>

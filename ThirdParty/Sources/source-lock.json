@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "id": "calculix-2.22",
+      "manifest": "CalculiX/2.22/source-manifest.json",
+      "manifestSha256": "8dd1b5fad4c0e369903bfea4de009592f7d1790a66aa69de21c4bfa19ea6ea94"
+    }
+  ]
+}

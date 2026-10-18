@@ -1,5 +1,83 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-10-18 latest publication boundary: maintainer explicitly authorizes one
+bounded task (~15 percentage points of remaining usage), then commit/push all
+current work and continue after reset. Task 0028 implements the portable read-only
+75% CPU planner/CLI (47 checks and 13 rejection controls per pin on Mac/Linux
+ARM64). It does not apply settings, schedule jobs or change reference runs.
+Task 0029 covers review, normal origin/research/native-feasibility publication,
+exact-commit hosted checks/artifacts and closing evidence/reset handoff. This
+supersedes earlier uncommitted-only wording for tasks 0022–0028. No upstream/
+x/main/release write or force push. Read .project/reports/analysis-execution-publication.md
+for actual SHA/status. STOP feature work after publication until maintainer
+resumes; preserve both correctness failures/tetra gate and all release gates.
+
+2026-10-18 latest, task 0027: maintainer requests research on solver advice,
+75%-of-available-thread defaults and NVIDIA/AMD/Apple GPU optimization. Read
+.project/reports/solver-guidance-threads-gpu.md. Solver advice and a 75% default
+are requested product direction; this increment only researches the concrete
+design. No settings/default/precision changes, integration, numerical benchmark
+or publication. Existing SPOOLES/modified PaStiX first; MUMPS only if required
+under D042. NVIDIA CUDA is documented; AMD SuperLU_DIST HIP requires another
+adapter; no reviewed Apple Metal direct-solver route identified (MSL 4.1 has no
+double scalar type). Proposed thread budget has manual override/concurrent-job
+coordination and is not a utilization/speed guarantee. Preserve all existing
+uncommitted work, both correctness failures/tetra gate and every release gate.
+
+2026-10-18 latest solver policy, task 0026: maintainer rejects Panua's machine-
+fingerprint licensing. A new alternative is needed only if omitting PARDISO
+cripples useful functionality. This narrows the earlier task 0025/D041 requirement
+to reproduce every proprietary backend. Research recommends assessing existing
+CalculiX SPOOLES/PaStiX first; no new solver integration or production default/
+precision change is selected. Read .project/reports/without-pardiso-assessment.md.
+Historical forum evidence identifies correctness and capacity risks, not a proven
+PARDISO-exclusive analysis category. In original 2.22 arpack/arpackbu code,
+PaStiX-labelled selections can call PARDISO when both are compiled in; later
+comparisons must verify actual dispatch. Our numerical comparisons are deferred
+by the maintainer. Task 0026 is research/documentation only; all changes remain
+uncommitted. Preserve both correctness failures/tetra gate and all release gates.
+
+2026-10-18 exact solver clarification: maintainer explicitly requires complete
+identical solver software adjusted for cross-platform use, and requested research
+only. Task 0025 proves RC2 ccx_dynamic.exe matches the official 2.22 Windows
+binary; all five DLLs match the old reference. Six choices pass the bounded cube
+through existing Mac CrossOver; this is not native ARM acceptance. GUI default
+is PARDISO, distinct from this executable's PaStiX default. Exact PaStiX/Scotch/
+ABI/transitive build recipe remains missing; native ARM Intel MKL/PARDISO is an
+identified gap. Read .project/reports/exact-solver-provenance.md. Do not silently
+replace/drop backends, rewrite solver keywords, select remote/compatibility
+architecture or claim fully native identical dependencies. Research changes are
+uncommitted, with no contacts/publication/production change. Existing correctness
+and release gates remain; earlier broad continuation does not select that policy.
+
+2026-10-18 continuation: task 0024 native job/preflight/original STA-CVG boundary
+passes 33 new checks plus four CLI controls per mode on native Mac/Linux ARM64
+(current/RC2/post-RC2), four source guards, with matching fingerprints/outcomes.
+Official CalculiX 2.22 source is under ThirdParty/Sources with pinned unchanged
+bytes/license; exact native PaStiX/BLAS/patch/compiler/ABI/runtime chain remains
+unproven. No native numerical solve/substitution is claimed. Continue original
+FRD/DAT field work and matching native-source/build recovery. All task 0022–0024
+changes remain uncommitted; no new publication or policy choice is authorized.
+The maintainer requires all third-party corresponding source in organized folders
+and a public package-manager/release branch; .project/REPOSITORY_LAYOUT.md records
+the map and planned x/release lane. No public branch/push is performed. Read
+.project/reports/native-job-boundary.md; retain both correctness failures, the
+tetra host gate and every Windows/net48/RC2/four-platform/release requirement.
+
+2026-10-18 next sequence accepted: maintainer approves
+`.project/proposals/next-native-workflow.md` and requires an installable desktop
+PrePoMax-X: Windows EXE/MSI, macOS ARM64 DMG, Linux x64/ARM64 DEB/RPM or similar,
+and Homebrew installation. Apple Developer ID enrollment is available. Continue
+local implementation in tested increments. Tasks 0022/0023 now generate a
+bounded complete C3D8 static deck through original types/writers; all three
+source modes pass native Mac/Linux ARM64 (331 accepted checks per build, both
+known correctness failures/measurement gate retained). Current evidence is
+`.project/reports/static-analysis-deck.md`. All task 0022/0023 changes remain
+uncommitted. Continue matching native solver execution and original results
+under the accepted sequence. No new publication/frontend/default serializer/
+numerical/native-tool policy is authorized; Windows/net48/RC2 and all installable
+desktop/four-platform/release gates remain. Earlier task 0021 stop is superseded.
+
 2026-10-18 publication complete: task 0019/0020 implementation is published at
 47f17be6657b470cff814d50b97c79fada52040a on origin/research/native-feasibility.
 Exact-commit pipeline #2960334103 passes both native Linux x64 jobs; downloaded

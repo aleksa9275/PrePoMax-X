@@ -16,7 +16,6 @@ using CaeMesh;
 using CaeGlobals;
 using System.Runtime.Serialization;
 using FileInOut.Output.Calculix;
-using System.Drawing.Design;
 using System.Runtime.InteropServices;
 
 namespace CaeModel

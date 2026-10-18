@@ -1,5 +1,63 @@
 # MacBook continuation — start here
 
+2026-10-18 latest: maintainer authorizes task 0028 then publication of all current
+work and continuation only after reset. [Publication record](../reports/analysis-execution-publication.md)
+contains actual SHA/hosted state and next work. CPU planner passes 47 checks/13
+rejection controls per pin on Mac/Linux ARM64; it advises only, without settings/
+solver/scheduler changes. Earlier uncommitted wording is historical after remote
+verification. Stop features until resumed; preserve both correctness failures/
+tetra gate and all release requirements.
+
+2026-10-18 latest: [task 0027 research/design](../reports/solver-guidance-threads-gpu.md)
+adds requested solver advice/75% thread product direction and sourced GPU
+feasibility. No implementation/settings/benchmark/publication change. Native
+CPU builds and existing open backends remain first; new adapters conditional
+under D042. Thread budget needs manual override and concurrent-job coordination.
+NVIDIA and AMD routes differ; no Apple Metal direct-solver path was identified.
+Preserve all uncommitted work and existing correctness/release gates.
+
+2026-10-18 latest: [task 0026 assessment](../reports/without-pardiso-assessment.md)
+and D042 supersede task 0025's all-proprietary-backend requirement. Maintainer
+rejects machine-bound Panua licensing; a new alternative is needed only if
+omitting PARDISO cripples functionality. Existing SPOOLES/PaStiX are candidates,
+not accepted native builds. Own comparisons are deferred. Verify actual modal/
+buckling dispatch: original 2.22 PaStiX branches can invoke PARDISO when linked.
+No backend/default/precision change, new benchmark or publication in task 0026.
+All uncommitted work, correctness failures/tetra gate and release gates remain.
+
+2026-10-18 latest: task 0025 exact solver research proves RC2 uses the unchanged
+official CalculiX 2.22 Windows executable and previous five runtime DLLs. Six
+choices pass the synthetic cube through existing Mac CrossOver, not native ARM.
+[Research report](../reports/exact-solver-provenance.md) identifies original binary
+provider/core source, PARDISO GUI versus PaStiX executable defaults, missing exact
+static-library build recipe and native ARM Intel MKL/PARDISO gap. Maintainer
+requires complete identical software; no silent solver/backend change or implied
+remote/compatibility architecture choice. This increment is research/report only;
+all work remains uncommitted and existing correctness/release gates remain.
+
+Task 0024 now provides the original-owned portable job/preflight/STA-CVG boundary
+and organized unchanged CalculiX 2.22 source. All three modes pass 33 new checks/
+four CLI controls on native Mac/Linux ARM64 with matching fingerprints; four
+source guards pass. No numerical solver is run: matching PaStiX/BLAS/patch/ABI/
+runtime provenance is pending. [Current evidence](../reports/native-job-boundary.md).
+All task 0022–0024 changes remain uncommitted. Continue original FRD/DAT field
+import and exact native-source/build recovery; retain both correctness failures
+and all Windows/net48/RC2/release gates. The final source/release organization
+requirement is recorded in [repository map](../REPOSITORY_LAYOUT.md).
+
+Current authorization: maintainer accepted the full next sequence on 2026-10-18
+and explicitly requires native installers/Homebrew; see [release delivery](../RELEASE.md).
+Tasks 0022/0023 now generate a complete bounded C3D8 static deck using original
+engineering types/writers. Current/RC2/post-RC2 pass 331 accepted checks per
+build on native Mac/Linux ARM64; nine analysis/ten replay guards, CLI/reference
+controls and independent offline-core checks pass. Both correctness failures/
+gate remain. [Current evidence](../reports/static-analysis-deck.md).
+All task 0022/0023 changes are uncommitted; Git pull or old CI ZIPs do not transfer
+this slice. Preserve all edits. Next accepted increment is matching native
+CalculiX execution, then original FRD/DAT/results. No solver was executed here.
+Earlier approval stops below are historical; no new publication/frontend/default
+serializer/numerical/native-tool policy is authorized.
+
 Publication complete: implementation **47f17be6** is on
 origin/research/native-feasibility. Pipeline #2960334103 passes both native x64
 jobs; downloaded evidence/package/source fingerprints verify. See

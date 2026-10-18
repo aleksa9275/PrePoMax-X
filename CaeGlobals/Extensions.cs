@@ -26,7 +26,7 @@ using System.Data;
 
 namespace CaeGlobals
 {
-    public static class ExtensionMethods
+    public static partial class ExtensionMethods
     {
         // Faster serialization
         // https://github.com/tomba/netserializer/blob/master/Doc.md
@@ -422,30 +422,7 @@ namespace CaeGlobals
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
         // vtkSelectBy
-        public static bool IsGeometryBased(this vtkSelectBy selectBy)
-        {
-            return selectBy == vtkSelectBy.Geometry ||
-                   selectBy == vtkSelectBy.GeometryVertex ||
-                   selectBy == vtkSelectBy.GeometryEdge ||
-                   selectBy == vtkSelectBy.GeometrySurface ||
-                   selectBy == vtkSelectBy.GeometryEdgeAngle ||
-                   selectBy == vtkSelectBy.GeometrySurfaceAngle ||
-                   selectBy == vtkSelectBy.GeometryPart;
-        }
         // Double
-        public static string ToCalculiX16String(this double value, bool enforceSeparator = false)
-        {
-            string result = value.ToString().ToUpper();
-            if (result.Length > 16) result = value.ToString("E8");
-            else if (enforceSeparator && !result.Contains("."))
-            {
-                int location = result.IndexOf("E");
-                // The first letter must not be E so > 0
-                if (location > 0) result = result.Insert(location, ".");
-                else result += ".";
-            }
-            return result;
-        }
         // String[]
         public static string ToRows(this string[] names, int maxRows = 30)
         {
@@ -496,30 +473,6 @@ namespace CaeGlobals
                 {
                     //Pull out the description value
                     return ((DescriptionAttribute)attrs[0]).Description;
-                }
-            }
-            //If we have no description attribute, just return the ToString of the enum
-            return enumerationValue.ToString();
-        }
-        public static string GetDisplayedName<T>(this T enumerationValue) where T : struct
-        {
-            Type type = enumerationValue.GetType();
-            if (!type.IsEnum)
-            {
-                throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
-            }
-
-            //Tries to find a DescriptionAttribute for a potential friendly name
-            //for the enum
-            MemberInfo[] memberInfo = type.GetMember(enumerationValue.ToString());
-            if (memberInfo != null && memberInfo.Length > 0)
-            {
-                object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DynamicTypeDescriptor.StandardValueAttribute), false);
-
-                if (attrs != null && attrs.Length > 0)
-                {
-                    //Pull out the description value
-                    return ((DynamicTypeDescriptor.StandardValueAttribute)attrs[0]).DisplayName;
                 }
             }
             //If we have no description attribute, just return the ToString of the enum

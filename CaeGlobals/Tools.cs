@@ -25,8 +25,7 @@ using UnitsNet;
 
 namespace CaeGlobals
 {
-    [Serializable]
-    public static class Tools
+    public static partial class Tools
     {
         private static readonly float _oneThird = 1f / 3f;
         private static readonly float _twoPiThirds = 2f * (float)Math.PI / 3f;
@@ -704,10 +703,6 @@ namespace CaeGlobals
             return Sin(x + 1.5707963f);
         }
         // Complex
-        public static double GetPhase360(double phase)
-        {
-            return (phase % 360 + 360) % 360;
-        }
         public static float GetComplexMagnitude(float real, float imaginary)
         {
             return (float)Math.Sqrt(real * real + imaginary * imaginary);

@@ -1,0 +1,28 @@
+execution-workflow-linux-x64:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  tags: [saas-linux-small-amd64]
+  timeout: 10m
+  variables:
+    GIT_DEPTH: "0"
+    DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web")'
+    - when: never
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends python3 git tini
+  script:
+    - git fetch --no-tags origin 912fb3d08014f246d48bef14d62a2cba0fdf5bb0 f6273e39983e06042ae8b06e9a3dd0f729ea4b91
+    - python3 ThirdParty/Sources/verify-sources.py
+    - python3 -m unittest discover -s X/Execution -p test_job_layout.py
+    - dotnet restore X/Execution/PrePoMaxX.Execution.slnx --configfile X/Analysis/NuGet.Config --packages X/Analysis/artifacts/packages
+    - tini -s -- python3 X/Execution/verify-execution.py --expect-os Linux --expect-architecture X64 --output X/Execution/artifacts/current-linux-x64.json
+    - tini -s -- python3 X/Execution/verify-execution.py --upstream-revision 3.0.0-rc2 --expect-os Linux --expect-architecture X64 --output X/Execution/artifacts/rc2-linux-x64.json
+    - tini -s -- python3 X/Execution/verify-execution.py --upstream-revision post-rc2-2026-10-17 --expect-os Linux --expect-architecture X64 --output X/Execution/artifacts/post-rc2-linux-x64.json
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - X/Execution/artifacts/*.json

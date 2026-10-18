@@ -1,0 +1,4 @@
+<Project>
+  <Import Project="../Core/Directory.Build.props" />
+  <PropertyGroup><RestorePackagesPath>$(MSBuildThisFileDirectory)../Analysis/artifacts/packages</RestorePackagesPath></PropertyGroup>
+</Project>

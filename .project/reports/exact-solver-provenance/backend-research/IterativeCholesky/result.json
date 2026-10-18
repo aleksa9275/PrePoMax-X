@@ -1,0 +1,66 @@
+{
+  "backend": "IterativeCholesky",
+  "success": true,
+  "exitCode": 0,
+  "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Sun Aug  4 19:44:24     2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:            8\n   elements:            1\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            8\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            4\n   single point constraints:           12\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:            5\n   terms in all sets:           29\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            2\n   data points in all amplitudes:            2\n   print requests:            3\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 12\n number of nonzero lower triangular matrix elements\n 66\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\nCholesky preconditioning\n\nalpha=0.000000\nSolving the system of equations using the iterative solver\n\niteration= 0, error= 0.000000e+00, limit=5.626353e-04\niteration= 1, error= 4.163336e-17, limit=5.626353e-04\nerror condition (0=good, 1=bad) = 0\n# of iterations = 1\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.029882\n________________________________________\n",
+  "stderr": "",
+  "inputSha256": "9d5335a287239fc1f89ffd6c517ee7e5892cdefdd251a367cff8b0eb0d5dc18c",
+  "solverVersion": "2.22",
+  "checks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    }
+  ],
+  "comparisonToNativeWindows": {
+    "displacements": {
+      "sameIdsAndShape": true,
+      "maximumAbsoluteDifference": 0.0,
+      "absoluteTolerance": 1e-09,
+      "matches": true
+    },
+    "forces": {
+      "sameIdsAndShape": true,
+      "maximumAbsoluteDifference": 9.6116279e-14,
+      "absoluteTolerance": 1e-05,
+      "matches": true
+    },
+    "stresses": {
+      "sameIdsAndShape": true,
+      "maximumAbsoluteDifference": 5.2580158e-13,
+      "absoluteTolerance": 0.0001,
+      "matches": true
+    }
+  },
+  "files": {
+    "uniaxial.inp": "9d5335a287239fc1f89ffd6c517ee7e5892cdefdd251a367cff8b0eb0d5dc18c",
+    "uniaxial.dat": "bdc246665301128539202f83ce460fd53280f76741706fc0cf1ba9eef2ebec98",
+    "uniaxial.cvg": "7949113325cb32be7bffd2b865928ef5606322c0f7f08d37a302e5063b074593",
+    "uniaxial.frd": "a676ee810513b6b3b356626919353672284a015ceb5fa99987e58111dbb47c6a",
+    "uniaxial.sta": "253efd59462bae0a6fce7b06552a063c82349747e482366b56da923c68b7ca9d"
+  }
+}
