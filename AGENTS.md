@@ -1,5 +1,16 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-10-18 publication complete: implementation tasks 0022–0028 are published at
+993f9263f8770bee5b75d2cca3b07baaf2c1097e on origin/research/native-feasibility.
+Exact-commit pipeline #2960594131 passes all four native Linux x64 jobs.
+Downloaded three-pin analysis/execution reports match source/tools/dependencies
+and retained Mac outcomes (331 analysis accepted, 47 execution/planning checks,
+13 CLI rejection controls; both correctness failures retained). Closing task 0029
+is documentation/evidence only. Read .project/reports/analysis-execution-publication.md.
+STOP feature work until maintainer resumes after reset. No production CPU
+scheduler/default migration, native solver acceptance or release-gate closure.
+Earlier uncommitted wording is historical for this publication.
+
 2026-10-18 latest publication boundary: maintainer explicitly authorizes one
 bounded task (~15 percentage points of remaining usage), then commit/push all
 current work and continue after reset. Task 0028 implements the portable read-only

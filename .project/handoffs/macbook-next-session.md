@@ -1,5 +1,13 @@
 # MacBook continuation — start here
 
+2026-10-18 published checkpoint: **993f9263**, pipeline #2960594131 passes all
+four native x64 jobs. Downloaded analysis/execution evidence verifies against
+published source/tools/dependencies and Mac outcomes. Closing task 0029 is
+records/evidence only; [start here](../reports/analysis-execution-publication.md).
+All task 0022–0028 work is now in Git; older uncommitted text is historical.
+Stop feature work until maintainer resumes after reset. Both correctness failures,
+actual native solver/full results and every Windows/net48/RC2/release gate remain.
+
 2026-10-18 latest: maintainer authorizes task 0028 then publication of all current
 work and continuation only after reset. [Publication record](../reports/analysis-execution-publication.md)
 contains actual SHA/hosted state and next work. CPU planner passes 47 checks/13

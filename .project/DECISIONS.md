@@ -1,5 +1,15 @@
 # Decision register
 
+D045 — Verified analysis/execution publication, 2026-10-18: tasks 0022–0028
+published normally to origin/research/native-feasibility at 993f9263; remote
+verified, master unchanged. Exact-commit pipeline #2960594131 passes all four
+native x64 jobs. Downloaded analysis/execution reports match source/tools/
+dependencies and retained Mac outcomes for all three pins. 331 accepted analysis
+and 47 execution/planning checks per pin; both correctness failures remain.
+Task 0029 closes with documentation/evidence only. Stop feature work until
+maintainer resumes; all native solver/Windows/net48/RC2/release gates remain.
+[Publication](reports/analysis-execution-publication.md).
+
 D044 — Accepted bounded thread-planning implementation and publication,
 2026-10-18: maintainer requests one small task within remaining usage then commit/
 push current work and continue after reset. Task 0028 implements callable modern-

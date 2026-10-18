@@ -1,5 +1,13 @@
 # Next session — native Windows reference validation
 
+2026-10-18 transfer checkpoint: **993f9263** implementation is published on
+origin/research/native-feasibility; pipeline #2960594131 passes all four native
+Linux x64 jobs. Three-pin downloaded analysis/execution fingerprints/outcomes
+verify. Closing task 0029 adds records/evidence only. Transfer from verified Git,
+preserving local/private work. [Publication/handoff](../reports/analysis-execution-publication.md).
+Expanded native Windows and full net48/RC2 remain pending; do not repeat old
+2.6 capture as RC2 acceptance. Both correctness failures/release gates remain.
+
 2026-10-18 latest: maintainer authorizes current-work publication under task
 0029 then continuation after reset. [Publication record](../reports/analysis-execution-publication.md)
 is authoritative for actual SHA/hosted status. Expanded X/Execution now expects

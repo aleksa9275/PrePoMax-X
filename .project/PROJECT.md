@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-10-18 publication verified: tasks 0022–0028 implementation is published at
+993f9263; exact-commit pipeline #2960594131 passes all four native Linux x64
+jobs. Downloaded three-pin analysis/execution reports match published source/
+tools/dependencies and retained Mac outcomes. Task 0029 closing evidence is
+recorded in [publication/reset handoff](reports/analysis-execution-publication.md).
+Stop feature work until maintainer resumes. Both correctness failures and all
+native solver/Windows/net48/RC2/four-target/full-workflow/installer gates remain.
+
 2026-10-18 latest: maintainer authorizes bounded task 0028 then committing/pushing
 all tasks 0022–0028 and stopping until continuation after reset. Portable CPU
 planning/CLI passes 47 checks/13 rejection controls per pin on Mac/Linux ARM64;

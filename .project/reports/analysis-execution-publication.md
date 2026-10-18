@@ -56,3 +56,32 @@ Windows/net48/RC2, both correctness failures/tetra gate, frontend/persistence/CA
 all corresponding source, four required targets and installers/Homebrew remain.
 No frontend/default serializer, numerical/precision/backend substitution or GPU
 commitment follows from this publication.
+
+## Verified publication and downloaded evidence
+
+Implementation **993f9263f8770bee5b75d2cca3b07baaf2c1097e** was pushed normally
+and independently verified with git ls-remote. Origin/master remains f6273e39.
+[Pipeline #2960594131](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/2960594131)
+passes all four jobs: research #17266997747, shared-core #17266997748,
+analysis #17266997749 and execution #17266997750. Status was read in authenticated
+GitLab UI for that exact commit, not inferred from a different branch pipeline.
+
+Actual downloaded analysis and execution artifact ZIPs were read locally.
+All six reports identify clean HEAD 993f9263. Analysis source/tool/dependency
+fingerprints and engineering outcomes match retained Mac reports after removing
+runtime metadata. Each pin retains 331 accepted checks and the two explicit
+open correctness checks. Execution's 47 checks/13 CLI rejection controls and
+source/tool/monitor outcomes also match Mac; host CPU counts are validated
+individually. [Download fingerprints and comparisons](analysis-execution-publication/download-verification.json)
+retain archive/report hashes and the six downloaded reports alongside them.
+The current Mac analysis rerun and [review record](analysis-execution-publication/prepublication-review.json)
+are retained. Archives/binaries remain outside Git.
+
+Authored/extracted-code whitespace checks pass excluding unchanged vendored
+CalculiX source, raw solver outputs and downloaded original README notices;
+their original whitespace/line endings are preserved rather than edited.
+All 1188 staged CalculiX file blobs independently matched verified working bytes.
+
+These closing changes only add documentation and verification evidence. They
+do not extend the code acceptance of implementation 993f9263 or close any
+remaining gate. Stop features at this reset handoff until the maintainer resumes.

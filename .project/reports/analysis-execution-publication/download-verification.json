@@ -1,0 +1,60 @@
+{
+  "success": true,
+  "implementationCommit": "993f9263f8770bee5b75d2cca3b07baaf2c1097e",
+  "pipelineId": 2960594131,
+  "pipelineStatus": "passed",
+  "jobs": {
+    "research": 17266997747,
+    "sharedCore": 17266997748,
+    "analysis": 17266997749,
+    "execution": 17266997750
+  },
+  "executionArchiveSha256": "ae99a8431d05d140baa631c68c4c44ee085fba01d7b47713a74446187508fa63",
+  "executionReports": [
+    {
+      "file": "execution-post-rc2-linux-x64.json",
+      "sha256": "5a75d95608357b3b99bd81f91aea091b54eb3f20ec4aa22d3ed60371b6d89b77",
+      "checks": 47,
+      "cliRejections": 13,
+      "matchedSourceToolsAndMacOutcomes": true
+    },
+    {
+      "file": "execution-current-linux-x64.json",
+      "sha256": "4a800abc0baca434d5abdb57e2786fedc4737e41d8b30de28cbf86ef42270b88",
+      "checks": 47,
+      "cliRejections": 13,
+      "matchedSourceToolsAndMacOutcomes": true
+    },
+    {
+      "file": "execution-rc2-linux-x64.json",
+      "sha256": "0aa43b77765b71aec7c579f305573a18ba0f06e9879910701ac5bbdd4cefb1fa",
+      "checks": 47,
+      "cliRejections": 13,
+      "matchedSourceToolsAndMacOutcomes": true
+    }
+  ],
+  "analysisArchiveSha256": "036ebfb3ef4db0a93af07c51b03a878e5ba0593ad6944ce65f5e70c090e35af5",
+  "analysisReports": [
+    {
+      "file": "analysis-linux-x64.json",
+      "sha256": "2f140388d2c372cce6b136066b5f34a23a3e27dedc0e0a7b4562bcce66cf89c4",
+      "acceptedChecks": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "matchedSourceToolsDependenciesAndMacOutcomes": true
+    },
+    {
+      "file": "analysis-post-rc2-linux-x64.json",
+      "sha256": "476f2f3b69bc8d23e80317cdb1e0402ac1b9a45c2d648b0c217719d0892d957f",
+      "acceptedChecks": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "matchedSourceToolsDependenciesAndMacOutcomes": true
+    },
+    {
+      "file": "analysis-rc2-linux-x64.json",
+      "sha256": "ddd12f01776605a9a9ecb2211fdf5ef6ea79a78b996941648e54b503adca6fb0",
+      "acceptedChecks": 331,
+      "knownCorrectnessFailuresRetained": 2,
+      "matchedSourceToolsDependenciesAndMacOutcomes": true
+    }
+  ]
+}

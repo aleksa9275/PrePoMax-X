@@ -1,5 +1,18 @@
 # Project status
 
+## Current — task 0029 publication and exact-commit evidence verified
+
+2026-10-18: implementation **993f9263** is on origin/research/native-feasibility;
+independent remote verification confirms it. Pipeline **#2960594131 passes all
+four native Linux x64 jobs**. Downloaded analysis/execution artifacts verify
+clean exact-commit HEAD and matching source/tool/dependency/Mac outcomes for
+current/RC2/post-RC2: 331 accepted analysis checks and 47 execution/planning
+checks, 13 CLI rejection controls each. Both correctness failures remain explicit.
+[Publication/evidence/reset handoff](reports/analysis-execution-publication.md).
+Closing changes are documentation/evidence only. Stop features until resumed.
+Native Windows/net48/RC2/full workflow/native solver and all release gates remain.
+Older uncommitted descriptions below are historical after this publication.
+
 ## Current — tasks 0028 complete locally / 0029 publication authorized
 
 2026-10-18: maintainer requests one bounded task then commit/push all current work

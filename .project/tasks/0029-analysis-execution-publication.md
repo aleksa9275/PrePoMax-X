@@ -12,3 +12,12 @@ binary/cache publication. Retain known correctness failures, no native solver
 acceptance/profile substitution, Windows/net48/RC2/full-workflow/four-target/
 installer gates. Record actual published SHA and CI state; never infer remote
 success or green CI. Close with reset handoff and stop feature work until resumed.
+
+## Completed
+
+Implementation 993f9263 published normally and remote verified; master unchanged.
+Exact-commit pipeline #2960594131 passes all four native Linux x64 jobs. Actual
+three-pin analysis/execution artifact downloads verify published source/tool/
+dependency fingerprints and retained Mac outcomes. Closing evidence is docs only.
+[Publication record](../reports/analysis-execution-publication.md). Stop feature
+work until the maintainer resumes. Every existing correctness/release gate remains.

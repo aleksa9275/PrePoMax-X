@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "implementationCommit": "993f9263f8770bee5b75d2cca3b07baaf2c1097e",
+  "parent": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+  "remoteBefore": "ed2dcb4d6f579ec6a8c11a1ef0437457a2d22fab",
+  "remoteVerified": "993f9263f8770bee5b75d2cca3b07baaf2c1097e",
+  "originMaster": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+  "sourceGuards": {
+    "analysis": 9,
+    "job": 4,
+    "coreReplay": 10
+  },
+  "stagedContentFiles": 1411,
+  "unchangedCalculixFiles": 1188,
+  "privateBinaryCacheCandidates": 0,
+  "authoredWhitespacePassed": true,
+  "whitespaceExemptions": [
+    "ThirdParty/Sources/CalculiX/2.22/src/**",
+    ".project/reports/exact-solver-provenance/backend-research/**",
+    ".project/reports/exact-solver-provenance/*README_Install.txt"
+  ],
+  "whitespaceExemptionReason": "Preserve downloaded original source and raw solver/reference evidence byte-for-byte; upstream/raw whitespace is not edited.",
+  "knownCorrectnessFailuresRetained": 2,
+  "noNativeSolverAcceptance": true
+}
