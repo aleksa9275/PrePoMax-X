@@ -1,5 +1,10 @@
 # Task 0020 — Portable mesh input and deck export workflow
 
+Publication update, 2026-10-18: implementation/evidence published at 47f17be6;
+exact-commit native Linux x64 pipeline #2960334103 and downloaded artifacts pass.
+[Task 0021 publication record](../reports/mesh-workflow-publication.md) supersedes
+historical uncommitted status below. New features wait for maintainer approval.
+
 2026-10-18, Europe/Belgrade. Maintainer asks to proceed with the implementation
 while preparing a Windows machine for GitLab. This authorizes local work on the
 proposed mesh/deck/solve/results direction; keep all task 0019 changes and new

@@ -1,0 +1,69 @@
+{
+  "sourceCommit": "47f17be6657b470cff814d50b97c79fada52040a",
+  "pipeline": 2960334103,
+  "jobs": {
+    "research-linux-x64": 17265478067,
+    "shared-core-linux-x64": 17265478068
+  },
+  "developmentArchiveSha256": "c89895e562a196b63b4e6d83cf332708dab0f801605c32dd4230df971e7ca242",
+  "archiveBytes": 586403,
+  "manifestEntriesVerified": 125,
+  "publishedSourceFilesVerified": 90,
+  "reports": {
+    "linux-x64.json": {
+      "sha256": "bd130102b04be17c82f9aa8f651392331d0318f2ca2126904d40caf84f5b2c2e",
+      "sourceHashesVerified": 48,
+      "toolHashesVerified": 36,
+      "portableGroupsEqualToMacArm64": [
+        "mappingTests",
+        "dataTests",
+        "elementTests",
+        "measurementCli",
+        "cli",
+        "meshWorkflow",
+        "dataRejectionControls",
+        "dataCliControls",
+        "dataComparison"
+      ],
+      "acceptedChecks": 218,
+      "openCorrectnessChecks": 2
+    },
+    "rc2-linux-x64.json": {
+      "sha256": "60233123ce90998e50dcca4b8ba9e176ab66ff31c84b0ba59c5f3a26a991cf67",
+      "sourceHashesVerified": 48,
+      "toolHashesVerified": 36,
+      "portableGroupsEqualToMacArm64": [
+        "mappingTests",
+        "dataTests",
+        "elementTests",
+        "measurementCli",
+        "cli",
+        "meshWorkflow",
+        "dataRejectionControls",
+        "dataCliControls",
+        "dataComparison"
+      ],
+      "acceptedChecks": 218,
+      "openCorrectnessChecks": 2
+    },
+    "post-rc2-linux-x64.json": {
+      "sha256": "cc746f87432d465166df8da214331f7b6ae973574aa6b3282432f56ef4f20c19",
+      "sourceHashesVerified": 48,
+      "toolHashesVerified": 36,
+      "portableGroupsEqualToMacArm64": [
+        "mappingTests",
+        "dataTests",
+        "elementTests",
+        "measurementCli",
+        "cli",
+        "meshWorkflow",
+        "dataRejectionControls",
+        "dataCliControls",
+        "dataComparison"
+      ],
+      "acceptedChecks": 218,
+      "openCorrectnessChecks": 2
+    }
+  },
+  "success": true
+}

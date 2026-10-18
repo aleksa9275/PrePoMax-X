@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-10-18 publication complete: task 0019/0020 implementation is published at
+47f17be6657b470cff814d50b97c79fada52040a on origin/research/native-feasibility.
+Exact-commit pipeline #2960334103 passes both native Linux x64 jobs; downloaded
+source/tool/outcome fingerprints and 125-entry package verify. Task 0021 closes
+publication with documentation/evidence only. STOP for maintainer approval of
+`.project/proposals/next-native-workflow.md` before further feature work. Earlier
+uncommitted/continue wording is historical. Both correctness failures and all
+Windows/net48/RC2/full-workflow/release gates remain.
+
 Read `.project/PROJECT.md`, `.project/STATUS.md`, `.project/DECISIONS.md` and the task record before changing anything. These tracked records, rather than conversational memory, define the handoff.
 
 ## Current authorization

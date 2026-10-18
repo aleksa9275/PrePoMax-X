@@ -1,5 +1,10 @@
 # Task 0019 — Sync upstream RC2 and measure portable-core impact
 
+Publication update, 2026-10-18: implementation/evidence published at 47f17be6;
+exact-commit native Linux x64 pipeline #2960334103 and downloaded artifacts pass.
+[Task 0021 publication record](../reports/mesh-workflow-publication.md) supersedes
+historical uncommitted status below. New features wait for maintainer approval.
+
 2026-10-18, Europe/Belgrade. Maintainer requests syncing the fork with Matej's
 3.0.0 RC2, comparing changes, identifying necessary adjustments and accelerating
 implementation toward a cross-platform 3.0.0 near the upstream stable release.

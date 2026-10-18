@@ -15,16 +15,20 @@ Do not restart the completed task 0011/Windows 2.6 preparation below. The
 maintainer is preparing a Windows machine for GitLab; this new slice needs
 native Windows x64/.NET 10 execution and a full original net48 build/oracle.
 
-Origin/master is the upstream mirror at f6273e39. Published development is
-research/native-feasibility at 2f2eca94. **Task 0019/0020 changes are uncommitted
-on the Mac and will not arrive through Git pull alone.** Do not reset the Mac
-or Windows checkout, assume the mirror contains our portable host, or publish
-implementation without a new instruction. Manual transfer of the verified
-development ZIP provides a runnable/source test route while publication waits.
+Origin/master is the upstream mirror at f6273e39. The completed task 0019/0020
+implementation is now published on research/native-feasibility at **47f17be6**.
+Fetch origin and fast-forward a clean research checkout; preserve any local
+Windows edits rather than resetting. Git now carries the portable host and
+checks. Native Windows validation remains pending; no new feature coding until
+the maintainer approves the proposed next steps.
 
-Current local archive:
-`X/Core/artifacts/mesh-workflow/development-build/PrePoMaxX-Core-development.zip`.
-SHA-256: `067890ed977219f0c56ee969f2a9115c605049fae04267c9a7a86488dd6b2c83`.
+Pinned [CI artifact download](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17265478068/artifacts/download)
+from passed pipeline #2960334103 contains `X/Core/artifacts/development-build/PrePoMaxX-Core-development.zip`.
+Extract that inner development ZIP for the standalone instructions below.
+Its SHA-256 is `c89895e562a196b63b4e6d83cf332708dab0f801605c32dd4230df971e7ca242`
+(586403 bytes; clean source commit 47f17be6). The older local dirty-source ZIP
+SHA 067890ed… is historical; use the pinned CI ZIP or the Git checkout now.
+
 It contains the three portable CLIs, examples, corresponding partial-build
 source and license; no runtime, solver or GUI. Use a fresh non-repository
 directory and a native x64 .NET 10 SDK/Python installation. In PowerShell,

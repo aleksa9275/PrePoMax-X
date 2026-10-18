@@ -24,4 +24,8 @@ Existing evidence: six Mac/Linux ARM64 builds, 218 accepted checks/39 CLI/four
 data controls per build, ten replay guards, both retained correctness failures,
 same-ZIP native Mac/Linux source rebuild and 125 manifest checks.
 
-Status: publication in progress. [Publication evidence](../reports/mesh-workflow-publication.md).
+Status: complete. Implementation published at 47f17be6; independent remote SHA
+verified. Exact-commit pipeline #2960334103 passes both native x64 jobs; downloaded
+reports/source/tool fingerprints and package verify. Closing changes contain
+only records/evidence and the unapproved next-step proposal. No new feature
+implementation; wait for maintainer approval. [Publication evidence](../reports/mesh-workflow-publication.md).

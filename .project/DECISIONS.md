@@ -1,5 +1,13 @@
 # Decision register
 
+D035 — Verified publication, proposed implementation remains unapproved,
+2026-10-18: task 0019/0020 published at 47f17be6; pipeline #2960334103 passes
+both native Linux x64 jobs. Downloaded evidence and source/tool/125-entry ZIP
+checks match the published source and retained Mac outcomes. Task 0021 closing
+changes are documentation/evidence only. Proposed model/deck → native solver →
+results sequence is recorded in proposals/next-native-workflow.md; wait for
+maintainer approval. Native Windows and all correctness/release gates remain.
+
 Use accepted/proposed/deferred labels; a proposal in a spec is not an architectural commitment.
 
 D034 — Accepted publication, new implementation awaits approval, 2026-10-18:

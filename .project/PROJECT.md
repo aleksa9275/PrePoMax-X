@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+Latest checkpoint: task 0019/0020 is published at **47f17be6**; exact-commit
+pipeline #2960334103 passes both native Linux x64 jobs and downloaded evidence/
+source/package independently verify. Task 0021 closes publication. New feature
+work must wait for approval of [the next sequence](proposals/next-native-workflow.md).
+Earlier uncommitted/continue descriptions below are historical; both original
+correctness failures and all release gates remain.
+
 2026-10-18 publication: maintainer requests committing/pushing completed RC2
 replay and mesh workflow work under [task 0021](tasks/0021-mesh-workflow-publication.md).
 Verify the remote/CI/artifacts and publish closing evidence, then explain the

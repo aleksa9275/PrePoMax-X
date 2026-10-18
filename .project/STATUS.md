@@ -1,13 +1,21 @@
 # Project status
 
-## Current — task 0021 authorized publication
+## Current — task 0021 publication verified; next features await approval
 
-2026-10-18: maintainer explicitly requests commit/push of completed task 0019/
-0020 changes to origin/research/native-feasibility. Publication/remote and exact
-native x64 CI/artifact verification are in progress. Existing Mac/Linux ARM64
-evidence and both correctness failures/gate remain. [Publication report](reports/mesh-workflow-publication.md).
-After publication/closing evidence, explain next steps and wait for maintainer
-approval before new feature work; this supersedes prior continuation wording.
+2026-10-18: task 0019/0020 implementation is published at **47f17be6** on
+origin/research/native-feasibility; remote SHA independently verified. Exact-
+commit pipeline **#2960334103 passes both native Linux x64 jobs**. Current,
+RC2 and post-RC2 each pass 218 accepted checks, 39 CLI/four data controls and
+retain both original correctness failures/measurement gate. Downloaded reports
+match all 48 source/36 tool hashes and Mac ARM64 portable outcomes. The CI ZIP
+verifies 125 entries and all 90 packaged sources against the published commit.
+[Publication evidence/download](reports/mesh-workflow-publication.md).
+
+Publication/closing evidence only is authorized. **Wait for maintainer approval**
+of [proposed next work](proposals/next-native-workflow.md) before implementing
+model/deck/solve/results. No next feature started. Native Windows/full net48/RC2
+and full-workflow/release gates remain. Earlier uncommitted/continuation state
+below records historical task checkpoints; implementation is now published.
 
 ## Latest — task 0020 portable mesh input/export implemented locally
 

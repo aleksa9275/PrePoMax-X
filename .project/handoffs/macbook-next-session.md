@@ -1,5 +1,14 @@
 # MacBook continuation — start here
 
+Publication complete: implementation **47f17be6** is on
+origin/research/native-feasibility. Pipeline #2960334103 passes both native x64
+jobs; downloaded evidence/package/source fingerprints verify. See
+[publication record](../reports/mesh-workflow-publication.md). Closing evidence
+is documentation only. **Wait for maintainer approval** of
+[the proposed next sequence](../proposals/next-native-workflow.md) before coding.
+Earlier uncommitted/continuation paragraphs are historical; use Git for transfer.
+Windows/full original net48/RC2 and existing correctness/release gates remain.
+
 Latest instruction is [task 0021](../tasks/0021-mesh-workflow-publication.md):
 publish the completed work, verify remote/CI/artifacts and closing evidence,
 then wait for maintainer approval of the next-step explanation. Consult its
