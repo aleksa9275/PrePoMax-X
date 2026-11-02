@@ -19,3 +19,10 @@ Local outcome: original Core CLI roundtrip passes with CUBE preserved; mesh
 checks 69/analysis accepted total 333. Native cube passes twelve checks and its
 negative control. Development publish/smoke and 125-entry package verification,
 ten replay/nine analysis guards pass. [Evidence/publication](../reports/core-pipeline-regression.md).
+
+Publication complete: repair f4e388a5 is independently verified on origin research;
+pipeline 3019257012 passes all five automatic native Linux x64 jobs. Core job
+17676020065 retains CUBE, passes 69 mesh checks and publishes/verifies its 125-entry
+development package. Downloaded Core source/tools match Mac; raw package manifest
+and hash verify. Historical compatibility is manual, not accepted by this run.
+This task is complete within scope; all other platform/release gates remain.

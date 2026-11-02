@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "profile": "fast",
+  "areas": [
+    "core"
+  ],
+  "host": {
+    "os": "Linux",
+    "architecture": "X64"
+  },
+  "recordedAtUtc": "2026-11-02T19:10:33.047080+00:00",
+  "steps": [
+    {
+      "area": "core",
+      "revision": "current",
+      "arguments": [
+        "/usr/bin/python3",
+        "X/Core/verify.py",
+        "--expect-os",
+        "Linux",
+        "--expect-architecture",
+        "X64",
+        "--output",
+        "/builds/aleksa9275/pre-po-max-x/X/Checks/artifacts/core-linux-x64/core-current.json"
+      ],
+      "result": "core-current.json",
+      "log": "core-current.log",
+      "status": "passed",
+      "exitCode": 0,
+      "resultSha256": "ca5eb8a5fea0ca4835638e286f81cc23d787698781f6a0e00ba07148783e7f1f",
+      "checks": null,
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "fullyAccepted": false,
+      "elapsedSeconds": 32.889
+    }
+  ],
+  "success": true,
+  "plannedStepCount": 1,
+  "solverExecuted": false,
+  "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+  "repository": {
+    "head": "f4e388a5343314651088cd381358ef36d0d33fad",
+    "dirty": false,
+    "patch": "source.patch",
+    "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "changedCode": [],
+    "scope": "changed build/test/shared source only; no user models or private files"
+  },
+  "upstreamPins": {
+    "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+    "revisions": [
+      {
+        "name": "3.0.0-rc2",
+        "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+      },
+      {
+        "name": "post-rc2-2026-10-17",
+        "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+      }
+    ]
+  },
+  "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+  "dotnetSdk": "10.0.403",
+  "elapsedSeconds": 33.414,
+  "pendingSteps": []
+}

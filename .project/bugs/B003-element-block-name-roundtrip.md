@@ -28,3 +28,7 @@ Core CLI description comparison. Shared writer changes must run both affected
 Core and Analysis verifiers; this reuses existing checks. No numerical tolerance,
 known correctness gate or Linux CI requirement is weakened. Hosted acceptance of
 the fix is recorded in the task/report after exact-commit verification.
+
+Closed by f4e388a5: native Linux x64 pipeline 3019257012/Core job 17676020065
+passes the strict CLI equality check with CUBE retained. Core source/tools match
+the passing Mac run; native Mac solve still has exactly eight stress rows.

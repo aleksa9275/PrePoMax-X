@@ -36,8 +36,24 @@ also pass. Actual publication/hosted status is recorded below.
 
 ## Publication and hosted verification
 
-The bounded repair is prepared for normal publication to origin research under
-the existing maintainer authorization. Exact repair SHA, pipeline and job outcomes
-will be recorded after the push and actual hosted run. A local pass is not a
-native Linux acceptance claim. No native Windows/Linux desktop/distro installer
-or production frontend/backend/format acceptance follows from this CI repair.
+Repair **f4e388a5343314651088cd381358ef36d0d33fad** is pushed and independently
+remote-verified on origin/research/native-feasibility; master remains f6273e39.
+[Exact-commit pipeline **3019257012**](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019257012)
+passes all five automatic native Linux x64 jobs: Core, Analysis, Execution,
+Results and Research. Historical compatibility remains manual/not-run.
+
+Core job **17676020065** now passes the actual CLI roundtrip with **CUBE** retained,
+69 mesh checks, development publishing/smoke and 125-entry package verification.
+The downloaded hosted Core JSON identifies clean exact repair SHA; source and
+tool fingerprints match the retained Mac run. The downloaded development ZIP's
+125 manifest entries and archive hash independently verify against the hosted
+package/verification reports. This is actual archive-byte verification for this
+checkpoint. [Retained hosted records](core-pipeline-regression/hosted-repair.json)
+identify every job, artifact/package hashes and scope. No raw job-upload tokens
+or authentication data are retained, and no additional test rerun was needed to
+close this documentation-only follow-up.
+
+Task 0040 is complete. Next remains the shared target/build entry and bounded Mac
+viewport/workflow implementation under task 0039's plan. Native Windows/Linux
+desktop/distro installer and production frontend/backend/format acceptance remain
+open, along with both known correctness failures/tetra gate and final gates.

@@ -1,6 +1,6 @@
 # Project status
 
-## Current — task 0040: failed 384edea2 pipeline identified and repaired locally
+## Current — task 0040: pipeline regression fixed and hosted-verified
 
 Signed-in GitLab inspection finds pipeline **3019186769**, one failed job:
 **shared-core-linux-x64 / 17675531644**. Analysis/execution/results/research pass;
@@ -12,8 +12,13 @@ The shared writer now preserves inline block names and emits explicit set member
 only where not already inline. Core CLI equality remains strict. Current Mac
 Core/Analysis pass (69 mesh / 333 accepted analysis checks); native solve again
 passes twelve checks and its negative control without duplicate stresses.
-Publication and exact-commit hosted acceptance are pending in the linked report.
-Both existing correctness failures/tetra gate and all release gates remain.
+Repair **f4e388a5** is published/remote-verified. Exact-commit pipeline
+**3019257012 passes all five automatic native Linux x64 jobs**; compatibility
+remains manual. Downloaded Core evidence matches Mac source/tools, retains CUBE
+and passes 69 mesh checks; actual development ZIP bytes/125 entries independently
+verify against hosted package reports. Task 0040 is complete; next is the shared
+target/build entry and Mac workflow under the revised plan. Both existing
+correctness failures/tetra gate and all other platform/release gates remain.
 
 ## Current — task 0039: macOS-first, shared-source delivery plan
 

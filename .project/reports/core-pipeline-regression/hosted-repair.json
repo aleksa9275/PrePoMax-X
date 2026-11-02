@@ -1,0 +1,33 @@
+{
+  "repairCommit": "f4e388a5343314651088cd381358ef36d0d33fad",
+  "pipelineId": 3019257012,
+  "pipelineUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019257012",
+  "verification": "passed; all five automatic native Linux x64 jobs, compatibility manual",
+  "jobs": {
+    "shared-core-linux-x64": 17676020065,
+    "analysis-workflow-linux-x64": 17676020066,
+    "execution-workflow-linux-x64": 17676020067,
+    "results-workflow-linux-x64": 17676020068,
+    "research-linux-x64": 17676020064,
+    "portable-compatibility-linux-x64": 17676020063
+  },
+  "remoteResearchVerified": true,
+  "masterUnchanged": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+  "verifiedAtUtc": "2026-11-02T22:10:46.338143+00:00",
+  "artifactArchiveSha256": "dae2da7442f1f911e1cec77b66a0b6c8e2146a8d29871a252e04ed7b725c0d57",
+  "coreSourceAndToolHashesMatchMac": true,
+  "coreMeshChecks": 69,
+  "blockNamePreserved": "CUBE",
+  "packageManifestEntriesVerified": 125,
+  "downloadedPackageSha256": "f31d5601c4891ff04ba8d84c97ca4784ff3958b986a469cd079fe3884147eb19",
+  "downloadedPackageBytesVerified": true,
+  "rawJobLogRetained": false,
+  "jobStatuses": {
+    "shared-core-linux-x64": "passed",
+    "analysis-workflow-linux-x64": "passed",
+    "execution-workflow-linux-x64": "passed",
+    "results-workflow-linux-x64": "passed",
+    "research-linux-x64": "passed",
+    "portable-compatibility-linux-x64": "manual"
+  }
+}

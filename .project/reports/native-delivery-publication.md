@@ -1,5 +1,10 @@
 # Native delivery checkpoint publication
 
+Later task 0040 verification supersedes the former unavailable-CI state below:
+66e3ca0f pipeline 3019099554 passed; 384edea2 pipeline 3019186769 failed on B003;
+repair f4e388a5 pipeline 3019257012 passes all five automatic native Linux x64 jobs.
+[Diagnosis, repair and downloaded evidence](core-pipeline-regression.md).
+
 2 November 2026. Maintainer explicitly authorizes proceeding and committing/pushing
 useful work with progress documentation. Only normal publication to
 origin/research/native-feasibility is in scope; no upstream/master/x/main/release

@@ -5,8 +5,12 @@ pipeline 3019186769 has one failure, shared-core-linux-x64 job 17675531644:
 actual CLI roundtrip lost block name CUBE after B001's fix. Other four automatic
 jobs passed. Read .project/reports/core-pipeline-regression.md and B003. Preserve
 inline block names, filter their already-emitted labels from explicit sets, retain
-strict CLI equality/B001 stress-row checks. Mac Core/Analysis and native solve pass
-locally; report records actual later publication/hosted acceptance. Writer changes
+strict CLI equality/B001 stress-row checks. Mac Core/Analysis and native solve pass.
+Repair f4e388a5 is remote-verified; pipeline 3019257012 passes all five automatic
+native Linux x64 jobs. Downloaded Core source/tools match Mac and the actual
+125-entry development ZIP bytes/hash verify. Compatibility stays manual. Task
+0040 is complete; next is task 0039's shared target/build entry and Mac workflow.
+Writer changes
 need both affected Core and Analysis consumers. No weakening tests/tolerances or
 new platform/release acceptance; existing D051 publication scope/gates remain.
 

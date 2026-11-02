@@ -1,8 +1,13 @@
 {
+  "hosted-package-report.json": "ef6ec4350b0337c3a45b0aada0aad442bcd8a7501994463929c7358d47b52fe7",
   "failure-summary.json": "f877b00fa2b162ae4dc78701fc00adb7fef7525cbe0004becd8047b468b24c33",
+  "hosted-repair.json": "273d2562c5988eb3145235582e0402927a4e056657c96f6464ef878daa13fcc8",
   "fixed-macos-analysis-current.json": "dce8f64e9b676a2b0d0e627a492892a4a531f7fc945d5213a6b7215f29fe4e0e",
   "fixed-package-verification.json": "4a6ef5bdaa0cbc2ea33af47cb68b6a27770595b5f6a11aacf0244cb74c826b31",
+  "hosted-verification.json": "578a192f9e886dcdea6acbc57d44a8afcf2a63816c50d93dfc5a9aa401e9e995",
+  "hosted-core-current.json": "ca5eb8a5fea0ca4835638e286f81cc23d787698781f6a0e00ba07148783e7f1f",
   "fixed-native-workflow.json": "959fd087f2920a7dc0d7e6cea2cc7541e43752006fd59a1b588faae900adbef8",
+  "hosted-manifest.json": "6714a1c5bb8ca242446601180192689a5732149aaf0d5eb702db261986839295",
   "fixed-macos-core-current.json": "e0719b5cc2acb253f24c6f4d1f973e3ff0eeeff17664161b7c91e6012c66bba2",
   "failed-source.patch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "fixed-package.json": "18783c9fd4e9297c3845e708e0db3bd7c9756f0f67f8577eb13b3a20bfd0c9e3",

@@ -1,5 +1,11 @@
 # PrePoMax-X project charter
 
+2026-11-02 CI closeout: task 0040 repairs the shared exporter regression at
+f4e388a5. Exact-commit Linux x64 pipeline 3019257012 passes all five automatic jobs;
+downloaded Core fingerprints and development package bytes verify. [Evidence](reports/core-pipeline-regression.md).
+The shared-source/macOS-first sequence resumes with its target/build entry;
+desktop/distro/full release acceptance and both correctness failures stay open.
+
 2026-11-02 delivery clarification: macOS ships first from shared source with
 Windows x64 and Linux x64/ARM64 built into the architecture. Debian/Fedora/Arch
 are packaging/test environments, not separate application implementations.
