@@ -18,3 +18,7 @@ One named regression checks this exact deck defect; the real native workflow now
 checks eight stresses, displacements/reactions and original DAT import. Tolerances
 are unchanged. This is separate from both pre-existing element correctness bugs.
 See [workflow evidence](../reports/native-cpu-workflow.md).
+
+Task 0040 follow-up: removing inline names caused B003 metadata loss. The refined
+fix preserves the name/membership inline and writes only residual explicit set
+members. B001's single-membership regression and actual native solve remain.

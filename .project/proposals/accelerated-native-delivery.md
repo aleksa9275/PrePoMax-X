@@ -25,6 +25,12 @@ a new cross-platform checkpoint cannot be called verified until it is resolved.
 Unavailable runners or CI access do not freeze independent Mac work; a shared
 engineering failure takes priority over adding behavior on top of that defect.
 
+Task 0040 update: signed-in inspection identifies pipeline 3019186769 at 384edea2,
+failed Core CLI mesh export/reopen (B003: block name CUBE became null). Other
+automatic jobs passed. [Repair and actual verification](../reports/core-pipeline-regression.md)
+supersede the earlier missing-log state. Shared exporter changes run both existing
+Core CLI and Analysis consumers; no additional general test framework is needed.
+
 ## Shared source is the development rule
 
 Keep original Cae*/vtkControl paths, types, assembly ownership, equations, units,

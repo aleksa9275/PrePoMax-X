@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-02 task 0040: user supplied signed-in GitLab access. Failed 384edea2
+pipeline 3019186769 has one failure, shared-core-linux-x64 job 17675531644:
+actual CLI roundtrip lost block name CUBE after B001's fix. Other four automatic
+jobs passed. Read .project/reports/core-pipeline-regression.md and B003. Preserve
+inline block names, filter their already-emitted labels from explicit sets, retain
+strict CLI equality/B001 stress-row checks. Mac Core/Analysis and native solve pass
+locally; report records actual later publication/hosted acceptance. Writer changes
+need both affected Core and Analysis consumers. No weakening tests/tolerances or
+new platform/release acceptance; existing D051 publication scope/gates remain.
+
 2026-11-02 latest planning direction, task 0039: maximize native Mac delivery
 speed from one shared source tree with Windows x64 and Linux x64/ARM64 awareness
 now. Debian/Fedora/Arch are package/test layers, not application forks; Arch Linux

@@ -115,7 +115,7 @@ def main():
             report['tests']=tests
             if not tests['success'] or tests['passed'] != 44 or tests['failed']: raise ValueError('Analysis tests incomplete or failed')
             report['regression'] = {}
-            for project, assembly, expected_count, arguments in [('Mapping','CoreTests',25,[]),('Data','CoreDataTests',30,['--self-test']),('Elements','ElementTests',95,[]),('Mesh','MeshDeckTests',68,[])]:
+            for project, assembly, expected_count, arguments in [('Mapping','CoreTests',25,[]),('Data','CoreDataTests',30,['--self-test']),('Elements','ElementTests',95,[]),('Mesh','MeshDeckTests',69,[])]:
                 result = json.loads(run(['dotnet',work/'build/bin'/project/'release'/('PrePoMaxX.'+assembly+'.dll'),*arguments]).stdout)
                 if not result['success'] or result['passed'] != expected_count or result['failed'] or result['runtime']['architecture'] != arch:
                     raise ValueError('Expanded-assembly original regression failed: '+project)

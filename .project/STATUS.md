@@ -1,5 +1,20 @@
 # Project status
 
+## Current — task 0040: failed 384edea2 pipeline identified and repaired locally
+
+Signed-in GitLab inspection finds pipeline **3019186769**, one failed job:
+**shared-core-linux-x64 / 17675531644**. Analysis/execution/results/research pass;
+compatibility is manual. Downloaded diagnostics expose B003: the previous B001
+fix changed exported block name CUBE to null. Missing package warnings follow
+the earlier verifier failure. [Diagnosis/evidence](reports/core-pipeline-regression.md).
+
+The shared writer now preserves inline block names and emits explicit set members
+only where not already inline. Core CLI equality remains strict. Current Mac
+Core/Analysis pass (69 mesh / 333 accepted analysis checks); native solve again
+passes twelve checks and its negative control without duplicate stresses.
+Publication and exact-commit hosted acceptance are pending in the linked report.
+Both existing correctness failures/tetra gate and all release gates remain.
+
 ## Current — task 0039: macOS-first, shared-source delivery plan
 
 Maintainer reports a failed GitLab pipeline and clarifies that macOS delivery

@@ -36,7 +36,7 @@ Check("original concentrated-load virtual dispatch writes data and rejects missi
 Check("unported derived step cannot lose its extra behavior",()=>Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,baseline.Sections,new ExtraStaticStep())));
 Check("cube material original property values",()=>Require(deck.Contains("210000, 0.3\n")));
 Check("cube original section named references",()=>Require(deck.Contains("*Solid section, Elset=SOLID, Material=ELASTIC\n")));
-Check("B001 native cube set membership emitted once",()=>Require(deck.Contains("*Element, Type=C3D8\n")&&!deck.Contains("*Element, Type=C3D8, Elset=")&&deck.Split("*Elset, Elset=SOLID\n").Length==2));
+Check("B001 native cube set membership emitted once",()=>Require(deck.Contains("*Element, Type=C3D8, Elset=SOLID\n")&&!deck.Contains("*Elset, Elset=SOLID\n")));
 Check("cube original constraints preserve free and constrained DOFs",()=>{
     Require(deck.Contains("X0, 1, 1, 0\n")&&deck.Contains("Y0, 2, 2, 0\n")&&deck.Contains("Z0, 3, 3, 0\n"));
     Require(baseline.Step.BoundaryConditions["Fix-X"] is DisplacementRotation bc&&bc.GetDofType(1)==DOFType.Zero&&bc.GetDofType(2)==DOFType.Free);

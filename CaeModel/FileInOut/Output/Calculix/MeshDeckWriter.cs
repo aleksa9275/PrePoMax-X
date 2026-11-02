@@ -1,6 +1,7 @@
 // PrePoMax-X mesh-only boundary. Element formatting/conversion is delegated to
 // Matej Borovinšek's original CalElement implementation. See root LICENSE.
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,7 @@ namespace CaeModel
                 // Roundtrip precision belongs to this transport boundary; engineering coordinates are unchanged.
                 foreach (var node in mesh.Nodes.Values.OrderBy(node => node.Id))
                     text.AppendFormat(CultureInfo.InvariantCulture, "{0}, {1:G17}, {2:G17}, {3:G17}\n", node.Id, node.X, node.Y, node.Z);
+                var inlineElementSets = new Dictionary<string, HashSet<int>>();
                 foreach (var block in mesh.ElementBlocks)
                 {
                     string elementType = block.InpElementTypeNames.Single();
@@ -38,12 +40,18 @@ namespace CaeModel
                     // original conversion path, including the I/R input aliases.
                     if (mesh.Elements[block.ElementLabels.First()] is LinearPyramidElement) elementType = "C3D5";
                     else if (mesh.Elements[block.ElementLabels.First()] is ParabolicPyramidElement) elementType = "C3D13";
-                    // Sets are emitted explicitly below. Repeating the same name
-                    // on *Element appends the members twice in native CalculiX,
-                    // producing duplicate integration-point history rows.
-                    var keyword = new FileInOut.Output.Calculix.CalElement(elementType, null,
+                    // Preserve block names; remember membership already emitted
+                    // by *Element so explicit sets below cannot duplicate it.
+                    var keyword = new FileInOut.Output.Calculix.CalElement(elementType, block.Name,
                         block.ElementLabels.Select(id => mesh.Elements[id]).ToList(), pyramidConversion ?? ConvertPyramidsToEnum.Wedges);
                     text.Append(keyword.GetKeywordString()).Append(keyword.GetDataString());
+                    if (!string.IsNullOrEmpty(block.Name))
+                    {
+                        HashSet<int> labels;
+                        if (!inlineElementSets.TryGetValue(block.Name, out labels))
+                            inlineElementSets[block.Name] = labels = new HashSet<int>();
+                        labels.UnionWith(block.ElementLabels);
+                    }
                 }
                 foreach (var entry in mesh.NodeSets)
                 {
@@ -52,8 +60,12 @@ namespace CaeModel
                 }
                 foreach (var entry in mesh.ElementSets)
                 {
+                    HashSet<int> inlineLabels;
+                    int[] labels = inlineElementSets.TryGetValue(entry.Key, out inlineLabels)
+                        ? entry.Value.Where(id => !inlineLabels.Contains(id)).ToArray() : entry.Value;
+                    if (labels.Length == 0) continue;
                     text.Append("*Elset, Elset=").Append(entry.Key).AppendLine();
-                    AppendLabels(text, entry.Value);
+                    AppendLabels(text, labels);
                 }
                 return text.ToString();
             }

@@ -44,11 +44,23 @@ internal static class Program
         foreach (var pair in a.ElementSets) Require(b.ElementSets[pair.Key].SequenceEqual(pair.Value));
         Require(a.ElementBlocks.Select(block => string.Join(",", block.InpElementTypeNames)).SequenceEqual(
             b.ElementBlocks.Select(block => string.Join(",", block.InpElementTypeNames))));
+        Require(a.ElementBlocks.Select(block => block.Name).SequenceEqual(b.ElementBlocks.Select(block => block.Name)));
     }
     private static int Main()
     {
         var sample = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "unit-cube.inp"));
         var cube = Read(sample);
+        Check("B003 named and anonymous blocks retain names with residual set membership once", () =>
+        {
+            var mesh = Read(Deck("C3D8", 8) +
+                "*ELEMENT,TYPE=C3D8,ELSET=PART\n202,1,2,3,4,5,6,7,8\n" +
+                "*ELEMENT,TYPE=C3D8\n303,1,2,3,4,5,6,7,8\n" +
+                "*ELSET,ELSET=PART\n101,202,303\n*ELSET,ELSET=ANOTHER\n101,303\n");
+            string output = MeshDeckWriter.WriteMesh(mesh).Replace("\r\n", "\n");
+            SameMesh(mesh, Read(output));
+            Require(output.Contains("*Elset, Elset=PART\n303\n") &&
+                output.Contains("*Elset, Elset=ANOTHER\n101, 303\n"));
+        });
         Check("real INP cube IDs, bounds and sets", () =>
         {
             Require(cube.Nodes.Count == 8 && cube.Elements.Count == 1 && cube.Elements[101] is LinearHexaElement);

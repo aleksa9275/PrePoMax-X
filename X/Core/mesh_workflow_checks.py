@@ -9,7 +9,7 @@ ROOT = HERE.parents[1]
 def verify(run, work, architecture):
     tests = work / "build/bin/MeshDeckTests/release/PrePoMaxX.MeshDeckTests.dll"
     result = json.loads(run(["dotnet", tests]).stdout)
-    if not result["success"] or result["passed"] != 68 or result["failed"] or result["runtime"]["architecture"] != architecture:
+    if not result["success"] or result["passed"] != 69 or result["failed"] or result["runtime"]["architecture"] != architecture:
         raise ValueError("Mesh workflow checks failed, changed count or used a nonnative process")
     cli = work / "build/bin/MeshDeck/release/PrePoMaxX.MeshDeck.dll"
     sample = HERE / "MeshDeck/unit-cube.inp"

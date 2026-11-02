@@ -1,0 +1,3 @@
+{"success": false, "mappingChecks": 25, "dataChecks": 30, "elementChecks": 95, "meshWorkflowChecks": null, "openCorrectnessChecks": 2, "cliControls": 9, "error": "Actual mesh CLI export/reopen differs in geometry, IDs, sets or formulation"}
+
+--- stderr ---

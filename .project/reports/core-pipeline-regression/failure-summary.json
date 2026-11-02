@@ -1,0 +1,32 @@
+{
+  "pipeline": 3019186769,
+  "job": 17675531644,
+  "commit": "384edea2f24bf51b57cac60d02f87e1b37dd77de",
+  "jobUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17675531644",
+  "artifactArchiveSha256": "b8e426c881d38c3d3e6ea98f9ef7ff341b74b6832f2023491383a36c2d0fc1d5",
+  "beforeBlockNames": [
+    "CUBE"
+  ],
+  "afterBlockNames": [
+    null
+  ],
+  "otherMeshMetadataEqual": {
+    "nodes": true,
+    "elements": true,
+    "bounds": true,
+    "nodeSets": true,
+    "elementSets": true,
+    "warnings": true,
+    "omittedKeywords": true,
+    "sourceOfEngineeringTypes": true,
+    "quadraticTetrahedronMeasurementGated": true
+  },
+  "error": "Actual mesh CLI export/reopen differs in geometry, IDs, sets or formulation",
+  "otherJobsObserved": {
+    "analysis-workflow-linux-x64": "passed",
+    "execution-workflow-linux-x64": "passed",
+    "results-workflow-linux-x64": "passed",
+    "research-linux-x64": "passed",
+    "portable-compatibility-linux-x64": "manual"
+  }
+}
