@@ -1,5 +1,9 @@
 # Project status
 
+Agent continuation: [current handoff](handoffs/native-macos-next-session.md)
+records the verified artifact, published implementation, pending gates and next
+bounded task. No feature implementation is left mid-change.
+
 ## Current — task 0042: local Mac solver-controls DMG
 
 Maintainer requests an unnotarized local DMG and explicitly wants desktop solver

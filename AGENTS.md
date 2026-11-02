@@ -1,5 +1,11 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-03 agent handoff: read
+.project/handoffs/native-macos-next-session.md for the published checkpoint,
+local-only DMG/runtime paths, evidence, pending gates and next bounded task 0043.
+The maintainer reports the local preview test passed. No task 0043 implementation
+is in progress; preserve the tested DMG and existing D051/D053 scope.
+
 2026-11-03 task 0042: maintainer requests a local DMG while Developer-ID signing/
 notarization are unavailable, explicitly choosing desktop solver controls first
 and a complete uninstall/reset guide. This reorders the bounded workflow/package
