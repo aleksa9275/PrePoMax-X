@@ -92,3 +92,13 @@ belongs to the maintainer; no Gatekeeper/quarantine bypass is automated.
 lightweight VMs, not a macOS desktop guest. It can serve later Linux compute
 checks, not Mac GUI/DMG/clean-macOS acceptance. This Mac reports 26.7.1; container
 is not installed, and existing Podman availability does not establish this DMG.
+
+## Maintainer test follow-up — 3 November 2026
+
+Maintainer reports that the local preview test went well and as expected. Record
+this as a user-reported pass on the existing Mac, without inferring a separate
+uninstall, clean-OS, downloaded Gatekeeper or broader engineering corpus pass.
+The next bounded engineering increment is the [native viewport boundary](../tasks/0043-native-viewport-boundary.md),
+followed by an editable solid workflow, explicit supported save/reopen, then shell/
+history and a portability checkpoint. No new implementation or frontend/format
+choice occurs in this follow-up.

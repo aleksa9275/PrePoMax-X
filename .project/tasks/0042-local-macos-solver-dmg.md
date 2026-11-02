@@ -40,3 +40,7 @@ analytical checks/control. Packaged-host cancellation/failure/tamper checks pass
 The image is 260,297,246 bytes; exact SHA/paths/evidence are in the report. Install
 and full uninstall/reset instructions are included. Binary stays local/ignored.
 No notarization, clean-OS, full product or new target desktop acceptance follows.
+
+Maintainer follow-up, 3 November 2026: local preview test went well and as expected.
+This is a user-reported current-Mac preview pass; no separate cleanup/clean-OS or
+broader test scope is inferred. Proposed task 0043 records the next bounded step.

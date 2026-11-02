@@ -16,8 +16,10 @@ checks/control; actual packaged-host cancellation/failure/tamper checks pass.
 The **248.2 MiB local DMG** is in
 `X/Build/artifacts/task0042-macos-dmg/dist/PrePoMax-X-Preview-arm64.dmg`.
 [Full uninstall/reset guide](../X/Desktop/UNINSTALL-macos.md) is included in it.
-Next: maintainer local install/cleanup test, then the bounded viewport binding
-and supported workflow expansion. No Developer-ID/notarization/clean-host or
+Maintainer reports the local preview test went well and as expected (3 November
+2026); a separate cleanup/clean-OS test is not inferred. Next: the proposed
+[bounded viewport binding](tasks/0043-native-viewport-boundary.md), then an editable
+solid workflow and supported save/reopen. No Developer-ID/notarization/clean-host or
 full product/release acceptance; both known failures/tetra gate and B002 remain.
 Apple container is Linux-only, not a Mac GUI test environment.
 
