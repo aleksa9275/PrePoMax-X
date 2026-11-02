@@ -1,0 +1,38 @@
+{
+  "commit": "a893005cb2f7d25183e4aee442682bc0f077ceea",
+  "pipelineId": 3019959774,
+  "pipelineUrl": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019959774",
+  "status": "passed: five automatic Linux x64 jobs; compatibility manual",
+  "jobs": {
+    "core": 17681185815,
+    "analysis": 17681185816,
+    "execution": 17681185817,
+    "results": 17681185818,
+    "research": 17681185814,
+    "compatibility": 17681185813
+  },
+  "remoteResearchVerified": true,
+  "masterUnchanged": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+  "downloadedExecutionArtifactsVerified": true,
+  "artifactComparison": "linux-macos-comparison.json",
+  "ciSplitCommit": "0411ae230f4d9bc4ebcc3402569e3aae64409234",
+  "ciSplitPipeline": {
+    "id": 3019992604,
+    "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019992604",
+    "status": "passed: six automatic Linux x64 jobs; compatibility manual",
+    "jobs": {
+      "nativeCpu": 17681455759,
+      "core": 17681455761,
+      "analysis": 17681455762,
+      "execution": 17681455763,
+      "results": 17681455764,
+      "research": 17681455760,
+      "compatibility": 17681455758
+    },
+    "downloadedNativeArtifactsVerified": true,
+    "archiveSha256": "3a6c237ae7f142409b1dee50c12c318d3be071d0a547cba58139f0ae80dcbf81",
+    "archiveEntries": 60,
+    "sameNativeExecutableAsInitialRun": true,
+    "sameDecodedFrdDatApartFromSourceFileHash": true
+  }
+}

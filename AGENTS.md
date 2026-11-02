@@ -6,8 +6,10 @@ common self-contained C# hosts, native Mac/Linux solver helpers and the preserve
 Mac package wrapper. Read X/Build/README.md and .project/reports/shared-target-builds.md
 for actual results/publication. Cross-publishing is not native execution; planned
 Debian/Fedora/Arch formats and unset platform floors are not support acceptance.
-Linux x64 CI is extended with the common native cube workflow; never claim its
-success until the exact hosted run is checked. No frontend/default/backend/format/
+Implementation a893005c passes exact-commit pipeline 3019959774; downloaded
+native Linux x64 cube/source/recipe evidence matches the bounded Mac comparison.
+CI split 0411ae23 uses an affected-input native job; pipeline 3019992604 passes
+all six automatic Linux x64 jobs. No frontend/default/backend/format/
 precision choice or release-gate closure. Existing D051 publication scope remains.
 
 2026-11-02 task 0040: user supplied signed-in GitLab access. Failed 384edea2

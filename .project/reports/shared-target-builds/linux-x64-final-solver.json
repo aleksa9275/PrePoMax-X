@@ -1,0 +1,128 @@
+{
+  "success": true,
+  "kind": "native-calculix-cpu-research-build",
+  "version": "2.22",
+  "recordedAtUtc": "2026-11-02T23:02:46.228824+00:00",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "target": "linux-x64",
+  "commands": [
+    {
+      "arguments": [
+        "/usr/bin/python3",
+        "/builds/aleksa9275/pre-po-max-x/ThirdParty/Sources/verify-sources.py"
+      ],
+      "exitCode": 0,
+      "log": "build-00.log",
+      "elapsedSeconds": 0.314
+    },
+    {
+      "arguments": [
+        "make",
+        "lib",
+        "CC=gcc",
+        "CFLAGS=-O2 -std=gnu89",
+        "RANLIB=ranlib"
+      ],
+      "exitCode": 0,
+      "log": "build-01.log",
+      "elapsedSeconds": 33.305
+    },
+    {
+      "arguments": [
+        "cmake",
+        "-S",
+        "/builds/aleksa9275/pre-po-max-x/ThirdParty/Sources/ARPACK-ng/3.9.1/src",
+        "-B",
+        "/builds/aleksa9275/pre-po-max-x/X/Build/artifacts/linux-x64-native/solver/work/arpack-build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_Fortran_COMPILER=gfortran",
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DMPI=OFF",
+        "-DINTERFACE64=OFF",
+        "-DICB=OFF",
+        "-DEXAMPLES=OFF",
+        "-DTESTS=OFF",
+        "-DBLAS_LIBRARIES=/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblas.so",
+        "-DLAPACK_LIBRARIES=/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblas.so"
+      ],
+      "exitCode": 0,
+      "log": "build-02.log",
+      "elapsedSeconds": 0.342
+    },
+    {
+      "arguments": [
+        "cmake",
+        "--build",
+        "/builds/aleksa9275/pre-po-max-x/X/Build/artifacts/linux-x64-native/solver/work/arpack-build",
+        "--parallel",
+        "2"
+      ],
+      "exitCode": 0,
+      "log": "build-03.log",
+      "elapsedSeconds": 5.598
+    },
+    {
+      "arguments": [
+        "make",
+        "-f",
+        "Makefile.native",
+        "-j2",
+        "all"
+      ],
+      "exitCode": 0,
+      "log": "build-04.log",
+      "elapsedSeconds": 103.142
+    }
+  ],
+  "patches": [
+    {
+      "path": "SPOOLES/Make.inc",
+      "change": "Explicit native compiler, optimization, C dialect and archive indexer"
+    },
+    {
+      "path": "SPOOLES/Tree/src/makeGlobalLib",
+      "change": "drawTree.c -> draw.c (upstream README.INSTALL correction)"
+    },
+    {
+      "path": "SPOOLES/ETree/src/transform.c",
+      "change": "integer zero instead of NULL for IVinit value",
+      "occurrences": 3
+    }
+  ],
+  "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+  "releaseReady": false,
+  "numericalAcceptance": false,
+  "buildToolSha256": "97d46212986231b8dfb3f0665edb787fc873b73cf7c4d3a78b57dd973e586a6a",
+  "platformAdapterSha256": "619661107b2169f30eb7395e6c842ccc1d91fb9d201b16466e025480df31bc50",
+  "targetCatalogSha256": "85b2043e727c36dd07fccfc7e5265cd26bb6c2e71df60b0b004109a2baafdaf9",
+  "openblasConfig": "OpenBLAS 0.3.26 NO_LAPACKE DYNAMIC_ARCH NO_AFFINITY Cooperlake MAX_THREADS=64",
+  "compilers": {
+    "C": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "Fortran": "GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  },
+  "sourceManifests": {
+    "CalculiX": "8dd1b5fad4c0e369903bfea4de009592f7d1790a66aa69de21c4bfa19ea6ea94",
+    "SPOOLES": "f2c1c473625ca657cfa5d05562f6c330f2d65e4ea182296dd73e0f896b2f4ece",
+    "ARPACK-ng": "9134295ed0acc1d83e747fd51deddb3535fc1e42c6709412ee4ec238180f27d5"
+  },
+  "generatedMakefileSha256": "fd1eb7c1241897237d53e93fc8f12816a6568b90778b89d69196843ce7345b72",
+  "legacyCompilerPolicy": "-fcommon retains pre-GCC-10 tentative-global behavior; sort deduplicates mafillmm.o from stale missing C entry",
+  "compileDatePolicy": "Original source banner retained; actual build time recorded here; byte reproducibility not asserted",
+  "executableSha256": "0615ddaf78580f92f9c325ed626bbb8c313a06437df5b24344f49bb6439aca9d",
+  "file": "/builds/aleksa9275/pre-po-max-x/X/Build/artifacts/linux-x64-native/solver/bin/ccx: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=4830ad99163e5e2c885b2fb13f005c7a6e771d2c, for GNU/Linux 3.2.0, not stripped",
+  "externalRuntimes": {
+    "/lib/x86_64-linux-gnu/libopenblas.so.0": "bfc7492adbf84a8f567720a9e1fae2afc18f3d817da233e7f4d453683485308e",
+    "/lib/x86_64-linux-gnu/libgfortran.so.5": "342618ccfebe840446e4ef2b7893f4161b2084845e570f42d68a70bfde58a58d",
+    "/lib/x86_64-linux-gnu/libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+    "/lib/x86_64-linux-gnu/libmvec.so.1": "57329ee0018b8fd8f8e51af5f87c723b6ecdf04679f4493134beab0f45d58ec5",
+    "/lib/x86_64-linux-gnu/libgomp.so.1": "135f3c8f006d2fe5e68e51281c7974cb991a03de3bfb3593d68d174dfcf854d1",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb",
+    "/lib/x86_64-linux-gnu/libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+    "/lib64/ld-linux-x86-64.so.2": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+  },
+  "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+  "distribution": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n",
+  "elapsedSeconds": 142.993
+}

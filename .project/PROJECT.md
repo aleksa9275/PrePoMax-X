@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-03 shared-build checkpoint: task 0041 implements the common four-RID entry,
+Mac/Linux native solver adapters and Mac package wrapper. Implementation a893005c
+passes exact-commit Linux x64 CI; downloaded cube/native-source evidence compares
+with Mac. Windows/Linux ARM64 publications are compile-only. The next desktop
+increment remains a bounded viewport binding attempt and Mac workflow, with
+clean-machine/runtime/signing and other native targets pending.
+[Actual evidence/publication](reports/shared-target-builds.md).
+
 2026-11-02 CI closeout: task 0040 repairs the shared exporter regression at
 f4e388a5. Exact-commit Linux x64 pipeline 3019257012 passes all five automatic jobs;
 downloaded Core fingerprints and development package bytes verify. [Evidence](reports/core-pipeline-regression.md).

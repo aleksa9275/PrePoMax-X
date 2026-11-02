@@ -21,3 +21,18 @@ Linux ARM64 cross-publication succeeds with native execution pending. Seven
 boundary regressions pass; pristine native source verification passes. Linux x64
 CI now includes the native CPU build/workflow; actual publication/hosted state
 is recorded in [report](../reports/shared-target-builds.md).
+
+Hosted outcome: implementation a893005c is remote-verified; exact-commit pipeline
+3019959774 passes five automatic jobs (compatibility manual). Actual downloaded
+65-entry execution archive verifies clean source, native ELF build, twelve cube
+checks/rejection control, shared source/recipe/catalog identity and Mac comparison
+of four FRD fields/96 histories. CI split 0411ae23 moves the slower native build
+behind affected inputs; pipeline 3019992604 passes all six automatic Linux x64
+jobs. Final coverage is recorded
+in the report/publication JSON. No full historical matrix is rerun for this build
+boundary change; no other native desktop/distro or release acceptance follows.
+
+Task 0041 is complete within its bounded build/compute scope. Final CI split
+artifacts verify clean 0411ae23 and the same native executable/decoded FRD/DAT
+values as the initial run; compatibility remains manual. Next increments are
+recorded in the report. Both correctness failures/tetra and release gates remain.

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "builds": [
+    {
+      "id": "linux-x64-2.22-spooles-research",
+      "os": "Linux",
+      "architecture": "X64",
+      "version": "2.22",
+      "executable": "ccx",
+      "files": {
+        "ccx": "0615ddaf78580f92f9c325ed626bbb8c313a06437df5b24344f49bb6439aca9d"
+      },
+      "externalFiles": {
+        "/lib/x86_64-linux-gnu/libopenblas.so.0": "bfc7492adbf84a8f567720a9e1fae2afc18f3d817da233e7f4d453683485308e",
+        "/lib/x86_64-linux-gnu/libgfortran.so.5": "342618ccfebe840446e4ef2b7893f4161b2084845e570f42d68a70bfde58a58d",
+        "/lib/x86_64-linux-gnu/libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+        "/lib/x86_64-linux-gnu/libmvec.so.1": "57329ee0018b8fd8f8e51af5f87c723b6ecdf04679f4493134beab0f45d58ec5",
+        "/lib/x86_64-linux-gnu/libgomp.so.1": "135f3c8f006d2fe5e68e51281c7974cb991a03de3bfb3593d68d174dfcf854d1",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb",
+        "/lib/x86_64-linux-gnu/libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+        "/lib64/ld-linux-x86-64.so.2": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+      "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+      "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+      "scope": "Research CPU profile; no production default or broad numerical/release acceptance"
+    }
+  ]
+}

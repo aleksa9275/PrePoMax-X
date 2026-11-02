@@ -1,0 +1,49 @@
+{
+  "success": true,
+  "scope": "One analytical cube; same original parsers; no broad accuracy/performance or distro acceptance",
+  "sourceManifestsMatch": true,
+  "recipeMatches": true,
+  "targetCatalogMatches": true,
+  "cleanHostedCommit": "a893005cb2f7d25183e4aee442682bc0f077ceea",
+  "frd": {
+    "DISP": {
+      "maximumAbsoluteDifference": 0,
+      "absoluteComparisonTolerance": 1e-09,
+      "components": 4
+    },
+    "STRESS": {
+      "maximumAbsoluteDifference": 4.05542018683718e-07,
+      "absoluteComparisonTolerance": 0.0001,
+      "components": 12
+    },
+    "TOSTRAIN": {
+      "maximumAbsoluteDifference": 1.0492629999999999e-19,
+      "absoluteComparisonTolerance": 1e-09,
+      "components": 11
+    },
+    "FORC": {
+      "maximumAbsoluteDifference": 2.421198e-15,
+      "absoluteComparisonTolerance": 1e-05,
+      "components": 4
+    }
+  },
+  "dat": {
+    "FORCES": {
+      "maximumAbsoluteDifference": 2.4211946e-15,
+      "absoluteComparisonTolerance": 1e-05,
+      "histories": 24
+    },
+    "DISPLACEMENTS": {
+      "maximumAbsoluteDifference": 0,
+      "absoluteComparisonTolerance": 1e-09,
+      "histories": 24
+    },
+    "STRESSES": {
+      "maximumAbsoluteDifference": 1.4563819e-14,
+      "absoluteComparisonTolerance": 0.0001,
+      "histories": 48
+    }
+  },
+  "artifactArchiveSha256": "d17f7aeca72a3a26e49b8ced6b53badb13e39da1897457af19f7ad509d2c90b9",
+  "artifactArchiveEntries": 65
+}

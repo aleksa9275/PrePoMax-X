@@ -44,10 +44,35 @@ Native Linux x64 CI uses the same entry:
 managed hosts → pinned native source build → common analytical cube workflow.
 It retains commands/logs, runtime/build identity and synthetic result evidence;
 large self-contained host directories/object files are not uploaded. No runner
-or other distro/GUI job is provisioned. Actual hosted acceptance is pending until
-an exact-commit run is inspected and recorded. The source-build step is split
+or other distro/GUI job is provisioned. The source-build step is split
 into an affected-input job so GUI-only edits do not rebuild native dependencies
 on every push; the original quick execution checks stay independent.
+
+Verified observation: implementation **a893005c** is remote-verified. Exact-commit
+[pipeline 3019959774](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019959774)
+passes all five automatic Linux x64 jobs; compatibility is manual. The downloaded
+65-entry execution artifact ZIP identifies a clean source commit and contains the
+actual native build and cube results. The shared native build takes 142 seconds
+on that worker; this is a build duration, not a solver performance benchmark.
+
+The Linux executable is ELF x86-64, built with GCC/gfortran 13.3, OpenBLAS 0.3.26
+LP64 on Ubuntu 24.04.5/glibc 2.39. Mac/Linux source manifests, recipe and target
+catalog match. The self-contained Linux hosts run all three smokes; original
+deck → native SPOOLES solve → original FRD/DAT/monitor reading passes twelve
+checks and altered-displacement rejection. Four field identities, node/element
+IDs and all 96 DAT history identities match Mac. Displacements match exactly;
+maximum cross-host field differences are 4.06e-7 stress, 2.43e-15 force and
+1.05e-19 strain, within the explicitly recorded comparison bounds. This bounded
+comparison does not change the original analytical tolerances or certify other
+analysis categories. [Downloaded evidence and comparison](shared-target-builds/linux-macos-comparison.json).
+
+The CI-only split **0411ae23** is also remote-verified; its exact-commit
+[pipeline 3019992604](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3019992604)
+passes all six automatic jobs; compatibility remains manual. Its downloaded
+native artifact identifies clean 0411ae23, verifies all report links, and contains
+the same native executable hash and decoded FRD/DAT values as the first run
+(source-file hashes are excluded from this semantic comparison). Final hosted
+outcomes are retained in [publication record](shared-target-builds/publication.json).
 
 Debian/Fedora/Arch package formats are target metadata, not delivered installers.
 Minimum OS/glibc baselines and verified distro versions are explicitly unset.
@@ -55,3 +80,25 @@ Windows native solver/package, Linux ARM64 native execution, all non-Mac desktop
 sessions and direct VTK binding comparison remain. Signing/clean-machine install,
 runtime relocation, corresponding-source closure, full graph/persistence/CAD/
 Windows/net48/RC2 and four-target/final correctness requirements remain open.
+
+## Next bounded increments
+
+1. Finish one native viewport binding/host attempt (B002), including whether the
+   current C# host can use a practical native VTK binding. Require a visible
+   packaged frame, original FEM-ID picking, resize/lifecycle and a recorded
+   larger-mesh interaction measurement. Keep the existing viewer as the workflow
+   harness; if a concrete dependency blocks the attempt, record that dependency
+   and the available tradeoff before expanding production dialogs.
+2. Connect a small common desktop workflow: model tree/open/select, native job
+   start/cancel/status and contour/history inspection, through the original
+   shared C# services. Add a supported save/reopen slice explicitly rather than
+   inventing or silently selecting a replacement persistence format.
+3. Make the Mac preview relocatable: include the required solver/runtime closure,
+   exercise a clean machine without SDK/Homebrew paths, then Developer-ID sign,
+   notarize and build DMG/Homebrew delivery. Carry the same build contract to
+   native Windows/Linux ARM64 and declared Debian/Fedora/Arch package checkpoints.
+
+Routine edits run affected checks and the relevant native smoke. Full historical,
+other-desktop and distro installation matrices remain integration/release work.
+These are next increments, not claimed implementation or a production frontend
+selection. The installable Mac workflow is the critical path.

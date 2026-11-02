@@ -1,6 +1,6 @@
 # Project status
 
-## Current — task 0041: shared target entry and native Linux workflow preparation
+## Current — task 0041: shared target builds and native Linux CPU workflow
 
 [Shared build entry](../X/Build/README.md) publishes the same mesh/results/job
 hosts for all four RIDs, using one catalog and target-native helpers. The Mac
@@ -9,12 +9,20 @@ packaged viewport pass; Windows x64/Linux ARM64 cross-publication succeeds with
 execution explicitly pending. Seven build-boundary controls pass.
 [Evidence/scope](reports/shared-target-builds.md).
 
-Linux x64 execution CI now includes the native source build and cube solve via
-the same entry. Hosted verification is pending publication/run; recipe existence
-is not acceptance. No new native Windows/ARM64 Linux or distro desktop/install
-pass, frontend/default/format/backend choice or release gate closure is claimed.
-Both known failures/tetra gate remain. Next: actual Linux evidence, then the
-bounded native viewport binding and Mac workflow under the shared-source plan.
+Implementation **a893005c** is published/remote-verified. Exact-commit pipeline
+**3019959774 passes all five automatic native Linux x64 jobs**; compatibility
+stays manual. Downloaded artifacts identify clean source, matching native source
+manifests/recipe/catalog and actual ELF/native solve. The twelve common cube
+checks and rejection control pass; four FRD fields and 96 DAT histories compare
+with Mac within recorded bounds. This is Ubuntu compute evidence, not a
+Debian/Fedora/Arch desktop or installer pass.
+
+CI-only **0411ae23** separates the slower source build into an affected-input job;
+GUI-only changes retain the short checks. Pipeline **3019992604 passes all six
+automatic jobs**.
+No native Windows/Linux ARM64 execution or release gate closure is claimed.
+Both known failures/tetra gate remain. Next: bounded native viewport binding,
+then Mac model/job/results workflow and relocatable signed preview packaging.
 
 ## Current — task 0040: pipeline regression fixed and hosted-verified
 
