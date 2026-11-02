@@ -40,12 +40,14 @@ Local build outputs and binary app/solver payloads are ignored.
 
 ## Linux and remaining coverage
 
-The existing native Linux x64 execution job is extended with the same entry:
+Native Linux x64 CI uses the same entry:
 managed hosts → pinned native source build → common analytical cube workflow.
 It retains commands/logs, runtime/build identity and synthetic result evidence;
 large self-contained host directories/object files are not uploaded. No runner
 or other distro/GUI job is provisioned. Actual hosted acceptance is pending until
-an exact-commit run is inspected and recorded.
+an exact-commit run is inspected and recorded. The source-build step is split
+into an affected-input job so GUI-only edits do not rebuild native dependencies
+on every push; the original quick execution checks stay independent.
 
 Debian/Fedora/Arch package formats are target metadata, not delivered installers.
 Minimum OS/glibc baselines and verified distro versions are explicitly unset.

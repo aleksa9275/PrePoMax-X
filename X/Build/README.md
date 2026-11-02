@@ -59,6 +59,7 @@ and native runtime relocation remain separate release work.
 
 Seven focused controls cover wrong-host/unsupported native operations, false
 cross-run claims and changed/wrong-target/symlinked host evidence or missing ELF
-runtime dependencies. Linux execution CI now also builds/solves the tiny cube via
-this entry; actual hosted outcomes are in the task 0041 report, not inferred from
+runtime dependencies. A dedicated Linux CI job builds/solves the tiny cube when
+native sources/consumers/build inputs change; GUI-only edits keep shorter checks.
+Actual hosted outcomes are in the task 0041 report, not inferred from
 the existence of a recipe. Full platform/historical matrices remain milestone work.

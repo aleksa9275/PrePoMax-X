@@ -10,26 +10,14 @@ execution-workflow-linux-x64:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
   before_script:
     - apt-get update
-    - apt-get install -y --no-install-recommends python3 git tini gcc gfortran cmake make pkg-config libopenblas-dev binutils file
+    - apt-get install -y --no-install-recommends python3 git tini
   script:
     - python3 ThirdParty/Sources/verify-sources.py
     - python3 -m unittest discover -s X/Execution -p test_job_layout.py
     - dotnet restore X/Execution/PrePoMaxX.Execution.slnx --configfile X/Analysis/NuGet.Config --packages X/Analysis/artifacts/packages
     - tini -s -- python3 X/Checks/check.py --profile fast --area execution --output X/Checks/artifacts/execution-linux-x64
-    - python3 -m unittest discover -s X/Build -p test_build.py
-    - python3 X/Build/build.py build --target linux-x64 --output X/Build/artifacts/linux-x64-hosts
-    - python3 X/Build/build.py build --target linux-x64 --component solver --jobs 2 --output X/Build/artifacts/linux-x64-native
-    - tini -s -- python3 ThirdParty/Build/verify-workflow.py --build X/Build/artifacts/linux-x64-native/solver --hosts-dir X/Build/artifacts/linux-x64-hosts --output X/Build/artifacts/linux-x64-workflow
   artifacts:
     when: always
     expire_in: 30 days
     paths:
       - X/Checks/artifacts/execution-linux-x64/
-      - X/Build/artifacts/linux-x64-hosts/build.json
-      - X/Build/artifacts/linux-x64-hosts/*.log
-      - X/Build/artifacts/linux-x64-hosts/locks/
-      - X/Build/artifacts/linux-x64-native/build.json
-      - X/Build/artifacts/linux-x64-native/*.log
-      - X/Build/artifacts/linux-x64-native/solver/*.json
-      - X/Build/artifacts/linux-x64-native/solver/*.log
-      - X/Build/artifacts/linux-x64-workflow/
