@@ -1,0 +1,10 @@
+{
+  "macos-workflow.json": "02e77d85b238871bb61ef5821ff9a6479b900795b0459884bd1daa4f9ab456ab",
+  "linux-arm64-cross-hosts.json": "1cb777b3bce3eece007356c6e17e7604233d59772f60f98666508cd7654ba943",
+  "macos-solver.json": "223f734cf0c7ee3aabdb3a5158a2437ee4a182bd0f17a9ae8e756762d2d30a76",
+  "macos-gui.png": "d437202f3e2f1bc8a5c00856d67e21349e1390c9fe185e1c8fa806a530a40f5c",
+  "macos-package.json": "f0f8fdd1e3311f712b48b18f027acd4992ea30c350bb7541c3c087f2810989e5",
+  "macos-hosts.json": "a4e4f1132c62e9a244edb5766d68b75f06a6f40e0c3b259b967324272087668f",
+  "macos-gui.json": "82752af0639c55c98da4102e026cec73e649f5238904886a0055b993a29f3838",
+  "windows-cross-hosts.json": "4716a71d61509daf462ecfe373d67d52de8d78acb1a10c89dc68ecf3f1e93174"
+}

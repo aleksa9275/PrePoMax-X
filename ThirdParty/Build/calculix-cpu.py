@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Build the pinned native CPU research solver; pristine sources are never edited."""
 import argparse
+import ctypes
+import importlib.util
+import sys
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -21,23 +24,42 @@ def sha(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--cc", default="gcc-16")
-    parser.add_argument("--fc", default="gfortran")
-    parser.add_argument("--blas", type=Path, default=Path("/opt/homebrew/opt/openblas/lib/libopenblas.dylib"))
+    parser.add_argument("--target", choices=["osx-arm64", "linux-x64", "linux-arm64"])
+    parser.add_argument("--cc")
+    parser.add_argument("--fc")
+    parser.add_argument("--blas", type=Path)
     parser.add_argument("--jobs", type=int, default=6)
     args = parser.parse_args()
-    if platform.system() != "Darwin" or platform.machine().lower() != "arm64":
-        parser.error("First reviewed recipe targets native macOS ARM64 only")
+    catalog = json.loads((ROOT / "X/Build/targets.json").read_text())
+    candidates = [rid for rid, data in catalog["targets"].items()
+        if data["os"] == platform.system() and platform.machine().lower() in data["machines"]]
+    target_id = args.target or (candidates[0] if len(candidates) == 1 else None)
+    if target_id not in candidates or not catalog["targets"][target_id]["solverAdapter"]:
+        parser.error("No native research solver recipe for this target/host; no cross-run or substitute selected")
+    target = catalog["targets"][target_id]
+    adapter_path = Path(__file__).parent / "platforms" / (target["solverAdapter"] + ".py")
+    spec = importlib.util.spec_from_file_location("native_platform", adapter_path)
+    adapter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(adapter)
+    try:
+        defaults = adapter.defaults(args.blas)
+        args.cc = args.cc or defaults["cc"]
+        args.fc = args.fc or defaults["fc"]
+        args.blas = defaults["blas"].absolute()
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        parser.error(str(error))
     if not 1 <= args.jobs <= 32:
         parser.error("jobs must be between 1 and 32")
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
     report = {"success": False, "kind": "native-calculix-cpu-research-build", "version": "2.22",
         "recordedAtUtc": datetime.now(timezone.utc).isoformat(), "os": platform.system(),
-        "architecture": platform.machine(), "commands": [], "patches": [],
+        "architecture": platform.machine(), "target": target_id, "commands": [], "patches": [],
         "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
         "releaseReady": False, "numericalAcceptance": False}
     report["buildToolSha256"] = sha(Path(__file__))
+    report["platformAdapterSha256"] = sha(adapter_path)
+    report["targetCatalogSha256"] = sha(ROOT / "X/Build/targets.json")
     started = time.monotonic()
     env = dict(os.environ, ZERO_AR_DATE="1", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1")
     def run(command, cwd=ROOT):
@@ -52,7 +74,13 @@ def main():
             raise RuntimeError(f"Build command failed; see {log}")
         return log.read_text()
     try:
-        run(["python3", ROOT / "ThirdParty/Sources/verify-sources.py"])
+        run([sys.executable, ROOT / "ThirdParty/Sources/verify-sources.py"])
+        blas_library = ctypes.CDLL(str(args.blas))
+        blas_library.openblas_get_config.restype = ctypes.c_char_p
+        blas_config = blas_library.openblas_get_config().decode()
+        if "OpenBLAS" not in blas_config or "USE64BITINT" in blas_config:
+            raise ValueError("This recipe requires OpenBLAS LP64/int32")
+        report["openblasConfig"] = blas_config
         report["compilers"] = {name: subprocess.check_output([value, "--version"], text=True).splitlines()[0]
             for name, value in [("C", args.cc), ("Fortran", args.fc)]}
         report["sourceManifests"] = {name: sha(ROOT / "ThirdParty/Sources" / name / version / "source-manifest.json")
@@ -121,50 +149,16 @@ ccx: ccx_2.22.o $(OBJECTS)
         binary.parent.mkdir(exist_ok=True)
         shutil.copy2(ccx / "ccx", binary)
         report["executableSha256"] = sha(binary)
-        report["file"] = subprocess.check_output(["file", binary], text=True).strip()
-        assert "arm64" in report["file"]
-        runtime = {}
-        pending = [binary]
-        unresolved = []
-        rpaths = []
-        def expand(name, loader):
-            return name.replace("@loader_path", str(loader.parent)).replace("@executable_path", str(binary.parent))
-        while pending:
-            file = pending.pop()
-            lines = subprocess.check_output(["otool", "-l", file], text=True).splitlines()
-            for i, line in enumerate(lines):
-                if line.strip() == "cmd LC_RPATH":
-                    for following in lines[i+1:i+4]:
-                        if following.strip().startswith("path "):
-                            rpaths.append(expand(following.strip()[5:].split(" (offset", 1)[0], file))
-            for line in subprocess.check_output(["otool", "-L", file], text=True).splitlines()[1:]:
-                name = line.strip().split(" (", 1)[0]
-                if name.startswith(("/usr/lib/", "/System/")):
-                    continue
-                candidate = Path(expand(name, file))
-                if name.startswith("@rpath/"):
-                    candidates = [Path(directory) / name[7:] for directory in rpaths]
-                    candidate = next((p for p in candidates if p.is_file()), candidate)
-                if not candidate.is_file():
-                    unresolved.append(name)
-                    continue
-                path = candidate.resolve()
-                # Pin the load path too: Homebrew opt symlinks may be retargeted.
-                if str(candidate) not in runtime:
-                    runtime[str(candidate)] = sha(path)
-                    pending.append(path)
-        if unresolved:
-            raise RuntimeError("Unresolved runtime paths: " + str(unresolved))
-        report["externalRuntimes"] = runtime
-        report["resolvedRpaths"] = list(dict.fromkeys(rpaths))
-        profile = {"id": "macos-arm64-2.22-spooles-research", "os": "Darwin", "architecture": "Arm64",
+        report.update(adapter.inspect(binary, target["architecture"], sha))
+        runtime = report["externalRuntimes"]
+        profile = {"id": target_id + "-2.22-spooles-research", "os": target["os"], "architecture": target["architecture"],
             "version": "2.22", "executable": "ccx", "files": {"ccx": sha(binary)},
             "externalFiles": runtime, "backend": report["backend"], "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
             "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
             "scope": "Research CPU profile; no production default or broad numerical/release acceptance"}
         (out / "build-registry.json").write_text(json.dumps({"schemaVersion": 1, "builds": [profile]}, indent=2) + "\n")
         report["success"] = True
-    except (OSError, ValueError, RuntimeError, AssertionError, StopIteration, subprocess.SubprocessError) as error:
+    except (OSError, AttributeError, ValueError, RuntimeError, AssertionError, StopIteration, subprocess.SubprocessError) as error:
         report["error"] = str(error)
     report["elapsedSeconds"] = round(time.monotonic() - started, 3)
     (out / "build-report.json").write_text(json.dumps(report, indent=2) + "\n")

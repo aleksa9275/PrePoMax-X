@@ -1,0 +1,63 @@
+{
+  "success": true,
+  "checks": [
+    {
+      "name": "native render window",
+      "passed": true
+    },
+    {
+      "name": "original IDs retained",
+      "passed": true
+    },
+    {
+      "name": "field scalar mapping",
+      "passed": true
+    },
+    {
+      "name": "VTK hit resolves original element ID",
+      "passed": true
+    },
+    {
+      "name": "nearest vertex resolves original node ID",
+      "passed": true
+    },
+    {
+      "name": "selected coordinates preserved",
+      "passed": true
+    },
+    {
+      "name": "selected nodal value uses original value order",
+      "passed": true
+    },
+    {
+      "name": "resize renders",
+      "passed": true
+    },
+    {
+      "name": "displayed frame has mesh/legend pixels",
+      "passed": true
+    },
+    {
+      "name": "window capture",
+      "passed": true
+    }
+  ],
+  "target": "osx-arm64",
+  "selection": {
+    "elementId": 1,
+    "nearestVertexNodeId": 5,
+    "nodeCoordinates": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "nodalValue": 0.000142857
+  },
+  "vtkVersion": "9.5.2",
+  "qtVersion": "6.10.2",
+  "sourceSha256": "ee4799820a7885c8ef02c4cfa74b442fd694c51d9946e58a163e91883cf6bcf4",
+  "renderer": "vtkCocoaRenderWindow",
+  "toolSha256": "288e983d40ac3e3864050bd2d2b1cc343c4e8df6f86faf3919909ea0e5c75e5c",
+  "transport": "Native VTK offscreen GPU frame copied into Qt; not final widget/performance acceptance",
+  "scope": "Native Mac render and programmatic picking; human pointer, DPI, other platforms and release packaging remain"
+}

@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import platform
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -20,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--hosts-dir", type=Path, help="Verified shared build output with self-contained hosts")
     args = parser.parse_args()
     build, out = args.build.resolve(), args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -42,16 +44,30 @@ def main():
         report["registrySha256"] = sha(registry)
         solve = ROOT / "X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve.dll"
         inspect = ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll"
-        report["hostHashes"] = {str(p.relative_to(ROOT)): sha(p) for p in [solve, inspect]}
+        solve_command, inspect_command = ["dotnet", solve], ["dotnet", inspect]
+        if args.hosts_dir:
+            sys.path.insert(0, str(ROOT / "X/Build"))
+            from build import verify_hosts, require_native, catalog
+            hosts = args.hosts_dir.resolve()
+            target_id = json.loads((hosts / "build.json").read_text())["target"]
+            require_native(catalog()["targets"][target_id])
+            host_report = verify_hosts(hosts, target_id)
+            suffix = catalog()["targets"][target_id]["executableSuffix"]
+            solve = hosts / "hosts/solve" / ("PrePoMaxX.Solve" + suffix)
+            inspect = hosts / "hosts/results" / ("PrePoMaxX.InspectResults" + suffix)
+            solve_command, inspect_command = [solve], [inspect]
+            report["hostBuildSha256"] = sha(hosts / "build.json")
+            report["target"] = target_id
+        report["hostHashes"] = {str(p): sha(p) for p in [solve, inspect]}
         mesh = ROOT / "X/Analysis/StaticDeck/cube-mesh.inp"
         spec = ROOT / "X/Analysis/StaticDeck/cube-analysis.json"
         report["inputs"] = {str(p.relative_to(ROOT)): sha(p) for p in [mesh, spec]}
-        job = run(["dotnet", solve, "--registry", registry, "run-static", profile["id"], build / "bin", mesh, spec, out / "run", "120"], "solve")
+        job = run([*solve_command, "--registry", registry, "run-static", profile["id"], build / "bin", mesh, spec, out / "run", "120"], "solve")
         report["solverExecuted"] = job["solverExecuted"]
         report["transportCompleted"] = job["success"]
-        frd = run(["dotnet", inspect, "inspect-frd", out / "run/analysis.frd"], "frd")
-        dat = run(["dotnet", inspect, "inspect-dat", out / "run/analysis.dat"], "dat")
-        monitor = run(["dotnet", solve, "inspect-monitor", out / "run/analysis.sta", out / "run/analysis.cvg"], "monitor")
+        frd = run([*inspect_command, "inspect-frd", out / "run/analysis.frd"], "frd")
+        dat = run([*inspect_command, "inspect-dat", out / "run/analysis.dat"], "dat")
+        monitor = run([*solve_command, "inspect-monitor", out / "run/analysis.sta", out / "run/analysis.cvg"], "monitor")
         module = importlib.util.spec_from_file_location("reference", ROOT / "X/Feasibility/Solver/run-reference.py")
         reference = importlib.util.module_from_spec(module)
         module.loader.exec_module(reference)

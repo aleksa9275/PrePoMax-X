@@ -1,5 +1,21 @@
 # Project status
 
+## Current — task 0041: shared target entry and native Linux workflow preparation
+
+[Shared build entry](../X/Build/README.md) publishes the same mesh/results/job
+hosts for all four RIDs, using one catalog and target-native helpers. The Mac
+package command remains a wrapper. Mac hosts/solver/common cube workflow and
+packaged viewport pass; Windows x64/Linux ARM64 cross-publication succeeds with
+execution explicitly pending. Seven build-boundary controls pass.
+[Evidence/scope](reports/shared-target-builds.md).
+
+Linux x64 execution CI now includes the native source build and cube solve via
+the same entry. Hosted verification is pending publication/run; recipe existence
+is not acceptance. No new native Windows/ARM64 Linux or distro desktop/install
+pass, frontend/default/format/backend choice or release gate closure is claimed.
+Both known failures/tetra gate remain. Next: actual Linux evidence, then the
+bounded native viewport binding and Mac workflow under the shared-source plan.
+
 ## Current — task 0040: pipeline regression fixed and hosted-verified
 
 Signed-in GitLab inspection finds pipeline **3019186769**, one failed job:

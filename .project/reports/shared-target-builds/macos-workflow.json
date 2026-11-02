@@ -1,0 +1,159 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-11-02T22:44:52.955587+00:00",
+  "os": "Darwin",
+  "architecture": "arm64",
+  "commands": [
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/solve/PrePoMaxX.Solve",
+        "--registry",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/build-registry.json",
+        "run-static",
+        "osx-arm64-2.22-spooles-research",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/bin",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-mesh.inp",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-analysis.json",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-pinned-mac-workflow/run",
+        "120"
+      ],
+      "exitCode": 0,
+      "log": "solve"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-frd",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-pinned-mac-workflow/run/analysis.frd"
+      ],
+      "exitCode": 0,
+      "log": "frd"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-dat",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-pinned-mac-workflow/run/analysis.dat"
+      ],
+      "exitCode": 0,
+      "log": "dat"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/solve/PrePoMaxX.Solve",
+        "inspect-monitor",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-pinned-mac-workflow/run/analysis.sta",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-pinned-mac-workflow/run/analysis.cvg"
+      ],
+      "exitCode": 0,
+      "log": "monitor"
+    }
+  ],
+  "toolSha256": "adde4a589b5f1b5ae964a77818799d2a6a65abc36ad4677f3620e32dc7866b12",
+  "threads": 1,
+  "scope": "One C3D8 static cube; not broad numerical/backend/performance/release acceptance",
+  "buildReportSha256": "223f734cf0c7ee3aabdb3a5158a2437ee4a182bd0f17a9ae8e756762d2d30a76",
+  "registrySha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+  "hostBuildSha256": "a4e4f1132c62e9a244edb5766d68b75f06a6f40e0c3b259b967324272087668f",
+  "target": "osx-arm64",
+  "hostHashes": {
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/solve/PrePoMaxX.Solve": "99d7a4ffa3f16cf6ebc33c635808b487d6580774ba6db8376557938c9dc5384c",
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-mac-hosts/hosts/results/PrePoMaxX.InspectResults": "ce9192e166dbc5246b64bbc1fa5e993300b26333b457a8d62d60a034ace19125"
+  },
+  "inputs": {
+    "X/Analysis/StaticDeck/cube-mesh.inp": "b74dde2612c0a9752b7f3589e3b3657863ee616f0815597ceb827066ffab290a",
+    "X/Analysis/StaticDeck/cube-analysis.json": "9fa37616b701236570924eabc85f72e644cf9bbcc31eeda4f60b570e89a9a6c5"
+  },
+  "solverExecuted": true,
+  "transportCompleted": true,
+  "alteredDisplacementRejected": true,
+  "checks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    },
+    {
+      "name": "original FRD node IDs retained",
+      "passed": true
+    },
+    {
+      "name": "original FRD element ID retained",
+      "passed": true
+    },
+    {
+      "name": "original FRD displacement and stress fields decoded",
+      "passed": true
+    },
+    {
+      "name": "original DAT history contains records",
+      "passed": true
+    },
+    {
+      "name": "original monitor records completed increment",
+      "passed": true
+    }
+  ],
+  "frdFields": [
+    {
+      "name": "DISP",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "STRESS",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "TOSTRAIN",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "FORC",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    }
+  ],
+  "datHistories": 96,
+  "outputHashes": {
+    "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+    "analysis.frd": "1efd2168be3e3758f728cdeeda69d2c49ddd643a345812b560f95ff0a4d88972",
+    "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+    "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "_output_analysis.txt": "ae0731e0f20088c0cc8e0db1c65bd3c4c5109ef7a9b0be45858ae2c74dcb514e",
+    "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.inp": "24f66e4a43cbd809c4da95b39a5eadfe13e372e8a6b94233081cd6b9463e3bb8",
+    "run.json": "31e22c5d60cb70f37714a8e8a9090c2dd5ad156cdae64aaa7cf59cf1e63b597a",
+    "analysis.dat": "6be78a9cbc048142c927a1b1ebb78db936c02c6477864e99401b4e37ffc57c8a"
+  }
+}

@@ -1,5 +1,14 @@
 # Native CPU research build
 
+Task 0041 adds a shared target entry (`X/Build/build.py`) and a Linux GNU/ELF
+adapter alongside the extracted Mac adapter. The original command below still
+auto-selects a matching native host; `--target` can make it explicit. The same
+source/patch/recipe is used, with OpenBLAS int32 configuration checked at runtime.
+`verify-workflow.py --hosts-dir <shared-build-output>` validates and runs the
+staged self-contained hosts without an external dotnet command. See
+[shared commands](../../X/Build/README.md) and actual task 0041 results. Historical
+Mac-only wording below describes the initial task 0038 proof, not all new recipes.
+
 First implemented target: macOS ARM64, CalculiX **2.22**, serial SPOOLES 2.2,
 static ARPACK-ng 3.9.1 int32 and OpenBLAS LP64. This explicit research profile
 does not replace the default Windows reference registry or choose a production

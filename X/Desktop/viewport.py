@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import platform
 from pathlib import Path
 import subprocess
 import sys
@@ -272,7 +273,15 @@ def main():
             checks = []
             def check(name, value):
                 checks.append({"name": name, "passed": bool(value)})
-            check("native render window", window.vtk.GetRenderWindow().GetClassName() == "vtkCocoaRenderWindow")
+            target_path = (Path(sys._MEIPASS) / "targets.json" if getattr(sys, "frozen", False)
+                else ROOT / "X/Build/targets.json")
+            targets = json.loads(target_path.read_text())["targets"]
+            candidates = [(rid, data) for rid, data in targets.items() if data["os"] == platform.system()
+                and platform.machine().lower() in data["machines"]]
+            if len(candidates) != 1:
+                raise ValueError("No unique native rendering target")
+            target_id, target = candidates[0]
+            check("native render window", window.vtk.GetRenderWindow().GetClassName() in target["renderWindows"])
             check("original IDs retained", window.grid.GetNumberOfPoints() == 8 and window.grid.GetNumberOfCells() == 1)
             if window.fields.count() > 1:
                 window.fields.setCurrentIndex(1)
@@ -304,7 +313,7 @@ def main():
             tool_sha = (json.loads((Path(sys._MEIPASS) / "source-identity.json").read_text())["viewportSha256"]
                 if getattr(sys, "frozen", False) else hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
             result.update(success=all(c["passed"] for c in checks), checks=checks,
-                selection=selection, vtkVersion=vtkVersion.GetVTKVersion(), qtVersion=QtCore.QT_VERSION_STR,
+                target=target_id, selection=selection, vtkVersion=vtkVersion.GetVTKVersion(), qtVersion=QtCore.qVersion(),
                 sourceSha256=window.scene["SourceSha256"], renderer=window.vtk.GetRenderWindow().GetClassName(),
                 toolSha256=tool_sha,
                 transport="Native VTK offscreen GPU frame copied into Qt; not final widget/performance acceptance",

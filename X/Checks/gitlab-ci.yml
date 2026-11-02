@@ -21,6 +21,7 @@
         - global.json
         - NuGet.Config
         - ThirdParty/Sources/**/*
+        - ThirdParty/Build/**/*.py
         - .project/reports/windows-reference/**/*
         - .gitlab-ci.yml
     - when: never

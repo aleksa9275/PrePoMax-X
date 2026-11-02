@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0041 continuation: maintainer requests next steps after verified CI repair.
+X/Build supplies one target catalog/entry for osx-arm64/win-x64/linux-x64/linux-arm64,
+common self-contained C# hosts, native Mac/Linux solver helpers and the preserved
+Mac package wrapper. Read X/Build/README.md and .project/reports/shared-target-builds.md
+for actual results/publication. Cross-publishing is not native execution; planned
+Debian/Fedora/Arch formats and unset platform floors are not support acceptance.
+Linux x64 CI is extended with the common native cube workflow; never claim its
+success until the exact hosted run is checked. No frontend/default/backend/format/
+precision choice or release-gate closure. Existing D051 publication scope remains.
+
 2026-11-02 task 0040: user supplied signed-in GitLab access. Failed 384edea2
 pipeline 3019186769 has one failure, shared-core-linux-x64 job 17675531644:
 actual CLI roundtrip lost block name CUBE after B001's fix. Other four automatic

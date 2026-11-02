@@ -1,5 +1,10 @@
 # Native viewport candidate
 
+The Mac package script is now a compatibility wrapper around the shared
+[target build entry](../Build/README.md). All four RIDs are explicit there;
+desktop render expectations come from the same target catalog included in the
+app. Windows/Linux managed cross-builds do not establish native desktop support.
+
 Qt/Python owns only this experimental window and VTK transport. Original C#
 readers decode INP and FRD in separate processes, retaining their actual assembly
 ownership. There is no second engineering parser/model or selected persistence
