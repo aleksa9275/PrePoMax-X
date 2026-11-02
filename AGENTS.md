@@ -7,7 +7,12 @@ slice before the remaining viewport binding attempt; B002 is still open. Read
 .project/tasks/0042-local-macos-solver-dmg.md and .project/reports/local-macos-dmg.md
 for actual artifact/verification/publication. Local preview signing is ad-hoc;
 no Gatekeeper/quarantine change or clean-Mac/public-release claim. Apple container
-is Linux-only. Existing D051/D053 research publication scope/gates remain.
+is Linux-only. Implementation b6ec65d7 is remote-verified; exact-commit pipeline 3020068825 passes
+all six automatic Linux x64 jobs (compatibility manual). Final local DMG identifies
+clean b6ec65d7; actual mounted/copied/ejected app solve/render/signature/identity
+checks pass, as do packaged-host cancel/failure/tamper checks. Read the report for
+artifact SHA/path and the full uninstall/reset guide. Binary stays local/ignored.
+Existing D051/D053 research publication scope/gates remain.
 
 Task 0041 continuation: maintainer requests next steps after verified CI repair.
 X/Build supplies one target catalog/entry for osx-arm64/win-x64/linux-x64/linux-arm64,

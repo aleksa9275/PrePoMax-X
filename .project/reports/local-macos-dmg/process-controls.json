@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "observedCommand": "DESKTOP_TEST_SOLVE_HOST=<copied-app>/Contents/Frameworks/hosts/solve/PrePoMaxX.Solve /private/tmp/prepomaxx-desktop-runtime/bin/python -m unittest discover -s X/Desktop -p test_jobs.py -v",
+  "qtProcessChecks": 3,
+  "cases": [
+    "cancel reaches original host and reaps actual fixture solver",
+    "malformed analysis retains original diagnostics",
+    "tampered native binary rejected before execution"
+  ],
+  "buildBoundaryControls": 8,
+  "sourceHashes": {
+    "X/Desktop/jobs.py": "6de44c71b92b288fb2274c986e61a63aafa9f37da423be7bce4b29c9a92b85e2",
+    "X/Desktop/test_jobs.py": "b047661f6fea69cacf369a09413faca5039b7e03c5c9d931e12ccea42d75fe57",
+    "X/Build/test_build.py": "1a531abbcb972ee0c186b3f488948188768e1e654959497018e73fcb471e489c",
+    "X/Execution/Solve/Program.cs": "79bc4b9d272f3cd5b275671ab7bedb39f3759ad132e6e367e03899f65416e400",
+    "X/Execution/cli_control.py": "a6b82a3883a2a391f46474c65a11d7fd31e9a2fa3c3424ac2ccb0245ee67427c"
+  },
+  "scope": "Real Qt/C# fixture process checks; not human mouse interaction or native Windows acceptance"
+}

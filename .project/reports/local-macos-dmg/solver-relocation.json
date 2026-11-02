@@ -1,0 +1,27 @@
+{
+  "originalBuildReportSha256": "223f734cf0c7ee3aabdb3a5158a2437ee4a182bd0f17a9ae8e756762d2d30a76",
+  "originalRegistrySha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+  "originalFiles": {
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/bin/ccx": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b",
+    "/opt/homebrew/opt/openblas/lib/libopenblas.0.dylib": "aeb5f40d3b5cc0fca84e05e90b8e7da6921cea2c33ca701062b0ccd7b4caf117",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgfortran.5.dylib": "09c11f298a73589b0fa79d93bad7fda25c29055999b5c331507e02f456bf1775",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgomp.1.dylib": "954328f63a49f0f294763c7b370c91893d7d99794b1665ada67b03b21283cc6b",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+    "/opt/homebrew/opt/libomp/lib/libomp.dylib": "432b8d15fc1b2431f937bba89796a32daaa2dd464eda12a744d9cb2818842477"
+  },
+  "relocatedFiles": {
+    "ccx": "d776387858acb7c13704d56fbc2f62a86f5f5b2460b4e720e86e65522f78ead5",
+    "libgcc_s.1.1.dylib": "fd4d92a79bfc4d7da66eaef5ef618ad9dc01f103dd569ca31f92cb87aad856eb",
+    "libgfortran.5.dylib": "c738e2e8c022e6e6c6f32f9b46cc0aeeb39d51f25e99e61b233caa8445425a3f",
+    "libgomp.1.dylib": "fd9e0816a5d1c61a85054cd04f0b35c2ff66217eef9a0bd6e03796532877a8b1",
+    "libomp.dylib": "7fd28cb0ea6020f4d7c90339a046296c6a3f9955bdafb6ec4f8dc1d93de787eb",
+    "libopenblas.0.dylib": "d1f0316617152a4557ce23a19bc47c7b833c22fd15fa7a61830edd8d04f04a6a",
+    "libquadmath.0.dylib": "239bfe66a63393aa0876bc6f02459dde3b866e25181f80daea2e21558c6d1d9d"
+  },
+  "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+  "adapterSha256": "cda9cc1211af86f4746d32ab2a52ee9a1bc11adb1353d82c56456b0c3d589c93",
+  "scope": "Relocated ad-hoc local static-solid preview; original backend unchanged; not release acceptance"
+}

@@ -3,14 +3,23 @@
 ## Current — task 0042: local Mac solver-controls DMG
 
 Maintainer requests an unnotarized local DMG and explicitly wants desktop solver
-controls first. Common QProcess controls now invoke the original C# static-deck/
-job/results services with start/cancel/status/output and automatic FRD loading.
-The explicit native CPU profile and runtime closure are relocated into the app.
-Preliminary packaged cube/visible frame passes; final exact-commit DMG/copy test
-and hosted publication are pending. [Scope/progress](reports/local-macos-dmg.md).
-[Full uninstall/reset guide](../X/Desktop/UNINSTALL-macos.md) is included. No
-Developer-ID/notarization/clean-host or release acceptance; both known failures/
-tetra gate and B002 remain. Apple container is Linux-only, not a Mac GUI test.
+controls first. Common QProcess controls invoke the original C# static-deck/job/
+results services with start/cancel/status/output and automatic FRD loading.
+The explicit native CPU profile/runtime closure is relocated into the app.
+Implementation **b6ec65d7** is remote-verified; exact-commit pipeline **3020068825
+passes all six automatic Linux x64 jobs** (compatibility manual). The local final
+DMG identifies that clean commit and passes mounted/copy/eject/signature/hash
+checks. Copied-app native cube: eleven GUI checks, seven original analytical
+checks/control; actual packaged-host cancellation/failure/tamper checks pass.
+[Artifact/evidence/scope](reports/local-macos-dmg.md).
+
+The **248.2 MiB local DMG** is in
+`X/Build/artifacts/task0042-macos-dmg/dist/PrePoMax-X-Preview-arm64.dmg`.
+[Full uninstall/reset guide](../X/Desktop/UNINSTALL-macos.md) is included in it.
+Next: maintainer local install/cleanup test, then the bounded viewport binding
+and supported workflow expansion. No Developer-ID/notarization/clean-host or
+full product/release acceptance; both known failures/tetra gate and B002 remain.
+Apple container is Linux-only, not a Mac GUI test environment.
 
 ## Current — task 0041: shared target builds and native Linux CPU workflow
 

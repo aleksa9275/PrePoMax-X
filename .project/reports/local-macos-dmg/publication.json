@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "b6ec65d722c8e0d64b8a489cdc4df8afa57973da",
+  "dirty": false,
+  "dmg": {
+    "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0042-macos-dmg/dist/PrePoMax-X-Preview-arm64.dmg",
+    "sha256": "9ae8e97c283c97db7aae8c0044385a9fa0d08c15f7c5207910eafe5c1a50c606",
+    "bytes": 260297246,
+    "signing": "App is ad-hoc signed; DMG is not Developer-ID signed or notarized",
+    "scope": "Internal local preview; clean macOS and downloaded Gatekeeper acceptance pending"
+  },
+  "installGuideSha256": "b8e09cbb9e34e98ecd2cb6fe4efb78e00af1387c30b203d4de07c0b78dc71de8",
+  "uninstallGuideSha256": "e992f0c7f24b56864804f41a447282729976f45d6c239e096a0e19ddd5630bcf",
+  "pipeline": {
+    "id": 3020068825,
+    "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3020068825",
+    "status": "passed: all six automatic native Linux x64 jobs; compatibility manual",
+    "jobs": {
+      "nativeCpu": 17681997275,
+      "execution": 17681997279,
+      "core": 17681997277,
+      "analysis": 17681997278,
+      "results": 17681997280,
+      "research": 17681997276,
+      "compatibility": 17681997274
+    },
+    "hostedArtifactArchiveDownloaded": false
+  },
+  "notes": "Source remote verified; local DMG retained, not uploaded or committed. No Developer-ID/notarization or clean-OS acceptance.",
+  "verification": "verification.json"
+}

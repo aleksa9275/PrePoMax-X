@@ -31,3 +31,12 @@ acceptance checkpoint. No new container installation is needed for this incremen
 Scope remains an internal static-solid workflow preview; original full model/
 PMX/CAD/meshing/history/other-backend parity is pending. Preserve both known
 correctness failures/tetra gate, shared source/four targets and release gates.
+
+Outcome: complete within scope. Implementation b6ec65d7 is remote-verified;
+pipeline 3020068825 passes six automatic Linux x64 jobs, compatibility manual.
+Final local DMG identifies clean b6ec65d7. Actual mounted/copied/ejected app passes
+signature/file/link identity, native solve/result rendering and unchanged original
+analytical checks/control. Packaged-host cancellation/failure/tamper checks pass.
+The image is 260,297,246 bytes; exact SHA/paths/evidence are in the report. Install
+and full uninstall/reset instructions are included. Binary stays local/ignored.
+No notarization, clean-OS, full product or new target desktop acceptance follows.

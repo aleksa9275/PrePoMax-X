@@ -39,12 +39,38 @@ use Qt's per-user data location unless an explicit test root is supplied.
 
 ## Verification and publication
 
-Preliminary packaged native cube passes eleven desktop/visible-frame/ID/field
-checks without external Python/dotnet on PATH. Three Qt job-boundary checks and
-eight build-boundary controls pass. Current Mac execution checks and the new
-stdin EOF/cancellation controls pass; twelve original cube checks/control also
-pass with the new host. Final exact-commit DMG mounted/copied-app evidence and
-publication are pending and will be recorded here before task closeout.
+Implementation **b6ec65d722c8e0d64b8a489cdc4df8afa57973da** is committed and
+remote-verified on origin/research/native-feasibility; master remains f6273e39.
+The final package identifies that exact clean source commit. Native Mac verification
+passes: DMG checksum/integrity; read-only mount; mounted signature; copied app in
+a path with spaces; image eject; copied signature; **1,606 regular-file hashes and
+1,464 symlink targets** match the manifest without escaping the app bundle.
+
+The copied app runs the real bundled static cube with PATH=/usr/bin:/bin and an
+invalid external DOTNET_ROOT. **Eleven desktop/visible-frame/ID/field checks and
+seven original analytical checks pass**, as does altered-displacement rejection.
+The screenshot was visually reviewed. Real Qt cancellation/reaping, preflight
+failure and tampered-solver checks also pass using the host inside the copied app.
+Eight build-boundary controls and the existing 49 execution checks/13 rejection
+controls pass; new EOF/cancel pipe controls pass. A diagnostic real solve records
+the loaded native libraries inside the copied app/system, with no Homebrew path.
+The actual packaged storage paths match the uninstall guide.
+
+Exact-commit [pipeline 3020068825](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3020068825)
+passes all **six automatic native Linux x64 jobs**, including the new CLI pipe
+controls and native build/cube workflow. Historical compatibility remains manual.
+This checkpoint's hosted artifact archive was not downloaded; do not claim an
+independent hosted archive comparison. The local final DMG/copy evidence is
+retained under [evidence index](local-macos-dmg/evidence-index.json).
+
+Local deliverable: `X/Build/artifacts/task0042-macos-dmg/dist/PrePoMax-X-Preview-arm64.dmg`,
+**260,297,246 bytes (248.2 MiB)**. SHA256:
+`9ae8e97c283c97db7aae8c0044385a9fa0d08c15f7c5207910eafe5c1a50c606`.
+An adjacent `.dmg.sha256` file provides the same checksum. The binary image stays
+local/ignored; source, recipes, evidence and instructions publish normally.
+It is ad-hoc signed at app level, not Developer-ID signed or notarized. A local
+copied-app test is not a downloaded Gatekeeper or clean-macOS installation test.
+
 
 No clean OS, downloaded Gatekeeper, older macOS, Windows/Linux desktop, final
 native binding/performance or public redistribution/source-closure claim follows.

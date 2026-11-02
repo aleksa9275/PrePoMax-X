@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-03 local preview: task 0042 delivers a local ad-hoc-signed, unnotarized
+Mac DMG with desktop solver controls, relocated native CPU runtimes and full
+uninstall/reset instructions. Exact-source copied-app solve/render/analytical
+checks pass; b6ec65d7 pipeline 3020068825 passes six automatic Linux x64 jobs.
+This internal static-solid preview is not full PMX/CAD/meshing or clean-OS/release
+acceptance. [Artifact and actual evidence](reports/local-macos-dmg.md).
+
 2026-11-03 shared-build checkpoint: task 0041 implements the common four-RID entry,
 Mac/Linux native solver adapters and Mac package wrapper. Implementation a893005c
 passes exact-commit Linux x64 CI; downloaded cube/native-source evidence compares
