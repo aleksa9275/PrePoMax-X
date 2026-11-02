@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-02 delivery clarification: macOS ships first from shared source with
+Windows x64 and Linux x64/ARM64 built into the architecture. Debian/Fedora/Arch
+are packaging/test environments, not separate application implementations.
+[Revised sequence](proposals/accelerated-native-delivery.md), task 0039, keeps
+Linux engineering feedback early and broad desktop/install testing at checkpoints.
+The reported failed GitLab job requires its actual log before diagnosis.
+
 2026-11-02 engineering checkpoint: [native CPU workflow](reports/native-cpu-workflow.md)
 completes the bounded original deck/solve/results path on Mac ARM64, and a
 [packaged native viewport candidate](reports/native-desktop-preview.md) displays

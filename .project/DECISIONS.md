@@ -1,5 +1,16 @@
 # Decision register
 
+D052 — Accepted delivery-order/shared-source clarification, 2026-11-02:
+maintainer requests maximum speed toward native macOS while designing for Windows
+and Debian/Fedora/Arch Linux now, with later staged testing and ideally the same
+source compiled for different targets. Keep one application/engineering source
+tree and target-specific adapters/build/package data; retain all four OS/CPU
+targets including Linux ARM64. [Task 0039 plan](proposals/accelerated-native-delivery.md)
+proposes the sequence and test cadence; it does not select a frontend/format/
+production backend or claim distro/version/runtime acceptance. The reported CI
+failure needs exact job evidence; no assumed diagnosis or tolerance/test weakening.
+Task 0039 changes documents only; existing D051 checkpoint publication scope stays.
+
 D051 — Accepted implementation continuation and checkpoint publication,
 2026-11-02: maintainer explicitly requests proceeding with the next desktop-host
 and native solver steps, documenting progress and committing/pushing useful

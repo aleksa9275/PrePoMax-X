@@ -1,137 +1,177 @@
-# Accelerated native delivery plan
+# macOS-first delivery from shared source
 
-2 November 2026. [Task 0035](../tasks/0035-accelerated-delivery-plan.md).
-Maintainer direction: installable native software first, CalculiX primary,
-Code_Aster optional, less repeated testing with reliable cross-platform diagnosis.
-Milestones below are planned work, not completed software or selected frameworks.
+Revised 2 November 2026 under [task 0039](../tasks/0039-shared-source-delivery-plan.md).
+This replaces the sequence in task 0035 using the actual 0037/0038 results.
+Maintainer direction: fastest useful native Mac product, with Windows and Linux
+(Debian, Fedora, Arch) designed in now and tested progressively. One source tree,
+one engineering behavior, target-specific builds and packages. This is the
+implementation plan; proposed commands/targets below are not implemented claims.
 
-## Focus
+## Starting point and first priority
 
-Keep original engineering behavior, shared services and native VTK. Reuse useful
-PrePoMac platform/packaging work selectively. Complete a desktop workflow rather
-than accumulating inspection tools. Existing SPOOLES/PaStiX are the open-backend
-route; PARDISO need not block initial delivery. Native correctness/capacity still
-needs proving. Preserve the 2.22 reference; any proposed 2.23 move is explicit.
+Published implementation: 384edea2; closing records: d7498f8e. The Mac ARM64 cube
+runs through original definitions/deck, native CalculiX 2.22 and original FRD/DAT
+readers. A packaged candidate displays its results. Current-source engineering
+checks exist on Mac and GitLab Linux x64; the latest hosted result is unresolved.
+The maintainer reports a failed pipeline. Its URL/job/log is requested; root cause
+is not established. Earlier “hosted unverified” is not a passing result.
 
-Defer Code_Aster, GPU integration, distributed/remote workers, broad solver
-benchmarks and new engineering features. A Linux solver VM stays an option for
-a demonstrated build/performance need. Windows x64, Mac ARM64 and Linux x64/ARM64
-remain the desktop targets; final functionality/parity requirements stay intact.
+The first engineering action is to obtain that exact job/commit, classify the
+failure (configuration, runner/setup, build, engineering assertion or packaging),
+repair it and rerun the affected hosted job. Retain the failing log and one useful
+regression if it exposes behavior. Do not disable Linux jobs, hide assertions or
+weaken tolerances to regain green. Planning can proceed before the log arrives;
+a new cross-platform checkpoint cannot be called verified until it is resolved.
+Unavailable runners or CI access do not freeze independent Mac work; a shared
+engineering failure takes priority over adding behavior on top of that defect.
 
-## Change the order of work
+## Shared source is the development rule
 
-| Milestone | Deliverable | Evidence sufficient to advance |
+Keep original Cae*/vtkControl paths, types, assembly ownership, equations, units,
+numbering and writer/reader semantics. The modern desktop uses the same shared
+engineering services on every target. Preserve the legacy Windows/net48 reference
+separately while its migration remains incomplete; it is not proof that the new
+native desktop already runs on Windows.
+
+- One modern desktop source/UI workflow. Platform adapters handle window/render
+  embedding, menus/dialog integration, process launch, paths, runtime loading and
+  installation. OS checks belong at those boundaries, not in FEM calculations.
+- C# projects publish for osx-arm64, win-x64, linux-x64 and linux-arm64. The same
+  source commit supplies all targets. No copied Mac/Windows/Linux application
+  trees, separate feature branches per OS, or independently maintained parsers.
+- Native C/C++/Fortran dependencies use pinned source plus explicit portability
+  overlays and host recipes. Build matching binaries per OS/architecture; record
+  toolchain, integer ABI, CPU baseline, runtime closure and actual solver dispatch.
+- Dependency versions/patches are shared where available. A target-specific asset
+  or justified version difference is explicit in the manifest and checked at its
+  boundary. Never substitute a solver, precision or renderer silently.
+- Keep the existing bounded C# process boundary while choosing the production
+  viewport binding. The Qt/Python candidate packages common scripts and native
+  libraries; it is not literally an all-C# compilation. A C# host would reduce
+  language/runtime complexity only if its real native VTK binding is practical.
+
+“Same source, different target” is achievable as a build contract. It does not
+mean one executable for all OSes, or that all native packages can be produced on
+a Mac. .NET uses portable RIDs; the current Python packager requires the target
+OS. Separate native workers are expected, not separate implementations.
+
+## Build and package contract — add next, keep small
+
+Generalize the working Mac recipes into one target entry point with target data
+and small platform helpers. Preserve current commands as wrappers during migration.
+Proposed interface: `build --target <rid>` followed by `package --format <format>`;
+choose actual CLI syntax during implementation, not a new build framework now.
+
+One target manifest records RID, source/dependency pins, minimum supported OS or
+Linux libc baseline, compiler/ABI settings, native asset locations and package
+formats. Shared orchestration validates assets, builds, stages one payload,
+records hashes and runs the common smoke command. Target helpers configure the
+compiler, inspect Mach-O/PE/ELF, relocate runtimes and sign/package that payload.
+Keep Homebrew paths and otool in the Mac helper; do not turn them into core APIs.
+
+The desktop test selects expected native rendering capabilities from target data;
+its current hardcoded vtkCocoaRenderWindow check is Mac proof only. Keep the
+nonsequential-ID and field-value expectations identical on every host.
+
+| Target | Native build/launch environment | Packaging layer, introduced progressively |
 |---|---|---|
-| A. Faster development loop | Fast/current-source and compatibility profiles, cached builds, compact diagnostic manifest | Relevant checks run without rebuilding unrelated suites; a failed fixture can be replayed |
-| B. Installable desktop preview | Native VTK viewport, file opening, model tree, mesh/retained-result display, selection; self-contained package early | Install/launch on a clean Mac without SDK/source; open a fixture and pick its known ID; prepare other target package recipes |
-| C. Usable analysis alpha | Original definitions → deck → native CalculiX → FRD/DAT → contours/history → supported save/reopen | A solid and a shell complete that workflow, with fixed displacement/reaction/ID expectations |
-| D. Cross-platform alpha | Same workflow and package layout on Windows and both Linux architectures | Execute the common corpus on native target workers; separately check actual UI and installation |
-| E. Full product | Expand CAD/meshing, analysis/results, legacy PMX/history and remaining workflows; finish signing/installers/Homebrew | Required parity corpus plus clean-machine install/upgrade/uninstall on all four targets |
+| macOS ARM64 | Existing Apple Silicon Mac | Self-contained .app, then signed/notarized DMG and Homebrew cask |
+| Windows x64 | Native Windows worker when available | Staged portable EXE folder first, then EXE/MSI installer |
+| Linux x64 | Existing native GitLab x64 worker; controlled Linux build image | Common payload/archive, then Debian .deb, Fedora .rpm, Arch PKGBUILD/package |
+| Linux ARM64 | ARM64 Linux VM/container on the Mac or an ARM worker | Same source/recipe structure and required Linux ARM64 packages |
 
-B is an internal desktop preview; C is a scoped engineering alpha. Neither is
-labelled completed parity. These early artifacts expose real integration and
-installation problems sooner. Public distribution keeps normal maintainer
-authorization. Native solver work starts alongside B in the work queue: the
-viewport need not wait for PaStiX, and solver execution need not wait for every
-dialog. Reuse original gateways, commands, writers/readers and runners; keep one
-application/engineering behavior layer.
+For each Linux architecture, aim to reuse one payload across the supported
+Debian/Fedora/Arch baselines. Each distro has package metadata/dependency names,
+not its own application implementation. Pin the oldest supported glibc/runtime
+baseline before shipping; newer-host builds cannot establish older-host support.
+Check Qt/VTK plugins, libstdc++/Fortran/BLAS/OpenMP dependencies and graphics/session
+requirements. Do not bundle the host libc or graphics driver as a shortcut.
+If a distro needs a rebuild, rebuild the same sources with an explicit toolchain
+profile and explain the difference; keep the common contract and fixture corpus.
 
-Bound the three unresolved decisions:
+Arch is rolling and officially x86-64. Any Arch ARM package/test refers explicitly
+to Arch Linux ARM; do not silently equate it to official Arch Linux. Linux ARM64
+remains required independently. Select exact Debian/Fedora versions and pinned
+Arch test images during target/dependency implementation; this plan asserts no
+untested distro/version support or newly provisioned runners.
 
-- **Frontend:** one short implementation comparison using the existing native
-  VTK fixture. Compare the C# host/binding route with Qt/Python VTK, already partly
-  exercised. Demonstrate launch, input/resize, exact picking, scalar display and
-  feasible packaging; end with a concrete recommendation. Select the production
-  route explicitly before expanding dialogs. Defer exhaustive lifecycle/DPI
-  stress to integration. Test a PrePoMac compatibility hybrid only for a concrete
-  shortcut that preserves the chosen VTK route; avoid another framework survey.
-- **Solver:** build a pinned native CPU SPOOLES profile at a known reference
-  thread count and connect a real solve. Recover PaStiX as the performance route
-  without blocking the first UI installer. Record the actual native recipe; exact
-  reproduction of unavailable proprietary Windows backend internals is not a
-  first-delivery prerequisite. Do not silently change precision or backend choices.
-- **Persistence:** include a small original-model save/reopen proof in C, not
-  after the whole UI. Preserve IDs, units and results. Default format, legacy
-  import and clone behavior remain explicit decisions; PrePoMac does not authorize
-  restoring unsafe serialization. Expand historical compatibility during E.
+## Delivery sequence
 
-Timebox a failed feasibility attempt to one focused implementation block; retain
-the blocker, try the other established route or present a concrete choice. Avoid
-open-ended environment retries/source archaeology. Calendar estimates should
-follow measured host/native-build proofs. Track installable artifacts and user
-workflows instead of increasing test counts.
-
-## Lighter checking cadence
-
-Current Core/Analysis/Execution/Results CI runs three source versions each: twelve
-verifier invocations, plus research and packaging. The projects also rebuild
-overlapping source closures. Preserve that coverage, but move repeated historical
-replays outside the ordinary development loop. We have not measured a total
-speed-up percentage. Missing host/solver/persistence integration remains a larger
-delivery risk than test runtime alone.
-
-| Trigger | Run now | Defer |
+| Increment | Main deliverable | Minimum evidence to advance |
 |---|---|---|
-| Ordinary change | Changed-area build and relevant existing checks on the active native host | Unchanged suites, other source versions and full platform matrix |
-| New defect/behavior | One useful regression for the real failure/contract; affected downstream checks | Tests that simply mirror implementation |
-| Shared math/units/deck/results, interop or persistence | Current-source engineering/consumer regressions appropriate to the risk | Unrelated historical/UI/native-tool suites |
-| Integration checkpoint, about daily during active coding | Build and small workflow smoke on available target workers once per candidate | Historical replays unless affected |
-| Upstream/dependency/extraction change | Relevant source/legacy ownership guards, dependency checks and affected historical replays | Unaffected pins/components |
-| Alpha/release candidate | Exact candidate artifact, common workflows, interactive/install checks on every claimed target; full declared release corpus | Nothing required for that candidate's stated scope |
+| 1. Restore feedback and remove Mac assumptions | Diagnose failed CI; target manifest/shared build entry; Mac helper and Linux x64 compute build from the same commit | Affected hosted job passes; Mac artifact still launches; unsupported targets report pending, not success |
+| 2. Useful native Mac preview | Resolve one bounded native-VTK host/binding attempt; model tree, open/select, job controls, contours/history and a supported save/reopen slice | Install/launch without SDK/Homebrew build paths on a clean Mac; common solid workflow; IDs/units/results preserved |
+| 3. Mac engineering alpha plus portability checkpoint | Solid and shell workflows; self-contained solver/runtime layout; signed preview package | Analytical outcomes and failure/cancel behavior; Linux x64 same-source cube; Windows cross-target managed compile/package preparation when possible |
+| 4. Other-target alpha | Same UI/engineering/build entry on native Windows and Linux ARM64; actual Linux desktop/package checks | Native launch/picking/solve/save/reopen on available targets; Debian/Fedora/Arch install/uninstall checks, with missing environments explicit |
+| 5. Full product | Expand CAD/meshing, full original analysis/results/PMX history, performance and packaging | Full declared parity/release corpus and signed install/upgrade/uninstall on every required target |
 
-Aim for a warm-cache fast loop under five minutes; measure it first. Build once
-and reuse outputs when source/dependency/configuration keys match. Use one reviewed
-active baseline for daily work; retain historical pins/evidence. Do not follow
-moving upstream HEAD. Resolve the current upstream divergence as its own bounded
-integration task.
+Mac UI work is the critical path. Linux x64 compute remains a small continuous
+signal while Mac work proceeds. Bring the other managed target compilations
+forward as soon as the shared entry point can do them; do not wait for a completed
+Mac application to discover missing platform APIs. Native Windows/ARM64 GUI and
+full distro matrices are scheduled at checkpoints, not run after every edit.
 
-Documentation changes need content/link checks; styling needs visual inspection.
-A parser fix needs its valid/malformed fixtures and relevant consumers. Source
-extraction/legacy guards run when those boundaries change. Full third-party
-inventories rerun when their inputs change. Keep full suites callable for periodic
-runs and investigations; a future periodic CI job is not configured by this plan.
+Keep the existing viewer as a temporary integration harness if direct embedding
+B002 remains unresolved. It must not force duplicated UI/engineering services or
+be labelled the final performant renderer. Timebox the next binding attempt to
+one implementation increment with a concrete build/pick/package result. If it
+fails, record the exact prerequisite and present the concrete tradeoff before
+expanding production dialogs; do not launch another open-ended framework survey.
 
-Do not weaken numerical tolerances, delete useful tests or hide known failures.
-Retain the two existing failure reproductions and tetra measurement gate.
-Unrelated implementation can progress with those explicit known results.
+Use native CalculiX 2.22/SPOOLES for the initial open CPU workflow where built and
+validated. Keep the existing Windows reference identity distinct. PaStiX remains
+the subsequent performance route; Code_Aster, GPU, remote workers, broad benchmarks
+and new engineering features stay deferred. No backend/default/precision or
+production persistence/frontend decision is silently made by this plan.
 
-## Cross-platform coverage and bug tracing
+## Checks that protect portability without dominating development
 
-Use Mac ARM64 for the local loop, existing GitLab native Linux x64 after authorized
-publication, the existing ARM64 VM/container or another ARM worker for Linux ARM64,
-and native Windows when its checkout/runner is available. No new runner or
-successful execution is assumed. An unavailable platform remains pending; it does
-not block unrelated local development, but cannot be called verified/released.
+| Trigger | Run | Defer |
+|---|---|---|
+| Ordinary Mac edit | Affected current-source checks; relevant Mac render/workflow smoke | Historical pins, all installers, all desktop targets |
+| Shared engineering/build/native boundary change | Affected current checks on Mac and native Linux x64; relevant other-RID compile/source guards | Unrelated suites; full distro GUI matrix |
+| Integration checkpoint | Build available target payloads from one commit; small common corpus; schedule native Windows/ARM64 checks on available workers | Full release corpus unless candidate scope requires it |
+| Linux payload/dependency/package change | Debian/Fedora/Arch package/load smoke on declared pinned images | Unrelated engineering replays per distro |
+| Scoped alpha/release candidate | Actual target artifact, native UI, install/upgrade/uninstall and its required workflow corpus | Nothing required for the claimed candidate scope |
 
-Use a small common corpus: analytical solid, thin shell, nonsequential-ID mesh/
-result selection, malformed/unsupported input, cancellation/nonzero exit and
-supported save/reopen. Add fixtures for actual bugs or new capabilities. Share
-fixture IDs, units, tool profiles and expected outcomes. Headless compute belongs
-in routine CI; actual picking, graphics, DPI and install behavior need native UI
-sessions at milestone/candidate checkpoints. Containers alone do not prove GUI
-or other CPU-architecture behavior.
+Build once per source/tool/dependency/target key and test that payload; package
+wrappers reuse it. Keep current suites and package caching, not a new test system.
+Start with the four existing Linux engineering verifiers until the failed pipeline
+is diagnosed; then split cheap compute feedback from slower packaging. No new
+matrix or runner provisioning is implemented by this planning task.
 
-Each run retains one manifest: source commit/dirty-tree identity, fixture version,
-OS/architecture/runtime, tool build IDs, arguments, thread settings, units,
-exit/status and output locations. Keep necessary failed-run inputs/logs. Reuse
-pinned dependency manifests. A dirty-tree hash alone cannot reproduce source:
-retain the relevant patch/new files locally, excluding private files/secrets.
+Cross-publishing managed code checks dependency/target compatibility, not native
+execution. Containers can check Linux loading, solver behavior and package
+metadata/lifecycle; desktop graphics/input/session behavior requires real native
+sessions or appropriate VMs. VM passes are labelled by actual CPU architecture;
+emulation and a Mac host alone do not prove native Linux x64 behavior.
 
-Each new bug gets a stable task/issue reference, minimal fixture, expected/actual
-result, first known bad build and affected platforms. Add one regression at its
-owning layer; verify the fix on the failing platform and a comparison platform
-when available. Export user model data only through an explicit user action.
+Common corpus: analytical solid, thin shell, nonsequential FEM IDs/results,
+malformed input, failure/cancellation and supported save/reopen. Add one owning-
+layer regression for a real defect. Retain both existing correctness failures,
+the tetra measurement gate and unchanged tolerances; do not make every unrelated
+change wait for their resolution. Full historical/Windows/net48/RC2/CAD/full-graph/
+source/license/four-target/release requirements remain for their stated scope.
 
-Keep task outcomes short: **changed / checked / open / next**. One current status
-entry links generated evidence. Detailed reports belong to milestones/difficult
-bugs. Keep the charter stable and record actual decisions without copying every
-test transcript. Preserve historical evidence.
+## Debugging and next actions
 
-## Immediate next task
+Every artifact/run identifies commit plus dirty-source snapshot if applicable,
+RID, distro/image or OS version, runtime/ABI/dependency hashes, fixture ID/units,
+solver/backend/thread settings, commands, status and retained logs/output hashes.
+Use a single stable bug ID with expected/actual behavior and affected hosts.
+Private models are included only with explicit user export authorization.
 
-Implement A with existing test projects/verifiers: fast/current-source versus
-compatibility profiles, shared caching and a compact manifest. Do not invent
-another test framework. Record timings, then start B's bounded VTK host/package
-proof and the native SPOOLES build, converging on C. This planning task changes
-neither current CI YAML nor application code and authorizes no public write or
-implicit frontend/serializer/numerical-policy choice.
+Next engineering order: **obtain/fix the failed hosted job → generalize target/
+build staging without regressing the Mac proof → finish the bounded viewport
+choice and Mac workflow → exercise the same payload/source on other targets.**
+A Windows/Linux-only failure is repaired in its adapter/recipe or shared owner,
+not worked around by forking the feature. Record coverage as passed/failed/not-run
+per target and distinguish build, compute, GUI and installer results.
+
+## Primary references for build constraints
+
+- [.NET RID catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog): use portable OS/architecture RIDs rather than distro-specific application targets.
+- [.NET publishing](https://learn.microsoft.com/en-us/dotnet/core/deploying/): self-contained publication includes the target runtime; it is distinct from target execution.
+- [PyInstaller operation](https://pyinstaller.org/en/stable/operating-mode.html): bundles are built for the active target OS/interpreter. Existing project pins remain 6.16.0, not the moving documentation version.
+- [Qt Linux deployment](https://doc.qt.io/qt-6/linux-deployment.html): runtime/plugin deployment and native-library loading need explicit packaging. This is not a Qt version upgrade.
+- [Arch Linux](https://archlinux.org/about/) and [Arch Linux ARM](https://archlinuxarm.org/about): distinguish x86-64 Arch from the AArch64 port.

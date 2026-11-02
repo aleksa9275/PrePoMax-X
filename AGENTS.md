@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-02 latest planning direction, task 0039: maximize native Mac delivery
+speed from one shared source tree with Windows x64 and Linux x64/ARM64 awareness
+now. Debian/Fedora/Arch are package/test layers, not application forks; Arch Linux
+ARM is an explicit environment. Read .project/proposals/accelerated-native-delivery.md
+for the revised target/adapters/build/test sequence. Maintainer reports failed
+GitLab CI; exact job/commit/log was requested and is not yet diagnosed. Do not
+claim a hosted pass or guess a fix, disable Linux checks or weaken tolerances.
+This task is planning only; no application/CI/frontend/default/backend/format/
+precision change. D051 publication authorization and all existing gates remain.
+
 2026-11-02 tasks 0037/0038: native Mac ARM64 CalculiX 2.22/SPOOLES research build
 and original deck → solve → FRD/DAT workflow pass the bounded analytical cube.
 The first solve exposed/fixed B001 duplicate set emission in MeshDeckWriter;

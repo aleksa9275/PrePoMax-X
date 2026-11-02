@@ -1,5 +1,23 @@
 # Project status
 
+## Current — task 0039: macOS-first, shared-source delivery plan
+
+Maintainer reports a failed GitLab pipeline and clarifies that macOS delivery
+speed must retain Windows/Linux awareness and the same source per target.
+[Revised plan](proposals/accelerated-native-delivery.md): four RID builds from one
+application/engineering tree, small native/OS build helpers and Debian/Fedora/Arch
+package wrappers. Mac preview is the critical path; Linux x64 engineering feedback
+continues now, other-target compilation comes early, full native UI/install tests
+come at checkpoints. Linux ARM64 remains required; Arch Linux ARM is explicit.
+
+First engineering item: obtain the exact failed job/commit/log and fix its owning
+layer; no cause or hosted pass is known. The report was requested; no CI/code
+changes are guessed from a failure notification. Independent Mac work need not
+wait for unavailable runner/access infrastructure. [Task 0039](tasks/0039-shared-source-delivery-plan.md)
+is documentation only. Existing native Mac cube/viewport evidence remains bounded;
+no new frontend/default solver/format choice or platform acceptance is implied.
+Both known correctness failures/tetra gate and all final release gates remain.
+
 ## Current — tasks 0037/0038: native solve and packaged desktop candidate
 
 Original definitions → native Mac ARM64 CalculiX 2.22/SPOOLES → original FRD/DAT/
