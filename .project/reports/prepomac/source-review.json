@@ -1,0 +1,239 @@
+{
+  "commit": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+  "scope": "source/isolated methods; no application or numerical solve",
+  "sources": {
+    "README.md": {
+      "sha256": "ac1370871517c2f1e52398216a757a9175d36cb364459f88b9c118249d5d53d2",
+      "bytes": 16125
+    },
+    "CONTRIBUTING.md": {
+      "sha256": "8c66fa8f44e4ce35b25a31e952e37d359e67370cb9cbea6926d4408383cdc177",
+      "bytes": 2604
+    },
+    "CaeGlobals/Tools.cs": {
+      "sha256": "e0ac611c4cfae13f47018e631f4199db31720b12c06e85c5ac79b1d851305fb2",
+      "bytes": 32207
+    },
+    "CaeGlobals/TypeSerializationSurrogate.cs": {
+      "sha256": "15a796d3dd52b939eb3b1f64c8eaad90a16ac9e3f66d9cfeb64ed6c4c440c63a",
+      "bytes": 15630
+    },
+    "PrePoMax/Controller.cs": {
+      "sha256": "d42d2deaf25d48989b9b201534318c1e1a563fd98f4c641c30a47dc562b25cd4",
+      "bytes": 1805317
+    },
+    "PrePoMax/Settings/SolverSettings.cs": {
+      "sha256": "0652445a5e67e2ff6017eb1d209566abcc1898b6b0dd8aaee8df01de2a7d40bf",
+      "bytes": 8853
+    },
+    "CaeJob/AnalysisJob.cs": {
+      "sha256": "99f3b2529a01749cafcaa350a03a3f64f18ecca0bb6f43a9d07d1813a0f3d45d",
+      "bytes": 46248
+    },
+    "CaeModel/FileInOut/Output/CodeAster/CodeAsterFileWriter.cs": {
+      "sha256": "473fa53e2dee6f429a4d8454c78eaca418cb033f4f43f651ac5afc9a958ff498",
+      "bytes": 41159
+    },
+    "CaeModel/FileInOut/Output/CodeAster/CodeAsterPostScript.cs": {
+      "sha256": "68ada62d332fa02fe4e01dbbdbb06e591c529dd006902fc35ef128fe9b02a3b9",
+      "bytes": 9280
+    },
+    "macOS/Native/CodeAster/Dockerfile": {
+      "sha256": "50b1365b2a421da8fb2c70f5c3d12f8d74bf7d3409e4b42394d167e527b415ba",
+      "bytes": 380
+    },
+    "macOS/Native/CodeAster/build.sh": {
+      "sha256": "6044a6e3f7a965396f1ff03d7c035d3ecbfd739ab94b2440af13aa510e6afe33",
+      "bytes": 313
+    },
+    "macOS/Directory.Build.props": {
+      "sha256": "caf469ee2de4fc70e03021c8bb1da15a6128a2ebd06e8fe8dc09fc07955a364f",
+      "bytes": 2682
+    },
+    "macOS/WinFormsCompat/WinFormsCompat.csproj": {
+      "sha256": "4cd5489473a4d56a9d8f852cc07b5567538974ff1cd1aca6e5a753239d334ea5",
+      "bytes": 1800
+    },
+    "macOS/WinFormsCompat/Forms/CompatApplication.cs": {
+      "sha256": "17e953c1c19e6c9aaae6958b9871e11cdbef9ff196dd92b4b40923515603d200",
+      "bytes": 5954
+    },
+    "macOS/vtkControl/vtkControl.csproj": {
+      "sha256": "05f4c61bbe6db83993afcd198d4fb48f3685611e7c279a077ff285a4762cf754",
+      "bytes": 1200
+    },
+    "macOS/vtkControl/Mac/Gl/OffscreenRenderer.cs": {
+      "sha256": "60a32fccf5354c3673c83136ff4e148ade401fbfb9a5f8a82f332e07fa192fba",
+      "bytes": 4435
+    },
+    "macOS/vtkControl/Mac/Gl/RenderSurface.cs": {
+      "sha256": "e0bb8427b830fff1b33e83f84ab3fb4e05a113a4ab72f1a41266a8e3c504d483",
+      "bytes": 2621
+    },
+    "macOS/vtkControl/Mac/Gl/SceneRenderer.cs": {
+      "sha256": "c414c1908c4e10896ce438ec2982125ea10da3a0ff4b21463ee1068749ea563e",
+      "bytes": 60766
+    },
+    "macOS/vtkControl/Mac/Vtk/Filters.cs": {
+      "sha256": "baea464760356bda3e9e0037deb6abd279821ebfcc87acc58589841578c2925b",
+      "bytes": 144370
+    },
+    "macOS/vtkControl/Mac/Vtk/Interaction.cs": {
+      "sha256": "0fc39dfabec027dbaedf5b8c1fdadbeda1276b0337109dd2282865a77bd76b85",
+      "bytes": 45992
+    },
+    "macOS/vtkControl/Mac/Vtk/DataModel.cs": {
+      "sha256": "bd3fec3268bd14478fccc058e54a424fefe5807e753bb4026387a3e03c7ec370",
+      "bytes": 84253
+    },
+    "macOS/vtkControl/Mac/Vtk/IO.cs": {
+      "sha256": "7452d3c63c7c618b0b024ee3172805cbb8c58f78704d4967bc536afaa1db4927",
+      "bytes": 19992
+    },
+    "macOS/vtkControl/Mac/Vtk/Rendering.cs": {
+      "sha256": "69f25a532ab175ceb17f70546bbeefc23fa4379c81763c9fb4cac18d2c993822",
+      "bytes": 102850
+    },
+    "macOS/vtkControl/Mac/Gl/GL.cs": {
+      "sha256": "380fdb27049d118b6c4b431db7827b7469b493c76db24135ddad2af5ed346173",
+      "bytes": 25574
+    },
+    "CaeMesh/Elements/FeElement.cs": {
+      "sha256": "edf62aacbabd528f4ab8b18247b778fc9ffe5e4925726df2238c6829011faeb6",
+      "bytes": 10327
+    },
+    "CaeMesh/Elements/3D/ParabolicTetraElement.cs": {
+      "sha256": "24156b0a0af8e18a08d4306d981ba6c08f2884c0df15814704325b7efabc6919",
+      "bytes": 19412
+    },
+    "macOS/GmshCommon/QMorph.cs": {
+      "sha256": "8f8ae8a675a3b5648c126d98f9df96426806b40fb3c36d35d3ee1f7c93570a5a",
+      "bytes": 2087
+    },
+    "macOS/Native/Win32Compat.c": {
+      "sha256": "1de361f9f4c1e2b24f1820f1a049a5dc2f64c666d436e5b6e6100fe3389751ea",
+      "bytes": 10440
+    },
+    "macOS/Native/NetGenMesher/CMakeLists.txt": {
+      "sha256": "07c625a6108b58af10fc592a8dae49dcd4eaeddd66d65d7a775c3c55e9afc9de",
+      "bytes": 1990
+    },
+    "macOS/Native/NetGenMesher/Mesh.cpp": {
+      "sha256": "59603f4ec2fbba786bd3e1cdd9773e4831395bb7e67080281fc03a52e893c00c",
+      "bytes": 66542
+    },
+    "macOS/Native/Mmg/build.sh": {
+      "sha256": "d01c444fdca8ceff0fb753f3158c86f8b4e24d78eadf4174c59e746a9ae8e1f9",
+      "bytes": 577
+    },
+    "macOS/build.sh": {
+      "sha256": "38c1898be75b3844114dae85d35c31226967ca62f8b988316ce2eee8e9a266b5",
+      "bytes": 652
+    },
+    "macOS/run.sh": {
+      "sha256": "eec650d2b96b063ac625d93b63828da6832e44715d92b60e36e353e2b1fac151",
+      "bytes": 215
+    },
+    "macOS/make-app.sh": {
+      "sha256": "87985162c73fe6297324a6146c6841d8e5e715e8782e42ba0d527ab51791d5ae",
+      "bytes": 3140
+    },
+    "macOS/bundle-deps.py": {
+      "sha256": "69261e4f52ab7b4606ed20f67289a4cf61b860825c145c0797877d14a8b96e2c",
+      "bytes": 11044
+    },
+    ".github/workflows/build.yml": {
+      "sha256": "fbdc1cac9ea83b04ae5c3aeb0e821fdd0c7678e9adf8a727034e0106e88a572a",
+      "bytes": 627
+    },
+    ".github/workflows/release.yml": {
+      "sha256": "e80bba4e7bfb14a06f65d23c2eedd129ddc23998dc574dbfc03cad9c48686596",
+      "bytes": 1384
+    },
+    "assets_composites/plate-validation/plate_validation.py": {
+      "sha256": "2d539151d39a2ce72e3d5907edfba726e46eb6dcbdbf3acfe331ac1d7ac6d999",
+      "bytes": 19063
+    },
+    "assets_composites/plate-validation/run_validation.sh": {
+      "sha256": "9521e563aea4619f972cf9401c8fa330350bfb3265fc134c00e47d11c745816f",
+      "bytes": 542
+    },
+    "Licenses/README.md": {
+      "sha256": "d40dc71e7e503fd70b0e00b5d5cf990d8b812d1fe9291b01dd714cb2be6d798c",
+      "bytes": 3139
+    }
+  },
+  "lineCounts": {
+    "macOS/WinFormsCompat": {
+      "files": 31,
+      "physicalLines": 19423
+    },
+    "macOS/DrawingCompat": {
+      "files": 4,
+      "physicalLines": 2214
+    },
+    "macOS/vtkControl": {
+      "files": 18,
+      "physicalLines": 12504
+    },
+    "macOS/Native/NetGenMesher": {
+      "files": 8,
+      "physicalLines": 3608
+    }
+  },
+  "pythonSyntaxFiles": [
+    "macOS/bundle-deps.py",
+    "assets_composites/plate-validation/plate_validation.py",
+    "assets_composites/plate-validation/make_plates.py"
+  ],
+  "shellSyntaxFiles": [
+    "macOS/build.sh",
+    "macOS/run.sh",
+    "macOS/make-app.sh",
+    "macOS/Native/build.sh",
+    "macOS/Native/CodeAster/build.sh",
+    "macOS/Native/NetGenMesher/build.sh",
+    "macOS/Native/Mmg/build.sh",
+    "assets_composites/plate-validation/run_validation.sh"
+  ],
+  "analyticalFixturesOnly": {
+    "NAVIER": {
+      "load": 0.018899374701524512,
+      "value": -21.609831878057086,
+      "reserve": 2.0000000000000004,
+      "t": 1.2
+    },
+    "TENSION": {
+      "load": 6042.837313071815,
+      "value": 0.5564209277178619,
+      "reserve": 2.0,
+      "t": 2.1
+    },
+    "CANTILEVER": {
+      "load": 16.15392638746329,
+      "value": -114.85377728489787,
+      "reserve": 1.9999999999999998,
+      "t": 2.1
+    }
+  },
+  "postprocessorHelpersOnly": {
+    "nan": "         NaN",
+    "positiveInfinity": " 1.00000E+30",
+    "negativeInfinity": " 1.00000E+30",
+    "componentCoverageFixture": {
+      "0": [
+        1.0,
+        3.0,
+        4.0
+      ],
+      "1": [
+        2.0,
+        0.0,
+        5.0
+      ]
+    }
+  },
+  "literalProjectCaseMismatches": [],
+  "harnessSourceSha256": "927638c22e4bc54a90f7f15954e18b7856d6c56473248a78b2e571abaa6e578c",
+  "harnessScope": "exact extracted methods; minimal type fixtures, no application, FE assembly, matrix solve or renderer"
+}

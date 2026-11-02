@@ -1,0 +1,162 @@
+{
+  "retrievedUtc": "2026-11-02T17:35:15.367050+00:00",
+  "observations": {
+    "prepomacLatestRelease": {
+      "url": "https://api.github.com/repos/moritzschuettler/prepomac/releases/latest",
+      "summary": {
+        "tag_name": "v3.0-mac.4",
+        "published_at": "2026-10-28T07:45:39Z",
+        "html_url": "https://github.com/moritzschuettler/prepomac/releases/tag/v3.0-mac.4",
+        "target_commitish": "main",
+        "assets": [
+          {
+            "name": "PrePoMax-macOS-arm64.zip",
+            "size": 120389305,
+            "digest": "sha256:1b3e00532056dae81c62eb3c5d5039349b4a6ffadf3821da959d05bc81131ed8",
+            "browser_download_url": "https://github.com/moritzschuettler/prepomac/releases/download/v3.0-mac.4/PrePoMax-macOS-arm64.zip"
+          }
+        ]
+      }
+    },
+    "prepomacLinuxIssueComments": {
+      "url": "https://api.github.com/repos/moritzschuettler/prepomac/issues/2/comments",
+      "summary": [
+        {
+          "date": "2026-10-25T15:40:06Z",
+          "url": "https://github.com/moritzschuettler/prepomac/issues/2#issuecomment-6399647971",
+          "body": "Hi,\n\nthank you so much \u2013 this is fantastic! I hadn't even thought of Linux, and it's great to see it running on Arch.\n\nYour changes are now in `main` (eb66bf17, with you as co-author), so Linux builds without manual steps:\n\n- **File name case:** the four `mv` you needed are fixed in the project files (macOS ignores case, so I never noticed). A check over all project references found no others.\n- **Native libraries:** `Native/build.sh` builds `libWin32Compat.so` and its `kernel32`/`user32` names on Linux, the projects copy `.so` or `.dylib` depending on the OS, and `GetCurrentThreadId` uses `gettid` there.\n- **NetGenMesher:** takes the OpenCASCADE headers from `/usr/include/opencascade` on Linux, and gmsh from the system or from `GMSH_DIR` (the gmsh SDK, which is what `gmsh-bin` installs).\n- **Mesa:** your shader fallback with `GL_ARB_arrays_of_arrays` is in.\n- **Library lookup:** gmsh (`libgmsh.so`), lp_solve and Python are now also found under their Linux names, so the gmsh mesh items, sweeps and Python scripts work without copying anything.\n\nI checked it in a Debian 13 container (arm64, OpenCASCADE 7.8, gmsh/lp_solve from Debian, Python 3.13): the build, STEP/BREP import, Netgen and gmsh meshing and Python scripts all work without a window. The README has a new \"Linux (experimental)\" section with the steps for Arch and Debian.\n\nYour screenshots also helped the macOS version: the doubled link texts in the About/splash window (\"\u2026MaterialsKIMM - Korean\u2026\") were a bug in the port's LinkLabel and happened on macOS too \u2013 fixed. And the About text no longer says \"on Windows platform\" outside Windows.\n\nTwo things are probably Linux-only and still open: some labels are cut off (e.g. \"Surfaces, edges and vert\" in Set Selection), because the port maps Segoe UI to the macOS system font, which Linux doesn't have, so a wider font is used. And the underscore in \"Vol_S235\" seems to be cut off by the window manager's title bar. If you'd like to look into the font mapping, a pull request is very welcome.\n\nI'm closing this since the build is in \u2013 feel free to reopen or open a new issue if something doesn't work with the current `main`.\n\nThanks again!\nMoritz\n"
+        },
+        {
+          "date": "2026-10-25T16:24:13Z",
+          "url": "https://github.com/moritzschuettler/prepomac/issues/2#issuecomment-6400124869",
+          "body": "looks great, PrePoMax  reported run flawlessly in Linux. If i can comment, light and shadow in results seems not activated."
+        }
+      ]
+    },
+    "codeAsterPackages": {
+      "url": "https://api.anaconda.org/package/conda-forge/code-aster",
+      "summary": {
+        "platforms": [
+          "linux-64",
+          "win-64"
+        ],
+        "version18_1_platforms": [
+          "linux-64",
+          "win-64"
+        ],
+        "latestVersion": "18.1.11",
+        "fileCount": 592
+      }
+    },
+    "calculixHomebrewCommit": {
+      "url": "https://api.github.com/repos/costerwi/homebrew-calculix/commits?path=calculix-ccx.rb&per_page=1",
+      "summary": [
+        {
+          "sha": "b128bf20a3d4db864832e54624d591473cde8e01",
+          "url": "https://github.com/costerwi/homebrew-calculix/commit/b128bf20a3d4db864832e54624d591473cde8e01",
+          "date": "2026-03-27T18:56:21Z"
+        }
+      ]
+    },
+    "codeAsterRecipeCommit": {
+      "url": "https://api.github.com/repos/conda-forge/code-aster-feedstock/commits?path=recipe/recipe.yaml&per_page=1",
+      "summary": [
+        {
+          "sha": "fc82bf852bb4fa490146bf524c0bb99092eb904a",
+          "url": "https://github.com/conda-forge/code-aster-feedstock/commit/fc82bf852bb4fa490146bf524c0bb99092eb904a",
+          "date": "2026-10-18T11:55:18Z"
+        }
+      ]
+    },
+    "prepomacReleaseTag": {
+      "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/ref/tags/v3.0-mac.4",
+      "summary": {
+        "ref": "refs/tags/v3.0-mac.4",
+        "node_id": "REF_kwDOVONAnrRyZWZzL3RhZ3MvdjMuMC1tYWMuNA",
+        "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/refs/tags/v3.0-mac.4",
+        "object": {
+          "sha": "27beefc7612e891d043b18f18d2acdd2c0609b39",
+          "type": "tag",
+          "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/tags/27beefc7612e891d043b18f18d2acdd2c0609b39"
+        }
+      }
+    },
+    "prepomacActions": {
+      "url": "https://api.github.com/repos/moritzschuettler/prepomac/actions/runs?per_page=5",
+      "summary": [
+        {
+          "name": "Release",
+          "head_sha": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/moritzschuettler/prepomac/actions/runs/40651491166",
+          "created_at": "2026-10-28T07:39:26Z"
+        },
+        {
+          "name": "Build",
+          "head_sha": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/moritzschuettler/prepomac/actions/runs/40651486364",
+          "created_at": "2026-10-28T07:39:24Z"
+        },
+        {
+          "name": "Release",
+          "head_sha": "b5f1f249530f9bd7c838b7486f4f4a33be2d201d",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/moritzschuettler/prepomac/actions/runs/40348737513",
+          "created_at": "2026-10-26T15:22:48Z"
+        },
+        {
+          "name": "Build",
+          "head_sha": "b5f1f249530f9bd7c838b7486f4f4a33be2d201d",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/moritzschuettler/prepomac/actions/runs/40348603504",
+          "created_at": "2026-10-26T15:21:59Z"
+        },
+        {
+          "name": "Build",
+          "head_sha": "088736c828cfb4031394bda3e63234c17677e03e",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/moritzschuettler/prepomac/actions/runs/40348024366",
+          "created_at": "2026-10-26T15:18:27Z"
+        }
+      ]
+    },
+    "prepomacReleaseTagTarget": {
+      "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/tags/27beefc7612e891d043b18f18d2acdd2c0609b39",
+      "summary": {
+        "node_id": "TA_kwDOVONAntoAKDI3YmVlZmM3NjEyZTg5MWQwNDNiMThmMThkMmFjZGQyYzA2MDliMzk",
+        "sha": "27beefc7612e891d043b18f18d2acdd2c0609b39",
+        "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/tags/27beefc7612e891d043b18f18d2acdd2c0609b39",
+        "tagger": {
+          "name": "moritzschuettler",
+          "email": "moritzschuettler24@gmail.com",
+          "date": "2026-10-28T07:39:22Z"
+        },
+        "object": {
+          "sha": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+          "type": "commit",
+          "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/commits/fb5a89dba6ac975956d9001edf6d6756f18fe0ca"
+        },
+        "tag": "v3.0-mac.4",
+        "message": "PrePoMax for macOS 3.0-mac.4: the meshing changes of PrePoMax of 2026-10-20 (edge counts of structured meshes, split plane selection)\n",
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      }
+    }
+  }
+}

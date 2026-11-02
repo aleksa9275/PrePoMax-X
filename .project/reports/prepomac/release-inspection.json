@@ -1,0 +1,142 @@
+{
+  "release": "v3.0-mac.4",
+  "sourceTarget": {
+    "sha": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+    "type": "commit",
+    "url": "https://api.github.com/repos/moritzschuettler/prepomac/git/commits/fb5a89dba6ac975956d9001edf6d6756f18fe0ca"
+  },
+  "archiveSize": 120389305,
+  "sha256": "1b3e00532056dae81c62eb3c5d5039349b4a6ffadf3821da959d05bc81131ed8",
+  "metadataDigestMatches": true,
+  "entryCount": 4500,
+  "extractedForInspection": [
+    "PrePoMax.app/Contents/MacOS/Solver/ccx",
+    "PrePoMax.app/Contents/MacOS/PrePoMax.runtimeconfig.json",
+    "PrePoMax.app/Contents/Info.plist"
+  ],
+  "frameworkEntries": [
+    "PrePoMax.app/Contents/Frameworks/libopen-pal.80.dylib",
+    "PrePoMax.app/Contents/Frameworks/libhwloc.15.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKG3d.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libxcb.1.dylib",
+    "PrePoMax.app/Contents/Frameworks/libevent_pthreads-2.1.7.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgmsh.dylib",
+    "PrePoMax.app/Contents/Frameworks/libxcb-shm.0.dylib",
+    "PrePoMax.app/Contents/Frameworks/libmpi_usempi_ignore_tkr.40.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKGeomAlgo.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libfltk_images.1.4.dylib",
+    "PrePoMax.app/Contents/Frameworks/libcairo.2.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKHLR.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libtbb.12.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKOffset.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKXSBase.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libXrender.1.dylib",
+    "PrePoMax.app/Contents/Frameworks/libpmix.2.dylib",
+    "PrePoMax.app/Contents/Frameworks/libX11.6.dylib",
+    "PrePoMax.app/Contents/Frameworks/libpng16.16.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKShHealing.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libmpi_mpifh.40.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKDEIGES.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libomp.dylib",
+    "PrePoMax.app/Contents/Frameworks/libtbbmalloc.2.dylib",
+    "PrePoMax.app/Contents/Frameworks/libfreetype.6.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKDESTEP.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKDE.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKMath.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKVCAF.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKGeomBase.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKTopAlgo.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKBRep.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgfortran.5.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKLCAF.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKCDF.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKMesh.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libxcb-render.0.dylib",
+    "PrePoMax.app/Contents/Frameworks/libintl.8.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKBool.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libmetis.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKPrim.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libmpi_usempif08.40.dylib",
+    "PrePoMax.app/Contents/Frameworks/libXdmcp.6.dylib",
+    "PrePoMax.app/Contents/Frameworks/liblpsolve55.dylib",
+    "PrePoMax.app/Contents/Frameworks/libfontconfig.1.dylib",
+    "PrePoMax.app/Contents/Frameworks/libarpack.2.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKG2d.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libXau.6.dylib",
+    "PrePoMax.app/Contents/Frameworks/libXext.6.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKService.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKCAF.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libfltk.1.4.dylib",
+    "PrePoMax.app/Contents/Frameworks/libjpeg.8.dylib",
+    "PrePoMax.app/Contents/Frameworks/libfltk_gl.1.4.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKernel.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKXCAF.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKBO.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libpixman-1.0.dylib",
+    "PrePoMax.app/Contents/Frameworks/libmpi.40.dylib",
+    "PrePoMax.app/Contents/Frameworks/libquadmath.0.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKFeat.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgcc_s.1.1.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKV3d.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libTKFillet.7.9.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgmp.10.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgomp.1.dylib",
+    "PrePoMax.app/Contents/Frameworks/libevent_core-2.1.7.dylib",
+    "PrePoMax.app/Contents/Frameworks/libgmsh.4.15.dylib",
+    "PrePoMax.app/Contents/Frameworks/libopenblas.0.dylib"
+  ],
+  "codeAsterBundledPaths": [],
+  "solver": {
+    "sha256": "9f4b1a43b318124bc53241fbc6e240790189a9d10d1701a134492616886b298c",
+    "bytes": 5324784,
+    "file": "/private/tmp/prepomac-release-inspect/ccx: Mach-O 64-bit executable arm64",
+    "dependencies": [
+      "\t@rpath/libarpack.2.dylib (compatibility version 4.0.0, current version 4.0.0)",
+      "\t@rpath/libgfortran.5.dylib (compatibility version 6.0.0, current version 6.0.0)",
+      "\t/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate (compatibility version 1.0.0, current version 4.0.0)",
+      "\t@rpath/libgomp.1.dylib (compatibility version 2.0.0, current version 2.0.0)",
+      "\t@rpath/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+      "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)"
+    ],
+    "missingLibraryMarkers": {
+      "PASTIX": true,
+      "PARDISO": true,
+      "SPOOLES": false
+    },
+    "versionStrings": [
+      "Version 2.23",
+      "Version 2.23",
+      "This is Version 2.23",
+      "CalculiX Version 2.23, Copyright(C) 1998-2025 Guido Dhondt",
+      "%5sUVERSION           Version 2.23                             "
+    ]
+  },
+  "runtimeConfig": {
+    "runtimeOptions": {
+      "tfm": "net10.0",
+      "includedFrameworks": [
+        {
+          "name": "Microsoft.NETCore.App",
+          "version": "10.0.14"
+        }
+      ],
+      "configProperties": {
+        "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
+        "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true
+      }
+    }
+  },
+  "bundleInfo": {
+    "CFBundleName": "PrePoMax",
+    "CFBundleDisplayName": "PrePoMax",
+    "CFBundleIdentifier": "com.prepomax.mac",
+    "CFBundleExecutable": "PrePoMaxLauncher",
+    "CFBundleIconFile": "AppIcon",
+    "CFBundlePackageType": "APPL",
+    "CFBundleShortVersionString": "3.0",
+    "CFBundleVersion": "v3.0-mac.4",
+    "LSMinimumSystemVersion": "13.0",
+    "LSApplicationCategoryType": "public.app-category.productivity",
+    "NSHighResolutionCapable": true
+  }
+}

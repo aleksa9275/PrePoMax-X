@@ -1,5 +1,12 @@
 # Dependency-aware roadmap
 
+2026-11-02 execution priority: use the [accelerated delivery sequence](proposals/accelerated-native-delivery.md)
+for the next work: faster checks → installable desktop preview → real CalculiX
+analysis/save-reopen → four-target alpha → full parity/release. Existing phases
+below retain the final capability backlog; they do not require completing every
+historical validation before producing an internal installer. Code_Aster/GPU work
+is deferred; current CI is not yet changed.
+
 2026-10-18 task 0031 adds original DAT static-shaped component histories and
 inspect-dat; task 0032 publishes both results increments under explicit request.
 Full results graph and actual native solver remain open. Next critical workflow

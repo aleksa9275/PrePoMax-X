@@ -1,5 +1,25 @@
 # Functional equivalence and platform acceptance
 
+## Development cadence — 2026-11-02
+
+Maintainer requests faster installable-product delivery and less repeated
+testing. The [delivery plan](proposals/accelerated-native-delivery.md) sets the
+current cadence: changed-area/current-source checks during development; affected
+consumer/engineering checks for numerical, interop and persistence changes;
+small cross-platform workflow checks at integration milestones; historical-pin
+replays for affected upstream/dependency/extraction changes; full declared
+candidate/platform acceptance before release. Older multi-host/three-pin task
+reports record the evidence actually obtained, not a requirement to repeat that
+matrix on every edit. Existing CI is unchanged until the profile implementation.
+
+Reuse existing tests and cached matching builds. Keep failed-run fixtures/logs
+with a compact source/tool/platform/command manifest and one owning-layer
+regression per new defect. Documentation/styling changes do not require numerical
+runs. Broaden checking only for affected behavior, a failure or a milestone.
+Both known correctness failures/tetra gate remain; no tolerance relaxation,
+hidden skip or claim that a pending platform passed. The release tiers below
+remain the final acceptance requirements, not daily development blockers.
+
 2026-10-18 task 0031 DAT adds canonical displacement/force/stress/strain history
 checks using original parsing/entries, including independent cube expectations,
 multiple increments/steps, exponent repair, identity/order/culture/path/concurrency

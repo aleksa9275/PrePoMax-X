@@ -1,5 +1,22 @@
 # PrePoMax-X project charter
 
+2026-11-02 priority: deliver installable native software faster, with CalculiX
+primary and Code_Aster deferred. [Delivery plan](proposals/accelerated-native-delivery.md)
+brings desktop/packaging integration forward and replaces repeated daily full
+matrices with affected checks and milestone coverage. Final capabilities,
+correctness and four-target delivery remain; [current status](STATUS.md) tracks
+the next implementation. No frontend/default format/solver profile is selected.
+
+2026-11-02 continuation: maintainer requests detailed PrePoMac comparison and
+permits considering a Linux VM on Mac for better solver performance. The
+[evaluation](reports/prepomac-evaluation.md) pins source/release fb5a89db and
+verifies its ZIP and bundled ARM64 CalculiX 2.23 metadata. It identifies useful
+desktop/Linux/packaging work, a limited Code_Aster static translator and remaining
+renderer/model/resource/lifecycle differences. VM evaluation is not a production
+worker/backend/frontend selection; no solver/performance acceptance or integration
+occurs. Original shared behavior, both correctness failures/tetra gate and all
+four-target/desktop/release requirements remain. Changes are local/uncommitted.
+
 2026-10-18 results publication: tasks 0030/0031 implementation **62c7de1b** is
 on origin research; exact-commit pipeline **#2960686368** passes all five native
 Linux x64 jobs. Hosted FRD/DAT artifact previews verify against Mac/Linux ARM64

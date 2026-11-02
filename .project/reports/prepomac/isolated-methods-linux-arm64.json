@@ -1,0 +1,6 @@
+{
+  "status": "not-run",
+  "reason": "Existing Podman VM could list cached images after initial startup, but API forwarding ended and a bounded restart failed with gvproxy socket error. No Linux harness/app/solver pass is claimed.",
+  "cleanup": "podman machine stop podman-machine-default succeeded",
+  "scope": "Linux source review and upstream author/user reports are separate from local execution"
+}

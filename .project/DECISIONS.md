@@ -1,5 +1,41 @@
 # Decision register
 
+D051 — Accepted implementation continuation and checkpoint publication,
+2026-11-02: maintainer explicitly requests proceeding with the next desktop-host
+and native solver steps, documenting progress and committing/pushing useful
+work. Reviewed checkpoints may publish normally to origin/research/native-feasibility,
+with remote/CI verification. Earlier uncommitted restrictions are historical for
+this continuation; no upstream/master/x/main/release write, force push, numerical
+policy/default format or production frontend selection is implied.
+
+D050 — Accepted delivery priority and lighter development cadence, 2026-11-02:
+maintainer confirms native installable software as the main goal, treats
+Code_Aster as optional, and requests less stringent repetition with cross-platform
+testing/bug tracing. CalculiX/open backends remain primary; PARDISO need not block
+initial delivery, while actual native capability/correctness remains unproved.
+Use affected/current-source checks for routine progress; broaden for affected
+numerical/interop/persistence behavior and at integration/release milestones.
+Keep useful tests/tolerances, both known failures/tetra gate, pending-platform
+honesty and final four-target/parity/package requirements. The concrete
+[plan](proposals/accelerated-native-delivery.md) proposes an early internal
+installer preview then an engineering alpha; it does not select a frontend,
+format, native build/profile or numerical change. Task 0035 is planning only;
+CI/application code stays unchanged, normal publication policy remains.
+
+D049 — Accepted PrePoMac investigation and VM execution-option research,
+2026-11-02: maintainer requests detailed solver/UI/Linux evaluation and is willing
+to use a Linux VM on Mac if it provides better solver performance. This allows
+evaluating optional solver workers; it does not choose a production worker,
+backend/default/precision/frontend/renderer/serializer or close native desktop
+targets. [Task 0034 report](reports/prepomac-evaluation.md) verifies source/release
+fb5a89db and actual ZIP/bundled ARM64 2.23 solver metadata, plus bounded Mac
+method/formula checks. Linux local diagnostics are not-run after infrastructure
+failure. Code_Aster is a limited different-FEM-engine translation, not general
+CalculiX parity; its SPOOLES-only package does not prove a general backend limit.
+Native-VTK/shared-core retention and selective reuse are recommendations, not new
+architecture commitments. Both correctness failures/tetra gate and all existing
+release gates remain. Research stays uncommitted; normal publication policy.
+
 D048 — Verified results publication and bounded evidence transport, 2026-10-18:
 tasks 0030/0031 publish normally to origin research at 62c7de1b; remote verified,
 master unchanged. Exact-commit pipeline #2960686368 passes all five native Linux

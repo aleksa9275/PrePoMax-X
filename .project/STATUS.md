@@ -1,5 +1,74 @@
 # Project status
 
+## Current — task 0036: first delivery-speed increment implemented
+
+[Profiles and commands](../X/Checks/README.md) now run current-source checks by
+selected area or explicit historical compatibility. All four fast suites pass
+native Mac ARM64 in 43.36 s; results compatibility passes all three pins, and seven
+orchestration regressions pass. Both known correctness failures/tetra gate remain.
+Each run retains source identity, patch/changed code, logs and verifier reports.
+[Task/evidence](tasks/0036-development-check-profiles.md).
+
+CI is prepared for four current-source verifiers instead of twelve, package
+archive caching, documentation-change skipping and optional manual compatibility.
+It is not published/hosted-verified. No production source/solver/frontend policy
+changes. Next: native-VTK host/package proof and native CPU solver build. All work
+is local/uncommitted; final platform/release requirements remain.
+
+## Current — 2026-11-02 accelerated delivery plan
+
+[Task 0035](tasks/0035-accelerated-delivery-plan.md) completes the requested
+[short conclusions](reports/prepomac-evaluation.md) and
+[delivery plan](proposals/accelerated-native-delivery.md). Native installers and
+a vertical desktop workflow take priority; CalculiX remains primary, Code_Aster/
+GPU/new features are deferred. Development uses affected/current-source checks;
+historical/full-platform coverage moves to relevant integrations/candidates.
+Reproducible bug manifests and final correctness/release requirements stay.
+
+Next implementation: fast versus compatibility verification profiles with shared
+caching, then a bounded native-VTK host/installer proof and native SPOOLES build.
+The frontend/default format/solver profile remain explicit decisions. Existing
+CI YAML and application code are unchanged. Records are local/uncommitted.
+
+## Current — 2026-11-02 detailed PrePoMac evaluation
+
+[Task 0034](tasks/0034-prepomac-evaluation.md) completes the maintainer-requested
+[solver/UI/Linux/VM comparison](reports/prepomac-evaluation.md) at PrePoMac
+fb5a89db / release v3.0-mac.4. Actual ZIP checksum, ARM64 CalculiX 2.23 binary
+metadata, exact-commit Mac build/release API status and 40 reviewed source hashes
+are retained. Bounded extracted methods run on Mac; analytical formula/syntax/
+literal-case checks pass. Local Linux execution failed on Podman forwarding;
+the VM was stopped, and no Linux/application/numerical/performance pass is claimed.
+
+PrePoMac supplies a broad working desktop adaptation, with WinForms/Avalonia
+compatibility and custom VTK/OpenGL behavior. Its Code_Aster adapter is a limited
+linear-static translator, forces amd64 Docker, downgrades several element orders,
+can omit/change model content, and does not establish full solver parity or VM
+speed. Its native Mac binary lacks PaStiX/PARDISO; that packaging does not establish
+a general SPOOLES-only CalculiX restriction. Maintainer accepts considering a
+Linux VM solver worker when performance warrants it; no production route is
+selected. Recommendations retain shared original engineering/native-VTK direction
+and selective reuse. All existing correctness/release gates remain; research
+records only, uncommitted, no integration/contact/publication.
+
+## Current — 2026-11-02 continuation and upstream review
+
+Maintainer resumes and requests status/upstream updates. [Task 0033](tasks/0033-continuation-upstream-review.md)
+and [review evidence](reports/upstream-2026-11-02.md) confirm published research
+HEAD d0e73e63 and origin/master f6273e39. Upstream master is now 2a25db82
+(20 October), still RC2: two new fixes, but divergent from the retained mirror
+(nine old-only/two new-only commits). Old composite history is retained on the
+new upstream Composites branch f6080786. Normal sync refuses this divergence;
+no local mirror/research branch integration or push occurred. Tracking refs were
+fetched; preserve exact replay pins and review branch separation before syncing.
+
+New community PrePoMac reports native Mac desktop/experimental Linux support with
+different rendering/meshing/backend choices. It warrants source/fixture assessment;
+it has not been locally validated or adopted. Prior bounded implementation/test
+evidence remains the checkpoint below; no new solver/full-desktop acceptance.
+Both correctness failures/tetra gate and all remaining release requirements stay.
+This review changes records only, left uncommitted under normal publication policy.
+
 ## Current — tasks 0030/0031 published; task 0032 closes evidence
 
 2026-10-18: implementation **62c7de1b** is independently verified on origin

@@ -1,5 +1,36 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-02 continuation/publication authorization: maintainer requests proceeding
+with desktop-host/native solver steps and committing/pushing useful work with
+progress documentation. Publish reviewed checkpoints normally to
+origin/research/native-feasibility; verify actual remote and relevant CI. Preserve
+all existing work, both known failures/tetra gate and release requirements. No
+upstream/master/x/main/release write, force push or silent frontend/format/
+precision choice. This supersedes prior leave-uncommitted wording for this
+continuation. Use bounded task records and the lighter verification cadence.
+
+2026-11-02 implementation start: task 0036 adds X/Checks/check.py fast/current
+and explicit compatibility profiles, retained failure/source manifests and prepared
+CI separation. All four current suites pass on Mac ARM64 in 43.36 s; selected
+results compatibility passes all three pins. Both known failures/tetra gate stay.
+Read X/Checks/README.md and .project/tasks/0036-development-check-profiles.md.
+CI changes are local and not hosted-verified; no commit/push. Next is the bounded
+native-VTK host/package proof and native CPU solver build under the accepted plan.
+
+2026-11-02 delivery-speed direction: maintainer prioritizes installable native
+software and requests less repetitive testing with reliable cross-platform bug
+tracing. Read task 0035 and .project/proposals/accelerated-native-delivery.md.
+Code_Aster is optional/deferred; CalculiX with existing open backends remains
+primary, PARDISO need not block initial delivery. Use changed-area/current-source
+checks for routine work; broaden for shared numerical/interop/persistence changes.
+Historical-pin replay, full platform sweeps and release-only checks belong at
+affected integrations/milestones, not every edit. Preserve useful tests, numerical
+tolerances, both known failures and tetra measurement gate. Missing checks stay
+pending, not passed. Final four-target/parity/installers/Homebrew requirements
+remain. First installer is an internal scoped preview, not final parity. The
+plan is recorded; task 0036 now prepares the CI profile changes. Frontend/default format/
+native solver profile remain explicit decisions; normal commit/push policy stays.
+
 2026-10-18 publication verified: tasks 0030/0031 FRD/DAT implementation is on
 origin/research/native-feasibility at 62c7de1bea234acc7aea16ee7c11283822f86501.
 Exact-commit pipeline #2960686368 passes all five native Linux x64 jobs. Three

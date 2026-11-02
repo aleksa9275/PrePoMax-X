@@ -1,5 +1,10 @@
 # Installable PrePoMax-X release delivery
 
+2026-11-02 scheduling: the [accelerated plan](proposals/accelerated-native-delivery.md)
+brings an internal installable desktop preview forward, followed by a scoped
+engineering alpha. Verify each artifact's stated capabilities; neither is final
+parity. The full product and public release requirements below remain unchanged.
+
 Accepted maintainer requirement, 2026-10-18 (Europe/Belgrade). The end product
 is an installable native **desktop application** with the mesh/model/deck/solve/
 results, interactive rendering, persistence and CAD/native-tool capabilities

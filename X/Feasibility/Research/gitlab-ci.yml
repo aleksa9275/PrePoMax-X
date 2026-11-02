@@ -1,4 +1,5 @@
 research-linux-x64:
+  extends: .portable-current
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:10.0
   tags: [saas-linux-small-amd64]
@@ -8,9 +9,6 @@ research-linux-x64:
     DOTNET_CLI_TELEMETRY_OPTOUT: "1"
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
     DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE: "1"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web")'
-    - when: never
   before_script:
     - apt-get update
     - apt-get install -y --no-install-recommends python3 git g++

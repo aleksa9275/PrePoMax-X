@@ -1,0 +1,174 @@
+{
+  "scope": "Task 0036 local native Mac ARM64 orchestration and existing verifiers; no solver/desktop/Linux/Windows/hosted acceptance",
+  "baselineCurrentResultsSeconds": 6.7,
+  "orchestrationRegressions": 7,
+  "runs": [
+    {
+      "profile": "fast",
+      "areas": [
+        "core",
+        "analysis",
+        "execution",
+        "results"
+      ],
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "dotnetSdk": "10.0.403",
+      "elapsedSeconds": 43.356,
+      "runnerSha256": "4247bb425fe63ab7dc1aa3c6dae962a422e3fbe8f3f00e32c6687c339a393c5e",
+      "manifestPath": "X/Checks/artifacts/task0036-fast-macos-arm64/manifest.json",
+      "manifestSha256": "7937fb2eaa09d4f8d7c2b32d04889757cfa9673a66a318958ee6a2a8ea187aed",
+      "success": true,
+      "steps": [
+        {
+          "area": "core",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 9.264,
+          "resultSha256": "08a922754c5eb83fe0f258b504323cb765d20941778f54b94a77e8f5721126ab",
+          "openCorrectnessChecks": [
+            {
+              "name": "quadratic tetrahedron affine integral",
+              "passed": false,
+              "expected": 28,
+              "actual": 26.794910717854155,
+              "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+            },
+            {
+              "name": "quadratic pyramid classification",
+              "passed": false,
+              "expected": true,
+              "actual": false,
+              "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+            }
+          ],
+          "fullyAccepted": false
+        },
+        {
+          "area": "analysis",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 14.031,
+          "resultSha256": "7b41d39aee08cb2dc94cf2ef98e322ff0dd69189c92cdf30f722660348e2eb34",
+          "checks": 44,
+          "openCorrectnessChecks": [
+            {
+              "name": "quadratic tetrahedron affine integral",
+              "passed": false,
+              "expected": 28,
+              "actual": 26.794910717854155,
+              "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+            },
+            {
+              "name": "quadratic pyramid classification",
+              "passed": false,
+              "expected": true,
+              "actual": false,
+              "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+            }
+          ],
+          "fullyAccepted": false
+        },
+        {
+          "area": "execution",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 12.888,
+          "resultSha256": "72b6d5acbba2768ca85d882cca8971720782fccb565707db0f1e026fefeb03f6",
+          "checks": 47,
+          "cliControls": 13
+        },
+        {
+          "area": "results",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 7.008,
+          "resultSha256": "9057db6dc994ed5f0eb5d8adea21d561a5819b66dc9eadfe627446fbedebd79a",
+          "checks": 78,
+          "cliControls": 9
+        }
+      ]
+    },
+    {
+      "profile": "compatibility",
+      "areas": [
+        "results"
+      ],
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "dotnetSdk": "10.0.403",
+      "elapsedSeconds": 39.448,
+      "runnerSha256": "4247bb425fe63ab7dc1aa3c6dae962a422e3fbe8f3f00e32c6687c339a393c5e",
+      "manifestPath": "X/Checks/artifacts/task0036-compatibility-results-macos-arm64/manifest.json",
+      "manifestSha256": "c4be9261f6378301375c53f3d00d458d4a3dfa5c9c346340964f12ced6b1ffb4",
+      "success": true,
+      "steps": [
+        {
+          "area": "results",
+          "revision": "source-guards",
+          "status": "passed",
+          "elapsedSeconds": 19.109
+        },
+        {
+          "area": "results",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 6.891,
+          "resultSha256": "56f07ee4f7a13b613abc93c18193b220b1670b509f3c46d876a583876369cfc5",
+          "checks": 78,
+          "cliControls": 9
+        },
+        {
+          "area": "results",
+          "revision": "3.0.0-rc2",
+          "status": "passed",
+          "elapsedSeconds": 6.645,
+          "resultSha256": "ef86afb647cd3be9aea815483c0666afe11b3e18b35f8e6c607498dcff8583af",
+          "checks": 78,
+          "cliControls": 9
+        },
+        {
+          "area": "results",
+          "revision": "post-rc2-2026-10-17",
+          "status": "passed",
+          "elapsedSeconds": 6.655,
+          "resultSha256": "2b8e60078fce5620dbff742f6ea32a058a86a01f6e7dd5f6e0d6b4a7d609a066",
+          "checks": 78,
+          "cliControls": 9
+        }
+      ]
+    },
+    {
+      "profile": "fast",
+      "areas": [
+        "results"
+      ],
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "dotnetSdk": "10.0.403",
+      "elapsedSeconds": 6.491,
+      "runnerSha256": "0722b676b64d2e2cde0ec5ea10ac24de9a4d72a4f001348bc5cad3add17ed02e",
+      "manifestPath": "X/Checks/artifacts/task0036-final-results-macos-arm64/manifest.json",
+      "manifestSha256": "b0848c1c8b3705ae1aabe2c83b634a9522ca86d784d6891014e70bf673a03692",
+      "success": true,
+      "steps": [
+        {
+          "area": "results",
+          "revision": "current",
+          "status": "passed",
+          "elapsedSeconds": 6.35,
+          "resultSha256": "37c09cf4cc7198e6b7ae7906baa46085eeaedcc8fa0c981c2e8b4644c57e41a3",
+          "checks": 78,
+          "cliControls": 9
+        }
+      ]
+    }
+  ],
+  "finalFollowup": "Malformed/non-object report failure branch checked by the focused orchestration regressions; successful verifier paths unchanged."
+}
