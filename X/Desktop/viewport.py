@@ -9,6 +9,7 @@ import subprocess
 import sys
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from jobs import DesktopJob, examples
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
 from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
@@ -114,6 +115,12 @@ class Viewport(QtWidgets.QMainWindow):
         self.resize(1000, 720)
         self.scene = None
         self.selection = None
+        self.current_path = None
+        self.closing_after_job = False
+        self.job = DesktopJob(self)
+        self.job.changed.connect(self.job_state)
+        self.job.completed.connect(self.job_completed)
+        self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
         toolbar = self.addToolBar("View")
         toolbar.addAction("Open INP / FRD", self.open_dialog)
         toolbar.addAction("Fit", self.fit)
@@ -145,6 +152,85 @@ class Viewport(QtWidgets.QMainWindow):
         self.picker.AddPickList(self.actor)
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
+        jobbar = self.addToolBar("Static analysis")
+        self.run_action = jobbar.addAction("Run static…", self.run_dialog)
+        self.example_action = jobbar.addAction("Solve example", self.run_example)
+        self.cancel_action = jobbar.addAction("Cancel", self.job.cancel)
+        self.cancel_action.setEnabled(False)
+        jobbar.addAction("Job files", self.open_job_directory)
+        self.job_label = QtWidgets.QLabel("Ready · static solid preview")
+        jobbar.addWidget(self.job_label)
+        dock = QtWidgets.QDockWidget("Job output", self)
+        self.job_output = QtWidgets.QPlainTextEdit()
+        self.job_output.setReadOnly(True)
+        self.job_output.setMaximumBlockCount(3000)
+        dock.setWidget(self.job_output)
+        self.addDockWidget(QtCore.Qt.DockWidgetArea.BottomDockWidgetArea, dock)
+        self.job_poll = QtCore.QTimer(self)
+        self.job_poll.timeout.connect(self.refresh_job_output)
+        self.job_poll.start(500)
+
+    def run_dialog(self):
+        mesh = str(self.current_path) if self.current_path and self.current_path.suffix.lower() == '.inp' else ''
+        if not mesh:
+            mesh, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis mesh", "", "INP mesh (*.inp)")
+        if not mesh:
+            return
+        analysis, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis definitions", str(examples()), "Analysis definitions (*.json)")
+        if analysis:
+            self.start_job(Path(mesh), Path(analysis))
+
+    def run_example(self):
+        self.start_job(examples() / 'cube-mesh.inp', examples() / 'cube-analysis.json')
+
+    def start_job(self, mesh, analysis):
+        try:
+            self.load(mesh)
+            self.job.start(mesh, analysis, self.jobs_root)
+            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nAnalysis: {analysis}\n")
+        except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+            self.job_label.setText("Cannot start")
+            self.job_output.setPlainText(str(error))
+            if getattr(self, 'automated_workflow', False):
+                raise
+            QtWidgets.QMessageBox.critical(self, "Cannot start static analysis", str(error))
+
+    def job_state(self, state):
+        active = state in ('Starting', 'Running', 'Cancelling')
+        self.run_action.setEnabled(not active)
+        self.example_action.setEnabled(not active)
+        self.cancel_action.setEnabled(active and state != 'Cancelling')
+        self.job_label.setText(state)
+
+    def refresh_job_output(self):
+        if not self.job.directory or not self.job.active:
+            return
+        log = self.job.directory / '_output_analysis.txt'
+        if log.is_file():
+            with log.open('rb') as stream:
+                stream.seek(max(0, log.stat().st_size - 65536))
+                text = stream.read().decode('utf-8', errors='replace')
+            self.job_output.setPlainText(f"Job: {self.job.directory}\n{self.job.state}\n{text}")
+
+    def job_completed(self, result):
+        outcome = result['outcome']
+        self.job_output.setPlainText(f"Job: {self.job.directory}\n{result['state']}\n" +
+            outcome.get('stdout', '') + '\n' + outcome.get('stderr', '') + '\n' +
+            str(outcome.get('error') or outcome.get('failureReason') or ''))
+        if result['success']:
+            try:
+                self.load(self.job.directory / 'analysis.frd')
+                if self.fields.count() > 1:
+                    self.fields.setCurrentIndex(1)
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+                self.job_label.setText('Solved; results could not be opened')
+                self.job_output.appendPlainText(str(error))
+        if self.closing_after_job:
+            QtCore.QTimer.singleShot(0, self.close)
+
+    def open_job_directory(self):
+        if self.job.directory and self.job.directory.is_dir():
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.directory)))
 
     def open_dialog(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh/results", "", "Mesh/results (*.inp *.frd)")
@@ -201,6 +287,7 @@ class Viewport(QtWidgets.QMainWindow):
                     self.fields.addItem(label, name)
         self.fields.blockSignals(False)
         self.scene, self.grid = scene, grid
+        self.current_path = path.resolve()
         self.selection = None
         self.mapper.SetInputData(grid)
         self.setWindowTitle(f"PrePoMax-X — {path.name} — native viewport candidate")
@@ -250,6 +337,11 @@ class Viewport(QtWidgets.QMainWindow):
         return self.selection
 
     def closeEvent(self, event):
+        if self.job.active:
+            self.closing_after_job = True
+            self.job.cancel()
+            event.ignore()
+            return
         self.vtk.Finalize()
         super().closeEvent(event)
 
@@ -259,9 +351,16 @@ def main():
     parser.add_argument("input", type=Path, nargs="?")
     parser.add_argument("--self-test", type=Path, help="Write bounded native render/ID/field checks and exit")
     parser.add_argument("--screenshot", type=Path)
+    parser.add_argument("--run-example", action="store_true", help="Run bundled native static example and load results")
+    parser.add_argument("--jobs-root", type=Path, help="New job folders under this directory")
     args = parser.parse_args()
     app = QtWidgets.QApplication([sys.argv[0]])
+    app.setOrganizationName("PrePoMax-X")
+    app.setApplicationName("PrePoMax-X Preview")
     window = Viewport()
+    if args.jobs_root:
+        window.jobs_root = args.jobs_root.resolve()
+    window.automated_workflow = bool(args.run_example and args.self_test)
     if args.input:
         window.load(args.input.resolve())
     window.show()
@@ -271,6 +370,13 @@ def main():
     def verify():
         try:
             checks = []
+            if args.run_example:
+                if not window.job.result or not window.job.result['success']:
+                    raise ValueError('Native desktop job failed: ' + str(window.job.result))
+                if not window.current_path or window.current_path.name != 'analysis.frd':
+                    raise ValueError('Successful job results were not loaded')
+                checks.append({'name': 'desktop native solve and result loading', 'passed': True})
+                result['desktopJob'] = window.job.result
             def check(name, value):
                 checks.append({"name": name, "passed": bool(value)})
             target_path = (Path(sys._MEIPASS) / "targets.json" if getattr(sys, "frozen", False)
@@ -313,6 +419,9 @@ def main():
             tool_sha = (json.loads((Path(sys._MEIPASS) / "source-identity.json").read_text())["viewportSha256"]
                 if getattr(sys, "frozen", False) else hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
             result.update(success=all(c["passed"] for c in checks), checks=checks,
+                storagePaths={name: QtCore.QStandardPaths.writableLocation(getattr(QtCore.QStandardPaths.StandardLocation, name))
+                    for name in ('AppLocalDataLocation', 'CacheLocation', 'AppConfigLocation')},
+                qtSettingsPath=QtCore.QSettings().fileName(),
                 target=target_id, selection=selection, vtkVersion=vtkVersion.GetVTKVersion(), qtVersion=QtCore.qVersion(),
                 sourceSha256=window.scene["SourceSha256"], renderer=window.vtk.GetRenderWindow().GetClassName(),
                 toolSha256=tool_sha,
@@ -326,7 +435,20 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.self_test:
+    if args.run_example:
+        if args.self_test:
+            window.job.completed.connect(lambda _: QtCore.QTimer.singleShot(500, verify))
+        def begin_example():
+            try:
+                window.run_example()
+            except Exception as error:
+                if args.self_test:
+                    args.self_test.parent.mkdir(parents=True, exist_ok=True)
+                    args.self_test.write_text(json.dumps({'success': False, 'error': str(error)}) + '\n')
+                window.close()
+                app.exit(1)
+        QtCore.QTimer.singleShot(1200, begin_example)
+    elif args.self_test:
         QtCore.QTimer.singleShot(1200, verify)
     return app.exec()
 

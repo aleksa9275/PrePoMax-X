@@ -45,7 +45,23 @@ X/Desktop packaging requirements. Common publication builds the two reader hosts
 the Mac helper bundles Qt/Python/VTK and verifies its ad-hoc signature. Target data
 is included in the app for renderer expectations. Direct embedding B002 remains;
 the frame-copy viewport is still a candidate. Other OS desktop/package adapters,
-DMG/MSI/DEB/RPM/Arch package creation and clean-machine/signing tests are pending.
+MSI/DEB/RPM/Arch package creation and clean-machine/Developer-ID tests are pending.
+
+Local workflow preview DMG (ad-hoc app signature, no notarization):
+
+    /private/tmp/prepomaxx-desktop-runtime/bin/python X/Build/build.py package --target osx-arm64 --format dmg --solver-build <verified-native-build> --output <new-output>
+    python3 X/Build/verify-macos-dmg.py --package <package-output> --output <new-verification-output>
+
+The explicit solver build is validated, copied with its non-system libraries,
+relocated to loader-relative paths and fingerprinted under a distinct local
+preview profile. The app includes all three shared hosts and the synthetic cube.
+The desktop starts/cancels the original C# run-static service through QProcess;
+stdin `cancel` asks the original runner to stop its solver tree. EOF is harmless.
+The DMG contains installation and full uninstall/reset instructions. Image creation,
+mounting and GUI tests need native macOS privileges unavailable in a filesystem
+sandbox; this does not require changing Gatekeeper settings.
+
+[Install](../Desktop/INSTALL-macos.md) · [Uninstall and reset](../Desktop/UNINSTALL-macos.md).
 
 Every output directory must be new. `build.json` retains source/dirty patch/input
 identity, exact commands/logs, target, file hashes and native-smoke scope. The

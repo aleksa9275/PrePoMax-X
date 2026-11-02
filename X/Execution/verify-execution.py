@@ -4,6 +4,7 @@ import argparse,hashlib,json,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
 from datetime import datetime,timezone
 import job_layout
+import cli_control
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
 sys.path.insert(0,str(ROOT/'X/Analysis'));import analysis_layout
 
@@ -58,6 +59,7 @@ def main():
    report['availability']=json.loads(run(['dotnet',cli,'availability']).stdout)
    report['monitor']=json.loads(run(['dotnet',cli,'inspect-monitor',ROOT/'.project/reports/windows-reference/solver/uniaxial.sta',ROOT/'.project/reports/windows-reference/solver/uniaxial.cvg']).stdout)
    if report['monitor']['status']['Count']!=1 or report['monitor']['status']['TotalTimes']!=[1]or report['monitor']['convergence']['Count']!=0:raise ValueError('Recorded original monitor result differs')
+   report['desktopPipeControl']=cli_control.verify(['dotnet',cli],ROOT,work,arch)
    report['cliControls']=[]
    controls=[('usage',['dotnet',cli],2),('unknown build',['dotnet',cli,'run-static','unknown',work,work/'mesh',work/'definition',work/'should-not-exist','30'],1),('unavailable or missing pinned build',['dotnet',cli,'run-static','windows-reference-2.22',work,work/'mesh',work/'definition',work/'should-not-exist','30'],1),('missing monitor',['dotnet',cli,'inspect-monitor',work/'missing.sta',work/'missing.cvg'],1)]
    for name,arguments in [('unknown option',['--unknown','1']),('missing value',['--threads']),('duplicate option',['--threads','auto','--threads','1']),('zero threads',['--threads','0']),('signed count',['--threads','+1']),('overflow count',['--threads','2147483648']),('excess concurrency',['--jobs','1025']),('zero jobs',['--jobs','0']),('overcommitted manual budget',['--threads','1','--jobs','2'])]:

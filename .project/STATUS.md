@@ -1,5 +1,17 @@
 # Project status
 
+## Current — task 0042: local Mac solver-controls DMG
+
+Maintainer requests an unnotarized local DMG and explicitly wants desktop solver
+controls first. Common QProcess controls now invoke the original C# static-deck/
+job/results services with start/cancel/status/output and automatic FRD loading.
+The explicit native CPU profile and runtime closure are relocated into the app.
+Preliminary packaged cube/visible frame passes; final exact-commit DMG/copy test
+and hosted publication are pending. [Scope/progress](reports/local-macos-dmg.md).
+[Full uninstall/reset guide](../X/Desktop/UNINSTALL-macos.md) is included. No
+Developer-ID/notarization/clean-host or release acceptance; both known failures/
+tetra gate and B002 remain. Apple container is Linux-only, not a Mac GUI test.
+
 ## Current — task 0041: shared target builds and native Linux CPU workflow
 
 [Shared build entry](../X/Build/README.md) publishes the same mesh/results/job

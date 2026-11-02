@@ -1,5 +1,16 @@
 # Decision register
 
+D053 — Local Mac DMG before notarization, 2026-11-03: maintainer requests a
+local-installable DMG while signing/notarization are unavailable and explicitly
+chooses desktop solver controls before the first DMG. Task 0042 prioritizes a
+bounded static mesh/analysis → native solve/cancel/status → FRD desktop preview
+with relocated native runtimes and ad-hoc signing. Developer-ID/notarization and
+clean-host/full release acceptance remain pending. This reorders the next slice
+ahead of the remaining viewport binding attempt without choosing the frame-copy
+bridge as production. Apple Linux containers cannot validate a Mac GUI/DMG.
+Existing normal origin-research publication authorization continues; no security
+setting/quarantine bypass or upstream/master/x/main/release write.
+
 D052 — Accepted delivery-order/shared-source clarification, 2026-11-02:
 maintainer requests maximum speed toward native macOS while designing for Windows
 and Debian/Fedora/Arch Linux now, with later staged testing and ideally the same

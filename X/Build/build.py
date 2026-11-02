@@ -61,7 +61,8 @@ class Build:
     def run(self, command, name=None):
         command = list(map(str, command))
         log = self.output / (name or f"command-{len(self.report['commands']):02d}.log")
-        env = dict(os.environ, DOTNET_CLI_TELEMETRY_OPTOUT="1", DOTNET_SKIP_FIRST_TIME_EXPERIENCE="1")
+        env = dict(os.environ, DOTNET_CLI_TELEMETRY_OPTOUT="1", DOTNET_SKIP_FIRST_TIME_EXPERIENCE="1",
+                   PYINSTALLER_CONFIG_DIR=str(self.output / "pyinstaller-cache"))
         with log.open("w") as stream:
             done = subprocess.run(command, cwd=ROOT, env=env, stdout=stream, stderr=subprocess.STDOUT)
         self.report["commands"].append({"arguments": command, "exitCode": done.returncode, "log": log.name})
@@ -131,17 +132,23 @@ def verify_hosts(path, target_id, required=("mesh", "results", "solve")):
             raise ValueError("Required published host missing: " + name)
     return report
 
-def package_preview(build):
+def package_preview(build, solver_build=None, package_format="app"):
     require_native(build.target)
-    publish_hosts(build, ("mesh", "results"))
-    identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"), "target": build.target_id,
+    publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
+    identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
+        "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
         "dirty": build.report["repository"]["dirty"]}
     (build.output / "source-identity.json").write_text(json.dumps(identity, indent=2) + "\n")
     adapter = build.target["desktopPackageAdapter"]
-    app = load_module(Path(__file__).parent / "platforms" / (adapter + ".py"), "package_platform").package(build, ROOT)
-    build.report.update(kind="native-viewport-candidate", app=str(app), sourceIdentity=identity,
-        fileHashes=file_hashes(app), scope="Ad-hoc local preview; no clean-machine/signing/release acceptance", success=True)
+    helper = load_module(Path(__file__).parent / "platforms" / (adapter + ".py"), "package_platform")
+    app = helper.package(build, ROOT, solver_build)
+    if package_format == "dmg":
+        helper.dmg(build, ROOT, app)
+    build.report.update(kind="native-static-workflow-preview" if solver_build else "native-viewport-candidate", app=str(app), sourceIdentity=identity,
+        fileHashes=file_hashes(app),
+        symlinkTargets={p.relative_to(app).as_posix(): os.readlink(p) for p in sorted(app.rglob("*")) if p.is_symlink()},
+        scope="Ad-hoc local preview; no clean-machine/signing/release acceptance", success=True)
     (build.output / "package.json").write_text(json.dumps(build.report, indent=2) + "\n")
 
 def main(argv=None):
@@ -149,7 +156,8 @@ def main(argv=None):
     parser.add_argument("action", choices=["plan", "build", "package"])
     parser.add_argument("--target", choices=list(catalog()["targets"]), required=True)
     parser.add_argument("--component", choices=["hosts", "solver"], default="hosts")
-    parser.add_argument("--format", choices=["app"], default="app")
+    parser.add_argument("--format", choices=["app", "dmg"], default="app")
+    parser.add_argument("--solver-build", type=Path, help="Explicit verified native solver build for desktop jobs")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--jobs", type=int, default=6)
     args = parser.parse_args(argv)
@@ -168,10 +176,12 @@ def main(argv=None):
             field = "desktopPackageAdapter" if args.action == "package" else "solverAdapter"
             if target[field] is None:
                 raise ValueError("Target recipe remains pending: " + field)
+        if args.action == "package" and args.format == "dmg" and (args.target != "osx-arm64" or not args.solver_build):
+            raise ValueError("Local DMG requires osx-arm64 and an explicit --solver-build")
         build = Build(args.target, args.output)
         build.identity()
         if args.action == "package":
-            package_preview(build)
+            package_preview(build, args.solver_build, args.format)
         elif args.component == "hosts":
             publish_hosts(build)
         else:

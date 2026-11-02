@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-03 task 0042: maintainer requests a local DMG while Developer-ID signing/
+notarization are unavailable, explicitly choosing desktop solver controls first
+and a complete uninstall/reset guide. This reorders the bounded workflow/package
+slice before the remaining viewport binding attempt; B002 is still open. Read
+.project/tasks/0042-local-macos-solver-dmg.md and .project/reports/local-macos-dmg.md
+for actual artifact/verification/publication. Local preview signing is ad-hoc;
+no Gatekeeper/quarantine change or clean-Mac/public-release claim. Apple container
+is Linux-only. Existing D051/D053 research publication scope/gates remain.
+
 Task 0041 continuation: maintainer requests next steps after verified CI repair.
 X/Build supplies one target catalog/entry for osx-arm64/win-x64/linux-x64/linux-arm64,
 common self-contained C# hosts, native Mac/Linux solver helpers and the preserved

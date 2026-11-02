@@ -50,6 +50,17 @@ public static class SolverBuilds
 
 internal static class Program
 {
+    private static async Task ReadCancellationAsync(CancellationTokenSource cancel)
+    {
+        try
+        {
+            while(await Console.In.ReadLineAsync() is string line)
+                if(line=="cancel"){cancel.Cancel();return;}
+        }
+        catch(ObjectDisposedException) { } // The job may finish before input arrives.
+        catch(IOException) { } // A closed parent pipe is not a cancellation request.
+    }
+
     private static async Task<int> Main(string[] args)
     {
         CultureInfo.CurrentCulture=CultureInfo.InvariantCulture;
@@ -109,6 +120,9 @@ internal static class Program
                 Directory.CreateDirectory(directory);AnalysisFiles.WriteNew(Path.Combine(directory,"analysis.inp"),deck);
                 var job=new ExecutableJob("analysis",executable,"",directory){ProcessArguments=new[]{"-i","analysis"},TimeLimit=TimeSpan.FromSeconds(timeout),ProcessEnvironment=new Dictionary<string,string>{{"OMP_NUM_THREADS","1"},{"MKL_NUM_THREADS","1"},{"OPENBLAS_NUM_THREADS","1"}}};
                 using var cancel=new CancellationTokenSource();ConsoleCancelEventHandler handler=(_,e)=>{e.Cancel=true;cancel.Cancel();};Console.CancelKeyPress+=handler;
+                // A GUI uses redirected stdin for cooperative cancellation. EOF is
+                // harmless; it must not cancel ordinary shell/CI invocations.
+                if(Console.IsInputRedirected) _=Task.Run(()=>ReadCancellationAsync(cancel));
                 try{await job.SubmitAsync(cancel.Token);}finally{Console.CancelKeyPress-=handler;solverExecuted=job.ProcessStarted;}
                 bool versionMatches=System.Text.RegularExpressions.Regex.IsMatch(job.CapturedStandardOutput,@"CalculiX Version\s+"+System.Text.RegularExpressions.Regex.Escape(build.GetProperty("version").GetString()!)+@"(?:\s|,)");
                 bool outputsPresent=new[]{".dat",".frd",".sta"}.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});

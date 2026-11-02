@@ -41,3 +41,14 @@ No binary or installer is published by this recipe.
 native rendering, actual frame colors, resize, exact IDs/value ordering, then
 closes. It uses programmatic picks; genuine pointer, DPI, scale and other target
 tests remain. [Evidence and candidate recommendation](../../.project/reports/native-desktop-preview.md).
+
+Local workflow preview: **Solve example** executes the bundled cube through the
+original C# deck/job service and opens its FRD. **Run static…** accepts a mesh plus
+the existing bounded analysis JSON; **Cancel** uses cooperative stdin cancellation,
+with retained output/error/outcome files and fresh job directories. **Job files**
+opens the actual workspace. This is a static-solid preview, not full PMX editing.
+The Mac --format dmg build needs an explicit --solver-build; the relocated runtime
+closure and three self-contained hosts travel with it.
+[Installation](INSTALL-macos.md) and [complete uninstall/reset](UNINSTALL-macos.md)
+are included in the DMG. Apple container provides Linux workloads, not Mac GUI
+acceptance; local native mounted/copy tests are kept distinct from a clean Mac.

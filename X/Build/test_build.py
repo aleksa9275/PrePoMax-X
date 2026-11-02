@@ -30,6 +30,13 @@ class BuildBoundaries(unittest.TestCase):
             self.assertEqual(build.main(["build", "--target", "win-x64", "--component", "solver", "--output", str(output)]), 1)
             self.assertFalse(output.exists())
 
+    def test_dmg_requires_explicit_solver_before_creating_output(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(build.platform, "system", return_value="Darwin"), \
+                patch.object(build.platform, "machine", return_value="arm64"), contextlib.redirect_stderr(io.StringIO()):
+            output = Path(folder) / "never-created"
+            self.assertEqual(build.main(["package", "--target", "osx-arm64", "--format", "dmg", "--output", str(output)]), 1)
+            self.assertFalse(output.exists())
+
     def test_staged_host_changes_cannot_reuse_evidence(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
