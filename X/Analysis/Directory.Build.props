@@ -2,6 +2,7 @@
   <Import Project="../Core/Directory.Build.props" />
   <PropertyGroup>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
     <RepositoryRoot>$(MSBuildThisFileDirectory)../../</RepositoryRoot>
     <RestorePackagesPath>$(MSBuildThisFileDirectory)artifacts/packages</RestorePackagesPath>
   </PropertyGroup>

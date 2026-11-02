@@ -1,5 +1,35 @@
 # Project status
 
+## Current — tasks 0037/0038: native solve and packaged desktop candidate
+
+Original definitions → native Mac ARM64 CalculiX 2.22/SPOOLES → original FRD/DAT/
+monitor readers now passes the analytical cube: twelve workflow checks plus the
+altered-displacement control. [Evidence/limits](reports/native-cpu-workflow.md).
+B001 duplicate set emission is fixed; current analysis **332** checks, execution
+**49** checks/13 rejection controls and ten replay/nine analysis guards pass.
+Both pre-existing correctness failures/tetra gate remain explicit.
+
+A local **.app** bundles Python/Qt/VTK and self-contained C# readers. It displays
+the native-generated results and nonsequential IDs with external Python/dotnet
+absent from PATH; 10/8 candidate checks pass. [Evidence/artifact](reports/native-desktop-preview.md).
+Direct Qt embedding has B002; the working native-VTK frame-copy bridge remains a
+candidate with performance/input/DPI limits. No frontend/default backend/format
+decision. This does not complete milestone B or a clean-machine installer.
+
+The earlier tooling/plan/review checkpoint is published at **66e3ca0f**, independently
+verified on origin/research/native-feasibility. This new implementation checkpoint
+is under authorized review/publication; [publication record](reports/native-delivery-publication.md)
+will record actual SHA. Hosted CI is unverified: available GitLab browser is
+unauthenticated/404 and glab is unavailable. Do not claim a hosted pass.
+
+Next: resolve the bounded native widget/C# binding comparison, integrate tree/job/
+results controls and save/reopen into a scoped preview; port the pinned solver
+recipe and common solid/shell workflow to native Linux workers. Runtime relocation,
+PaStiX/performance, native Windows/net48/RC2, CAD/full graph, four-target/signing/
+installer/Homebrew and complete corresponding-source gates remain.
+
+All older local/uncommitted descriptions below are historical for published work.
+
 ## Current — task 0036: first delivery-speed increment implemented
 
 [Profiles and commands](../X/Checks/README.md) now run current-source checks by

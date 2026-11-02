@@ -47,7 +47,7 @@ def main():
     shutil.copyfile(package,feed/package.name)
    run(['dotnet','build',HERE/'PrePoMaxX.Execution.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-p:RepositoryRoot='+str(source)+'/', '-p:RestorePackagesPath='+str(work/'packages'),'--source',feed,'-v:minimal'])
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll']).stdout)
-   if not report['tests']['success']or report['tests']['passed']!=47 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
+   if not report['tests']['success']or report['tests']['passed']!=49 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
    cli=work/'build/bin/Solve/release/PrePoMaxX.Solve.dll'
    report['threadPlanning']={}
    for label,arguments in [('automatic',[]),('manual',['--threads','1','--jobs','1'])]:

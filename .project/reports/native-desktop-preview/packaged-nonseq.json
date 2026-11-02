@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "checks": [
+    {
+      "name": "native render window",
+      "passed": true
+    },
+    {
+      "name": "original IDs retained",
+      "passed": true
+    },
+    {
+      "name": "VTK hit resolves original element ID",
+      "passed": true
+    },
+    {
+      "name": "nearest vertex resolves original node ID",
+      "passed": true
+    },
+    {
+      "name": "selected coordinates preserved",
+      "passed": true
+    },
+    {
+      "name": "resize renders",
+      "passed": true
+    },
+    {
+      "name": "displayed frame has mesh/legend pixels",
+      "passed": true
+    },
+    {
+      "name": "window capture",
+      "passed": true
+    }
+  ],
+  "selection": {
+    "elementId": 7001,
+    "nearestVertexNodeId": 4,
+    "nodeCoordinates": [
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "vtkVersion": "9.5.2",
+  "qtVersion": "6.10.0",
+  "sourceSha256": "7dbe07fa322a178cfac7171ad74db03af8f90048a321d107b0e484b591562fa0",
+  "renderer": "vtkCocoaRenderWindow",
+  "toolSha256": "3e84b3a87aa03700c0eff201404ce8541148d60dcf0cdc38e6ef991290983232",
+  "transport": "Native VTK offscreen GPU frame copied into Qt; not final widget/performance acceptance",
+  "scope": "Native Mac render and programmatic picking; human pointer, DPI, other platforms and release packaging remain"
+}

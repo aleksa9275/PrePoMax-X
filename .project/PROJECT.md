@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-02 engineering checkpoint: [native CPU workflow](reports/native-cpu-workflow.md)
+completes the bounded original deck/solve/results path on Mac ARM64, and a
+[packaged native viewport candidate](reports/native-desktop-preview.md) displays
+its results. Real integration found B001 (fixed) and B002 (direct embedding open).
+Explicit research build profiles and the candidate frame bridge do not choose
+production solver/frontend defaults. [STATUS](STATUS.md) records checks and
+publication; final platform/functionality/release requirements remain.
+
 2026-11-02 priority: deliver installable native software faster, with CalculiX
 primary and Code_Aster deferred. [Delivery plan](proposals/accelerated-native-delivery.md)
 brings desktop/packaging integration forward and replaces repeated daily full

@@ -1,0 +1,132 @@
+{
+  "success": true,
+  "kind": "native-calculix-cpu-research-build",
+  "version": "2.22",
+  "recordedAtUtc": "2026-11-02T18:42:02.165711+00:00",
+  "os": "Darwin",
+  "architecture": "arm64",
+  "commands": [
+    {
+      "arguments": [
+        "python3",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Sources/verify-sources.py"
+      ],
+      "exitCode": 0,
+      "log": "build-00.log",
+      "elapsedSeconds": 0.15
+    },
+    {
+      "arguments": [
+        "make",
+        "lib",
+        "CC=gcc-16",
+        "CFLAGS=-O2 -std=gnu89",
+        "RANLIB=ranlib"
+      ],
+      "exitCode": 0,
+      "log": "build-01.log",
+      "elapsedSeconds": 31.956
+    },
+    {
+      "arguments": [
+        "cmake",
+        "-S",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Sources/ARPACK-ng/3.9.1/src",
+        "-B",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Build/artifacts/macos-arm64-loadpath-pins/work/arpack-build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc-16",
+        "-DCMAKE_Fortran_COMPILER=gfortran",
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DMPI=OFF",
+        "-DINTERFACE64=OFF",
+        "-DICB=OFF",
+        "-DEXAMPLES=OFF",
+        "-DTESTS=OFF",
+        "-DBLAS_LIBRARIES=/opt/homebrew/opt/openblas/lib/libopenblas.dylib",
+        "-DLAPACK_LIBRARIES=/opt/homebrew/opt/openblas/lib/libopenblas.dylib"
+      ],
+      "exitCode": 0,
+      "log": "build-02.log",
+      "elapsedSeconds": 1.005
+    },
+    {
+      "arguments": [
+        "cmake",
+        "--build",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Build/artifacts/macos-arm64-loadpath-pins/work/arpack-build",
+        "--parallel",
+        "6"
+      ],
+      "exitCode": 0,
+      "log": "build-03.log",
+      "elapsedSeconds": 1.546
+    },
+    {
+      "arguments": [
+        "make",
+        "-f",
+        "Makefile.native",
+        "-j6",
+        "all"
+      ],
+      "exitCode": 0,
+      "log": "build-04.log",
+      "elapsedSeconds": 23.551
+    }
+  ],
+  "patches": [
+    {
+      "path": "SPOOLES/Make.inc",
+      "change": "Explicit native compiler, optimization, C dialect and archive indexer"
+    },
+    {
+      "path": "SPOOLES/Tree/src/makeGlobalLib",
+      "change": "drawTree.c -> draw.c (upstream README.INSTALL correction)"
+    },
+    {
+      "path": "SPOOLES/ETree/src/transform.c",
+      "change": "integer zero instead of NULL for IVinit value",
+      "occurrences": 3
+    }
+  ],
+  "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+  "releaseReady": false,
+  "numericalAcceptance": false,
+  "buildToolSha256": "951bb97c6221eac0d7c1de8864e3d995828303bb9866abf2e7cc7f9e86c96088",
+  "compilers": {
+    "C": "gcc-16 (Homebrew GCC 16.2.0) 16.2.0",
+    "Fortran": "GNU Fortran (Homebrew GCC 16.2.0) 16.2.0"
+  },
+  "sourceManifests": {
+    "CalculiX": "8dd1b5fad4c0e369903bfea4de009592f7d1790a66aa69de21c4bfa19ea6ea94",
+    "SPOOLES": "f2c1c473625ca657cfa5d05562f6c330f2d65e4ea182296dd73e0f896b2f4ece",
+    "ARPACK-ng": "9134295ed0acc1d83e747fd51deddb3535fc1e42c6709412ee4ec238180f27d5"
+  },
+  "generatedMakefileSha256": "1aa24bd1b6bf8abdc19c8d963edbd9758342917ed1a26cdc80a54581fe054646",
+  "legacyCompilerPolicy": "-fcommon retains pre-GCC-10 tentative-global behavior; sort deduplicates mafillmm.o from stale missing C entry",
+  "compileDatePolicy": "Original source banner retained; actual build time recorded here; byte reproducibility not asserted",
+  "executableSha256": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b",
+  "file": "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Build/artifacts/macos-arm64-loadpath-pins/bin/ccx: Mach-O 64-bit executable arm64",
+  "externalRuntimes": {
+    "/opt/homebrew/opt/openblas/lib/libopenblas.0.dylib": "aeb5f40d3b5cc0fca84e05e90b8e7da6921cea2c33ca701062b0ccd7b4caf117",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgfortran.5.dylib": "09c11f298a73589b0fa79d93bad7fda25c29055999b5c331507e02f456bf1775",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgomp.1.dylib": "954328f63a49f0f294763c7b370c91893d7d99794b1665ada67b03b21283cc6b",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+    "/opt/homebrew/opt/libomp/lib/libomp.dylib": "432b8d15fc1b2431f937bba89796a32daaa2dd464eda12a744d9cb2818842477"
+  },
+  "resolvedRpaths": [
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/ThirdParty/Build/artifacts/macos-arm64-loadpath-pins/bin",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/gcc/aarch64-apple-darwin25/16",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/gcc",
+    "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current",
+    "/opt/homebrew/Cellar/openblas/0.3.34/lib",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/gcc/aarch64-apple-darwin25/16",
+    "/opt/homebrew/opt/gcc/lib/gcc/current/gcc",
+    "/opt/homebrew/opt/gcc/lib/gcc/current"
+  ],
+  "elapsedSeconds": 58.844
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "builds": [
+    {
+      "id": "macos-arm64-2.22-spooles-research",
+      "os": "Darwin",
+      "architecture": "Arm64",
+      "version": "2.22",
+      "executable": "ccx",
+      "files": {
+        "ccx": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b"
+      },
+      "externalFiles": {
+        "/opt/homebrew/opt/openblas/lib/libopenblas.0.dylib": "aeb5f40d3b5cc0fca84e05e90b8e7da6921cea2c33ca701062b0ccd7b4caf117",
+        "/opt/homebrew/opt/gcc/lib/gcc/current/libgfortran.5.dylib": "09c11f298a73589b0fa79d93bad7fda25c29055999b5c331507e02f456bf1775",
+        "/opt/homebrew/opt/gcc/lib/gcc/current/libgomp.1.dylib": "954328f63a49f0f294763c7b370c91893d7d99794b1665ada67b03b21283cc6b",
+        "/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+        "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+        "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+        "/opt/homebrew/opt/gcc/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+        "/opt/homebrew/opt/libomp/lib/libomp.dylib": "432b8d15fc1b2431f937bba89796a32daaa2dd464eda12a744d9cb2818842477"
+      },
+      "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+      "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+      "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+      "scope": "Research CPU profile; no production default or broad numerical/release acceptance"
+    }
+  ]
+}

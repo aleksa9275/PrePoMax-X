@@ -38,7 +38,10 @@ namespace CaeModel
                     // original conversion path, including the I/R input aliases.
                     if (mesh.Elements[block.ElementLabels.First()] is LinearPyramidElement) elementType = "C3D5";
                     else if (mesh.Elements[block.ElementLabels.First()] is ParabolicPyramidElement) elementType = "C3D13";
-                    var keyword = new FileInOut.Output.Calculix.CalElement(elementType, block.Name,
+                    // Sets are emitted explicitly below. Repeating the same name
+                    // on *Element appends the members twice in native CalculiX,
+                    // producing duplicate integration-point history rows.
+                    var keyword = new FileInOut.Output.Calculix.CalElement(elementType, null,
                         block.ElementLabels.Select(id => mesh.Elements[id]).ToList(), pyramidConversion ?? ConvertPyramidsToEnum.Wedges);
                     text.Append(keyword.GetKeywordString()).Append(keyword.GetDataString());
                 }

@@ -74,6 +74,11 @@ try{
   Check("pinned build file accepted only with exact bytes",PrePoMaxX.Solve.SolverBuilds.ValidateFiles(fileProfile.RootElement,dir)==Path.Combine(dir,"probe.bin"));
   File.AppendAllText(Path.Combine(dir,"probe.bin"),"tampered");bool rejected=false;try{PrePoMaxX.Solve.SolverBuilds.ValidateFiles(fileProfile.RootElement,dir);}catch(InvalidDataException){rejected=true;}Check("changed native binary rejected",rejected);
  }
+ string runtime=Path.Combine(root,"runtime.bin");File.WriteAllText(runtime,"pinned runtime");
+ using(var externalProfile=JsonDocument.Parse(JsonSerializer.Serialize(new{executable=Path.GetFileName(probe),files=new Dictionary<string,string>{{Path.GetFileName(probe),PrePoMaxX.Solve.SolverBuilds.Hash(probe)}},externalFiles=new Dictionary<string,string>{{runtime,PrePoMaxX.Solve.SolverBuilds.Hash(runtime)}}}))){
+  Check("external runtime hash accepted",PrePoMaxX.Solve.SolverBuilds.ValidateFiles(externalProfile.RootElement,Path.GetDirectoryName(probe)!)==Path.GetFullPath(probe));
+  File.AppendAllText(runtime,"changed");bool rejected=false;try{PrePoMaxX.Solve.SolverBuilds.ValidateFiles(externalProfile.RootElement,Path.GetDirectoryName(probe)!);}catch(InvalidDataException){rejected=true;}Check("changed external runtime rejected before execution",rejected);
+ }
  var recordedStatus=CalculixMonitorDataParser.ParseStatus(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"uniaxial.sta")));
  Check("original parser reads recorded Windows status IDs",recordedStatus.Count==1&&recordedStatus.Steps[0]==1&&recordedStatus.Increments[0]==1&&recordedStatus.Attempts[0]==1);
  Check("recorded status retains original times and iterations",recordedStatus.TotalTimes[0]==1&&recordedStatus.IncrementTimes[0]==1&&recordedStatus.IterationCounts[0]==1);

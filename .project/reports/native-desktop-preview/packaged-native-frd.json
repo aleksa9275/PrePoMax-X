@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "checks": [
+    {
+      "name": "native render window",
+      "passed": true
+    },
+    {
+      "name": "original IDs retained",
+      "passed": true
+    },
+    {
+      "name": "field scalar mapping",
+      "passed": true
+    },
+    {
+      "name": "VTK hit resolves original element ID",
+      "passed": true
+    },
+    {
+      "name": "nearest vertex resolves original node ID",
+      "passed": true
+    },
+    {
+      "name": "selected coordinates preserved",
+      "passed": true
+    },
+    {
+      "name": "selected nodal value uses original value order",
+      "passed": true
+    },
+    {
+      "name": "resize renders",
+      "passed": true
+    },
+    {
+      "name": "displayed frame has mesh/legend pixels",
+      "passed": true
+    },
+    {
+      "name": "window capture",
+      "passed": true
+    }
+  ],
+  "selection": {
+    "elementId": 1,
+    "nearestVertexNodeId": 5,
+    "nodeCoordinates": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "nodalValue": 0.000142857
+  },
+  "vtkVersion": "9.5.2",
+  "qtVersion": "6.10.0",
+  "sourceSha256": "ec3626403c6122a8f382d3f321e6c7553d0d01a4b06133517ddf50fdb627c8af",
+  "renderer": "vtkCocoaRenderWindow",
+  "toolSha256": "3e84b3a87aa03700c0eff201404ce8541148d60dcf0cdc38e6ef991290983232",
+  "transport": "Native VTK offscreen GPU frame copied into Qt; not final widget/performance acceptance",
+  "scope": "Native Mac render and programmatic picking; human pointer, DPI, other platforms and release packaging remain"
+}

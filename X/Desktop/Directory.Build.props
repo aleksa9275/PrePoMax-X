@@ -1,0 +1,3 @@
+<Project>
+  <Import Project="../Analysis/Directory.Build.props" />
+</Project>

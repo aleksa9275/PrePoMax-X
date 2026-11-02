@@ -38,6 +38,12 @@ public static class SolverBuilds
             string file=Path.Combine(directory,entry.Name);
             if(!File.Exists(file)||Hash(file)!=entry.Value.GetString())throw new InvalidDataException("Pinned solver/runtime file missing or changed: "+entry.Name);
         }
+        if(build.TryGetProperty("externalFiles",out var external))
+            foreach(var entry in external.EnumerateObject())
+            {
+                if(!Path.IsPathFullyQualified(entry.Name))throw new InvalidDataException("External runtime path must be absolute.");
+                if(!File.Exists(entry.Name)||Hash(entry.Name)!=entry.Value.GetString())throw new InvalidDataException("Pinned external runtime missing or changed: "+entry.Name);
+            }
         return Path.GetFullPath(Path.Combine(directory,executable));
     }
 }
@@ -51,6 +57,11 @@ internal static class Program
         bool solverExecuted=false;
         try
         {
+            if(args.Length>=1&&args[0]=="--registry")
+            {
+                if(args.Length<3)throw new ArgumentException("--registry requires a registry path and command.");
+                registryPath=Path.GetFullPath(args[1]);args=args[2..];
+            }
             var registry=SolverBuilds.Read(registryPath);
             if(args.Length>=1&&args[0]=="thread-plan")
             {
@@ -81,7 +92,7 @@ internal static class Program
                 var builds=registry.GetProperty("builds").EnumerateArray().Where(b=>b.GetProperty("os").GetString()==SolverBuilds.HostOs&&b.GetProperty("architecture").GetString()==SolverBuilds.HostArchitecture).Select(b=>b.GetProperty("id").GetString()).ToArray();
                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,pinnedBuilds=builds,solverAvailable=builds.Length==0?(bool?)false:null,binaryAvailabilityChecked=false,solverExecuted=false}));return 0;
             }
-            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
+            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
             var build=SolverBuilds.Select(registry,args[1]);string executable=SolverBuilds.ValidateFiles(build,Path.GetFullPath(args[2]));
             double timeout=double.Parse(args[6],CultureInfo.InvariantCulture);
             if(!double.IsFinite(timeout)||timeout<=0||timeout>86400)throw new InvalidDataException("Timeout must be finite and in (0,86400] seconds.");
@@ -96,7 +107,7 @@ internal static class Program
             {
                 if(Directory.Exists(directory)||File.Exists(directory))throw new IOException("Run directory already exists.");
                 Directory.CreateDirectory(directory);AnalysisFiles.WriteNew(Path.Combine(directory,"analysis.inp"),deck);
-                var job=new ExecutableJob("analysis",executable,"",directory){ProcessArguments=new[]{"-i","analysis"},TimeLimit=TimeSpan.FromSeconds(timeout),ProcessEnvironment=new Dictionary<string,string>{{"OMP_NUM_THREADS","1"},{"MKL_NUM_THREADS","1"}}};
+                var job=new ExecutableJob("analysis",executable,"",directory){ProcessArguments=new[]{"-i","analysis"},TimeLimit=TimeSpan.FromSeconds(timeout),ProcessEnvironment=new Dictionary<string,string>{{"OMP_NUM_THREADS","1"},{"MKL_NUM_THREADS","1"},{"OPENBLAS_NUM_THREADS","1"}}};
                 using var cancel=new CancellationTokenSource();ConsoleCancelEventHandler handler=(_,e)=>{e.Cancel=true;cancel.Cancel();};Console.CancelKeyPress+=handler;
                 try{await job.SubmitAsync(cancel.Token);}finally{Console.CancelKeyPress-=handler;solverExecuted=job.ProcessStarted;}
                 bool versionMatches=System.Text.RegularExpressions.Regex.IsMatch(job.CapturedStandardOutput,@"CalculiX Version\s+"+System.Text.RegularExpressions.Regex.Escape(build.GetProperty("version").GetString()!)+@"(?:\s|,)");
@@ -107,7 +118,7 @@ internal static class Program
             }
             finally{lease.Dispose();File.Delete(reservation);}
         }
-        catch(Exception e)when(e is IOException or InvalidDataException or ArgumentException or CaeGlobals.CaeException or JsonException or NotSupportedException or FormatException or OverflowException or UnauthorizedAccessException)
+        catch(Exception e)when(e is IOException or InvalidDataException or ArgumentException or CaeGlobals.CaeException or JsonException or NotSupportedException or FormatException or OverflowException or UnauthorizedAccessException or KeyNotFoundException or InvalidOperationException)
         {Console.Error.WriteLine(JsonSerializer.Serialize(new{success=false,solverExecuted,error=e.Message}));return 1;}
     }
 }

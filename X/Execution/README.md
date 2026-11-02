@@ -1,5 +1,16 @@
 # Native job execution boundary
 
+Task 0038 adds an explicit research registry override:
+`PrePoMaxX.Solve --registry <build-registry.json> run-static ...`. The default
+registry remains the Windows reference. `ThirdParty/Build/calculix-cpu.py`
+generates a fingerprinted native Mac ARM64 SPOOLES profile; the original bounded
+deck/solve/FRD/DAT workflow has now run successfully on that host. External runtime
+load paths are checked before launch; OMP/MKL/OpenBLAS reference counts stay one.
+See [recipe](../../ThirdParty/Build/README.md) and
+[evidence/limits](../../.project/reports/native-cpu-workflow.md). Historical
+Windows/native-profile availability statements below describe the default
+registry and prior task boundary, not absence of this explicit research route.
+
 This modern partial build source-links the original CaeJob.ExecutableJob data,
 Submit/progress/output behavior and original JobStatus enum in their original
 assembly. Mechanical extraction keeps the original WMI/job-object implementation

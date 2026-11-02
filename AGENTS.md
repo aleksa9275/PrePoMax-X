@@ -1,5 +1,18 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-02 tasks 0037/0038: native Mac ARM64 CalculiX 2.22/SPOOLES research build
+and original deck → solve → FRD/DAT workflow pass the bounded analytical cube.
+The first solve exposed/fixed B001 duplicate set emission in MeshDeckWriter;
+332 current analysis checks, 49 execution checks and existing source guards pass.
+Both original correctness failures/tetra gate remain. A local ad-hoc-signed Mac
+viewport app displays original-reader data without external Python/dotnet on PATH;
+B002 direct Qt embedding fails, so its VTK frame-copy bridge stays experimental.
+Read .project/reports/native-cpu-workflow.md and native-desktop-preview.md, tasks
+0037/0038 and current STATUS for actual publication. No production frontend/default
+backend/format/precision choice or full release acceptance. Preserve four targets,
+runtime/source/installer requirements; do not claim hosted CI without verification.
+Earlier local/uncommitted descriptions are historical after confirmed publication.
+
 2026-11-02 continuation/publication authorization: maintainer requests proceeding
 with desktop-host/native solver steps and committing/pushing useful work with
 progress documentation. Publish reviewed checkpoints normally to
