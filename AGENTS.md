@@ -7,6 +7,8 @@ The first solve exposed/fixed B001 duplicate set emission in MeshDeckWriter;
 Both original correctness failures/tetra gate remain. A local ad-hoc-signed Mac
 viewport app displays original-reader data without external Python/dotnet on PATH;
 B002 direct Qt embedding fails, so its VTK frame-copy bridge stays experimental.
+Implementation is published/remote-verified at 384edea2 on origin research;
+master is unchanged and hosted CI is unverified (GitLab session signed out).
 Read .project/reports/native-cpu-workflow.md and native-desktop-preview.md, tasks
 0037/0038 and current STATUS for actual publication. No production frontend/default
 backend/format/precision choice or full release acceptance. Preserve four targets,

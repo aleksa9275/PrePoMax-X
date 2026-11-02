@@ -8,9 +8,18 @@ write or force push.
 - **66e3ca0fbce22ca17efa7222dae9bed5218c6a87**: PrePoMac/upstream review,
   accelerated plan and focused development checks/CI preparation. Pushed and
   independently verified with `git ls-remote`.
-- Tasks **0037/0038**: native CPU workflow, B001 fix, dependency sources,
-  packaged native viewport candidate and B002 evidence. Current checkpoint is
-  being reviewed for normal commit/push; actual SHA is recorded after publication.
+- **384edea2f24bf51b57cac60d02f87e1b37dd77de**, tasks **0037/0038**: native CPU
+  workflow, B001 fix, dependency sources, packaged native viewport candidate and
+  B002 evidence. Normal push succeeded; independent `git ls-remote` returned this
+  exact research SHA. The master mirror remains
+  `f6273e39983e06042ae8b06e9a3dd0f729ea4b91`. Closing progress records are a
+  documentation-only follow-up on the same authorized research lane.
+
+Before committing, all **2288 newly recovered source files** were read back from
+the Git index and matched their SHA-256 manifests. Both retained evidence indexes
+and the native build recipe hash match. No generated solver/app/build cache was
+staged. Authored changes pass whitespace review; pristine third-party whitespace
+and solver-formatted evidence are preserved rather than reformatted.
 
 Relevant Mac checks and retained evidence are in
 [CPU workflow](native-cpu-workflow.md) and [desktop candidate](native-desktop-preview.md).

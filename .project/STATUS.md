@@ -16,10 +16,10 @@ Direct Qt embedding has B002; the working native-VTK frame-copy bridge remains a
 candidate with performance/input/DPI limits. No frontend/default backend/format
 decision. This does not complete milestone B or a clean-machine installer.
 
-The earlier tooling/plan/review checkpoint is published at **66e3ca0f**, independently
-verified on origin/research/native-feasibility. This new implementation checkpoint
-is under authorized review/publication; [publication record](reports/native-delivery-publication.md)
-will record actual SHA. Hosted CI is unverified: available GitLab browser is
+The earlier tooling/plan/review checkpoint **66e3ca0f** and new implementation
+checkpoint **384edea2** are published and independently verified on
+origin/research/native-feasibility. [Publication record](reports/native-delivery-publication.md).
+The master mirror is unchanged. Hosted CI is unverified: available GitLab browser is
 unauthenticated/404 and glab is unavailable. Do not claim a hosted pass.
 
 Next: resolve the bounded native widget/C# binding comparison, integrate tree/job/
