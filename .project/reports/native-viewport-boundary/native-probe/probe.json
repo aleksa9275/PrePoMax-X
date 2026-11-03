@@ -1,0 +1,123 @@
+{
+  "success": true,
+  "transport": "native-cocoa",
+  "checks": [
+    {
+      "name": "NSWindow click resolves original element ID",
+      "passed": true
+    },
+    {
+      "name": "NSWindow click resolves original node ID",
+      "passed": true
+    },
+    {
+      "name": "NSWindow click preserves original field value",
+      "passed": true
+    },
+    {
+      "name": "NSWindow drag rotates VTK camera",
+      "passed": true
+    },
+    {
+      "name": "NSWindow drag does not select",
+      "passed": true
+    },
+    {
+      "name": "render size matches widget and device scale",
+      "passed": true
+    },
+    {
+      "name": "actual screen capture available",
+      "passed": true
+    },
+    {
+      "name": "actual screen contains mesh/contour pixels",
+      "passed": true
+    },
+    {
+      "name": "actual screen capture saved",
+      "passed": true
+    },
+    {
+      "name": "larger mesh decoded by original reader",
+      "passed": true
+    },
+    {
+      "name": "five native create/render/finalize cycles",
+      "passed": true
+    },
+    {
+      "name": "window closes cleanly",
+      "passed": true
+    }
+  ],
+  "host": {
+    "os": "Darwin",
+    "machine": "arm64",
+    "version": "26.7.1"
+  },
+  "scope": "Synthetic Cocoa NSWindow pointer dispatch, actual screen pixels and local transport measurements; not human input or release acceptance",
+  "fieldClick": {
+    "selection": {
+      "elementId": 1,
+      "nearestVertexNodeId": 5,
+      "nodeCoordinates": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "nodalValue": 0.000142857
+    },
+    "expected": 0.000142857,
+    "selectedArray": "0:ALL",
+    "viewportOrigin": [
+      0,
+      34
+    ]
+  },
+  "selection": {
+    "elementId": 1,
+    "nearestVertexNodeId": 5,
+    "nodeCoordinates": [
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "devicePixelRatio": 2.0,
+  "renderSize": [
+    2120,
+    808
+  ],
+  "widgetSize": [
+    1060,
+    404
+  ],
+  "sourceSha256": "bc6e36c611df7d3e8238c4ab93d3c39fdc871af256893d40ae3b183b09e0d837",
+  "smallMesh": {
+    "nodes": 8,
+    "cells": 1,
+    "framebuffer": [
+      800,
+      600
+    ],
+    "medianRenderMs": 9.1994579997845,
+    "p95RenderMs": 16.795959003502503,
+    "frames": 35
+  },
+  "largerMesh": {
+    "nodes": 29791,
+    "cells": 27000,
+    "loadSeconds": 0.19632854099472752,
+    "framebuffer": [
+      800,
+      600
+    ],
+    "medianRenderMs": 11.314041999867186,
+    "p95RenderMs": 13.655916001880541,
+    "frames": 35,
+    "fixtureSha256": "a05179fee82fec852ea1f3d2e6c00bbe3f6dcdbe1b9010c9e38b85b0269b5cd9",
+    "maxResidentBytes": 364888064
+  },
+  "measurementScope": "35 synchronous render submissions at equal 800x600 framebuffer; not display FPS, CAD/solver throughput or general benchmark; peak RSS includes interpreter and readers are separate processes"
+}

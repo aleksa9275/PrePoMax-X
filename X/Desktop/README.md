@@ -1,5 +1,20 @@
 # Native viewport candidate
 
+Task 0043 adds an **opt-in Mac native child-view transport**, with the same
+original C# readers/job services and unchanged VTK/Qt pins:
+
+    /private/tmp/prepomaxx-desktop-runtime/bin/python X/Desktop/viewport.py X/Desktop/nonsequential-cube.inp --viewport native-cocoa
+
+For a packaged app, pass the same option to
+`PrePoMax-X-Viewport.app/Contents/MacOS/PrePoMax-X-Viewport`. It uses a VTK-owned
+child NSView and forwards Qt input into VTK; the bridge remains the default.
+`--viewport-probe <new-directory>` records synthetic native-window clicks/drag,
+actual screen pixels, Retina size, lifecycle and a 27,000-cell transport sample.
+These are automated events, not human/cross-platform input acceptance. The
+[measured comparison and C# binding prerequisite](../../.project/reports/native-viewport-boundary.md)
+do not select a production frontend or establish a speed win. The original
+task 0042 DMG remains available unchanged.
+
 The Mac package script is now a compatibility wrapper around the shared
 [target build entry](../Build/README.md). All four RIDs are explicit there;
 desktop render expectations come from the same target catalog included in the

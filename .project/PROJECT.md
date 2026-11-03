@@ -1,5 +1,14 @@
 # PrePoMax-X project charter
 
+2026-11-03 maintainer direction: **PrePoMax 3.0.0 is the functionality/parity
+target**. Maintain open-source macOS and Linux distributions and follow subsequent
+upstream releases even if upstream does not accept the portability contribution.
+Keep shared engineering behavior and a versioned upstream-delta/parity record;
+upstream acceptance is not a dependency for this project's continuation. This
+does not claim stable-3.0.0 source/artifact correspondence or authorize an
+unreviewed baseline switch. Current engineering pins remain explicit until the
+exact 3.0.0 release is verified. Windows x64 remains a required target.
+
 2026-11-03 local preview: task 0042 delivers a local ad-hoc-signed, unnotarized
 Mac DMG with desktop solver controls, relocated native CPU runtimes and full
 uninstall/reset instructions. Exact-source copied-app solve/render/analytical

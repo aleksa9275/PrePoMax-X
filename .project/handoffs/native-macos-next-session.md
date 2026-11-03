@@ -1,5 +1,46 @@
 # Native macOS continuation — 3 November 2026
 
+## Latest checkpoint — task 0043 (supersedes the task 0042 snapshot below)
+
+The maintainer specifies **PrePoMax 3.0.0 parity**, then ongoing upstream-release
+tracking and open-source macOS/Linux distributions independent of upstream
+adoption. D054 and `.project/PARITY.md` record this. Exact stable-3.0.0 source/
+binary correspondence remains pending; no baseline or mirror change was made.
+Read `.project/reports/native-viewport-boundary.md` for actual publication/CI.
+
+Task 0043 is implemented and locally verified: opt-in `--viewport native-cocoa`
+creates a VTK child NSView, forwards Qt input to the generic interactor and
+maps Retina framebuffer/pick coordinates. The existing bridge remains default.
+Copied/ejected DMG app: 11 real solve/render checks, seven analytical checks/
+negative control, 12 synthetic native-NSWindow input/display/lifecycle/27,000-cell
+checks, 11 matching default-bridge checks and eight nonsequential-ID checks pass.
+Eight build and three process checks pass. No new native Windows/Linux GUI or
+production frontend/performance acceptance. The C# route needs a reviewed current
+binding/wrapper/source closure; no current C# viewport host was executed.
+
+Local task 0043 DMG:
+`X/Build/artifacts/task0043-native-viewport/dist/PrePoMax-X-Preview-arm64.dmg`,
+SHA256 `c6618c3f057a0d6c42ec0d7f6d145f6f92d89560aac16956bb8aa402d2f7ee2f`.
+This is an ad-hoc-signed source-snapshot build (base fa5494dc plus recorded dirty
+code snapshot), not a clean-commit/public release. All four desktop source hashes
+match reviewed files. Retained manifests/probes/screenshots/snapshot live in
+`.project/reports/native-viewport-boundary/`; binary remains local/ignored.
+Original task 0042 tested DMG below remains byte-identical and available.
+
+Native larger-mesh synchronous render submissions were slower than bridge in
+the measured run; peak process RSS was lower. Equal framebuffer comparison is
+not display FPS or a solver/CAD benchmark. No performance win is claimed.
+The original QVTK failures remain rejected; B002 has a verified alternative.
+
+Next bounded increment is `.project/tasks/0044-editable-solid-workflow.md`
+(prepared, not started): model tree/material/support/load editing through original
+C# services, no manual JSON for the supported slice. Then explicit supported
+save/reopen. Keep D051/D053 scope, source/algorithm/precision/default/persistence
+boundaries, both correctness failures/tetra gate and all release requirements.
+No feature change is left half-implemented. Preserve the four Finder files.
+
+## Historical task 0042 snapshot
+
 Prepared for another agent at the maintainer's request. No feature implementation
 is in progress. Read AGENTS.md, PROJECT.md, STATUS.md, DECISIONS.md and task 0043
 before changing code. Current records supersede historical stop/uncommitted-only

@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Publish shared sources for explicit targets; record native execution separately."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parents[2]
+CATALOG_PATH = Path(__file__).with_name("targets.json")
+HOSTS = {
+    "mesh": ("X/Desktop/MeshScene/MeshScene.csproj", "PrePoMaxX.MeshScene"),
+    "results": ("X/Results/Inspect/Inspect.csproj", "PrePoMaxX.InspectResults"),
+    "solve": ("X/Execution/Solve/Solve.csproj", "PrePoMaxX.Solve"),
+}
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def load_module(path, name):
+    spec = importlib.util.spec_from_file_location(name, path)
+    value = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(value)
+    return value
+
+def catalog():
+    value = json.loads(CATALOG_PATH.read_text())
+    if value["schemaVersion"] != 1 or set(value["targets"]) != {"osx-arm64", "win-x64", "linux-x64", "linux-arm64"}:
+        raise ValueError("Unknown shared target catalog")
+    return value
+
+def native(target):
+    return target["os"] == platform.system() and platform.machine().lower() in target["machines"]
+
+def require_native(target):
+    if not native(target):
+        raise ValueError("Native operation requires matching OS/architecture; cross-publishing is not execution")
+
+def file_hashes(folder):
+    return {p.relative_to(folder).as_posix(): sha(p) for p in sorted(folder.rglob("*")) if p.is_file() and not p.is_symlink()}
+
+class Build:
+    def __init__(self, target_id, output):
+        self.catalog = catalog()
+        self.target_id, self.target = target_id, self.catalog["targets"][target_id]
+        self.output = output.resolve()
+        self.output.mkdir(parents=True, exist_ok=False)
+        self.started = time.monotonic()
+        self.report = {"success": False, "target": target_id, "targetData": self.target,
+            "recordedAtUtc": datetime.now(timezone.utc).isoformat(), "commands": [],
+            "host": {"os": platform.system(), "machine": platform.machine()},
+            "targetCatalogSha256": sha(CATALOG_PATH), "nativeExecution": False, "releaseAccepted": False}
+
+    def run(self, command, name=None):
+        command = list(map(str, command))
+        log = self.output / (name or f"command-{len(self.report['commands']):02d}.log")
+        env = dict(os.environ, DOTNET_CLI_TELEMETRY_OPTOUT="1", DOTNET_SKIP_FIRST_TIME_EXPERIENCE="1",
+                   PYINSTALLER_CONFIG_DIR=str(self.output / "pyinstaller-cache"))
+        with log.open("w") as stream:
+            done = subprocess.run(command, cwd=ROOT, env=env, stdout=stream, stderr=subprocess.STDOUT)
+        self.report["commands"].append({"arguments": command, "exitCode": done.returncode, "log": log.name})
+        if done.returncode:
+            raise RuntimeError("Command failed; see " + str(log))
+        return log.read_text()
+
+    def identity(self):
+        reproduction = self.output / "reproduction"
+        reproduction.mkdir()
+        self.report["repository"] = load_module(ROOT / "X/Checks/check.py", "check_source").retain_source(reproduction)
+        # Add known native build inputs outside the existing X/Cae snapshot scope.
+        inputs = [CATALOG_PATH, ROOT / "ThirdParty/Sources/source-lock.json",
+            *sorted((ROOT / "ThirdParty/Build").glob("*.py")),
+            *sorted((ROOT / "ThirdParty/Build/platforms").glob("*.py"))]
+        self.report["buildInputs"] = {p.relative_to(ROOT).as_posix(): sha(p) for p in inputs}
+        for source in inputs:
+            target = reproduction / "source" / source.relative_to(ROOT)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+
+    def finish(self):
+        self.report["elapsedSeconds"] = round(time.monotonic() - self.started, 3)
+        (self.output / "build.json").write_text(json.dumps(self.report, indent=2) + "\n")
+
+def publish_hosts(build, include=None):
+    build.report["kind"] = "self-contained-shared-hosts"
+    build.report["sdk"] = build.run(["dotnet", "--version"]).strip()
+    include = tuple(include or HOSTS)
+    feed = ROOT / "X/Analysis/artifacts/offline-feed"
+    feed.mkdir(parents=True, exist_ok=True)
+    for folder in include:
+        build.run(["dotnet", "publish", HOSTS[folder][0], "-c", "Release", "-r", build.target_id,
+            "--self-contained", "true", f"-p:RuntimeFrameworkVersion={build.catalog['runtimeFrameworkVersion']}",
+            f"-p:NativePreviewLockRoot={build.output / 'locks' / folder}", "--disable-build-servers", "-m:1",
+            "--source", feed, "--source", "https://api.nuget.org/v3/index.json",
+            "-o", build.output / "hosts" / folder, "-v:quiet"])
+    build.report["hostFiles"] = file_hashes(build.output / "hosts")
+    if native(build.target):
+        cases = {"mesh": [ROOT / "X/Desktop/nonsequential-cube.inp"],
+            "results": ["inspect-frd", ROOT / ".project/reports/windows-reference/solver/uniaxial.frd"],
+            "solve": ["thread-plan", "--threads", "1"]}
+        build.report["smoke"] = []
+        for folder in include:
+            executable = build.output / "hosts" / folder / (HOSTS[folder][1] + build.target["executableSuffix"])
+            value = json.loads(build.run([executable, *cases[folder]], "smoke-" + folder + ".log"))
+            if value.get("success") is not True:
+                raise ValueError("Native shared host rejected common fixture: " + folder)
+            if folder == "mesh" and ([e["id"] for e in value["elements"]] != [7001] or len(value["nodes"]) != 8):
+                raise ValueError("Original mesh IDs changed in published host")
+            build.report["smoke"].append({"host": folder, "passed": True, "output": value})
+        build.report["nativeExecution"] = True
+        build.report["nativeExecutionScope"] = "Published C# host smoke only; GUI/installer and numerical solve are separate"
+    else:
+        build.report["executionPending"] = "Cross-published payload; execute on matching native worker"
+
+def verify_hosts(path, target_id, required=("mesh", "results", "solve")):
+    report = json.loads((path / "build.json").read_text())
+    if report.get("success") is not True or report.get("target") != target_id:
+        raise ValueError("Host build did not complete for requested target")
+    if any(p.is_symlink() for p in (path / "hosts").rglob("*")):
+        raise ValueError("Staged hosts cannot contain unverified symlinks")
+    if file_hashes(path / "hosts") != report["hostFiles"]:
+        raise ValueError("Staged host files changed after build")
+    for name in required:
+        if not any(p.startswith(name + "/") for p in report["hostFiles"]):
+            raise ValueError("Required published host missing: " + name)
+    return report
+
+def package_preview(build, solver_build=None, package_format="app"):
+    require_native(build.target)
+    publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
+    identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
+        "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
+        "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
+        "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
+        "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
+        "dirty": build.report["repository"]["dirty"]}
+    (build.output / "source-identity.json").write_text(json.dumps(identity, indent=2) + "\n")
+    adapter = build.target["desktopPackageAdapter"]
+    helper = load_module(Path(__file__).parent / "platforms" / (adapter + ".py"), "package_platform")
+    app = helper.package(build, ROOT, solver_build)
+    if package_format == "dmg":
+        helper.dmg(build, ROOT, app)
+    build.report.update(kind="native-static-workflow-preview" if solver_build else "native-viewport-candidate", app=str(app), sourceIdentity=identity,
+        fileHashes=file_hashes(app),
+        symlinkTargets={p.relative_to(app).as_posix(): os.readlink(p) for p in sorted(app.rglob("*")) if p.is_symlink()},
+        scope="Ad-hoc local preview; no clean-machine/signing/release acceptance", success=True)
+    (build.output / "package.json").write_text(json.dumps(build.report, indent=2) + "\n")
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("action", choices=["plan", "build", "package"])
+    parser.add_argument("--target", choices=list(catalog()["targets"]), required=True)
+    parser.add_argument("--component", choices=["hosts", "solver"], default="hosts")
+    parser.add_argument("--format", choices=["app", "dmg"], default="app")
+    parser.add_argument("--solver-build", type=Path, help="Explicit verified native solver build for desktop jobs")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--jobs", type=int, default=6)
+    args = parser.parse_args(argv)
+    target = catalog()["targets"][args.target]
+    if args.action == "plan":
+        print(json.dumps({"target": args.target, "data": target, "matchingNativeHost": native(target),
+            "managedCrossPublish": True, "nativeSolverRecipe": target["solverAdapter"] is not None,
+            "desktopPackageRecipe": target["desktopPackageAdapter"], "executionVerified": False}, indent=2))
+        return 0
+    if not args.output:
+        parser.error("Build/package requires a new --output directory")
+    build = None
+    try:
+        if args.action == "package" or args.component == "solver":
+            require_native(target)
+            field = "desktopPackageAdapter" if args.action == "package" else "solverAdapter"
+            if target[field] is None:
+                raise ValueError("Target recipe remains pending: " + field)
+        if args.action == "package" and args.format == "dmg" and (args.target != "osx-arm64" or not args.solver_build):
+            raise ValueError("Local DMG requires osx-arm64 and an explicit --solver-build")
+        build = Build(args.target, args.output)
+        build.identity()
+        if args.action == "package":
+            package_preview(build, args.solver_build, args.format)
+        elif args.component == "hosts":
+            publish_hosts(build)
+        else:
+            build.run([sys.executable, ROOT / "ThirdParty/Build/calculix-cpu.py", "--target", args.target,
+                "--output", build.output / "solver", "--jobs", args.jobs])
+            build.report.update(kind="native-cpu-solver-build", solverBuild="solver/build-report.json",
+                nativeExecution=False, scope="Build only; execute common workflow separately")
+        build.report["success"] = True
+    except (OSError, ValueError, RuntimeError, KeyError, subprocess.SubprocessError) as error:
+        if build:
+            build.report["error"] = str(error)
+        else:
+            print(json.dumps({"success": False, "error": str(error)}), file=sys.stderr)
+            return 1
+    finally:
+        if build:
+            build.finish()
+    print(json.dumps({k: build.report.get(k) for k in ["success", "target", "kind", "app", "elapsedSeconds", "error"]}))
+    return 0 if build.report["success"] else 1
+
+if __name__ == "__main__":
+    raise SystemExit(main())

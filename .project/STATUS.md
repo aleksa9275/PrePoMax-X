@@ -1,5 +1,23 @@
 # Project status
 
+## Current — task 0043: native viewport boundary
+
+Maintainer selects **PrePoMax 3.0.0 parity**, followed by future upstream release
+tracking and open-source Mac/Linux maintenance independent of upstream adoption.
+[Version/coverage record](PARITY.md), D054. Exact stable-release correspondence
+remains pending; no source baseline/mirror change was made.
+
+Opt-in `--viewport native-cocoa` renders through a VTK-owned child NSView without
+frame copying, with Qt input forwarding and Retina coordinates. The actual DMG's
+copied app passes 11 solve/render checks, 7 analytical checks/control, 12 native
+event/display/lifecycle/larger-mesh checks and 11 default-bridge checks. Eight build
+and three process checks pass. [Report/artifact/comparison](reports/native-viewport-boundary.md).
+No speed win, C# native-host execution or production frontend decision is claimed.
+Original task 0042 DMG remains byte-identical. Publication/CI status is in the report.
+Next: editable solid model tree/material/support/load workflow; supported save/
+reopen follows with an explicit persistence decision. Both correctness failures/
+tetra gate and all full-parity/four-target/release requirements remain.
+
 Agent continuation: [current handoff](handoffs/native-macos-next-session.md)
 records the verified artifact, published implementation, pending gates and next
 bounded task. No feature implementation is left mid-change.

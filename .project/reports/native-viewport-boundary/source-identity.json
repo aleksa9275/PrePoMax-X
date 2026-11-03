@@ -1,0 +1,10 @@
+{
+  "viewportSha256": "78072b3cf49bdfca1b51f71fc182c2bcd31a67090dde7dab6762c8aa85955984",
+  "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+  "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+  "desktopJobsSha256": "6de44c71b92b288fb2274c986e61a63aafa9f37da423be7bce4b29c9a92b85e2",
+  "target": "osx-arm64",
+  "targetCatalogSha256": "85b2043e727c36dd07fccfc7e5265cd26bb6c2e71df60b0b004109a2baafdaf9",
+  "gitHead": "fa5494dcd8f64e579ad0f7c121cb93b49ead91fa",
+  "dirty": true
+}

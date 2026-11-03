@@ -1,0 +1,109 @@
+diff --git a/X/Build/build.py b/X/Build/build.py
+index 2f71cb0d..9126961a 100644
+--- a/X/Build/build.py
++++ b/X/Build/build.py
+@@ -136,6 +136,8 @@ def package_preview(build, solver_build=None, package_format="app"):
+     require_native(build.target)
+     publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
+     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
++        "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
++        "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
+         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
+         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
+         "dirty": build.report["repository"]["dirty"]}
+diff --git a/X/Desktop/viewport.py b/X/Desktop/viewport.py
+index a80cb6d5..c2eb2319 100644
+--- a/X/Desktop/viewport.py
++++ b/X/Desktop/viewport.py
+@@ -109,7 +109,7 @@ def decode(path):
+ 
+ 
+ class Viewport(QtWidgets.QMainWindow):
+-    def __init__(self):
++    def __init__(self, transport="frame-bridge"):
+         super().__init__()
+         self.setWindowTitle("PrePoMax-X — native viewport candidate")
+         self.resize(1000, 720)
+@@ -128,7 +128,12 @@ class Viewport(QtWidgets.QMainWindow):
+         self.fields.setMinimumWidth(330)
+         self.fields.currentIndexChanged.connect(self.set_field)
+         toolbar.addWidget(self.fields)
+-        self.vtk = FrameBridge(self)
++        self.transport = transport
++        if transport == "native-cocoa":
++            from native_cocoa import NativeCocoaView
++            self.vtk = NativeCocoaView(self)
++        else:
++            self.vtk = FrameBridge(self)
+         self.setCentralWidget(self.vtk)
+         self.renderer = vtkRenderer()
+         self.renderer.SetBackground(0.12, 0.15, 0.19)
+@@ -353,11 +358,16 @@ def main():
+     parser.add_argument("--screenshot", type=Path)
+     parser.add_argument("--run-example", action="store_true", help="Run bundled native static example and load results")
+     parser.add_argument("--jobs-root", type=Path, help="New job folders under this directory")
++    parser.add_argument("--viewport", choices=("frame-bridge", "native-cocoa"), default="frame-bridge",
++                        help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
++    parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
+     args = parser.parse_args()
++    if args.viewport_probe and (args.self_test or args.run_example):
++        parser.error("Use --viewport-probe separately from solve/self-test")
+     app = QtWidgets.QApplication([sys.argv[0]])
+     app.setOrganizationName("PrePoMax-X")
+     app.setApplicationName("PrePoMax-X Preview")
+-    window = Viewport()
++    window = Viewport(args.viewport)
+     if args.jobs_root:
+         window.jobs_root = args.jobs_root.resolve()
+     window.automated_workflow = bool(args.run_example and args.self_test)
+@@ -410,12 +420,25 @@ def main():
+             app.processEvents()
+             window.vtk.render()
+             check("resize renders", window.vtk.GetRenderWindow().GetSize()[0] > 0)
+-            frame = window.vtk.frame
++            if window.transport == "native-cocoa":
++                # QWidget.grab() does not capture a VTK-owned native child view.
++                origin = window.vtk.mapToGlobal(QtCore.QPoint(0, 0))
++                frame = window.screen().grabWindow(0, origin.x(), origin.y(),
++                    window.vtk.width(), window.vtk.height()).toImage()
++            else:
++                frame = window.vtk.frame
++            if frame is None or frame.isNull():
++                raise ValueError("Could not capture displayed viewport")
+             colors = {frame.pixelColor(x, y).rgb() for x in range(0, frame.width(), 20) for y in range(0, frame.height(), 20)}
+             check("displayed frame has mesh/legend pixels", len(colors) > (10 if "fields" in window.scene else 3))
+             if args.screenshot:
+                 args.screenshot.parent.mkdir(parents=True, exist_ok=True)
+-                check("window capture", window.grab().save(str(args.screenshot)))
++                if window.transport == "native-cocoa":
++                    origin = window.mapToGlobal(QtCore.QPoint(0, 0))
++                    capture = window.screen().grabWindow(0, origin.x(), origin.y(), window.width(), window.height())
++                else:
++                    capture = window.grab()
++                check("window capture", capture.save(str(args.screenshot)))
+             tool_sha = (json.loads((Path(sys._MEIPASS) / "source-identity.json").read_text())["viewportSha256"]
+                 if getattr(sys, "frozen", False) else hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+             result.update(success=all(c["passed"] for c in checks), checks=checks,
+@@ -425,8 +448,8 @@ def main():
+                 target=target_id, selection=selection, vtkVersion=vtkVersion.GetVTKVersion(), qtVersion=QtCore.qVersion(),
+                 sourceSha256=window.scene["SourceSha256"], renderer=window.vtk.GetRenderWindow().GetClassName(),
+                 toolSha256=tool_sha,
+-                transport="Native VTK offscreen GPU frame copied into Qt; not final widget/performance acceptance",
+-                scope="Native Mac render and programmatic picking; human pointer, DPI, other platforms and release packaging remain")
++                transport=window.transport,
++                scope="Bounded render and programmatic picking; human pointer, DPI, other platforms and release packaging remain")
+         except Exception as error:
+             result["error"] = str(error)
+         args.self_test.parent.mkdir(parents=True, exist_ok=True)
+@@ -435,7 +458,10 @@ def main():
+         window.close()
+         app.exit(0 if result["success"] else 1)
+ 
+-    if args.run_example:
++    if args.viewport_probe:
++        from viewport_probe import run
++        QtCore.QTimer.singleShot(1200, lambda: run(app, window, args.viewport_probe))
++    elif args.run_example:
+         if args.self_test:
+             window.job.completed.connect(lambda _: QtCore.QTimer.singleShot(500, verify))
+         def begin_example():

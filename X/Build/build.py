@@ -136,6 +136,8 @@ def package_preview(build, solver_build=None, package_format="app"):
     require_native(build.target)
     publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
+        "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
+        "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
         "dirty": build.report["repository"]["dirty"]}

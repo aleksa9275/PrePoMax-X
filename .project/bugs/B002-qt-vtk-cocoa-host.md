@@ -1,5 +1,13 @@
 # B002 — Qt/VTK candidate Cocoa embedding defects
 
+3 November task 0043 update: an alternative `SetParentInfo` child-NSView route
+with Qt → generic-VTK input forwarding passes visible packaged rendering,
+original IDs/scalars, synthetic native NSWindow clicks/drag, 2x Retina resize
+and repeated lifecycle checks. [Actual evidence and measured tradeoff](../reports/native-viewport-boundary.md).
+The original QVTK adapters below remain rejected; this is an opt-in alternative,
+not an original-adapter fix, general Qt/VTK compatibility statement, production
+frontend choice or full input/performance/four-target acceptance.
+
 2 November 2026, unshipped task 0037 candidate, macOS 26.7.1 ARM64,
 VTK 9.5.2 / PyQt6 6.10.0 / Qt runtime 6.10.2 / CPython 3.12.14.
 These are observations of this combination, not a general Qt/VTK incompatibility.

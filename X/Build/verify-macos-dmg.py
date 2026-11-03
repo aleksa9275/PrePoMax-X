@@ -20,6 +20,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--package', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--viewport', choices=('frame-bridge', 'native-cocoa'), default='frame-bridge')
     args = parser.parse_args()
     package, out = args.package.resolve(), args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -70,7 +71,7 @@ def main():
         executable = installed / 'Contents/MacOS/PrePoMax-X-Viewport'
         gui_file = out / 'desktop-workflow.json'
         run([executable, '--run-example', '--jobs-root', out / 'Job workspace', '--self-test', gui_file,
-             '--screenshot', out / 'desktop-workflow.png'], 'desktop', env)
+             '--viewport', args.viewport, '--screenshot', out / 'desktop-workflow.png'], 'desktop', env)
         gui = json.loads(gui_file.read_text())
         if not gui['success']:
             raise ValueError('Desktop workflow checks failed')
@@ -88,6 +89,7 @@ def main():
         if not all(c['passed'] for c in checks) or not rejected:
             raise ValueError('Native numerical check or negative control failed')
         report.update(success=True, installedApp=str(installed), appFiles=len(hashes), appLinks=len(links),
+            viewport=args.viewport,
             guiChecks=gui['checks'], analyticalChecks=checks, alteredDisplacementRejected=rejected,
             jobDirectory=job['directory'], nativeSolverExecuted=True, externalBuildToolsOnPath=False,
             developerIdSigned=False, notarized=False)

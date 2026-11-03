@@ -1,0 +1,20 @@
+{
+  "buildTests": {
+    "passed": 8,
+    "command": "python3 -m unittest discover -s X/Build -p test_build.py"
+  },
+  "desktopProcessTests": {
+    "passed": 3,
+    "command": "/private/tmp/prepomaxx-desktop-runtime/bin/python -m unittest discover -s X/Desktop -p test_jobs.py"
+  },
+  "upstream": {
+    "checked": "2026-11-03",
+    "default": "master",
+    "head": "2a25db82896aa0aa51666eb550df19d3950a8630",
+    "tagsAdvertised": false,
+    "gitlabReleaseApi": [],
+    "stable300CorrespondenceVerified": false
+  },
+  "originalDmgSha256": "9ae8e97c283c97db7aae8c0044385a9fa0d08c15f7c5207910eafe5c1a50c606",
+  "scope": "Affected build/process checks; packaged Mac evidence is separate. No new full-platform/native GUI acceptance."
+}

@@ -1,5 +1,17 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-03 task 0043 continuation: maintainer selects PrePoMax 3.0.0 as parity
+target and wants ongoing open-source macOS/Linux distributions tracking future
+upstream releases even without upstream adoption (D054; .project/PARITY.md).
+Task 0043 implements an opt-in native Cocoa child-view adapter with Qt input;
+packaged solve/render, native-window event/Retina/lifecycle/larger-mesh evidence
+is in .project/reports/native-viewport-boundary.md. Keep the tested task 0042 DMG
+unchanged. Bridge stays default; no production frontend choice or performance
+win is claimed, and no current C# host was executed. Read the report for actual
+publication/CI status and artifact/source-snapshot identity. Next is the editable
+solid workflow, then explicitly agreed save/reopen. Preserve all prior gates
+and D051/D053 scope; 3.0.0 stable correspondence is not yet verified.
+
 2026-11-03 agent handoff: read
 .project/handoffs/native-macos-next-session.md for the published checkpoint,
 local-only DMG/runtime paths, evidence, pending gates and next bounded task 0043.

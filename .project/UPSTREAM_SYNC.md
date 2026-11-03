@@ -1,5 +1,12 @@
 # Upstream synchronization and integration
 
+Maintainer direction, 3 November 2026: initial parity target is **PrePoMax 3.0.0**;
+thereafter follow upstream releases and maintain open-source macOS/Linux packages
+even if upstream does not accept the contribution. Required Windows support and
+the shared-source rule remain. Record the exact release commit/artifact and
+feature/behavior delta for each version; release numbering alone is insufficient.
+This direction does not automatically merge new upstream code or publish a release.
+
 ## Repository lanes
 
 `origin` is `git@gitlab.com:aleksa9275/pre-po-max-x.git`; `upstream` is `https://gitlab.com/MatejB/PrePoMax.git`. The advertised default is currently `master`, also referenced by origin/HEAD and upstream/HEAD. `master` mirrors upstream exactly. `x/main` is a separate reviewed integration lane; Phase 0 documentation stays on `feature/project-initialization`. New development branches use the maintainer's requested prefixes.

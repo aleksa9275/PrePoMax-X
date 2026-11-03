@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "id": "calculix-2.22",
+      "manifest": "CalculiX/2.22/source-manifest.json",
+      "manifestSha256": "8dd1b5fad4c0e369903bfea4de009592f7d1790a66aa69de21c4bfa19ea6ea94"
+    },
+    {
+      "id": "spooles-2.2",
+      "manifest": "SPOOLES/2.2/source-manifest.json",
+      "manifestSha256": "f2c1c473625ca657cfa5d05562f6c330f2d65e4ea182296dd73e0f896b2f4ece"
+    },
+    {
+      "id": "arpack-ng-3.9.1",
+      "manifest": "ARPACK-ng/3.9.1/source-manifest.json",
+      "manifestSha256": "9134295ed0acc1d83e747fd51deddb3535fc1e42c6709412ee4ec238180f27d5"
+    }
+  ]
+}

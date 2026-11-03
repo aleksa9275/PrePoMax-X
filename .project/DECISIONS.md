@@ -1,5 +1,16 @@
 # Decision register
 
+D054 — Accepted parity target and ongoing open-source maintenance, 2026-11-03:
+maintainer specifies PrePoMax 3.0.0 as the functionality target and intends to
+follow future upstream releases while maintaining macOS/Linux distributions,
+independently of whether upstream accepts the contribution. Preserve one shared
+engineering implementation and required Windows x64/Linux x64/Linux ARM64/macOS
+ARM64 targets. Track each exact upstream release, feature delta, compatibility
+and native acceptance; do not equate an RC/source assembly version with verified
+stable release correspondence. Task 0043 is now authorized for implementation.
+Existing D051 publication and D053 local-preview boundaries continue; no silent
+production frontend/persistence/backend choice or upstream communication.
+
 D053 — Local Mac DMG before notarization, 2026-11-03: maintainer requests a
 local-installable DMG while signing/notarization are unavailable and explicitly
 chooses desktop solver controls before the first DMG. Task 0042 prioritizes a
