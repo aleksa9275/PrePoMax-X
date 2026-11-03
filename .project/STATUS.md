@@ -18,10 +18,13 @@ The first packaged real-editor comparison passes 18 GUI checks and 15 deck/
 numerical/control checks: E=105 GPa and 50 N/node reach the executed deck, giving
 200 MPa stress and fourfold displacement with unchanged absolute tolerances.
 [Final artifact, actual verification and publication](reports/editable-solid-workflow.md).
-The fully captured tested DMG remains available. A later test-only cleanup
-candidate completes its native jobs but its final screen capture is pending:
-a separate minimal Qt app also returns null captures. This is retained as a
-failed capture, not passed verification; maintainer display availability was asked.
+Final configuration coverage found/fixed B004: histories-off runs must not
+require nonempty DAT, while requested DAT and FRD/STA remain strict. Native Mac
+history-on/off workflow passes 15 checks and the copied edited model's FRD fields
+match exactly with histories off. The current DMG passes both editor viewport
+proofs. A null-capture incident is retained; strict native retry passes after the
+maintainer confirmed the Mac was unlocked/awake. No security setting changed.
+Publication/CI of the repair is recorded in the report.
 
 Scope: imported mesh named sets and the existing bounded static-solid definition.
 No additional/picked-set authoring, project save/reopen, full PMX/history/CAD/

@@ -1,0 +1,206 @@
+{
+  "success": true,
+  "recordedAtUtc": "2026-11-03T12:23:42.556836+00:00",
+  "os": "Darwin",
+  "architecture": "arm64",
+  "commands": [
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/solve/PrePoMaxX.Solve",
+        "--registry",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/build-registry.json",
+        "run-static",
+        "osx-arm64-2.22-spooles-research",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/bin",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-mesh.inp",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-analysis.json",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/run",
+        "120"
+      ],
+      "exitCode": 0,
+      "log": "solve"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-frd",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/run/analysis.frd"
+      ],
+      "exitCode": 0,
+      "log": "frd"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-dat",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/run/analysis.dat"
+      ],
+      "exitCode": 0,
+      "log": "dat"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/solve/PrePoMaxX.Solve",
+        "inspect-monitor",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/run/analysis.sta",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/run/analysis.cvg"
+      ],
+      "exitCode": 0,
+      "log": "monitor"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/solve/PrePoMaxX.Solve",
+        "--registry",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/build-registry.json",
+        "run-static",
+        "osx-arm64-2.22-spooles-research",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/bin",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-mesh.inp",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/field-only.json",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/field-only-run",
+        "120"
+      ],
+      "exitCode": 0,
+      "log": "field-only-solve"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-frd",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-native-workflow/field-only-run/analysis.frd"
+      ],
+      "exitCode": 0,
+      "log": "field-only-frd"
+    }
+  ],
+  "toolSha256": "b4666cfe6bbba54be7a70ac4dd22c04105b063a7c70ed5d47410884f6ad63c3a",
+  "threads": 1,
+  "scope": "One C3D8 static cube; not broad numerical/backend/performance/release acceptance",
+  "buildReportSha256": "223f734cf0c7ee3aabdb3a5158a2437ee4a182bd0f17a9ae8e756762d2d30a76",
+  "registrySha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+  "hostBuildSha256": "e42b04511696023a91a4d0fd6dd5454b854419e956b2a36176ce491db51f6957",
+  "target": "osx-arm64",
+  "hostHashes": {
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/solve/PrePoMaxX.Solve": "99d7a4ffa3f16cf6ebc33c635808b487d6580774ba6db8376557938c9dc5384c",
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-b004-delivery/hosts/results/PrePoMaxX.InspectResults": "ce9192e166dbc5246b64bbc1fa5e993300b26333b457a8d62d60a034ace19125"
+  },
+  "inputs": {
+    "X/Analysis/StaticDeck/cube-mesh.inp": "b74dde2612c0a9752b7f3589e3b3657863ee616f0815597ceb827066ffab290a",
+    "X/Analysis/StaticDeck/cube-analysis.json": "9fa37616b701236570924eabc85f72e644cf9bbcc31eeda4f60b570e89a9a6c5"
+  },
+  "solverExecuted": true,
+  "transportCompleted": true,
+  "alteredDisplacementRejected": true,
+  "checks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    },
+    {
+      "name": "original FRD node IDs retained",
+      "passed": true
+    },
+    {
+      "name": "original FRD element ID retained",
+      "passed": true
+    },
+    {
+      "name": "original FRD displacement and stress fields decoded",
+      "passed": true
+    },
+    {
+      "name": "original DAT history contains records",
+      "passed": true
+    },
+    {
+      "name": "original monitor records completed increment",
+      "passed": true
+    },
+    {
+      "name": "field-only native solve succeeds without requiring DAT",
+      "passed": true
+    },
+    {
+      "name": "field-only original reader preserves mesh IDs and topology",
+      "passed": true
+    },
+    {
+      "name": "field-only original FRD fields exactly match history-enabled run",
+      "passed": true
+    }
+  ],
+  "frdFields": [
+    {
+      "name": "DISP",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "STRESS",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "TOSTRAIN",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    },
+    {
+      "name": "FORC",
+      "stepId": 1,
+      "incrementId": 1,
+      "time": 1
+    }
+  ],
+  "datHistories": 96,
+  "outputHashes": {
+    "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+    "analysis.frd": "4e42c541e9fd060578dc9598e9326e986b6622fb6eb084a021bb6ecc540c84f4",
+    "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+    "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "_output_analysis.txt": "b8cd3d55635be3c071a34382a4c6a3a38e646fe8bba6e4d258c06b42809fc66b",
+    "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.inp": "24f66e4a43cbd809c4da95b39a5eadfe13e372e8a6b94233081cd6b9463e3bb8",
+    "run.json": "1ae6e775871f8ebc21069ca2aaa556a448cc6ecf0196bc19ad368fa66d5e699b",
+    "analysis.dat": "6be78a9cbc048142c927a1b1ebb78db936c02c6477864e99401b4e37ffc57c8a"
+  },
+  "fieldOnly": {
+    "success": true,
+    "requiredOutputs": [
+      ".frd",
+      ".sta"
+    ],
+    "definitionSha256": "2b261a8c0a7a46c8b43dc6cc0054930372a506b2a527103a2fc4dc8ee4b2b0ae",
+    "frdSha256": "4e42c541e9fd060578dc9598e9326e986b6622fb6eb084a021bb6ecc540c84f4",
+    "datBytes": 0
+  }
+}

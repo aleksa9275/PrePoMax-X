@@ -136,9 +136,14 @@ internal static class Program
                 if(Console.IsInputRedirected) _=Task.Run(()=>ReadCancellationAsync(cancel));
                 try{await job.SubmitAsync(cancel.Token);}finally{Console.CancelKeyPress-=handler;solverExecuted=job.ProcessStarted;}
                 bool versionMatches=System.Text.RegularExpressions.Regex.IsMatch(job.CapturedStandardOutput,@"CalculiX Version\s+"+System.Text.RegularExpressions.Regex.Escape(build.GetProperty("version").GetString()!)+@"(?:\s|,)");
-                bool outputsPresent=new[]{".dat",".frd",".sta"}.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});
+                // DAT is requested by history outputs, not by field-only runs.
+                // Empty/unrequested DAT must not turn a completed FRD/STA run
+                // into failure; requested histories still require nonempty DAT.
+                string[] requiredOutputs=spec.Step.NodalHistorySets.Length+spec.Step.ElementHistorySets.Length>0
+                    ?new[]{".dat",".frd",".sta"}:new[]{".frd",".sta"};
+                bool outputsPresent=requiredOutputs.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});
                 bool success=job.JobStatus==JobStatus.OK&&versionMatches&&outputsPresent;
-                var result=new{success,solverExecuted,buildId=args[1],registrySha256=SolverBuilds.Hash(registryPath),build,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,status=job.JobStatus.ToString(),exitCode=job.ExitCode,versionMatches,outputsPresent,stdout=job.CapturedStandardOutput,stderr=job.CapturedStandardError,failureReason=job.FailureReason,numericalAcceptance=false,outputs=Directory.EnumerateFiles(directory).ToDictionary(Path.GetFileName,p=>SolverBuilds.Hash(p))};
+                var result=new{success,solverExecuted,buildId=args[1],registrySha256=SolverBuilds.Hash(registryPath),build,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,status=job.JobStatus.ToString(),exitCode=job.ExitCode,versionMatches,outputsPresent,requiredOutputs,stdout=job.CapturedStandardOutput,stderr=job.CapturedStandardError,failureReason=job.FailureReason,numericalAcceptance=false,outputs=Directory.EnumerateFiles(directory).ToDictionary(Path.GetFileName,p=>SolverBuilds.Hash(p))};
                 string json=JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true});AnalysisFiles.WriteNew(Path.Combine(directory,"run.json"),json+"\n");Console.WriteLine(json);return success?0:1;
             }
             finally{lease.Dispose();File.Delete(reservation);}

@@ -12,6 +12,7 @@ def begin(app, window, output):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     report = {'success': False, 'checks': [], 'transport': window.transport,
+        'captureMethod': 'QWidget paint capture' if window.transport == 'frame-bridge' else 'actual screen rectangle',
         'scope': 'Automated Qt editor controls and actual bundled native jobs; no project save/reopen or full-model acceptance'}
     state = {'phase': 'baseline', 'finished': False}
     mesh_path = examples() / 'cube-mesh.inp'
@@ -41,7 +42,11 @@ def begin(app, window, output):
         app.exit(0 if report['success'] else 1)
 
     def capture(widget, path):
-        # Includes the native VTK child when capturing the main window.
+        # The bridge paints into Qt, so the ordinary widget capture includes it.
+        # Native child views require actual screen pixels; do not substitute a
+        # widget/API capture for that rejected-black-frame boundary.
+        if window.transport == 'frame-bridge':
+            return widget.grab().save(str(path))
         origin = widget.mapToGlobal(QtCore.QPoint(0, 0))
         return widget.screen().grabWindow(0, origin.x(), origin.y(), widget.width(), widget.height()).save(str(path))
 
@@ -113,7 +118,7 @@ def begin(app, window, output):
                 QtCore.Qt.MatchFlag.MatchRecursive, 0)[0].child(0).text(1) == '105 GPa')
             window.raise_()
             app.processEvents()
-            check('edited native result and model tree capture', capture(window, output / 'edited-result.png'))
+            check('edited result and model tree capture: ' + report['captureMethod'], capture(window, output / 'edited-result.png'))
             finish()
         except Exception as error:
             finish(error)

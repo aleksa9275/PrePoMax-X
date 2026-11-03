@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "runtimeFrameworkVersion": "10.0.14",
+  "solverSourceLock": "ThirdParty/Sources/source-lock.json",
+  "targets": {
+    "osx-arm64": {
+      "os": "Darwin", "architecture": "Arm64", "machines": ["arm64"],
+      "executableSuffix": "", "solverAdapter": "macos", "desktopPackageAdapter": "macos",
+      "renderWindows": ["vtkCocoaRenderWindow"],
+      "plannedFormats": ["app", "dmg", "homebrew-cask"],
+      "minimumSupportedOs": null
+    },
+    "win-x64": {
+      "os": "Windows", "architecture": "X64", "machines": ["amd64", "x86_64"],
+      "executableSuffix": ".exe", "solverAdapter": null, "desktopPackageAdapter": null,
+      "renderWindows": ["vtkWin32OpenGLRenderWindow"],
+      "plannedFormats": ["portable-exe", "exe-installer", "msi"],
+      "minimumSupportedOs": null
+    },
+    "linux-x64": {
+      "os": "Linux", "architecture": "X64", "machines": ["x86_64", "amd64"],
+      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": null,
+      "renderWindows": ["vtkXOpenGLRenderWindow", "vtkEGLRenderWindow", "vtkOSOpenGLRenderWindow"],
+      "plannedFormats": ["tar.gz", "deb", "rpm", "arch-package"],
+      "minimumSupportedOs": null, "glibcBaseline": null
+    },
+    "linux-arm64": {
+      "os": "Linux", "architecture": "Arm64", "machines": ["aarch64", "arm64"],
+      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": null,
+      "renderWindows": ["vtkXOpenGLRenderWindow", "vtkEGLRenderWindow", "vtkOSOpenGLRenderWindow"],
+      "plannedFormats": ["tar.gz", "deb", "rpm", "arch-linux-arm-package"],
+      "minimumSupportedOs": null, "glibcBaseline": null
+    }
+  },
+  "linuxPackaging": {
+    "debian": {"format": "deb", "verifiedVersions": []},
+    "fedora": {"format": "rpm", "verifiedVersions": []},
+    "arch": {"format": "arch-package", "verifiedVersions": []},
+    "arch-linux-arm": {"format": "arch-linux-arm-package", "verifiedVersions": []}
+  },
+  "scope": "Build recipes and planned formats, not native execution, distro support or release acceptance"
+}

@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "checks": {
+    "nativeRunSuccess": true,
+    "requiresFrdStaOnly": true,
+    "meshAndIdEquality": true,
+    "allOriginalFieldsExactlyEqual": true
+  },
+  "commands": [
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/Frameworks/hosts/solve/PrePoMaxX.Solve",
+        "--registry",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/Resources/native-solver/build-registry.json",
+        "run-static",
+        "osx-arm64-2.22-spooles-local-preview",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/Resources/native-solver/bin",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Analysis/StaticDeck/cube-mesh.inp",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-field-only/no-history.json",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-field-only/solve",
+        "30"
+      ],
+      "exitCode": 0
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/Frameworks/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-frd",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-field-only/solve/analysis.frd"
+      ],
+      "exitCode": 0
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/Frameworks/hosts/results/PrePoMaxX.InspectResults",
+        "inspect-frd",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-editor-verification/jobs/20261103-122745-65cb69a5a042/solve/analysis.frd"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "datBytes": 0,
+  "externalBuildToolsOnPath": false,
+  "scope": "Actual copied Mac app hosts and bundled native solver; field-only edited model equals history-enabled edited result; no GUI capture claim"
+}

@@ -87,6 +87,24 @@ def main():
         report["frdFields"] = [{k: f[k] for k in ["name", "stepId", "incrementId", "time"]} for f in frd["fields"]]
         report["datHistories"] = len(dat["histories"])
         report["outputHashes"] = {p.name: sha(p) for p in (out / "run").iterdir() if p.is_file()}
+        # Same original model and physical run, with all history requests off.
+        field_spec = json.loads(spec.read_text())
+        field_spec['step']['nodalHistorySets'], field_spec['step']['elementHistorySets'] = [], []
+        field_definition = out / 'field-only.json'
+        field_definition.write_text(json.dumps(field_spec, indent=2) + '\n')
+        field_job = run([*solve_command, '--registry', registry, 'run-static', profile['id'], build / 'bin',
+            mesh, field_definition, out / 'field-only-run', '120'], 'field-only-solve')
+        field_frd = run([*inspect_command, 'inspect-frd', out / 'field-only-run/analysis.frd'], 'field-only-frd')
+        checks.extend([
+            {'name': 'field-only native solve succeeds without requiring DAT', 'passed': field_job['success'] and
+             field_job['solverExecuted'] and field_job['requiredOutputs'] == ['.frd', '.sta']},
+            {'name': 'field-only original reader preserves mesh IDs and topology', 'passed':
+             all(field_frd[key] == frd[key] for key in ('nodes', 'elements', 'nodeIdsInValueOrder'))},
+            {'name': 'field-only original FRD fields exactly match history-enabled run', 'passed': field_frd['fields'] == frd['fields']},
+        ])
+        report['fieldOnly'] = {'success': field_job['success'], 'requiredOutputs': field_job['requiredOutputs'],
+            'definitionSha256': sha(field_definition), 'frdSha256': sha(out / 'field-only-run/analysis.frd'),
+            'datBytes': (out / 'field-only-run/analysis.dat').stat().st_size if (out / 'field-only-run/analysis.dat').exists() else None}
         report["success"] = all(c["passed"] for c in checks) and report["alteredDisplacementRejected"]
     except (OSError, ValueError, RuntimeError, KeyError, IndexError, subprocess.SubprocessError) as error:
         report["error"] = str(error)

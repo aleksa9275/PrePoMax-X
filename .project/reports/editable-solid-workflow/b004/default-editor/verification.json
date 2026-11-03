@@ -1,0 +1,200 @@
+{
+  "success": true,
+  "checks": [
+    {
+      "name": "packaged editor workflow passes",
+      "passed": true
+    },
+    {
+      "name": "submitted material is 105 GPa",
+      "passed": true
+    },
+    {
+      "name": "submitted nodal force is 50 N per node",
+      "passed": true
+    },
+    {
+      "name": "original deck reflects edits and preserves mesh supports sections outputs",
+      "passed": true
+    },
+    {
+      "name": "altered edited-deck force rejected",
+      "passed": true
+    },
+    {
+      "name": "all seven original baseline analytical checks pass",
+      "passed": true
+    },
+    {
+      "name": "edited displacement IDs unchanged",
+      "passed": true
+    },
+    {
+      "name": "edited force IDs unchanged",
+      "passed": true
+    },
+    {
+      "name": "edited displacements match 200 N and 105 GPa",
+      "passed": true
+    },
+    {
+      "name": "edited stresses retain eight integration points",
+      "passed": true
+    },
+    {
+      "name": "edited axial stress is 200 MPa with transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "edited support reaction balances 200 N",
+      "passed": true
+    },
+    {
+      "name": "edited global nodal-force sum zero",
+      "passed": true
+    },
+    {
+      "name": "altered edited displacement rejected",
+      "passed": true
+    },
+    {
+      "name": "edited displacement is four times baseline",
+      "passed": true
+    }
+  ],
+  "scope": "Local copied-app edited static cube; no clean OS or full parity acceptance",
+  "command": [
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/MacOS/PrePoMax-X-Viewport",
+    "--editor-probe",
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-editor-verification/gui",
+    "--jobs-root",
+    "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-editor-verification/jobs",
+    "--viewport",
+    "frame-bridge"
+  ],
+  "exitCode": 0,
+  "guiChecks": [
+    {
+      "name": "baseline actual native job completed",
+      "passed": true
+    },
+    {
+      "name": "baseline FRD loaded into viewport",
+      "passed": true
+    },
+    {
+      "name": "model tree retains source model after result loading",
+      "passed": true
+    },
+    {
+      "name": "Configure opens the real analysis dialog",
+      "passed": true
+    },
+    {
+      "name": "invalid material cannot apply or start a solver",
+      "passed": true
+    },
+    {
+      "name": "support free/constrained components survive editing",
+      "passed": true
+    },
+    {
+      "name": "edited load dialog capture",
+      "passed": true
+    },
+    {
+      "name": "edited material dialog capture",
+      "passed": true
+    },
+    {
+      "name": "original C# validation accepts edited controls",
+      "passed": true
+    },
+    {
+      "name": "applied controls update model definition",
+      "passed": true
+    },
+    {
+      "name": "edited actual native job completed",
+      "passed": true
+    },
+    {
+      "name": "edited FRD loaded into viewport",
+      "passed": true
+    },
+    {
+      "name": "executed snapshot matches applied controls",
+      "passed": true
+    },
+    {
+      "name": "edited run uses a distinct workspace",
+      "passed": true
+    },
+    {
+      "name": "executed deck matches original validation hash",
+      "passed": true
+    },
+    {
+      "name": "original example mesh remains unchanged",
+      "passed": true
+    },
+    {
+      "name": "model tree shows changed material",
+      "passed": true
+    },
+    {
+      "name": "edited result and model tree capture: QWidget paint capture",
+      "passed": true
+    }
+  ],
+  "baselineAnalyticalChecks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    }
+  ],
+  "baselineDirectory": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-editor-verification/jobs/20261103-122744-e212cc79468b/solve",
+  "editedDirectory": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-current-editor-verification/jobs/20261103-122745-65cb69a5a042/solve",
+  "expected": {
+    "modulusMPa": 105000,
+    "forcePerNodeN": 50,
+    "totalAxialForceN": 200,
+    "stressMPa": 200,
+    "loadedFaceDisplacementMm": 0.0019047619047619048
+  },
+  "originalTolerances": {
+    "displacement": 1e-09,
+    "axialStress": 0.0001,
+    "transverseStress": 1e-05,
+    "force": 1e-05
+  },
+  "baselineDeckSha256": "24f66e4a43cbd809c4da95b39a5eadfe13e372e8a6b94233081cd6b9463e3bb8",
+  "editedDeckSha256": "72c104e84af8b27ec2f40d7e552cfc235716986f544f3ae0687425502df338e0",
+  "externalBuildToolsOnPath": false,
+  "developerIdSigned": false,
+  "notarized": false
+}

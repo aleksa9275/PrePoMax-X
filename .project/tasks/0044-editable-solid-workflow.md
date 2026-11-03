@@ -14,6 +14,13 @@ artifact/verification/publication is recorded in
 [the report](../reports/editable-solid-workflow.md). No project format, production
 frontend/default/backend change or full parity acceptance is implied.
 
+Final configuration coverage fixes B004: required outputs now follow history
+requests; requested DAT and FRD/STA remain strict. Native Mac workflow passes
+15 checks, copied edited field-only outputs match exactly, and both current
+editor viewport proofs pass. Earlier capture failure remains retained; strict
+native retry passes after maintainer display confirmation. The report records
+the current repaired DMG and actual second checkpoint publication/CI.
+
 Prepared 3 November 2026 after task 0043's bounded native viewport proof.
 Continue the accepted Mac-first/shared-source sequence toward 3.0.0 parity.
 The task 0042 DMG remains the tested fallback; task 0043's native transport stays

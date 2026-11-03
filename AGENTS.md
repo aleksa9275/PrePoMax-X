@@ -9,6 +9,12 @@ new/picked sets and project save/reopen remain pending. Task 0045 prepares an
 explicit persistence decision/proof; do not relabel job JSON as PMX or silently
 select a default format. Keep both earlier DMGs, D051/D053/D054 scope, both known
 correctness failures/tetra gate and all full-parity/four-target/release gates.
+Final task 0044 coverage fixes B004: require DAT only for requested histories;
+retain strict FRD/STA and requested-DAT checks. Current repaired DMG is
+X/Build/artifacts/task0044-current-delivery/dist/PrePoMax-X-Preview-arm64.dmg.
+Both viewport editor proofs and copied field-only checks pass. Earlier capture
+failure remains retained; strict native retry passes after maintainer display
+confirmation. Read the report for actual repair publication/CI and current artifact.
 
 2026-11-03 task 0043 continuation: maintainer selects PrePoMax 3.0.0 as parity
 target and wants ongoing open-source macOS/Linux distributions tracking future

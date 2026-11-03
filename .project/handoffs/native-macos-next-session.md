@@ -25,6 +25,15 @@ failures/tetra gate, four-target/source/license/install/release requirements and
 D051/D053 publication scope. No feature is left mid-change; four Finder files
 remain user-owned/untracked.
 
+Final task 0044 coverage fixes B004: DAT is required only for requested histories;
+FRD/STA and requested-DAT checks remain strict. Current repaired DMG:
+`X/Build/artifacts/task0044-current-delivery/dist/PrePoMax-X-Preview-arm64.dmg`,
+SHA256 `004f32d85acf8bef58315c9a13b6321d5ffbc4ff26f019fe672f9e091d634c14`.
+Both current copied-app editor viewport proofs pass. Native history-on/off and
+copied edited field-only original-reader fields match exactly. A capture incident
+is retained; strict native retry passes after maintainer display confirmation.
+Read the report for actual second checkpoint publication/CI and source identity.
+
 ## Previous checkpoint — task 0043 (supersedes the task 0042 snapshot below)
 
 The maintainer specifies **PrePoMax 3.0.0 parity**, then ongoing upstream-release

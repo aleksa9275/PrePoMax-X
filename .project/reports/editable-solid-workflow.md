@@ -110,7 +110,36 @@ No private user model is used or included.
 
 ## Local artifact and reproduction
 
-The fully captured/tested DMG is
+**Current delivery, including B004 repair:**
+`X/Build/artifacts/task0044-current-delivery/dist/PrePoMax-X-Preview-arm64.dmg`:
+260,546,785 bytes; SHA256
+`004f32d85acf8bef58315c9a13b6321d5ffbc4ff26f019fe672f9e091d634c14`.
+Its mounted/copied/ejected app passes the original 11 default-viewport/solve
+checks, seven analytical checks/control, 1,610-file/1,470-link/signature checks,
+and **18 editor + 15 deck/numerical/control checks on each viewport path**.
+Default bridge proof uses ordinary Qt widget paint capture; native-child proof
+uses actual screen pixels. [Current default](editable-solid-workflow/b004/default-editor/verification.json),
+[current native](editable-solid-workflow/b004/native-editor/verification.json).
+
+**B004:** valid field-only runs produce empty DAT; the old host mislabeled them
+failed. Required outputs now follow the requested histories: FRD/STA always,
+nonempty DAT whenever history sets are requested. Missing requested DAT and fields
+still fail; solver/model/reader/numerical bounds do not change.
+[Bug and regression](../bugs/B004-field-only-output-contract.md). Current execution
+controls pass, and native Mac history-on/off cube workflow passes **15 checks**
+with all original-reader FRD fields exactly equal. Four
+[copied-app field-only checks](editable-solid-workflow/b004/copied-field-only/verification.json)
+prove the edited model succeeds with zero-byte DAT and exactly matches its
+history-enabled mesh/IDs/fields. Current package/snapshot files are under
+`editable-solid-workflow/b004/`, identifying **0583a2bd plus retained dirty source**.
+
+The earlier capture incident below is resolved by a strict native retry after
+the maintainer confirmed the Mac was unlocked/awake. No security setting was
+changed; the failed evidence remains retained and its exact cause is unknown.
+
+### Earlier candidate evidence (superseded by current delivery)
+
+The earlier fully captured/tested history-enabled DMG is
 `X/Build/artifacts/task0044-final-delivery/dist/PrePoMax-X-Preview-arm64.dmg`:
 260,510,141 bytes, SHA256
 `9a6e586c0c8b8065a1185e219a23ea8e159495d42daa67b111628723f4de316a`.
@@ -124,14 +153,15 @@ path is `X/Build/artifacts/task0044-reviewed-delivery/dist/PrePoMax-X-Preview-ar
 260,546,540 bytes, SHA256
 `5d08e69e55e96beb61342587b53162cd7b783d8a1da5df7ba6c8f791ae6c2f27`.
 Both actual native jobs, original validation/deck hash and 17 editor checks pass,
-but the final actual screen capture fails. A separate minimal Qt application
+but the final actual screen capture initially failed. A separate minimal Qt application
 also returns null for screen-region, own-window and full-screen grabs, with a Qt
 ICC-profile warning. The cause is not established; display-session availability
 was requested from the maintainer. This failed capture is **not** a passing GUI
-check. Independent actual DAT checks still pass with unchanged bounds. Retain
-the passing artifact above while this latest capture remains pending.
+check. Independent actual DAT checks still pass with unchanged bounds. The
+current delivery and passing strict retry above supersede this candidate. These
+earlier packages predate B004 and are not the repaired field-only delivery.
 
-The package source identity records base **c0f60987 plus a retained dirty source
+The earlier package source identity records base **c0f60987 plus a retained dirty source
 snapshot**; do not call it a clean-commit build. Compare the six desktop source
 hashes and changed C# files with the publication commit; the passing artifact's
 probe predates that final test-only cleanup change. Binary remains local and

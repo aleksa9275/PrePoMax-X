@@ -1,0 +1,56 @@
+{
+  "success": true,
+  "solverExecuted": true,
+  "buildId": "osx-arm64-2.22-spooles-research",
+  "registrySha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+  "build": {
+    "id": "osx-arm64-2.22-spooles-research",
+    "os": "Darwin",
+    "architecture": "Arm64",
+    "version": "2.22",
+    "executable": "ccx",
+    "files": {
+      "ccx": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b"
+    },
+    "externalFiles": {
+      "/opt/homebrew/opt/openblas/lib/libopenblas.0.dylib": "aeb5f40d3b5cc0fca84e05e90b8e7da6921cea2c33ca701062b0ccd7b4caf117",
+      "/opt/homebrew/opt/gcc/lib/gcc/current/libgfortran.5.dylib": "09c11f298a73589b0fa79d93bad7fda25c29055999b5c331507e02f456bf1775",
+      "/opt/homebrew/opt/gcc/lib/gcc/current/libgomp.1.dylib": "954328f63a49f0f294763c7b370c91893d7d99794b1665ada67b03b21283cc6b",
+      "/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+      "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+      "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+      "/opt/homebrew/opt/gcc/lib/gcc/current/libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+      "/opt/homebrew/opt/libomp/lib/libomp.dylib": "432b8d15fc1b2431f937bba89796a32daaa2dd464eda12a744d9cb2818842477"
+    },
+    "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+    "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+    "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+    "scope": "Research CPU profile; no production default or broad numerical/release acceptance"
+  },
+  "os": "Darwin",
+  "architecture": "Arm64",
+  "status": "OK",
+  "exitCode": 0,
+  "versionMatches": true,
+  "outputsPresent": true,
+  "requiredOutputs": [
+    ".dat",
+    ".frd",
+    ".sta"
+  ],
+  "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:            8\n   elements:            1\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            8\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            4\n   single point constraints:           12\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:            6\n   terms in all sets:           33\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            4\n   data points in all amplitudes:            4\n   print requests:            3\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC\u0027s\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 12\n number of nonzero lower triangular matrix elements\n 66\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.003110\n________________________________________\n",
+  "stderr": "",
+  "failureReason": null,
+  "numericalAcceptance": false,
+  "outputs": {
+    "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+    "analysis.frd": "4e42c541e9fd060578dc9598e9326e986b6622fb6eb084a021bb6ecc540c84f4",
+    "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+    "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "_output_analysis.txt": "b8cd3d55635be3c071a34382a4c6a3a38e646fe8bba6e4d258c06b42809fc66b",
+    "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.inp": "24f66e4a43cbd809c4da95b39a5eadfe13e372e8a6b94233081cd6b9463e3bb8",
+    "analysis.dat": "6be78a9cbc048142c927a1b1ebb78db936c02c6477864e99401b4e37ffc57c8a"
+  }
+}
