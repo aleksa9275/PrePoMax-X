@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "profile": "fast",
+  "areas": [
+    "execution",
+    "analysis"
+  ],
+  "host": {
+    "os": "Darwin",
+    "architecture": "Arm64"
+  },
+  "recordedAtUtc": "2026-11-03T11:49:53.389114+00:00",
+  "steps": [
+    {
+      "area": "execution",
+      "revision": "current",
+      "arguments": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "X/Execution/verify-execution.py",
+        "--expect-os",
+        "Darwin",
+        "--expect-architecture",
+        "Arm64",
+        "--output",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Checks/artifacts/task0044-current-mac/execution-current.json"
+      ],
+      "result": "execution-current.json",
+      "log": "execution-current.log",
+      "status": "passed",
+      "exitCode": 0,
+      "resultSha256": "71056b395544ea40d9f06368ff8bab9108d7d5f89f4822941ab19536e6ea3c33",
+      "checks": 49,
+      "elapsedSeconds": 14.849
+    },
+    {
+      "area": "analysis",
+      "revision": "current",
+      "arguments": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "X/Analysis/verify-analysis.py",
+        "--expect-os",
+        "Darwin",
+        "--expect-architecture",
+        "Arm64",
+        "--output",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Checks/artifacts/task0044-current-mac/analysis-current.json"
+      ],
+      "result": "analysis-current.json",
+      "log": "analysis-current.log",
+      "status": "passed",
+      "exitCode": 0,
+      "resultSha256": "1a2dd789d2e56f839d00354155a7c926598bd656d418a3d19644603a4e9dd795",
+      "checks": 44,
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "fullyAccepted": false,
+      "elapsedSeconds": 14.434
+    }
+  ],
+  "success": true,
+  "plannedStepCount": 2,
+  "solverExecuted": false,
+  "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+  "repository": {
+    "head": "c0f6098775ee261d9ccc3645a1a1805d2dd7c161",
+    "dirty": true,
+    "patch": "source.patch",
+    "patchSha256": "73be96a9b783f531c357ca7b8755abec56f7739a87b3b2969868bcfe9cd569cd",
+    "changedCode": [
+      {
+        "path": "X/Desktop/MeshScene/Program.cs",
+        "state": "modified",
+        "sha256": "282f32dd8c183cbd7d5979208eef023262215797b6869141fef30ca87cf09251"
+      },
+      {
+        "path": "X/Desktop/analysis_editor.py",
+        "state": "untracked",
+        "sha256": "ee8ea4bddb672d3a08942a8cd29a2587c6fe7b45ce4d6678fd87627b65fbeb30"
+      },
+      {
+        "path": "X/Desktop/jobs.py",
+        "state": "modified",
+        "sha256": "4a88920b258fce237f53979c0301b21b02d9226a0a6c5328fe73d199ecf4e557"
+      },
+      {
+        "path": "X/Desktop/test_analysis_editor.py",
+        "state": "untracked",
+        "sha256": "a3e415845e4013c71c323937f37b5930b2fe839531f026688ac6a677997825cb"
+      },
+      {
+        "path": "X/Desktop/test_jobs.py",
+        "state": "modified",
+        "sha256": "f1dee30569de85d12c011cfffc7c6a3702a11f14d0ae6fa84741719c755978a7"
+      },
+      {
+        "path": "X/Desktop/viewport.py",
+        "state": "modified",
+        "sha256": "0043edd0d5312ada05641f15efc212c0b6137642b2f635265675e1796ff736f4"
+      },
+      {
+        "path": "X/Execution/Solve/Program.cs",
+        "state": "modified",
+        "sha256": "3fd69cff0091a5552981aa453f388b100c9510fc92af48f2965f9a29a1c1a965"
+      },
+      {
+        "path": "X/Execution/definition_control.py",
+        "state": "untracked",
+        "sha256": "662236a409344fa7514e4671d11e15ff530d1ba335d1d54b4bd02ead3c2c749a"
+      },
+      {
+        "path": "X/Execution/verify-execution.py",
+        "state": "modified",
+        "sha256": "6a526a6d2396a47b4344ca3117c387a510064727b53f85878cf0a1047e8b2004"
+      }
+    ],
+    "scope": "changed build/test/shared source only; no user models or private files"
+  },
+  "upstreamPins": {
+    "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+    "revisions": [
+      {
+        "name": "3.0.0-rc2",
+        "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+      },
+      {
+        "name": "post-rc2-2026-10-17",
+        "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+      }
+    ]
+  },
+  "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+  "dotnetSdk": "10.0.403",
+  "elapsedSeconds": 29.452,
+  "pendingSteps": []
+}

@@ -1,5 +1,34 @@
 # Project status
 
+## Current — task 0044: editable static solid workflow
+
+Model tree and Configure / Run analysis now edit explicit units, original
+isotropic elastic materials/solid sections, displacement supports, forces per
+node, static increments and requested history sets. Named-set inventory comes
+from the original INP reader; original C# `validate-static` builds/validates the
+deck without a solver. Jobs freeze input mesh/definition into a new workspace,
+then use the existing original solve/cancel/status/FRD path. Accepted edits remain
+in the tree after results load. Stale validation clears on edit; unsaved-session
+discard prompts protect edits. No engineering parser/math or project format is
+reimplemented in Python.
+
+Seven real-Qt/original-C# editor checks, four process/snapshot/cancel/failure
+checks, eight build checks and affected current-source Analysis/Execution pass.
+The first packaged real-editor comparison passes 18 GUI checks and 15 deck/
+numerical/control checks: E=105 GPa and 50 N/node reach the executed deck, giving
+200 MPa stress and fourfold displacement with unchanged absolute tolerances.
+[Final artifact, actual verification and publication](reports/editable-solid-workflow.md).
+The fully captured tested DMG remains available. A later test-only cleanup
+candidate completes its native jobs but its final screen capture is pending:
+a separate minimal Qt app also returns null captures. This is retained as a
+failed capture, not passed verification; maintainer display availability was asked.
+
+Scope: imported mesh named sets and the existing bounded static-solid definition.
+No additional/picked-set authoring, project save/reopen, full PMX/history/CAD/
+meshing or production frontend choice. Both prior tested DMGs, both correctness
+failures/tetra gate and all release requirements remain. Next: explicit supported
+save/reopen boundary and persistence decision.
+
 ## Current — task 0043: native viewport boundary
 
 Maintainer selects **PrePoMax 3.0.0 parity**, followed by future upstream release

@@ -84,6 +84,29 @@ class DesktopJobBoundary(unittest.TestCase):
             self.assertIn('missing or changed', job.result['outcome']['error'])
             self.assertFalse(job.result['success'])
 
+    def test_editor_run_freezes_mesh_and_definition_before_execution(self):
+        with tempfile.TemporaryDirectory(prefix='desktop edited model ') as directory:
+            root = Path(directory)
+            command = self.command(root, '#!/bin/sh\necho "CalculiX Version 2.22"\necho $$ > solver.pid\nexec /bin/sleep 60\n')
+            mesh = root / 'original mesh.inp'
+            initial_mesh = (ROOT / 'X/Analysis/StaticDeck/cube-mesh.inp').read_bytes()
+            mesh.write_bytes(initial_mesh)
+            definition = json.loads((ROOT / 'X/Analysis/StaticDeck/cube-analysis.json').read_text())
+            job = DesktopJob()
+            job.start(mesh, None, root / 'jobs', command, definition=definition)
+            definition['materials'][0]['youngsModulus'] = '999 GPa'
+            mesh.write_text('Changed after submission')
+            self.wait(lambda: (job.directory / 'solver.pid').exists())
+            self.assertEqual((job.input_directory / 'mesh.inp').read_bytes(), initial_mesh)
+            frozen = json.loads((job.input_directory / 'analysis.json').read_text())
+            self.assertEqual(frozen['materials'][0]['youngsModulus'], '210 GPa')
+            self.assertIn('210000, 0.3', (job.directory / 'analysis.inp').read_text())
+            self.assertEqual(job.input_directory.parent, job.directory.parent)
+            job.cancel()
+            self.wait(lambda: job.result is not None)
+            self.assertEqual(job.state, 'Cancelled')
+            self.assertEqual(Path(job.result['inputDirectory']), job.input_directory)
+
 
 if __name__ == '__main__':
     unittest.main()

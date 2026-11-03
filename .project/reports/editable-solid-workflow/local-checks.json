@@ -1,0 +1,16 @@
+{
+  "editorWidgets": {
+    "passed": 7,
+    "command": "QT_QPA_PLATFORM=offscreen /private/tmp/prepomaxx-desktop-runtime/bin/python -m unittest discover -s X/Desktop -p test_analysis_editor.py"
+  },
+  "jobProcesses": {
+    "passed": 4,
+    "command": "DESKTOP_TEST_SOLVE_HOST=X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve /private/tmp/prepomaxx-desktop-runtime/bin/python -m unittest discover -s X/Desktop -p test_jobs.py"
+  },
+  "buildControls": {
+    "passed": 8,
+    "command": "python3 -m unittest discover -s X/Build -p test_build.py"
+  },
+  "scope": "Mac ARM64 affected checks and packaged workflows; native Windows/Linux GUI and clean OS remain pending",
+  "infrastructure": "Two initial SDK builds stalled under sandbox, were stopped by exact owned PID and rerun successfully with normal SDK access. No check weakening."
+}

@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "checks": {
+    "baselineSevenAnalyticalChecks": true,
+    "editedDisplacementIds": true,
+    "editedForceIds": true,
+    "editedDisplacement": true,
+    "editedIntegrationPoints": true,
+    "editedStress": true,
+    "editedReaction": true,
+    "editedEquilibrium": true
+  },
+  "screenCapturePassed": false,
+  "scope": "Independent numeric diagnosis of the candidate whose actual screen capture failed; does not turn that failed GUI check into a pass"
+}

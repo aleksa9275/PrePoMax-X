@@ -1,0 +1,460 @@
+diff --git a/X/Build/build.py b/X/Build/build.py
+index 9126961a..c150a3c2 100644
+--- a/X/Build/build.py
++++ b/X/Build/build.py
+@@ -138,6 +138,8 @@ def package_preview(build, solver_build=None, package_format="app"):
+     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
+         "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
+         "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
++        "analysisEditorSha256": sha(ROOT / "X/Desktop/analysis_editor.py"),
++        "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),
+         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
+         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
+         "dirty": build.report["repository"]["dirty"]}
+diff --git a/X/Desktop/MeshScene/Program.cs b/X/Desktop/MeshScene/Program.cs
+index 351a626d..60e3e1f4 100644
+--- a/X/Desktop/MeshScene/Program.cs
++++ b/X/Desktop/MeshScene/Program.cs
+@@ -16,6 +16,8 @@ try
+         engineeringOwner = "Original CaeModel/CaeMesh INP mesh reader; renderer DTO only",
+         nodes = mesh.Nodes.Values.Select(n => new { id = n.Id, x = n.X, y = n.Y, z = n.Z }),
+         elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds }),
++        nodeSets = mesh.NodeSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
++        elementSets = mesh.ElementSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
+         warnings = mesh.Warnings, omittedKeywords = mesh.OmittedKeywords,
+         solverExecuted = false
+     }));
+diff --git a/X/Desktop/jobs.py b/X/Desktop/jobs.py
+index 86aa650c..9833b4a4 100644
+--- a/X/Desktop/jobs.py
++++ b/X/Desktop/jobs.py
+@@ -1,5 +1,6 @@
+ """Desktop process adapter. Original C# owns deck validation and solver lifecycle."""
+ from datetime import datetime, timezone
++import hashlib
+ import json
+ from pathlib import Path
+ import sys
+@@ -29,6 +30,12 @@ def examples():
+     return resources() / 'examples' if getattr(sys, 'frozen', False) else ROOT / 'X/Analysis/StaticDeck'
+ 
+ 
++def validation_command():
++    if getattr(sys, 'frozen', False):
++        return [str(resources() / 'hosts/solve/PrePoMaxX.Solve'), 'validate-static']
++    return ['dotnet', str(ROOT / 'X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve.dll'), 'validate-static']
++
++
+ class DesktopJob(QtCore.QObject):
+     changed = QtCore.pyqtSignal(str)
+     completed = QtCore.pyqtSignal(dict)
+@@ -43,22 +50,45 @@ class DesktopJob(QtCore.QObject):
+         self.stderr = bytearray()
+         self.command = None
+         self.requested_cancel = False
++        self.input_directory = None
++        self.workspace = None
+ 
+     @property
+     def active(self):
+         return self.process is not None and self.process.state() != QtCore.QProcess.ProcessState.NotRunning
+ 
+-    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600):
++    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *, definition=None, mesh_bytes=None):
+         if self.active:
+             raise ValueError('A job is already running.')
+-        mesh, analysis = Path(mesh).resolve(), Path(analysis).resolve()
+-        if not mesh.is_file() or not analysis.is_file():
++        mesh = Path(mesh).resolve()
++        analysis = Path(analysis).resolve() if analysis is not None else None
++        if definition is None and (not mesh.is_file() or analysis is None or not analysis.is_file()):
+             raise ValueError('Select an existing INP mesh and analysis JSON.')
++        # Serialize now; subsequent edits cannot alter the submitted definition.
++        if definition is not None:
++            definition_bytes = (json.dumps(definition, indent=2, allow_nan=False) + '\n').encode('utf-8')
++            mesh_bytes = mesh.read_bytes() if mesh_bytes is None else mesh_bytes
+         command = list(command if command is not None else solver_command())
+         parent_directory = Path(parent_directory).resolve()
+         parent_directory.mkdir(parents=True, exist_ok=True)
+         # The original host reserves/creates this new directory atomically.
+         self.directory = parent_directory / (datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:12])
++        self.workspace = self.directory
++        self.input_directory = None
++        if definition is not None:
++            self.workspace.mkdir()
++            self.input_directory = self.workspace / 'inputs'
++            self.input_directory.mkdir()
++            self.directory = self.workspace / 'solve'
++            mesh, analysis = self.input_directory / 'mesh.inp', self.input_directory / 'analysis.json'
++            with mesh.open('xb') as stream:
++                stream.write(mesh_bytes)
++            with analysis.open('xb') as stream:
++                stream.write(definition_bytes)
++            (self.input_directory / 'input-identity.json').write_text(json.dumps({
++                'meshSha256': hashlib.sha256(mesh_bytes).hexdigest(),
++                'analysisSha256': hashlib.sha256(definition_bytes).hexdigest(),
++                'scope': 'Immutable submitted job input; not project persistence'}, indent=2) + '\n')
+         self.stdout, self.stderr = bytearray(), bytearray()
+         self.result, self.requested_cancel = None, False
+         self.command = command + [str(mesh), str(analysis), str(self.directory), str(timeout)]
+@@ -120,6 +150,8 @@ class DesktopJob(QtCore.QObject):
+         (self.directory / 'desktop.stderr').write_bytes(self.stderr)
+         self.result = {'success': success, 'state': state, 'command': self.command,
+                        'directory': str(self.directory), 'cancelRequested': self.requested_cancel,
++                       'inputDirectory': str(self.input_directory) if self.input_directory else None,
++                       'workspace': str(self.workspace),
+                        'outcome': value}
+         (self.directory / 'desktop-job.json').write_text(json.dumps(self.result, indent=2) + '\n')
+         self.set_state(state)
+diff --git a/X/Desktop/test_jobs.py b/X/Desktop/test_jobs.py
+index 541f7d27..b7bc71f3 100644
+--- a/X/Desktop/test_jobs.py
++++ b/X/Desktop/test_jobs.py
+@@ -84,6 +84,29 @@ class DesktopJobBoundary(unittest.TestCase):
+             self.assertIn('missing or changed', job.result['outcome']['error'])
+             self.assertFalse(job.result['success'])
+ 
++    def test_editor_run_freezes_mesh_and_definition_before_execution(self):
++        with tempfile.TemporaryDirectory(prefix='desktop edited model ') as directory:
++            root = Path(directory)
++            command = self.command(root, '#!/bin/sh\necho "CalculiX Version 2.22"\necho $$ > solver.pid\nexec /bin/sleep 60\n')
++            mesh = root / 'original mesh.inp'
++            initial_mesh = (ROOT / 'X/Analysis/StaticDeck/cube-mesh.inp').read_bytes()
++            mesh.write_bytes(initial_mesh)
++            definition = json.loads((ROOT / 'X/Analysis/StaticDeck/cube-analysis.json').read_text())
++            job = DesktopJob()
++            job.start(mesh, None, root / 'jobs', command, definition=definition)
++            definition['materials'][0]['youngsModulus'] = '999 GPa'
++            mesh.write_text('Changed after submission')
++            self.wait(lambda: (job.directory / 'solver.pid').exists())
++            self.assertEqual((job.input_directory / 'mesh.inp').read_bytes(), initial_mesh)
++            frozen = json.loads((job.input_directory / 'analysis.json').read_text())
++            self.assertEqual(frozen['materials'][0]['youngsModulus'], '210 GPa')
++            self.assertIn('210000, 0.3', (job.directory / 'analysis.inp').read_text())
++            self.assertEqual(job.input_directory.parent, job.directory.parent)
++            job.cancel()
++            self.wait(lambda: job.result is not None)
++            self.assertEqual(job.state, 'Cancelled')
++            self.assertEqual(Path(job.result['inputDirectory']), job.input_directory)
++
+ 
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/X/Desktop/viewport.py b/X/Desktop/viewport.py
+index c2eb2319..3c0db339 100644
+--- a/X/Desktop/viewport.py
++++ b/X/Desktop/viewport.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Native Qt/VTK viewport candidate. Engineering decoding belongs to C# hosts."""
+ import argparse
++import copy
+ import hashlib
+ import json
+ import platform
+@@ -10,6 +11,7 @@ import sys
+ 
+ from PyQt6 import QtCore, QtGui, QtWidgets
+ from jobs import DesktopJob, examples
++from analysis_editor import AnalysisDialog, new_definition
+ from vtkmodules.util.numpy_support import vtk_to_numpy
+ from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
+ from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
+@@ -116,13 +118,19 @@ class Viewport(QtWidgets.QMainWindow):
+         self.scene = None
+         self.selection = None
+         self.current_path = None
++        self.model_path = None
++        self.model_scene = None
++        self.mesh_bytes = None
++        self.definition = None
++        self.analysis_valid = False
++        self.editor_dirty = False
+         self.closing_after_job = False
+         self.job = DesktopJob(self)
+         self.job.changed.connect(self.job_state)
+         self.job.completed.connect(self.job_completed)
+         self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
+         toolbar = self.addToolBar("View")
+-        toolbar.addAction("Open INP / FRD", self.open_dialog)
++        self.open_action = toolbar.addAction("Open INP / FRD", self.open_dialog)
+         toolbar.addAction("Fit", self.fit)
+         self.fields = QtWidgets.QComboBox()
+         self.fields.setMinimumWidth(330)
+@@ -158,7 +166,8 @@ class Viewport(QtWidgets.QMainWindow):
+         self.vtk.clicked.connect(self.pick)
+         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
+         jobbar = self.addToolBar("Static analysis")
+-        self.run_action = jobbar.addAction("Run static…", self.run_dialog)
++        self.configure_action = jobbar.addAction("Configure…", self.configure_model)
++        self.run_action = jobbar.addAction("Run analysis", self.run_model)
+         self.example_action = jobbar.addAction("Solve example", self.run_example)
+         self.cancel_action = jobbar.addAction("Cancel", self.job.cancel)
+         self.cancel_action.setEnabled(False)
+@@ -174,25 +183,85 @@ class Viewport(QtWidgets.QMainWindow):
+         self.job_poll = QtCore.QTimer(self)
+         self.job_poll.timeout.connect(self.refresh_job_output)
+         self.job_poll.start(500)
+-
+-    def run_dialog(self):
+-        mesh = str(self.current_path) if self.current_path and self.current_path.suffix.lower() == '.inp' else ''
+-        if not mesh:
+-            mesh, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis mesh", "", "INP mesh (*.inp)")
+-        if not mesh:
++        model_dock = QtWidgets.QDockWidget("Model", self)
++        self.model_tree = QtWidgets.QTreeWidget()
++        self.model_tree.setHeaderLabels(['Model', 'Definition'])
++        self.model_tree.setMinimumWidth(330)
++        self.model_tree.header().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
++        self.model_tree.header().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
++        self.model_tree.setToolTip('Double-click a material, section, support, load or step to configure it.')
++        self.model_tree.itemDoubleClicked.connect(self.edit_tree_item)
++        model_dock.setWidget(self.model_tree)
++        self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, model_dock)
++        self.update_model_tree()
++
++    def update_model_tree(self):
++        self.model_tree.clear()
++        if self.model_scene is None:
++            QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP mesh', 'or Solve example'])
++            return
++        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, self.definition['unitSystem'] or 'Choose units'])
++        root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
++        QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
++        for key, label in [('nodeSets', 'Imported node sets'), ('elementSets', 'Imported element sets')]:
++            group = QtWidgets.QTreeWidgetItem(root, [label])
++            for item in self.model_scene.get(key, []):
++                QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
++        for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
++                (2, 'Solid sections', self.definition['sections'], 'elementSet'),
++                (3, 'Supports', self.definition['step']['constraints'], 'nodeSet'),
++                (4, 'Nodal loads', self.definition['step']['loads'], 'nodeSet')]:
++            group = QtWidgets.QTreeWidgetItem(root, [label, str(len(records))])
++            group.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
++            for record in records:
++                child = QtWidgets.QTreeWidgetItem(group, [record['name'], record[region]])
++                child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
++        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
++        step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
++        self.model_tree.expandToDepth(1)
++
++    def edit_tree_item(self, item, column):
++        tab = item.data(0, QtCore.Qt.ItemDataRole.UserRole)
++        if tab is not None:
++            self.configure_model(tab)
++
++    def configure_model(self, tab=0):
++        if self.job.active:
++            return
++        if self.model_scene is None:
++            QtWidgets.QMessageBox.information(self, 'Open a mesh', 'Open an INP mesh or use Solve example before configuring an analysis.')
++            return
++        dialog = AnalysisDialog(self, self.model_scene, self.mesh_bytes, self.definition, int(tab))
++        if dialog.exec() == QtWidgets.QDialog.DialogCode.Accepted:
++            self.editor_dirty = self.editor_dirty or dialog.definition != self.definition
++            self.definition = dialog.definition
++            self.analysis_valid = True
++            self.update_model_tree()
++
++    def run_model(self):
++        if self.job.active:
+             return
+-        analysis, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis definitions", str(examples()), "Analysis definitions (*.json)")
+-        if analysis:
+-            self.start_job(Path(mesh), Path(analysis))
++        if not self.analysis_valid:
++            self.configure_model()
++        if self.model_scene is not None and self.analysis_valid:
++            self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
+ 
+     def run_example(self):
+-        self.start_job(examples() / 'cube-mesh.inp', examples() / 'cube-analysis.json')
++        if not self.confirm_discard():
++            return
++        definition = json.loads((examples() / 'cube-analysis.json').read_text())
++        self.load(examples() / 'cube-mesh.inp', as_model=True, definition=definition)
++        self.analysis_valid = True
++        self.run_model()
+ 
+-    def start_job(self, mesh, analysis):
++    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None):
+         try:
+-            self.load(mesh)
+-            self.job.start(mesh, analysis, self.jobs_root)
+-            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nAnalysis: {analysis}\n")
++            if definition is None:
++                self.load(mesh)
++            else:
++                self.show_scene(self.model_scene, self.model_path)
++            self.job.start(mesh, analysis, self.jobs_root, definition=definition, mesh_bytes=mesh_bytes)
++            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
+         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+             self.job_label.setText("Cannot start")
+             self.job_output.setPlainText(str(error))
+@@ -203,6 +272,8 @@ class Viewport(QtWidgets.QMainWindow):
+     def job_state(self, state):
+         active = state in ('Starting', 'Running', 'Cancelling')
+         self.run_action.setEnabled(not active)
++        self.configure_action.setEnabled(not active)
++        self.open_action.setEnabled(not active)
+         self.example_action.setEnabled(not active)
+         self.cancel_action.setEnabled(active and state != 'Cancelling')
+         self.job_label.setText(state)
+@@ -234,19 +305,34 @@ class Viewport(QtWidgets.QMainWindow):
+             QtCore.QTimer.singleShot(0, self.close)
+ 
+     def open_job_directory(self):
+-        if self.job.directory and self.job.directory.is_dir():
+-            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.directory)))
++        if self.job.workspace and self.job.workspace.is_dir():
++            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.workspace)))
+ 
+     def open_dialog(self):
+         path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh/results", "", "Mesh/results (*.inp *.frd)")
+         if path:
+             try:
+-                self.load(Path(path))
++                as_model = Path(path).suffix.lower() == '.inp'
++                if as_model and not self.confirm_discard():
++                    return
++                self.load(Path(path), as_model=as_model)
+             except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+                 QtWidgets.QMessageBox.critical(self, "Cannot open file", str(error))
+ 
+-    def load(self, path):
++    def load(self, path, *, as_model=False, definition=None):
++        mesh_bytes = path.read_bytes() if as_model else None
+         scene = decode(path)
++        if as_model and hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
++            raise ValueError('Mesh changed during import. Reopen it before configuring an analysis.')
++        self.show_scene(scene, path)
++        if as_model:
++            self.model_path, self.model_scene, self.mesh_bytes = path.resolve(), scene, mesh_bytes
++            self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
++            self.analysis_valid = False
++            self.editor_dirty = False
++            self.update_model_tree()
++
++    def show_scene(self, scene, path):
+         points = vtkPoints()
+         points.SetDataTypeToDouble()
+         nodes = scene["nodes"]
+@@ -342,6 +428,9 @@ class Viewport(QtWidgets.QMainWindow):
+         return self.selection
+ 
+     def closeEvent(self, event):
++        if not self.closing_after_job and not self.confirm_discard():
++            event.ignore()
++            return
+         if self.job.active:
+             self.closing_after_job = True
+             self.job.cancel()
+@@ -350,6 +439,14 @@ class Viewport(QtWidgets.QMainWindow):
+         self.vtk.Finalize()
+         super().closeEvent(event)
+ 
++    def confirm_discard(self):
++        if not self.editor_dirty:
++            return True
++        return QtWidgets.QMessageBox.question(self, 'Discard unsaved model edits?',
++            'Project saving is not available in this preview. Submitted run inputs remain in Job files. '
++            'Discard the current model edits?', QtWidgets.QMessageBox.StandardButton.Yes |
++            QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No) == QtWidgets.QMessageBox.StandardButton.Yes
++
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+@@ -361,18 +458,21 @@ def main():
+     parser.add_argument("--viewport", choices=("frame-bridge", "native-cocoa"), default="frame-bridge",
+                         help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
+     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
++    parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
+     args = parser.parse_args()
+     if args.viewport_probe and (args.self_test or args.run_example):
+         parser.error("Use --viewport-probe separately from solve/self-test")
++    if args.editor_probe and (args.self_test or args.run_example or args.viewport_probe or args.input):
++        parser.error("Use --editor-probe separately from other probes and input")
+     app = QtWidgets.QApplication([sys.argv[0]])
+     app.setOrganizationName("PrePoMax-X")
+     app.setApplicationName("PrePoMax-X Preview")
+     window = Viewport(args.viewport)
+     if args.jobs_root:
+         window.jobs_root = args.jobs_root.resolve()
+-    window.automated_workflow = bool(args.run_example and args.self_test)
++    window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe)
+     if args.input:
+-        window.load(args.input.resolve())
++        window.load(args.input.resolve(), as_model=args.input.suffix.lower() == '.inp')
+     window.show()
+     window.vtk.render()
+     result = {"success": False}
+@@ -458,7 +558,10 @@ def main():
+         window.close()
+         app.exit(0 if result["success"] else 1)
+ 
+-    if args.viewport_probe:
++    if args.editor_probe:
++        from editor_probe import begin
++        QtCore.QTimer.singleShot(1200, lambda: begin(app, window, args.editor_probe))
++    elif args.viewport_probe:
+         from viewport_probe import run
+         QtCore.QTimer.singleShot(1200, lambda: run(app, window, args.viewport_probe))
+     elif args.run_example:
+diff --git a/X/Execution/Solve/Program.cs b/X/Execution/Solve/Program.cs
+index 432978bb..18d291e8 100644
+--- a/X/Execution/Solve/Program.cs
++++ b/X/Execution/Solve/Program.cs
+@@ -1,6 +1,7 @@
+ using System.Globalization;
+ using System.Runtime.InteropServices;
+ using System.Security.Cryptography;
++using System.Text;
+ using System.Text.Json;
+ using CaeJob;
+ using PrePoMaxX.StaticDeck;
+@@ -73,6 +74,16 @@ internal static class Program
+                 if(args.Length<3)throw new ArgumentException("--registry requires a registry path and command.");
+                 registryPath=Path.GetFullPath(args[1]);args=args[2..];
+             }
++            if(args.Length==3&&args[0]=="validate-static")
++            {
++                var validationMesh=MeshFiles.Read(args[1]);var validationSpec=AnalysisFiles.Read(args[2]);
++                string validationDeck=AnalysisFiles.Build(validationMesh,validationSpec);
++                Console.WriteLine(JsonSerializer.Serialize(new{success=true,solverExecuted=false,
++                    unitSystem=validationSpec.UnitSystem,nodes=validationMesh.Nodes.Count,elements=validationMesh.Elements.Count,
++                    materials=validationSpec.Materials.Length,sections=validationSpec.Sections.Length,
++                    constraints=validationSpec.Step.Constraints.Length,loads=validationSpec.Step.Loads.Length,
++                    deckSha256=Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(validationDeck)))}));return 0;
++            }
+             var registry=SolverBuilds.Read(registryPath);
+             if(args.Length>=1&&args[0]=="thread-plan")
+             {
+@@ -103,7 +114,7 @@ internal static class Program
+                 var builds=registry.GetProperty("builds").EnumerateArray().Where(b=>b.GetProperty("os").GetString()==SolverBuilds.HostOs&&b.GetProperty("architecture").GetString()==SolverBuilds.HostArchitecture).Select(b=>b.GetProperty("id").GetString()).ToArray();
+                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,pinnedBuilds=builds,solverAvailable=builds.Length==0?(bool?)false:null,binaryAvailabilityChecked=false,solverExecuted=false}));return 0;
+             }
+-            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
++            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] validate-static <mesh.inp> <analysis.json> | thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
+             var build=SolverBuilds.Select(registry,args[1]);string executable=SolverBuilds.ValidateFiles(build,Path.GetFullPath(args[2]));
+             double timeout=double.Parse(args[6],CultureInfo.InvariantCulture);
+             if(!double.IsFinite(timeout)||timeout<=0||timeout>86400)throw new InvalidDataException("Timeout must be finite and in (0,86400] seconds.");
+diff --git a/X/Execution/verify-execution.py b/X/Execution/verify-execution.py
+index bc5687f4..aa7ab33d 100644
+--- a/X/Execution/verify-execution.py
++++ b/X/Execution/verify-execution.py
+@@ -4,6 +4,7 @@ import argparse,hashlib,json,platform,shutil,subprocess,sys,tempfile
+ from pathlib import Path
+ from datetime import datetime,timezone
+ import job_layout
++import definition_control
+ import cli_control
+ HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+ sys.path.insert(0,str(ROOT/'X/Analysis'));import analysis_layout
+@@ -50,6 +51,7 @@ def main():
+    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll']).stdout)
+    if not report['tests']['success']or report['tests']['passed']!=49 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
+    cli=work/'build/bin/Solve/release/PrePoMaxX.Solve.dll'
++   report['desktopDefinitionControl']=definition_control.verify(run,cli,ROOT,work)
+    report['threadPlanning']={}
+    for label,arguments in [('automatic',[]),('manual',['--threads','1','--jobs','1'])]:
+     value=json.loads(run(['dotnet',cli,'thread-plan']+arguments).stdout);plan=value['plan'];available=plan['AvailableLogicalProcessors'];budget=plan['TotalThreadBudget']

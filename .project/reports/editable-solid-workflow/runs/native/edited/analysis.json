@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "105 GPa",
+      "poissonsRatio": "0.3"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid-1",
+      "material": "ELASTIC",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1.0,
+    "initialTimeIncrement": 1.0,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1.0,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Fix-X",
+        "nodeSet": "X0",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Fix-Y",
+        "nodeSet": "Y0",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Fix-Z",
+        "nodeSet": "Z0",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "Axial",
+        "nodeSet": "X1",
+        "forcePerNode": [
+          "50 N",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "nodalHistorySets": [
+      "NALL"
+    ],
+    "elementHistorySets": [
+      "SOLID"
+    ]
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "success": true,
+  "commands": [
+    {
+      "arguments": [
+        "hdiutil",
+        "verify",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-delivery/dist/PrePoMax-X-Preview-arm64.dmg"
+      ],
+      "exitCode": 0,
+      "log": "verify-image"
+    },
+    {
+      "arguments": [
+        "hdiutil",
+        "attach",
+        "-readonly",
+        "-noautoopen",
+        "-mountpoint",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Mounted preview",
+        "-plist",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-delivery/dist/PrePoMax-X-Preview-arm64.dmg"
+      ],
+      "exitCode": 0,
+      "log": "mount"
+    },
+    {
+      "arguments": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Mounted preview/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "mounted-signature"
+    },
+    {
+      "arguments": [
+        "ditto",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Mounted preview/PrePoMax-X-Viewport.app",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Installed copy/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "copy-app"
+    },
+    {
+      "arguments": [
+        "hdiutil",
+        "detach",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Mounted preview"
+      ],
+      "exitCode": 0,
+      "log": "eject"
+    },
+    {
+      "arguments": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Installed copy/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "installed-signature"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/MacOS/PrePoMax-X-Viewport",
+        "--run-example",
+        "--jobs-root",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Job workspace",
+        "--self-test",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/desktop-workflow.json",
+        "--viewport",
+        "native-cocoa",
+        "--screenshot",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/desktop-workflow.png"
+      ],
+      "exitCode": 0,
+      "log": "desktop"
+    }
+  ],
+  "scope": "Local mounted/copy test, not a clean macOS or downloaded Gatekeeper test",
+  "dmgSha256": "9a6e586c0c8b8065a1185e219a23ea8e159495d42daa67b111628723f4de316a",
+  "packageManifestSha256": "5713456aed0ea03830af2551d07abfe0b8ec179c07c2bbc0826f7ad98743f2a8",
+  "installedApp": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Installed copy/PrePoMax-X-Viewport.app",
+  "appFiles": 1610,
+  "appLinks": 1470,
+  "viewport": "native-cocoa",
+  "guiChecks": [
+    {
+      "name": "desktop native solve and result loading",
+      "passed": true
+    },
+    {
+      "name": "native render window",
+      "passed": true
+    },
+    {
+      "name": "original IDs retained",
+      "passed": true
+    },
+    {
+      "name": "field scalar mapping",
+      "passed": true
+    },
+    {
+      "name": "VTK hit resolves original element ID",
+      "passed": true
+    },
+    {
+      "name": "nearest vertex resolves original node ID",
+      "passed": true
+    },
+    {
+      "name": "selected coordinates preserved",
+      "passed": true
+    },
+    {
+      "name": "selected nodal value uses original value order",
+      "passed": true
+    },
+    {
+      "name": "resize renders",
+      "passed": true
+    },
+    {
+      "name": "displayed frame has mesh/legend pixels",
+      "passed": true
+    },
+    {
+      "name": "window capture",
+      "passed": true
+    }
+  ],
+  "analyticalChecks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    }
+  ],
+  "alteredDisplacementRejected": true,
+  "jobDirectory": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-final-dmg-verification/Job workspace/20261103-115903-f21217b6e672/solve",
+  "nativeSolverExecuted": true,
+  "externalBuildToolsOnPath": false,
+  "developerIdSigned": false,
+  "notarized": false
+}

@@ -29,11 +29,11 @@ into the shared application; preserve intentional upstream behavior and units.
 | Area | Verified bounded coverage | Remaining parity work |
 |---|---|---|
 | Mesh input/decks | Original INP reader, IDs, bounded mesh export and static C3D8 deck | Full import/export/model graph and supported element/analysis combinations |
-| Materials/analysis editing | Original shared types/writers callable through services | Model tree and original-definition UI, broader assignments/loads/steps |
+| Materials/analysis editing | Model tree/Qt editor for original static-solid units/materials/sections/supports/nodal loads/step controls; original C# validation and real edited solve | New/picked sets, broader assignments/materials/loads/steps and full original model operations |
 | Native solve | Mac ARM64/Linux x64 analytical static cube; desktop start/cancel/status | Analysis/backend breadth, capacity/performance and native other-target acceptance |
 | Visualization | INP/C3D8 FRD, contours, original IDs/values; opt-in direct Mac child-view proof | Full vtkControl pipeline, clipping/highlighting, deformation, input/DPI/performance and other native desktops |
 | Results/history | Original bounded FRD fields/invariants and static-shaped DAT histories | Full original results orchestration, shell/dynamic outputs and interactive histories |
-| Persistence | Legacy reference/inventory evidence retained | Explicit supported save/reopen, full PMX/PMH/settings/history and compatibility |
+| Persistence | Legacy reference/inventory evidence retained; immutable submitted job snapshots | Explicit supported project save/reopen, full PMX/PMH/settings/history and compatibility; job snapshots are not a project format |
 | CAD/meshing | Original source/native inventory and research fixtures retained | Matching custom sources/builds, native import/repair/mesh and full geometry/selection behavior |
 | Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
 | Engineering correctness | Strict accepted-scope checks retained | Both known element failures and quadratic-tetrahedron measurement gate remain |

@@ -1,5 +1,6 @@
 """Desktop process adapter. Original C# owns deck validation and solver lifecycle."""
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -29,6 +30,12 @@ def examples():
     return resources() / 'examples' if getattr(sys, 'frozen', False) else ROOT / 'X/Analysis/StaticDeck'
 
 
+def validation_command():
+    if getattr(sys, 'frozen', False):
+        return [str(resources() / 'hosts/solve/PrePoMaxX.Solve'), 'validate-static']
+    return ['dotnet', str(ROOT / 'X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve.dll'), 'validate-static']
+
+
 class DesktopJob(QtCore.QObject):
     changed = QtCore.pyqtSignal(str)
     completed = QtCore.pyqtSignal(dict)
@@ -43,22 +50,45 @@ class DesktopJob(QtCore.QObject):
         self.stderr = bytearray()
         self.command = None
         self.requested_cancel = False
+        self.input_directory = None
+        self.workspace = None
 
     @property
     def active(self):
         return self.process is not None and self.process.state() != QtCore.QProcess.ProcessState.NotRunning
 
-    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600):
+    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *, definition=None, mesh_bytes=None):
         if self.active:
             raise ValueError('A job is already running.')
-        mesh, analysis = Path(mesh).resolve(), Path(analysis).resolve()
-        if not mesh.is_file() or not analysis.is_file():
+        mesh = Path(mesh).resolve()
+        analysis = Path(analysis).resolve() if analysis is not None else None
+        if definition is None and (not mesh.is_file() or analysis is None or not analysis.is_file()):
             raise ValueError('Select an existing INP mesh and analysis JSON.')
+        # Serialize now; subsequent edits cannot alter the submitted definition.
+        if definition is not None:
+            definition_bytes = (json.dumps(definition, indent=2, allow_nan=False) + '\n').encode('utf-8')
+            mesh_bytes = mesh.read_bytes() if mesh_bytes is None else mesh_bytes
         command = list(command if command is not None else solver_command())
         parent_directory = Path(parent_directory).resolve()
         parent_directory.mkdir(parents=True, exist_ok=True)
         # The original host reserves/creates this new directory atomically.
         self.directory = parent_directory / (datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:12])
+        self.workspace = self.directory
+        self.input_directory = None
+        if definition is not None:
+            self.workspace.mkdir()
+            self.input_directory = self.workspace / 'inputs'
+            self.input_directory.mkdir()
+            self.directory = self.workspace / 'solve'
+            mesh, analysis = self.input_directory / 'mesh.inp', self.input_directory / 'analysis.json'
+            with mesh.open('xb') as stream:
+                stream.write(mesh_bytes)
+            with analysis.open('xb') as stream:
+                stream.write(definition_bytes)
+            (self.input_directory / 'input-identity.json').write_text(json.dumps({
+                'meshSha256': hashlib.sha256(mesh_bytes).hexdigest(),
+                'analysisSha256': hashlib.sha256(definition_bytes).hexdigest(),
+                'scope': 'Immutable submitted job input; not project persistence'}, indent=2) + '\n')
         self.stdout, self.stderr = bytearray(), bytearray()
         self.result, self.requested_cancel = None, False
         self.command = command + [str(mesh), str(analysis), str(self.directory), str(timeout)]
@@ -120,6 +150,8 @@ class DesktopJob(QtCore.QObject):
         (self.directory / 'desktop.stderr').write_bytes(self.stderr)
         self.result = {'success': success, 'state': state, 'command': self.command,
                        'directory': str(self.directory), 'cancelRequested': self.requested_cancel,
+                       'inputDirectory': str(self.input_directory) if self.input_directory else None,
+                       'workspace': str(self.workspace),
                        'outcome': value}
         (self.directory / 'desktop-job.json').write_text(json.dumps(self.result, indent=2) + '\n')
         self.set_state(state)

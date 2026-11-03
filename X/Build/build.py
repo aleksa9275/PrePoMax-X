@@ -138,6 +138,8 @@ def package_preview(build, solver_build=None, package_format="app"):
     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
         "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
         "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
+        "analysisEditorSha256": sha(ROOT / "X/Desktop/analysis_editor.py"),
+        "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),
         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
         "dirty": build.report["repository"]["dirty"]}

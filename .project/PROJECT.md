@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-03 editable-solid increment: task 0044 supplies model-tree configuration
+of units, isotropic elastic materials, solid sections, displacement supports,
+nodal forces and static controls through the existing original C# services.
+Job inputs are frozen; actual edited-deck/native numerical checks are recorded
+in [the report](reports/editable-solid-workflow.md). This is bounded session
+editing using imported sets; full PMX save/reopen, CAD/meshing and full 3.0.0
+parity remain pending. Previous tested DMGs and correctness gates are preserved.
+
 2026-11-03 maintainer direction: **PrePoMax 3.0.0 is the functionality/parity
 target**. Maintain open-source macOS and Linux distributions and follow subsequent
 upstream releases even if upstream does not accept the portability contribution.

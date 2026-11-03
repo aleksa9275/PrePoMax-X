@@ -1,4 +1,18 @@
-# Task 0044 — First editable solid workflow (next; not started)
+# Task 0044 — First editable solid workflow (implemented; final verification/publication)
+
+3 November continuation: maintainer says to proceed after the published task 0043
+checkpoint. Implement the existing bounded definition editor using original INP
+set inventory, C# validation and immutable per-job input snapshots. First scope
+assigns imported named sets; arbitrary picked/new-set authoring stays pending.
+
+Implemented model tree, units/material/section/support/load/static-output controls,
+original-C# `validate-static`, frozen per-run input workspaces and unsaved-session
+discard prompts. Seven real-Qt editor checks, four process checks and eight build
+checks pass; affected current Analysis/Execution pass. Actual packaged baseline
+and edited native solves pass 18 GUI plus 15 deck/numerical/control checks. Final
+artifact/verification/publication is recorded in
+[the report](../reports/editable-solid-workflow.md). No project format, production
+frontend/default/backend change or full parity acceptance is implied.
 
 Prepared 3 November 2026 after task 0043's bounded native viewport proof.
 Continue the accepted Mac-first/shared-source sequence toward 3.0.0 parity.

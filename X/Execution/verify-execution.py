@@ -4,6 +4,7 @@ import argparse,hashlib,json,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
 from datetime import datetime,timezone
 import job_layout
+import definition_control
 import cli_control
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
 sys.path.insert(0,str(ROOT/'X/Analysis'));import analysis_layout
@@ -50,6 +51,7 @@ def main():
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll']).stdout)
    if not report['tests']['success']or report['tests']['passed']!=49 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
    cli=work/'build/bin/Solve/release/PrePoMaxX.Solve.dll'
+   report['desktopDefinitionControl']=definition_control.verify(run,cli,ROOT,work)
    report['threadPlanning']={}
    for label,arguments in [('automatic',[]),('manual',['--threads','1','--jobs','1'])]:
     value=json.loads(run(['dotnet',cli,'thread-plan']+arguments).stdout);plan=value['plan'];available=plan['AvailableLogicalProcessors'];budget=plan['TotalThreadBudget']

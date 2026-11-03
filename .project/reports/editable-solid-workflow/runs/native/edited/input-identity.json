@@ -1,0 +1,5 @@
+{
+  "meshSha256": "b74dde2612c0a9752b7f3589e3b3657863ee616f0815597ceb827066ffab290a",
+  "analysisSha256": "7fe6051e42a1cab56620724e09389d91a07ee0a19a69b037417f8b7ee0e4286a",
+  "scope": "Immutable submitted job input; not project persistence"
+}

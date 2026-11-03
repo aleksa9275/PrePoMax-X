@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "solverExecuted": true,
+  "buildId": "osx-arm64-2.22-spooles-local-preview",
+  "registrySha256": "57c34bfd74acd566070cefac14bff441fe6066c933b71e33e170f8bb22491413",
+  "build": {
+    "id": "osx-arm64-2.22-spooles-local-preview",
+    "os": "Darwin",
+    "architecture": "Arm64",
+    "version": "2.22",
+    "executable": "ccx",
+    "files": {
+      "ccx": "d776387858acb7c13704d56fbc2f62a86f5f5b2460b4e720e86e65522f78ead5",
+      "libgcc_s.1.1.dylib": "fd4d92a79bfc4d7da66eaef5ef618ad9dc01f103dd569ca31f92cb87aad856eb",
+      "libgfortran.5.dylib": "c738e2e8c022e6e6c6f32f9b46cc0aeeb39d51f25e99e61b233caa8445425a3f",
+      "libgomp.1.dylib": "fd9e0816a5d1c61a85054cd04f0b35c2ff66217eef9a0bd6e03796532877a8b1",
+      "libomp.dylib": "7fd28cb0ea6020f4d7c90339a046296c6a3f9955bdafb6ec4f8dc1d93de787eb",
+      "libopenblas.0.dylib": "d1f0316617152a4557ce23a19bc47c7b833c22fd15fa7a61830edd8d04f04a6a",
+      "libquadmath.0.dylib": "239bfe66a63393aa0876bc6f02459dde3b866e25181f80daea2e21558c6d1d9d"
+    },
+    "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+    "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+    "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+    "scope": "Relocated ad-hoc local static-solid preview; original backend unchanged; not release acceptance"
+  },
+  "os": "Darwin",
+  "architecture": "Arm64",
+  "status": "OK",
+  "exitCode": 0,
+  "versionMatches": true,
+  "outputsPresent": true,
+  "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:            8\n   elements:            1\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            8\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            4\n   single point constraints:           12\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:            6\n   terms in all sets:           33\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            4\n   data points in all amplitudes:            4\n   print requests:            3\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC\u0027s\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 12\n number of nonzero lower triangular matrix elements\n 66\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.002216\n________________________________________\n",
+  "stderr": "",
+  "failureReason": null,
+  "numericalAcceptance": false,
+  "outputs": {
+    "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+    "analysis.frd": "00766a44c72a8a479a41439f7e84de50c41bf2f5f67f661e1dc65e4431947dc9",
+    "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+    "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "_output_analysis.txt": "8cfaf1c80692b21d5b509fe3c45a9a9335f736f41f60e5b1ab0eb308957697c6",
+    "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analysis.inp": "24f66e4a43cbd809c4da95b39a5eadfe13e372e8a6b94233081cd6b9463e3bb8",
+    "analysis.dat": "6be78a9cbc048142c927a1b1ebb78db936c02c6477864e99401b4e37ffc57c8a"
+  }
+}

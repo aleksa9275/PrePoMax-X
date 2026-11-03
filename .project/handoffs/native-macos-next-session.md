@@ -1,6 +1,31 @@
 # Native macOS continuation — 3 November 2026
 
-## Latest checkpoint — task 0043 (supersedes the task 0042 snapshot below)
+## Latest checkpoint — task 0044
+
+Task 0044 adds the bounded editable solid model tree and Configure / Run analysis.
+Read `.project/reports/editable-solid-workflow.md` for the actual final artifact,
+source snapshot, retained inputs/decks/numerical output and publication/CI status.
+Original C# `validate-static` constructs original objects/decks without a solver;
+Qt controls only presentation. Per-run workspaces retain frozen mesh/definition
+inputs plus a fresh `solve` directory. No original Cae* algorithms/tolerances or
+backend/thread/runtime policy is changed.
+
+Seven editor/original-C# checks, four real process/snapshot/cancel/failure checks,
+eight build checks and current Analysis/Execution pass. Native and default-bridge
+packaged editor proofs each pass 18 GUI and 15 deck/numerical/control checks;
+E=105 GPa/50 N per node produce 200 MPa and fourfold displacement. Prior tested
+task 0042 and task 0043 DMGs remain unchanged. Native Cocoa remains opt-in.
+
+Next: task `.project/tasks/0045-supported-project-persistence.md` (not started).
+Prepare a concrete supported save/reopen boundary and explicit persistence
+decision. Current job snapshots are not a new project/PMX format. Imported named
+sets are assignable; additional/picked-set creation and full model/CAD/history/
+results parity remain pending. Preserve 3.0.0/future-release direction, both known
+failures/tetra gate, four-target/source/license/install/release requirements and
+D051/D053 publication scope. No feature is left mid-change; four Finder files
+remain user-owned/untracked.
+
+## Previous checkpoint — task 0043 (supersedes the task 0042 snapshot below)
 
 The maintainer specifies **PrePoMax 3.0.0 parity**, then ongoing upstream-release
 tracking and open-source macOS/Linux distributions independent of upstream

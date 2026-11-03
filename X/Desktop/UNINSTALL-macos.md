@@ -17,7 +17,10 @@ Do these steps yourself when you want to reset; none are run automatically.
 
 ## 2. Remove this preview's per-user state
 
-First keep any solver results you want. **Job files** in the running app reveals
+First keep any submitted mesh/analysis snapshots and solver results you want.
+Task 0044 job workspaces contain `inputs` and `solve` folders. Edits that have
+not been submitted exist only in the current session; project saving is pending.
+**Job files** in the running app reveals
 its exact job location. In Finder use **Go → Go to Folder…** for the paths below.
 Move only the indicated preview-specific items to Trash, if they exist:
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Native Qt/VTK viewport candidate. Engineering decoding belongs to C# hosts."""
 import argparse
+import copy
 import hashlib
 import json
 import platform
@@ -10,6 +11,7 @@ import sys
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
+from analysis_editor import AnalysisDialog, new_definition
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
 from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
@@ -116,13 +118,19 @@ class Viewport(QtWidgets.QMainWindow):
         self.scene = None
         self.selection = None
         self.current_path = None
+        self.model_path = None
+        self.model_scene = None
+        self.mesh_bytes = None
+        self.definition = None
+        self.analysis_valid = False
+        self.editor_dirty = False
         self.closing_after_job = False
         self.job = DesktopJob(self)
         self.job.changed.connect(self.job_state)
         self.job.completed.connect(self.job_completed)
         self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
         toolbar = self.addToolBar("View")
-        toolbar.addAction("Open INP / FRD", self.open_dialog)
+        self.open_action = toolbar.addAction("Open INP / FRD", self.open_dialog)
         toolbar.addAction("Fit", self.fit)
         self.fields = QtWidgets.QComboBox()
         self.fields.setMinimumWidth(330)
@@ -158,7 +166,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
         jobbar = self.addToolBar("Static analysis")
-        self.run_action = jobbar.addAction("Run static…", self.run_dialog)
+        self.configure_action = jobbar.addAction("Configure…", self.configure_model)
+        self.run_action = jobbar.addAction("Run analysis", self.run_model)
         self.example_action = jobbar.addAction("Solve example", self.run_example)
         self.cancel_action = jobbar.addAction("Cancel", self.job.cancel)
         self.cancel_action.setEnabled(False)
@@ -174,25 +183,85 @@ class Viewport(QtWidgets.QMainWindow):
         self.job_poll = QtCore.QTimer(self)
         self.job_poll.timeout.connect(self.refresh_job_output)
         self.job_poll.start(500)
+        model_dock = QtWidgets.QDockWidget("Model", self)
+        self.model_tree = QtWidgets.QTreeWidget()
+        self.model_tree.setHeaderLabels(['Model', 'Definition'])
+        self.model_tree.setMinimumWidth(330)
+        self.model_tree.header().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        self.model_tree.header().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.model_tree.setToolTip('Double-click a material, section, support, load or step to configure it.')
+        self.model_tree.itemDoubleClicked.connect(self.edit_tree_item)
+        model_dock.setWidget(self.model_tree)
+        self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, model_dock)
+        self.update_model_tree()
 
-    def run_dialog(self):
-        mesh = str(self.current_path) if self.current_path and self.current_path.suffix.lower() == '.inp' else ''
-        if not mesh:
-            mesh, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis mesh", "", "INP mesh (*.inp)")
-        if not mesh:
+    def update_model_tree(self):
+        self.model_tree.clear()
+        if self.model_scene is None:
+            QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP mesh', 'or Solve example'])
             return
-        analysis, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Static analysis definitions", str(examples()), "Analysis definitions (*.json)")
-        if analysis:
-            self.start_job(Path(mesh), Path(analysis))
+        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, self.definition['unitSystem'] or 'Choose units'])
+        root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
+        QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
+        for key, label in [('nodeSets', 'Imported node sets'), ('elementSets', 'Imported element sets')]:
+            group = QtWidgets.QTreeWidgetItem(root, [label])
+            for item in self.model_scene.get(key, []):
+                QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
+        for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
+                (2, 'Solid sections', self.definition['sections'], 'elementSet'),
+                (3, 'Supports', self.definition['step']['constraints'], 'nodeSet'),
+                (4, 'Nodal loads', self.definition['step']['loads'], 'nodeSet')]:
+            group = QtWidgets.QTreeWidgetItem(root, [label, str(len(records))])
+            group.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
+            for record in records:
+                child = QtWidgets.QTreeWidgetItem(group, [record['name'], record[region]])
+                child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
+        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
+        step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
+        self.model_tree.expandToDepth(1)
+
+    def edit_tree_item(self, item, column):
+        tab = item.data(0, QtCore.Qt.ItemDataRole.UserRole)
+        if tab is not None:
+            self.configure_model(tab)
+
+    def configure_model(self, tab=0):
+        if self.job.active:
+            return
+        if self.model_scene is None:
+            QtWidgets.QMessageBox.information(self, 'Open a mesh', 'Open an INP mesh or use Solve example before configuring an analysis.')
+            return
+        dialog = AnalysisDialog(self, self.model_scene, self.mesh_bytes, self.definition, int(tab))
+        if dialog.exec() == QtWidgets.QDialog.DialogCode.Accepted:
+            self.editor_dirty = self.editor_dirty or dialog.definition != self.definition
+            self.definition = dialog.definition
+            self.analysis_valid = True
+            self.update_model_tree()
+
+    def run_model(self):
+        if self.job.active:
+            return
+        if not self.analysis_valid:
+            self.configure_model()
+        if self.model_scene is not None and self.analysis_valid:
+            self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
 
     def run_example(self):
-        self.start_job(examples() / 'cube-mesh.inp', examples() / 'cube-analysis.json')
+        if not self.confirm_discard():
+            return
+        definition = json.loads((examples() / 'cube-analysis.json').read_text())
+        self.load(examples() / 'cube-mesh.inp', as_model=True, definition=definition)
+        self.analysis_valid = True
+        self.run_model()
 
-    def start_job(self, mesh, analysis):
+    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None):
         try:
-            self.load(mesh)
-            self.job.start(mesh, analysis, self.jobs_root)
-            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nAnalysis: {analysis}\n")
+            if definition is None:
+                self.load(mesh)
+            else:
+                self.show_scene(self.model_scene, self.model_path)
+            self.job.start(mesh, analysis, self.jobs_root, definition=definition, mesh_bytes=mesh_bytes)
+            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             self.job_label.setText("Cannot start")
             self.job_output.setPlainText(str(error))
@@ -203,6 +272,8 @@ class Viewport(QtWidgets.QMainWindow):
     def job_state(self, state):
         active = state in ('Starting', 'Running', 'Cancelling')
         self.run_action.setEnabled(not active)
+        self.configure_action.setEnabled(not active)
+        self.open_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
         self.cancel_action.setEnabled(active and state != 'Cancelling')
         self.job_label.setText(state)
@@ -234,19 +305,34 @@ class Viewport(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(0, self.close)
 
     def open_job_directory(self):
-        if self.job.directory and self.job.directory.is_dir():
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.directory)))
+        if self.job.workspace and self.job.workspace.is_dir():
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.workspace)))
 
     def open_dialog(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh/results", "", "Mesh/results (*.inp *.frd)")
         if path:
             try:
-                self.load(Path(path))
+                as_model = Path(path).suffix.lower() == '.inp'
+                if as_model and not self.confirm_discard():
+                    return
+                self.load(Path(path), as_model=as_model)
             except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
                 QtWidgets.QMessageBox.critical(self, "Cannot open file", str(error))
 
-    def load(self, path):
+    def load(self, path, *, as_model=False, definition=None):
+        mesh_bytes = path.read_bytes() if as_model else None
         scene = decode(path)
+        if as_model and hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
+            raise ValueError('Mesh changed during import. Reopen it before configuring an analysis.')
+        self.show_scene(scene, path)
+        if as_model:
+            self.model_path, self.model_scene, self.mesh_bytes = path.resolve(), scene, mesh_bytes
+            self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
+            self.analysis_valid = False
+            self.editor_dirty = False
+            self.update_model_tree()
+
+    def show_scene(self, scene, path):
         points = vtkPoints()
         points.SetDataTypeToDouble()
         nodes = scene["nodes"]
@@ -342,6 +428,9 @@ class Viewport(QtWidgets.QMainWindow):
         return self.selection
 
     def closeEvent(self, event):
+        if not self.closing_after_job and not self.confirm_discard():
+            event.ignore()
+            return
         if self.job.active:
             self.closing_after_job = True
             self.job.cancel()
@@ -349,6 +438,14 @@ class Viewport(QtWidgets.QMainWindow):
             return
         self.vtk.Finalize()
         super().closeEvent(event)
+
+    def confirm_discard(self):
+        if not self.editor_dirty:
+            return True
+        return QtWidgets.QMessageBox.question(self, 'Discard unsaved model edits?',
+            'Project saving is not available in this preview. Submitted run inputs remain in Job files. '
+            'Discard the current model edits?', QtWidgets.QMessageBox.StandardButton.Yes |
+            QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No) == QtWidgets.QMessageBox.StandardButton.Yes
 
 
 def main():
@@ -361,18 +458,21 @@ def main():
     parser.add_argument("--viewport", choices=("frame-bridge", "native-cocoa"), default="frame-bridge",
                         help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
+    parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
     args = parser.parse_args()
     if args.viewport_probe and (args.self_test or args.run_example):
         parser.error("Use --viewport-probe separately from solve/self-test")
+    if args.editor_probe and (args.self_test or args.run_example or args.viewport_probe or args.input):
+        parser.error("Use --editor-probe separately from other probes and input")
     app = QtWidgets.QApplication([sys.argv[0]])
     app.setOrganizationName("PrePoMax-X")
     app.setApplicationName("PrePoMax-X Preview")
     window = Viewport(args.viewport)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.run_example and args.self_test)
+    window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe)
     if args.input:
-        window.load(args.input.resolve())
+        window.load(args.input.resolve(), as_model=args.input.suffix.lower() == '.inp')
     window.show()
     window.vtk.render()
     result = {"success": False}
@@ -458,7 +558,10 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.viewport_probe:
+    if args.editor_probe:
+        from editor_probe import begin
+        QtCore.QTimer.singleShot(1200, lambda: begin(app, window, args.editor_probe))
+    elif args.viewport_probe:
         from viewport_probe import run
         QtCore.QTimer.singleShot(1200, lambda: run(app, window, args.viewport_probe))
     elif args.run_example:

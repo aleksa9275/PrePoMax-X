@@ -1,0 +1,88 @@
+{
+  "success": false,
+  "commands": [
+    {
+      "arguments": [
+        "hdiutil",
+        "verify",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-delivery/dist/PrePoMax-X-Preview-arm64.dmg"
+      ],
+      "exitCode": 0,
+      "log": "verify-image"
+    },
+    {
+      "arguments": [
+        "hdiutil",
+        "attach",
+        "-readonly",
+        "-noautoopen",
+        "-mountpoint",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Mounted preview",
+        "-plist",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-delivery/dist/PrePoMax-X-Preview-arm64.dmg"
+      ],
+      "exitCode": 0,
+      "log": "mount"
+    },
+    {
+      "arguments": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Mounted preview/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "mounted-signature"
+    },
+    {
+      "arguments": [
+        "ditto",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Mounted preview/PrePoMax-X-Viewport.app",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Installed copy/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "copy-app"
+    },
+    {
+      "arguments": [
+        "hdiutil",
+        "detach",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Mounted preview"
+      ],
+      "exitCode": 0,
+      "log": "eject"
+    },
+    {
+      "arguments": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Installed copy/PrePoMax-X-Viewport.app"
+      ],
+      "exitCode": 0,
+      "log": "installed-signature"
+    },
+    {
+      "arguments": [
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Installed copy/PrePoMax-X-Viewport.app/Contents/MacOS/PrePoMax-X-Viewport",
+        "--run-example",
+        "--jobs-root",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/Job workspace",
+        "--self-test",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/desktop-workflow.json",
+        "--viewport",
+        "native-cocoa",
+        "--screenshot",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0044-reviewed-dmg-verification/desktop-workflow.png"
+      ],
+      "exitCode": 1,
+      "log": "desktop"
+    }
+  ],
+  "scope": "Local mounted/copy test, not a clean macOS or downloaded Gatekeeper test",
+  "dmgSha256": "5d08e69e55e96beb61342587b53162cd7b783d8a1da5df7ba6c8f791ae6c2f27",
+  "packageManifestSha256": "362ac60dbeb75d03dcb46b3e65d6a033071e9e2a1e308914e0bd6f3402540045",
+  "error": "desktop failed: qt.gui.icc: fromIccProfile: failed size sanity 1\n"
+}

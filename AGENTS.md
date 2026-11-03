@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-03 task 0044: maintainer requests proceeding after task 0043. Editable
+static-solid model tree/controls now use original C# validation and frozen job
+inputs, with actual changed-material/load native numerical evidence. Read
+.project/reports/editable-solid-workflow.md for the final DMG, source snapshot,
+checks and actual publication/CI. Imported named-set assignments are supported;
+new/picked sets and project save/reopen remain pending. Task 0045 prepares an
+explicit persistence decision/proof; do not relabel job JSON as PMX or silently
+select a default format. Keep both earlier DMGs, D051/D053/D054 scope, both known
+correctness failures/tetra gate and all full-parity/four-target/release gates.
+
 2026-11-03 task 0043 continuation: maintainer selects PrePoMax 3.0.0 as parity
 target and wants ongoing open-source macOS/Linux distributions tracking future
 upstream releases even without upstream adoption (D054; .project/PARITY.md).

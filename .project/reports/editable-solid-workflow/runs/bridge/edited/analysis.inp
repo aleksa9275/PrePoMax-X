@@ -1,0 +1,51 @@
+** PrePoMax-X bounded 3D linear-static analysis deck
+*Node
+1, 0, 0, 0
+2, 1, 0, 0
+3, 1, 1, 0
+4, 0, 1, 0
+5, 0, 0, 1
+6, 1, 0, 1
+7, 1, 1, 1
+8, 0, 1, 1
+*Element, Type=C3D8, Elset=SOLID
+1, 1, 2, 3, 4, 5, 6, 7, 8
+*Nset, Nset=NALL
+1, 2, 3, 4, 5, 6, 7, 8
+*Nset, Nset=X0
+1, 4, 5, 8
+*Nset, Nset=Y0
+1, 2, 5, 6
+*Nset, Nset=Z0
+1, 2, 3, 4
+*Nset, Nset=X1
+2, 3, 6, 7
+*Material, Name=ELASTIC
+*Elastic
+105000, 0.3
+*Solid section, Elset=SOLID, Material=ELASTIC
+*Step, Inc=100
+*Static
+1, 1, 1E-05, 1
+** Name: Fix-X
+*Boundary
+X0, 1, 1, 0
+** Name: Fix-Y
+*Boundary
+Y0, 2, 2, 0
+** Name: Fix-Z
+*Boundary
+Z0, 3, 3, 0
+** Name: Axial
+*Cload
+X1, 1, 50
+*Output, Frequency=1
+*Node print, Nset=NALL, Global=Yes
+RF, U
+*El print, Elset=SOLID, Global=Yes
+S
+*Node file
+RF, U
+*El file
+S, E, NOE
+*End step

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using CaeJob;
 using PrePoMaxX.StaticDeck;
@@ -73,6 +74,16 @@ internal static class Program
                 if(args.Length<3)throw new ArgumentException("--registry requires a registry path and command.");
                 registryPath=Path.GetFullPath(args[1]);args=args[2..];
             }
+            if(args.Length==3&&args[0]=="validate-static")
+            {
+                var validationMesh=MeshFiles.Read(args[1]);var validationSpec=AnalysisFiles.Read(args[2]);
+                string validationDeck=AnalysisFiles.Build(validationMesh,validationSpec);
+                Console.WriteLine(JsonSerializer.Serialize(new{success=true,solverExecuted=false,
+                    unitSystem=validationSpec.UnitSystem,nodes=validationMesh.Nodes.Count,elements=validationMesh.Elements.Count,
+                    materials=validationSpec.Materials.Length,sections=validationSpec.Sections.Length,
+                    constraints=validationSpec.Step.Constraints.Length,loads=validationSpec.Step.Loads.Length,
+                    deckSha256=Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(validationDeck)))}));return 0;
+            }
             var registry=SolverBuilds.Read(registryPath);
             if(args.Length>=1&&args[0]=="thread-plan")
             {
@@ -103,7 +114,7 @@ internal static class Program
                 var builds=registry.GetProperty("builds").EnumerateArray().Where(b=>b.GetProperty("os").GetString()==SolverBuilds.HostOs&&b.GetProperty("architecture").GetString()==SolverBuilds.HostArchitecture).Select(b=>b.GetProperty("id").GetString()).ToArray();
                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,pinnedBuilds=builds,solverAvailable=builds.Length==0?(bool?)false:null,binaryAvailabilityChecked=false,solverExecuted=false}));return 0;
             }
-            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
+            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] validate-static <mesh.inp> <analysis.json> | thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
             var build=SolverBuilds.Select(registry,args[1]);string executable=SolverBuilds.ValidateFiles(build,Path.GetFullPath(args[2]));
             double timeout=double.Parse(args[6],CultureInfo.InvariantCulture);
             if(!double.IsFinite(timeout)||timeout<=0||timeout>86400)throw new InvalidDataException("Timeout must be finite and in (0,86400] seconds.");

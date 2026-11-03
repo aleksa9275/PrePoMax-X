@@ -1,5 +1,16 @@
 # Decision register
 
+D055 — Accepted first editable solid desktop slice, 2026-11-03: maintainer
+requests proceeding after task 0043. Task 0044 edits the existing bounded static
+definition through a model tree/Qt controls and original INP set inventory.
+Original C# objects/writer validate and generate the deck; submitted mesh and
+definition are frozen per job. This is session editing with retained run inputs,
+not a new PMX format or supported project save/reopen. Imported named-set
+assignments are supported; picked/new-set authoring remains pending. Original
+solver/version/thread profile, engineering semantics, production frontend and
+all correctness/four-target/release requirements remain. D051 publication scope
+continues. [Actual implementation/evidence](reports/editable-solid-workflow.md).
+
 D054 — Accepted parity target and ongoing open-source maintenance, 2026-11-03:
 maintainer specifies PrePoMax 3.0.0 as the functionality target and intends to
 follow future upstream releases while maintaining macOS/Linux distributions,

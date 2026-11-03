@@ -18,10 +18,20 @@ to run the bundled workflow. Build tools are only needed to rebuild it.
 3. Click **Solve example**. The original C# services generate a deck, run native
    CalculiX, and load the completed FRD. Choose a contour component, Fit, click
    for original FEM IDs/values, or drag to rotate.
-4. **Run static…** accepts a supported INP mesh plus the existing bounded analysis
-   JSON (see Examples). It is not an arbitrary CalculiX-deck execution mode.
-5. **Cancel** requests cancellation through the job host. **Job files** opens the
-   job directory with input deck, solver output, errors and JSON outcome. Closing
+4. Click **Configure…** (or double-click a model-tree item) to edit units,
+   isotropic elastic materials, solid sections, displacement supports, forces
+   per node, static increments and requested histories. **Validate** checks the
+   definition without running a solver; **Apply**, then **Run analysis** submits it.
+   For example, change Young's modulus to 105 GPa and the axial force to 50 N per
+   node. The cube then carries 200 N and has four times the original displacement.
+5. To configure your own supported mesh, use **Open INP / FRD** and select an INP.
+   Choose its units explicitly and assign materials/supports/loads to its imported
+   named sets. Blank displacement components are free; zero fixes a component.
+   Forces are applied to each node in the chosen set. This preview imports mesh
+   data, not existing INP analysis definitions or arbitrary CalculiX analyses.
+6. **Cancel** requests cancellation through the job host. **Job files** opens the
+   workspace with frozen submitted inputs and a solve folder containing the
+   generated deck, solver output, errors and outcome. Closing
    during a job requests cancellation and waits for cleanup before exiting.
 
 Jobs are stored in a new unique folder under Qt's per-user AppLocalDataLocation
@@ -31,8 +41,11 @@ this preview does not introduce a production thread/backend default.
 
 ## Scope and removal
 
-This is the bounded static-solid workflow and experimental VTK frame-copy viewer.
-Full PMX editing/save/history, CAD, meshing, other analyses/backends and final
+This is a bounded static-solid editor and experimental viewport. The frame-copy
+viewer remains default; the native Cocoa transport is opt-in. Model edits live
+in this session: **project save/reopen is not available**, and discarding edits or
+quitting loses the editable session. Submitted job inputs/results remain on disk.
+Full PMX editing/save/history, new or picked-set creation, CAD, meshing, other analyses/backends and final
 viewport performance are not delivered. It is not the complete PrePoMax product.
 
 Follow **UNINSTALL-AND-RESET.md** beside this file for full removal: app copies,

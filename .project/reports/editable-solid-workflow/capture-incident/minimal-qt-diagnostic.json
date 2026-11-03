@@ -1,0 +1,15 @@
+{
+  "screen": "Built-in Retina Display",
+  "geometry": [
+    0,
+    0,
+    1512,
+    982
+  ],
+  "regionNull": true,
+  "ownWindowNull": true,
+  "wholeScreenNull": true,
+  "warning": "qt.gui.icc: fromIccProfile: failed size sanity 1",
+  "causeEstablished": false,
+  "scope": "Independent minimal QApplication/QLabel; screen grabs were not saved or used to inspect other apps"
+}
