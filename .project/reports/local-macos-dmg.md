@@ -1,5 +1,9 @@
 # Local macOS solver preview DMG — task 0042
 
+Storage update, task 0046: generated app/DMG/test payloads below were removed at
+the maintainer's request after successful testing. Verification records and hashes
+remain historical; see [cleanup/rebuild process](storage-cleanup.md).
+
 3 November 2026. Maintainer requests a local-installable DMG while Developer ID
 signing/notarization are unavailable, explicitly choosing desktop solver controls
 before the first image. This reorders the bounded workflow/package increment

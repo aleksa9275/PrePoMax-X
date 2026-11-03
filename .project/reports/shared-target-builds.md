@@ -1,5 +1,9 @@
 # Shared target builds — task 0041
 
+Storage update, task 0046: generated host/package copies below were removed at
+the maintainer's request; the reusable native solver is retained. Verification
+records and hashes remain historical; see [cleanup/rebuild process](storage-cleanup.md).
+
 Maintainer resumes the accepted shared-source/macOS-first sequence after the
 verified CI repair. `X/Build/build.py` now publishes the same original C# mesh,
 results and execution hosts for four RIDs, with one target catalog. Common staging,

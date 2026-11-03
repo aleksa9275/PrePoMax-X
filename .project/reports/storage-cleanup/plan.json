@@ -1,0 +1,604 @@
+{
+  "recordedAtUtc": "2026-11-03T13:05:26.959642+00:00",
+  "root": "/Users/aleksa/Documents/GitLab/pre-po-max-x",
+  "gitHead": "f2e376cd14eaacd4a003ad1bcca5574b01d10768",
+  "filesystemAvailableBeforeBytes": 202075279360,
+  "scope": "Ignored task0041\u20130044 generated payloads only; preserve parent metadata, reports, jobs, source and build inputs",
+  "entries": [
+    {
+      "path": "X/Build/artifacts/task0041-final-mac-package/build",
+      "allocatedBytes": 19292160,
+      "logicalBytes": 19263070,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "4742f31e98752a81a281db8297fb1f5788a1c225eafaa938669432973e8bbfb4"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-final-mac-package/dist",
+      "allocatedBytes": 1380409344,
+      "logicalBytes": 1374655815,
+      "regularFiles": 2740,
+      "symlinks": 1503,
+      "treeStampSha256": "24141a59f8d80bce78fbf81d0dc32d4af8373b2a00a0cdf19f864078a15d0c43"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-final-mac-package/hosts",
+      "allocatedBytes": 179400704,
+      "logicalBytes": 178665798,
+      "regularFiles": 410,
+      "symlinks": 0,
+      "treeStampSha256": "1f9367c37898623d4922bf8fbd38d073fad3fb2520b856348efba092e8a279a1"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-linux-arm64-hosts/hosts",
+      "allocatedBytes": 275316736,
+      "logicalBytes": 274185196,
+      "regularFiles": 632,
+      "symlinks": 0,
+      "treeStampSha256": "e63fdc91de02ad52fe857cec1d54bf80e9e986ccacf118d457aae14d63c83d88"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-mac-hosts/hosts",
+      "allocatedBytes": 269598720,
+      "logicalBytes": 268474276,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "8212518e2964f825204c2ecafa3a151897700251349db22ca410f9930059f36c"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-mac-package/build",
+      "allocatedBytes": 19279872,
+      "logicalBytes": 19253186,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "062064ead775b990216e1128c4c671c3bfed2b570ab8c78b005bdf62d69845d3"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-mac-package/dist",
+      "allocatedBytes": 1380409344,
+      "logicalBytes": 1374655815,
+      "regularFiles": 2740,
+      "symlinks": 1503,
+      "treeStampSha256": "d43a42e92ee3e8d5025b4dd6ad39acd3c99d3b63f6d7812287fb3566a4134a8a"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-mac-package/hosts",
+      "allocatedBytes": 179400704,
+      "logicalBytes": 178665798,
+      "regularFiles": 410,
+      "symlinks": 0,
+      "treeStampSha256": "233473466aa08517eac180bbf0c88674a929c303fab481d83207e6a711f6f2ab"
+    },
+    {
+      "path": "X/Build/artifacts/task0041-windows-hosts/hosts",
+      "allocatedBytes": 251314176,
+      "logicalBytes": 250127300,
+      "regularFiles": 632,
+      "symlinks": 0,
+      "treeStampSha256": "68345e11fb0a9f64869cb88e45b3dd520ac1156d19a180fc5de6453db39c70b7"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-dmg-verification/Installed copy",
+      "allocatedBytes": 806457344,
+      "logicalBytes": 803147856,
+      "regularFiles": 1606,
+      "symlinks": 1464,
+      "treeStampSha256": "63f1799333a02f67d5b92204ec1dcde4a56fef500a38fb626af489493fad0db7"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-mac-hosts/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475524,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "8681c232e2504d9909098850f36de60e973556d0815aa8077cbda10f2082f2f2"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-dmg/build",
+      "allocatedBytes": 19517440,
+      "logicalBytes": 19484432,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "59ddea7893650c8743e2d550d61fc1dcf9293dda384e0f18cf7fe41f5971959d"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-dmg/dist",
+      "allocatedBytes": 1846607872,
+      "logicalBytes": 1840016912,
+      "regularFiles": 3194,
+      "symlinks": 1723,
+      "treeStampSha256": "0ff6f1ea6009d0fb036d28ee89cd3e15cb15300e4e795057da7a7eb59577d297"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-dmg/dmg-payload",
+      "allocatedBytes": 806514688,
+      "logicalBytes": 803192729,
+      "regularFiles": 1611,
+      "symlinks": 1465,
+      "treeStampSha256": "1d5ed8f664becdd7086b3ea6aeda15eb0a80dc5615e23e6a671e074e1e8ec8ee"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-dmg/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475520,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "eca389f31c66e1c8f4a5badae66b180ebbe629e70ec919b6bbfce65623d7141f"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-dmg/pyinstaller-cache",
+      "allocatedBytes": 880078848,
+      "logicalBytes": 878590517,
+      "regularFiles": 725,
+      "symlinks": 0,
+      "treeStampSha256": "e6e18f0ccaf3073d7f0644c58aa36c6e2dca276acdd25e979d9d52776dc080b5"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview/build",
+      "allocatedBytes": 18907136,
+      "logicalBytes": 18876599,
+      "regularFiles": 14,
+      "symlinks": 0,
+      "treeStampSha256": "cbbcafb56dbcaee8c673b401bf79480cd50e8732fd4e079d7f1ba8e9fa548f56"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview/dist",
+      "allocatedBytes": 41336832,
+      "logicalBytes": 41255488,
+      "regularFiles": 33,
+      "symlinks": 0,
+      "treeStampSha256": "07417f93ca4b160557645f7e570606623ea70f272909406b2e1e76261b4cd88e"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475524,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "185267fe06639ddb60f69ed0d2f1902bd59ab10b9bd0d5319d03d06fe163060c"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r2/build",
+      "allocatedBytes": 19533824,
+      "logicalBytes": 19501689,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "d30dfb96b376bc64e067bf88d917e73b8ec4bcac11bcc14c70f72541b3f373d8"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r2/dist",
+      "allocatedBytes": 1586294784,
+      "logicalBytes": 1579710443,
+      "regularFiles": 3191,
+      "symlinks": 1723,
+      "treeStampSha256": "3c6cb4cb45a414f5020d2d5110fb029f2ecbd993cec503d4f71e3322485f6b67"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r2/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475524,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "063a9231e523a74cf572a94b2e5e0fbb2e3f11edd3ba00c3c608b5598cce9511"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r2/pyinstaller-cache",
+      "allocatedBytes": 880087040,
+      "logicalBytes": 878590517,
+      "regularFiles": 725,
+      "symlinks": 0,
+      "treeStampSha256": "bd585bbb0a903b9c20eca2bda5fe7713b947810673f9bd4f359d3fda6c99aa5b"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/build",
+      "allocatedBytes": 19533824,
+      "logicalBytes": 19501801,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "0ccd7ddeb486efb0216978951255ce8d0fe130f8c33af588038540aaa9b1cee5"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/dist",
+      "allocatedBytes": 1846616064,
+      "logicalBytes": 1840033698,
+      "regularFiles": 3192,
+      "symlinks": 1723,
+      "treeStampSha256": "1cce2995d9aa7bc21b81f36cb07302ca466494bf59fd7e4515925e33eb0b923e"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/dmg-payload",
+      "allocatedBytes": 806506496,
+      "logicalBytes": 803187112,
+      "regularFiles": 1610,
+      "symlinks": 1465,
+      "treeStampSha256": "6b2de9717c60eb27b0add99dfdf90663c549cc885f39dca1151e5d97426ed586"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475524,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "2007d56e21a29550280ad6448449a73d51723e706c0b454897ccab8f36277692"
+    },
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/pyinstaller-cache",
+      "allocatedBytes": 880078848,
+      "logicalBytes": 878590517,
+      "regularFiles": 725,
+      "symlinks": 0,
+      "treeStampSha256": "67e42b39c61f992def0693227d3979ab5dc2b2083caab9c28ad51d2c16700941"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-verification/Installed copy",
+      "allocatedBytes": 807075840,
+      "logicalBytes": 803759199,
+      "regularFiles": 1610,
+      "symlinks": 1470,
+      "treeStampSha256": "84c82c6a49de13484037cc776ca84a637d5f9fa63786bcc5eba49fbeda3595da"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/build",
+      "allocatedBytes": 19574784,
+      "logicalBytes": 19546698,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "5a37cceca333860788210f5b862ee8f907899bfb4d73a72b494e522d65d4a6a7"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/dist",
+      "allocatedBytes": 1848025088,
+      "logicalBytes": 1841423460,
+      "regularFiles": 3200,
+      "symlinks": 1733,
+      "treeStampSha256": "446c9f73824124903a12ad978578ee12a28a1369ca7d646cbb1c9ef07625f49b"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/dmg-payload",
+      "allocatedBytes": 807133184,
+      "logicalBytes": 803804072,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "817174284e420f8ef45bfb0515c7f12142150844ca800f6f5e713990089c678e"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/hosts",
+      "allocatedBytes": 269602816,
+      "logicalBytes": 268475496,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "801a53c2d910ffb40079e0989adc0c431caebcfe17fc387140a1dfffc530c3cf"
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "8ab99f43ff1aef865edf92e6b725fc80bbb61d391120f7b473a753190a040f06"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/build",
+      "allocatedBytes": 19636224,
+      "logicalBytes": 19607307,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "fdf579316ba2f4b208c076b1941bd82d4f5c80f7961cb7c7918c5e9760d971af"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/dist",
+      "allocatedBytes": 1848107008,
+      "logicalBytes": 1841510969,
+      "regularFiles": 3199,
+      "symlinks": 1733,
+      "treeStampSha256": "d446c1bc5c242acdf583628ea8537e40a1c9eb84ac89f071484c38874d0339cb"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/dmg-payload",
+      "allocatedBytes": 807161856,
+      "logicalBytes": 803834136,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "f25866c0f4dc2ad67c68b6998d038f478462a29a40a8d0729501252e00be8eeb"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481964,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "bbcb7ad80b621a69daf0a341dbc5d7748d25d74da503418f292e2efd0ed0b569"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "faeb36c0c797a42baf4d62503f68119e8732c97ddc3705400841dc5ca898458e"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/build",
+      "allocatedBytes": 19652608,
+      "logicalBytes": 19615525,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "9b64dbe75f857cf6152deadb3e37a7e0af355e94d4bc48a3e2ee293cbe70be65"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/dist",
+      "allocatedBytes": 1848147968,
+      "logicalBytes": 1841543785,
+      "regularFiles": 3201,
+      "symlinks": 1733,
+      "treeStampSha256": "9e943ef1532d934d09493df9bf2a9aaae0e17a8d90d8f59434979575c6f16878"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/dmg-payload",
+      "allocatedBytes": 807161856,
+      "logicalBytes": 803834328,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "39553898bed09989afebbbafbef1f5dc943be949526a889cb64a9b12f1af2f57"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481964,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "f633db91f05b98e4bb3330b55f153a66c6fd33b61726568f8970f8c0491df35d"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "4f149ba63a49b61155c6b7ee32c62a3dc466d022f9b0eb05865e0d907fecc2f5"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-dmg-verification/Installed copy",
+      "allocatedBytes": 807104512,
+      "logicalBytes": 803788204,
+      "regularFiles": 1610,
+      "symlinks": 1470,
+      "treeStampSha256": "28d79bf0c72650bf3ad50c8f9555d284c56bedb1d36aed9a57aa03feb58d7671"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-dmg-verification/Installed copy",
+      "allocatedBytes": 807100416,
+      "logicalBytes": 803786264,
+      "regularFiles": 1610,
+      "symlinks": 1470,
+      "treeStampSha256": "be7abe694f4384fd433fcf6070c7ae94582e8bc05731fd874e5d05985829e68f"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/build",
+      "allocatedBytes": 19636224,
+      "logicalBytes": 19606407,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "3e625d6a65378ff2d20a478baab3b6112abc7bf787290cb680caea8ffd9db027"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/dist",
+      "allocatedBytes": 1848119296,
+      "logicalBytes": 1841528553,
+      "regularFiles": 3199,
+      "symlinks": 1733,
+      "treeStampSha256": "51a8eb05306c8c5260f56ccd75cbd4c8391b590b9d26d73eb55a7f4beb940e82"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/dmg-payload",
+      "allocatedBytes": 807157760,
+      "logicalBytes": 803831137,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "f691e5b3014ca0575620f933eefc41d1697e24ccdfd9374a97a0029db117b4cb"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481432,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "55ba52bd2c4056d2a80a35db5d2778541e8ac042252dc9add1b8166ffed30bdb"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "6ddf65948e6bfb12c85c769689e7466d169dd59efa728d117e3a4d2e3af258ac"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid-final/build",
+      "allocatedBytes": 19652608,
+      "logicalBytes": 19624333,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "c3595fd2d59ea0e0e3f402c0586324266f2a71b7a1d7a46c5e6581f20bf3cff7"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid-final/dist",
+      "allocatedBytes": 1848086528,
+      "logicalBytes": 1841496887,
+      "regularFiles": 3199,
+      "symlinks": 1733,
+      "treeStampSha256": "b1214a4fec89b8e0b44cac8c77696ec70dad24fab11512a145346bcfea21586a"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid-final/dmg-payload",
+      "allocatedBytes": 807157760,
+      "logicalBytes": 803832081,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "4666cda5891260d3c89b73a9a6722a02299c8fca1824d2d0f77044061b31b1f0"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid-final/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481432,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "8266d322c158ca194fa831a524876776cc6ce44c563fcf867c4e2c0e42f81435"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid-final/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "3c3504eb1bb17f863716b43036542326e9268b7139f81261243796d11edf5aee"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-delivery/build",
+      "allocatedBytes": 19636224,
+      "logicalBytes": 19609033,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "21bb20536737d93eed613b2174d961e4cfa9ac74667264508c5a81219aae9f59"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-delivery/dist",
+      "allocatedBytes": 1848094720,
+      "logicalBytes": 1841499001,
+      "regularFiles": 3200,
+      "symlinks": 1733,
+      "treeStampSha256": "4bd6f4f5a4b269b546ab23b06162e80eeb924e1ff16c0229d8a9e3dff53bdaa6"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-delivery/dmg-payload",
+      "allocatedBytes": 807157760,
+      "logicalBytes": 803833332,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "1eb8b264aaf8282bc12f2defc40d8825b687db73b6c41389f5f276a62f1fb34c"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-delivery/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481432,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "f50a67ffe157e753e6270e31550cdc049aa2c257617c1d7df45382b462a75363"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-delivery/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "5e4348acc79606c544171beb5db3e70114fa73583be9daf200c9b8a5ec6bcd01"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-final-dmg-verification/Installed copy",
+      "allocatedBytes": 807100416,
+      "logicalBytes": 803787208,
+      "regularFiles": 1610,
+      "symlinks": 1470,
+      "treeStampSha256": "41bd1e19452501cfbb000445e2002369c3088ee8587ed7f3a0ad439c56ce8e66"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-delivery/build",
+      "allocatedBytes": 19652608,
+      "logicalBytes": 19617507,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "14474c9a7ae0fe2b329982c0f319ab8f23732c2396880b7cc14e0cf8b11f5408"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-delivery/dist",
+      "allocatedBytes": 1848131584,
+      "logicalBytes": 1841535849,
+      "regularFiles": 3199,
+      "symlinks": 1733,
+      "treeStampSha256": "c545b364c421457d2f2eb9202679390886c3d9ace58151b17fc2fb1a8189de78"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-delivery/dmg-payload",
+      "allocatedBytes": 807161856,
+      "logicalBytes": 803833604,
+      "regularFiles": 1615,
+      "symlinks": 1471,
+      "treeStampSha256": "22f41395c5974414acb76f65e88dfcac3d0d4e8b1a2dc70fc5edd82cb33173ff"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-delivery/hosts",
+      "allocatedBytes": 269606912,
+      "logicalBytes": 268481432,
+      "regularFiles": 629,
+      "symlinks": 0,
+      "treeStampSha256": "beb55cf1e3b32c44c6b1c3a3662d367c3f90dc99ed29b3ccf72c768c7e6e2ecb"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-delivery/pyinstaller-cache",
+      "allocatedBytes": 880676864,
+      "logicalBytes": 879184713,
+      "regularFiles": 727,
+      "symlinks": 0,
+      "treeStampSha256": "a77cb6d072f9d4c31bab29dc199fc4f55a71e26d407dcb762f2d6877069a2f72"
+    },
+    {
+      "path": "X/Build/artifacts/task0044-reviewed-dmg-verification/Installed copy",
+      "allocatedBytes": 807104512,
+      "logicalBytes": 803787480,
+      "regularFiles": 1610,
+      "symlinks": 1470,
+      "treeStampSha256": "71e7f80cb6c2b5bc06593ef4c16e424d9323445682734eb48d4d7c5dba7a7bef"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-final/build",
+      "allocatedBytes": 19296256,
+      "logicalBytes": 19263503,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "4e1f9f5dd60cfadca7e1d7a21376fbc4351fd57bafd275f12812c02727f4654d"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-final/dist",
+      "allocatedBytes": 1380401152,
+      "logicalBytes": 1374648677,
+      "regularFiles": 2738,
+      "symlinks": 1502,
+      "treeStampSha256": "9d6c7011c6524580ace96eed855e74ed6698edc7fad8408d713ff4906f75ba9d"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-final/hosts",
+      "allocatedBytes": 179400704,
+      "logicalBytes": 178665054,
+      "regularFiles": 410,
+      "symlinks": 0,
+      "treeStampSha256": "4bc961dc6ee9dfcd96d6a5578ad399be62ddb791a84bc041ade50236f32c0010"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-preview/build",
+      "allocatedBytes": 19296256,
+      "logicalBytes": 19265597,
+      "regularFiles": 16,
+      "symlinks": 0,
+      "treeStampSha256": "3f80b0f7982b7daa876c469f8b05d9353ce04b85b5184a3d3c1167b813a0eba2"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-preview/dist",
+      "allocatedBytes": 1380392960,
+      "logicalBytes": 1374647353,
+      "regularFiles": 2736,
+      "symlinks": 1501,
+      "treeStampSha256": "0f1d45bafe70abe6e714af89884d5cea0764db87dbb54848bdf8333db8586430"
+    },
+    {
+      "path": "X/Desktop/artifacts/package-macos-arm64-preview/hosts",
+      "allocatedBytes": 179400704,
+      "logicalBytes": 178665054,
+      "regularFiles": 410,
+      "symlinks": 0,
+      "treeStampSha256": "11372e7ab83809d8acd7c9fc6c558c4c1c676dcc8c11b72a292bc380e1127b49"
+    }
+  ],
+  "skipped": [],
+  "allocatedBytesEstimate": 49730408448,
+  "note": "Allocated-byte sum can overcount APFS shared extents; actual free-space change is measured separately"
+}

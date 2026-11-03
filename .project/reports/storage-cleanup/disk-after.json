@@ -1,0 +1,8 @@
+{
+  "artifactRootsAllocatedKiB": {
+    "X/Build/artifacts": 142020,
+    "X/Desktop/artifacts": 10244
+  },
+  "dfOutput": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   675Gi   230Gi    75%    1.2M  2.4G    0%   /System/Volumes/Data\n",
+  "note": "Post-cleanup filesystem availability is observational, not a dedicated disk quota"
+}

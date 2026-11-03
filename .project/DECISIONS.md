@@ -1,5 +1,16 @@
 # Decision register
 
+D056 — Accepted generated-artifact retention/cleanup, 2026-11-03: maintainer
+reports task 0044 seems to work and requests removing unnecessary tested apps/
+DMGs before proceeding. Older keep-tested-DMG instructions are superseded for
+generated payload retention. Prune reviewed ignored historical package/test/cache
+copies; preserve source, tracked evidence, small provenance, jobs/private models,
+installed user app/state and useful shared build inputs. Keep at most the current
+image while needed for user testing; remove it after confirmation. Record removed
+availability and actual space; historical hashes are not current payload presence.
+No security/uninstall/application/format/frontend/numerical change or release-gate
+closure. [Task 0046/report](reports/storage-cleanup.md); task 0045 remains next.
+
 D055 — Accepted first editable solid desktop slice, 2026-11-03: maintainer
 requests proceeding after task 0043. Task 0044 edits the existing bounded static
 definition through a model tree/Qt controls and original INP set inventory.

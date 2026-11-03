@@ -1,5 +1,21 @@
 # Project status
 
+## Current — task 0046: completed-preview storage retention
+
+Maintainer reports the task 0044 preview seems to work and requests cleanup before
+the next task. [Task 0046 plan/outcome](reports/storage-cleanup.md) prunes reviewed
+ignored package/test/cache payloads while preserving tracked source/evidence,
+small build records, all jobs and useful shared solver/runtime/dependency inputs.
+Earlier keep-DMG instructions are superseded by D056. Old local app/DMG/host links
+below describe historical verified payloads; rebuild before reuse after pruning.
+User installed app/state/private models are outside this cleanup. This is storage
+maintenance, not new application/platform/release acceptance. Task 0045 is next
+and remains unstarted. Both correctness failures/tetra gate and all release gates stay.
+
+Completed: 74 generated directories removed; observed **41.98 GiB** free-space
+gain, **230 GiB available**. All 292 retained evidence files and nine pinned
+solver/runtime hashes verify; shared tool/cache inputs and Mac build recipe remain.
+
 ## Current — task 0044: editable static solid workflow
 
 Model tree and Configure / Run analysis now edit explicit units, original

@@ -1,5 +1,16 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-03 task 0046 retention direction: maintainer reports task 0044 seems to
+work and requests deleting unnecessary tested .app/.dmg/build copies to reclaim
+storage before task 0045. Read .project/reports/storage-cleanup.md and its actual
+execution/post-check receipts. This supersedes earlier keep-DMG instructions:
+historical generated payload paths are purged, while source/evidence, small build
+metadata, jobs, installed user app/state and reusable solver/tool caches remain.
+Do not rebuild or retain old previews merely to satisfy historical handoff text.
+For future work keep one candidate for verification/user testing, prune duplicates
+promptly, and remove generated binaries after user confirmation. No app/numerical/
+format/frontend/release gate change. Task 0045 is still prepared, not started.
+
 2026-11-03 task 0044: maintainer requests proceeding after task 0043. Editable
 static-solid model tree/controls now use original C# validation and frozen job
 inputs, with actual changed-material/load native numerical evidence. Read

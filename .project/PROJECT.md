@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-03 retention correction: the maintainer reports the local editable-solid
+preview seems to work and requests reclaiming tested package/build copies.
+[Task 0046](reports/storage-cleanup.md) removes generated payloads and supersedes
+older keep-DMG instructions. Source, evidence, user installed app/state, jobs and
+useful rebuild inputs remain; historical artifact paths do not imply availability.
+Task 0045 remains prepared and unstarted. Correctness/release gates are unchanged.
+
 2026-11-03 editable-solid increment: task 0044 supplies model-tree configuration
 of units, isotropic elastic materials, solid sections, displacement supports,
 nodal forces and static controls through the existing original C# services.

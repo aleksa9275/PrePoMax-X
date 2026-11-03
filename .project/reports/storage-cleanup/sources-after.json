@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "components": [
+    {
+      "component": "CalculiX CrunchiX",
+      "version": "2.22",
+      "files": 1188,
+      "bytes": 11372771,
+      "archiveSha256": "3a94dcc775a31f570229734b341d6b06301ebdc759863df901c8b9bf1854c0bc",
+      "releaseReady": false
+    },
+    {
+      "component": "SPOOLES",
+      "version": "2.2",
+      "files": 1809,
+      "bytes": 13940880,
+      "archiveSha256": "a84559a0e987a1e423055ef4fdf3035d55b65bbe4bf915efaa1a35bef7f8c5dd",
+      "releaseReady": false
+    },
+    {
+      "component": "ARPACK-ng",
+      "version": "3.9.1",
+      "files": 479,
+      "bytes": 5952424,
+      "archiveSha256": "f6641deb07fa69165b7815de9008af3ea47eb39b2bb97521fbf74c97aba6e844",
+      "releaseReady": false
+    }
+  ]
+}

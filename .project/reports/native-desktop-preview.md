@@ -1,5 +1,9 @@
 # Native desktop candidate — task 0037
 
+Storage update, task 0046: generated app/DMG/test payloads below were removed at
+the maintainer's request after successful testing. Verification records and hashes
+remain historical; see [cleanup/rebuild process](storage-cleanup.md).
+
 2 November 2026. **Verified:** a local ARM64 `.app` opens a mesh or completed
 C3D8 static FRD through original C# readers, displays native VTK contours and
 resolves original FEM IDs/values. This is the first bounded desktop/package proof,

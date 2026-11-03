@@ -1,0 +1,32 @@
+{
+  "firstApply": "Guard refused allocation-only differences before deletion; no receipt/deletions",
+  "same74Paths": true,
+  "allTreeStampsAndFileMetadataUnchanged": true,
+  "allocationChanges": [
+    {
+      "path": "X/Build/artifacts/task0042-macos-preview-r3/pyinstaller-cache",
+      "allocatedBytesBefore": 880087040,
+      "allocatedBytesNow": 880078848
+    },
+    {
+      "path": "X/Build/artifacts/task0043-native-viewport/pyinstaller-cache",
+      "allocatedBytesBefore": 880685056,
+      "allocatedBytesNow": 880676864
+    },
+    {
+      "path": "X/Build/artifacts/task0044-b004-delivery/pyinstaller-cache",
+      "allocatedBytesBefore": 880685056,
+      "allocatedBytesNow": 880676864
+    },
+    {
+      "path": "X/Build/artifacts/task0044-current-delivery/pyinstaller-cache",
+      "allocatedBytesBefore": 880685056,
+      "allocatedBytesNow": 880676864
+    },
+    {
+      "path": "X/Build/artifacts/task0044-editable-solid/pyinstaller-cache",
+      "allocatedBytesBefore": 880685056,
+      "allocatedBytesNow": 880676864
+    }
+  ]
+}

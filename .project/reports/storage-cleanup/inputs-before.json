@@ -1,0 +1,49 @@
+{
+  "solverInputs": [
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/bin/ccx",
+      "sha256": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b"
+    },
+    {
+      "path": "/opt/homebrew/opt/openblas/lib/libopenblas.0.dylib",
+      "sha256": "aeb5f40d3b5cc0fca84e05e90b8e7da6921cea2c33ca701062b0ccd7b4caf117"
+    },
+    {
+      "path": "/opt/homebrew/opt/gcc/lib/gcc/current/libgfortran.5.dylib",
+      "sha256": "09c11f298a73589b0fa79d93bad7fda25c29055999b5c331507e02f456bf1775"
+    },
+    {
+      "path": "/opt/homebrew/opt/gcc/lib/gcc/current/libgomp.1.dylib",
+      "sha256": "954328f63a49f0f294763c7b370c91893d7d99794b1665ada67b03b21283cc6b"
+    },
+    {
+      "path": "/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib",
+      "sha256": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a"
+    },
+    {
+      "path": "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libquadmath.0.dylib",
+      "sha256": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a"
+    },
+    {
+      "path": "/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/libgcc_s.1.1.dylib",
+      "sha256": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+    },
+    {
+      "path": "/opt/homebrew/opt/gcc/lib/gcc/current/libgcc_s.1.1.dylib",
+      "sha256": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+    },
+    {
+      "path": "/opt/homebrew/opt/libomp/lib/libomp.dylib",
+      "sha256": "432b8d15fc1b2431f937bba89796a32daaa2dd464eda12a744d9cb2818842477"
+    }
+  ],
+  "allSolverHashesMatch": true,
+  "runtimeImports": {
+    "qt": "6.10.2",
+    "vtk": "9.5.2"
+  },
+  "sourceSolveApphostPresent": true,
+  "nugetCachePresent": true,
+  "offlineFeedPresent": true,
+  "latestDmgSha256": "004f32d85acf8bef58315c9a13b6321d5ffbc4ff26f019fe672f9e091d634c14"
+}

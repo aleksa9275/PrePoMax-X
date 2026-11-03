@@ -1,5 +1,9 @@
 # Editable static-solid workflow — task 0044
 
+Storage update, task 0046: maintainer reports this preview seems to work.
+Generated app/DMG/test payloads below were removed at their request. Verification
+records and hashes remain historical; see [cleanup/rebuild process](storage-cleanup.md).
+
 3 November 2026. **Verified observation:** a packaged Mac desktop can edit the
 existing bounded static-solid definition, validate it through the original C#
 model/deck services, solve it natively and inspect its fields. No hand-edited

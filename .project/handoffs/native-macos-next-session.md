@@ -1,5 +1,29 @@
 # Native macOS continuation — 3 November 2026
 
+## Current retention update — task 0046 / D056
+
+Maintainer reports task 0044 seems to work and requests reclaiming unnecessary
+tested app/DMG/build copies before task 0045. Read
+`.project/reports/storage-cleanup.md` plus its exact plan/execution/post-check
+receipts. Earlier keep-DMG instructions and payload-availability statements below
+are historical after this cleanup; do not rebuild old binaries just to retain them.
+Tracked source/evidence, small metadata/logs/snapshots, all jobs and useful shared
+build inputs remain. Installed user app/state/private models are not removed.
+
+Reusable inputs to preserve: `/private/tmp/prepomaxx-desktop-runtime`,
+`X/Build/artifacts/task0041-final-mac-solver/solver`, exact NuGet cache/offline feed
+and current source bin/obj directories. Rebuild any next package to a fresh output
+name with the existing shared entry; old `hosts` folders and test app copies are
+not reusable after pruning. Use DESKTOP_TEST_SOLVE_HOST with a current source
+Solve apphost for process checks. Keep one candidate only until testing confirms
+it; prune packaging duplicates/caches and superseded binaries promptly.
+
+Task 0045 remains prepared, not started. No engineering/default/format/frontend
+or release-gate change; both correctness failures/tetra gate remain.
+Cleanup completed: 74 directories removed, observed 41.98 GiB reclaimed and
+230 GiB available. All 292 prior evidence entries verify unchanged; nine pinned
+solver/runtime hashes, Qt/VTK imports, native sources and Mac dry plan pass.
+
 ## Latest checkpoint — task 0044
 
 Task 0044 adds the bounded editable solid model tree and Configure / Run analysis.

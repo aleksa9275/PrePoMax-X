@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "removedDirectoryCount": 74,
+  "retainedParentRecordDirectories": [
+    "X/Build/artifacts/task0041-final-mac-package",
+    "X/Build/artifacts/task0041-linux-arm64-hosts",
+    "X/Build/artifacts/task0041-mac-hosts",
+    "X/Build/artifacts/task0041-mac-package",
+    "X/Build/artifacts/task0041-windows-hosts",
+    "X/Build/artifacts/task0042-dmg-verification",
+    "X/Build/artifacts/task0042-mac-hosts",
+    "X/Build/artifacts/task0042-macos-dmg",
+    "X/Build/artifacts/task0042-macos-preview",
+    "X/Build/artifacts/task0042-macos-preview-r2",
+    "X/Build/artifacts/task0042-macos-preview-r3",
+    "X/Build/artifacts/task0043-native-verification",
+    "X/Build/artifacts/task0043-native-viewport",
+    "X/Build/artifacts/task0044-b004-delivery",
+    "X/Build/artifacts/task0044-current-delivery",
+    "X/Build/artifacts/task0044-current-dmg-verification",
+    "X/Build/artifacts/task0044-dmg-verification",
+    "X/Build/artifacts/task0044-editable-solid",
+    "X/Build/artifacts/task0044-editable-solid-final",
+    "X/Build/artifacts/task0044-final-delivery",
+    "X/Build/artifacts/task0044-final-dmg-verification",
+    "X/Build/artifacts/task0044-reviewed-delivery",
+    "X/Build/artifacts/task0044-reviewed-dmg-verification",
+    "X/Desktop/artifacts/package-macos-arm64-final",
+    "X/Desktop/artifacts/package-macos-arm64-preview"
+  ],
+  "priorEvidenceIndexes": 7,
+  "priorEvidenceEntries": 292,
+  "priorEvidenceBeforeAfterIdentical": true,
+  "solverHashFilesStillMatch": 9,
+  "runtimeImports": {
+    "qt": "6.10.2",
+    "vtk": "9.5.2"
+  },
+  "reusableSourceHostCacheFeedPresent": [
+    "X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve",
+    "X/Analysis/artifacts/packages",
+    "X/Analysis/artifacts/offline-feed"
+  ],
+  "pinnedNativeSourcesVerified": true,
+  "recipeDryPlanPassed": true,
+  "noAppRebuildOrNumericalRerun": true,
+  "filesystemAvailableAfterChecksBytes": 247147483136
+}

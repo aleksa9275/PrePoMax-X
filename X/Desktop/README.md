@@ -23,7 +23,8 @@ actual screen pixels, Retina size, lifecycle and a 27,000-cell transport sample.
 These are automated events, not human/cross-platform input acceptance. The
 [measured comparison and C# binding prerequisite](../../.project/reports/native-viewport-boundary.md)
 do not select a production frontend or establish a speed win. The original
-task 0042 DMG remains available unchanged.
+task 0042 DMG's verification is retained; its generated binary was removed under
+the [storage retention policy](../../.project/reports/storage-cleanup.md).
 
 The Mac package script is now a compatibility wrapper around the shared
 [target build entry](../Build/README.md). All four RIDs are explicit there;

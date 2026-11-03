@@ -1,5 +1,9 @@
 # Native Cocoa viewport boundary — task 0043
 
+Storage update, task 0046: generated app/DMG/test payloads below were removed at
+the maintainer's request after successful testing. Verification records and hashes
+remain historical; see [cleanup/rebuild process](storage-cleanup.md).
+
 3 November 2026. **Verified observation:** an opt-in direct-render Cocoa child
 view works in the copied Mac app with the existing original C# services and the
 pinned VTK 9.5.2/PyQt6 6.10.0/Qt runtime 6.10.2/CPython 3.12.14 combination.

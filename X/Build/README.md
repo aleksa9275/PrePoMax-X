@@ -1,5 +1,13 @@
 # Shared target builds
 
+Generated payloads are disposable after verification/user confirmation. Retain
+source, small manifests/logs/reproduction evidence and useful shared build inputs;
+prune duplicate app/standalone/DMG staging copies, per-build packaging caches and
+test-installed app copies promptly. Keep at most the current DMG while needed
+for user testing. Never remove user installed apps, models or jobs as part of a
+build cleanup. [Retention policy, actual cleanup and rebuild steps](../../.project/reports/storage-cleanup.md).
+Historical manifests are evidence, not a guarantee their binary payloads exist.
+
 One source tree, four RIDs: `osx-arm64`, `win-x64`, `linux-x64`, `linux-arm64`.
 `targets.json` holds OS/architecture, native adapter, executable/rendering names
 and planned package formats. Null OS/libc floors and empty distro version lists

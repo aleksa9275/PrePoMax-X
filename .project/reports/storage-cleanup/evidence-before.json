@@ -1,0 +1,37 @@
+[
+  {
+    "index": ".project/reports/core-pipeline-regression/evidence-index.json",
+    "entries": 16,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/editable-solid-workflow/evidence-index.json",
+    "entries": 191,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/local-macos-dmg/evidence-index.json",
+    "entries": 15,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/native-cpu-workflow/evidence-index.json",
+    "entries": 16,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/native-desktop-preview/evidence-index.json",
+    "entries": 6,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/native-viewport-boundary/evidence-index.json",
+    "entries": 25,
+    "verified": true
+  },
+  {
+    "index": ".project/reports/shared-target-builds/evidence-index.json",
+    "entries": 23,
+    "verified": true
+  }
+]

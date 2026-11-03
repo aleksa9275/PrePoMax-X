@@ -1,0 +1,27 @@
+{
+  "target": "osx-arm64",
+  "data": {
+    "os": "Darwin",
+    "architecture": "Arm64",
+    "machines": [
+      "arm64"
+    ],
+    "executableSuffix": "",
+    "solverAdapter": "macos",
+    "desktopPackageAdapter": "macos",
+    "renderWindows": [
+      "vtkCocoaRenderWindow"
+    ],
+    "plannedFormats": [
+      "app",
+      "dmg",
+      "homebrew-cask"
+    ],
+    "minimumSupportedOs": null
+  },
+  "matchingNativeHost": true,
+  "managedCrossPublish": true,
+  "nativeSolverRecipe": true,
+  "desktopPackageRecipe": "macos",
+  "executionVerified": false
+}
