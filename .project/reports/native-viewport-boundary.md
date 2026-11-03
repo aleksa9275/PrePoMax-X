@@ -53,7 +53,8 @@ Packaged runs use `PATH=/usr/bin:/bin`, invalid external DOTNET_ROOT and bundled
 readers/runtimes. The build source identity truthfully records base HEAD
 fa5494dc plus a **dirty source snapshot**, retained under
 [reproduction](native-viewport-boundary/reproduction/source.patch).
-All four recorded desktop source hashes were compared to the reviewed files.
+All four recorded desktop source hashes were compared to the reviewed files and
+independently to the published implementation's Git blobs at **7514c88c**.
 This package is not described as a clean-commit build. The DMG stays local/ignored.
 
 ## Measured transport tradeoff
@@ -120,7 +121,22 @@ python3 X/Build/verify-macos-dmg.py --package <new-package> --output <new-verifi
 env PATH=/usr/bin:/bin DOTNET_ROOT=/nonexistent-external-dotnet '<copied-app>/Contents/MacOS/PrePoMax-X-Viewport' .project/reports/windows-reference/solver/uniaxial.frd --viewport native-cocoa --viewport-probe <new-probe>
 ```
 
-Task 0043 publication/CI follow-up is recorded below when verified. No native
-Windows/Linux GUI, stable-3.0.0 correspondence or full release acceptance follows.
+## Publication and exact-commit hosted verification
+
+Implementation **7514c88c7e2b4cc65825040c2b06a11df5a2ad49** is published and
+independently remote-verified on origin/research/native-feasibility. Origin/master
+remains f6273e39983e06042ae8b06e9a3dd0f729ea4b91. Exact-commit
+[pipeline 3022061388](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3022061388)
+**passes all six automatic native Linux x64 jobs**; compatibility stays manual.
+The signed-in pipeline page and native job log were inspected. Native job
+[17695879032](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879032)
+passes eight build controls, shared host publication, the native CPU build and
+actual solver execution with twelve common analytical/FRD/DAT/monitor checks.
+[Structured observation](native-viewport-boundary/publication.json) records jobs
+and scope. Hosted archives were not downloaded or independently compared here;
+Linux compute CI does not exercise the Mac viewport.
+
+The closing follow-up changes evidence/documents only. No native Windows/Linux
+GUI, stable-3.0.0 correspondence or full release acceptance follows.
 Both known correctness failures/tetra gate, full persistence/history/CAD/meshing,
 native backend breadth, four-target installers and source/license gates remain.

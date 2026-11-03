@@ -7,6 +7,7 @@
   "desktop-workflow.json": "e22a1f4745af202a5efc9f2fd2c417bddd9aa2ca3a697aa5e902cfd2be9c89f4",
   "package.json": "2c114daaf9b61979d2580d5b2bfbe64e61f91399811435588e64da3459428185",
   "verification.json": "52a0ab29cd4202d6ae80e976950512ffefb6f96321825d4c2bf830930e45339a",
+  "publication.json": "98d93b99e2b942494e5bae57e7ba9ec63e523c9d194cf82f904531ae446043d2",
   "build.json": "dd201a2b2f716e34342101eb0c3a6fdc37399145c59186d10ff5adf6ee0d0f21",
   "native-probe/window.png": "17cb7a459110953ecbee00bed612c940350ca67ca6e208d3e590dba2db83f4ce",
   "native-probe/probe.json": "fd0f19c7c2081376d48f5a20652046e22dd9f06d61e964b349be6b6783fe4c5a",

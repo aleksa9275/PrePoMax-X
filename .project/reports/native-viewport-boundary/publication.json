@@ -1,0 +1,67 @@
+{
+  "recordedAtUtc": "2026-11-03T11:35:29.792261+00:00",
+  "implementationCommit": "7514c88c7e2b4cc65825040c2b06a11df5a2ad49",
+  "destination": "origin/research/native-feasibility",
+  "remoteVerified": true,
+  "originMaster": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+  "pipeline": {
+    "id": 3022061388,
+    "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3022061388",
+    "status": "passed",
+    "observedVia": "Signed-in GitLab browser pipeline page; native CPU job log"
+  },
+  "automaticJobs": [
+    {
+      "name": "analysis-workflow-linux-x64",
+      "id": 17695879035,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879035"
+    },
+    {
+      "name": "execution-workflow-linux-x64",
+      "id": 17695879036,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879036"
+    },
+    {
+      "name": "native-cpu-workflow-linux-x64",
+      "id": 17695879032,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879032"
+    },
+    {
+      "name": "research-linux-x64",
+      "id": 17695879033,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879033"
+    },
+    {
+      "name": "results-workflow-linux-x64",
+      "id": 17695879037,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879037"
+    },
+    {
+      "name": "shared-core-linux-x64",
+      "id": 17695879034,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17695879034"
+    }
+  ],
+  "manualCompatibility": {
+    "id": 17695879031,
+    "status": "manual/not run"
+  },
+  "nativeJobObserved": {
+    "buildControls": 8,
+    "sharedHostsPublished": true,
+    "nativeSolverBuilt": true,
+    "solverExecuted": true,
+    "workflowChecksPassed": 12,
+    "hostPublicationSeconds": 47.415,
+    "nativeBuildSeconds": 144.82
+  },
+  "packagedDesktopHashesMatchPublishedGitBlobs": true,
+  "hostedArtifactDownloadVerified": false,
+  "scope": "Linux x64 current compute/build evidence; no Mac viewport or other-target GUI acceptance. Mac DMG source identity remains its retained fa5494dc plus dirty snapshot."
+}

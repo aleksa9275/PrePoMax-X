@@ -13,7 +13,9 @@ copied app passes 11 solve/render checks, 7 analytical checks/control, 12 native
 event/display/lifecycle/larger-mesh checks and 11 default-bridge checks. Eight build
 and three process checks pass. [Report/artifact/comparison](reports/native-viewport-boundary.md).
 No speed win, C# native-host execution or production frontend decision is claimed.
-Original task 0042 DMG remains byte-identical. Publication/CI status is in the report.
+Original task 0042 DMG remains byte-identical. Implementation **7514c88c** is
+remote-verified; exact-commit pipeline **3022061388 passes all six automatic
+Linux x64 jobs** (compatibility manual). Hosted archives were not downloaded here.
 Next: editable solid model tree/material/support/load workflow; supported save/
 reopen follows with an explicit persistence decision. Both correctness failures/
 tetra gate and all full-parity/four-target/release requirements remain.

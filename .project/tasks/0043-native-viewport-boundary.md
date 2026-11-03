@@ -1,4 +1,4 @@
-# Task 0043 — Bounded native viewport boundary (implemented/verified locally)
+# Task 0043 — Bounded native viewport boundary (complete/published)
 
 3 November 2026 continuation: maintainer authorizes this next implementation and
 specifies 3.0.0 parity plus future upstream-tracking open-source macOS/Linux
@@ -15,7 +15,9 @@ candidate is not faster in the recorded synchronous-call measurement; do not
 claim a performance win or production frontend choice. The practical C# route
 requires a reviewed current binding/wrapper and native/source closure; none was
 executed. Task 0042 DMG/hash and both correctness failures/tetra gate are preserved.
-Publication/hosted results are recorded in the report when actually verified.
+Implementation **7514c88c** is published/remote-verified; exact-commit pipeline
+**3022061388 passes all six automatic Linux x64 jobs**, compatibility manual.
+Hosted archives were not downloaded. Closing publication is documentation only.
 
 3 November 2026. Maintainer reports the task 0042 local DMG test went well and as
 expected. This is a user-reported pass of the current preview on the existing Mac;

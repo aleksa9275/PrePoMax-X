@@ -6,7 +6,11 @@ The maintainer specifies **PrePoMax 3.0.0 parity**, then ongoing upstream-releas
 tracking and open-source macOS/Linux distributions independent of upstream
 adoption. D054 and `.project/PARITY.md` record this. Exact stable-3.0.0 source/
 binary correspondence remains pending; no baseline or mirror change was made.
-Read `.project/reports/native-viewport-boundary.md` for actual publication/CI.
+Implementation **7514c88c** is published/remote-verified. Exact-commit pipeline
+**3022061388 passes all six automatic Linux x64 jobs** (compatibility manual).
+Native Linux job actually builds/runs the cube; hosted archives were not
+downloaded here. Closing publication is evidence/documents only. Read
+`.project/reports/native-viewport-boundary.md` and its publication.json.
 
 Task 0043 is implemented and locally verified: opt-in `--viewport native-cocoa`
 creates a VTK child NSView, forwards Qt input to the generic interactor and

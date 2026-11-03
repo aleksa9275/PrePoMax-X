@@ -8,7 +8,10 @@ packaged solve/render, native-window event/Retina/lifecycle/larger-mesh evidence
 is in .project/reports/native-viewport-boundary.md. Keep the tested task 0042 DMG
 unchanged. Bridge stays default; no production frontend choice or performance
 win is claimed, and no current C# host was executed. Read the report for actual
-publication/CI status and artifact/source-snapshot identity. Next is the editable
+publication details and artifact/source-snapshot identity. Implementation
+7514c88c is remote-verified; exact-commit pipeline 3022061388 passes all six
+automatic Linux x64 jobs (compatibility manual; no hosted archive download).
+Next is the editable
 solid workflow, then explicitly agreed save/reopen. Preserve all prior gates
 and D051/D053 scope; 3.0.0 stable correspondence is not yet verified.
 
