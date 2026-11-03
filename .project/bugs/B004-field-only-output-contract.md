@@ -5,6 +5,8 @@ CalculiX 2.22/SPOOLES cube: uncheck all node/element history requests, keep the
 original field outputs. CalculiX exits successfully, JobStatus is OK and FRD/STA
 exist, but DAT is empty. The host's unconditional nonempty-DAT requirement turns
 this valid field-only run into `success=false, outputsPresent=false`.
+The actual failed outcome, zero-byte DAT and generated FRD/STA are retained in
+[before-fix evidence](../reports/editable-solid-workflow/b004/before-fix/solve/run.json).
 
 Repair in the host output contract: FRD/STA remain required; nonempty DAT remains
 required whenever any history set is requested. Record `requiredOutputs` in the
@@ -23,3 +25,7 @@ Actual copied-app hosts/bundled solver run the edited model with histories off:
 zero-byte DAT is accepted, FRD/STA remain required and all original-reader fields
 exactly equal the history-on edited run. Both current editor viewport proofs
 also pass. No numerical bound is changed.
+
+Repair **921b24a6** is published/remote-verified; exact-commit pipeline
+**3022312183 passes all six automatic Linux x64 jobs**. Native Linux history-on/
+off cube/reader workflow passes 15 checks, including exact FRD-field equality.

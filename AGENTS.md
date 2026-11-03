@@ -15,6 +15,10 @@ X/Build/artifacts/task0044-current-delivery/dist/PrePoMax-X-Preview-arm64.dmg.
 Both viewport editor proofs and copied field-only checks pass. Earlier capture
 failure remains retained; strict native retry passes after maintainer display
 confirmation. Read the report for actual repair publication/CI and current artifact.
+Final repair 921b24a6 is remote-verified; exact-commit pipeline 3022312183 passes
+all six automatic native Linux x64 jobs (15 native history-on/off checks;
+compatibility manual; no hosted archive download). Closing follow-up is docs/
+evidence only. Task 0044 is complete; task 0045 is prepared, not started.
 
 2026-11-03 task 0043 continuation: maintainer selects PrePoMax 3.0.0 as parity
 target and wants ongoing open-source macOS/Linux distributions tracking future

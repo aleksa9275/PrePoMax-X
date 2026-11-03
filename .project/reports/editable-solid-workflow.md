@@ -175,6 +175,27 @@ python3 X/Build/verify-editable-solid.py --app '<copied-app>' --output <new-edit
 python3 X/Build/verify-editable-solid.py --app '<copied-app>' --output <new-default-check> --viewport frame-bridge
 ```
 
-Publication/CI is recorded after actual remote/hosted verification. All original
+## Publication and exact-commit CI
+
+Initial editor implementation **0583a2bdee195bd4c12016b4774da321507fb1db** is
+published; pipeline **3022231946** passes all six automatic Linux x64 jobs.
+Final B004 repair **921b24a6f2527ffc643d844b5dc4d634b203e136** is published and
+independently remote-verified on origin/research/native-feasibility.
+[Exact-commit pipeline 3022312183](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3022312183)
+**passes all six automatic native Linux x64 jobs**; compatibility stays manual.
+Native job [17697775383](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775383)
+builds the current self-contained hosts and native solver, executes both cube
+output configurations and passes all **15** analytical/reader/monitor/field-only
+checks. The signed-in pipeline page and native log were inspected; hosted
+archives were not downloaded or compared. This is Linux compute/build evidence,
+not Windows/Linux GUI or installer acceptance.
+
+All six current packaged desktop source hashes match the final repair's Git
+blobs; changed C# and build/test source snapshots also match. Origin/master
+remains f6273e39983e06042ae8b06e9a3dd0f729ea4b91. The final DMG still truthfully
+identifies its 0583a2bd-plus-dirty snapshot, not a clean-commit build. The closing
+publication is evidence/documents only. [Structured publication](editable-solid-workflow/publication.json).
+
+All original
 correctness/persistence/history/CAD/native-source/four-target/install/release gates
 remain. No upstream/master/x/main/release write or public binary distribution.

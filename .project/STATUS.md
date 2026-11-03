@@ -24,7 +24,10 @@ history-on/off workflow passes 15 checks and the copied edited model's FRD field
 match exactly with histories off. The current DMG passes both editor viewport
 proofs. A null-capture incident is retained; strict native retry passes after the
 maintainer confirmed the Mac was unlocked/awake. No security setting changed.
-Publication/CI of the repair is recorded in the report.
+Implementation 0583a2bd and B004 repair **921b24a6** are published/remote-verified.
+Final exact-commit pipeline **3022312183 passes all six automatic Linux x64 jobs**,
+including 15 native history-on/off checks; compatibility stays manual. Hosted
+archives were not downloaded. Closing publication is evidence/documents only.
 
 Scope: imported mesh named sets and the existing bounded static-solid definition.
 No additional/picked-set authoring, project save/reopen, full PMX/history/CAD/

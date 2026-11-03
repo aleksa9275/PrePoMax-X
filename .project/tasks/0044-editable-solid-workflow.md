@@ -1,4 +1,4 @@
-# Task 0044 — First editable solid workflow (implemented; final verification/publication)
+# Task 0044 — First editable solid workflow (complete/published)
 
 3 November continuation: maintainer says to proceed after the published task 0043
 checkpoint. Implement the existing bounded definition editor using original INP
@@ -20,6 +20,13 @@ requests; requested DAT and FRD/STA remain strict. Native Mac workflow passes
 editor viewport proofs pass. Earlier capture failure remains retained; strict
 native retry passes after maintainer display confirmation. The report records
 the current repaired DMG and actual second checkpoint publication/CI.
+
+Implementation 0583a2bd and final repair **921b24a6** are published/remote-verified.
+Final exact-commit pipeline **3022312183 passes all six automatic native Linux
+x64 jobs**, compatibility manual. Native Linux history-on/off cube checks pass
+15 assertions. Hosted archives were not downloaded. Closeout is documentation/
+evidence only; task 0045 is prepared, not started. No remaining task 0044 code
+change is in progress.
 
 Prepared 3 November 2026 after task 0043's bounded native viewport proof.
 Continue the accepted Mac-first/shared-source sequence toward 3.0.0 parity.

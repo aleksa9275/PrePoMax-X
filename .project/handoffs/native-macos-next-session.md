@@ -33,6 +33,10 @@ Both current copied-app editor viewport proofs pass. Native history-on/off and
 copied edited field-only original-reader fields match exactly. A capture incident
 is retained; strict native retry passes after maintainer display confirmation.
 Read the report for actual second checkpoint publication/CI and source identity.
+Final repair **921b24a6** is published/remote-verified. Exact-commit pipeline
+**3022312183 passes all six automatic native Linux x64 jobs**, including 15 native
+history-on/off checks; compatibility manual, hosted archives not downloaded.
+The closing follow-up is documentation/evidence only. Task 0045 remains unstarted.
 
 ## Previous checkpoint — task 0043 (supersedes the task 0042 snapshot below)
 

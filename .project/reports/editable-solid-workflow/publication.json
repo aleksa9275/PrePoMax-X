@@ -1,0 +1,79 @@
+{
+  "recordedAtUtc": "2026-11-03T12:39:12.820494+00:00",
+  "destination": "origin/research/native-feasibility",
+  "implementationCommit": "0583a2bdee195bd4c12016b4774da321507fb1db",
+  "initialPipeline": {
+    "id": 3022231946,
+    "status": "passed",
+    "automaticJobsPassed": 6
+  },
+  "finalRepairCommit": "921b24a6f2527ffc643d844b5dc4d634b203e136",
+  "remoteVerified": true,
+  "originMaster": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91",
+  "pipeline": {
+    "id": 3022312183,
+    "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3022312183",
+    "status": "passed",
+    "observedVia": "Signed-in GitLab pipeline page and native workflow log"
+  },
+  "automaticJobs": [
+    {
+      "name": "analysis-workflow-linux-x64",
+      "id": 17697775386,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775386"
+    },
+    {
+      "name": "execution-workflow-linux-x64",
+      "id": 17697775387,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775387"
+    },
+    {
+      "name": "native-cpu-workflow-linux-x64",
+      "id": 17697775383,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775383"
+    },
+    {
+      "name": "research-linux-x64",
+      "id": 17697775384,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775384"
+    },
+    {
+      "name": "results-workflow-linux-x64",
+      "id": 17697775388,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775388"
+    },
+    {
+      "name": "shared-core-linux-x64",
+      "id": 17697775385,
+      "status": "passed",
+      "url": "https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17697775385"
+    }
+  ],
+  "compatibility": {
+    "id": 17697775382,
+    "status": "manual/not run"
+  },
+  "nativeJobObserved": {
+    "buildControls": 8,
+    "sharedHostPublishSeconds": 53.408,
+    "nativeBuildSeconds": 145.646,
+    "solverExecuted": true,
+    "workflowChecksPassed": 15,
+    "fieldOnlyFrdExactlyMatchesHistoryEnabled": true
+  },
+  "finalDmg": {
+    "path": "X/Build/artifacts/task0044-current-delivery/dist/PrePoMax-X-Preview-arm64.dmg",
+    "sha256": "004f32d85acf8bef58315c9a13b6321d5ffbc4ff26f019fe672f9e091d634c14",
+    "bytes": 260546785,
+    "sourceIdentity": "0583a2bd plus retained dirty source snapshot; six desktop hashes match final repair Git blobs",
+    "adHocSigned": true,
+    "notarized": false
+  },
+  "hostedArtifactDownloadVerified": false,
+  "scope": "Bounded Mac editor, native Mac/Linux x64 cube/output contracts; full parity, other native desktops, clean OS and release gates remain"
+}
