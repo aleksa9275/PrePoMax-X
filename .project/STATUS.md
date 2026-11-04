@@ -1,5 +1,15 @@
 # Project status
 
+## Current — task 0049: reopened PMX native solve
+
+The opt-in macOS preview displays a supported static PMX in the model tree and
+viewport and runs it through the native CalculiX job. The checked PMX deck
+builder preserves density, step frequency and field outputs. Jobs retain the
+reopened project's hash and frozen inputs. PMX edits use the two-value Save As
+dialog. The native Linux desktop package is the next delivery increment.
+[Task record](tasks/0049-static-pmx-native-solve.md) ·
+[Verification](reports/static-pmx-native-solve.md).
+
 ## Current — task 0048: desktop static PMX
 
 The opt-in macOS ARM64 preview opens, edits and saves a supported result-free

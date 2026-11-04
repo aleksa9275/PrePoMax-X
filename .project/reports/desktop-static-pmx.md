@@ -53,13 +53,15 @@ loading. Full release source and notices closure remains pending.
 - The Qt probe exercises the actual modal and its save method, with the output
   path passed directly. The native file chooser itself is outside this probe.
 
-The retained internal image is
+The historical internal image was
 `X/Build/artifacts/task0048-final/dist/PrePoMax-X-Preview-arm64.dmg`,
 SHA-256 `a6670a0392e618921dfcea785095c01f126765ddc35edbc8a4a1b17e12f77266`.
 Sixteen generated paths were removed, including the superseded task 0047 DMG
 and duplicate task 0048 app, cache and staging copies. The measured free-space
 gain was 10.33 GiB. Build receipts, synthetic PMX fixtures and job evidence
 were retained. [Machine-readable checks and cleanup](desktop-static-pmx-verification.json).
+Task 0049 superseded and removed the task 0048 image.
+[Current image and solve workflow](static-pmx-native-solve.md).
 
 ## Publication
 

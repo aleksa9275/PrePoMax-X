@@ -1,0 +1,320 @@
+{
+  "implementation": "023383ceed5f7aca3d1c2af424be4899c7280323",
+  "dmgSha256": "faf470719ca820f702862f232b3799e2d22066f254ad8f88017836f259add2a5",
+  "inpBaseline": {
+    "guiChecks": [
+      {
+        "name": "desktop native solve and result loading",
+        "passed": true
+      },
+      {
+        "name": "native render window",
+        "passed": true
+      },
+      {
+        "name": "original IDs retained",
+        "passed": true
+      },
+      {
+        "name": "field scalar mapping",
+        "passed": true
+      },
+      {
+        "name": "VTK hit resolves original element ID",
+        "passed": true
+      },
+      {
+        "name": "nearest vertex resolves original node ID",
+        "passed": true
+      },
+      {
+        "name": "selected coordinates preserved",
+        "passed": true
+      },
+      {
+        "name": "selected nodal value uses original value order",
+        "passed": true
+      },
+      {
+        "name": "resize renders",
+        "passed": true
+      },
+      {
+        "name": "displayed frame has mesh/legend pixels",
+        "passed": true
+      },
+      {
+        "name": "window capture",
+        "passed": true
+      }
+    ],
+    "analyticalChecks": [
+      {
+        "name": "all eight displacement IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all eight force IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all displacement components match uniform uniaxial strain",
+        "passed": true
+      },
+      {
+        "name": "eight integration-point stresses",
+        "passed": true
+      },
+      {
+        "name": "axial stress 100 MPa, transverse/shear zero",
+        "passed": true
+      },
+      {
+        "name": "supported face balances 100 N",
+        "passed": true
+      },
+      {
+        "name": "global nodal-force sum zero",
+        "passed": true
+      }
+    ],
+    "alteredDisplacementRejected": true
+  },
+  "pmxByViewport": {
+    "frame-bridge": {
+      "success": true,
+      "viewport": "frame-bridge",
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Baseline project opened in the model tree and viewport",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen renders the original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Unsupported PMX preserves the active model",
+          "passed": true
+        },
+        {
+          "name": "Run analysis launched the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Native solver completed the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Frozen inputs identify the reopened PMX and validated definition",
+          "passed": true
+        },
+        {
+          "name": "Executed deck matches the original C# validation",
+          "passed": true
+        },
+        {
+          "name": "Result fields loaded in the viewport with the PMX model retained",
+          "passed": true
+        },
+        {
+          "name": "Both project files are unchanged after solve",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+        "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+        "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+        "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+        "patchedStringRecords": [
+          555,
+          561,
+          563
+        ],
+        "portableReadbackPassed": true
+      },
+      "job": {
+        "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+        "inputs": {
+          "meshSha256": "03cb153ead9a89c42acb2fbedb1cdf5eb29e6c35ca2375d336d0bf06fb43f6bc",
+          "analysisSha256": "d8fd1345d7535364b1abb646d86eafc6f39811d86289d1ce7ecafddc7dd448ba",
+          "scope": "Immutable submitted job input; not project persistence",
+          "sourcePmxSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61"
+        },
+        "frdSha256": "196326abd8941f75fb9d97587a906de186c75f9567d25a72d822f7193028da5e",
+        "requiredOutputs": [
+          ".frd",
+          ".sta"
+        ]
+      }
+    },
+    "native-cocoa": {
+      "success": true,
+      "viewport": "native-cocoa",
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Baseline project opened in the model tree and viewport",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen renders the original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Unsupported PMX preserves the active model",
+          "passed": true
+        },
+        {
+          "name": "Run analysis launched the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Native solver completed the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Frozen inputs identify the reopened PMX and validated definition",
+          "passed": true
+        },
+        {
+          "name": "Executed deck matches the original C# validation",
+          "passed": true
+        },
+        {
+          "name": "Result fields loaded in the viewport with the PMX model retained",
+          "passed": true
+        },
+        {
+          "name": "Both project files are unchanged after solve",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+        "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+        "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+        "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+        "patchedStringRecords": [
+          555,
+          561,
+          563
+        ],
+        "portableReadbackPassed": true
+      },
+      "job": {
+        "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+        "inputs": {
+          "meshSha256": "03cb153ead9a89c42acb2fbedb1cdf5eb29e6c35ca2375d336d0bf06fb43f6bc",
+          "analysisSha256": "d8fd1345d7535364b1abb646d86eafc6f39811d86289d1ce7ecafddc7dd448ba",
+          "scope": "Immutable submitted job input; not project persistence",
+          "sourcePmxSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61"
+        },
+        "frdSha256": "3c29d5a96324b10f666366fe1a072487e98d8fe8aa2e5f310d5a373cb025945b",
+        "requiredOutputs": [
+          ".frd",
+          ".sta"
+        ]
+      }
+    }
+  },
+  "originalReference": {
+    "deckSha256": "9b77c7a1ae767f6b175a8021fe4ba3e9b2503dfc3885d3520b7e93ca89228209",
+    "frdSha256": "275513774758569531c54fc8dad6be708594ad7674cef377865f40352f89526f",
+    "checkedDeckSemanticsMatch": true,
+    "meshAndDecodedFieldsMatch": true,
+    "fieldNames": [
+      "DISP",
+      "STRESS",
+      "FORC"
+    ],
+    "nodeIds": [
+      13,
+      23,
+      33,
+      43,
+      53,
+      63,
+      73,
+      83
+    ]
+  },
+  "retention": {
+    "currentDmg": "X/Build/artifacts/task0049-delivery/dist/PrePoMax-X-Preview-arm64.dmg",
+    "removedKiBByPath": {
+      "X/Build/artifacts/task0049-delivery/hosts": 523896,
+      "X/Build/artifacts/task0049-delivery/build": 19680,
+      "X/Build/artifacts/task0049-delivery/pyinstaller-cache": 912908,
+      "X/Build/artifacts/task0049-delivery/dmg-payload": 1048392,
+      "X/Build/artifacts/task0049-delivery/dist/PrePoMax-X-Viewport": 1022048,
+      "X/Build/artifacts/task0049-delivery/dist/PrePoMax-X-Viewport.app": 1048336,
+      "X/Build/artifacts/task0049-copy-check/Installed copy": 1048336,
+      "X/Build/artifacts/task0048-final/dist/PrePoMax-X-Preview-arm64.dmg": 360040
+    },
+    "observedFreeGainBytes": 5615611904
+  }
+}

@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0049 connects a checked result-free C3D8 PMX to the macOS model tree,
+viewport and native CalculiX job. Both copied-app viewports pass the full
+reopen/solve workflow and match the original 3.0.0 export's decoded fields.
+Read .project/reports/static-pmx-native-solve.md for evidence, publication,
+the retained image and cleanup. The next delivery increment is native Linux
+desktop packaging. The maintainer's workflow test remains reserved for the
+fully operational 3.0.0 candidate. Keep all general PMX, correctness and
+release gates. Notify the maintainer when notarization needs their involvement.
+
 2026-11-04 task 0048: the maintainer wants maximum progress toward full
 PrePoMax 3.0.0 parity and will test their workflow at that candidate. Notify
 them when Developer ID and notarization require their involvement. The opt-in

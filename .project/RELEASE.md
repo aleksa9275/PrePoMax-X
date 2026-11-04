@@ -7,9 +7,10 @@ creation, native solve and result display through the desktop INP workflow.
 [PMX desktop](reports/desktop-static-pmx.md) ·
 [INP desktop](reports/session-named-set-authoring.md).
 
-The next product gates are using a reopened PMX model in the native viewport and
-job workflow, and a native Linux desktop installation on x64 and ARM64. The full
-3.0.0 release requires broader PMX, model, results, CAD and meshing coverage, resolution of
+Task 0049 adds the reopened static PMX model to the Mac viewport and native job
+workflow. The next delivery gate is a native Linux desktop installation on x64
+and ARM64. The full 3.0.0 release requires broader PMX, model, results, CAD and
+meshing coverage, resolution of
 both recorded correctness failures and the quadratic-tetrahedron gate, verified
 3.0.0 source correspondence, and the native platform and installer checks below.
 The maintainer's workflow test is reserved for a fully operational 3.0.0 parity

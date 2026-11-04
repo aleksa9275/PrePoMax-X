@@ -10,3 +10,5 @@ reopening the synthetic PMX, running the native solve, and comparing the
 rendered results and executed deck with the retained task 0045 reference.
 Exercise the existing INP solve and keep the full PMX and release gates open.
 Linux desktop packaging is a later increment.
+
+Completed within this scope. [Verification](../reports/static-pmx-native-solve.md).
