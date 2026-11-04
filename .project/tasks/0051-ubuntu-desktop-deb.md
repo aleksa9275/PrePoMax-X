@@ -10,3 +10,5 @@ user. Reuse the static INP solve and render probe and the available PMX
 reference. Remove and purge the package, then check that the package files
 are gone and the user's project and job files are intact. Keep the
 research branch publication scope and all release and correctness gates.
+
+Completed within this scope. [Installer, verification and publication](../reports/ubuntu-desktop-deb.md).

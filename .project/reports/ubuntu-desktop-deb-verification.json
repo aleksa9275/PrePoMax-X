@@ -1,0 +1,285 @@
+{
+  "implementation": "559cb5063a20672df8391597608379549b3475f6",
+  "arm64": {
+    "installer": "X/Build/artifacts/task0051-arm64-deb/prepomaxx-preview_0.0.0~preview+20261104162309.gitb55882eca795_arm64.deb",
+    "buildManifest": "X/Build/artifacts/task0051-arm64-deb/deb.json",
+    "verification": "X/Build/artifacts/task0051-arm64-verified/verification.json",
+    "screenshot": "X/Build/artifacts/task0051-arm64-verified/User evidence/workflow/desktop-workflow.png",
+    "containerImageId": "1f1aeedbd16d617d1e09524c511cbbfb3b9748526f73ef36325366eee8347f8c",
+    "build": {
+      "success": true,
+      "scope": "Internal Ubuntu 24.04 preview",
+      "package": "prepomaxx-preview",
+      "version": "0.0.0~preview+20261104162309.gitb55882eca795",
+      "architecture": "arm64",
+      "sourceCommit": "b55882eca795ad2d911c2f99b046b83b36c3e01c",
+      "target": "linux-arm64",
+      "archiveSha256": "a80ab8336b34884369a5c60783ce676b0fba2e6189adee7447eec06b4e793a41",
+      "packageManifestSha256": "774c3a1eb2dd6e1381e3ca6eea24772349ece08a78c4f63ce1259631dffe2fd8",
+      "wrapperSha256": "2602a8db7804ab7a85496b7307c176a2685cbc3f8f9561b37adaf288e5978cc4",
+      "dependencies": [
+        "libc6 (>= 2.39)",
+        "libstdc++6",
+        "libicu74",
+        "libssl3t64",
+        "libgssapi-krb5-2",
+        "zlib1g",
+        "libgl1",
+        "libegl1",
+        "libgl1-mesa-dri",
+        "libxrender1",
+        "libdbus-1-3",
+        "libfontconfig1",
+        "fonts-dejavu-core",
+        "libglib2.0-0t64",
+        "libxkbcommon-x11-0",
+        "libxcb-cursor0",
+        "libxcb-icccm4",
+        "libxcb-image0",
+        "libxcb-keysyms1",
+        "libxcb-render-util0",
+        "libxcb-shape0",
+        "libxcb-xinerama0",
+        "libxcb-xinput0",
+        "libsm6"
+      ],
+      "appFiles": 2149,
+      "appLinks": 244,
+      "deb": {
+        "name": "prepomaxx-preview_0.0.0~preview+20261104162309.gitb55882eca795_arm64.deb",
+        "sha256": "03861c3db16530ff355da09268e9fcb4c6ba1c5164d3967aef84842dc78eb52b",
+        "bytes": 415485218
+      }
+    },
+    "lifecycle": {
+      "distribution": "Ubuntu 24.04.5 LTS",
+      "userModelSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+      "userJobInXdgData": true,
+      "userFilesChecked": 76,
+      "remove": {
+        "packageFilesGone": true,
+        "userFilesPreserved": true
+      },
+      "reinstall": {
+        "packageFilesRestored": true,
+        "userFilesPreserved": true
+      },
+      "purge": {
+        "packageFilesGone": true,
+        "userFilesPreserved": true
+      }
+    },
+    "workflow": {
+      "uid": 65534,
+      "renderer": "vtkXOpenGLRenderWindow",
+      "qtVersion": "6.10.2",
+      "vtkVersion": "9.5.2",
+      "guiChecks": [
+        {
+          "name": "desktop native solve and result loading",
+          "passed": true
+        },
+        {
+          "name": "native render window",
+          "passed": true
+        },
+        {
+          "name": "original IDs retained",
+          "passed": true
+        },
+        {
+          "name": "field scalar mapping",
+          "passed": true
+        },
+        {
+          "name": "VTK hit resolves original element ID",
+          "passed": true
+        },
+        {
+          "name": "nearest vertex resolves original node ID",
+          "passed": true
+        },
+        {
+          "name": "selected coordinates preserved",
+          "passed": true
+        },
+        {
+          "name": "selected nodal value uses original value order",
+          "passed": true
+        },
+        {
+          "name": "resize renders",
+          "passed": true
+        },
+        {
+          "name": "displayed frame has mesh/legend pixels",
+          "passed": true
+        },
+        {
+          "name": "window capture",
+          "passed": true
+        }
+      ],
+      "analyticalChecks": [
+        {
+          "name": "all eight displacement IDs exactly once",
+          "passed": true
+        },
+        {
+          "name": "all eight force IDs exactly once",
+          "passed": true
+        },
+        {
+          "name": "all displacement components match uniform uniaxial strain",
+          "passed": true
+        },
+        {
+          "name": "eight integration-point stresses",
+          "passed": true
+        },
+        {
+          "name": "axial stress 100 MPa, transverse/shear zero",
+          "passed": true
+        },
+        {
+          "name": "supported face balances 100 N",
+          "passed": true
+        },
+        {
+          "name": "global nodal-force sum zero",
+          "passed": true
+        }
+      ],
+      "alteredDisplacementRejected": true,
+      "pmx": {
+        "success": true,
+        "viewport": "frame-bridge",
+        "checks": [
+          {
+            "name": "PMX action is available",
+            "passed": true
+          },
+          {
+            "name": "Baseline project opened in the model tree and viewport",
+            "passed": true
+          },
+          {
+            "name": "Opened the static PMX dialog",
+            "passed": true
+          },
+          {
+            "name": "Opened baseline material and load",
+            "passed": true
+          },
+          {
+            "name": "Invalid modulus leaves no file",
+            "passed": true
+          },
+          {
+            "name": "Save As publishes a verified PMX",
+            "passed": true
+          },
+          {
+            "name": "Save As refuses an existing file",
+            "passed": true
+          },
+          {
+            "name": "Opened the static PMX dialog",
+            "passed": true
+          },
+          {
+            "name": "Fresh reopen shows saved equations",
+            "passed": true
+          },
+          {
+            "name": "Fresh reopen renders the original mesh IDs",
+            "passed": true
+          },
+          {
+            "name": "Unsupported PMX preserves the active model",
+            "passed": true
+          },
+          {
+            "name": "Run analysis launched the PMX job",
+            "passed": true
+          },
+          {
+            "name": "Native solver completed the PMX job",
+            "passed": true
+          },
+          {
+            "name": "Frozen inputs identify the reopened PMX and validated definition",
+            "passed": true
+          },
+          {
+            "name": "Executed deck matches the original C# validation",
+            "passed": true
+          },
+          {
+            "name": "Result fields loaded in the viewport with the PMX model retained",
+            "passed": true
+          },
+          {
+            "name": "Both project files are unchanged after solve",
+            "passed": true
+          }
+        ],
+        "write": {
+          "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+          "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+          "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+          "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+          "patchedStringRecords": [
+            555,
+            561,
+            563
+          ],
+          "portableReadbackPassed": true
+        },
+        "job": {
+          "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+          "inputs": {
+            "meshSha256": "03cb153ead9a89c42acb2fbedb1cdf5eb29e6c35ca2375d336d0bf06fb43f6bc",
+            "analysisSha256": "d8fd1345d7535364b1abb646d86eafc6f39811d86289d1ce7ecafddc7dd448ba",
+            "scope": "Immutable submitted job input; not project persistence",
+            "sourcePmxSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61"
+          },
+          "frdSha256": "e40c6858ebc635a5df1bc1b3775f3c0c3998fa830346e7a37e07ba4f9effc087",
+          "requiredOutputs": [
+            ".frd",
+            ".sta"
+          ]
+        }
+      },
+      "pmxDecodedResultsMatch": true
+    },
+    "buildBoundaryChecksPassed": 9,
+    "tamperChecks": {
+      "changedArchiveRejectedBeforeAssembly": true,
+      "changedInstallerRejectedBeforeApt": true
+    }
+  },
+  "nextMacCadReference": {
+    "fixture": "APIs/Python/Test_Scripts/Models/L_bracket_r.step",
+    "fixtureSha256": "ed653a2eddc136286d57a01c5bc0c8e91822aadb0347a4a7f3593674e1157041",
+    "upstreamChecks": "APIs/Python/Test_Scripts/Test_Model_Geometry_Metadata.py",
+    "documentedPatchedGmshBranch": "https://gitlab.com/MatejB/gmsh/-/tree/prepomax-quadqs-transfinite",
+    "observed": "Signed-in GitLab returned 404 on 2026-11-04"
+  },
+  "gitlabX64": {
+    "pipeline": 3028114125,
+    "job": 17743502888,
+    "commit": "559cb5063a20672df8391597608379549b3475f6",
+    "automaticJobsPassed": 6,
+    "compatibility": "manual",
+    "remoteVerified": true,
+    "archiveSha256": "817331cfc063e9c08739abb991be436c916abe1b901e463e46e15430b23bad1b",
+    "installerSha256": "a0cd0ff96927ffb5488b623d5d95fe80a8de4b4caad740f58241686f265582c3",
+    "installerBytes": 449318156,
+    "architecture": "amd64",
+    "installedInpSolveAndRenderPassed": true,
+    "aptInstallRemoveReinstallPurgePassed": true,
+    "installedPmxFixtureExercised": false,
+    "artifactBundleDownloaded": false
+  }
+}

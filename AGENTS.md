@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0051 adds an internal Ubuntu 24.04 .deb around the native Linux
+preview. ARM64 passes APT install, ordinary-user INP and PMX solve/render,
+remove, reinstall and purge in a disposable container. User project and job
+bytes survive all lifecycle operations. Read
+.project/reports/ubuntu-desktop-deb.md for the retained installer, native x64
+CI and the next Mac CAD reference fixture. Keep all 3.0.0 parity,
+correctness, tetrahedron and release gates. The maintainer will test the
+fully operational Mac candidate and should be notified when notarization
+requires their involvement.
+
 Task 0050 adds a native Linux desktop archive for both Linux targets. The
 extracted ARM64 preview passes the INP and checked static PMX workflows in a
 separate Ubuntu 24.04 runtime container with Xvfb/Mesa. The saved PMX, executed

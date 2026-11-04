@@ -10,7 +10,9 @@ creation, native solve and result display through the desktop INP workflow.
 Task 0049 adds the reopened static PMX model to the Mac viewport and native job
 workflow. [Task 0050](reports/linux-desktop-preview.md) adds an internal Linux
 archive for the shared desktop and checks the extracted workflow under X11.
-Linux distro installers and physical desktop acceptance remain pending.
+[Task 0051](reports/ubuntu-desktop-deb.md) adds an internal Ubuntu 24.04 .deb
+with APT install, launch and removal checks. Wider Linux distro coverage
+and physical desktop acceptance remain pending.
 The full 3.0.0 release requires broader PMX, model, results, CAD and
 meshing coverage, resolution of
 both recorded correctness failures and the quadratic-tetrahedron gate, verified

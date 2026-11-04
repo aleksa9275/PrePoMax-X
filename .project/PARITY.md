@@ -38,7 +38,7 @@ into the shared application; preserve intentional upstream behavior and units.
 | CAD/meshing | Original source/native inventory and research fixtures retained | Matching custom sources/builds, native import/repair/mesh and full geometry/selection behavior |
 | Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
 | Engineering correctness | Strict accepted-scope checks retained | Both known element failures and quadratic-tetrahedron measurement gate remain |
-| Distribution | Internal ad-hoc Mac DMG and native Linux desktop archive; shared four-RID hosts | Native Windows installer, Linux distro packages and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
+| Distribution | Internal ad-hoc Mac DMG, native Linux archive and Ubuntu 24.04 installer proof; shared four-RID hosts | Native Windows installer, Linux distro coverage and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
 
 ## Future release cadence
 

@@ -1,5 +1,17 @@
 # Project status
 
+## Current — task 0051: Ubuntu desktop installer
+
+The native desktop archive now wraps as an internal Ubuntu 24.04 .deb for
+ARM64 and x64. A fresh ARM64 container installed through APT and ran the
+INP and checked PMX workflows as an ordinary user. Remove, reinstall and
+purge preserved all tested project and job files. Pipeline #3028114125
+passed all six automatic jobs, including the installed x64 INP workflow
+and APT lifecycle. A Mac parity follow-up
+can start with the tracked L-bracket STEP reference and CAD source recovery.
+[Task record](tasks/0051-ubuntu-desktop-deb.md) ·
+[Verification](reports/ubuntu-desktop-deb.md).
+
 ## Current — task 0050: native Linux desktop archive
 
 The shared desktop and checked static PMX workflow now build as a native Linux
