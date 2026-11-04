@@ -1,0 +1,218 @@
+{
+  "sourceCheckout": "261ab8275fc907ca15a58e7be8e07ea6d6ba87d7",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "execution": "original Windows PrePoMax via CrossOver 26.2"
+  },
+  "officialArchive": {
+    "sha256": "f4499f51e20536ad60d5e5bd87f67e4986a0dfdaf9e020bfc92b1dd1c85e30d9",
+    "bytes": 200999611
+  },
+  "originalExecutables": {
+    "PrePoMax.exe": {
+      "sha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+      "bytes": 2841088
+    },
+    "PrePoMax.com": {
+      "sha256": "593d64472ee48e1d2f51c877ef844094d5da2d730c8bc27a57e7d50a20fa862b",
+      "bytes": 7168
+    }
+  },
+  "fixture": {
+    "path": "APIs/Python/Test_Scripts/Models/L_bracket_r.step",
+    "sha256": "ed653a2eddc136286d57a01c5bc0c8e91822aadb0347a4a7f3593674e1157041",
+    "bytes": 21340
+  },
+  "upstreamChecks": {
+    "path": "APIs/Python/Test_Scripts/Test_Model_Geometry_Metadata.py",
+    "sha256": "922f2e282b9b189a5872496295b5a2970d2b11629ceea6d078899c7e1a25eeb0",
+    "bytes": 9062,
+    "passed": true
+  },
+  "captureScript": {
+    "sha256": "24e32cb820549909991aa25b94ac000ecd55f13e9091f389910fe741e93687a2",
+    "bytes": 2796
+  },
+  "observedCommands": [
+    [
+      "STEP_ASSEMBLY_SPLIT_TO_COMPOUNDS",
+      "L_bracket_r.step",
+      "l-bracket.brep"
+    ],
+    [
+      "BREP_VISUALIZATION",
+      "l-bracket_solid_0001.brep",
+      "l-bracket.vis",
+      "0.01",
+      "1",
+      "0.26"
+    ]
+  ],
+  "bundledNetgen": {
+    "releaseFileHashes": {
+      "NetGenMesher.exe": "1a09dbe76f91ef72f5d305b5d99d37f8d6218a258cb60c221962d539e61f64c4",
+      "TKBO.dll": "a7b7650420393bce8f27186e031f5eca2f22a64924db09a9682afe876716c276",
+      "TKBRep.dll": "815e275193c05b2093c8fcaf181e4f79cbaf373851e4cc224970e291626cef16",
+      "TKBool.dll": "c4e9530a196bf3e5ab1b69f5e12e8df0c81b35ddfcde5283efc61b58c5096e9e",
+      "TKCAF.dll": "3ff2e65992c0be566f8863b7841b744c4e12da3bd3da9b9bd029da1b52bb9fcc",
+      "TKCDF.dll": "e3a97c180e612b031acad03a7b0cd6cd9f11071ad9ba93c1195631c26e577b35",
+      "TKDE.dll": "f2e3ba6eabe19fa0f33114c081013c872f7249976aaabe17407318b9aedaebaa",
+      "TKDEIGES.dll": "a0fa8256da952e117ab87bb7dc04853acc94d6d05a17fff943a870ca07a26135",
+      "TKDESTEP.dll": "f4124c6b1f147afbbbe0a23095804e5c1d11bf81975655c4576cf24f82ba09b4",
+      "TKDESTL.dll": "bdb2f5e9957848eb395c8c12ab59762b1977d9d41992adba3d3c713cc011e1f1",
+      "TKFillet.dll": "394ea46cf43a92d4d3862d386c1d62c27f1b5727194bb45cf04c48202cb6b6ad",
+      "TKG2d.dll": "571579062002f6a2a0c71d51e5e80d1687711725358dd3049e750d44903f8e00",
+      "TKG3d.dll": "431bd9da81fd67cb2a332f306330004a72cb5ef3f1ba3a90861e484857fcc372",
+      "TKGeomAlgo.dll": "633df9b5803a70ac0e293b6ddb30aa6c56adba5320d60776732aaff97e7ac95d",
+      "TKGeomBase.dll": "425fe6a8e862d52b6925fb4a26b78823eb696a0e61065fafbc7530d0714f9331",
+      "TKHLR.dll": "922bfc968fbcf07c6ce42e7257909f27120b50d8f0b296e029534898aec19a4e",
+      "TKLCAF.dll": "1e07b5a77adaee3430ab57557174651462982a80db2937bba6e336763db6c03e",
+      "TKMath.dll": "a528bbc5cdfa673874c5afab83a5c7df3428ef13ae3f5124c50cb2099b01aabc",
+      "TKMesh.dll": "1cd8f944665bee9db11b9b70e9c8cf0f95d0d9cfd5b1ef84251b6db027aa5205",
+      "TKMeshVS.dll": "bfc319cd128ae4730051aa1511fce48acd8b15c99e1e067dbb34eca0a7bc489c",
+      "TKOffset.dll": "9c2ad740a4ed14ad834ce990fb954874733e867b44b3a3467753d03a9db71ca3",
+      "TKPrim.dll": "0a6e9e684ba3d8e28c804cf1607188ddca4244d71acc08963cb352a4e09132a4",
+      "TKService.dll": "71e88ccf7d94a9b0e7bca2b363d40f7babaf42c6b62665dac065a844ac0f7770",
+      "TKShHealing.dll": "f75f507c07e60fd2f93fb1753e92ef5c882cf1129927d694d5180a0cc70c1c4e",
+      "TKTopAlgo.dll": "c19731d478c858b72f3d5fd36b4dd041c5d16c1883dfd91bf90cdbe1ca9b09c6",
+      "TKV3d.dll": "739e077976e9070cfec774dcdf30a9a4fb10df1c800941561674db49a18951f4",
+      "TKVCAF.dll": "b9a7a0199a985b8b699bd06c88c43718ace363ad1cc923c302d1af39058adb39",
+      "TKXCAF.dll": "7b2fe0aadf953e2363c28fd98bdd9571a443f88f8e48aeab2b610a1f98b5f107",
+      "TKXSBase.dll": "6fbd4d65c9298e8db528a79af557f67b1dc87b8d647cb04c9ebc11a171b1ca69",
+      "TKernel.dll": "546558e6534b9104f3ff205922e403b205527492577f7da8732d66118a56db67",
+      "msvcp140.dll": "7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca",
+      "msvcr100.dll": "f4994b634e081ed1bb374480c9d70e01ba5f17c07806fe0c5360d33df019e324",
+      "nglib.dll": "dee9ffc5363626f2fe4df89fd8f9364c99390509722dc5fd3ec17f3ee84f16f2",
+      "pthreadVC2.dll": "0e6af724609ef6846982ef717013426c359c455fff324e906d8d55c8bb88d16e",
+      "vcomp140.dll": "95d4ce4a6802d1e18b5e0e1722cc30ea72ca7e033f83828f05c0b7b993fe7cbf",
+      "vcruntime140.dll": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7",
+      "vcruntime140_1.dll": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e",
+      "zlib.dll": "519940326dabd0c3250a39964fdf0374ed2396b9b4478c826242aa69ffd90de5"
+    },
+    "commonIdentical": [
+      "NetGenMesher.exe",
+      "TKBO.dll",
+      "TKBRep.dll",
+      "TKBool.dll",
+      "TKCAF.dll",
+      "TKCDF.dll",
+      "TKDE.dll",
+      "TKDEIGES.dll",
+      "TKDESTEP.dll",
+      "TKDESTL.dll",
+      "TKFillet.dll",
+      "TKG2d.dll",
+      "TKG3d.dll",
+      "TKGeomAlgo.dll",
+      "TKGeomBase.dll",
+      "TKHLR.dll",
+      "TKLCAF.dll",
+      "TKMath.dll",
+      "TKMesh.dll",
+      "TKMeshVS.dll",
+      "TKOffset.dll",
+      "TKPrim.dll",
+      "TKService.dll",
+      "TKShHealing.dll",
+      "TKTopAlgo.dll",
+      "TKV3d.dll",
+      "TKVCAF.dll",
+      "TKXCAF.dll",
+      "TKXSBase.dll",
+      "TKernel.dll",
+      "msvcp140.dll",
+      "msvcr100.dll",
+      "pthreadVC2.dll",
+      "vcomp140.dll",
+      "vcruntime140.dll",
+      "vcruntime140_1.dll",
+      "zlib.dll"
+    ],
+    "different": {
+      "nglib.dll": {
+        "release": "dee9ffc5363626f2fe4df89fd8f9364c99390509722dc5fd3ec17f3ee84f16f2",
+        "checkout": "d65e08883a3c57dfd54898d3a7a5cbe6d5a3d699ffc3927a23328ac45812039d"
+      }
+    },
+    "releaseOnly": [],
+    "checkoutOnly": []
+  },
+  "topology": {
+    "faceTypes": {
+      "Plane": 8,
+      "Cylinder": 1
+    },
+    "edgeTypes": {
+      "Line": 19,
+      "Circle": 2
+    },
+    "vertices": 14
+  },
+  "outputs": {
+    "geometry.json": {
+      "sha256": "0cad7eeeea2107d31e3cc469f0ef68acb727c820e1570b1de8e6b419ee6d8922",
+      "bytes": 37031,
+      "path": ".project/reports/l-bracket-cad-reference/geometry.json",
+      "repeatByteIdentical": true
+    },
+    "l-bracket.vis": {
+      "sha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+      "bytes": 22848,
+      "path": "X/Feasibility/Cad/artifacts/task0052/l-bracket.vis",
+      "repeatByteIdentical": true
+    },
+    "l-bracket_solid_0001.brep": {
+      "sha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+      "bytes": 4512,
+      "path": "X/Feasibility/Cad/artifacts/task0052/l-bracket_solid_0001.brep",
+      "repeatByteIdentical": true
+    }
+  },
+  "localLogs": {
+    "first-app.log": {
+      "sha256": "1bf7f749716ba7380a8957007e52a9d588f33a0c4cb5b8c2a5979786ba562fd5",
+      "bytes": 2164
+    },
+    "first-split-step.log": {
+      "sha256": "7fb5ad7cfe5d9dabe7afa96265ed12c30614e98ad3ce7d3ee6347a120fd24b1b",
+      "bytes": 246
+    },
+    "first-visualization.log": {
+      "sha256": "c10c74910173fe1065f3f431beb88580bf2f1132994603e3a1098891df610bb5",
+      "bytes": 583
+    },
+    "repeat-app.log": {
+      "sha256": "a26d07f11d1132bbfbb5e9c1c778f592a6570e6498716df31d39fe7f57dc9cb9",
+      "bytes": 2171
+    },
+    "repeat-split-step.log": {
+      "sha256": "7fb5ad7cfe5d9dabe7afa96265ed12c30614e98ad3ce7d3ee6347a120fd24b1b",
+      "bytes": 246
+    },
+    "repeat-visualization.log": {
+      "sha256": "5e3723de487c2a1fb6981a2deb518d71ad5f0cb4b45cee2932c4cefb69cd18ca",
+      "bytes": 584
+    },
+    "upstream-geometry.log": {
+      "sha256": "bf535b6b33ef08698ec91f0d5f61bcca6a91ab3b6face3ff8e85e5730d5a8c6c",
+      "bytes": 2232
+    }
+  },
+  "installerCleanup": {
+    "removedPath": "X/Build/artifacts/task0051-arm64-deb/prepomaxx-preview_0.0.0~preview+20261104162309.gitb55882eca795_arm64.deb",
+    "bytes": 415485218,
+    "sha256": "03861c3db16530ff355da09268e9fcb4c6ba1c5164d3967aef84842dc78eb52b",
+    "observedFreeGainBytes": -8192,
+    "retained": [
+      "task 0050 ARM64 archive",
+      "task 0051 manifests, verification and test jobs",
+      "task 0049 Mac DMG"
+    ]
+  },
+  "temporaryCaptureCleanup": {
+    "allocatedKiBRemoved": 848968,
+    "observedFreeGainBytes": 870952960,
+    "scope": "Task 0052 temporary CrossOver bottle and extracted archive; pinned official ZIP and small capture outputs retained"
+  }
+}

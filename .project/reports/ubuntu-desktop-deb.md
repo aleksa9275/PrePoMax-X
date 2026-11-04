@@ -57,6 +57,10 @@ hash matched its build report. The installed PMX fixture was exercised on
 ARM64. CI uploaded the logs and receipts. The binary installer is retained
 locally for ARM64.
 
+Task 0052 subsequently removed the local installer. Its checksum,
+verification and rebuild archive remain available.
+[Cleanup receipt](l-bracket-cad-reference/verification.json).
+
 This covers Ubuntu 24.04 under X11 software rendering in a virtual display.
 Debian, Fedora, Arch, physical desktop acceptance, version-to-version
 upgrade and public release packaging remain open. Full 3.0.0 parity still

@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0052 removed the verified Ubuntu .deb and kept its evidence, jobs and
+task 0050 rebuild archive. Original Windows 3.0.0 under CrossOver passes
+the L-bracket STEP geometry checks and yields repeatable BREP/VIS outputs
+through its bundled NetGenMesher. The original `nglib.dll` differs from
+the checkout. Read .project/reports/l-bracket-cad-reference.md before
+attempting the portable VIS boundary or matching native CAD source recovery.
+Keep full 3.0.0 parity, both correctness failures, the tetrahedron gate and
+release acceptance open.
+
 Task 0051 adds an internal Ubuntu 24.04 .deb around the native Linux
 preview. ARM64 passes APT install, ordinary-user INP and PMX solve/render,
 remove, reinstall and purge in a disposable container. User project and job

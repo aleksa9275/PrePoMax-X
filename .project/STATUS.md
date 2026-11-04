@@ -1,5 +1,16 @@
 # Project status
 
+## Current — task 0052: original L-bracket CAD reference
+
+The pinned Windows 3.0.0 executable under CrossOver passed the L-bracket
+STEP geometry checks. Repeat captures and direct NetGenMesher replays
+matched byte for byte. The released Netgen executable matches the checkout,
+with `nglib.dll` the sole difference among 38 bundled executable/DLL files.
+Matching native CAD source and execution remain open. The task 0051 installer
+was removed and its verification and rebuild archive were retained.
+[Task record](tasks/0052-l-bracket-cad-reference.md) ·
+[Verification](reports/l-bracket-cad-reference.md).
+
 ## Current — task 0051: Ubuntu desktop installer
 
 The native desktop archive now wraps as an internal Ubuntu 24.04 .deb for
