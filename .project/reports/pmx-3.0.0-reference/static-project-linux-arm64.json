@@ -1,0 +1,710 @@
+{
+  "captures": {
+    "cube": {
+      "inputSha256": "930ddc0eecd0ddd215e801269dbb5a768e0a50d950b4627eda339c75a584cbf7",
+      "mesh": {
+        "nodes": [
+          {
+            "id": 1,
+            "coordinates": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 2,
+            "coordinates": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 3,
+            "coordinates": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 4,
+            "coordinates": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 5,
+            "coordinates": [
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 6,
+            "coordinates": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 7,
+            "coordinates": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": 8,
+            "coordinates": [
+              0,
+              1,
+              1
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": 1,
+            "partId": 1,
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        ],
+        "meshAssembly": "CaeMesh",
+        "partNames": [
+          "Solid_part-1"
+        ],
+        "partBlockBytes": 997
+      },
+      "graph": {
+        "unitSystem": "MM_TON_S_C",
+        "nodeSets": {},
+        "elementSets": {
+          "Cube": [
+            1
+          ]
+        },
+        "parts": [
+          {
+            "name": "Solid_part-1",
+            "id": 1,
+            "nodes": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "elements": [
+              1
+            ]
+          }
+        ],
+        "materials": [],
+        "sections": [],
+        "steps": []
+      },
+      "unparsedResultBytes": 4
+    },
+    "definitions": {
+      "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+      "mesh": {
+        "nodes": [
+          {
+            "id": 1,
+            "coordinates": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 2,
+            "coordinates": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 3,
+            "coordinates": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 4,
+            "coordinates": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 5,
+            "coordinates": [
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 6,
+            "coordinates": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 7,
+            "coordinates": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": 8,
+            "coordinates": [
+              0,
+              1,
+              1
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": 1,
+            "partId": 1,
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        ],
+        "meshAssembly": "CaeMesh",
+        "partNames": [
+          "Solid_part-1"
+        ],
+        "partBlockBytes": 997
+      },
+      "graph": {
+        "unitSystem": "MM_TON_S_C",
+        "nodeSets": {
+          "NALL": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "X0": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "Y0": [
+            1,
+            2,
+            5,
+            6
+          ],
+          "Z0": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "X1": [
+            2,
+            3,
+            6,
+            7
+          ]
+        },
+        "elementSets": {
+          "XSOLID": [
+            1
+          ]
+        },
+        "parts": [
+          {
+            "name": "Solid_part-1",
+            "id": 1,
+            "nodes": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "elements": [
+              1
+            ]
+          }
+        ],
+        "materials": [
+          {
+            "name": "XSTEEL",
+            "temperatureDependent": false,
+            "properties": [
+              {
+                "type": "CaeModel.Elastic",
+                "rows": [
+                  [
+                    "210000 MPa",
+                    "0.3",
+                    "0 \u00b0C"
+                  ]
+                ]
+              },
+              {
+                "type": "CaeModel.Density",
+                "rows": [
+                  [
+                    "7.85E-09 t/mm\u00b3",
+                    "0 \u00b0C"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "name": "Section-1",
+            "material": "XSTEEL",
+            "region": "XSOLID",
+            "regionType": 4
+          }
+        ],
+        "steps": [
+          {
+            "name": "Step-1",
+            "nonlinearGeometry": false,
+            "perturbation": false,
+            "runAnalysis": true,
+            "solverType": 0,
+            "incrementationType": 1,
+            "timePeriod": 1,
+            "initialTimeIncrement": 1,
+            "minTimeIncrement": 1e-05,
+            "maxTimeIncrement": 1e+30,
+            "maxIncrements": 100,
+            "outputFrequency": -2147483648,
+            "fieldOutputs": [
+              {
+                "name": "NF-Output-1",
+                "type": "CaeModel.NodalFieldOutput",
+                "variables": 3
+              },
+              {
+                "name": "EF-Output-1",
+                "type": "CaeModel.ElementFieldOutput",
+                "variables": 1
+              }
+            ],
+            "historyOutputCount": 0,
+            "constraints": [
+              {
+                "name": "Displacement_rotation-1",
+                "region": "X0",
+                "regionType": 2,
+                "displacements": [
+                  "0 mm",
+                  "Unconstrained",
+                  "Unconstrained"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              },
+              {
+                "name": "Displacement_rotation-2",
+                "region": "Y0",
+                "regionType": 2,
+                "displacements": [
+                  "Unconstrained",
+                  "0 mm",
+                  "Unconstrained"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              },
+              {
+                "name": "Displacement_rotation-3",
+                "region": "Z0",
+                "regionType": 2,
+                "displacements": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "0 mm"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              }
+            ],
+            "loads": [
+              {
+                "name": "Concentrated_force-1",
+                "region": "X1",
+                "regionType": 2,
+                "force": [
+                  "25 N",
+                  "0 N",
+                  "0 N"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "unparsedResultBytes": 4
+    },
+    "definitions-with-results": {
+      "inputSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+      "mesh": {
+        "nodes": [
+          {
+            "id": 1,
+            "coordinates": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 2,
+            "coordinates": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "id": 3,
+            "coordinates": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 4,
+            "coordinates": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "id": 5,
+            "coordinates": [
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 6,
+            "coordinates": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": 7,
+            "coordinates": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": 8,
+            "coordinates": [
+              0,
+              1,
+              1
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": 1,
+            "partId": 1,
+            "type": "C3D8",
+            "connectivity": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          }
+        ],
+        "meshAssembly": "CaeMesh",
+        "partNames": [
+          "Solid_part-1"
+        ],
+        "partBlockBytes": 997
+      },
+      "graph": {
+        "unitSystem": "MM_TON_S_C",
+        "nodeSets": {
+          "NALL": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "X0": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "Y0": [
+            1,
+            2,
+            5,
+            6
+          ],
+          "Z0": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "X1": [
+            2,
+            3,
+            6,
+            7
+          ]
+        },
+        "elementSets": {
+          "XSOLID": [
+            1
+          ]
+        },
+        "parts": [
+          {
+            "name": "Solid_part-1",
+            "id": 1,
+            "nodes": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "elements": [
+              1
+            ]
+          }
+        ],
+        "materials": [
+          {
+            "name": "XSTEEL",
+            "temperatureDependent": false,
+            "properties": [
+              {
+                "type": "CaeModel.Elastic",
+                "rows": [
+                  [
+                    "210000 MPa",
+                    "0.3",
+                    "0 \u00b0C"
+                  ]
+                ]
+              },
+              {
+                "type": "CaeModel.Density",
+                "rows": [
+                  [
+                    "7.85E-09 t/mm\u00b3",
+                    "0 \u00b0C"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "name": "Section-1",
+            "material": "XSTEEL",
+            "region": "XSOLID",
+            "regionType": 4
+          }
+        ],
+        "steps": [
+          {
+            "name": "Step-1",
+            "nonlinearGeometry": false,
+            "perturbation": false,
+            "runAnalysis": true,
+            "solverType": 0,
+            "incrementationType": 1,
+            "timePeriod": 1,
+            "initialTimeIncrement": 1,
+            "minTimeIncrement": 1e-05,
+            "maxTimeIncrement": 1e+30,
+            "maxIncrements": 100,
+            "outputFrequency": -2147483648,
+            "fieldOutputs": [
+              {
+                "name": "NF-Output-1",
+                "type": "CaeModel.NodalFieldOutput",
+                "variables": 3
+              },
+              {
+                "name": "EF-Output-1",
+                "type": "CaeModel.ElementFieldOutput",
+                "variables": 1
+              }
+            ],
+            "historyOutputCount": 0,
+            "constraints": [
+              {
+                "name": "Displacement_rotation-1",
+                "region": "X0",
+                "regionType": 2,
+                "displacements": [
+                  "0 mm",
+                  "Unconstrained",
+                  "Unconstrained"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              },
+              {
+                "name": "Displacement_rotation-2",
+                "region": "Y0",
+                "regionType": 2,
+                "displacements": [
+                  "Unconstrained",
+                  "0 mm",
+                  "Unconstrained"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              },
+              {
+                "name": "Displacement_rotation-3",
+                "region": "Z0",
+                "regionType": 2,
+                "displacements": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "0 mm"
+                ],
+                "rotations": [
+                  "Unconstrained",
+                  "Unconstrained",
+                  "Unconstrained"
+                ]
+              }
+            ],
+            "loads": [
+              {
+                "name": "Concentrated_force-1",
+                "region": "X1",
+                "regionType": 2,
+                "force": [
+                  "25 N",
+                  "0 N",
+                  "0 N"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "unparsedResultBytes": 7281
+    }
+  },
+  "rejected": [
+    "dangling-node-set",
+    "wrong-part-id",
+    "wrong-part-name",
+    "missing-section-material",
+    "missing-load-region"
+  ],
+  "embeddedResult": {
+    "pmxSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+    "frdSha256": "8394ba500bd3083e5b550c0312766671518a0eaf8c658e4b1e275773a3733d26",
+    "nodeCount": 8,
+    "elementCount": 1,
+    "fields": 4,
+    "components": 13,
+    "values": 104,
+    "opaqueHistoryTrailerBytes": 6419
+  },
+  "resultRejections": [
+    "duplicate-result-node-slot",
+    "modified-result-value"
+  ]
+}

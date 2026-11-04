@@ -1,0 +1,271 @@
+{
+  "execution": "Official Windows executable under CrossOver 26.2 on macOS ARM64",
+  "definitionsCanonicalDeckMatchesOnReopen": true,
+  "definitionsSnapshot": {
+    "nodes": {
+      "1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "2": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "3": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "4": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "5": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "6": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "7": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "8": [
+        0.0,
+        1.0,
+        1.0
+      ]
+    },
+    "elements": {
+      "1": {
+        "type": "C3D8",
+        "connectivity": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    "nodeSets": {
+      "NALL": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "X0": [
+        1,
+        4,
+        5,
+        8
+      ],
+      "Y0": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "Z0": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "X1": [
+        2,
+        3,
+        6,
+        7
+      ]
+    },
+    "elementSets": {
+      "XSOLID": [
+        1
+      ]
+    },
+    "materials": {
+      "XSTEEL": {
+        "elastic": [
+          210000.0,
+          0.3
+        ],
+        "density": [
+          7.85e-09
+        ]
+      }
+    },
+    "sections": [
+      {
+        "elementSet": "XSOLID",
+        "material": "XSTEEL"
+      }
+    ],
+    "steps": [
+      {
+        "type": "Static",
+        "static": [
+          1.0,
+          1.0,
+          1e-05,
+          1e+30
+        ],
+        "boundaries": [
+          [
+            "X0",
+            1.0,
+            1.0,
+            0.0
+          ],
+          [
+            "Y0",
+            2.0,
+            2.0,
+            0.0
+          ],
+          [
+            "Z0",
+            3.0,
+            3.0,
+            0.0
+          ]
+        ],
+        "loads": [
+          [
+            "X1",
+            1.0,
+            25.0
+          ]
+        ]
+      }
+    ],
+    "units": "MM_TON_S_C"
+  },
+  "canonicalDeckSha256": "8295fa2677b688c29c5a4f44655dcf18b8f389e63b5f51c58872ae52dbf45a28",
+  "fixtures": {
+    "cube.pmx": {
+      "framing": {
+        "inputSha256": "930ddc0eecd0ddd215e801269dbb5a768e0a50d950b4627eda339c75a584cbf7",
+        "fileBytes": 5775,
+        "header": "PrePoMax v3.0.0",
+        "versionNumbers": [
+          3,
+          0,
+          0
+        ],
+        "mainFrame": {
+          "offset": 36,
+          "compressedBytes": 5735,
+          "inflatedBytes": 43962,
+          "nrbfBytes": 42657,
+          "nrbfSha256": "fcbf18381dbe2a6161be0f100cbf5d0a6c589cae9c717dc0c2c1512c09818059",
+          "opaqueModelBytes": 1297,
+          "opaqueModelSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a"
+        },
+        "opaqueTail": {
+          "offset": 5771,
+          "bytes": 4,
+          "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+        },
+        "inputUnchanged": true
+      },
+      "recordCount": 221,
+      "typeCount": 113,
+      "historyAndResultTypes": [
+        "PrePoMax.Commands.CommandsCollection"
+      ]
+    },
+    "definitions.pmx": {
+      "framing": {
+        "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+        "fileBytes": 8644,
+        "header": "PrePoMax v3.0.0",
+        "versionNumbers": [
+          3,
+          0,
+          0
+        ],
+        "mainFrame": {
+          "offset": 36,
+          "compressedBytes": 8604,
+          "inflatedBytes": 65626,
+          "nrbfBytes": 64321,
+          "nrbfSha256": "7a63011e3c3993af7b388ae3035e9b53f39772e47e24f8a50979b23056e95494",
+          "opaqueModelBytes": 1297,
+          "opaqueModelSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a"
+        },
+        "opaqueTail": {
+          "offset": 8640,
+          "bytes": 4,
+          "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+        },
+        "inputUnchanged": true
+      },
+      "recordCount": 430,
+      "typeCount": 159,
+      "historyAndResultTypes": [
+        "PrePoMax.Commands.CommandsCollection"
+      ]
+    },
+    "definitions-with-results.pmx": {
+      "framing": {
+        "inputSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+        "fileBytes": 16912,
+        "header": "PrePoMax v3.0.0",
+        "versionNumbers": [
+          3,
+          0,
+          0
+        ],
+        "mainFrame": {
+          "offset": 36,
+          "compressedBytes": 9595,
+          "inflatedBytes": 75947,
+          "nrbfBytes": 74642,
+          "nrbfSha256": "b7a4bb6df9eddec787196f9c4145d18c70278928cc4167d9f591a753b6e077b3",
+          "opaqueModelBytes": 1297,
+          "opaqueModelSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a"
+        },
+        "opaqueTail": {
+          "offset": 9631,
+          "bytes": 7281,
+          "sha256": "da7c6964ad074b3bd74e778162659aefc591e3bd45141ca2eee56f2685450322"
+        },
+        "inputUnchanged": true
+      },
+      "recordCount": 500,
+      "typeCount": 170,
+      "historyAndResultTypes": [
+        "CaeResults.FeResults",
+        "PrePoMax.Commands.CommandsCollection"
+      ]
+    }
+  },
+  "decoderBuild": [
+    {
+      "kind": "decoder build",
+      "exitCode": 0,
+      "log": "  Determining projects to restore...\n  Restored <repository>/X/Feasibility/Pmx/NrbfInventory.csproj (in 22 ms).\n  NrbfInventory -> <temporary>/bin/NrbfInventory/release/PrePoMaxX.NrbfInventory.dll\n\nBuild succeeded.\n    0 Warning(s)\n    0 Error(s)\n\nTime Elapsed 00:00:00.91\nCSSM_ModuleLoad(): One or more parameters passed to a function were not valid.\n"
+    }
+  ],
+  "resultBearingCanonicalDeckMatchesOnReopen": true,
+  "resultCountAfterReopen": 1,
+  "resultUnitsAtImport": "UNIT_LESS",
+  "resultSourceFrdSha256": "8394ba500bd3083e5b550c0312766671518a0eaf8c658e4b1e275773a3733d26"
+}

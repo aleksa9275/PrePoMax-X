@@ -1,0 +1,169 @@
+{
+  "controlledPmxSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+  "historyProjectionSha256": "6c6b51336de3e54f61525a5958d6ad9f4153435a417b97ba47398900bdccfd22",
+  "comparison": {
+    "datSha256": "9e696dbd14446cd8c7b7dd870a526b74f975ddd3bd09389491602a607e8326de",
+    "matchedRawSeries": 96,
+    "matchedSamples": 96,
+    "decodedDerivedStressSeries": 48
+  },
+  "profileResultHistories": {
+    "pmxSha256": "9287bdec4964962f2502e22524b2b060c1f2e5e09c74cbd608217bb1f698d9c2",
+    "name": "HistoryOutput",
+    "sets": {
+      "From_Field-1": {
+        "harmonic": false,
+        "fields": {
+          "STRESS": {
+            "MISES": {
+              "unit": "MPa",
+              "entries": {
+                "51": {
+                  "time": [
+                    1.0
+                  ],
+                  "values": [
+                    25.471271514892578
+                  ],
+                  "counts": [
+                    1
+                  ],
+                  "local": false,
+                  "unit": null
+                }
+              }
+            }
+          }
+        },
+        "baseSet": null
+      },
+      "From_Field-1_STRESS_MISES_x2": {
+        "harmonic": false,
+        "fields": {
+          "TABLE": {
+            "VALUE": {
+              "unit": "MPa",
+              "entries": {
+                "51": {
+                  "time": [
+                    1.0
+                  ],
+                  "values": [
+                    50.942543029785156
+                  ],
+                  "counts": [
+                    1
+                  ],
+                  "local": false,
+                  "unit": "MPa"
+                }
+              }
+            }
+          }
+        },
+        "baseSet": null
+      }
+    }
+  },
+  "profileCommands": {
+    "pmxSha256": "9287bdec4964962f2502e22524b2b060c1f2e5e09c74cbd608217bb1f698d9c2",
+    "cursor": 18,
+    "appliedRecordCount": 19,
+    "remainingRecordCount": 0,
+    "commands": [
+      {
+        "type": "PrePoMax.Commands.CClear",
+        "ordinal": 0
+      },
+      {
+        "type": "PrePoMax.Commands.CSetNewModelProperties",
+        "ordinal": 1
+      },
+      {
+        "type": "PrePoMax.Commands.CImportFile",
+        "ordinal": 2
+      },
+      {
+        "type": "PrePoMax.Commands.CReplaceGeometryPartProperties",
+        "ordinal": 3
+      },
+      {
+        "type": "PrePoMax.Commands.CCreateMesh",
+        "ordinal": 4
+      },
+      {
+        "type": "PrePoMax.Commands.CAddMaterial",
+        "ordinal": 5
+      },
+      {
+        "type": "PrePoMax.Commands.CAddSection",
+        "ordinal": 6
+      },
+      {
+        "type": "PrePoMax.Commands.CAddStep",
+        "ordinal": 7
+      },
+      {
+        "type": "PrePoMax.Commands.CAddBC",
+        "ordinal": 8
+      },
+      {
+        "type": "PrePoMax.Commands.CAddLoad",
+        "ordinal": 9
+      },
+      {
+        "type": "PrePoMax.Commands.CReplaceFieldOutput",
+        "ordinal": 10
+      },
+      {
+        "type": "PrePoMax.Commands.CAddMeshSetupItem",
+        "ordinal": 11
+      },
+      {
+        "type": "PrePoMax.Commands.CCreateMesh",
+        "ordinal": 12
+      },
+      {
+        "type": "PrePoMax.Commands.CPrepareAndRunJob",
+        "ordinal": 13
+      },
+      {
+        "type": "PrePoMax.Commands.COpenResults",
+        "ordinal": 14
+      },
+      {
+        "type": "PrePoMax.Commands.CAddResultHistoryOutput",
+        "ordinal": 15
+      },
+      {
+        "type": "PrePoMax.Commands.CExportResultHistoryOutput",
+        "ordinal": 16
+      },
+      {
+        "type": "PrePoMax.Commands.CRunPythonScript",
+        "ordinal": 17
+      },
+      {
+        "type": "PrePoMax.Commands.CSaveToPmx",
+        "ordinal": 18
+      }
+    ]
+  },
+  "controlledCommands": {
+    "pmxSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+    "cursor": -1,
+    "appliedRecordCount": 0,
+    "remainingRecordCount": 0,
+    "commands": []
+  },
+  "sharedTimeSamplesRestored": 2,
+  "rejected": [
+    "truncated-trailer",
+    "trailing-bytes",
+    "duplicate-series",
+    "invalid-shared-time",
+    "entry-trailing-deflate-data",
+    "nonfinite-sample",
+    "modified-dat-value"
+  ]
+}

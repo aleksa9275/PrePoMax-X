@@ -1,0 +1,89 @@
+{
+  "archiveUrl": "https://prepomax.fs.um.si/Files/Downloads/PrePoMax%20v3.0.0.zip",
+  "archiveBytes": 200999611,
+  "archiveSha256": "f4499f51e20536ad60d5e5bd87f67e4986a0dfdaf9e020bfc92b1dd1c85e30d9",
+  "prePoMaxExeSha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+  "upstreamHead": "2a25db82896aa0aa51666eb550df19d3950a8630",
+  "upstreamTagsAdvertised": [],
+  "sourceCorrespondenceVerified": false,
+  "samples": {
+    "Bearing_bracket.pmx": {
+      "framing": {
+        "inputSha256": "3bb152c7e4605744995dfd1f0b49c8304b341c7f146881cbc8aa3734becf827a",
+        "fileBytes": 1585905,
+        "header": "PrePoMax v3.0.0",
+        "versionNumbers": [
+          3,
+          0,
+          0
+        ],
+        "mainFrame": {
+          "offset": 36,
+          "compressedBytes": 1585865,
+          "inflatedBytes": 3072262,
+          "nrbfBytes": 472600,
+          "nrbfSha256": "42d4369f9268b1e740096ee83ebcfbb4d5824c6da230ceeceeaf9ac3bfd595f2",
+          "opaqueModelBytes": 2599654,
+          "opaqueModelSha256": "a6017973340b39cfda6450f49a28b14f3af28579935ae2f2ebfec0b5c8a6189a"
+        },
+        "opaqueTail": {
+          "offset": 1585901,
+          "bytes": 4,
+          "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+        },
+        "inputUnchanged": true
+      },
+      "decoderSucceeded": true,
+      "recordCount": 459,
+      "typeCount": 127,
+      "hasFeResults": false,
+      "hasCommandsCollection": true,
+      "inspectorSucceeded": false,
+      "inspectorError": "Source context differs from pinned baseline",
+      "observedCommandTypes": [
+        "PrePoMax.Commands.CImportFile",
+        "PrePoMax.Commands.CSaveToPmx"
+      ]
+    },
+    "Profile.pmx": {
+      "framing": {
+        "inputSha256": "9287bdec4964962f2502e22524b2b060c1f2e5e09c74cbd608217bb1f698d9c2",
+        "fileBytes": 1522735,
+        "header": "PrePoMax v3.0.0",
+        "versionNumbers": [
+          3,
+          0,
+          0
+        ],
+        "mainFrame": {
+          "offset": 36,
+          "compressedBytes": 405955,
+          "inflatedBytes": 1237351,
+          "nrbfBytes": 414071,
+          "nrbfSha256": "2a0ef5e80d6b1e2e590064072effbb7124723b6279499f27678ae76008ef9f59",
+          "opaqueModelBytes": 823272,
+          "opaqueModelSha256": "3790c9bb55ffc8acb955b4901ad39079968d4841de8c06c0024a9c7deb465839"
+        },
+        "opaqueTail": {
+          "offset": 405991,
+          "bytes": 1116744,
+          "sha256": "b4f1685ab8b657a1e17044f760141c17dabbee3e388a828d4fa202b1e9e68015"
+        },
+        "inputUnchanged": true
+      },
+      "decoderSucceeded": true,
+      "recordCount": 1177,
+      "typeCount": 256,
+      "hasFeResults": true,
+      "hasCommandsCollection": true,
+      "inspectorSucceeded": false,
+      "inspectorError": "Source context differs from pinned baseline",
+      "observedCommandTypes": [
+        "PrePoMax.Commands.CImportFile",
+        "PrePoMax.Commands.COpenResults",
+        "PrePoMax.Commands.CRunPythonScript",
+        "PrePoMax.Commands.CSaveToPmx"
+      ]
+    }
+  }
+}

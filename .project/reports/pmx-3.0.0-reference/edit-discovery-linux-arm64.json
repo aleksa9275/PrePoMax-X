@@ -1,0 +1,56 @@
+{
+  "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+  "outputSha256": "b002a595839f59455244658fee7aa8e4492a418a62263fce348067efe969911b",
+  "editedGraphSha256": "8bafa2d5e8597cf0907da8eeba54987398c92fa9de97d7121c17b2b1a8d6f413",
+  "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+  "patchedStringRecords": [
+    555,
+    561,
+    563
+  ],
+  "portableReadbackPassed": true,
+  "matchesOfficialEditedProjection": true,
+  "modelAndResultTailPreserved": true,
+  "rejected": [
+    "existing-output",
+    "source-as-output",
+    "other-valid-pmx"
+  ],
+  "variableLengthEdit": {
+    "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+    "outputSha256": "e0b66febd79f33d550b68ba9dda6177027855224d7b5f631baa6ef0eabaea348",
+    "editedGraphSha256": "4c5a54a40bace8051270f86c797f3dbf18c39b110e5fad2177406b0d7246519c",
+    "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+    "patchedStringRecords": [
+      555,
+      561,
+      563
+    ],
+    "portableReadbackPassed": true
+  },
+  "variableLengthEditFromOfficialEdit": {
+    "inputSha256": "9ab316c4b2e7219849918bdc684f7cddca20a01c3e2d6a46d66a64f0af51b556",
+    "outputSha256": "2ec187107af7878ff724b97cc212f0110887cb2cf585aa59b5816fb66191ca53",
+    "editedGraphSha256": "5bef1279a028e5b3a639bd005451a68b5c935f3918202d6435b235fa7fab3a09",
+    "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+    "patchedStringRecords": [
+      555,
+      561,
+      563
+    ],
+    "portableReadbackPassed": true
+  },
+  "discoveredEditFromExtraSet": {
+    "inputSha256": "f40387606274c705431749a76892c78159c5ed00ea43a0d79810d04904bead66",
+    "outputSha256": "38f224ac58ef42ca4eaea522e93c638feb4295cfe13e71cf3c2d27b88d62a84d",
+    "editedGraphSha256": "40fa9624edbd8206226103cc785c53fe41a293047b95f1927bf71df4cfda9830",
+    "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+    "patchedStringRecords": [
+      568,
+      574,
+      576
+    ],
+    "portableReadbackPassed": true
+  },
+  "invalidMagnitudeCount": 6
+}

@@ -1,0 +1,26 @@
+{
+  "officialExecutable": "Windows PrePoMax 3.0.0 via CrossOver 26.2",
+  "modulusMPa": 98765.5,
+  "forcePerNodeN": 7.125,
+  "pmxSha256": {
+    "official-decimal-edit": "2ec187107af7878ff724b97cc212f0110887cb2cf585aa59b5816fb66191ca53",
+    "portable-decimal-edit": "e0b66febd79f33d550b68ba9dda6177027855224d7b5f631baa6ef0eabaea348",
+    "portable-decimal-shifted": "2ec187107af7878ff724b97cc212f0110887cb2cf585aa59b5816fb66191ca53",
+    "portable-decimal-resave": "477f072b004dc9f8f82dde70056d8cd8bfa673463eae8a4f0b2e92208b9d1a74"
+  },
+  "bothPortableCandidatesOpenedAndExported": true,
+  "originalResaveMatchesPortableProjection": true,
+  "bothDecksMatchOfficialIndependentEdit": true,
+  "canonicalDeckSha256": "18e8ab4b00f56a1b6580b28e181b2120447f3657401be9ff5d4cf4c77293401c",
+  "nativeMacSolve": {
+    "officialFrdSha256": "765f4534abd10cb8d1f2e0834e091a280484b1901146660cc1dcad3df5736f15",
+    "portableFrdSha256": "765f4534abd10cb8d1f2e0834e091a280484b1901146660cc1dcad3df5736f15",
+    "matchingDecodedFields": [
+      "DISP",
+      "STRESS",
+      "FORC"
+    ],
+    "node2AxialDisplacementMm": 0.000288562,
+    "axialReactionOnFixedFaceN": -28.5
+  }
+}

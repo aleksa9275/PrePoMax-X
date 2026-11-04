@@ -5,7 +5,8 @@ preview seems to work and requests reclaiming tested package/build copies.
 [Task 0046](reports/storage-cleanup.md) removes generated payloads and supersedes
 older keep-DMG instructions. Source, evidence, user installed app/state, jobs and
 useful rebuild inputs remain; historical artifact paths do not imply availability.
-Task 0045 remains prepared and unstarted. Correctness/release gates are unchanged.
+The task 0045 PMX research checkpoint is recorded in STATUS. General PMX
+compatibility remains open alongside task 0047 session set authoring.
 
 2026-11-03 editable-solid increment: task 0044 supplies model-tree configuration
 of units, isotropic elastic materials, solid sections, displacement supports,

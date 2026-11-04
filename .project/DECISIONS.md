@@ -1,5 +1,13 @@
 # Decision register
 
+D057 — Original PMX compatibility, 2026-11-03. The maintainer selects full
+original .pmx compatibility and reusability for task 0045. Require original
+Windows PrePoMax 3.0.0 interoperability in both directions, preserve editable
+project semantics, and check older inputs accepted by that reference.
+Deliver the static-solid interoperability proof first and broaden coverage
+before claiming full compatibility. The exchange prototype remains research
+evidence. [Task 0045](tasks/0045-supported-project-persistence.md).
+
 D056 — Accepted generated-artifact retention/cleanup, 2026-11-03: maintainer
 reports task 0044 seems to work and requests removing unnecessary tested apps/
 DMGs before proceeding. Older keep-tested-DMG instructions are superseded for

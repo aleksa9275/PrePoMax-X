@@ -1,0 +1,36 @@
+{
+  "officialExecutable": "Windows PrePoMax 3.0.0 through CrossOver 26.2",
+  "pmxHashes": {
+    "shape-official-edit": "7171af460edea5f095cf1cdb223fe0a9b601bdde967561651756c2c94e91472d",
+    "shape-portable": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+    "shape-portable-original-resave": "e6001e9a25a99255389cda06c9202befaac72563365bdebecaf08eab57e3349c"
+  },
+  "reducedIntegrationControlSha256": "aa629ff7cf1acac0992e8dbf369a73640395d8465e57aec089f85f91c36eaff8",
+  "editedModulusMPa": 84500.5,
+  "editedForcePerNodeN": 42.25,
+  "elementId": 7001,
+  "nodeIds": [
+    13,
+    23,
+    33,
+    43,
+    53,
+    63,
+    73,
+    83
+  ],
+  "officialExportsMatch": true,
+  "originalResaveProjectionMatches": true,
+  "canonicalOfficialDeckSha256": "b46c0d00c6254fdf01b9554eaf6bbe16c74700766ac12da390b916a3328922c2",
+  "decodedMacSolverFieldsMatch": true,
+  "matchedFields": [
+    "DISP",
+    "STRESS",
+    "FORC"
+  ],
+  "frdSha256": {
+    "official": "c29fae79a3ce925321833aea0b0d2ca820f659d86b5ff2d2818daa6de3bb59a3",
+    "reopened": "c29fae79a3ce925321833aea0b0d2ca820f659d86b5ff2d2818daa6de3bb59a3",
+    "portable": "0f5f9a41c22628632014d0406959acef52aa2482b07e2e5dcf16f3aeaada38fa"
+  }
+}

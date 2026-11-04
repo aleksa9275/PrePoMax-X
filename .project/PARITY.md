@@ -10,6 +10,7 @@ Windows x64, Linux x64, Linux ARM64 and Apple Silicon macOS ARM64 remain require
 | Item | Current state |
 |---|---|
 | Product functionality target | PrePoMax 3.0.0 |
+| Official Windows download | [Upstream downloads](https://prepomax.fs.um.si/downloads/) lists 3.0.0 dated 2 November 2026. [Downloaded archive and executable hashes](reports/pmx-3.0.0-reference/official-archive.json) |
 | Verified stable 3.0.0 commit and binary correspondence | Pending; do not label an RC or assembly version as verified stable |
 | Retained RC2 source marker | 912fb3d08014f246d48bef14d62a2cba0fdf5bb0 |
 | Retained post-RC2 mirror/source pin | f6273e39983e06042ae8b06e9a3dd0f729ea4b91 |
@@ -29,11 +30,11 @@ into the shared application; preserve intentional upstream behavior and units.
 | Area | Verified bounded coverage | Remaining parity work |
 |---|---|---|
 | Mesh input/decks | Original INP reader, IDs, bounded mesh export and static C3D8 deck | Full import/export/model graph and supported element/analysis combinations |
-| Materials/analysis editing | Model tree/Qt editor for original static-solid units/materials/sections/supports/nodal loads/step controls; original C# validation and real edited solve | New/picked sets, broader assignments/materials/loads/steps and full original model operations |
+| Materials/analysis editing | Model tree/Qt editor for original static-solid units/materials/sections/supports/nodal loads/step controls; original C# validation and real edited solve, plus session set creation from IDs or a picked ID | Multi-pick, set replacement/deletion, broader assignments/materials/loads/steps and full original model operations |
 | Native solve | Mac ARM64/Linux x64 analytical static cube; desktop start/cancel/status | Analysis/backend breadth, capacity/performance and native other-target acceptance |
 | Visualization | INP/C3D8 FRD, contours, original IDs/values; opt-in direct Mac child-view proof | Full vtkControl pipeline, clipping/highlighting, deformation, input/DPI/performance and other native desktops |
 | Results/history | Original bounded FRD fields/invariants and static-shaped DAT histories | Full original results orchestration, shell/dynamic outputs and interactive histories |
-| Persistence | Legacy reference/inventory evidence retained; immutable submitted job snapshots | Explicit supported project save/reopen, full PMX/PMH/settings/history and compatibility; job snapshots are not a project format |
+| Persistence | Legacy reference/inventory evidence retained; immutable submitted job snapshots | D057 requires original PMX read/write interoperability, starting with the static-solid workflow, then expanding across the full project and history corpus |
 | CAD/meshing | Original source/native inventory and research fixtures retained | Matching custom sources/builds, native import/repair/mesh and full geometry/selection behavior |
 | Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
 | Engineering correctness | Strict accepted-scope checks retained | Both known element failures and quadratic-tetrahedron measurement gate remain |

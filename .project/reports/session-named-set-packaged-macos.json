@@ -1,0 +1,48 @@
+{
+  "verifiedOn": "macOS ARM64",
+  "dmg": {
+    "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0047-delivery/dist/PrePoMax-X-Preview-arm64.dmg",
+    "sha256": "dc69aff5557bf5f4df75a970dcb5176449aff692dea7964468af71854523ce10",
+    "bytes": 260514909,
+    "signing": "App is ad-hoc signed; DMG is not Developer-ID signed or notarized",
+    "scope": "Internal local preview; clean macOS and downloaded Gatekeeper acceptance pending"
+  },
+  "sourceHead": "90939dc53c8405cf15bb3a4817c3076e0d983e9f",
+  "dirtySnapshot": true,
+  "sourcePatchSha256": "6c06afe89ecf97c512620c26010520595d7ed8c351da6ab71b5971da6cde1437",
+  "verifiedSourceFiles": {
+    "X/Desktop/viewport.py": "106e1b5f0a4f3114462c612240f088db47859b9c09498cd88a0b077122e1f32b",
+    "X/Desktop/editor_probe.py": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+    "X/Desktop/MeshScene/Program.cs": "a785f1a076625681188c778f10a1aab67b155dd52e06fe0c4c002279e14cb695",
+    "X/Build/verify-editable-solid.py": "58c6aaa88a0e9cfa6cec50dd7de244ad123a3584554e341bc013927c858408da"
+  },
+  "copyVerificationSha256": "e7b9d1202a9fc141a8c01f552f2726d716792d555b3876f90f5ce34bab970efc",
+  "mountCopyGuiChecks": 11,
+  "mountCopyAnalyticalChecks": 7,
+  "editor": {
+    "frame-bridge": {
+      "receipt": "X/Build/artifacts/task0047-editor-check/verification.json",
+      "receiptSha256": "9688a1c636c27e1f0259d9984c0325ae00b14c98ba48fbce9d0e4741377a748d",
+      "verificationChecks": 21,
+      "guiChecks": 24,
+      "editedDeckSha256": "4b85e04134074f4604e5c95cefd42c2fd3e7b0af1f64f9032edb4e833603f21c"
+    },
+    "native-cocoa": {
+      "receipt": "X/Build/artifacts/task0047-native-editor-check/verification.json",
+      "receiptSha256": "3b17df7ebb9090526250e91f7c682d4bc2c38f75ee3efc9adea3f7735ef082f8",
+      "verificationChecks": 21,
+      "guiChecks": 24,
+      "editedDeckSha256": "4b85e04134074f4604e5c95cefd42c2fd3e7b0af1f64f9032edb4e833603f21c"
+    }
+  },
+  "removedGeneratedDirectories": [
+    "X/Build/artifacts/task0047-delivery/build",
+    "X/Build/artifacts/task0047-delivery/dist/PrePoMax-X-Viewport",
+    "X/Build/artifacts/task0047-delivery/dist/PrePoMax-X-Viewport.app",
+    "X/Build/artifacts/task0047-delivery/hosts",
+    "X/Build/artifacts/task0047-delivery/dmg-payload",
+    "X/Build/artifacts/task0047-delivery/pyinstaller-cache",
+    "X/Build/artifacts/task0047-copy-check/Installed copy"
+  ],
+  "filesystemAvailableIncreaseBytes": 4125020160
+}

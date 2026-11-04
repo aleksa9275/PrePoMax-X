@@ -1,0 +1,19 @@
+{
+  "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+  "outputSha256": "b002a595839f59455244658fee7aa8e4492a418a62263fce348067efe969911b",
+  "editedGraphSha256": "8bafa2d5e8597cf0907da8eeba54987398c92fa9de97d7121c17b2b1a8d6f413",
+  "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+  "patchedStringRecords": [
+    555,
+    561,
+    563
+  ],
+  "portableReadbackPassed": true,
+  "matchesOfficialEditedProjection": true,
+  "modelAndResultTailPreserved": true,
+  "rejected": [
+    "existing-output",
+    "source-as-output",
+    "other-valid-pmx"
+  ]
+}

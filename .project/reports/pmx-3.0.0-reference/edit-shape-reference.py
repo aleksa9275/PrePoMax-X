@@ -1,0 +1,6 @@
+properties = pmx.model.materials['XSTEEL'].get_properties()
+properties[0] = pmx.create.elastic(84500.5, 0.3)
+pmx.model.materials.replace('XSTEEL', properties=properties)
+pmx.model.steps['Step-1'].loads.replace_concentrated_force('Concentrated_force-1', f1=42.25)
+pmx.save('shape-official-edit.pmx')
+pmx.export_to_calculix('shape-official-edit.inp')

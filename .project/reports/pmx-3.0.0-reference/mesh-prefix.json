@@ -1,0 +1,274 @@
+{
+  "verified": {
+    "cube": {
+      "inputSha256": "930ddc0eecd0ddd215e801269dbb5a768e0a50d950b4627eda339c75a584cbf7",
+      "nodes": [
+        {
+          "id": 1,
+          "coordinates": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 2,
+          "coordinates": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 3,
+          "coordinates": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 4,
+          "coordinates": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 5,
+          "coordinates": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 6,
+          "coordinates": [
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 7,
+          "coordinates": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "id": 8,
+          "coordinates": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": 1,
+          "partId": 1,
+          "type": "C3D8",
+          "connectivity": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "meshAssembly": "CaeMesh",
+      "unparsedPartBytes": 997
+    },
+    "definitions": {
+      "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+      "nodes": [
+        {
+          "id": 1,
+          "coordinates": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 2,
+          "coordinates": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 3,
+          "coordinates": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 4,
+          "coordinates": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 5,
+          "coordinates": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 6,
+          "coordinates": [
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 7,
+          "coordinates": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "id": 8,
+          "coordinates": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": 1,
+          "partId": 1,
+          "type": "C3D8",
+          "connectivity": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "meshAssembly": "CaeMesh",
+      "unparsedPartBytes": 997
+    },
+    "definitions-with-results": {
+      "inputSha256": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+      "nodes": [
+        {
+          "id": 1,
+          "coordinates": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 2,
+          "coordinates": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": 3,
+          "coordinates": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 4,
+          "coordinates": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": 5,
+          "coordinates": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 6,
+          "coordinates": [
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "id": 7,
+          "coordinates": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "id": 8,
+          "coordinates": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": 1,
+          "partId": 1,
+          "type": "C3D8",
+          "connectivity": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ],
+      "meshAssembly": "CaeMesh",
+      "unparsedPartBytes": 997
+    }
+  },
+  "rejected": [
+    "nonempty-geometry",
+    "oversized-node-count",
+    "unsupported-cell-type",
+    "unknown-node-reference"
+  ]
+}

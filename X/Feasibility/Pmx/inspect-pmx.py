@@ -32,6 +32,11 @@ def read_exact(stream,size):
 
 
 def framing(stream,max_inflated=MAX_INFLATED):
+    report, graph, _ = read_frames(stream, max_inflated)
+    return report, graph
+
+
+def read_frames(stream,max_inflated=MAX_INFLATED):
     if not 0<max_inflated<=MAX_INFLATED: raise ValueError("Invalid inflated-byte limit")
     size=stream.seek(0,2); stream.seek(0)
     if not 36<=size<=MAX_FILE: raise ValueError("File outside inspection size limits")
@@ -71,7 +76,7 @@ def framing(stream,max_inflated=MAX_INFLATED):
                          "nrbfBytes":graph_size,"nrbfSha256":hashlib.sha256(graph).hexdigest(),
                          "opaqueModelBytes":len(opaque_model),"opaqueModelSha256":hashlib.sha256(opaque_model).hexdigest()},
             "opaqueTail":{"offset":tail_offset,"bytes":size-tail_offset,"sha256":tail_hash.hexdigest()},
-            "inputUnchanged":True},graph
+            "inputUnchanged":True},graph,opaque_model
 
 
 def build_decoder(folder,commands):

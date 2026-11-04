@@ -1,5 +1,19 @@
 # Installable PrePoMax-X release delivery
 
+As of 4 November 2026, the task 0047 local macOS ARM64 DMG has passed copied-app
+verification, named-set creation, native solve and result display. The scoped
+static workflow is the current desktop checkpoint. The PMX read/write evidence
+covers a restricted result-free static workflow through research tools. Desktop
+Save/Open and full original-app interoperability remain open.
+[Desktop checkpoint](reports/session-named-set-authoring.md) ·
+[PMX checkpoint](reports/supported-project-persistence.md).
+
+The next product gates are the checked PMX workflow in the packaged desktop
+and a native Linux desktop installation on x64 and ARM64. The full 3.0.0 release
+also requires broader model, results, CAD and meshing coverage, resolution of
+both recorded correctness failures and the quadratic-tetrahedron gate, verified
+3.0.0 source correspondence, and the native platform and installer checks below.
+
 2026-11-02 scheduling: the [accelerated plan](proposals/accelerated-native-delivery.md)
 brings an internal installable desktop preview forward, followed by a scoped
 engineering alpha. Verify each artifact's stated capabilities; neither is final

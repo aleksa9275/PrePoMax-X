@@ -1,0 +1,32 @@
+{
+  "source": "Official Windows PrePoMax 3.0.0 through CrossOver 26.2",
+  "extraSetPmxSha256": "f40387606274c705431749a76892c78159c5ed00ea43a0d79810d04904bead66",
+  "extraNodeSet": {
+    "X1-1": [
+      2,
+      3,
+      6,
+      7
+    ]
+  },
+  "targets": [
+    {
+      "Role": "modulus",
+      "RecordId": 576,
+      "Offset": 63428,
+      "Value": "210000 MPa"
+    },
+    {
+      "Role": "force",
+      "RecordId": 568,
+      "Offset": 63298,
+      "Value": "25 N"
+    },
+    {
+      "Role": "magnitude",
+      "RecordId": 574,
+      "Offset": 63395,
+      "Value": "25 N"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "paths": [
+    {
+      "path": "/tmp/prepomaxx-task0045-bottles/Task0045-reference",
+      "allocatedKiB": 20
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-bottles/Task0045-stable",
+      "allocatedKiB": 849240
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-graph-build",
+      "allocatedKiB": 660
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-history-graph",
+      "allocatedKiB": 668
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-discovery",
+      "allocatedKiB": 684
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-owner",
+      "allocatedKiB": 688
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-shape",
+      "allocatedKiB": 696
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-mesh-build",
+      "allocatedKiB": 1524
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-results-build",
+      "allocatedKiB": 7748
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-deck-build",
+      "allocatedKiB": 15116
+    },
+    {
+      "path": "/tmp/prepomaxx-task0045-edited-solve",
+      "allocatedKiB": 72
+    },
+    {
+      "path": "/tmp/task0045-reconstruction",
+      "allocatedKiB": 48
+    },
+    {
+      "path": "/tmp/task0045-portable-write-solve",
+      "allocatedKiB": 24
+    },
+    {
+      "path": "/tmp/task0045-decimal-solve.1ygo0T",
+      "allocatedKiB": 48
+    },
+    {
+      "path": "/tmp/task0045-discovery-solve.87qMqg",
+      "allocatedKiB": 48
+    },
+    {
+      "path": "/tmp/task0045-final-solve.sleBKH",
+      "allocatedKiB": 48
+    },
+    {
+      "path": "/tmp/task0045-shape-solve.qf5DgY",
+      "allocatedKiB": 72
+    }
+  ],
+  "fixtureHashes": {
+    "Profile.pmx": "9287bdec4964962f2502e22524b2b060c1f2e5e09c74cbd608217bb1f698d9c2",
+    "cube-export.inp": "7aff4ef29d327ef72932a99174d9d071cdb8c5cc27a29e10364c2ca110e50e22",
+    "cube-results.dat": "9e696dbd14446cd8c7b7dd870a526b74f975ddd3bd09389491602a607e8326de",
+    "cube-results.frd": "8394ba500bd3083e5b550c0312766671518a0eaf8c658e4b1e275773a3733d26",
+    "cube.pmx": "930ddc0eecd0ddd215e801269dbb5a768e0a50d950b4627eda339c75a584cbf7",
+    "cube.pmx.graph.json": "194ceb7759f755bb477fa3e545d7dc9b1499e135fcf526f435b2d29105d01072",
+    "definitions-edited-export.inp": "82d11e97b8eb2f60ad26ce06c2f619f901f1c70776d7cff30fd68143c48a47a6",
+    "definitions-edited-reopened-export.inp": "82d11e97b8eb2f60ad26ce06c2f619f901f1c70776d7cff30fd68143c48a47a6",
+    "definitions-edited.pmx": "9ab316c4b2e7219849918bdc684f7cddca20a01c3e2d6a46d66a64f0af51b556",
+    "definitions-export.inp": "7bdc76eb0e7cbe43fa768950603b5114327e72578b15942d842cf7ccff15f9c9",
+    "definitions-reopened-export.inp": "7bdc76eb0e7cbe43fa768950603b5114327e72578b15942d842cf7ccff15f9c9",
+    "definitions-results-reopened-export.inp": "3fd0615f3e2da843b6185236bf3d99666a6bc04122235da80c14204490270a01",
+    "definitions-with-results.pmx": "fbad3c635801b5bc059da727056f0bfa53d8fdb73fab8b85163b88f6706564b3",
+    "definitions-with-results.pmx.graph.json": "4c9a1fe79d1e5407e37c4ef6319a11ac9ec0b9ad3c13956d42f1a6e29d104125",
+    "definitions.pmx": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+    "definitions.pmx.graph.json": "d32b213c9635c0f599d49de8bd31c13ce57174160c8fb9db055de87ef62168ef",
+    "official-decimal-edit.pmx": "2ec187107af7878ff724b97cc212f0110887cb2cf585aa59b5816fb66191ca53",
+    "official-extra-set-edited.pmx": "9cea369c462f23e9c575ac0c47081c80d4f03568c1479e18856534818a0ce4a4",
+    "official-extra-set.inp": "403a0c1528396dca9f269701628b555b2afc06316570a6c5a48e17ed9b90c4f2",
+    "official-extra-set.pmx": "f40387606274c705431749a76892c78159c5ed00ea43a0d79810d04904bead66",
+    "portable-decimal-edit.pmx": "e0b66febd79f33d550b68ba9dda6177027855224d7b5f631baa6ef0eabaea348",
+    "portable-decimal-resave.pmx": "477f072b004dc9f8f82dde70056d8cd8bfa673463eae8a4f0b2e92208b9d1a74",
+    "portable-decimal-shifted.pmx": "2ec187107af7878ff724b97cc212f0110887cb2cf585aa59b5816fb66191ca53",
+    "portable-edited-export.inp": "82d11e97b8eb2f60ad26ce06c2f619f901f1c70776d7cff30fd68143c48a47a6",
+    "portable-edited-original-resave-export.inp": "82d11e97b8eb2f60ad26ce06c2f619f901f1c70776d7cff30fd68143c48a47a6",
+    "portable-edited-original-resave.pmx": "7e4e6925ed20fe25b878fb3653ae0d4c938fca8d4f207115096d27a2ea952ac3",
+    "portable-edited.pmx": "b002a595839f59455244658fee7aa8e4492a418a62263fce348067efe969911b",
+    "portable-extra-set-edited.pmx": "38f224ac58ef42ca4eaea522e93c638feb4295cfe13e71cf3c2d27b88d62a84d",
+    "portable-extra-set-resave.pmx": "66d23da4ccf850a8a7835e121d492dc096951f8d08f9a002063f9f2336784ee3",
+    "shape-official-edit.inp": "9b77c7a1ae767f6b175a8021fe4ba3e9b2503dfc3885d3520b7e93ca89228209",
+    "shape-official-edit.pmx": "7171af460edea5f095cf1cdb223fe0a9b601bdde967561651756c2c94e91472d",
+    "shape-portable-official-export.inp": "9b77c7a1ae767f6b175a8021fe4ba3e9b2503dfc3885d3520b7e93ca89228209",
+    "shape-portable-original-resave.pmx": "e6001e9a25a99255389cda06c9202befaac72563365bdebecaf08eab57e3349c",
+    "shape-portable.pmx": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+    "shape-reduced-export.inp": "6883076a072cd67bd2927c58fd44c6d53d7e9db7fb32e8004d4597ed1742b7e9",
+    "shape-reduced.pmx": "aa629ff7cf1acac0992e8dbf369a73640395d8465e57aec089f85f91c36eaff8",
+    "shape-reference-export.inp": "b13e0011aef10bf3ca8a2467c1d98de4dd0a71bb294b14f87dbf50c6ca4aea95",
+    "shape-reference.pmx": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea"
+  },
+  "referenceReceiptHashes": {
+    "capture-shifted-records.py": "ccafa81b20593107abba8a422891c4401920033ef042ce372858da1c0603af19",
+    "controlled-capture.json": "b7691c75e05b0415dbc7f76b6ad385d7086471b4692ac70772d38bd02e40db75",
+    "controlled-write-linux-arm64.json": "5e6547938ca30b67e5d3ba38c2ec2415000b5fe9ed48898d11ae35d2a46336bd",
+    "controlled-write-original-readback.json": "9f481efbb39057197e05941c8852bc1900abae186deab8f03119965d639e1ed3",
+    "edit-decimal-reference.py": "8cfcdb1f610fc0de5fc24178afa37f874e0522491a162ede40eb1f2e7c07d77f",
+    "edit-definitions.py": "3ecdb957f61e65cfe609d577d6c516768ff2775d47f2305f10bc2e794684bfa9",
+    "edit-discovery-fixture.json": "ac1b3b901255d76435e79fb8004f877673024b3b2f96dc569c2183036c9db896",
+    "edit-discovery-linux-arm64.json": "3de7c97082da8f9f1f3945e26eb9a08459b9672df66c01f78638d1a31e0a8210",
+    "edit-discovery-original-readback.json": "3ac9140e6ff97e7f4486b2970730f68b74de77abdb828f7a1a5b7ad836c669fc",
+    "edit-extra-set-reference.py": "86f4a2159cb06ff6eaff8b4bff1686354af8828e10437daf8c266daf4b515108",
+    "edit-shape-reference.py": "bb113109b064b7236e0bc96e4b71847a9a2b97a4742ce3e6ca3ba98326cd08ee",
+    "edited-capture.json": "76716bd6ebde5c8cc9f33b0271c4e2c227e5043d5baa7bd96db752550fe9e301",
+    "history-linux-arm64.json": "14b3dea56cef73afb11f80a2d0b5cf92e8befa5720fabfcd83659786adb64eaa",
+    "history-macos-arm64.json": "14b3dea56cef73afb11f80a2d0b5cf92e8befa5720fabfcd83659786adb64eaa",
+    "mesh-prefix.json": "02bca9d03cc3ce9f343818dc80576524a390a302e4c173a6e8cac909181dd166",
+    "official-archive.json": "8261f8ce33a6a26943b5475c8fe50a1966c30ba1a2075ab00377a9f21763b862",
+    "parameterized-write-linux-arm64.json": "577d7bbd9badade04e761c2d950627c213778ed32e683484eafbfe8b9d64ffbc",
+    "parameterized-write-original-readback.json": "b411f938c10b85d39aa21c4917871b358454ad10cfc3329f7e260adffaf6fd18",
+    "profile-history-original-readback.json": "984dbf81ca582c89fad4066a3c38a08b3c9c59984eddbdeac4af1eeb0bc7ff81",
+    "read-discovered-edit.py": "4b73e941e21b64d9f18de145b680a0c8c7d33fa249c8d601df52cf5a10906399",
+    "read-portable-decimal-shifted.py": "2ad047598bccfee639208765b9b1072c97d48b54a53018fdccf22f45ad78824d",
+    "read-portable-decimal.py": "f33f2116e12836bec66c5c846966726fa9a60dbec2668f2829ce15cd2d010b0f",
+    "read-portable-edit.py": "087df45143f7112ace90663e72443e23be22bd1e79c225db37f872946f0c2923",
+    "read-profile-histories.py": "3eab8cbfddf36fa2457ed486790ce17cfff8d6878a319ce5606da0685233f201",
+    "read-shape-portable.py": "b9062dbf4e338f5f3f24a5c89153d84383e59ac4a708cb84df9bb1094c05449f",
+    "reconstruction-linux-arm64.json": "8059e850ee52118514fb4eaa83db5938913cd1be3a6a838b7172011813490e0b",
+    "reconstruction-macos-arm64.json": "5582c3a27d3f66d0883e10b6ccee0a0c9a2c40084fbd6b1b317bb6b5f0b880d3",
+    "reopen-definitions.py": "fb0a91998357a08970380bdcf233c1415fb642cc1a2913bada8a2571d26e2678",
+    "reopen-edited.py": "3cbdef8d14613248bbcf9aba7bc85df2449d67ab03301015730ffdd5090c7957",
+    "reopen-portable-resave.py": "2c7ae646696d2dd67e7358f1e867af93ca39f2a6dee94432c38e102897b2bec7",
+    "reopen-results.py": "2f242311fd49abd4384fbd7384cd97ded2d8c1dc8dea266a1287140d72124f96",
+    "save-cube.py": "61076625fb4b31b1918feeea023ad13fa720f3ea4c468095374e0732335c7864",
+    "save-definitions.py": "40f852beeb216f29f053ac8389e9828cea423e532f6d787c7d7e545edfe35e2c",
+    "save-results.py": "7249a494b0ace83f79b6e0d1d26726fbaa84d39f054d3d49dfc1b76aeeac13f7",
+    "save-shape-reduced.py": "af10861332f45731df9e2ae148f5503cc0bee7240a1a3b0cefd2d8d3ed6ce83d",
+    "save-shape-reference.py": "a0d66feb286173429a75bb1c6f914971c18cf23f4ff9604cef61fca2a2893a7a",
+    "shape-reduced.inp": "ad1ee25bb2f52e6ba512f20cdf7012c29310f977bc6fcaf7daea061b9376a9b4",
+    "shape-reference.inp": "b8a1720ace8160b3ffbe18e6c77b679bfddae628aca0895f7486959ff77aa220",
+    "shape-workflow-linux-arm64.json": "09a3d5a4a8741282403761d463658d758f4f49d200d415fb1ad3cfecc6707d30",
+    "shape-workflow-original-readback.json": "7ff0725f7464754515cba61f5974b8fdfb693fdc62c37f6e2a5958c6452fd0cc",
+    "shared-record-gate.json": "c8314aef655c0cee0745ba7b7af2823bbd527d23c33b27c853cf5b2dbc002a33",
+    "static-project-linux-arm64.json": "50987e79976eb25751a1d107fbfdf1dbcc2845a29f5d495a97dddcacf0736614",
+    "static-project-macos-arm64.json": "50987e79976eb25751a1d107fbfdf1dbcc2845a29f5d495a97dddcacf0736614"
+  },
+  "retainedArchiveSha256": "f4499f51e20536ad60d5e5bd87f67e4986a0dfdaf9e020bfc92b1dd1c85e30d9",
+  "filesystemAvailableBeforeBytes": 216129331200,
+  "filesystemAvailableAfterBytes": 217005633536,
+  "removedDirectoryCount": 17,
+  "fixtureAndEvidenceHashesMatch": true
+}

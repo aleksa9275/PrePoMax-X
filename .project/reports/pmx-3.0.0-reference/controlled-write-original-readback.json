@@ -1,0 +1,27 @@
+{
+  "inputSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+  "outputSha256": "b002a595839f59455244658fee7aa8e4492a418a62263fce348067efe969911b",
+  "editedGraphSha256": "8bafa2d5e8597cf0907da8eeba54987398c92fa9de97d7121c17b2b1a8d6f413",
+  "modelBlockSha256": "a9d373d3d0f8f7b5bc6fbece68b856046a7826f5f5d103ccdf6e2fdd58c0982a",
+  "patchedStringRecords": [
+    555,
+    561,
+    563
+  ],
+  "portableReadbackPassed": true,
+  "matchesOfficialEditedProjection": true,
+  "modelAndResultTailPreserved": true,
+  "rejected": [
+    "existing-output",
+    "source-as-output",
+    "other-valid-pmx"
+  ],
+  "originalExecutableContext": "Official Windows PrePoMax 3.0.0 through CrossOver 26.2",
+  "originalResaveSha256": "7e4e6925ed20fe25b878fb3653ae0d4c938fca8d4f207115096d27a2ea952ac3",
+  "originalOpenAndResaveDeckMatches": true,
+  "originalResavePortableProjectionMatches": true,
+  "canonicalDeckSha256": "e9748fdbfd1d252d9b7518c0b124e4d36047af0b15683673f1a8cc8015fc3a02",
+  "nativeMacFieldsMatchOfficialEdit": true,
+  "nativeMacFrdSha256": "3d5b681f317216a29a0d170b48cca115865717f0d21917f03c654d1696d65748",
+  "referenceFrdSha256": "3fd8340aebfcbd9154a22c8cccb9ee621df306a28983f6287c77741497fc5b0b"
+}

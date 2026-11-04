@@ -6,8 +6,10 @@ import hashlib
 import json
 import platform
 from pathlib import Path
+import re
 import subprocess
 import sys
+import tempfile
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
@@ -90,17 +92,25 @@ class FrameBridge(QtWidgets.QWidget):
         self.window.Finalize()
 
 
+def mesh_command():
+    return ([str(Path(sys._MEIPASS) / "hosts/mesh/PrePoMaxX.MeshScene")] if getattr(sys, "frozen", False) else
+            ["dotnet", str(ROOT / "X/Desktop/MeshScene/bin/Release/net10.0/PrePoMaxX.MeshScene.dll")])
+
+
 def decode(path):
     """Use the original reader assemblies in separate processes; no second parser."""
     packaged = getattr(sys, "frozen", False)
     if path.suffix.lower() == ".inp":
-        command = ([str(Path(sys._MEIPASS) / "hosts/mesh/PrePoMaxX.MeshScene")] if packaged else
-            ["dotnet", str(ROOT / "X/Desktop/MeshScene/bin/Release/net10.0/PrePoMaxX.MeshScene.dll")]) + [str(path)]
+        command = mesh_command() + [str(path)]
     elif path.suffix.lower() == ".frd":
         command = ([str(Path(sys._MEIPASS) / "hosts/results/PrePoMaxX.InspectResults")] if packaged else
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
         raise ValueError("This bounded viewport opens INP meshes or completed static C3D8 FRD snapshots.")
+    return run_reader(command)
+
+
+def run_reader(command):
     result = subprocess.run(command, capture_output=True, text=True, timeout=60)
     if result.returncode:
         raise ValueError(result.stderr.strip() or result.stdout.strip() or "Original reader failed")
@@ -166,6 +176,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
         jobbar = self.addToolBar("Static analysis")
+        self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
+        self.add_set_action.setEnabled(False)
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
         self.run_action = jobbar.addAction("Run analysis", self.run_model)
         self.example_action = jobbar.addAction("Solve example", self.run_example)
@@ -203,7 +215,7 @@ class Viewport(QtWidgets.QMainWindow):
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, self.definition['unitSystem'] or 'Choose units'])
         root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
         QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
-        for key, label in [('nodeSets', 'Imported node sets'), ('elementSets', 'Imported element sets')]:
+        for key, label in [('nodeSets', 'Node sets'), ('elementSets', 'Element sets')]:
             group = QtWidgets.QTreeWidgetItem(root, [label])
             for item in self.model_scene.get(key, []):
                 QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
@@ -224,6 +236,68 @@ class Viewport(QtWidgets.QMainWindow):
         tab = item.data(0, QtCore.Qt.ItemDataRole.UserRole)
         if tab is not None:
             self.configure_model(tab)
+
+    def add_set_dialog(self):
+        if self.job.active or self.model_scene is None:
+            return
+        dialog = QtWidgets.QDialog(self)
+        dialog.setWindowTitle('Add mesh set')
+        form = QtWidgets.QFormLayout(dialog)
+        kind = QtWidgets.QComboBox()
+        kind.addItem('Node set', 'node')
+        kind.addItem('Element set', 'element')
+        name = QtWidgets.QLineEdit()
+        name.setMaxLength(80)
+        ids = QtWidgets.QLineEdit()
+        ids.setMaxLength(12000)
+        ids.setPlaceholderText('Original mesh IDs, separated by commas or spaces')
+        pick = QtWidgets.QPushButton('Use picked ID')
+        selection = self.selection if self.scene is self.model_scene else None
+        pick.setEnabled(bool(selection))
+        if selection:
+            def use_pick():
+                field = 'nearestVertexNodeId' if kind.currentData() == 'node' else 'elementId'
+                ids.setText(str(selection[field]))
+            pick.clicked.connect(use_pick)
+        form.addRow('Kind', kind)
+        form.addRow('Name', name)
+        form.addRow('IDs', ids)
+        form.addRow('', pick)
+        buttons = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok |
+                                             QtWidgets.QDialogButtonBox.StandardButton.Cancel)
+        buttons.rejected.connect(dialog.reject)
+        form.addRow(buttons)
+
+        def apply():
+            try:
+                self.add_named_set(kind.currentData(), name.text().strip(), ids.text())
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+                QtWidgets.QMessageBox.critical(dialog, 'Cannot add mesh set', str(error))
+            else:
+                dialog.accept()
+
+        buttons.accepted.connect(apply)
+        dialog.exec()
+
+    def add_named_set(self, kind, name, labels):
+        if self.job.active or self.model_scene is None:
+            raise ValueError('Open an INP mesh and finish any active job before editing sets.')
+        if len(labels) > 12000:
+            raise ValueError('The set label list is too long.')
+        ids = ','.join(re.split(r'[,\s]+', labels.strip()))
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-set-') as directory:
+            original, updated = (Path(directory) / file for file in ('mesh.inp', 'updated.inp'))
+            original.write_bytes(self.mesh_bytes)
+            scene = run_reader(mesh_command() + ['add-set', str(original), str(updated), kind, name, ids])
+            mesh_bytes = updated.read_bytes()
+            if hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
+                raise ValueError('Edited mesh changed while loading the new set.')
+        if self.scene is self.model_scene:
+            self.scene = scene
+        self.model_scene, self.mesh_bytes = scene, mesh_bytes
+        self.analysis_valid = False
+        self.editor_dirty = True
+        self.update_model_tree()
 
     def configure_model(self, tab=0):
         if self.job.active:
@@ -273,6 +347,7 @@ class Viewport(QtWidgets.QMainWindow):
         active = state in ('Starting', 'Running', 'Cancelling')
         self.run_action.setEnabled(not active)
         self.configure_action.setEnabled(not active)
+        self.add_set_action.setEnabled(not active and self.model_scene is not None)
         self.open_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
         self.cancel_action.setEnabled(active and state != 'Cancelling')
@@ -330,6 +405,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
             self.analysis_valid = False
             self.editor_dirty = False
+            self.add_set_action.setEnabled(not self.job.active)
             self.update_model_tree()
 
     def show_scene(self, scene, path):

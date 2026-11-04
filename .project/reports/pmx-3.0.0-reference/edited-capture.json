@@ -1,0 +1,60 @@
+{
+  "origin": "Official Windows PrePoMax 3.0.0 under CrossOver 26.2",
+  "originalPmxSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+  "editedPmxSha256": "9ab316c4b2e7219849918bdc684f7cddca20a01c3e2d6a46d66a64f0af51b556",
+  "solverSha256": "c8eb0df883edff6bca85d0de05e9db188d6e08df5ed801044f31c1db7ee9b18b",
+  "editedCanonicalDeckSha256": "e9748fdbfd1d252d9b7518c0b124e4d36047af0b15683673f1a8cc8015fc3a02",
+  "editedReopenedCanonicalDeckIdentical": true,
+  "onlyExpectedMaterialAndLoadChanges": true,
+  "portableStaticGraphMatchesEditedExport": true,
+  "editedReopenedFrdFieldsIdentical": true,
+  "rawFrdValues": {
+    "baseline": {
+      "node2AxialDisplacementMm": 0.00047619,
+      "axialNodalStressMPa": [
+        99.996,
+        99.996,
+        99.996,
+        99.996,
+        99.996,
+        99.996,
+        99.996,
+        99.996
+      ],
+      "fixedFaceAxialReactionN": -100
+    },
+    "edited": {
+      "node2AxialDisplacementMm": 0.00190476,
+      "axialNodalStressMPa": [
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992
+      ],
+      "fixedFaceAxialReactionN": -200
+    },
+    "reopened": {
+      "node2AxialDisplacementMm": 0.00190476,
+      "axialNodalStressMPa": [
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992,
+        199.992
+      ],
+      "fixedFaceAxialReactionN": -200
+    }
+  },
+  "frdSha256": {
+    "baseline": "64f04a5110582f4c326ca5fd5c612c8d28d6f6518972c1a726a58b7965f5fafb",
+    "edited": "3fd8340aebfcbd9154a22c8cccb9ee621df306a28983f6287c77741497fc5b0b",
+    "reopened": "707b17ef41c6ed35a6bcdf9573dc44878ecf7d2554ce6f58173e9b174a8892f1"
+  }
+}

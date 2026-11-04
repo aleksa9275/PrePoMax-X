@@ -1,0 +1,26 @@
+{
+  "source": "Official Windows PrePoMax 3.0.0 under CrossOver 26.2",
+  "pmxSha256": "9287bdec4964962f2502e22524b2b060c1f2e5e09c74cbd608217bb1f698d9c2",
+  "entryId": "51",
+  "matchesPortableRead": true,
+  "officialReadback": {
+    "From_Field-1": {
+      "time": [
+        1.0
+      ],
+      "unit": "MPa",
+      "values": [
+        25.471271514892578
+      ]
+    },
+    "From_Field-1_STRESS_MISES_x2": {
+      "time": [
+        1.0
+      ],
+      "unit": "MPa",
+      "values": [
+        50.942543029785156
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "referenceExecutable": "Official Windows PrePoMax 3.0.0 via CrossOver 26.2",
+  "pmxSha256": {
+    "official-extra-set-edited": "9cea369c462f23e9c575ac0c47081c80d4f03568c1479e18856534818a0ce4a4",
+    "portable-extra-set-edited": "38f224ac58ef42ca4eaea522e93c638feb4295cfe13e71cf3c2d27b88d62a84d",
+    "portable-extra-set-resave": "66d23da4ccf850a8a7835e121d492dc096951f8d08f9a002063f9f2336784ee3"
+  },
+  "preservedExtraNodeSet": {
+    "X1-1": [
+      2,
+      3,
+      6,
+      7
+    ]
+  },
+  "modulusMPa": 123456.75,
+  "forcePerNodeN": 19.25,
+  "originalAppDecksMatch": true,
+  "originalAppResaveProjectionMatches": true,
+  "canonicalDeckSha256": "eeac52dada8f9ba5f1acfa8ab3f26565a4237cd6e831cc15b3549e5bc6cffece",
+  "nativeMacSolve": {
+    "matchedFields": [
+      "DISP",
+      "STRESS",
+      "FORC"
+    ],
+    "officialFrdSha256": "d834ed9d47f5e4af3316b0dccda101b9cbb622591886656cca9851b7e92b8dab",
+    "portableFrdSha256": "d834ed9d47f5e4af3316b0dccda101b9cbb622591886656cca9851b7e92b8dab"
+  }
+}

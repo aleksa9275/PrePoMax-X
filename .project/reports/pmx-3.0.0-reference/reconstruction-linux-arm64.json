@@ -1,0 +1,28 @@
+{
+  "verified": {
+    "definitions": {
+      "pmxSha256": "73a4faf9966942ffe32a5a4aff1c3deb8b808c1fb2538d95c613c9563f132bbf",
+      "nodes": 8,
+      "elements": 1,
+      "massDensity": 7.85e-09,
+      "material": "XSTEEL",
+      "step": "Step-1",
+      "solverExecuted": false,
+      "deckSha256": "694349135bcc6e67089dd644cc8922bf3333d7422358466c8b016cbba7effc41",
+      "originalExportSha256": "7bdc76eb0e7cbe43fa768950603b5114327e72578b15942d842cf7ccff15f9c9"
+    },
+    "definitions-edited": {
+      "pmxSha256": "9ab316c4b2e7219849918bdc684f7cddca20a01c3e2d6a46d66a64f0af51b556",
+      "nodes": 8,
+      "elements": 1,
+      "massDensity": 7.85e-09,
+      "material": "XSTEEL",
+      "step": "Step-1",
+      "solverExecuted": false,
+      "deckSha256": "f0eff5d4b6bb2c4fa787911f427aab75bc23989a7e71fb856990b4d6a524b03f",
+      "originalExportSha256": "82d11e97b8eb2f60ad26ce06c2f619f901f1c70776d7cff30fd68143c48a47a6"
+    }
+  },
+  "overwriteRejected": true,
+  "otherValidCaptureRejected": true
+}

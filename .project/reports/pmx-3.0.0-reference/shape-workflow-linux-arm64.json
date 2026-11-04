@@ -1,0 +1,36 @@
+{
+  "firstWrite": {
+    "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+    "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+    "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+    "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+    "patchedStringRecords": [
+      555,
+      561,
+      563
+    ],
+    "portableReadbackPassed": true
+  },
+  "secondWrite": {
+    "inputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+    "outputSha256": "a6525b52a8edd1a19f7f16e1da179c265ef8eb9fc6f8519d7b3e0dcd00c67021",
+    "editedGraphSha256": "ac1b018d6db88a167bc49482297d19d8b23fa5627ca9c365f61361bbda3cef12",
+    "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+    "patchedStringRecords": [
+      555,
+      561,
+      563
+    ],
+    "portableReadbackPassed": true
+  },
+  "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+  "officialDeckSemanticsMatch": true,
+  "refused": [
+    "unpinned-default",
+    "saved-results",
+    "unsupported-formulation",
+    "unsupported-version",
+    "nonempty-command-history",
+    "existing-output"
+  ]
+}

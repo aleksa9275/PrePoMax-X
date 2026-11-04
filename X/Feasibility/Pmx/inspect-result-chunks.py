@@ -20,7 +20,7 @@ def inspect(path):
             return value
         def integer(): return struct.unpack("<i",read(4))[0]
         header=read(32).rstrip(b"\0").decode("ascii")
-        if header not in {"PrePoMax v2.5.1 dev","PrePoMax v2.6.0"}: raise ValueError("Unverified version for results-frame probe")
+        if header not in {"PrePoMax v2.5.1 dev","PrePoMax v2.6.0","PrePoMax v3.0.0"}: raise ValueError("Unverified version for results-frame probe")
         main=integer()
         if not 0<main<=size-36: raise ValueError("Invalid main frame")
         stream.seek(main,1)
@@ -51,12 +51,17 @@ def inspect(path):
         fields=integer() if state==1 else 0
         if not 0<=fields<=10000: raise ValueError("Field count outside limits")
         for i in range(fields): chunk("field-"+str(i))
-        history=read(size-stream.tell())
-        if len(history)<4 or struct.unpack("<i",history[:4])[0] not in {-1,1}: raise ValueError("Unrecognized history trailer")
+        history_bytes=size-stream.tell()
+        if history_bytes<4: raise ValueError("Unrecognized history trailer")
+        history_flag=read(4)
+        if struct.unpack("<i",history_flag)[0] not in {-1,1}: raise ValueError("Unrecognized history trailer")
+        history_hash=hashlib.sha256(history_flag)
+        while stream.tell()<size:
+            history_hash.update(read(min(65536,size-stream.tell())))
         with path.open("rb") as source:
             if hashlib.file_digest(source,"sha256").hexdigest()!=initial_hash: raise ValueError("Input changed during inspection")
         return {"success":True,"inputSha256":initial_hash,"header":header,"resultCount":count,"resultNameSha256":hashlib.sha256(name).hexdigest(),
-                "fieldFrameCount":fields,"chunks":chunks,"opaqueHistoryTrailerBytes":len(history),"opaqueHistoryTrailerSha256":hashlib.sha256(history).hexdigest(),
+                "fieldFrameCount":fields,"chunks":chunks,"opaqueHistoryTrailerBytes":history_bytes,"opaqueHistoryTrailerSha256":history_hash.hexdigest(),
                 "limits":["Observed single-result versions only","Mesh/field payloads fingerprinted, not interpreted","History trailer remains opaque; no numerical or command equivalence claim"]}
 
 

@@ -1,0 +1,50 @@
+{
+  "verifiedOn": "macOS ARM64",
+  "sourceMeshSha256": "b74dde2612c0a9752b7f3589e3b3657863ee616f0815597ceb827066ffab290a",
+  "frozenEditedMeshSha256": "e7f06f29ab804fcbc2e1e7879a73520fe15d3908b50398d79fb77a9989f456d0",
+  "deckSha256": "73a6f831d144627054dc5b10fb38d72eb2f80cf2dc4dead29dac7c667afdcc0a",
+  "authoredNodeSet": {
+    "NewAxialNodes": [
+      2,
+      3,
+      6,
+      7
+    ]
+  },
+  "authoredElementSet": {
+    "NewSolid": [
+      1
+    ]
+  },
+  "submittedSetsUsedByDeck": true,
+  "analyticalChecks": [
+    {
+      "name": "all eight displacement IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all eight force IDs exactly once",
+      "passed": true
+    },
+    {
+      "name": "all displacement components match uniform uniaxial strain",
+      "passed": true
+    },
+    {
+      "name": "eight integration-point stresses",
+      "passed": true
+    },
+    {
+      "name": "axial stress 100 MPa, transverse/shear zero",
+      "passed": true
+    },
+    {
+      "name": "supported face balances 100 N",
+      "passed": true
+    },
+    {
+      "name": "global nodal-force sum zero",
+      "passed": true
+    }
+  ]
+}

@@ -17,6 +17,7 @@ def begin(app, window, output):
     state = {'phase': 'baseline', 'finished': False}
     mesh_path = examples() / 'cube-mesh.inp'
     original_mesh_hash = hashlib.sha256(mesh_path.read_bytes()).hexdigest()
+    authored_sets = {'node': ('ProbeLoadNodes', '2,3,6,7'), 'element': ('ProbeSolid', '1')}
 
     def check(name, passed):
         report['checks'].append({'name': name, 'passed': bool(passed)})
@@ -63,6 +64,11 @@ def begin(app, window, output):
             dialog.sections.table.item(0, 1).setText('ELASTIC')
             dialog.materials.table.item(0, 1).setText('105 GPa')
             dialog.loads.table.item(0, 2).setText('50 N')
+            for kind, choice in [('node', dialog.loads.table.cellWidget(0, 1)),
+                                 ('element', dialog.sections.table.cellWidget(0, 2))]:
+                index = choice.findData(authored_sets[kind][0])
+                check(kind + ' set available for assignment', index >= 0)
+                choice.setCurrentIndex(index)
             check('support free/constrained components survive editing', dialog.collect()['step']['constraints'] == original_constraints)
             dialog.tabs.setCurrentIndex(4)
             app.processEvents()
@@ -78,6 +84,31 @@ def begin(app, window, output):
             if isinstance(app.activeModalWidget(), QtWidgets.QDialog):
                 app.activeModalWidget().reject()
             state['edit_error'] = error
+
+    def author_set(kind):
+        def submit():
+            dialog = app.activeModalWidget()
+            try:
+                check('Add set opens the mesh set dialog', isinstance(dialog, QtWidgets.QDialog) and
+                      dialog.windowTitle() == 'Add mesh set')
+                choices = dialog.findChild(QtWidgets.QComboBox)
+                choices.setCurrentIndex(choices.findData(kind))
+                for field, value in zip(dialog.findChildren(QtWidgets.QLineEdit), authored_sets[kind], strict=True):
+                    field.setText(value)
+                buttons = dialog.findChild(QtWidgets.QDialogButtonBox)
+                buttons.button(QtWidgets.QDialogButtonBox.StandardButton.Ok).click()
+            except Exception as error:
+                state['edit_error'] = error
+                if isinstance(dialog, QtWidgets.QDialog):
+                    dialog.reject()
+
+        QtCore.QTimer.singleShot(150, submit)
+        window.add_set_action.trigger()
+        if 'edit_error' in state:
+            raise state['edit_error']
+        entries = window.model_scene['nodeSets' if kind == 'node' else 'elementSets']
+        check(kind + ' set added to the original mesh scene', any(
+            item['name'] == authored_sets[kind][0] for item in entries))
 
     def completed(result):
         if state['finished']:
@@ -98,6 +129,9 @@ def begin(app, window, output):
             if state['phase'] == 'baseline':
                 check('model tree retains source model after result loading', window.model_path == mesh_path.resolve() and
                       window.model_tree.topLevelItem(0).text(0) == mesh_path.name)
+                for kind in authored_sets:
+                    author_set(kind)
+                report['authoredSets'] = authored_sets
                 QtCore.QTimer.singleShot(150, edit_modal)
                 window.configure_action.trigger()
                 if 'edit_error' in state:

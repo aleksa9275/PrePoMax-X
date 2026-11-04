@@ -4,21 +4,35 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 
-// Record inventory only: never load a type named in the payload or request arrays/values.
+// Record inspection never loads a type named by the payload.
 internal static class Program
 {
     static int Main(string[] args)
     {
-        if(args.Length!=2 || args[0]!="--inventory")
-        { Console.WriteLine("{\"success\":false,\"error\":\"Use --inventory <bounded NRBF file>\"}"); return 2; }
+        if(args.Length!=2 || args[0] is not ("--inventory" or "--static-graph" or "--command-history" or "--edit-strings" or "--static-edit-contract"))
+        { Console.WriteLine("{\"success\":false,\"error\":\"Expected a supported inspection command and a bounded NRBF file\"}"); return 2; }
         try
         {
             using var stream=File.OpenRead(args[1]);
-            if(stream.Length>128L*1024*1024 || stream.Length<18) throw new InvalidDataException("NRBF byte limit or minimum length exceeded");
+            bool projection = args[0] != "--inventory";
+            long limit = (projection ? 16L : 128L) * 1024 * 1024;
+            if(stream.Length>limit || stream.Length<18) throw new InvalidDataException("NRBF byte limit or minimum length exceeded");
             if(!NrbfDecoder.StartsWithPayloadHeader(stream)) throw new InvalidDataException("NRBF header not recognized");
             var root=NrbfDecoder.Decode(stream,out var records,leaveOpen:true);
             if(stream.Position!=stream.Length) throw new InvalidDataException("Trailing bytes after NRBF MessageEnd");
-            if(records.Count>1_000_000) throw new InvalidDataException("Decoded record count exceeds inspection limit");
+            if(records.Count>(projection ? 100_000 : 1_000_000)) throw new InvalidDataException("Decoded record count exceeds inspection limit");
+            if (projection)
+            {
+                object summary = args[0] switch
+                {
+                    "--static-graph" => StaticGraph.Read(root),
+                    "--command-history" => StaticGraph.ReadCommandHistory(root),
+                    "--static-edit-contract" => StaticGraph.ValidateEditContract(root, records.Values, ReadGraphBytes(stream)),
+                    _ => StaticGraph.LocateEditStrings(root, records.Values, ReadGraphBytes(stream))
+                };
+                Console.WriteLine(JsonSerializer.Serialize(summary));
+                return 0;
+            }
             var groups=records.Values.GroupBy(record=>record.TypeName.AssemblyQualifiedName)
                 .OrderBy(group=>group.Key,StringComparer.Ordinal).Select(group=>new {
                     type=group.Key,
@@ -55,5 +69,13 @@ internal static class Program
             Console.WriteLine(JsonSerializer.Serialize(new {success=false,errorType=error.GetType().Name,error=error.Message}));
             return 1;
         }
+    }
+
+    private static byte[] ReadGraphBytes(FileStream stream)
+    {
+        byte[] graph = new byte[checked((int)stream.Position)];
+        stream.Position = 0;
+        stream.ReadExactly(graph);
+        return graph;
     }
 }

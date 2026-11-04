@@ -1,5 +1,55 @@
 # Project status
 
+## Current — task 0047: session named set authoring
+
+The desktop now creates node and element sets from original IDs or a picked
+ID, validates through the original C# reader, and freezes them into jobs.
+The source macOS desktop and native cube solve pass. The local ARM64 DMG
+passed mounted and copied-app verification. The packaged set and solve
+workflow passes through both viewports. One DMG remains for user testing.
+[Task 0047 report](reports/session-named-set-authoring.md).
+The task 0045 cleanup removed 17 temporary directories while preserving the
+reference archive, fixtures, and receipts. General PMX compatibility remains
+open. [Cleanup receipt](reports/pmx-3.0.0-reference/cleanup-2026-11-04.json).
+
+## Current — task 0045: original PMX compatibility
+
+D057 selects full original .pmx compatibility. The first milestone is
+bidirectional original-Windows readback for a static-solid model, followed by
+broader coverage against the verified 3.0.0 baseline. The prior synthetic
+exchange proof verified input and deck preservation on macOS. General PMX
+model reconstruction and writing remain pending. The official
+3.0.0 archive is pinned by hash. Three controlled PMX captures through CrossOver
+include a reopened static-solid model and one reopened result. Exact upstream
+source correspondence and a controlled nonempty history fixture are pending.
+The portable project probe now binds the original binary mesh to its graph,
+recovers units, named sets, parts and the captured static definitions, and
+matches all 104 raw embedded result values against the source FRD by node ID.
+Mac and Linux ARM64 receipts match byte for byte. A real original-app
+material/load edit now has a reopened deck and numerical reference for the
+future writer proof. The history reader matches 96 raw DAT series and
+recovers the official Profile command order and cursor. The original app
+confirmed the two saved Profile result series through CrossOver. The two
+pinned static captures now reconstruct through original engineering objects
+and reproduce the official-export native Mac solver fields. The controlled
+portable writer generates the same edited PMX bytes on Mac and Linux ARM64.
+The original Windows app under CrossOver reopens and resaves it, and its
+export reproduces the official edited reference deck and solver fields. The
+writer now handles variable-length decimal edits in both pinned graph layouts
+by identifying the three string records without fixed offsets. Both generated
+files pass original-app readback for the independent decimal reference. The
+writer now discovers the three edit records through the model graph and
+handles a third pinned project with a duplicated node set and new record IDs.
+The writer now rejects shared target equation containers and string records
+while reproducing the verified output hashes for those inputs. An opt-in
+shape-checked workflow now edits, reopens and rebuilds a deck from an unlisted
+result-free static-solid PMX. Mac and Linux ARM64 receipts match, and the
+official Windows executable under CrossOver resaves the edit with matching
+native Mac solver fields. Task 0045 remains open. General
+FeModel reconstruction, visualization, command replay, desktop Open/Save
+and bidirectional original Windows interoperability remain pending.
+[Compatibility plan](reports/supported-project-persistence.md).
+
 ## Current — task 0046: completed-preview storage retention
 
 Maintainer reports the task 0044 preview seems to work and requests cleanup before
@@ -9,8 +59,8 @@ small build records, all jobs and useful shared solver/runtime/dependency inputs
 Earlier keep-DMG instructions are superseded by D056. Old local app/DMG/host links
 below describe historical verified payloads; rebuild before reuse after pruning.
 User installed app/state/private models are outside this cleanup. This is storage
-maintenance, not new application/platform/release acceptance. Task 0045 is next
-and remains unstarted. Both correctness failures/tetra gate and all release gates stay.
+maintenance, not new application/platform/release acceptance. The task 0045
+proof follows this cleanup. Both correctness failures/tetra gate and all release gates stay.
 
 Completed: 74 generated directories removed; observed **41.98 GiB** free-space
 gain, **230 GiB available**. All 292 retained evidence files and nine pinned

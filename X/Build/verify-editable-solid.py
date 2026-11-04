@@ -23,6 +23,7 @@ def main():
     parser.add_argument('--app', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--viewport', choices=('frame-bridge', 'native-cocoa'), default='native-cocoa')
+    parser.add_argument('--require-authored-sets', action='store_true')
     args = parser.parse_args()
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -53,16 +54,37 @@ def main():
         check('submitted nodal force is 50 N per node', definitions['step']['loads'][0]['forcePerNode'] == ['50 N', '0', '0'])
         decks = module('deck_checks', ROOT / 'X/Analysis/static_deck_checks.py')
         original = decks.snapshot((baseline / 'analysis.inp').read_text())
-        changed = decks.snapshot((edited / 'analysis.inp').read_text())
+        edited_text = (edited / 'analysis.inp').read_text()
+        changed = decks.snapshot(edited_text)
+        authored = gui.get('authoredSets')
+        if args.require_authored_sets:
+            check('authored sets verified by packaged editor', authored is not None)
+        load_region = 'X1'
+        expected_sections = original['sections']
+        if authored:
+            check('job definition assigns newly authored sets', definitions['step']['loads'][0]['nodeSet'] ==
+                  'ProbeLoadNodes' and definitions['sections'][0]['elementSet'] == 'ProbeSolid')
+            load_region = 'ProbeLoadNodes'
+            expected_sections = [('PROBESOLID', 'ELASTIC')]
+            frozen_mesh = (Path(gui['edited']['inputDirectory']) / 'mesh.inp').read_text()
+            for source, text in (('submitted mesh', frozen_mesh), ('executed deck', edited_text)):
+                cards = decks.cards(text)
+                for keyword, name, labels in (('NSET', 'PROBELOADNODES', {2, 3, 6, 7}),
+                                               ('ELSET', 'PROBESOLID', {1})):
+                    observed = {int(value) for card, params, rows in cards
+                                if card == '*' + keyword and params.get(keyword) == name
+                                for row in rows for value in row if value}
+                    check(source + ' preserves ' + name + ' membership', observed == labels)
 
         def edited_deck_ok(snapshot):
             return (snapshot['materials'] == {'ELASTIC': (105000.0, 0.3)} and
                 snapshot['loads'] == {(node, 1): 50.0 for node in (2, 3, 6, 7)} and
-                all(snapshot[key] == original[key] for key in ('nodes', 'elements', 'sections',
+                snapshot['sections'] == expected_sections and
+                all(snapshot[key] == original[key] for key in ('nodes', 'elements',
                     'constraints', 'outputs', 'stepCount', 'staticCount', 'endCount')))
 
         check('original deck reflects edits and preserves mesh supports sections outputs', edited_deck_ok(changed))
-        tampered = decks.snapshot((edited / 'analysis.inp').read_text().replace('X1, 1, 50', 'X1, 1, 51'))
+        tampered = decks.snapshot(edited_text.replace(f'{load_region}, 1, 50', f'{load_region}, 1, 51'))
         check('altered edited-deck force rejected', not edited_deck_ok(tampered))
         reference = module('solver_reference', ROOT / 'X/Feasibility/Solver/run-reference.py')
         baseline_data = reference.parse_dat((baseline / 'analysis.dat').read_text())
