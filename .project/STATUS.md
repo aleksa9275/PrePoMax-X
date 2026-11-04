@@ -1,5 +1,15 @@
 # Project status
 
+## Current — task 0053: portable VIS reader
+
+The original VIS metadata and tessellation reader runs in the portable
+probe. macOS ARM64, Linux ARM64 and native GitLab Linux x64 pass the exact
+L-bracket comparison and produce identical decoded results. Windows part
+construction and local selection numbering follow the shared read stage.
+Native CAD import and matching-source recovery remain open.
+[Task record](tasks/0053-portable-vis-reader.md) ·
+[Verification](reports/portable-vis-reader.md).
+
 ## Current — task 0052: original L-bracket CAD reference
 
 The pinned Windows 3.0.0 executable under CrossOver passed the L-bracket

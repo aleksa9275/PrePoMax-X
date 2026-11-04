@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0053 shares the original VIS metadata, tessellation and merge code
+with a portable probe. The task 0052 L-bracket VIS matches the original
+capture on macOS ARM64, Linux ARM64 and native GitLab Linux x64.
+Read .project/reports/portable-vis-reader.md for checks and publication.
+Windows part creation and selection numbering follow this boundary.
+Native CAD source recovery, full 3.0.0 parity, both correctness failures,
+the tetrahedron gate and release acceptance remain open.
+
 Task 0052 removed the verified Ubuntu .deb and kept its evidence, jobs and
 task 0050 rebuild archive. Original Windows 3.0.0 under CrossOver passes
 the L-bracket STEP geometry checks and yields repeatable BREP/VIS outputs

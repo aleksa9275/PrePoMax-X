@@ -7,3 +7,5 @@ boundary with the exact task 0052 VIS file and compare the decoded
 geometry with the original 3.0.0 application capture.
 
 Record platform evidence and the remaining CAD, mesh and release gates.
+
+Completed within this scope. [Reader and comparison evidence](../reports/portable-vis-reader.md).

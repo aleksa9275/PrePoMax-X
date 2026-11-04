@@ -1,0 +1,46 @@
+{
+  "implementation": "5507ff75630db33f94b9a84495286b91ea69f50f",
+  "fixture": "X/Feasibility/Cad/fixtures/l-bracket.vis",
+  "fixtureSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+  "portable": {
+    "osx-arm64": {
+      "report": "X/Feasibility/Cad/artifacts/task0053/macos-arm64.json",
+      "checksPassed": 292,
+      "decodedSha256": "ccb7c45612b915a755b21b83de06b24d9ab28c30c73abbe90241ee9c88d62eaf"
+    },
+    "linux-arm64": {
+      "report": "X/Feasibility/Cad/artifacts/task0053/linux-arm64-final.json",
+      "checksPassed": 292,
+      "decodedSha256": "ccb7c45612b915a755b21b83de06b24d9ab28c30c73abbe90241ee9c88d62eaf"
+    },
+    "linux-x64": {
+      "pipeline": 3028209392,
+      "job": 17744290285,
+      "checksPassed": 292,
+      "decodedSha256": "ccb7c45612b915a755b21b83de06b24d9ab28c30c73abbe90241ee9c88d62eaf"
+    }
+  },
+  "coreReplayChecksPassed": 10,
+  "extractionAudit": {
+    "parseHelpersCompared": true,
+    "mergeHelpersUnchanged": true,
+    "legacyMeasurementBodiesUnchanged": true
+  },
+  "cleanup": {
+    "temporaryBuildFoldersRemoved": [
+      "/private/tmp/prepomaxx-vis053-build",
+      "/private/tmp/prepomaxx-vis053-native",
+      "/private/tmp/prepomaxx-vis053-native2"
+    ]
+  },
+  "publication": {
+    "remote": "origin/research/native-feasibility",
+    "remoteVerified": true,
+    "pipeline": 3028209392,
+    "automaticJobsPassed": 6,
+    "historicalCompatibility": "manual",
+    "nativeSolverJob": 17744290284,
+    "nativeSolverChecksPassed": 15,
+    "artifactBundleDownloaded": false
+  }
+}
