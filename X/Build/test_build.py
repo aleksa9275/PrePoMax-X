@@ -37,6 +37,15 @@ class BuildBoundaries(unittest.TestCase):
             self.assertEqual(build.main(["package", "--target", "osx-arm64", "--format", "dmg", "--output", str(output)]), 1)
             self.assertFalse(output.exists())
 
+    def test_linux_package_requires_tar_and_explicit_solver_before_creating_output(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(build.platform, "system", return_value="Linux"), \
+                patch.object(build.platform, "machine", return_value="aarch64"), contextlib.redirect_stderr(io.StringIO()):
+            output = Path(folder) / "never-created"
+            command = ["package", "--target", "linux-arm64", "--pmx-preview", "--output", str(output)]
+            self.assertEqual(build.main(command), 1)
+            self.assertEqual(build.main(command + ["--format", "app", "--solver-build", "solver"]), 1)
+            self.assertFalse(output.exists())
+
     def test_staged_host_changes_cannot_reuse_evidence(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

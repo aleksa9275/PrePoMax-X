@@ -19,14 +19,14 @@
     },
     "linux-x64": {
       "os": "Linux", "architecture": "X64", "machines": ["x86_64", "amd64"],
-      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": null,
+      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": "linux",
       "renderWindows": ["vtkXOpenGLRenderWindow", "vtkEGLRenderWindow", "vtkOSOpenGLRenderWindow"],
       "plannedFormats": ["tar.gz", "deb", "rpm", "arch-package"],
       "minimumSupportedOs": null, "glibcBaseline": null
     },
     "linux-arm64": {
       "os": "Linux", "architecture": "Arm64", "machines": ["aarch64", "arm64"],
-      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": null,
+      "executableSuffix": "", "solverAdapter": "linux", "desktopPackageAdapter": "linux",
       "renderWindows": ["vtkXOpenGLRenderWindow", "vtkEGLRenderWindow", "vtkOSOpenGLRenderWindow"],
       "plannedFormats": ["tar.gz", "deb", "rpm", "arch-linux-arm-package"],
       "minimumSupportedOs": null, "glibcBaseline": null

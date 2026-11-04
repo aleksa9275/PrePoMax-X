@@ -22,7 +22,11 @@ HOSTS = {
 }
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 def load_module(path, name):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -78,6 +82,9 @@ class Build:
         inputs = [CATALOG_PATH, ROOT / "ThirdParty/Sources/source-lock.json",
             *sorted((ROOT / "ThirdParty/Build").glob("*.py")),
             *sorted((ROOT / "ThirdParty/Build/platforms").glob("*.py"))]
+        if self.target["desktopPackageAdapter"] == "linux":
+            inputs.extend([ROOT / f"X/Desktop/requirements-{self.target_id}.txt",
+                           ROOT / "X/Desktop/INSTALL-linux.md"])
         self.report["buildInputs"] = {p.relative_to(ROOT).as_posix(): sha(p) for p in inputs}
         for source in inputs:
             target = reproduction / "source" / source.relative_to(ROOT)
@@ -154,10 +161,13 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
     app = helper.package(build, ROOT, solver_build)
     if package_format == "dmg":
         helper.dmg(build, ROOT, app)
+    elif package_format == "tar.gz":
+        helper.archive(build, app)
     build.report.update(kind="native-static-workflow-preview" if solver_build else "native-viewport-candidate", app=str(app), sourceIdentity=identity,
         fileHashes=file_hashes(app),
         symlinkTargets={p.relative_to(app).as_posix(): os.readlink(p) for p in sorted(app.rglob("*")) if p.is_symlink()},
-        scope="Ad-hoc local preview; no clean-machine/signing/release acceptance", success=True)
+        scope=("Local Linux preview; no distro support or release acceptance" if adapter == "linux" else
+               "Ad-hoc local preview; no clean-machine/signing/release acceptance"), success=True)
     (build.output / "package.json").write_text(json.dumps(build.report, indent=2) + "\n")
 
 
@@ -185,15 +195,16 @@ def main(argv=None):
     parser.add_argument("action", choices=["plan", "build", "package"])
     parser.add_argument("--target", choices=list(catalog()["targets"]), required=True)
     parser.add_argument("--component", choices=["hosts", "solver"], default="hosts")
-    parser.add_argument("--format", choices=["app", "dmg"], default="app")
+    parser.add_argument("--format", choices=["app", "dmg", "tar.gz"])
     parser.add_argument("--solver-build", type=Path, help="Explicit verified native solver build for desktop jobs")
     parser.add_argument("--pmx-preview", action="store_true", help="Bundle the checked static PMX desktop editor")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--jobs", type=int, default=6)
     args = parser.parse_args(argv)
-    if args.pmx_preview and (args.action != "package" or args.target != "osx-arm64"):
-        parser.error("--pmx-preview requires a macOS desktop package")
     target = catalog()["targets"][args.target]
+    adapter = target["desktopPackageAdapter"]
+    if args.pmx_preview and (args.action != "package" or adapter is None):
+        parser.error("--pmx-preview requires a supported desktop package")
     if args.action == "plan":
         print(json.dumps({"target": args.target, "data": target, "matchingNativeHost": native(target),
             "managedCrossPublish": True, "nativeSolverRecipe": target["solverAdapter"] is not None,
@@ -208,8 +219,12 @@ def main(argv=None):
             field = "desktopPackageAdapter" if args.action == "package" else "solverAdapter"
             if target[field] is None:
                 raise ValueError("Target recipe remains pending: " + field)
-        if args.action == "package" and args.format == "dmg" and (args.target != "osx-arm64" or not args.solver_build):
-            raise ValueError("Local DMG requires osx-arm64 and an explicit --solver-build")
+        if args.action == "package":
+            args.format = args.format or ("tar.gz" if adapter == "linux" else "app")
+            if adapter == "linux" and (args.format != "tar.gz" or not args.solver_build):
+                raise ValueError("Linux preview requires tar.gz and an explicit --solver-build")
+            if adapter == "macos" and (args.format == "tar.gz" or (args.format == "dmg" and not args.solver_build)):
+                raise ValueError("macOS preview requires app or dmg; dmg needs an explicit --solver-build")
         build = Build(args.target, args.output)
         build.identity()
         if args.action == "package":
@@ -231,7 +246,8 @@ def main(argv=None):
     finally:
         if build:
             build.finish()
-    print(json.dumps({k: build.report.get(k) for k in ["success", "target", "kind", "app", "elapsedSeconds", "error"]}))
+    print(json.dumps({k: build.report.get(k) for k in ["success", "target", "kind", "app", "elapsedSeconds", "error"]}
+                     | ({"archive": build.report["archive"]} if "archive" in build.report else {})))
     return 0 if build.report["success"] else 1
 
 if __name__ == "__main__":

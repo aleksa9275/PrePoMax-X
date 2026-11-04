@@ -52,7 +52,7 @@ the same new output argument. Use the isolated Python environment with the pinne
 X/Desktop packaging requirements. Common publication builds the two reader hosts;
 the Mac helper bundles Qt/Python/VTK and verifies its ad-hoc signature. Target data
 is included in the app for renderer expectations. Direct embedding B002 remains;
-the frame-copy viewport is still a candidate. Other OS desktop/package adapters,
+the frame-copy viewport is still a candidate. Windows desktop packaging,
 MSI/DEB/RPM/Arch package creation and clean-machine/Developer-ID tests are pending.
 
 Local workflow preview DMG (ad-hoc app signature, no notarization):
@@ -73,10 +73,50 @@ Add `--pmx-preview` to the shared macOS package command to bundle the checked
 PMX 3.0.0 editor. **Open static PMX…** opens the result-free C3D8 subset for
 modulus and axial-force edits and Save As to a new project file. The package
 uses the public Microsoft NRBF decoder pinned at 10.0.14. The legacy offline
-research build keeps its existing SDK decoder reference. The static PMX dialog
-and the INP solver workflow are separate in this preview.
+research build keeps its existing SDK decoder reference. Reopen the edited PMX
+to run it through the same native job and results viewport.
 
 [Install](../Desktop/INSTALL-macos.md) · [Uninstall and reset](../Desktop/UNINSTALL-macos.md).
+
+## Linux desktop archive
+
+Use native Ubuntu 24.04 with the .NET 10 SDK, CPython 3.12 and the native
+solver build tools listed above. Install the preview build extras
+(`python3-venv libpython3.12 patchelf`) and graphics/runtime packages:
+
+    sudo apt-get install libgl1 libegl1 libgl1-mesa-dri libxrender1 libdbus-1-3 \
+      libfontconfig1 fonts-dejavu-core libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 \
+      libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xinput0 \
+      libsm6 libglib2.0-0t64 libicu74 libssl3t64 libgssapi-krb5-2 zlib1g
+
+Run with the matching RID (`linux-arm64` or `linux-x64`):
+
+    rid=linux-arm64
+    python3 -m venv /tmp/prepomaxx-desktop
+    /tmp/prepomaxx-desktop/bin/python -m pip install --require-hashes --only-binary=:all: -r "X/Desktop/requirements-$rid.txt"
+    python3 X/Build/build.py build --target "$rid" --component solver --output X/Build/artifacts/linux-solver
+    /tmp/prepomaxx-desktop/bin/python X/Build/build.py package --target "$rid" --format tar.gz \
+      --solver-build X/Build/artifacts/linux-solver/solver --pmx-preview --output X/Build/artifacts/linux-preview
+
+The archive in `dist/` contains the launchable folder. Extract it intact; see
+[Linux install and uninstall](../Desktop/INSTALL-linux.md). The adapter
+checks the source solver and its ELF libraries against the native build
+report, then relocates the compiler/BLAS libraries next to the solver. The
+system supplies its loader, glibc and display stack. The archived app uses
+the shared frame bridge. PMX remains opt-in.
+
+For verification under Xvfb (`xvfb xauth`):
+
+    LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1400x1000x24" \
+      python3 X/Build/verify-linux-preview.py --package X/Build/artifacts/linux-preview \
+        --output X/Build/artifacts/linux-preview-check
+
+Pass `--pmx-fixture` and `--pmx-reference-frd` to additionally exercise the
+retained task 0045 fixture against the task 0049 official-export solve.
+The Linux x64 CI workflow exercises the archive when desktop/package inputs
+change and retains reports, logs and the screenshot. It does not publish
+the archive. Xvfb proves rendering and workflow behavior through a virtual
+display; physical desktop, GPU/Wayland and distro support are separate.
 
 Every output directory must be new. `build.json` retains source/dirty patch/input
 identity, exact commands/logs, target, file hashes and native-smoke scope. The
@@ -88,7 +128,7 @@ and native runtime relocation remain separate release work.
 
     python3 -m unittest discover -s X/Build -p test_build.py
 
-Seven focused controls cover wrong-host/unsupported native operations, false
+Focused controls cover wrong-host/unsupported native operations, false
 cross-run claims and changed/wrong-target/symlinked host evidence or missing ELF
 runtime dependencies. A dedicated Linux CI job builds/solves the tiny cube when
 native sources/consumers/build inputs change; GUI-only edits keep shorter checks.

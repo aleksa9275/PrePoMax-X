@@ -1,9 +1,9 @@
 # Compile native dependencies only when their sources/consumers/build inputs change.
-# GUI-only edits keep the existing shorter Linux engineering jobs.
+# Exercise the extracted x64 desktop preview on packaging/desktop changes.
 native-cpu-workflow-linux-x64:
   extends: .portable-packages
   stage: test
-  image: mcr.microsoft.com/dotnet/sdk:10.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0-noble
   tags: [saas-linux-small-amd64]
   timeout: 10m
   variables:
@@ -12,6 +12,17 @@ native-cpu-workflow-linux-x64:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
   rules:
     - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "web"'
+      variables:
+        BUILD_LINUX_DESKTOP: "1"
+    - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "push"'
+      changes:
+        - X/Build/**/*
+        - X/Desktop/**/*
+        - X/Feasibility/Pmx/**/*
+        - X/Feasibility/PmxMesh/**/*
+        - X/Feasibility/PmxDeck/**/*
+      variables:
+        BUILD_LINUX_DESKTOP: "1"
     - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "push"'
       changes:
         - ThirdParty/Build/**/*
@@ -38,6 +49,14 @@ native-cpu-workflow-linux-x64:
     - python3 X/Build/build.py build --target linux-x64 --output X/Build/artifacts/linux-x64-hosts
     - python3 X/Build/build.py build --target linux-x64 --component solver --jobs 2 --output X/Build/artifacts/linux-x64-native
     - tini -s -- python3 ThirdParty/Build/verify-workflow.py --build X/Build/artifacts/linux-x64-native/solver --hosts-dir X/Build/artifacts/linux-x64-hosts --output X/Build/artifacts/linux-x64-workflow
+    - |
+      if [ "${BUILD_LINUX_DESKTOP:-}" = 1 ]; then
+        apt-get install -y --no-install-recommends python3-venv libpython3.12 patchelf xvfb xauth libgl1 libegl1 libgl1-mesa-dri libxrender1 libdbus-1-3 libfontconfig1 fonts-dejavu-core libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xinput0 libsm6 libglib2.0-0t64
+        python3 -m venv /tmp/prepomaxx-desktop
+        /tmp/prepomaxx-desktop/bin/python -m pip install --require-hashes --only-binary=:all: -r X/Desktop/requirements-linux-x64.txt
+        /tmp/prepomaxx-desktop/bin/python X/Build/build.py package --target linux-x64 --format tar.gz --pmx-preview --solver-build X/Build/artifacts/linux-x64-native/solver --output X/Build/artifacts/linux-x64-desktop
+        LIBGL_ALWAYS_SOFTWARE=1 tini -s -- xvfb-run -a -s "-screen 0 1400x1000x24" python3 X/Build/verify-linux-preview.py --package X/Build/artifacts/linux-x64-desktop --output X/Build/artifacts/linux-x64-desktop-check
+      fi
   artifacts:
     when: always
     expire_in: 30 days
@@ -50,3 +69,8 @@ native-cpu-workflow-linux-x64:
       - X/Build/artifacts/linux-x64-native/solver/*.json
       - X/Build/artifacts/linux-x64-native/solver/*.log
       - X/Build/artifacts/linux-x64-workflow/
+      - X/Build/artifacts/linux-x64-desktop/build.json
+      - X/Build/artifacts/linux-x64-desktop/*.log
+      - X/Build/artifacts/linux-x64-desktop-check/*.json
+      - X/Build/artifacts/linux-x64-desktop-check/*.stderr
+      - X/Build/artifacts/linux-x64-desktop-check/desktop-workflow.png
