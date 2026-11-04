@@ -34,11 +34,11 @@ into the shared application; preserve intentional upstream behavior and units.
 | Native solve | Mac ARM64/Linux x64 analytical static cube; desktop start/cancel/status | Analysis/backend breadth, capacity/performance and native other-target acceptance |
 | Visualization | INP/C3D8 FRD, contours, original IDs/values; opt-in direct Mac child-view proof | Full vtkControl pipeline, clipping/highlighting, deformation, input/DPI/performance and other native desktops |
 | Results/history | Original bounded FRD fields/invariants and static-shaped DAT histories | Full original results orchestration, shell/dynamic outputs and interactive histories |
-| Persistence | macOS preview opens, edits, saves, renders and runs the checked result-free static PMX subset; edited output matches the original-app readback fixture; jobs retain the source PMX hash and immutable inputs | Expand original-app interoperability across the full project, results and history corpus under D057 |
+| Persistence | macOS and Linux ARM64 previews open, edit, save, render and run the checked result-free static PMX subset; edited output matches the original-app readback fixture; jobs retain the source PMX hash and immutable inputs | Expand original-app interoperability across the full project, results and history corpus under D057 |
 | CAD/meshing | Original source/native inventory and research fixtures retained | Matching custom sources/builds, native import/repair/mesh and full geometry/selection behavior |
 | Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
 | Engineering correctness | Strict accepted-scope checks retained | Both known element failures and quadratic-tetrahedron measurement gate remain |
-| Distribution | Internal ad-hoc Mac DMG; shared four-RID hosts | Native Windows/Linux desktop/package acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
+| Distribution | Internal ad-hoc Mac DMG and native Linux desktop archive; shared four-RID hosts | Native Windows installer, Linux distro packages and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
 
 ## Future release cadence
 

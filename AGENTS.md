@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0050 adds a native Linux desktop archive for both Linux targets. The
+extracted ARM64 preview passes the INP and checked static PMX workflows in a
+separate Ubuntu 24.04 runtime container with Xvfb/Mesa. The saved PMX, executed
+deck and original decoded results match task 0049. Read
+.project/reports/linux-desktop-preview.md for the retained archive, native x64
+CI, dependency setup and cleanup. The next packaging proof is a native
+Debian-family install/uninstall. Keep the current Mac image and the Linux
+ARM64 archive while needed; both correctness failures, the tetrahedron gate,
+full 3.0.0 workflow and all release acceptance remain open.
+
 Task 0049 connects a checked result-free C3D8 PMX to the macOS model tree,
 viewport and native CalculiX job. Both copied-app viewports pass the full
 reopen/solve workflow and match the original 3.0.0 export's decoded fields.

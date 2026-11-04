@@ -1,5 +1,18 @@
 # Project status
 
+## Current — task 0050: native Linux desktop archive
+
+The shared desktop and checked static PMX workflow now build as a native Linux
+archive. The extracted ARM64 archive runs the shipped INP example and the
+retained PMX edit/save/reopen/solve workflow under X11 in a separate Ubuntu
+runtime container. The saved PMX, executed deck and decoded fields match the
+task 0049 reference. Exact-commit GitLab pipeline #3028048004 passed all six
+automatic jobs, including x64 packaging and the extracted INP workflow.
+Physical desktop and distro package acceptance remain open; a Debian-family
+install/uninstall proof is the next packaging increment.
+[Task record](tasks/0050-linux-desktop-preview.md) ·
+[Verification](reports/linux-desktop-preview.md).
+
 ## Current — task 0049: reopened PMX native solve
 
 The opt-in macOS preview displays a supported static PMX in the model tree and

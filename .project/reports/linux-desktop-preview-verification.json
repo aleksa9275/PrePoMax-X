@@ -1,0 +1,291 @@
+{
+  "implementation": "b55882eca795ad2d911c2f99b046b83b36c3e01c",
+  "arm64": {
+    "archive": {
+      "path": "X/Build/artifacts/task0050-arm64-delivery/dist/PrePoMax-X-Preview-linux-arm64.tar.gz",
+      "bytes": 415668457,
+      "sha256": "a80ab8336b34884369a5c60783ce676b0fba2e6189adee7447eec06b4e793a41"
+    },
+    "manifest": "X/Build/artifacts/task0050-arm64-delivery/package.json",
+    "verification": "X/Build/artifacts/task0050-arm64-delivery-check/verification.json",
+    "screenshot": "X/Build/artifacts/task0050-arm64-delivery-check/desktop-workflow.png",
+    "vm": "Podman AppleHV, native-architecture Ubuntu 24.04.5 ARM64",
+    "runtime": "Separate Ubuntu 24.04.5 ARM64 runtime container with Xvfb/Mesa; dotnet, ccx and gcc absent from PATH",
+    "buildLibc": "glibc 2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "sdk": "10.0.402",
+    "solverRelocation": {
+      "originalBuildReportSha256": "503480db2c14829c368bcfdadcf287934402f890d07fc6d1e9da695ee97884e4",
+      "originalExecutableSha256": "49a14bda11a75ee7d43c1fd17b2379f7a9a5a6a3b77aff17309c5a9b5652a6cc",
+      "originalRegistrySha256": "e85c6974526fccbef149abf2d7d219ce5371d38e4a76d7c0866ba6fbe0ae7d26",
+      "originalRuntimes": {
+        "/lib/aarch64-linux-gnu/libopenblas.so.0": "4f04c974ceb53b9bad6b6dc5d606881450e3a8835837ad07c4636d10c8acfe81",
+        "/lib/aarch64-linux-gnu/libgfortran.so.5": "91ee38590e45e4702ee8d275c13e556384cf3ba3b1ac0a163921c5dd036a462a",
+        "/lib/aarch64-linux-gnu/libm.so.6": "5e0391562de36de323fb9cb0f2c1b6bd6d034c840b1dac018499f5fe4ded1b4a",
+        "/lib/aarch64-linux-gnu/libmvec.so.1": "ecf27aef2109bfe2e251e037e2a5bb252c19077cbf30a4913b50e6ea6e69dc63",
+        "/lib/aarch64-linux-gnu/libgomp.so.1": "33c8bcb7d33228fe5101bfeb201bcaff4563d4ecf09497229b9deba522ebaf3d",
+        "/lib/aarch64-linux-gnu/libgcc_s.so.1": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+        "/lib/aarch64-linux-gnu/libc.so.6": "0f1905dc27dbc6715875c70527bc8da846a10084c9c483e9d8ff76dce8d69d0e",
+        "/lib/ld-linux-aarch64.so.1": "390027e5f45f236bd1838bc54bf464c5ff01d260ab9f8b415ea8276641bce505"
+      },
+      "bundledLibraries": {
+        "libopenblas.so.0": "/lib/aarch64-linux-gnu/libopenblas.so.0",
+        "libgfortran.so.5": "/lib/aarch64-linux-gnu/libgfortran.so.5",
+        "libgomp.so.1": "/lib/aarch64-linux-gnu/libgomp.so.1",
+        "libgcc_s.so.1": "/lib/aarch64-linux-gnu/libgcc_s.so.1"
+      },
+      "relocatedFiles": {
+        "ccx": "59f34d9354898ed869e875588a3399fcb68d997014aa365b344c46d5d46d9474",
+        "libgcc_s.so.1": "45a54623a113b2184fadceb5da70a227b47afcbb4b83362451a06a62349228bf",
+        "libgfortran.so.5": "f7b9769f1c9aace2fdd9fce3b794e8004c5938ff540c8ecbdd57141840a54f31",
+        "libgomp.so.1": "f6600eece63dd9d85d9d46acb4cfd691e263eecff79b48da6acdfbb5fc65e656",
+        "libopenblas.so.0": "8d1bb32a2c4f3e961986687fe91e50841e62af9e65e7828d93f1ffb289f7c984"
+      },
+      "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+      "adapterSha256": "5f165406edeb9c98f7c9c0a828262e86dd70803a0988b4afb69c84fa5462db18"
+    },
+    "appFiles": 2149,
+    "appLinks": 244,
+    "renderer": "vtkXOpenGLRenderWindow",
+    "qtVersion": "6.10.2",
+    "vtkVersion": "9.5.2",
+    "guiChecks": [
+      {
+        "name": "desktop native solve and result loading",
+        "passed": true
+      },
+      {
+        "name": "native render window",
+        "passed": true
+      },
+      {
+        "name": "original IDs retained",
+        "passed": true
+      },
+      {
+        "name": "field scalar mapping",
+        "passed": true
+      },
+      {
+        "name": "VTK hit resolves original element ID",
+        "passed": true
+      },
+      {
+        "name": "nearest vertex resolves original node ID",
+        "passed": true
+      },
+      {
+        "name": "selected coordinates preserved",
+        "passed": true
+      },
+      {
+        "name": "selected nodal value uses original value order",
+        "passed": true
+      },
+      {
+        "name": "resize renders",
+        "passed": true
+      },
+      {
+        "name": "displayed frame has mesh/legend pixels",
+        "passed": true
+      },
+      {
+        "name": "window capture",
+        "passed": true
+      }
+    ],
+    "analyticalChecks": [
+      {
+        "name": "all eight displacement IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all eight force IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all displacement components match uniform uniaxial strain",
+        "passed": true
+      },
+      {
+        "name": "eight integration-point stresses",
+        "passed": true
+      },
+      {
+        "name": "axial stress 100 MPa, transverse/shear zero",
+        "passed": true
+      },
+      {
+        "name": "supported face balances 100 N",
+        "passed": true
+      },
+      {
+        "name": "global nodal-force sum zero",
+        "passed": true
+      }
+    ],
+    "alteredDisplacementRejected": true,
+    "pmx": {
+      "success": true,
+      "viewport": "frame-bridge",
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Baseline project opened in the model tree and viewport",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen renders the original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Unsupported PMX preserves the active model",
+          "passed": true
+        },
+        {
+          "name": "Run analysis launched the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Native solver completed the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Frozen inputs identify the reopened PMX and validated definition",
+          "passed": true
+        },
+        {
+          "name": "Executed deck matches the original C# validation",
+          "passed": true
+        },
+        {
+          "name": "Result fields loaded in the viewport with the PMX model retained",
+          "passed": true
+        },
+        {
+          "name": "Both project files are unchanged after solve",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+        "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+        "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+        "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+        "patchedStringRecords": [
+          555,
+          561,
+          563
+        ],
+        "portableReadbackPassed": true
+      },
+      "job": {
+        "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+        "inputs": {
+          "meshSha256": "03cb153ead9a89c42acb2fbedb1cdf5eb29e6c35ca2375d336d0bf06fb43f6bc",
+          "analysisSha256": "d8fd1345d7535364b1abb646d86eafc6f39811d86289d1ce7ecafddc7dd448ba",
+          "scope": "Immutable submitted job input; not project persistence",
+          "sourcePmxSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61"
+        },
+        "frdSha256": "6036fd9994ccb69d60766c21b2bc4c9e27084410fd28179703c211b21b6c4cd3",
+        "requiredOutputs": [
+          ".frd",
+          ".sta"
+        ]
+      }
+    },
+    "pmxReferenceFrdSha256": "275513774758569531c54fc8dad6be708594ad7674cef377865f40352f89526f",
+    "pmxDecodedResultsMatch": true,
+    "packagedSolverLauncherTestsPassed": 4,
+    "buildBoundaryTestsPassed": 9,
+    "cleanup": {
+      "removedKiBByPath": {
+        "task0050-arm64-freeze-failure/hosts": 535144,
+        "task0050-arm64-freeze-failure/build": 0,
+        "task0050-arm64-freeze-failure/dist": 0,
+        "task0050-arm64-package/hosts": 535144,
+        "task0050-arm64-package/build": 21824,
+        "task0050-arm64-package/dist": 1594224,
+        "task0050-arm64-final/hosts": 535144,
+        "task0050-arm64-final/build": 21880,
+        "task0050-arm64-final/dist": 1623896,
+        "task0050-arm64-delivery/hosts": 535144,
+        "task0050-arm64-delivery/build": 21880,
+        "task0050-arm64-delivery/dist/PrePoMax-X-Preview": 1213768,
+        "task0050-arm64-verification/Installed preview": 1183220,
+        "task0050-arm64-final-check/Installed preview": 1212628,
+        "task0050-arm64-verified/Installed preview": 1212628,
+        "task0050-arm64-delivery-check/Installed preview": 1212696,
+        "task0050-arm64-solver/solver/work": 54544
+      },
+      "totalRemovedKiB": 11513764,
+      "observedFreeGainBytes": 5201207296,
+      "stoppedTaskContainersRemoved": 8
+    },
+    "containerImages": {
+      "buildBase": "27c38b4417f399491c60ba15f35bf450ffcea6d57c78ccbc5ce3c9fb05cfcc88",
+      "runtimeBase": "1f1aeedbd16d617d1e09524c511cbbfb3b9748526f73ef36325366eee8347f8c"
+    }
+  },
+  "gitlabX64": {
+    "ref": "refs/heads/research/native-feasibility",
+    "remoteVerified": true,
+    "pipeline": 3028048004,
+    "job": 17742939786,
+    "status": "passed",
+    "automaticPassed": [
+      "analysis-workflow-linux-x64",
+      "execution-workflow-linux-x64",
+      "native-cpu-workflow-linux-x64",
+      "research-linux-x64",
+      "results-workflow-linux-x64",
+      "shared-core-linux-x64"
+    ],
+    "manual": [
+      "portable-compatibility-linux-x64"
+    ],
+    "runnerCpu": "Intel Xeon Platinum 8581C",
+    "imageDigest": "sha256:de4fe90a98845d75910b9769662465c84de1a934665c431279d1382b2bddc02b",
+    "nativeSolverWorkflowChecksPassed": 15,
+    "desktopArchiveBytes": 449497843,
+    "desktopArchiveSha256": "8b806a63e2aa8910ab21661e08c119a29b3e022f77e3c80056688ef11f34c4dd",
+    "extractedInpSolveAndRenderPassed": true,
+    "pmxToolingPackaged": true,
+    "pmxFixtureExercised": false,
+    "verificationScope": "Exact commit, native runner and package hash observed in GitLab job log",
+    "archiveUploaded": false,
+    "artifactBundleDownloaded": false
+  }
+}

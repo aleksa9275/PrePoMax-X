@@ -13,3 +13,5 @@ deck and original-reader results with the task 0049 reference.
 This is an internal archive. Debian/Fedora/Arch packages and distro floors,
 general PMX, full 3.0.0 parity, both correctness failures and the tetrahedron
 gate, platform release tests and signing all remain open.
+
+Completed within this scope. [Archive, verification, cleanup and publication](../reports/linux-desktop-preview.md).
