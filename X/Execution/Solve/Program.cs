@@ -114,11 +114,21 @@ internal static class Program
                 var builds=registry.GetProperty("builds").EnumerateArray().Where(b=>b.GetProperty("os").GetString()==SolverBuilds.HostOs&&b.GetProperty("architecture").GetString()==SolverBuilds.HostArchitecture).Select(b=>b.GetProperty("id").GetString()).ToArray();
                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,pinnedBuilds=builds,solverAvailable=builds.Length==0?(bool?)false:null,binaryAvailabilityChecked=false,solverExecuted=false}));return 0;
             }
-            if(args.Length!=7||args[0]!="run-static") {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] validate-static <mesh.inp> <analysis.json> | thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static <build-id> <solver-directory> <mesh.inp> <analysis.json> <new-run-directory> <timeout-seconds>");return 2;}
+            if(args.Length!=7||args[0] is not ("run-static" or "run-static-pmx")) {Console.Error.WriteLine("Usage: PrePoMaxX.Solve [--registry <explicit-build-registry.json>] validate-static <mesh.inp> <analysis.json> | thread-plan [--threads auto|N] [--jobs N] | availability | inspect-monitor <status.sta> <convergence.cvg> | run-static|run-static-pmx <build-id> <solver-directory> <mesh.inp> <definition.json> <new-run-directory> <timeout-seconds>");return 2;}
             var build=SolverBuilds.Select(registry,args[1]);string executable=SolverBuilds.ValidateFiles(build,Path.GetFullPath(args[2]));
             double timeout=double.Parse(args[6],CultureInfo.InvariantCulture);
             if(!double.IsFinite(timeout)||timeout<=0||timeout>86400)throw new InvalidDataException("Timeout must be finite and in (0,86400] seconds.");
-            var mesh=MeshFiles.Read(args[3]);var spec=AnalysisFiles.Read(args[4]);string deck=AnalysisFiles.Build(mesh,spec);
+            var mesh=MeshFiles.Read(args[3]);
+            string deck;
+            bool hasHistory=false;
+            if(args[0]=="run-static-pmx")
+                deck=PmxStaticDeck.Build(mesh,args[4]).Text;
+            else
+            {
+                var spec=AnalysisFiles.Read(args[4]);
+                deck=AnalysisFiles.Build(mesh,spec);
+                hasHistory=spec.Step.NodalHistorySets.Length+spec.Step.ElementHistorySets.Length>0;
+            }
             string directory=Path.GetFullPath(args[5]);
             if(Directory.Exists(directory)||File.Exists(directory))throw new IOException("Run directory must be new.");
             // Parent exists, and a CreateNew reservation prevents two CLI instances
@@ -139,7 +149,7 @@ internal static class Program
                 // DAT is requested by history outputs, not by field-only runs.
                 // Empty/unrequested DAT must not turn a completed FRD/STA run
                 // into failure; requested histories still require nonempty DAT.
-                string[] requiredOutputs=spec.Step.NodalHistorySets.Length+spec.Step.ElementHistorySets.Length>0
+                string[] requiredOutputs=hasHistory
                     ?new[]{".dat",".frd",".sta"}:new[]{".frd",".sta"};
                 bool outputsPresent=requiredOutputs.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});
                 bool success=job.JobStatus==JobStatus.OK&&versionMatches&&outputsPresent;

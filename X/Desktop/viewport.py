@@ -131,6 +131,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.current_path = None
         self.model_path = None
         self.model_scene = None
+        self.pmx_session = None
         self.mesh_bytes = None
         self.definition = None
         self.analysis_valid = False
@@ -144,6 +145,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.open_action = toolbar.addAction("Open INP / FRD", self.open_dialog)
         self.pmx_action = toolbar.addAction("Open static PMX…", self.open_pmx_dialog)
         self.pmx_action.setVisible(pmx_available())
+        self.edit_pmx_action = toolbar.addAction("Edit PMX…", self.edit_pmx)
+        self.edit_pmx_action.setVisible(False)
         toolbar.addAction("Fit", self.fit)
         self.fields = QtWidgets.QComboBox()
         self.fields.setMinimumWidth(330)
@@ -215,7 +218,8 @@ class Viewport(QtWidgets.QMainWindow):
         if self.model_scene is None:
             QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP mesh', 'or Solve example'])
             return
-        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, self.definition['unitSystem'] or 'Choose units'])
+        units = self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
+        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, units or 'Choose units'])
         root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
         QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
         for key, label in [('nodeSets', 'Node sets'), ('elementSets', 'Element sets')]:
@@ -283,7 +287,7 @@ class Viewport(QtWidgets.QMainWindow):
         dialog.exec()
 
     def add_named_set(self, kind, name, labels):
-        if self.job.active or self.model_scene is None:
+        if self.job.active or self.model_scene is None or self.pmx_session is not None:
             raise ValueError('Open an INP mesh and finish any active job before editing sets.')
         if len(labels) > 12000:
             raise ValueError('The set label list is too long.')
@@ -305,6 +309,9 @@ class Viewport(QtWidgets.QMainWindow):
     def configure_model(self, tab=0):
         if self.job.active:
             return
+        if self.pmx_session is not None:
+            self.edit_pmx()
+            return
         if self.model_scene is None:
             QtWidgets.QMessageBox.information(self, 'Open a mesh', 'Open an INP mesh or use Solve example before configuring an analysis.')
             return
@@ -321,7 +328,12 @@ class Viewport(QtWidgets.QMainWindow):
         if not self.analysis_valid:
             self.configure_model()
         if self.model_scene is not None and self.analysis_valid:
-            self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
+            if self.pmx_session is not None:
+                pmx = self.pmx_session
+                self.start_job(self.model_path, None, definition=pmx.definition, mesh_bytes=pmx.mesh_bytes,
+                               pmx_sha256=pmx.project['inputSha256'])
+            else:
+                self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
 
     def run_example(self):
         if not self.confirm_discard():
@@ -331,14 +343,15 @@ class Viewport(QtWidgets.QMainWindow):
         self.analysis_valid = True
         self.run_model()
 
-    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None):
+    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None, pmx_sha256=None):
         try:
             if definition is None:
                 self.load(mesh)
             else:
                 self.show_scene(self.model_scene, self.model_path)
-            self.job.start(mesh, analysis, self.jobs_root, definition=definition, mesh_bytes=mesh_bytes)
-            self.job_output.setPlainText(f"Job: {self.job.directory}\nMesh: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
+            self.job.start(mesh, analysis, self.jobs_root, definition=definition,
+                           mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256)
+            self.job_output.setPlainText(f"Job: {self.job.directory}\nSource: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             self.job_label.setText("Cannot start")
             self.job_output.setPlainText(str(error))
@@ -349,8 +362,9 @@ class Viewport(QtWidgets.QMainWindow):
     def job_state(self, state):
         active = state in ('Starting', 'Running', 'Cancelling')
         self.run_action.setEnabled(not active)
-        self.configure_action.setEnabled(not active)
-        self.add_set_action.setEnabled(not active and self.model_scene is not None)
+        self.configure_action.setEnabled(not active and self.pmx_session is None)
+        self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
+        self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
@@ -410,22 +424,41 @@ class Viewport(QtWidgets.QMainWindow):
     def open_pmx(self, path):
         if self.job.active:
             raise ValueError('Finish the active job before opening a static PMX.')
-        dialog = PmxDialog(self, PmxSession(path))
-        dialog.exec()
+        if not self.confirm_discard():
+            return
+        pmx = PmxSession(path)
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-mesh-') as directory:
+            mesh = Path(directory) / 'mesh.inp'
+            mesh.write_bytes(pmx.mesh_bytes)
+            scene = decode(mesh)
+        if hashlib.sha256(pmx.mesh_bytes).hexdigest() != scene['SourceSha256']:
+            raise ValueError('The displayed PMX mesh differs from the validated model.')
+        self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition['analysis'], pmx=pmx)
+
+    def edit_pmx(self):
+        if not self.job.active and self.pmx_session is not None:
+            PmxDialog(self, self.pmx_session).exec()
 
     def load(self, path, *, as_model=False, definition=None):
         mesh_bytes = path.read_bytes() if as_model else None
         scene = decode(path)
         if as_model and hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
             raise ValueError('Mesh changed during import. Reopen it before configuring an analysis.')
-        self.show_scene(scene, path)
         if as_model:
-            self.model_path, self.model_scene, self.mesh_bytes = path.resolve(), scene, mesh_bytes
-            self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
-            self.analysis_valid = False
-            self.editor_dirty = False
-            self.add_set_action.setEnabled(not self.job.active)
-            self.update_model_tree()
+            self.set_model(path, scene, mesh_bytes, definition)
+        else:
+            self.show_scene(scene, path)
+
+    def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None):
+        self.show_scene(scene, path)
+        self.model_path, self.model_scene, self.mesh_bytes = path.resolve(), scene, mesh_bytes
+        self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
+        self.pmx_session = pmx
+        self.analysis_valid = pmx is not None
+        self.editor_dirty = False
+        self.edit_pmx_action.setVisible(pmx is not None)
+        self.job_state(self.job.state)
+        self.update_model_tree()
 
     def show_scene(self, scene, path):
         points = vtkPoints()
@@ -555,7 +588,7 @@ def main():
     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
     parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
     parser.add_argument("--pmx-probe", type=Path, nargs=2, metavar=("INPUT", "OUTPUT"),
-                        help="Exercise static PMX edit, save and reopen in the desktop")
+                        help="Exercise static PMX edit, save, reopen and solve in the desktop")
     args = parser.parse_args()
     if args.viewport_probe and (args.self_test or args.run_example):
         parser.error("Use --viewport-probe separately from solve/self-test")
@@ -569,9 +602,12 @@ def main():
     window = Viewport(args.viewport)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe)
+    window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe or args.pmx_probe)
     if args.input:
-        window.load(args.input.resolve(), as_model=args.input.suffix.lower() == '.inp')
+        if args.input.suffix.lower() == '.pmx':
+            window.open_pmx(args.input)
+        else:
+            window.load(args.input.resolve(), as_model=args.input.suffix.lower() == '.inp')
     window.show()
     window.vtk.render()
     result = {"success": False}

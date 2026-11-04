@@ -14,7 +14,7 @@ def resources():
     return Path(sys._MEIPASS) if getattr(sys, 'frozen', False) else ROOT
 
 
-def solver_command():
+def solver_command(*, pmx=False):
     if getattr(sys, 'frozen', False):
         base = resources()
         registry = base / 'native-solver/build-registry.json'
@@ -22,7 +22,7 @@ def solver_command():
             registry = base.parent / 'Resources/native-solver/build-registry.json'
         profile = json.loads(registry.read_text())['builds'][0]
         return [str(base / 'hosts/solve/PrePoMaxX.Solve'), '--registry', str(registry),
-                'run-static', profile['id'], str(registry.parent / 'bin')]
+                'run-static-pmx' if pmx else 'run-static', profile['id'], str(registry.parent / 'bin')]
     raise ValueError('Use a packaged solver preview for desktop jobs; no development solver is selected implicitly.')
 
 
@@ -57,7 +57,8 @@ class DesktopJob(QtCore.QObject):
     def active(self):
         return self.process is not None and self.process.state() != QtCore.QProcess.ProcessState.NotRunning
 
-    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *, definition=None, mesh_bytes=None):
+    def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *,
+              definition=None, mesh_bytes=None, pmx_sha256=None):
         if self.active:
             raise ValueError('A job is already running.')
         mesh = Path(mesh).resolve()
@@ -68,7 +69,7 @@ class DesktopJob(QtCore.QObject):
         if definition is not None:
             definition_bytes = (json.dumps(definition, indent=2, allow_nan=False) + '\n').encode('utf-8')
             mesh_bytes = mesh.read_bytes() if mesh_bytes is None else mesh_bytes
-        command = list(command if command is not None else solver_command())
+        command = list(command if command is not None else solver_command(pmx=pmx_sha256 is not None))
         parent_directory = Path(parent_directory).resolve()
         parent_directory.mkdir(parents=True, exist_ok=True)
         # The original host reserves/creates this new directory atomically.
@@ -85,10 +86,13 @@ class DesktopJob(QtCore.QObject):
                 stream.write(mesh_bytes)
             with analysis.open('xb') as stream:
                 stream.write(definition_bytes)
-            (self.input_directory / 'input-identity.json').write_text(json.dumps({
+            identity = {
                 'meshSha256': hashlib.sha256(mesh_bytes).hexdigest(),
                 'analysisSha256': hashlib.sha256(definition_bytes).hexdigest(),
-                'scope': 'Immutable submitted job input; not project persistence'}, indent=2) + '\n')
+                'scope': 'Immutable submitted job input; not project persistence'}
+            if pmx_sha256 is not None:
+                identity['sourcePmxSha256'] = pmx_sha256
+            (self.input_directory / 'input-identity.json').write_text(json.dumps(identity, indent=2) + '\n')
         self.stdout, self.stderr = bytearray(), bytearray()
         self.result, self.requested_cancel = None, False
         self.command = command + [str(mesh), str(analysis), str(self.directory), str(timeout)]

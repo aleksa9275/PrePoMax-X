@@ -1,10 +1,9 @@
 using System.Globalization;
 using System.Text.Json;
 using CaeGlobals;
-using CaeModel;
-using FileInOut.Output.Calculix;
 using PrePoMaxX.MeshDeck;
 using PrePoMaxX.StaticDeck;
+using PrePoMaxX.Solve;
 
 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
@@ -13,56 +12,10 @@ try
     if (args.Length != 3)
         throw new ArgumentException("Expected mesh input, controlled PMX definition and new deck path.");
     var mesh = MeshFiles.Read(args[0]);
-    using var input = File.OpenRead(args[1]);
-    if (input.Length > AnalysisFiles.MaximumDefinitionBytes)
-        throw new InvalidDataException("Controlled definition exceeds the byte limit.");
-    var model = JsonSerializer.Deserialize<ControlledDefinition>(input,
-        new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
-        ?? throw new InvalidDataException("Missing controlled definition.");
-    var (materials, sections, step) = AnalysisFiles.Create(model.Analysis);
-    if (materials.Length != 1 || model.Density is not { Length: 2 } ||
-        model.Analysis.UnitSystem != "mm-N-s-C" ||
-        (model.OutputFrequency != int.MinValue && model.OutputFrequency < 1))
-        throw new InvalidDataException("Unexpected controlled PMX material, unit or output definition.");
-
-    // MM_TON_S_C uses MPa, N, mm and tonne/mm³. Build in the existing
-    // static deck boundary, then add the original density keyword separately.
-    StringDensityConverter.SetUnit = "t/mm³";
-    var density = new Density(new[] { new[] { 1d, 0d } });
-    density.DensityTemp[0][0].SetEquation(model.Density[0]);
-    density.DensityTemp[0][1].SetEquation(model.Density[1]);
-    double massDensity = density.DensityTemp[0][0].Value;
-    if (!double.IsFinite(massDensity) || massDensity <= 0 ||
-        !double.IsFinite(density.DensityTemp[0][1].Value))
-        throw new InvalidDataException("Expected finite positive mass density and finite temperature.");
-
-    step.OutputFrequency = model.OutputFrequency;
-    step.FieldOutputs.Clear();
-    foreach (var output in model.Outputs)
-    {
-        switch (output.Type)
-        {
-            case "CaeModel.NodalFieldOutput":
-                step.AddFieldOutput(new NodalFieldOutput(output.Name, (NodalFieldVariable)output.Variables));
-                break;
-            case "CaeModel.ElementFieldOutput":
-                step.AddFieldOutput(new ElementFieldOutput(output.Name, (ElementFieldVariable)output.Variables));
-                break;
-            default:
-                throw new InvalidDataException("Unsupported controlled field output type.");
-        }
-    }
-    MeshFiles.Measure(mesh);
-    string deck = StaticAnalysisDeckWriter.Write(mesh, materials, sections, step);
-    int sectionOffset = deck.IndexOf("*Solid section", StringComparison.OrdinalIgnoreCase);
-    if (sectionOffset <= 0 || deck[sectionOffset - 1] != '\n')
-        throw new InvalidDataException("Original deck has no section boundary for the density keyword.");
-    var keyword = new CalDensity(density, false);
-    deck = deck.Insert(sectionOffset, keyword.GetKeywordString() + keyword.GetDataString());
-    deck = "*Heading\nUnit system: MM_TON_S_C\nModel space: ThreeD\n" + deck;
+    var (deck, massDensity, material, step) = PmxStaticDeck.Build(mesh, args[1]);
     AnalysisFiles.WriteNew(args[2], deck);
     Console.WriteLine(JsonSerializer.Serialize(new { nodes = mesh.Nodes.Count, elements = mesh.Elements.Count,
-        massDensity, material = materials[0].Name, step = step.Name, solverExecuted = false }));
+        massDensity, material, step, solverExecuted = false }));
     return 0;
 }
 catch (Exception error) when (error is IOException or InvalidDataException or ArgumentException or
@@ -71,7 +24,3 @@ catch (Exception error) when (error is IOException or InvalidDataException or Ar
     Console.Error.WriteLine(error.Message);
     return 1;
 }
-
-internal sealed record ControlledDefinition(AnalysisSpec Analysis, string[] Density, int OutputFrequency,
-    CapturedOutput[] Outputs);
-internal sealed record CapturedOutput(string Name, string Type, int Variables);

@@ -55,7 +55,11 @@ class PmxSession:
             with copy.open('rb') as stream:
                 framing, graph, _ = reader['read_frames'](stream)
             targets = decks['validate_shape'](self.project, framing, graph, self.graph_host)
-            decks['build_project_deck'](self.project, self.deck_host, Path(directory) / 'check.inp')
+            self.mesh_bytes = decks['mesh_input'](self.project).encode('utf-8')
+            self.definition = decks['project_definition'](self.project['graph'])
+            deck = Path(directory) / 'check.inp'
+            decks['build_deck'](self.mesh_bytes, self.definition, self.deck_host, deck)
+            self.deck_sha256 = hashlib.sha256(deck.read_bytes()).hexdigest()
         values = {target['Role']: target['Value'] for target in targets}
         if not values['modulus'].endswith(' MPa') or not values['force'].endswith(' N'):
             raise ValueError('The PMX editor requires stored MPa and N equation values.')
@@ -129,7 +133,7 @@ class PmxDialog(QtWidgets.QDialog):
 
 
 def run_probe(app, window, source, output):
-    """Exercise the real PMX dialog and its checked Save As operation."""
+    """Exercise the PMX dialog, model viewport and native job."""
     try:
         output.mkdir(parents=True, exist_ok=False)
     except OSError as error:
@@ -137,16 +141,20 @@ def run_probe(app, window, source, output):
         window.close()
         app.exit(1)
         return
-    report = {'success': False, 'checks': []}
+    report = {'success': False, 'viewport': window.transport, 'checks': []}
     target = output / 'edited.pmx'
+    node_ids = [13, 23, 33, 43, 53, 63, 73, 83]
     errors = []
+    timeout = QtCore.QTimer(window)
+    timeout.setSingleShot(True)
+    timeout.timeout.connect(window.job.cancel)
 
     def check(name, condition):
         report['checks'].append({'name': name, 'passed': bool(condition)})
         if not condition:
             raise ValueError(name)
 
-    def in_dialog(path, action):
+    def in_dialog(action):
         def interact():
             dialog = app.activeModalWidget()
             try:
@@ -158,7 +166,7 @@ def run_probe(app, window, source, output):
                 if isinstance(dialog, QtWidgets.QDialog):
                     dialog.reject()
         QtCore.QTimer.singleShot(0, interact)
-        window.open_pmx(path)
+        window.edit_pmx_action.trigger()
         if errors:
             raise errors[0]
 
@@ -179,21 +187,70 @@ def run_probe(app, window, source, output):
     def reopened(dialog):
         check('Fresh reopen shows saved equations', dialog.modulus.text() == '84500.5' and
               dialog.force.text() == '42.25')
-        mesh = dialog.session.project['mesh']
-        check('Fresh reopen preserves original mesh IDs',
-              [node['id'] for node in mesh['nodes']] == [13, 23, 33, 43, 53, 63, 73, 83]
-              and [element['id'] for element in mesh['elements']] == [7001])
+
+    def finish(error=None):
+        if error is not None:
+            report['error'] = str(error)
+        report['success'] = error is None
+        (output / 'verification.json').write_text(json.dumps(report, indent=2) + '\n')
+        print(json.dumps(report), flush=True)
+        window.close()
+        app.exit(0 if report['success'] else 1)
+
+    def completed(result):
+        timeout.stop()
+        try:
+            check('Native solver completed the PMX job', result['success'] and result['outcome']['solverExecuted'])
+            inputs = Path(result['inputDirectory'])
+            identity = json.loads((inputs / 'input-identity.json').read_text())
+            check('Frozen inputs identify the reopened PMX and validated definition',
+                  identity['sourcePmxSha256'] == report['write']['outputSha256']
+                  and (inputs / 'mesh.inp').read_bytes() == pmx.mesh_bytes
+                  and json.loads((inputs / 'analysis.json').read_text()) == pmx.definition)
+            deck_sha256 = result['outcome']['outputs']['analysis.inp']
+            check('Executed deck matches the original C# validation', deck_sha256 == pmx.deck_sha256)
+            check('Result fields loaded in the viewport with the PMX model retained',
+                  window.current_path == Path(result['directory']) / 'analysis.frd'
+                  and window.model_path == target and window.mapper.GetScalarVisibility()
+                  and {'DISP', 'STRESS', 'FORC'} <= {field['name'] for field in window.scene['fields']})
+            check('Both project files are unchanged after solve',
+                  hashlib.sha256(source.read_bytes()).hexdigest() == original_hash
+                  and hashlib.sha256(target.read_bytes()).hexdigest() == identity['sourcePmxSha256'])
+            report['job'] = {'deckSha256': deck_sha256, 'inputs': identity,
+                             'frdSha256': result['outcome']['outputs']['analysis.frd'],
+                             'requiredOutputs': result['outcome']['requiredOutputs']}
+        except Exception as error:
+            finish(error)
+        else:
+            finish()
 
     try:
         original_hash = hashlib.sha256(source.read_bytes()).hexdigest()
         check('PMX action is available', window.pmx_action.isVisible())
-        in_dialog(source, edit)
-        in_dialog(target, reopened)
-        check('Original project bytes preserved', hashlib.sha256(source.read_bytes()).hexdigest() == original_hash)
-        report['success'] = True
+        window.open_pmx(source)
+        check('Baseline project opened in the model tree and viewport',
+              window.model_path == source and window.current_path == source and window.edit_pmx_action.isVisible())
+        in_dialog(edit)
+        window.open_pmx(target)
+        pmx = window.pmx_session
+        in_dialog(reopened)
+        grid_nodes = window.grid.GetPointData().GetGlobalIds()
+        grid_elements = window.grid.GetCellData().GetGlobalIds()
+        check('Fresh reopen renders the original mesh IDs',
+              [grid_nodes.GetValue(i) for i in range(grid_nodes.GetNumberOfValues())] == node_ids
+              and [grid_elements.GetValue(i) for i in range(grid_elements.GetNumberOfValues())] == [7001])
+        unsupported = output / 'old.pmx'
+        unsupported.write_bytes(pmx.contents.replace(b'PrePoMax v3.0.0', b'PrePoMax v2.6.0', 1))
+        try:
+            window.open_pmx(unsupported)
+        except ValueError:
+            check('Unsupported PMX preserves the active model', window.pmx_session is pmx and window.current_path == target)
+        else:
+            raise ValueError('Unsupported PMX was accepted.')
+        window.jobs_root = output / 'jobs'
+        window.job.completed.connect(completed)
+        timeout.start(120000)
+        window.run_action.trigger()
+        check('Run analysis launched the PMX job', window.job.active)
     except Exception as error:
-        report['error'] = str(error)
-    (output / 'verification.json').write_text(json.dumps(report, indent=2) + '\n')
-    print(json.dumps(report), flush=True)
-    window.close()
-    app.exit(0 if report['success'] else 1)
+        finish(error)

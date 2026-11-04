@@ -25,6 +25,11 @@ def main():
   pin=job_layout.BASELINE
   if a.upstream_revision:pin=next(r['commit']for r in json.loads((ROOT/'X/Core/upstream-replays.json').read_text())['revisions']if r['name']==a.upstream_revision)
   rows=analysis_layout.source_rows(pin);jobs=job_layout.verify(pin);portable='CaeJob/ExecutableJob.Portable.cs'
+  density='CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs'
+  density_bytes=(ROOT/density).read_bytes()
+  if density_bytes!=analysis_layout.original(pin,density) or density_bytes!=analysis_layout.original(job_layout.BASELINE,density):
+   raise ValueError('Original PMX density keyword source changed')
+  rows.append({'path':density,'sha256':hashlib.sha256(density_bytes).hexdigest()})
   report.update(upstreamRevision=a.upstream_revision or'current',sources=rows,jobSources=jobs,portableAdapter={'path':portable,'sha256':sha(ROOT/portable)},repository={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT))})
   report['tools']={p.relative_to(HERE).as_posix():sha(p)for p in sorted(HERE.rglob('*'))if p.is_file()and not {'artifacts','bin','obj','__pycache__'}.intersection(p.relative_to(HERE).parts)}
   report['analysisTools']={p.relative_to(ROOT/'X/Analysis').as_posix():sha(p)for p in sorted((ROOT/'X/Analysis').rglob('*'))if p.is_file()and not {'artifacts','bin','obj','__pycache__'}.intersection(p.relative_to(ROOT/'X/Analysis').parts)}

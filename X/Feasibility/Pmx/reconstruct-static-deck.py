@@ -88,13 +88,18 @@ def validate_shape(project, framing, graph, graph_decoder):
         return reader['decode'](graph_decoder, ['--static-edit-contract', path])
 
 
-def build_project_deck(project, deck_builder, output):
+def build_deck(mesh_bytes, controlled_definition, deck_builder, output):
     with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-deck-') as directory:
         mesh = Path(directory) / 'mesh.inp'
         definition = Path(directory) / 'definition.json'
-        mesh.write_text(mesh_input(project), encoding='utf-8')
-        definition.write_text(json.dumps(project_definition(project['graph'])), encoding='utf-8')
-        built = reader['decode'](deck_builder, [mesh, definition, output.resolve()])
+        mesh.write_bytes(mesh_bytes)
+        definition.write_text(json.dumps(controlled_definition), encoding='utf-8')
+        return reader['decode'](deck_builder, [mesh, definition, output.resolve()])
+
+
+def build_project_deck(project, deck_builder, output):
+    built = build_deck(mesh_input(project).encode('utf-8'), project_definition(project['graph']),
+                       deck_builder, output)
     return {'pmxSha256': project['inputSha256'], **built}
 
 
