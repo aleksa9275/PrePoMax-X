@@ -227,7 +227,9 @@
     <Compile Include="FileInOut\Output\Calculix\MaterialDeckWriter.cs" />
     <Compile Include="FileInOut\Output\Calculix\StaticAnalysisDeckWriter.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.cs" />
+    <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.GeometryData.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.cs" />
+    <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.Parts.cs" />
     <Compile Include="FileInOut\Input\Netgen\NetgenVolKeywords.cs" />
     <Compile Include="FileInOut\Input\StlGeomFile\StlFileReader.cs" />
     <Compile Include="FileInOut\Common\ElementsToImport.cs" />

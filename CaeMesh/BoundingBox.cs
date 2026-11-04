@@ -61,25 +61,14 @@ namespace CaeMesh
     }
 
     [Serializable]
-    public class BoundingBox
+    public partial class BoundingBox
     {
         // Variables                                                                                                                
-        public double MinX;
-        public double MinY;
-        public double MinZ;
-        //
-        public double MaxX;
-        public double MaxY;
-        public double MaxZ;
         //
         public object Tag;
 
 
         // Constructors                                                                                                             
-        public BoundingBox()
-        {
-            Reset();
-        }
         public BoundingBox(double[] bounds)
         {
             MinX = bounds[0];
@@ -224,15 +213,6 @@ namespace CaeMesh
 
 
         // Methods                                                                                                                  
-        public void Reset()
-        {
-            MinX = double.MaxValue;
-            MinY = double.MaxValue;
-            MinZ = double.MaxValue;
-            MaxX = -double.MaxValue;
-            MaxY = -double.MaxValue;
-            MaxZ = -double.MaxValue;
-        }
         public void AddOffset(double[] offset)
         {
             MinX += offset[0];
@@ -340,17 +320,6 @@ namespace CaeMesh
             //
             if (box.MaxZ > MaxZ) MaxZ = box.MaxZ;
             if (box.MinZ < MinZ) MinZ = box.MinZ;
-        }
-        public void IncludeNode(FeNode node)
-        {
-            if (node.X > MaxX) MaxX = node.X;
-            if (node.X < MinX) MinX = node.X;
-            //
-            if (node.Y > MaxY) MaxY = node.Y;
-            if (node.Y < MinY) MinY = node.Y;
-            //
-            if (node.Z > MaxZ) MaxZ = node.Z;
-            if (node.Z < MinZ) MinZ = node.Z;
         }
         //
         public bool Intersects(BoundingBox box, double relativeOffset = 0)
@@ -591,10 +560,6 @@ namespace CaeMesh
         public double GetZSize()
         {
             return MaxZ - MinZ;
-        }
-        public double GetDiagonal()
-        {
-            return Math.Sqrt(Math.Pow(MaxX - MinX, 2) + Math.Pow(MaxY - MinY, 2) + Math.Pow(MaxZ - MinZ, 2));
         }
         public double GetVolume()
         {
