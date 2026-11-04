@@ -56,6 +56,9 @@ native-cpu-workflow-linux-x64:
         /tmp/prepomaxx-desktop/bin/python -m pip install --require-hashes --only-binary=:all: -r X/Desktop/requirements-linux-x64.txt
         /tmp/prepomaxx-desktop/bin/python X/Build/build.py package --target linux-x64 --format tar.gz --pmx-preview --solver-build X/Build/artifacts/linux-x64-native/solver --output X/Build/artifacts/linux-x64-desktop
         LIBGL_ALWAYS_SOFTWARE=1 tini -s -- xvfb-run -a -s "-screen 0 1400x1000x24" python3 X/Build/verify-linux-preview.py --package X/Build/artifacts/linux-x64-desktop --output X/Build/artifacts/linux-x64-desktop-check
+        apt-get install -y --no-install-recommends desktop-file-utils
+        python3 X/Build/linux_deb.py --package X/Build/artifacts/linux-x64-desktop --output X/Build/artifacts/linux-x64-deb
+        tini -s -- python3 X/Build/verify-linux-deb.py --deb X/Build/artifacts/linux-x64-deb/*.deb --package X/Build/artifacts/linux-x64-desktop --output X/Build/artifacts/linux-x64-deb-check
       fi
   artifacts:
     when: always
@@ -74,3 +77,7 @@ native-cpu-workflow-linux-x64:
       - X/Build/artifacts/linux-x64-desktop-check/*.json
       - X/Build/artifacts/linux-x64-desktop-check/*.stderr
       - X/Build/artifacts/linux-x64-desktop-check/desktop-workflow.png
+      - X/Build/artifacts/linux-x64-deb/*.json
+      - X/Build/artifacts/linux-x64-deb/*.log
+      - X/Build/artifacts/linux-x64-deb-check/*.json
+      - X/Build/artifacts/linux-x64-deb-check/*.log

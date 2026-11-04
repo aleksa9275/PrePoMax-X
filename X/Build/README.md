@@ -118,6 +118,37 @@ change and retains reports, logs and the screenshot. It does not publish
 the archive. Xvfb proves rendering and workflow behavior through a virtual
 display; physical desktop, GPU/Wayland and distro support are separate.
 
+### Ubuntu 24.04 installer preview
+
+Wrap an existing archive build and its `package.json` on a matching Linux
+worker with Python 3.12 and `dpkg-deb`. This reuses the checked application
+bytes and records both archive and installer hashes.
+
+    python3 X/Build/linux_deb.py --package X/Build/artifacts/linux-preview \
+      --output X/Build/artifacts/linux-preview-deb
+
+Use `sudo apt install ./<installer-filename>.deb` with the actual local
+filename. APT resolves the declared Ubuntu runtime dependencies. Launch
+**PrePoMax-X Preview** from the applications menu or run
+`prepomaxx-preview`. Remove the preview with
+`sudo apt remove prepomaxx-preview`. Removal and purge preserve jobs and
+projects in user directories. The package version is an internal preview
+version derived from the archive build time and source commit.
+
+Run the lifecycle check as root only in a disposable Ubuntu 24.04 container
+or VM with current APT indexes, `python3 xvfb xauth desktop-file-utils`, and
+the source archive build available. The verifier installs with APT, checks
+the menu entry, launches as an ordinary user and checks file hashes through
+removal, reinstall and purge.
+
+    python3 X/Build/verify-linux-deb.py --deb X/Build/artifacts/linux-preview-deb/*.deb \
+      --package X/Build/artifacts/linux-preview --output X/Build/artifacts/linux-deb-check
+
+Supply the same optional PMX fixture and reference FRD arguments to check the
+installed PMX workflow. CI keeps reports and logs. The Ubuntu preview is one
+installer proof, with Debian, Fedora, Arch and public release packaging still
+pending.
+
 Every output directory must be new. `build.json` retains source/dirty patch/input
 identity, exact commands/logs, target, file hashes and native-smoke scope. The
 workflow validates the staged hosts' complete regular-file hashes/target and

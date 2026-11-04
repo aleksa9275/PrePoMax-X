@@ -8,6 +8,28 @@ import sys
 import tarfile
 
 
+def checked_archive(package):
+    from build import catalog, require_native, sha
+    manifest = json.loads((package / "package.json").read_text())
+    target = manifest["target"]
+    if manifest["success"] is not True or target not in ("linux-x64", "linux-arm64"):
+        raise ValueError("Successful Linux package manifest required")
+    require_native(catalog()["targets"][target])
+    archive = package / "dist" / f"PrePoMax-X-Preview-{target}.tar.gz"
+    if sha(archive) != manifest["archive"]["sha256"]:
+        raise ValueError("Archive changed after packaging")
+    return manifest, archive
+
+
+def verify_payload(app, manifest):
+    from build import file_hashes
+    hashes = file_hashes(app)
+    links = {p.relative_to(app).as_posix(): os.readlink(p) for p in app.rglob("*") if p.is_symlink()}
+    if hashes != manifest["fileHashes"] or links != manifest["symlinkTargets"]:
+        raise ValueError("Preview files or links differ from package manifest")
+    return {"appFiles": len(hashes), "appLinks": len(links)}
+
+
 def elf_links(path, library_dir=None):
     env = dict(os.environ, LC_ALL="C")
     env.pop("LD_LIBRARY_PATH", None)

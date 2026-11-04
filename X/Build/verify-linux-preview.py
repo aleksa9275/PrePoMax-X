@@ -9,13 +9,16 @@ from runpy import run_path
 import subprocess
 import tarfile
 
-from build import ROOT, catalog, file_hashes, require_native, sha
+from build import ROOT, sha
+from platforms.linux import checked_archive, verify_payload
+from linux_deb import APP, LAUNCHER
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--installed", action="store_true", help="Verify the installed Ubuntu preview instead of extracting")
     parser.add_argument("--pmx-fixture", type=Path, help="Retained task 0045 shape-reference.pmx")
     parser.add_argument("--pmx-reference-frd", type=Path, help="Task 0049 official-export solve reference")
     args = parser.parse_args()
@@ -25,7 +28,8 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     report = {"success": False, "commands": [], "architecture": platform.machine(),
               "distribution": platform.freedesktop_os_release()["PRETTY_NAME"],
-              "scope": "Extracted archive under the supplied Linux display; no distro or release acceptance"}
+              "mode": "installed-deb" if args.installed else "extracted-archive", "uid": os.geteuid(),
+              "scope": "Preview under the supplied Linux display; no release acceptance"}
 
     env = dict(os.environ, PATH="/usr/bin:/bin", DOTNET_ROOT="/nonexistent-external-dotnet",
                QT_QPA_PLATFORM="xcb", XDG_CONFIG_HOME=str(out / "config"), XDG_DATA_HOME=str(out / "data"),
@@ -44,28 +48,22 @@ def main():
         return done.stdout
 
     try:
-        manifest = json.loads((package / "package.json").read_text())
+        manifest, archive = checked_archive(package)
         target = manifest["target"]
-        require_native(catalog()["targets"][target])
-        if manifest["success"] is not True or not target.startswith("linux-"):
-            raise ValueError("Successful Linux package manifest required")
-        archive = package / "dist" / f"PrePoMax-X-Preview-{target}.tar.gz"
-        report["archiveSha256"] = sha(archive)
+        report["archiveSha256"] = manifest["archive"]["sha256"]
         report["packageManifestSha256"] = sha(package / "package.json")
-        if report["archiveSha256"] != manifest["archive"]["sha256"]:
-            raise ValueError("Archive changed after packaging")
-        installed = out / "Installed preview" / "PrePoMax-X-Preview"
-        with tarfile.open(archive, "r:gz") as payload:
-            payload.extractall(installed.parent, filter="data")
-        hashes = file_hashes(installed)
-        links = {p.relative_to(installed).as_posix(): os.readlink(p) for p in installed.rglob("*") if p.is_symlink()}
-        if hashes != manifest["fileHashes"] or links != manifest["symlinkTargets"]:
-            raise ValueError("Extracted files or links differ from package manifest")
-        report.update(target=target, appFiles=len(hashes), appLinks=len(links))
-        executable = installed / "PrePoMax-X-Preview"
+        if args.installed:
+            installed, executable = APP, LAUNCHER
+        else:
+            installed = out / "Installed preview" / "PrePoMax-X-Preview"
+            with tarfile.open(archive, "r:gz") as payload:
+                payload.extractall(installed.parent, filter="data")
+            executable = installed / "PrePoMax-X-Preview"
+        report.update(target=target, **verify_payload(installed, manifest))
         gui_path = out / "desktop-workflow.json"
-        run([executable, "--run-example", "--jobs-root", out / "Job workspace",
-             "--self-test", gui_path, "--screenshot", out / "desktop-workflow.png"], "desktop")
+        job_args = [] if args.installed else ["--jobs-root", out / "Job workspace"]
+        run([executable, "--run-example", *job_args, "--self-test", gui_path,
+             "--screenshot", out / "desktop-workflow.png"], "desktop")
         gui = json.loads(gui_path.read_text())
         job = gui["desktopJob"]
         report.update(guiChecks=gui["checks"], renderer=gui["renderer"],
