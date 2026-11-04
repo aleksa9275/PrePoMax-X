@@ -12,8 +12,9 @@ read_frames = run_path(str(HERE / 'inspect-pmx.py'))['read_frames']
 
 
 def decode(decoder, args):
-    result = subprocess.run(['dotnet', str(decoder.resolve()), *map(str, args)],
-                            capture_output=True, text=True, timeout=30)
+    path = str(decoder.resolve())
+    command = ['dotnet', path] if decoder.suffix.lower() == '.dll' else [path]
+    result = subprocess.run([*command, *map(str, args)], capture_output=True, text=True, timeout=30)
     if result.returncode:
         raise ValueError((result.stderr or result.stdout).strip())
     return json.loads(result.stdout)

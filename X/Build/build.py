@@ -132,9 +132,11 @@ def verify_hosts(path, target_id, required=("mesh", "results", "solve")):
             raise ValueError("Required published host missing: " + name)
     return report
 
-def package_preview(build, solver_build=None, package_format="app"):
+def package_preview(build, solver_build=None, package_format="app", pmx_preview=False):
     require_native(build.target)
     publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
+    if pmx_preview:
+        publish_pmx_preview(build)
     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),
         "nativeCocoaSha256": sha(ROOT / "X/Desktop/native_cocoa.py"),
         "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
@@ -143,6 +145,9 @@ def package_preview(build, solver_build=None, package_format="app"):
         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
         "dirty": build.report["repository"]["dirty"]}
+    if pmx_preview:
+        identity["pmxDesktopSha256"] = sha(ROOT / "X/Desktop/pmx_project.py")
+        identity["pmxToolHashes"] = file_hashes(build.output / "pmx-tools")
     (build.output / "source-identity.json").write_text(json.dumps(identity, indent=2) + "\n")
     adapter = build.target["desktopPackageAdapter"]
     helper = load_module(Path(__file__).parent / "platforms" / (adapter + ".py"), "package_platform")
@@ -155,6 +160,26 @@ def package_preview(build, solver_build=None, package_format="app"):
         scope="Ad-hoc local preview; no clean-machine/signing/release acceptance", success=True)
     (build.output / "package.json").write_text(json.dumps(build.report, indent=2) + "\n")
 
+
+def publish_pmx_preview(build):
+    projects = {
+        "pmx-mesh": ("X/Feasibility/PmxMesh/PmxMesh.csproj", []),
+        "pmx-graph": ("X/Feasibility/Pmx/NrbfInventory.csproj", ["-p:UseOfficialNrbf=true"]),
+        "pmx-deck": ("X/Feasibility/PmxDeck/PmxDeck.csproj", []),
+    }
+    for name, (project, properties) in projects.items():
+        build.run(["dotnet", "publish", project, "-c", "Release", "-r", build.target_id,
+                   "--self-contained", "true", f"-p:RuntimeFrameworkVersion={build.catalog['runtimeFrameworkVersion']}",
+                   f"-p:NativePreviewLockRoot={build.output / 'locks' / name}",
+                   "--disable-build-servers", "-m:1", "--source", ROOT / "X/Analysis/artifacts/offline-feed",
+                   "--source", "https://api.nuget.org/v3/index.json", *properties,
+                   "-o", build.output / "hosts" / name, "-v:quiet"], "publish-" + name + ".log")
+    tools = build.output / "pmx-tools"
+    tools.mkdir()
+    for name in ("inspect-pmx.py", "inspect-static-project.py", "reconstruct-static-deck.py", "write-controlled-edit.py"):
+        shutil.copy2(ROOT / "X/Feasibility/Pmx" / name, tools / name)
+    build.report["hostFiles"] = file_hashes(build.output / "hosts")
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["plan", "build", "package"])
@@ -162,9 +187,12 @@ def main(argv=None):
     parser.add_argument("--component", choices=["hosts", "solver"], default="hosts")
     parser.add_argument("--format", choices=["app", "dmg"], default="app")
     parser.add_argument("--solver-build", type=Path, help="Explicit verified native solver build for desktop jobs")
+    parser.add_argument("--pmx-preview", action="store_true", help="Bundle the checked static PMX desktop editor")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--jobs", type=int, default=6)
     args = parser.parse_args(argv)
+    if args.pmx_preview and (args.action != "package" or args.target != "osx-arm64"):
+        parser.error("--pmx-preview requires a macOS desktop package")
     target = catalog()["targets"][args.target]
     if args.action == "plan":
         print(json.dumps({"target": args.target, "data": target, "matchingNativeHost": native(target),
@@ -185,7 +213,7 @@ def main(argv=None):
         build = Build(args.target, args.output)
         build.identity()
         if args.action == "package":
-            package_preview(build, args.solver_build, args.format)
+            package_preview(build, args.solver_build, args.format, args.pmx_preview)
         elif args.component == "hosts":
             publish_hosts(build)
         else:

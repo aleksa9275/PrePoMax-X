@@ -14,6 +14,7 @@ import tempfile
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
+from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
 from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
@@ -141,6 +142,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
         toolbar = self.addToolBar("View")
         self.open_action = toolbar.addAction("Open INP / FRD", self.open_dialog)
+        self.pmx_action = toolbar.addAction("Open static PMX…", self.open_pmx_dialog)
+        self.pmx_action.setVisible(pmx_available())
         toolbar.addAction("Fit", self.fit)
         self.fields = QtWidgets.QComboBox()
         self.fields.setMinimumWidth(330)
@@ -349,6 +352,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.configure_action.setEnabled(not active)
         self.add_set_action.setEnabled(not active and self.model_scene is not None)
         self.open_action.setEnabled(not active)
+        self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
         self.cancel_action.setEnabled(active and state != 'Cancelling')
         self.job_label.setText(state)
@@ -393,6 +397,21 @@ class Viewport(QtWidgets.QMainWindow):
                 self.load(Path(path), as_model=as_model)
             except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
                 QtWidgets.QMessageBox.critical(self, "Cannot open file", str(error))
+
+    def open_pmx_dialog(self):
+        name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open static PMX project', '',
+                                                        'PrePoMax project (*.pmx)')
+        if name:
+            try:
+                self.open_pmx(name)
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+                QtWidgets.QMessageBox.critical(self, 'Cannot open static PMX', str(error))
+
+    def open_pmx(self, path):
+        if self.job.active:
+            raise ValueError('Finish the active job before opening a static PMX.')
+        dialog = PmxDialog(self, PmxSession(path))
+        dialog.exec()
 
     def load(self, path, *, as_model=False, definition=None):
         mesh_bytes = path.read_bytes() if as_model else None
@@ -519,7 +538,7 @@ class Viewport(QtWidgets.QMainWindow):
         if not self.editor_dirty:
             return True
         return QtWidgets.QMessageBox.question(self, 'Discard unsaved model edits?',
-            'Project saving is not available in this preview. Submitted run inputs remain in Job files. '
+            'INP session edits are kept in memory. Submitted run inputs remain in Job files. '
             'Discard the current model edits?', QtWidgets.QMessageBox.StandardButton.Yes |
             QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No) == QtWidgets.QMessageBox.StandardButton.Yes
 
@@ -535,11 +554,15 @@ def main():
                         help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
     parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
+    parser.add_argument("--pmx-probe", type=Path, nargs=2, metavar=("INPUT", "OUTPUT"),
+                        help="Exercise static PMX edit, save and reopen in the desktop")
     args = parser.parse_args()
     if args.viewport_probe and (args.self_test or args.run_example):
         parser.error("Use --viewport-probe separately from solve/self-test")
     if args.editor_probe and (args.self_test or args.run_example or args.viewport_probe or args.input):
         parser.error("Use --editor-probe separately from other probes and input")
+    if args.pmx_probe and (args.self_test or args.run_example or args.viewport_probe or args.editor_probe or args.input):
+        parser.error("Use --pmx-probe separately from other probes and input")
     app = QtWidgets.QApplication([sys.argv[0]])
     app.setOrganizationName("PrePoMax-X")
     app.setApplicationName("PrePoMax-X Preview")
@@ -634,7 +657,11 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.editor_probe:
+    if args.pmx_probe:
+        from pmx_project import run_probe
+        source, output = (path.resolve() for path in args.pmx_probe)
+        QtCore.QTimer.singleShot(500, lambda: run_probe(app, window, source, output))
+    elif args.editor_probe:
         from editor_probe import begin
         QtCore.QTimer.singleShot(1200, lambda: begin(app, window, args.editor_probe))
     elif args.viewport_probe:

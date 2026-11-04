@@ -69,6 +69,13 @@ The DMG contains installation and full uninstall/reset instructions. Image creat
 mounting and GUI tests need native macOS privileges unavailable in a filesystem
 sandbox; this does not require changing Gatekeeper settings.
 
+Add `--pmx-preview` to the shared macOS package command to bundle the checked
+PMX 3.0.0 editor. **Open static PMX…** opens the result-free C3D8 subset for
+modulus and axial-force edits and Save As to a new project file. The package
+uses the public Microsoft NRBF decoder pinned at 10.0.14. The legacy offline
+research build keeps its existing SDK decoder reference. The static PMX dialog
+and the INP solver workflow are separate in this preview.
+
 [Install](../Desktop/INSTALL-macos.md) · [Uninstall and reset](../Desktop/UNINSTALL-macos.md).
 
 Every output directory must be new. `build.json` retains source/dirty patch/input

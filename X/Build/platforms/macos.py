@@ -84,11 +84,13 @@ def package(build, root, solver_build=None):
     example_dir.mkdir()
     for name in ('cube-mesh.inp', 'cube-analysis.json'):
         shutil.copy2(root / 'X/Analysis/StaticDeck' / name, example_dir / name)
+    pmx = (['--add-data', f"{output / 'pmx-tools'}:pmx-tools", '--hidden-import', 'decimal']
+           if (output / 'pmx-tools').is_dir() else [])
     build.run([sys.executable, '-m', 'PyInstaller', '--noconfirm', '--windowed', '--onedir',
         '--name', 'PrePoMax-X-Viewport', '--osx-bundle-identifier', 'org.prepomaxx.preview', '--target-architecture', 'arm64', '--collect-all', 'vtkmodules',
         '--add-data', f"{output / 'hosts'}:hosts", '--add-data', f"{output / 'source-identity.json'}:.",
         '--add-data', f"{root / 'X/Build/targets.json'}:.", '--add-data', f'{example_dir}:examples',
-        '--distpath', output / 'dist', '--workpath', output / 'build', '--specpath', output,
+        *pmx, '--distpath', output / 'dist', '--workpath', output / 'build', '--specpath', output,
         root / 'X/Desktop/viewport.py'])
     app = output / 'dist/PrePoMax-X-Viewport.app'
     if not app.is_dir():

@@ -7,11 +7,14 @@
     <Nullable>enable</Nullable>
     <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
-  <!-- Research-only trusted SDK decoder. No payload assemblies or production references. -->
-  <ItemGroup>
+  <!-- Keep historical offline research runs independent of the preview package. -->
+  <ItemGroup Condition="'$(UseOfficialNrbf)' != 'true'">
     <Reference Include="System.Formats.Nrbf">
       <HintPath>$(MSBuildBinPath)/System.Formats.Nrbf.dll</HintPath>
       <Private>true</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseOfficialNrbf)' == 'true'">
+    <PackageReference Include="System.Formats.Nrbf" Version="[10.0.14]" />
   </ItemGroup>
 </Project>
