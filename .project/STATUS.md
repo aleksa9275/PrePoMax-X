@@ -1,12 +1,28 @@
 # Project status
 
+## Current — task 0048: desktop static PMX
+
+The opt-in macOS ARM64 preview opens, edits and saves a supported result-free
+static-solid PMX 3.0.0 project. The desktop validates Young's modulus and axial
+force edits, publishes a new PMX, and leaves the source file untouched. The
+saved fixture matches the file previously reopened and resaved by the official
+Windows 3.0.0 executable through CrossOver. Task 0048 is separate from the INP
+viewport and job path. General project, results and command-history persistence,
+full 3.0.0 parity, native Linux desktop packaging and release gates remain open.
+[Task record](tasks/0048-desktop-static-pmx.md) ·
+[Verification](reports/desktop-static-pmx.md).
+
+The maintainer will run their workflow when the fully operational 3.0.0 parity
+candidate is ready. Notify them when Developer ID and notarization require their
+involvement.
+
 ## Current — task 0047: session named set authoring
 
 The desktop now creates node and element sets from original IDs or a picked
 ID, validates through the original C# reader, and freezes them into jobs.
 The source macOS desktop and native cube solve pass. The local ARM64 DMG
 passed mounted and copied-app verification. The packaged set and solve
-workflow passes through both viewports. One DMG remains for user testing.
+workflow passes through both viewports. Task 0048 supersedes the local image.
 [Task 0047 report](reports/session-named-set-authoring.md).
 The task 0045 cleanup removed 17 temporary directories while preserving the
 reference archive, fixtures, and receipts. General PMX compatibility remains
@@ -45,9 +61,10 @@ while reproducing the verified output hashes for those inputs. An opt-in
 shape-checked workflow now edits, reopens and rebuilds a deck from an unlisted
 result-free static-solid PMX. Mac and Linux ARM64 receipts match, and the
 official Windows executable under CrossOver resaves the edit with matching
-native Mac solver fields. Task 0045 remains open. General
-FeModel reconstruction, visualization, command replay, desktop Open/Save
-and bidirectional original Windows interoperability remain pending.
+native Mac solver fields. Task 0045 remains open for general FeModel
+reconstruction, visualization, command replay and broader bidirectional
+original Windows interoperability. Task 0048 wraps the verified subset in the
+macOS desktop.
 [Compatibility plan](reports/supported-project-persistence.md).
 
 ## Current — task 0046: completed-preview storage retention

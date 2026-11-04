@@ -351,7 +351,9 @@ reconstruction and both original-app exports.
 
 Task 0045 remains open. General FeModel and visualization reconstruction,
 older project layouts, projects with results and command payloads, history
-replay, clone identity and desktop Save/Open still require coverage.
+replay, clone identity and broader desktop Save/Open still require coverage.
+Task 0048 verifies desktop Open and Save As for the checked result-free C3D8
+subset in the macOS ARM64 preview. [Desktop PMX verification](desktop-static-pmx.md).
 The 4 November public upstream query returned HEAD 2a25db82896a and no
 matching 3.0.0 tag, so archive-to-source correspondence remains pending.
 CrossOver provided original-executable readback. Native Windows and packaged

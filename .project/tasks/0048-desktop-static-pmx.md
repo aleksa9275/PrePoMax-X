@@ -18,3 +18,7 @@ The scope is the existing checked result-free C3D8 shape and two scalar edits.
 PMX loading into the viewport and the native solver workflow remains a separate
 increment. General model graphs, results, command histories and Linux desktop
 packaging remain open.
+
+Completed within this scope on 4 November 2026. The copied ARM64 app
+passed the native solver/render checks and both viewport PMX probes.
+[Implementation, verification and publication](../reports/desktop-static-pmx.md).

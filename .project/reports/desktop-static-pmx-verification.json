@@ -1,0 +1,266 @@
+{
+  "implementation": "1a386d261003b831e2b5c6e0930a4147689bf775",
+  "dmg": {
+    "path": "X/Build/artifacts/task0048-final/dist/PrePoMax-X-Preview-arm64.dmg",
+    "sha256": "a6670a0392e618921dfcea785095c01f126765ddc35edbc8a4a1b17e12f77266",
+    "developerIdSigned": false,
+    "notarized": false
+  },
+  "copiedApp": {
+    "success": true,
+    "nativeSolverExecuted": true,
+    "guiChecks": [
+      {
+        "name": "desktop native solve and result loading",
+        "passed": true
+      },
+      {
+        "name": "native render window",
+        "passed": true
+      },
+      {
+        "name": "original IDs retained",
+        "passed": true
+      },
+      {
+        "name": "field scalar mapping",
+        "passed": true
+      },
+      {
+        "name": "VTK hit resolves original element ID",
+        "passed": true
+      },
+      {
+        "name": "nearest vertex resolves original node ID",
+        "passed": true
+      },
+      {
+        "name": "selected coordinates preserved",
+        "passed": true
+      },
+      {
+        "name": "selected nodal value uses original value order",
+        "passed": true
+      },
+      {
+        "name": "resize renders",
+        "passed": true
+      },
+      {
+        "name": "displayed frame has mesh/legend pixels",
+        "passed": true
+      },
+      {
+        "name": "window capture",
+        "passed": true
+      }
+    ],
+    "analyticalChecks": [
+      {
+        "name": "all eight displacement IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all eight force IDs exactly once",
+        "passed": true
+      },
+      {
+        "name": "all displacement components match uniform uniaxial strain",
+        "passed": true
+      },
+      {
+        "name": "eight integration-point stresses",
+        "passed": true
+      },
+      {
+        "name": "axial stress 100 MPa, transverse/shear zero",
+        "passed": true
+      },
+      {
+        "name": "supported face balances 100 N",
+        "passed": true
+      },
+      {
+        "name": "global nodal-force sum zero",
+        "passed": true
+      }
+    ],
+    "alteredDisplacementRejected": true,
+    "externalBuildToolsOnPath": false
+  },
+  "pmxByViewport": {
+    "frame-bridge": {
+      "success": true,
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen preserves original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Original project bytes preserved",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+        "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+        "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+        "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+        "patchedStringRecords": [
+          555,
+          561,
+          563
+        ],
+        "portableReadbackPassed": true
+      }
+    },
+    "native-cocoa": {
+      "success": true,
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen preserves original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Original project bytes preserved",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+        "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+        "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+        "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+        "patchedStringRecords": [
+          555,
+          561,
+          563
+        ],
+        "portableReadbackPassed": true
+      }
+    }
+  },
+  "originalAppReadbackHashMatch": true,
+  "standaloneShape": {
+    "firstWrite": {
+      "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+      "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+      "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+      "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+      "patchedStringRecords": [
+        555,
+        561,
+        563
+      ],
+      "portableReadbackPassed": true
+    },
+    "secondWrite": {
+      "inputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+      "outputSha256": "a6525b52a8edd1a19f7f16e1da179c265ef8eb9fc6f8519d7b3e0dcd00c67021",
+      "editedGraphSha256": "ac1b018d6db88a167bc49482297d19d8b23fa5627ca9c365f61361bbda3cef12",
+      "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+      "patchedStringRecords": [
+        555,
+        561,
+        563
+      ],
+      "portableReadbackPassed": true
+    },
+    "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+    "officialDeckSemanticsMatch": true,
+    "refused": [
+      "unpinned-default",
+      "saved-results",
+      "unsupported-formulation",
+      "unsupported-version",
+      "nonempty-command-history",
+      "existing-output"
+    ]
+  },
+  "cleanup": {
+    "removedSizeKiBByPath": {
+      "X/Build/artifacts/task0048-delivery/build": 19668,
+      "X/Build/artifacts/task0048-delivery/hosts": 523884,
+      "X/Build/artifacts/task0048-delivery/dmg-payload": 1048376,
+      "X/Build/artifacts/task0048-delivery/pyinstaller-cache": 912908,
+      "X/Build/artifacts/task0048-delivery/dist/PrePoMax-X-Viewport.app": 1048320,
+      "X/Build/artifacts/task0048-delivery/dist/PrePoMax-X-Viewport": 1022032,
+      "X/Build/artifacts/task0048-final/build": 19652,
+      "X/Build/artifacts/task0048-final/hosts": 523884,
+      "X/Build/artifacts/task0048-final/dmg-payload": 1048376,
+      "X/Build/artifacts/task0048-final/pyinstaller-cache": 912908,
+      "X/Build/artifacts/task0048-final/dist/PrePoMax-X-Viewport.app": 1048320,
+      "X/Build/artifacts/task0048-final/dist/PrePoMax-X-Viewport": 1022032,
+      "X/Build/artifacts/task0048-delivery/dist/PrePoMax-X-Preview-arm64.dmg": 360040,
+      "X/Build/artifacts/task0047-delivery/dist/PrePoMax-X-Preview-arm64.dmg": 254412,
+      "X/Build/artifacts/task0048-copy-check/Installed copy": 1048320,
+      "X/Build/artifacts/task0048-final-copy-check/Installed copy": 1048320
+    },
+    "observedFreeGainBytes": 11092295680,
+    "retainedPreviewSha256": "a6670a0392e618921dfcea785095c01f126765ddc35edbc8a4a1b17e12f77266"
+  }
+}

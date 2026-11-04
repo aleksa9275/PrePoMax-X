@@ -1,18 +1,20 @@
 # Installable PrePoMax-X release delivery
 
-As of 4 November 2026, the task 0047 local macOS ARM64 DMG has passed copied-app
-verification, named-set creation, native solve and result display. The scoped
-static workflow is the current desktop checkpoint. The PMX read/write evidence
-covers a restricted result-free static workflow through research tools. Desktop
-Save/Open and full original-app interoperability remain open.
-[Desktop checkpoint](reports/session-named-set-authoring.md) ·
-[PMX checkpoint](reports/supported-project-persistence.md).
+As of 4 November 2026, the local macOS ARM64 DMG has passed copied-app
+verification and native static solve. Task 0048 adds opt-in desktop Open and
+Save As for a result-free static-solid PMX subset. Task 0047 proved named-set
+creation, native solve and result display through the desktop INP workflow.
+[PMX desktop](reports/desktop-static-pmx.md) ·
+[INP desktop](reports/session-named-set-authoring.md).
 
-The next product gates are the checked PMX workflow in the packaged desktop
-and a native Linux desktop installation on x64 and ARM64. The full 3.0.0 release
-also requires broader model, results, CAD and meshing coverage, resolution of
+The next product gates are using a reopened PMX model in the native viewport and
+job workflow, and a native Linux desktop installation on x64 and ARM64. The full
+3.0.0 release requires broader PMX, model, results, CAD and meshing coverage, resolution of
 both recorded correctness failures and the quadratic-tetrahedron gate, verified
 3.0.0 source correspondence, and the native platform and installer checks below.
+The maintainer's workflow test is reserved for a fully operational 3.0.0 parity
+candidate. Notify the maintainer when Developer ID and notarization need their
+involvement.
 
 2026-11-02 scheduling: the [accelerated plan](proposals/accelerated-native-delivery.md)
 brings an internal installable desktop preview forward, followed by a scoped

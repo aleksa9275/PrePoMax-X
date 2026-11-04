@@ -1,5 +1,18 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-04 task 0048: the maintainer wants maximum progress toward full
+PrePoMax 3.0.0 parity and will test their workflow at that candidate. Notify
+them when Developer ID and notarization require their involvement. The opt-in
+macOS preview now opens and saves the checked result-free static-solid PMX
+subset. Both copied-app viewport probes pass and the edited PMX bytes match the
+prior official 3.0.0 original-app readback. The task 0045 and 0047 checkpoint
+and task 0048 implementation are published to origin/research/native-feasibility.
+Read .project/reports/desktop-static-pmx.md for the retained image, exact CI
+evidence and cleanup. Next is feeding the reopened PMX into the viewport and
+native job path, followed by native Linux desktop packaging. Broader PMX
+compatibility, both known correctness failures, the tetra gate and all parity
+and release requirements remain open.
+
 2026-11-03 task 0046 retention direction: maintainer reports task 0044 seems to
 work and requests deleting unnecessary tested .app/.dmg/build copies to reclaim
 storage before task 0045. Read .project/reports/storage-cleanup.md and its actual

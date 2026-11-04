@@ -38,8 +38,10 @@ dialog, and verifies their membership in the frozen input and executed deck.
 The edited solve uses 105 GPa and 50 N per node and reproduces the existing
 200 MPa axial-stress and fourfold-displacement expectations.
 
-The retained candidate is
+The verified historical image was
 `X/Build/artifacts/task0047-delivery/dist/PrePoMax-X-Preview-arm64.dmg`.
 Seven duplicate generated directories were removed after verification.
 Build and test receipts, source snapshots and job results are retained.
 [Package and cleanup receipt](session-named-set-packaged-macos.json).
+Task 0048 superseded the image and removed the task 0047 DMG.
+[Current image and cleanup](desktop-static-pmx.md).
