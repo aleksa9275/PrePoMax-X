@@ -18,6 +18,8 @@ native-cpu-workflow-linux-x64:
       changes:
         - X/Build/**/*
         - X/Desktop/**/*
+        - X/Feasibility/Cad/**/*
+        - CaeModel/FileInOut/Input/VisFileReader/**/*
         - X/Feasibility/Pmx/**/*
         - X/Feasibility/PmxMesh/**/*
         - X/Feasibility/PmxDeck/**/*

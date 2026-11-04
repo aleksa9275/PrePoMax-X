@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0054 and 0055 carry source edge IDs through the original VIS merge
+and open read-only VIS geometry in the native desktop. The L-bracket
+displays CAD edges and canonical measurements, with face picks using
+source IDs. Read .project/reports/desktop-vis-geometry.md for checks and
+publication. Matching native CAD source recovery and STEP/BREP import,
+full 3.0.0 parity, both correctness failures, the tetrahedron gate and
+release acceptance remain open.
+
 Task 0053 shares the original VIS metadata, tessellation and merge code
 with a portable probe. The task 0052 L-bracket VIS matches the original
 capture on macOS ARM64, Linux ARM64 and native GitLab Linux x64.

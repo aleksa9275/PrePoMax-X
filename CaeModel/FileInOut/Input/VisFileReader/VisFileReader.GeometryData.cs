@@ -34,6 +34,7 @@ namespace FileInOut.Input
             public Dictionary<int, GeomFaceType> FaceTypes { get; internal set; }
             public Dictionary<int, GeomCurveType> EdgeTypes { get; internal set; }
             public Dictionary<int, int> ElementIdSurfaceId { get; internal set; }
+            public Dictionary<int, HashSet<int>> ElementIdEdgeIds { get; internal set; }
         }
 
         public static GeometryData ReadGeometryData(string data)
@@ -48,6 +49,7 @@ namespace FileInOut.Input
             Dictionary<int, GeomFaceType> faceTypes = new Dictionary<int, GeomFaceType>();
             Dictionary<int, GeomCurveType> edgeTypes = new Dictionary<int, GeomCurveType>();
             Dictionary<int, int> elementIdSurfaceId = new Dictionary<int, int>();
+            Dictionary<int, int> elementIdEdgeId = new Dictionary<int, int>();
             //
             BoundingBox bBox = new BoundingBox();
             double epsilon = 1E-9;
@@ -74,12 +76,12 @@ namespace FileInOut.Input
             {
                 ReadFace(faceData[i], sourceGeometryMetadata, ref offsetNodeId, nodes,
                          ref offsetElementId, elements, surfaceIdNodeIds, faceTypes,
-                         edgeIdNodeIds, edgeTypes, elementIdSurfaceId, ref bBox);
+                         edgeIdNodeIds, edgeTypes, elementIdSurfaceId, elementIdEdgeId, ref bBox);
             }
             //
             double max = bBox.GetDiagonal();
             MergeNodes(nodes, elements, surfaceIdNodeIds, edgeIdNodeIds, epsilon * max, out _);
-            MergeEdgeElements(elements);
+            Dictionary<int, HashSet<int>> elementIdEdgeIds = MergeEdgeElements(elements, elementIdEdgeId);
             //
             return new GeometryData
             {
@@ -92,6 +94,7 @@ namespace FileInOut.Input
                 FaceTypes = faceTypes,
                 EdgeTypes = edgeTypes,
                 ElementIdSurfaceId = elementIdSurfaceId,
+                ElementIdEdgeIds = elementIdEdgeIds,
             };
         }
 
@@ -103,6 +106,7 @@ namespace FileInOut.Input
                                      Dictionary<int, HashSet<int>> edgeIdNodeIds,
                                      Dictionary<int, GeomCurveType> edgeTypes,
                                      Dictionary<int, int> elementIdSurfaceId,
+                                     Dictionary<int, int> elementIdEdgeId,
                                      ref BoundingBox bBox)
         {
             int numOfNodes = 0;
@@ -147,7 +151,7 @@ namespace FileInOut.Input
                 else if (data[i].StartsWith("edge polylines"))
                 {
                     numOfElements = ReadEdges(data[i], geometryMetadata, offsetNodeId, offsetElementId, elements,
-                                              edgeIdNodeIds, edgeTypes, freeEdgeKeys, triangleEdgeKeys);
+                                              edgeIdNodeIds, edgeTypes, elementIdEdgeId, freeEdgeKeys, triangleEdgeKeys);
                     offsetElementId += numOfElements;
                 }
             }
@@ -249,7 +253,8 @@ namespace FileInOut.Input
         private static int ReadEdges(string elementData, GeometryMetadata geometryMetadata,
                                      int offsetNodeId, int offsetElementId,
                                      Dictionary<int, FeElement> elements, Dictionary<int, HashSet<int>> edgeIdNodeIds,
-                                     Dictionary<int, GeomCurveType> edgeTypes, HashSet<int[]> freeEdgeKeys,
+                                     Dictionary<int, GeomCurveType> edgeTypes, Dictionary<int, int> elementIdEdgeId,
+                                     HashSet<int[]> freeEdgeKeys,
                                      HashSet<int[]> triangleEdgeKeys)
         {
             string[] data = elementData.Split(lineSplitter, StringSplitOptions.RemoveEmptyEntries);
@@ -304,6 +309,7 @@ namespace FileInOut.Input
                         {
                             id = internalId + offsetElementId;
                             elements.Add(id, new LinearBeamElement(id, key));
+                            elementIdEdgeId.Add(id, edgeId);
                             internalId++;
                         }
                     }
@@ -320,6 +326,7 @@ namespace FileInOut.Input
                             id = internalId + offsetElementId;
                             element = new LinearBeamElement(id, new int[] { edgeNodeIdsArr[j] , edgeNodeIdsArr[k] });
                             elements.Add(element.Id, element);
+                            elementIdEdgeId.Add(element.Id, edgeId);
                             internalId++;
                         }
                     }
@@ -445,7 +452,8 @@ namespace FileInOut.Input
                 entry.Value.UnionWith(newIds);
             }
         }
-        private static void MergeEdgeElements(Dictionary<int, FeElement> elements)
+        private static Dictionary<int, HashSet<int>> MergeEdgeElements(Dictionary<int, FeElement> elements,
+                                                                      Dictionary<int, int> elementIdEdgeId)
         {
             int[] key;
             FeElement[] elementsToRemove;
@@ -463,8 +471,12 @@ namespace FileInOut.Input
                 }
             }
             //
+            Dictionary<int, HashSet<int>> elementIdEdgeIds = new Dictionary<int, HashSet<int>>();
             foreach (var entry in nodeIdsElements)
             {
+                // Keep every CAD edge that contributed to the surviving segment.
+                elementIdEdgeIds.Add(entry.Value[0].Id,
+                                     new HashSet<int>(entry.Value.Select(element => elementIdEdgeId[element.Id])));
                 if (entry.Value.Count > 1)
                 {
                     elementsToRemove = entry.Value.ToArray();
@@ -474,6 +486,7 @@ namespace FileInOut.Input
                     }
                 }
             }
+            return elementIdEdgeIds;
         }
 
     }

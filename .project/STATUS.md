@@ -1,5 +1,14 @@
 # Project status
 
+## Current — tasks 0054 and 0055: read-only desktop CAD geometry
+
+The native preview opens the original L-bracket VIS export, draws CAD
+edges and resolves face picks to source IDs and original measurements in
+the model tree. The separate CAD reader is part of the shared preview
+build. VIS documents are read-only and remain separate from editable
+analysis. Matching-source recovery and native STEP/BREP import are the
+next CAD boundary. [Verification](reports/desktop-vis-geometry.md).
+
 ## Current — task 0053: portable VIS reader
 
 The original VIS metadata and tessellation reader runs in the portable

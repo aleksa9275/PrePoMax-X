@@ -70,6 +70,16 @@ def main():
                       qtVersion=gui["qtVersion"], vtkVersion=gui["vtkVersion"])
         if not gui["success"] or gui["target"] != target or not job["outcome"]["solverExecuted"]:
             raise ValueError("No successful native desktop solve")
+        cad_fixture = ROOT / "X/Feasibility/Cad/fixtures/l-bracket.vis"
+        cad_path = out / "cad-workflow.json"
+        run([executable, cad_fixture, "--self-test", cad_path], "cad")
+        cad = json.loads(cad_path.read_text())
+        if (not cad["success"] or cad["target"] != target or cad["sourceSha256"] != sha(cad_fixture)
+                or any(cad["cad"][key] != count for key, count in
+                       (("nodes", 38), ("triangles", 72), ("edgeSegments", 45), ("sourceFaces", 9)))
+                or 9 not in cad["cad"]["pickedSourceFaceIds"]):
+            raise ValueError("Packaged viewport did not render and pick the original VIS fixture")
+        report["cadChecks"] = cad["checks"]
         reference = run_path(str(ROOT / "X/Feasibility/Solver/run-reference.py"))
         data = reference["parse_dat"]((Path(job["directory"]) / "analysis.dat").read_text())
         checks = reference["analytical_checks"](data)

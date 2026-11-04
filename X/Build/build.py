@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = Path(__file__).with_name("targets.json")
 HOSTS = {
     "mesh": ("X/Desktop/MeshScene/MeshScene.csproj", "PrePoMaxX.MeshScene"),
+    "cad": ("X/Feasibility/Cad/Inspect/Inspect.csproj", "PrePoMaxX.InspectVis"),
     "results": ("X/Results/Inspect/Inspect.csproj", "PrePoMaxX.InspectResults"),
     "solve": ("X/Execution/Solve/Solve.csproj", "PrePoMaxX.Solve"),
 }
@@ -110,6 +111,7 @@ def publish_hosts(build, include=None):
     build.report["hostFiles"] = file_hashes(build.output / "hosts")
     if native(build.target):
         cases = {"mesh": [ROOT / "X/Desktop/nonsequential-cube.inp"],
+            "cad": ["scene", ROOT / "X/Feasibility/Cad/fixtures/l-bracket.vis"],
             "results": ["inspect-frd", ROOT / ".project/reports/windows-reference/solver/uniaxial.frd"],
             "solve": ["thread-plan", "--threads", "1"]}
         build.report["smoke"] = []
@@ -141,7 +143,7 @@ def verify_hosts(path, target_id, required=("mesh", "results", "solve")):
 
 def package_preview(build, solver_build=None, package_format="app", pmx_preview=False):
     require_native(build.target)
-    publish_hosts(build, ("mesh", "results", "solve") if solver_build else ("mesh", "results"))
+    publish_hosts(build, ("mesh", "cad", "results", "solve") if solver_build else ("mesh", "cad", "results"))
     if pmx_preview:
         publish_pmx_preview(build)
     identity = {"viewportSha256": sha(ROOT / "X/Desktop/viewport.py"),

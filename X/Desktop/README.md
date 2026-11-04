@@ -38,6 +38,7 @@ format. The results reader supports the existing bounded C3D8 static snapshot;
 other analysis/mesh/UI functionality is not established by this preview.
 
     dotnet build X/Desktop/MeshScene/MeshScene.csproj -c Release --source X/Analysis/artifacts/offline-feed
+    dotnet build X/Feasibility/Cad/Inspect/Inspect.csproj -c Release --source X/Analysis/artifacts/offline-feed
     dotnet build X/Results/Inspect/Inspect.csproj -c Release --source X/Analysis/artifacts/offline-feed
     python3 -m venv /private/tmp/prepomaxx-desktop-runtime
     /private/tmp/prepomaxx-desktop-runtime/bin/python -m pip install --require-hashes -r X/Desktop/requirements-packaging-macos-arm64.txt
@@ -47,6 +48,13 @@ Use Open for INP/FRD, Fit, the scalar component selector, click for element/near
 vertex IDs and nodal value, or drag to rotate using VTK's camera. Values remain
 undeformed and in stored units. These controls are deliberately a bounded host
 proof, not full vtkControl/Controller parity or an editing application.
+
+Use **Open INP / FRD / VIS** to inspect a VIS version 2 export up to 1 MiB.
+The preview draws the CAD edges over the display tessellation. Click a face to
+open its source face row in the model tree. The tree shows CAD measurements
+in the units declared by the file, with the stored value in each measurement's
+tooltip. VIS documents are read-only and the CAD IDs are source IDs.
+[Original L-bracket fixture](../Feasibility/Cad/fixtures/l-bracket.vis).
 
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge

@@ -10,6 +10,9 @@ metadata, merged nodes, triangles and source face and edge IDs as JSON.
 
 The tracked fixture preserves the exact bytes from the original 3.0.0
 NetGenMesher capture. The comparison uses the original app's selection
-mapping to relate its measurements to source IDs. Desktop part creation
-and selection generation still live in the legacy reader.
+mapping to relate its measurements to source IDs. The `scene` subcommand
+emits a desktop DTO with triangles, CAD edge segments and the source IDs
+and measurements needed for read-only inspection. The 1 MiB VIS input limit
+applies to both modes. Windows part creation and selection numbering still
+live in the legacy reader.
 [Task 0052 reference](../../../.project/reports/l-bracket-cad-reference.md).

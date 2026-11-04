@@ -103,11 +103,15 @@ def decode(path):
     packaged = getattr(sys, "frozen", False)
     if path.suffix.lower() == ".inp":
         command = mesh_command() + [str(path)]
+    elif path.suffix.lower() == ".vis":
+        command = ([str(Path(sys._MEIPASS) / "hosts/cad/PrePoMaxX.InspectVis")] if packaged else
+            ["dotnet", str(ROOT / "X/Feasibility/Cad/Inspect/bin/Release/net10.0/PrePoMaxX.InspectVis.dll")])
+        command += ["scene", str(path)]
     elif path.suffix.lower() == ".frd":
         command = ([str(Path(sys._MEIPASS) / "hosts/results/PrePoMaxX.InspectResults")] if packaged else
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
-        raise ValueError("This bounded viewport opens INP meshes or completed static C3D8 FRD snapshots.")
+        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8 FRD snapshot.")
     return run_reader(command)
 
 
@@ -142,7 +146,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.job.completed.connect(self.job_completed)
         self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
         toolbar = self.addToolBar("View")
-        self.open_action = toolbar.addAction("Open INP / FRD", self.open_dialog)
+        self.open_action = toolbar.addAction("Open INP / FRD / VIS", self.open_dialog)
         self.pmx_action = toolbar.addAction("Open static PMX…", self.open_pmx_dialog)
         self.pmx_action.setVisible(pmx_available())
         self.edit_pmx_action = toolbar.addAction("Edit PMX…", self.edit_pmx)
@@ -170,6 +174,15 @@ class Viewport(QtWidgets.QMainWindow):
         self.actor.GetProperty().SetEdgeColor(0.12, 0.12, 0.12)
         self.actor.GetProperty().SetColor(0.75, 0.81, 0.88)
         self.renderer.AddActor(self.actor)
+        self.cad_edge_mapper = vtkDataSetMapper()
+        self.cad_edge_actor = vtkActor()
+        self.cad_edge_actor.SetMapper(self.cad_edge_mapper)
+        self.cad_edge_actor.GetProperty().SetColor(0.12, 0.12, 0.12)
+        self.cad_edge_actor.GetProperty().SetLineWidth(2)
+        self.cad_edge_actor.GetProperty().RenderLinesAsTubesOn()
+        self.cad_edge_actor.PickableOff()
+        self.cad_edge_actor.VisibilityOff()
+        self.renderer.AddActor(self.cad_edge_actor)
         self.legend = vtkScalarBarActor()
         self.legend.SetLookupTable(self.mapper.GetLookupTable())
         self.legend.SetNumberOfLabels(5)
@@ -215,8 +228,12 @@ class Viewport(QtWidgets.QMainWindow):
 
     def update_model_tree(self):
         self.model_tree.clear()
+        self.cad_faces = {}
+        if self.scene and "cad" in self.scene:
+            self.populate_cad_tree(self.scene["cad"])
+            return
         if self.model_scene is None:
-            QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP mesh', 'or Solve example'])
+            QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP or VIS file', 'or Solve example'])
             return
         units = self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, units or 'Choose units'])
@@ -237,6 +254,28 @@ class Viewport(QtWidgets.QMainWindow):
                 child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
         step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
         step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
+        self.model_tree.expandToDepth(1)
+
+    def populate_cad_tree(self, cad):
+        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.current_path.name, "Read-only CAD"])
+        unit = "Model units" if cad["lengthUnit"] == "model" else cad["lengthUnit"]
+        QtWidgets.QTreeWidgetItem(root, ["Length unit", unit])
+        for kind, label in (("solid", "Solids"), ("shell", "Shells"), ("face", "Faces"), ("edge", "Edges")):
+            entities = cad["entities"].get(kind, [])
+            group = QtWidgets.QTreeWidgetItem(root, [label, str(len(entities))])
+            for entity in entities:
+                properties = entity["properties"]
+                item = QtWidgets.QTreeWidgetItem(group, [f"{kind.title()} {entity['id']}",
+                                                         ", ".join(map(str, properties.get("type", [])))])
+                if kind == "face":
+                    self.cad_faces[entity["id"]] = item
+                for name in ("volume", "surface_area", "center_of_mass", "area", "length", "radius", "convexity"):
+                    if name in properties:
+                        values = properties[name]
+                        display = ", ".join(format(value, ".12g") if isinstance(value, float) else str(value)
+                                            for value in values)
+                        measurement = QtWidgets.QTreeWidgetItem(item, [name.replace("_", " ").capitalize(), display])
+                        measurement.setToolTip(1, ", ".join(map(str, values)))
         self.model_tree.expandToDepth(1)
 
     def edit_tree_item(self, item, column):
@@ -361,8 +400,9 @@ class Viewport(QtWidgets.QMainWindow):
 
     def job_state(self, state):
         active = state in ('Starting', 'Running', 'Cancelling')
-        self.run_action.setEnabled(not active)
-        self.configure_action.setEnabled(not active and self.pmx_session is None)
+        cad = self.scene is not None and "cad" in self.scene
+        self.run_action.setEnabled(not active and not cad)
+        self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.open_action.setEnabled(not active)
@@ -402,7 +442,8 @@ class Viewport(QtWidgets.QMainWindow):
             QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.workspace)))
 
     def open_dialog(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh/results", "", "Mesh/results (*.inp *.frd)")
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh, results or geometry", "",
+                                                        "Supported files (*.inp *.frd *.vis)")
         if path:
             try:
                 as_model = Path(path).suffix.lower() == '.inp'
@@ -440,6 +481,18 @@ class Viewport(QtWidgets.QMainWindow):
             PmxDialog(self, self.pmx_session).exec()
 
     def load(self, path, *, as_model=False, definition=None):
+        if path.suffix.lower() == ".vis":
+            if self.job.active:
+                raise ValueError("Finish the active job before opening VIS geometry.")
+            if not self.confirm_discard():
+                return
+            self.show_scene(decode(path), path)
+            self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
+            self.analysis_valid = self.editor_dirty = False
+            self.edit_pmx_action.setVisible(False)
+            self.job_state(self.job.state)
+            self.update_model_tree()
+            return
         mesh_bytes = path.read_bytes() if as_model else None
         scene = decode(path)
         if as_model and hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
@@ -447,7 +500,11 @@ class Viewport(QtWidgets.QMainWindow):
         if as_model:
             self.set_model(path, scene, mesh_bytes, definition)
         else:
+            leaving_cad = self.scene is not None and "cad" in self.scene
             self.show_scene(scene, path)
+            if leaving_cad:
+                self.job_state(self.job.state)
+                self.update_model_tree()
 
     def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None):
         self.show_scene(scene, path)
@@ -487,9 +544,25 @@ class Viewport(QtWidgets.QMainWindow):
             grid.InsertNextCell(cell_type, len(mapped), mapped)
             cell_ids.InsertNextValue(element["id"])
         grid.GetCellData().SetGlobalIds(cell_ids)
+        cad = scene.get("cad")
+        if cad:
+            face_ids = vtkIdTypeArray()
+            face_ids.SetName("SourceFaceId")
+            for element in scene["elements"]:
+                face_ids.InsertNextValue(element["sourceFaceId"])
+            grid.GetCellData().AddArray(face_ids)
+            edge_grid = vtkUnstructuredGrid()
+            edge_grid.SetPoints(points)
+            for segment in cad["edgeSegments"]:
+                edge_grid.InsertNextCell(3, 2, [indices[node] for node in segment["nodeIds"]])
+            self.cad_edge_mapper.SetInputData(edge_grid)
+        else:
+            self.cad_edge_mapper.RemoveAllInputs()
+        self.cad_edge_actor.SetVisibility(cad is not None)
+        self.actor.GetProperty().SetEdgeVisibility(cad is None)
         self.fields.blockSignals(True)
         self.fields.clear()
-        self.fields.addItem("Mesh (undeformed)", None)
+        self.fields.addItem("CAD geometry" if cad else "Mesh (undeformed)", None)
         if "fields" in scene:
             value_order = {n: i for i, n in enumerate(scene["nodeIdsInValueOrder"])}
             for field_index, field in enumerate(scene["fields"]):
@@ -514,7 +587,11 @@ class Viewport(QtWidgets.QMainWindow):
         self.renderer.GetActiveCamera().SetFocalPoint(0.5, 0.5, 0.5)
         self.set_field(0)
         self.fit()
-        self.statusBar().showMessage(f'{len(nodes)} nodes · {len(scene["elements"])} elements · values as stored · undeformed')
+        if cad:
+            self.statusBar().showMessage(f'{len(scene["elements"])} display triangles · '
+                                         f'{len(cad["edgeSegments"])} CAD edge segments · read-only')
+        else:
+            self.statusBar().showMessage(f'{len(nodes)} nodes · {len(scene["elements"])} elements · values as stored · undeformed')
 
     def set_field(self, index):
         if self.scene is None:
@@ -539,11 +616,20 @@ class Viewport(QtWidgets.QMainWindow):
     def pick(self, x, y):
         if self.scene is None or not self.picker.Pick(x, y, 0, self.renderer):
             self.selection = None
-            self.statusBar().showMessage("No mesh selection")
+            self.statusBar().showMessage("No selection")
             return None
         cell, point = self.picker.GetCellId(), self.picker.GetPointId()
         if cell < 0 or point < 0:
             return None
+        if "cad" in self.scene:
+            face_id = self.grid.GetCellData().GetArray("SourceFaceId").GetValue(cell)
+            self.selection = {"sourceFaceId": face_id}
+            item = self.cad_faces[face_id]
+            self.model_tree.setCurrentItem(item)
+            item.setExpanded(True)
+            self.model_tree.scrollToItem(item)
+            self.statusBar().showMessage(f"CAD face {face_id} · source ID")
+            return self.selection
         self.selection = {
             "elementId": int(self.grid.GetCellData().GetGlobalIds().GetValue(cell)),
             "nearestVertexNodeId": int(self.grid.GetPointData().GetGlobalIds().GetValue(point)),
@@ -574,6 +660,65 @@ class Viewport(QtWidgets.QMainWindow):
             'INP session edits are kept in memory. Submitted run inputs remain in Job files. '
             'Discard the current model edits?', QtWidgets.QMessageBox.StandardButton.Yes |
             QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No) == QtWidgets.QMessageBox.StandardButton.Yes
+
+
+def verify_cad_view(window, check):
+    scene = window.scene
+    cad = scene["cad"]
+    check("original VIS node and triangle IDs retained",
+          [window.grid.GetPointData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfPoints())]
+          == [node["id"] for node in scene["nodes"]]
+          and [window.grid.GetCellData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfCells())]
+          == [element["id"] for element in scene["elements"]])
+    check("CAD edges visible without triangle wireframe",
+          window.cad_edge_actor.GetVisibility() and not window.actor.GetProperty().GetEdgeVisibility()
+          and window.cad_edge_mapper.GetInput().GetNumberOfCells() == len(cad["edgeSegments"]))
+    check("CAD document is read-only", window.model_scene is None and not window.run_action.isEnabled()
+          and not window.configure_action.isEnabled() and not window.add_set_action.isEnabled())
+    face_ids = window.grid.GetCellData().GetArray("SourceFaceId")
+    check("source face IDs carried by VTK cells", [face_ids.GetValue(i) for i in range(face_ids.GetNumberOfTuples())]
+          == [element["sourceFaceId"] for element in scene["elements"]])
+    hits = set()
+    for i, element in enumerate(scene["elements"]):
+        if element["sourceFaceId"] in hits:
+            continue
+        triangle = window.grid.GetCell(i).GetPoints()
+        centroid = [sum(triangle.GetPoint(j)[axis] for j in range(3)) / 3 for axis in range(3)]
+        window.renderer.SetWorldPoint(*centroid, 1)
+        window.renderer.WorldToDisplay()
+        x, y, _ = window.renderer.GetDisplayPoint()
+        selection = window.pick(x, y)
+        if selection and window.picker.GetCellId() == i:
+            source_id = element["sourceFaceId"]
+            check(f"CAD pick resolves source face {source_id}",
+                  selection == {"sourceFaceId": source_id}
+                  and window.model_tree.currentItem() is window.cad_faces[source_id])
+            hits.add(source_id)
+    check("visible CAD face picked", bool(hits))
+    return {"nodes": len(scene["nodes"]), "triangles": len(scene["elements"]), "edgeSegments": len(cad["edgeSegments"]),
+            "sourceFaces": len(window.cad_faces), "pickedSourceFaceIds": sorted(hits)}
+
+
+def verify_mesh_view(window, check):
+    check("original IDs retained", window.grid.GetNumberOfPoints() == 8 and window.grid.GetNumberOfCells() == 1)
+    if window.fields.count() > 1:
+        window.fields.setCurrentIndex(1)
+        check("field scalar mapping", window.mapper.GetScalarVisibility() == 1 and window.legend.GetVisibility() == 1)
+    window.renderer.SetWorldPoint(0.5, 0.5, 1, 1)
+    window.renderer.WorldToDisplay()
+    x, y, _ = window.renderer.GetDisplayPoint()
+    selection = window.pick(x, y)
+    check("VTK hit resolves original element ID", selection and selection["elementId"] == window.scene["elements"][0]["id"])
+    check("nearest vertex resolves original node ID", selection and selection["nearestVertexNodeId"] in {n["id"] for n in window.scene["nodes"]})
+    if selection:
+        node = next(n for n in window.scene["nodes"] if n["id"] == selection["nearestVertexNodeId"])
+        check("selected coordinates preserved", list(selection["nodeCoordinates"]) == [node["x"], node["y"], node["z"]])
+    if selection and "fields" in window.scene:
+        field = window.scene["fields"][0]
+        component = next(iter(field["components"]))
+        index = window.scene["nodeIdsInValueOrder"].index(selection["nearestVertexNodeId"])
+        check("selected nodal value uses original value order", selection["nodalValue"] == field["components"][component][index])
+    return selection
 
 
 def main():
@@ -633,24 +778,11 @@ def main():
                 raise ValueError("No unique native rendering target")
             target_id, target = candidates[0]
             check("native render window", window.vtk.GetRenderWindow().GetClassName() in target["renderWindows"])
-            check("original IDs retained", window.grid.GetNumberOfPoints() == 8 and window.grid.GetNumberOfCells() == 1)
-            if window.fields.count() > 1:
-                window.fields.setCurrentIndex(1)
-                check("field scalar mapping", window.mapper.GetScalarVisibility() == 1 and window.legend.GetVisibility() == 1)
-            window.renderer.SetWorldPoint(0.5, 0.5, 1, 1)
-            window.renderer.WorldToDisplay()
-            x, y, _ = window.renderer.GetDisplayPoint()
-            selection = window.pick(x, y)
-            check("VTK hit resolves original element ID", selection and selection["elementId"] == window.scene["elements"][0]["id"])
-            check("nearest vertex resolves original node ID", selection and selection["nearestVertexNodeId"] in {n["id"] for n in window.scene["nodes"]})
-            if selection:
-                node = next(n for n in window.scene["nodes"] if n["id"] == selection["nearestVertexNodeId"])
-                check("selected coordinates preserved", list(selection["nodeCoordinates"]) == [node["x"], node["y"], node["z"]])
-            if selection and "fields" in window.scene:
-                field = window.scene["fields"][0]
-                component = next(iter(field["components"]))
-                index = window.scene["nodeIdsInValueOrder"].index(selection["nearestVertexNodeId"])
-                check("selected nodal value uses original value order", selection["nodalValue"] == field["components"][component][index])
+            if "cad" in window.scene:
+                result["cad"] = verify_cad_view(window, check)
+                selection = window.selection
+            else:
+                selection = verify_mesh_view(window, check)
             window.resize(1120, 760)
             app.processEvents()
             window.vtk.render()
