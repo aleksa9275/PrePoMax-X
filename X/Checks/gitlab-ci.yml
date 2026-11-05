@@ -17,12 +17,15 @@
         - X/**/*.inp
         - X/**/*.txt
         - X/**/*.yml
+        - X/Feasibility/Cad/fixtures/**/*
         - .project/scripts/*.py
         - global.json
         - NuGet.Config
         - ThirdParty/Sources/**/*
         - ThirdParty/Build/**/*.py
         - .project/reports/windows-reference/**/*
+        - .project/reports/multipart-cad-reference.json
+        - .project/reports/multipart-cad-reference/**/*
         - .gitlab-ci.yml
     - when: never
 
