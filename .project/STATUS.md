@@ -1,5 +1,14 @@
 # Project status
 
+## Current — task 0056: VIS kernel IDs
+
+All 38 release Netgen runtime files match the upstream binary drop at
+`a55b39c6`. Its managed fix now keeps nonconsecutive triangle sides out of
+CAD edge segments and preserves later kernel IDs when a Windows face or
+edge has no match. The original L-bracket comparison stays exact.
+Matching native C++ sources and Windows execution of the legacy fix
+remain open. [Verification](reports/vis-kernel-id-parity.md).
+
 ## Current — tasks 0054 and 0055: read-only desktop CAD geometry
 
 The native preview opens the original L-bracket VIS export, draws CAD

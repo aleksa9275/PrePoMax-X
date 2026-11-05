@@ -268,7 +268,6 @@ namespace FileInOut.Input
             //
             int edgeId;
             int[] key;
-            int[] edgeNodeIdsArr;
             HashSet<int> edgeNodeIds = new HashSet<int>();
             HashSet<int> edgeNodeIdsOut;
             //
@@ -300,31 +299,16 @@ namespace FileInOut.Input
                     //
                     edgeNodeIds.Add(nodeIds[0]);
                     edgeNodeIds.Add(nodeIds[1]);
-                    //
-                    if (internalEdge && nodeIds[0] != nodeIds[1])
+                    // A partial triangulation can leave a free side between nonconsecutive polyline nodes.
+                    // Only consecutive nodes form a segment of the CAD edge.
+                    if (nodeIds[0] != nodeIds[1])
                     {
                         key = nodeIds[0] < nodeIds[1] ? new int[] { nodeIds[0], nodeIds[1] } :
                               new int[] { nodeIds[1], nodeIds[0] };
-                        if (triangleEdgeKeys.Contains(key) && !freeEdgeKeys.Contains(key))
+                        if (freeEdgeKeys.Contains(key) || (internalEdge && triangleEdgeKeys.Contains(key)))
                         {
                             id = internalId + offsetElementId;
-                            elements.Add(id, new LinearBeamElement(id, key));
-                            elementIdEdgeId.Add(id, edgeId);
-                            internalId++;
-                        }
-                    }
-                }
-                edgeNodeIdsArr = edgeNodeIds.ToArray();
-                for (int j = 0; j < edgeNodeIdsArr.Length; j++)
-                {
-                    for (int k = j + 1; k < edgeNodeIdsArr.Length; k++)
-                    {
-                        key = edgeNodeIdsArr[j] < edgeNodeIdsArr[k] ? new int[] { edgeNodeIdsArr[j], edgeNodeIdsArr[k] } :
-                              new int[] { edgeNodeIdsArr[k], edgeNodeIdsArr[j] };
-                        if (freeEdgeKeys.Contains(key))
-                        {
-                            id = internalId + offsetElementId;
-                            element = new LinearBeamElement(id, new int[] { edgeNodeIdsArr[j] , edgeNodeIdsArr[k] });
+                            element = new LinearBeamElement(id, key);
                             elements.Add(element.Id, element);
                             elementIdEdgeId.Add(element.Id, edgeId);
                             internalId++;

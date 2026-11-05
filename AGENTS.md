@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0056 identifies upstream a55b39c6 as the binary drop matching all
+38 bundled 3.0.0 Netgen runtime files. Its managed partial-triangulation
+and unmatched-kernel-ID fixes are ported. Read
+.project/reports/vis-kernel-id-parity.md for checks and publication.
+Matching native C++ source and native STEP/BREP import remain open,
+alongside Windows legacy verification and all existing correctness,
+tetrahedron, parity and release gates.
+
 Tasks 0054 and 0055 carry source edge IDs through the original VIS merge
 and open read-only VIS geometry in the native desktop. The L-bracket
 displays CAD edges and canonical measurements, with face picks using

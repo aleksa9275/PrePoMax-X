@@ -13,6 +13,12 @@ REFERENCE = HERE.parents[2] / ".project/reports/l-bracket-cad-reference"
 FIXTURE = HERE / "fixtures/l-bracket.vis"
 
 
+def add_first_face_edge(raw, polyline):
+    first = b"Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)\r\nEdge polyline: 1 1 2"
+    modified = first.replace(b"polylines: 4", b"polylines: 5") + b"\r\nEdge polyline: " + polyline
+    return raw.replace(first, modified, 1)
+
+
 def compare(observed, reference, check):
     nodes = {row["id"]: row["coordinates"] for row in observed["nodes"]}
     vertices = reference["vertices"]
@@ -125,13 +131,19 @@ def main():
         with TemporaryDirectory(prefix="prepomaxx-vis-controls-") as temp:
             alias = Path(temp) / "alias.vis"
             # Assign the same first segment to two CAD edges before the shared deduplication.
-            alias.write_bytes(raw.replace(
-                b"Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)\r\nEdge polyline: 1 1 2",
-                b"Number of edge polylines: 5 (Edge Id, N1, N2, N3 ...)\r\n"
-                b"Edge polyline: 1 1 2\r\nEdge polyline: 2 1 2", 1))
+            alias.write_bytes(add_first_face_edge(raw, b"2 1 2"))
             aliased = json.loads(subprocess.check_output([*command, "scene", alias], timeout=30))
             check("merged segment retains coincident source edge IDs",
                   any(segment["sourceEdgeIds"] == [1, 2] for segment in aliased["cad"]["edgeSegments"]))
+            partial = Path(temp) / "partial-face.vis"
+            # In this face, 1-3 is a free side and 3-2 is shared by two triangles.
+            # 1-2 is a free side too, but it skips a node on the added edge 5.
+            partial.write_bytes(add_first_face_edge(raw, b"5 1 3 2"))
+            partial_scene = json.loads(subprocess.check_output([*command, "scene", partial], timeout=30))
+            by_nodes = {tuple(segment["nodeIds"]): segment["sourceEdgeIds"]
+                        for segment in partial_scene["cad"]["edgeSegments"]}
+            check("consecutive free side keeps the source edge ID", by_nodes[1, 3] == [2, 5])
+            check("nonconsecutive chord does not acquire a false edge ID", by_nodes[1, 2] == [1])
             for name, content in (
                 ("unsupported version", raw.replace(b"VIS file format: 2", b"VIS file format: 1", 1)),
                 ("missing tessellation", raw.split(b"Number of visualization vertices:", 1)[0]),
