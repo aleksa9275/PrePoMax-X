@@ -11,7 +11,8 @@ one-output requirement.
 The rendering DTO assigns unique renderer node and cell IDs and retains
 the source part, node and triangle IDs alongside them. It copies
 per-part CAD metadata and edge identities. Coincident nodes in different
-parts stay distinct. The combined scene hash identifies the ordered
+parts stay distinct. Part IDs are 1-based ordinals in sorted output
+filename order. The combined scene hash identifies the ordered
 part IDs and VIS hashes. A single-part scene retains its previous
 contract and hash.
 
@@ -44,6 +45,27 @@ multi-part viewport picks and the existing cancellation controls.
 Nine build boundary tests pass. Both packaged Mac viewports display
 and pick three visible faces in each part. The single-part L-bracket
 and bundled native INP solve also pass.
+
+The first published checkpoint, `6797d33e`, normalized the two new VIS
+fixtures to LF in Git. The working-tree files still held the original
+CRLF bytes, so the source runs passed. Commit `e033115f` adds a scoped
+attribute and restores both exact fixture blobs. Both published blob
+hashes were verified against the original captures. The Mac package's
+application hashes match this repaired commit.
+The fixture-only repair exposed a CI matcher gap. Commit `2cca047d`
+adds the CAD fixture and original-app capture paths to the portable
+job rules so these inputs trigger their comparisons.
+
+All six automatic jobs passed for `2cca047d`. The x64 research job
+passed seven conversion tests, three scene-identity tests, all 359
+multi-part comparisons and the existing 348 L-bracket checks. The
+combined-scene hash matches Mac and Linux ARM64. The separate
+`e033115f` x64 desktop job passed the extracted and installed VIS/INP
+workflows and APT remove, reinstall and purge. Both commits have the
+same application and fixture content. Historical compatibility stayed
+manual.
+[Final source pipeline #3031189917](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3031189917) ·
+[x64 desktop job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17765435497).
 
 The conversion uses the explicitly configured original Windows runtime
 through CrossOver. Matching native C++ source recovery, native CAD

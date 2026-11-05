@@ -250,5 +250,53 @@
       "checksPassed": 10,
       "analyticalChecksPassed": 7
     }
+  },
+  "publishedImplementation": "6797d33e5cf673fd05899c4398b22e6a2820b10b",
+  "fixtureRepairCommit": "e033115fbba0fd34ffd90d4661fb19a280037c28",
+  "publishedFixtureBytesVerified": true,
+  "packagedApplicationHashesMatchRepairedCommit": true,
+  "duplicateMacStagingAllocatedKiBRemoved": 2092728,
+  "removedSupersededTemporaryApps": [
+    {
+      "path": "/tmp/prepomaxx-task0055-mac/dist/PrePoMax-X-Viewport.app",
+      "allocatedKiB": 873388
+    },
+    {
+      "path": "/tmp/prepomaxx-task0058-mac/dist/PrePoMax-X-Viewport.app",
+      "allocatedKiB": 873412
+    },
+    {
+      "path": "/tmp/prepomaxx-task0059-mac/dist/PrePoMax-X-Viewport.app",
+      "allocatedKiB": 873416
+    }
+  ],
+  "retainedTemporaryApp": "/tmp/prepomaxx-task0062-mac/dist/PrePoMax-X-Viewport.app",
+  "fixtureChecksRuleCommit": "2cca047d",
+  "linuxArm64Desktop": {
+    "verifiedCommit": "e033115fbba0fd34ffd90d4661fb19a280037c28",
+    "archiveSha256": "0ffd36127d37adbe51c41245f305c043cfe9b7df33639ff1567c093c8bd57163",
+    "archiveBytes": 343604453,
+    "multipartComparisonsPassed": 359,
+    "cadChecksPassed": 14,
+    "inpSolveAndRenderChecksPassed": 11,
+    "analyticalChecksPassed": 7
+  },
+  "gitlab": {
+    "sourceCommit": "2cca047d90cc40eddf3adf61e081de4d762e0789",
+    "sourcePipeline": 3031189917,
+    "passedAutomaticJobs": 6,
+    "researchJob": 17765556608,
+    "conversionTestsPassed": 7,
+    "sceneTestsPassed": 3,
+    "multipartComparisonsPassed": 359,
+    "singlePartChecksPassed": 348,
+    "desktopCommit": "e033115fbba0fd34ffd90d4661fb19a280037c28",
+    "desktopPipeline": 3031174198,
+    "desktopJob": 17765435497,
+    "sourceAndDesktopApplicationAndFixturesMatch": true,
+    "extractedAndInstalledPreviewChecksPassed": true,
+    "aptLifecyclePassed": true,
+    "archiveSha256": "c3aa42b0cc3ea03495e2573db9d77b8171b88524bb268dc83e2c2b34d22ae0b1",
+    "debSha256": "34ce20e51ec0908bc4fdd80f5fdb84d9ef4c29fa0a247bc9eac678e09e6f7588"
   }
 }

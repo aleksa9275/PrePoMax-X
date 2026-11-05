@@ -8,6 +8,9 @@ them together, preserves source IDs within each part and resolves
 part/face selections to the model tree. Two original-app captures
 match, and 359 exact comparisons pass on Mac and Linux ARM64.
 Matching native C++ sources and native CAD execution remain open.
+All six automatic x64 jobs pass for the final source checkpoint; the
+repaired-fixture desktop job also passes the extracted and installed
+preview workflows.
 [Verification](reports/multipart-cad-preview.md).
 
 ## Current — task 0059: responsive CAD import
