@@ -1,0 +1,36 @@
+493
+14:59:16
+Traceback (most recent call last):
+494
+14:59:16
+  File "/builds/aleksa9275/pre-po-max-x/X/Build/NativeCad/build.py", line 199, in <module>
+495
+14:59:16
+    main()
+496
+14:59:16
+  File "/builds/aleksa9275/pre-po-max-x/X/Build/NativeCad/build.py", line 134, in main
+497
+14:59:16
+    run(["cmake", "--build", output / "occt-build", "--parallel", args.jobs], log)
+498
+14:59:16
+  File "/builds/aleksa9275/pre-po-max-x/X/Build/NativeCad/build.py", line 30, in run
+499
+14:59:16
+    subprocess.run([str(x) for x in args], stdout=output,
+500
+14:59:16
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+501
+14:59:16
+    raise CalledProcessError(retcode, process.args,
+502
+14:59:16
+subprocess.CalledProcessError: Command '['cmake', '--build', '/builds/aleksa9275/pre-po-max-x/X/Build/artifacts/native-cad-linux-x64/occt-build', '--parallel', '2']' returned non-zero exit status 2.
+503
+14:59:16
+WARNING: step_script could not run to completion because the timeout was exceeded. For more control over job and script timeouts see: https://docs.gitlab.com/ci/runners/configure_runners/#set-script-and-after_script-timeouts
+504
+14:59:16
+ERROR: Job failed: execution took longer than 45m0s seconds

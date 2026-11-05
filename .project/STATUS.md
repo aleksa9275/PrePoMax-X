@@ -20,6 +20,13 @@ zero hosted minutes, and web/manual runs require explicit maintainer instruction
 Let the existing x64 build finish; do not retry it or start other hosted jobs.
 Continue with local native checks and retained caches, preserving pending gates.
 
+The existing native x64 CAD job then hit its **45-minute timeout during OCCT
+compilation**, before native CAD execution. No retry was started. Its platform
+acceptance remains pending. The affected portable research job passed; four
+unrelated jobs were cancelled. Published `08e08565` enforces the quota hold and
+GitLab's editor reports valid pipeline syntax.
+[Exact outcomes](reports/native-cad-meshing/publication-ci.json).
+
 ## Current — tasks 0063–0064: original native CAD and meshing
 
 The newly published original NetgenMesher/modified Netgen source is recovered,
@@ -29,7 +36,8 @@ linear volume meshes. The original Windows L-bracket mesh has identical
 connectivity and near-identical coordinates. Native visualization has recorded
 rounding and planar-diagonal differences; the strict original-scene comparison
 remains failed. Linux ARM64 passes the same native experiment in a separate
-verification container; new native x64 CAD CI awaits publication. Desktop mesh authoring/analysis handoff and broad CAD editing remain
+verification container; native x64 CAD CI timed out before engine execution.
+Desktop mesh authoring/analysis handoff and broad CAD editing remain
 next. [Actual evidence and limits](reports/native-cad-meshing.md).
 
 ## Current — tasks 0060–0062: multi-part CAD preview

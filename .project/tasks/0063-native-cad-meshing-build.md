@@ -15,3 +15,9 @@ without silently selecting them as a replacement mesher.
 Preserve original engineering algorithms, both correctness failures, the tetra
 host gate and all broader 3.0.0/four-target/release requirements. Publish useful
 reviewed checkpoints under D051 with actual remote and relevant CI verification.
+
+Outcome: original source and reproducible build are implemented; Mac/Linux
+ARM64 pass native CAD/linear-meshing experiments and relocation checks. The
+first hosted x64 attempt timed out after 45 minutes building OCCT, before CAD
+execution. Native x64 acceptance remains pending. D058 prohibits retries or
+other hosted runs without explicit new instruction. [Evidence](../reports/native-cad-meshing.md).

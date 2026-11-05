@@ -1,0 +1,60 @@
+{
+  "pipeline": 3032333691,
+  "commit": "91b51c1b1345f2af4a673180111f363b0abc35bb",
+  "jobs": [
+    {
+      "name": "native-cad-linux-x64",
+      "id": 17774357865,
+      "status": "failed",
+      "reason": "execution exceeded 45m0s while cmake built OCCT",
+      "cadExecutionReached": false
+    },
+    {
+      "name": "research-linux-x64",
+      "id": 17774357867,
+      "status": "passed",
+      "duration": "1m33s"
+    },
+    {
+      "name": "results-workflow-linux-x64",
+      "id": 17774357871,
+      "status": "passed",
+      "duration": "1m20s"
+    },
+    {
+      "name": "native-cpu-workflow-linux-x64",
+      "id": 17774357866,
+      "status": "canceled",
+      "reason": "quota conservation; unchanged solver/package workflow"
+    },
+    {
+      "name": "shared-core-linux-x64",
+      "id": 17774357868,
+      "status": "canceled",
+      "reason": "quota conservation; no engineering C# change"
+    },
+    {
+      "name": "analysis-workflow-linux-x64",
+      "id": 17774357869,
+      "status": "canceled",
+      "reason": "quota conservation; no engineering C# change"
+    },
+    {
+      "name": "execution-workflow-linux-x64",
+      "id": 17774357870,
+      "status": "canceled",
+      "reason": "quota conservation; no engineering C# change"
+    },
+    {
+      "name": "portable-compatibility-linux-x64",
+      "id": 17774357864,
+      "status": "manual; not run"
+    }
+  ],
+  "sourcePublicationRemoteVerified": true,
+  "x64NativeCadAccepted": false,
+  "quotaHoldCommit": "08e0856590f73cd277ad420504c76a9f618d0b84",
+  "quotaHoldServerSyntaxValidation": "Pipeline syntax is correct, observed in GitLab editor on research/native-feasibility",
+  "newHostedRunsAllowed": "Only on explicit maintainer instruction under D058",
+  "rawHostedArchiveVerified": false
+}

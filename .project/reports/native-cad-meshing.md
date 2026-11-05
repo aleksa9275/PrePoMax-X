@@ -8,8 +8,9 @@ natively on macOS ARM64 and Linux ARM64. The Mac desktop imports the original L-
 STEP and two-part BREP through it, with background conversion and source
 part/face picks. Original Netgen generates measured linear volume meshes.
 Linux ARM64 also passes the same experiment in a separate verification container.
-The new native Linux x64 CI job is awaiting publication; no hosted pass is
-claimed at this checkpoint.
+The first native Linux x64 job timed out during OCCT compilation before native
+CAD execution. Its platform acceptance remains pending. The affected portable
+research job passed; no full-pipeline or native-x64 pass is claimed.
 
 ## Source and build
 
@@ -153,3 +154,36 @@ parity and four-target/release acceptance remain open.
 
 [Task 0067](../tasks/0067-native-cad-static-workflow.md) prepares the next full
 bounded native CAD → first-order mesh → static solve/results desktop workflow.
+
+## Publication and hosted quota closeout
+
+Implementation `91b51c1b` is published and remote-verified on origin research.
+The local command probes and milestone cadence are at `26189d8f`; quota hold
+and retained candidate/handoff records are at `08e08565`. No master/upstream/
+release branch was written.
+
+Exact-commit pipeline #3032333691 has a passing affected `research-linux-x64`
+job and a passing results job. Four unrelated jobs were cancelled to conserve
+quota; historical compatibility was not run. The new native CAD job
+`17774357865` failed after **45 minutes** while CMake compiled OCCT. The runner
+explicitly reports its execution-time limit. The native x64 mesher and CAD
+checks were not reached. The observed trace is retained; no hosted runtime,
+native build receipt or raw archive was verified.
+[Job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17774357865) ·
+[Actual per-job outcomes](native-cad-meshing/publication-ci.json) ·
+[Timeout excerpt](native-cad-meshing/linux-x64-timeout.txt).
+
+The uncached hosted kernel build cost was underestimated. The maintainer
+instructs that CI is unavailable for the next 25 days. D058 supersedes the
+earlier partial cadence change: root workflow permits only web pipelines,
+ordinary pushes start no hosted jobs, and **no web/manual run or retry may be
+started without explicit new maintainer instruction**. All checks remain
+defined, and missing platform/release checks remain pending. GitLab's editor
+validated the published configuration syntax. Later publication uses `ci.skip`
+as an additional guard and does not spend runner minutes.
+
+Continue local Mac/Linux ARM64 work with the retained OCCT/native runtimes.
+Before any future authorised x64 kernel retry, benchmark/reduce its cold-build
+scope and arrange persistent verified dependency caching; do not repeat the
+uncached 45-minute job unchanged. This is a build-cost follow-up, not a reason
+to weaken geometry or engineering comparisons.
