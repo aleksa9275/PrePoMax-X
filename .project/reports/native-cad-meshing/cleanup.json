@@ -1,0 +1,45 @@
+{
+  "authorization": "D056: prune duplicate tested generated payloads; preserve evidence/jobs/current candidate/tool caches",
+  "removed": [
+    {
+      "path": "/tmp/prepomaxx-task0062-mac/dist",
+      "allocatedKiBBefore": 873420,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-task0064-mac/dist",
+      "allocatedKiBBefore": 1720756,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-task0064-mac/build",
+      "allocatedKiBBefore": 19244,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-native-cad-build",
+      "allocatedKiBBefore": 50688,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-native-cad-work",
+      "allocatedKiBBefore": 10424,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-task0064-current/dist/PrePoMax-X-Viewport",
+      "allocatedKiBBefore": 847332,
+      "removed": true
+    },
+    {
+      "path": "/tmp/prepomaxx-task0064-current/build",
+      "allocatedKiBBefore": 19260,
+      "removed": true
+    }
+  ],
+  "retainedCurrentApp": "/tmp/prepomaxx-task0064-current/dist/PrePoMax-X-Viewport.app",
+  "retainedNativeRuntime": "/tmp/prepomaxx-task0063-recipe/runtime",
+  "linuxOcctCacheImage": "localhost/prepomaxx-native-cad-builder:occt8.0.1-arm64",
+  "linuxCacheImageId": "34610ff4c4a9d6a39bcf1c5576dd4cfe86b7a1347c885acd048bb9ab8ed64e25",
+  "disposableLinuxBuilderRemoved": true
+}

@@ -13,3 +13,10 @@ manual milestone jobs. Preserve every command, tolerance, automatic ordinary
 source check, explicit web-triggered package workflow and numerical integration
 trigger. A missing manual milestone stays pending for platform/release acceptance.
 Publish this cadence/closing-evidence change without starting another full build.
+
+Follow-up: the maintainer reports that the long first x64 build will exhaust
+the allowance and leave no CI for 25 days. D058 now supersedes the earlier
+partial cadence change: allow only explicitly requested manual web pipelines,
+so ordinary pushes create no hosted pipeline. Let the existing x64 job finish;
+no retry or other hosted job without explicit instruction. All original checks
+remain defined and all missing platform/release checks remain pending.

@@ -45,3 +45,16 @@ and imported twice in the original Windows application. Verify its
 topology, canonical measurements and part-scoped renderer IDs with
 
     python3 X/Feasibility/Cad/verify-parts.py --inspector /tmp/prepomaxx-vis/bin/Inspect/release/PrePoMaxX.InspectVis.dll --output /tmp/cad-parts.json
+
+## Original native CAD and meshing
+
+The original custom NetgenMesher source is now recovered and builds natively
+with pinned OCCT 8.0.1. Mac/Linux ARM64 pass the separate native geometry and
+linear-volume-mesh experiment. Its explicit metadata/planar-coverage criteria
+are separate from the unchanged exact Windows replay above.
+[Build and verify](../../Build/NativeCad/README.md).
+
+The local `.project/scripts/probe-native-cad-operations.py` also checks valid-box
+repair, translation, splitting and STEP export/reimport. Its three BREP operation
+outputs match the original Windows tool on Mac/Linux ARM64.
+[Operation receipts and scope](../../../.project/reports/native-cad-operations.md).

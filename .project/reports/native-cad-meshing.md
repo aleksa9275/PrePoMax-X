@@ -119,9 +119,37 @@ mid-plane splitting and STEP export/reimport on Mac/Linux ARM64 and the original
 Windows tool. The three BREP operations produce identical bytes on all paths.
 [Actual scope and receipts](native-cad-operations.md).
 
+The retained Mac candidate is
+`/tmp/prepomaxx-task0064-current/dist/PrePoMax-X-Viewport.app`, with explicit
+native CAD runtime `/tmp/prepomaxx-task0063-recipe/runtime`. Its application
+source hashes match published `26189d8f`; the dirty flag is caused solely by
+pre-existing untracked Finder metadata and the changed-code list is empty.
+Both final packaged CAD workflows and signature verification pass.
+[Candidate identity](native-cad-meshing/local-candidate.json) ·
+[Current STEP](native-cad-meshing/mac-current-step.json) ·
+[Current parts](native-cad-meshing/mac-current-parts.json).
+
+The native Mac tool imports STEP, visualizes BREP and generates the mesh while
+both OCCT build/install library directories are temporarily unavailable. Loader
+diagnostics identify the copied runtime libraries, and the build directories
+are restored afterward. Linux already executes in a separate container with
+no original build tree. This checks relocation, without claiming a clean-OS
+or final distribution runtime floor.
+[Mac relocation receipt](native-cad-meshing/mac-relocation.json).
+
+Duplicate tested package/build allocations totaling about 3.38 GiB were
+removed under D056. Evidence, jobs, current candidate, original archives and
+useful tool caches remain. The verified Linux OCCT build is retained as local
+image `localhost/prepomaxx-native-cad-builder:occt8.0.1-arm64` (image ID in the
+candidate receipt); its duplicate disposable builder container is removed.
+[Cleanup receipt](native-cad-meshing/cleanup.json).
+
 CAD is still read-only; the measured `.vol` outputs are not yet editable
 desktop analysis meshes. Next is the original VOL reader/mesh handoff and
 desktop meshing controls, followed by CAD editing/repair coverage and the
 remaining native Gmsh/QuadWild paths. Both original correctness failures,
 the tetrahedron engineering gate, exact visualization parity, broader 3.0.0
 parity and four-target/release acceptance remain open.
+
+[Task 0067](../tasks/0067-native-cad-static-workflow.md) prepares the next full
+bounded native CAD → first-order mesh → static solve/results desktop workflow.

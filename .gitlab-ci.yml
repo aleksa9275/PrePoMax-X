@@ -1,4 +1,11 @@
 # PrePoMax-X additive checks; the upstream Windows solution is untouched.
+# Quota hold: ordinary pushes consume no hosted minutes. Run manually only
+# after explicit maintainer instruction; retain all checks for that milestone.
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - when: never
+
 include:
   - local: X/Checks/gitlab-ci.yml
   - local: X/Build/gitlab-ci.yml

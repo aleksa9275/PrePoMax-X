@@ -7,6 +7,9 @@ native-cad-linux-x64:
   tags: [saas-linux-small-amd64]
   timeout: 45m
   rules:
+    - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: true
     - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "push"'
       changes:
         - X/Build/NativeCad/**/*

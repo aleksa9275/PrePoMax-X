@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "runtime": "/tmp/prepomaxx-task0063-recipe/runtime",
+  "buildLibrariesUnavailable": [
+    "/tmp/prepomaxx-occt-install",
+    "/tmp/prepomaxx-occt-build/mac64/clang/lib"
+  ],
+  "commands": [
+    {
+      "operation": "STEP_ASSEMBLY_SPLIT_TO_COMPOUNDS",
+      "exitCode": 0
+    },
+    {
+      "operation": "BREP_VISUALIZATION",
+      "exitCode": 0
+    },
+    {
+      "operation": "BREP_MESH",
+      "exitCode": 0
+    }
+  ],
+  "buildLibrariesRestored": true
+}

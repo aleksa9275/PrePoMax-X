@@ -1,0 +1,30 @@
+{
+  "app": "/tmp/prepomaxx-task0064-current/dist/PrePoMax-X-Viewport.app",
+  "nativeCadRuntime": "/tmp/prepomaxx-task0063-recipe/runtime",
+  "nativeLinuxRuntime": "/tmp/prepomaxx-task0063-linux/runtime",
+  "applicationSource": {
+    "viewportSha256": "292003f85a288254ee01f5285cd819e1aee55867ba3534736fb25e19e5280ea4",
+    "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+    "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+    "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+    "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+    "cadImportSha256": "85c7844e293f9604736998303df9a6e26605d24029b04f6f21e758333806c8b6",
+    "cadJobSha256": "fbcffaa67ae9bd7c1e4ddd18adfff94c1500df04328a94663ab073b58c40f897",
+    "cadSceneSha256": "a914db43434c91c9344e8e1842525c116bfa4ea5249fe60a859313500b5237d6",
+    "desktopJobsSha256": "b654c9f034d01a2575a59536b136045f645342658c98941ceeac848b924e3c1e",
+    "target": "osx-arm64",
+    "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+    "gitHead": "26189d8faa037d236fbb65752bb5767b03d37c0b",
+    "dirty": true,
+    "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613"
+  },
+  "changedCode": [],
+  "sourcePatchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "gitStatusNote": "Only pre-existing untracked Finder .DS_Store files set the dirty flag; all application source hashes match published 26189d8f.",
+  "signing": "ad hoc; codesign --verify --deep --strict passed",
+  "notarized": false,
+  "fullParityAccepted": false,
+  "nativeCadExecutableSha256": "6018c4dd94d7873e68c4c24ae2a51b45f5a2662a12fc193523792921e7c2313a",
+  "linuxOcctCacheImage": "localhost/prepomaxx-native-cad-builder:occt8.0.1-arm64",
+  "linuxOcctCacheImageId": "34610ff4c4a9d6a39bcf1c5576dd4cfe86b7a1347c885acd048bb9ab8ed64e25"
+}

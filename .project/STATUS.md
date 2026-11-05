@@ -14,7 +14,11 @@ jobs in the CAD checkpoint pipeline were cancelled, with actual outcomes to be
 recorded at closeout. Expensive CAD-source and desktop-package builds become
 manual push milestones; ordinary source checks and numerical integration
 triggers are preserved. Missing milestones remain pending for platform/release
-acceptance. Use native local caches for routine development under D050.
+acceptance. The maintainer's follow-up says there is no hosted CI for the next
+25 days. D058 now blocks automatic pipelines entirely: ordinary pushes consume
+zero hosted minutes, and web/manual runs require explicit maintainer instruction.
+Let the existing x64 build finish; do not retry it or start other hosted jobs.
+Continue with local native checks and retained caches, preserving pending gates.
 
 ## Current — tasks 0063–0064: original native CAD and meshing
 

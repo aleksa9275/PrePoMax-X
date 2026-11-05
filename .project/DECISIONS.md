@@ -1,5 +1,17 @@
 # Decision register
 
+D058 — Hosted runner quota hold, 2026-11-05: the maintainer warns that the
+first uncached x64 CAD build consumes the remaining monthly CI allowance and
+hosted CI will be unavailable for the next 25 days. Let the current test finish;
+start no further hosted runs without explicit maintainer instruction. Ordinary
+pushes must consume zero runner minutes. Preserve the complete test/job matrix
+behind manually requested web pipelines, use native Mac/Linux ARM64 local
+verification and retained tool caches, and keep unexecuted x64/Windows/release
+checks pending. This narrows D051's hosted verification cadence for the quota
+hold without changing its research-branch publication authorization, engineering
+tests/tolerances or release requirements. No automatic re-enable date or hidden
+retry is selected. [Task 0065](tasks/0065-ci-quota-milestones.md).
+
 D057 — Original PMX compatibility, 2026-11-03. The maintainer selects full
 original .pmx compatibility and reusability for task 0045. Require original
 Windows PrePoMax 3.0.0 interoperability in both directions, preserve editable
