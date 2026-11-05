@@ -1,5 +1,5 @@
 # Compile native dependencies only when their sources/consumers/build inputs change.
-# Exercise the extracted x64 desktop preview on packaging/desktop changes.
+# Expensive CAD/desktop builds are explicit milestones while runner quota is scarce.
 native-cad-linux-x64:
   extends: .portable-packages
   stage: test
@@ -15,6 +15,8 @@ native-cad-linux-x64:
         - X/Feasibility/Cad/test_native.py
         - .project/reports/native-cad-meshing-reference/**/*
         - X/Build/gitlab-ci.yml
+      when: manual
+      allow_failure: true
     - when: never
   before_script:
     - apt-get update
@@ -59,6 +61,8 @@ native-cpu-workflow-linux-x64:
         - X/Feasibility/PmxDeck/**/*
       variables:
         BUILD_LINUX_DESKTOP: "1"
+      when: manual
+      allow_failure: true
     - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "push"'
       changes:
         - ThirdParty/Build/**/*

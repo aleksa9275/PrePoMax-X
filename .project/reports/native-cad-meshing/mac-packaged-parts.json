@@ -1,0 +1,137 @@
+{
+  "success": true,
+  "cad": {
+    "nodes": 16,
+    "triangles": 24,
+    "edgeSegments": 24,
+    "sourceFaces": 12,
+    "partCount": 2,
+    "pickedPartFaces": [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ]
+    ],
+    "conversion": "Native Netgen 5.3.1 / OCCT 8.0.1"
+  },
+  "checks": [
+    {
+      "name": "native render window",
+      "passed": true
+    },
+    {
+      "name": "renderer node and triangle IDs retained",
+      "passed": true
+    },
+    {
+      "name": "CAD edges visible without triangle wireframe",
+      "passed": true
+    },
+    {
+      "name": "CAD document is read-only",
+      "passed": true
+    },
+    {
+      "name": "source face IDs carried by VTK cells",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (1, 2)",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (1, 4)",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (1, 6)",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (2, 2)",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (2, 4)",
+      "passed": true
+    },
+    {
+      "name": "CAD pick resolves source face (2, 6)",
+      "passed": true
+    },
+    {
+      "name": "visible CAD face picked",
+      "passed": true
+    },
+    {
+      "name": "visible face picked in every CAD part",
+      "passed": true
+    },
+    {
+      "name": "VTK preserves sourceNodeId",
+      "passed": true
+    },
+    {
+      "name": "VTK preserves sourcePartId",
+      "passed": true
+    },
+    {
+      "name": "VTK preserves sourceElementId",
+      "passed": true
+    },
+    {
+      "name": "VTK preserves sourcePartId",
+      "passed": true
+    },
+    {
+      "name": "resize renders",
+      "passed": true
+    },
+    {
+      "name": "displayed frame has mesh/legend pixels",
+      "passed": true
+    },
+    {
+      "name": "window capture",
+      "passed": true
+    }
+  ],
+  "storagePaths": {
+    "AppLocalDataLocation": "/Users/aleksa/Library/Application Support/PrePoMax-X/PrePoMax-X Preview",
+    "CacheLocation": "/Users/aleksa/Library/Caches/PrePoMax-X/PrePoMax-X Preview",
+    "AppConfigLocation": "/Users/aleksa/Library/Preferences/PrePoMax-X/PrePoMax-X Preview"
+  },
+  "qtSettingsPath": "/Users/aleksa/Library/Preferences/com.prepomax-x.PrePoMax-X Preview.plist",
+  "target": "osx-arm64",
+  "selection": {
+    "sourceFaceId": 6,
+    "sourcePartId": 2
+  },
+  "vtkVersion": "9.5.2",
+  "qtVersion": "6.10.2",
+  "sourceSha256": "8661487243bccad97e868c1222a8429b1602b17a2804fb95aeeed05801aa6199",
+  "renderer": "vtkCocoaRenderWindow",
+  "toolSha256": "292003f85a288254ee01f5285cd819e1aee55867ba3534736fb25e19e5280ea4",
+  "transport": "native-cocoa",
+  "scope": "Bounded render and programmatic picking; human pointer, DPI, other platforms and release packaging remain"
+}

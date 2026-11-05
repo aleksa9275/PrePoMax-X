@@ -108,6 +108,17 @@ tests and three scene-identity tests pass.
 [STEP desktop receipt](native-cad-meshing/mac-desktop-step.json) ·
 [Two-part desktop receipt](native-cad-meshing/mac-desktop-parts.json).
 
+The ad-hoc-signed packaged Mac app also passes native STEP import in the frame
+bridge and native two-part import/picking in Cocoa, using its bundled decoder
+hosts and the explicit native CAD runtime. Signature verification passes.
+[Packaged STEP](native-cad-meshing/mac-packaged-step.json) ·
+[Packaged two-part](native-cad-meshing/mac-packaged-parts.json).
+
+The next local operation experiment passes valid-box repair, translation,
+mid-plane splitting and STEP export/reimport on Mac/Linux ARM64 and the original
+Windows tool. The three BREP operations produce identical bytes on all paths.
+[Actual scope and receipts](native-cad-operations.md).
+
 CAD is still read-only; the measured `.vol` outputs are not yet editable
 desktop analysis meshes. Next is the original VOL reader/mesh handoff and
 desktop meshing controls, followed by CAD editing/repair coverage and the

@@ -1,5 +1,21 @@
 # Project status
 
+## Current — task 0066: original CAD command roundtrips
+
+Native Mac/Linux ARM64 and the pinned Windows reference pass valid-box repair,
+translation, mid-plane splitting and STEP export/reimport. Repair, translation
+and split BREP bytes match across all three paths. General repair and desktop
+CAD authoring remain open. [Evidence](reports/native-cad-operations.md).
+
+## Current — task 0065: hosted CI quota
+
+The maintainer reports less than 25% of compute minutes remaining. Redundant
+jobs in the CAD checkpoint pipeline were cancelled, with actual outcomes to be
+recorded at closeout. Expensive CAD-source and desktop-package builds become
+manual push milestones; ordinary source checks and numerical integration
+triggers are preserved. Missing milestones remain pending for platform/release
+acceptance. Use native local caches for routine development under D050.
+
 ## Current — tasks 0063–0064: original native CAD and meshing
 
 The newly published original NetgenMesher/modified Netgen source is recovered,

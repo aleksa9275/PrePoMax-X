@@ -1,0 +1,82 @@
+{
+  "success": true,
+  "host": "Darwin",
+  "machine": "arm64",
+  "conversion": "Native Netgen 5.3.1 / OCCT 8.0.1",
+  "executableSha256": "6018c4dd94d7873e68c4c24ae2a51b45f5a2662a12fc193523792921e7c2313a",
+  "operations": [
+    {
+      "operation": "repair",
+      "brepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+      "solidCount": 1,
+      "faceCount": 6,
+      "volume": 1999.9999999999995,
+      "center": [
+        5,
+        5,
+        10
+      ]
+    },
+    {
+      "operation": "translate",
+      "brepSha256": "16bf8fe126166ca4aaf5d24771092f92867f74f003a0716b235ad3be8cfc9b61",
+      "solidCount": 1,
+      "faceCount": 6,
+      "volume": 1999.9999999999995,
+      "center": [
+        12.000000000000002,
+        1.9999999999999998,
+        15
+      ]
+    },
+    {
+      "operation": "split",
+      "brepSha256": "c2f47f772d6af8c97e635d9b6b5057bf028f1d94f404d8c49ab2a700cc7a1916",
+      "volumes": [
+        999.9999999999998,
+        999.9999999999998
+      ],
+      "centers": [
+        [
+          5,
+          5,
+          4.999999999999999
+        ],
+        [
+          5,
+          5,
+          15.000000000000002
+        ]
+      ],
+      "sourceSolidOrigins": [
+        "1",
+        "1"
+      ]
+    },
+    {
+      "operation": "STEP roundtrip",
+      "stepSha256": "0a11aa3457ca56771ca68be662fa1aeacc6adff7355c7d49d1a1c0812cf610dd",
+      "solidCount": 1,
+      "faceCount": 6,
+      "volume": 1999.9999999999995,
+      "center": [
+        5,
+        5,
+        10
+      ]
+    }
+  ],
+  "generalCadRepairAccepted": false,
+  "baseline": {
+    "solidCount": 1,
+    "faceCount": 6,
+    "volume": 1999.9999999999995,
+    "center": [
+      5,
+      5,
+      10
+    ]
+  },
+  "fixtureSha256": "935d95427e275082fee8582ce0111ca05919730e0c01b6ad717a578d7d291b74",
+  "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81"
+}
