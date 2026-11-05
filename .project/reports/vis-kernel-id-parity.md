@@ -26,15 +26,24 @@ skipped side to an unrelated source edge. After the fix, the adjacent
 side kept its two valid source IDs and the skipped side retained only
 its original edge ID. The original L-bracket's decoded geometry and
 desktop scene hashes were unchanged. macOS ARM64 and Linux ARM64 each
-passed all 348 checks. The macOS fast Core profile also passed.
+passed all 348 checks. The macOS fast Core profile and native desktop
+render and face-pick checks also passed.
 
 The native library at this revision re-triangulates some partially
 meshed faces at finer edge divisions. The upstream repository carries the
 runtime and describes the behavior, while the source for the custom
-wrapper and matching modified library remains unlocated. The pinned
-native source/build request can now name the exact binary drop. The
+wrapper and matching modified library remains unlocated. The official
+archive's 1,720 entries include no C/C++ sources, Visual Studio projects
+or PDBs. The binary debug paths identify the `NetGenLibTest` release build
+and Netgen 5.3.1's `windows/nglib` Release(OCC) build, both labelled
+Visual Studio 2026 and OCCT 8.0.1. The pinned native source/build request
+can now name the exact binary drop and build directories. The
 managed application release's source correspondence is tracked separately.
 [Upstream maintainer's STEP import description](https://prepomax.discourse.group/t/step-import-source-code-questions/3312/3).
+
+Implementation `ade88e61` was pushed and verified on
+`origin/research/native-feasibility`.
+[Exact-commit pipeline #3029605997](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029605997).
 
 Native STEP/BREP import, CAD repair and volume meshing remain open, along
 with both correctness failures, the tetrahedron gate, broader 3.0.0 parity

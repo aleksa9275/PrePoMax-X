@@ -5,7 +5,8 @@ native-cpu-workflow-linux-x64:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:10.0-noble
   tags: [saas-linux-small-amd64]
-  timeout: 10m
+  # The desktop path can spend several minutes downloading pinned Qt/VTK wheels.
+  timeout: 25m
   variables:
     GIT_DEPTH: "0"
     DOTNET_CLI_TELEMETRY_OPTOUT: "1"

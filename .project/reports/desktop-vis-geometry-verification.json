@@ -1,0 +1,302 @@
+{
+  "implementation": "0d232799ad7b9b959d636ce52dab47fcd2969e20",
+  "portableVis": {
+    "platformChecks": {
+      "osx-arm64": 346,
+      "linux-arm64": 346,
+      "linux-x64": 346
+    },
+    "decodedSha256": "ccb7c45612b915a755b21b83de06b24d9ab28c30c73abbe90241ee9c88d62eaf",
+    "sceneSha256": "1fc206733144279fd9d00eea71465cccdbc974686b469f9aea021d37cd8e2a81",
+    "linuxX64Job": 17755041225
+  },
+  "macDesktop": {
+    "sourceRegressionTests": 15,
+    "buildBoundaryTests": 9,
+    "packageBuildBase": "e44cd46ae1a2f758c0fd5e37d3fd9264f1583541",
+    "buildInputsMatchedImplementation": {
+      "CaeModel/FileInOut/Input/VisFileReader/VisFileReader.GeometryData.cs": "34c906800d65d15eaefdf43a9754284499453cf558f1c5e29ec653710e2ab669",
+      "X/Build/build.py": "4d607311e6f297e3a0d5c1fa62630ef6c5208e9a7d1a73dc8d41ea79904c6acc",
+      "X/Desktop/viewport.py": "f9ad205548d369db9401740727d7c39da3dbc731a2d0380aae27eafdc11ab43f",
+      "X/Feasibility/Cad/Directory.Build.props": "7d3a930d13ee865186d103711733ba7ac41d119a527fec488afd5f48406cfa2b",
+      "X/Feasibility/Cad/Inspect/Program.cs": "f71baa966955b485d529ba76755e217f7cfcbb6d9c772b93e91779ba585d1a31"
+    },
+    "target": "osx-arm64",
+    "bundledHostsWithSystemOnlyPath": true,
+    "packaged": {
+      "cad": {
+        "success": true,
+        "checks": [
+          {
+            "name": "native render window",
+            "passed": true
+          },
+          {
+            "name": "original VIS node and triangle IDs retained",
+            "passed": true
+          },
+          {
+            "name": "CAD edges visible without triangle wireframe",
+            "passed": true
+          },
+          {
+            "name": "CAD document is read-only",
+            "passed": true
+          },
+          {
+            "name": "source face IDs carried by VTK cells",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 2",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 3",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 4",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 5",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 7",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 9",
+            "passed": true
+          },
+          {
+            "name": "visible CAD face picked",
+            "passed": true
+          },
+          {
+            "name": "resize renders",
+            "passed": true
+          },
+          {
+            "name": "displayed frame has mesh/legend pixels",
+            "passed": true
+          },
+          {
+            "name": "window capture",
+            "passed": true
+          }
+        ],
+        "renderer": "vtkCocoaRenderWindow",
+        "transport": "frame-bridge",
+        "qtVersion": "6.10.2",
+        "vtkVersion": "9.5.2",
+        "sourceSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+        "geometry": {
+          "nodes": 38,
+          "triangles": 72,
+          "edgeSegments": 45,
+          "sourceFaces": 9,
+          "pickedSourceFaceIds": [
+            2,
+            3,
+            4,
+            5,
+            7,
+            9
+          ]
+        },
+        "screenshotSha256": "10bc7f9d6525ba6e2afcd401336ef8450fb78755fb36e996af76c7a1ddea33c6"
+      },
+      "cad-cocoa": {
+        "success": true,
+        "checks": [
+          {
+            "name": "native render window",
+            "passed": true
+          },
+          {
+            "name": "original VIS node and triangle IDs retained",
+            "passed": true
+          },
+          {
+            "name": "CAD edges visible without triangle wireframe",
+            "passed": true
+          },
+          {
+            "name": "CAD document is read-only",
+            "passed": true
+          },
+          {
+            "name": "source face IDs carried by VTK cells",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 2",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 3",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 4",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 5",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 7",
+            "passed": true
+          },
+          {
+            "name": "CAD pick resolves source face 9",
+            "passed": true
+          },
+          {
+            "name": "visible CAD face picked",
+            "passed": true
+          },
+          {
+            "name": "resize renders",
+            "passed": true
+          },
+          {
+            "name": "displayed frame has mesh/legend pixels",
+            "passed": true
+          },
+          {
+            "name": "window capture",
+            "passed": true
+          }
+        ],
+        "renderer": "vtkCocoaRenderWindow",
+        "transport": "native-cocoa",
+        "qtVersion": "6.10.2",
+        "vtkVersion": "9.5.2",
+        "sourceSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+        "geometry": {
+          "nodes": 38,
+          "triangles": 72,
+          "edgeSegments": 45,
+          "sourceFaces": 9,
+          "pickedSourceFaceIds": [
+            2,
+            3,
+            4,
+            5,
+            7,
+            9
+          ]
+        },
+        "screenshotSha256": "0519168dae51f1e9be2bdde9f253d01470b44cdb97146fe6322ba23a1eeac606"
+      },
+      "solve": {
+        "success": true,
+        "checks": [
+          {
+            "name": "desktop native solve and result loading",
+            "passed": true
+          },
+          {
+            "name": "native render window",
+            "passed": true
+          },
+          {
+            "name": "original IDs retained",
+            "passed": true
+          },
+          {
+            "name": "field scalar mapping",
+            "passed": true
+          },
+          {
+            "name": "VTK hit resolves original element ID",
+            "passed": true
+          },
+          {
+            "name": "nearest vertex resolves original node ID",
+            "passed": true
+          },
+          {
+            "name": "selected coordinates preserved",
+            "passed": true
+          },
+          {
+            "name": "selected nodal value uses original value order",
+            "passed": true
+          },
+          {
+            "name": "resize renders",
+            "passed": true
+          },
+          {
+            "name": "displayed frame has mesh/legend pixels",
+            "passed": true
+          }
+        ],
+        "renderer": "vtkCocoaRenderWindow",
+        "transport": "frame-bridge",
+        "qtVersion": "6.10.2",
+        "vtkVersion": "9.5.2",
+        "sourceSha256": "b24bf3cfc22eaaf0eb3fd5407d3e2d4698ca4719fd92bcfc95e32988a2f0ee64",
+        "solverExecuted": true,
+        "analyticalChecks": [
+          {
+            "name": "all eight displacement IDs exactly once",
+            "passed": true
+          },
+          {
+            "name": "all eight force IDs exactly once",
+            "passed": true
+          },
+          {
+            "name": "all displacement components match uniform uniaxial strain",
+            "passed": true
+          },
+          {
+            "name": "eight integration-point stresses",
+            "passed": true
+          },
+          {
+            "name": "axial stress 100 MPa, transverse/shear zero",
+            "passed": true
+          },
+          {
+            "name": "supported face balances 100 N",
+            "passed": true
+          },
+          {
+            "name": "global nodal-force sum zero",
+            "passed": true
+          }
+        ],
+        "alteredDisplacementRejected": true
+      }
+    }
+  },
+  "linuxArm64Desktop": {
+    "archiveSha256": "47f8edd990ea0c2382dc44b4fdf14850a20e9d158e45e8b4e9284d06174d651b",
+    "archiveBytes": 343591484,
+    "mode": "extracted in disposable Ubuntu 24.04 builder container under Xvfb and Mesa",
+    "cadChecksPassed": 14,
+    "geometry": {
+      "nodes": 38,
+      "triangles": 72,
+      "edgeSegments": 45,
+      "sourceFaces": 9,
+      "pickedSourceFaceIds": [
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ]
+    },
+    "nativeSolverAndAnalyticalChecksPassed": true
+  }
+}
