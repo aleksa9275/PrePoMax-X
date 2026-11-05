@@ -34,3 +34,14 @@ For a direct candidate comparison, replace the reference options with
 repeatable bytes and an identical decoded scene. The report also says
 whether its raw BREP and VIS match the original. A fixture match leaves
 source correspondence and native platform acceptance as separate checks.
+
+The shared `convert_cad_parts` boundary accepts up to 32 emitted BREP
+parts, with at most 32 MiB of combined BREP and 16 MiB of combined VIS.
+Each VIS is limited to 1 MiB. The original single-part conversion entry
+continues to require one output.
+
+The two-part fixture was captured twice through the pinned original tool
+and imported twice in the original Windows application. Verify its
+topology, canonical measurements and part-scoped renderer IDs with
+
+    python3 X/Feasibility/Cad/verify-parts.py --inspector /tmp/prepomaxx-vis/bin/Inspect/release/PrePoMaxX.InspectVis.dll --output /tmp/cad-parts.json

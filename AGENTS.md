@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0060–0062 add bounded multi-part reference conversion, part-scoped
+source identities and desktop display/picking of all emitted parts.
+The two-body original Windows app capture and repeat tool outputs
+match. Read .project/reports/multipart-cad-preview.md for checks and
+publication. Matching native C++ sources, native CAD execution,
+Windows geometry selection numbering and all correctness, tetrahedron,
+parity and release gates remain open.
+
 Task 0059 runs CAD import and VIS decoding in a background worker,
 with cancellation and deferred window closing. The previous document
 is retained until success. Read .project/reports/responsive-cad-import.md

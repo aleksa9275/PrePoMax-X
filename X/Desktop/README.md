@@ -67,7 +67,7 @@ BREP in the open dialog.
       --cad-reference "/path/to/Meshers/Netgen" cad-reference "/path/to/L_bracket_r.step"
 
 This read-only preview accepts files up to 16 MiB whose split produces
-one BREP file. It runs conversion in a temporary workspace before
+up to 32 BREP parts. It converts and decodes every part in a temporary workspace before
 opening the validated VIS scene. Each conversion stage has a 60-second
 limit. Imports opened through the file dialog or command line run in the
 background. The current document stays visible until conversion and decoding
@@ -75,6 +75,13 @@ finish. Use **Cancel** to stop the import. Closing the window waits for the
 cancelled worker to finish. The macOS app carries the reference hash receipt, and CrossOver
 and the Windows runtime are supplied separately.
 [Reference replay and setup](../Feasibility/Cad/README.md).
+
+A multi-part import displays all emitted parts together. Each model-tree
+entry keeps that part's original CAD measurements. Clicking a face selects
+both its part and its source face ID. Source node, triangle and edge IDs
+remain scoped to their own part, including coincident nodes shared in
+space. If any part fails or the import is cancelled, the prior document
+stays visible.
 
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge

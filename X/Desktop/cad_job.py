@@ -6,6 +6,7 @@ from threading import Event
 from PyQt6 import QtCore
 
 from cad_import import CadImportCancelled
+from cad_scene import read_cad_parts
 
 
 class CadImportJob(QtCore.QThread):
@@ -23,8 +24,8 @@ class CadImportJob(QtCore.QThread):
     def run(self):
         try:
             with TemporaryDirectory(prefix="prepomaxx-cad-") as directory:
-                _, vis = self.tool.convert(self.source, Path(directory) / "import", cancel=self.cancel_requested)
-                scene = self.decoder(vis, cancel=self.cancel_requested)
+                scene = read_cad_parts(self.source, self.tool, self.decoder, Path(directory) / "import",
+                                       cancel=self.cancel_requested)
             if self.cancel_requested.is_set():
                 raise CadImportCancelled("CAD import cancelled.")
             scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"

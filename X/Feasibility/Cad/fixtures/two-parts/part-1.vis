@@ -1,0 +1,420 @@
+VIS file format: 2
+Coordinate system: global
+Length unit: model
+
+**********
+Geometry
+**********
+
+Number of solids: 1
+
+Solid number: 1
+Solid orientation: Forward
+Solid bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Solid volume: 1999.9999999999995
+Solid center_of_mass: 5 5 10
+Solid inertia_at_center_of_mass: 83333.333333333314 0 0 0 83333.333333333314 0 0 0 33333.333333333343
+Solid surface_area: 999.99999999999989
+Solid shell_ids: 1
+Solid face_ids: 1 2 3 4 5 6
+
+Number of shells: 1
+
+Shell number: 1
+Shell orientation: Forward
+Shell closed: 1
+Shell bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Shell area: 999.99999999999989
+Shell centroid: 5 5 10
+Shell face_ids: 1 2 3 4 5 6
+
+Number of faces: 6
+
+Face number: 1
+Face orientation: Reversed
+Face type: Plane
+Face bounding_box: -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Face area: 199.99999999999997
+Face centroid: 0 5 10
+Face edge_ids: 1 2 3 4
+Face axis: 0 0 0 1 0 -0
+Face x_direction: 0 0 1
+Face y_direction: 0 -1 0
+
+Face number: 2
+Face orientation: Forward
+Face type: Plane
+Face bounding_box: 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Face area: 199.99999999999997
+Face centroid: 10 5 10
+Face edge_ids: 5 6 7 8
+Face axis: 10 0 0 1 0 -0
+Face x_direction: 0 0 1
+Face y_direction: 0 -1 0
+
+Face number: 3
+Face orientation: Reversed
+Face type: Plane
+Face bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 20.000000100000001
+Face area: 199.99999999999997
+Face centroid: 5 0 10
+Face edge_ids: 9 5 10 1
+Face axis: 0 0 0 -0 1 0
+Face x_direction: 0 0 1
+Face y_direction: 1 0 -0
+
+Face number: 4
+Face orientation: Forward
+Face type: Plane
+Face bounding_box: -9.9999999999999995e-08 10.000000099999999 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Face area: 199.99999999999997
+Face centroid: 5 10 10
+Face edge_ids: 11 7 12 3
+Face axis: 0 10 0 -0 1 0
+Face x_direction: 0 0 1
+Face y_direction: 1 0 -0
+
+Face number: 5
+Face orientation: Reversed
+Face type: Plane
+Face bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08
+Face area: 99.999999999999986
+Face centroid: 5 5 0
+Face edge_ids: 4 11 8 9
+Face axis: 0 0 0 0 0 1
+Face x_direction: 1 0 -0
+Face y_direction: -0 1 0
+
+Face number: 6
+Face orientation: Forward
+Face type: Plane
+Face bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 19.999999899999999 20.000000100000001
+Face area: 99.999999999999986
+Face centroid: 5 5 20
+Face edge_ids: 2 12 6 10
+Face axis: 0 0 20 0 0 1
+Face x_direction: 1 0 -0
+Face y_direction: -0 1 0
+
+Number of edges: 12
+
+Edge number: 1
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 20.000000100000001
+Edge length: 20
+Edge centroid: 0 0 10
+Edge midpoint: 0 0 10
+Edge vertex_ids: 1 2
+Edge face_ids: 1 3
+Edge face_use_count: 2
+Edge axis: 0 0 0 0 0 1
+
+Edge number: 2
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 10.000000099999999 19.999999899999999 20.000000100000001
+Edge length: 10
+Edge centroid: 0 5 20
+Edge midpoint: 0 5 20
+Edge vertex_ids: 3 1
+Edge face_ids: 1 6
+Edge face_use_count: 2
+Edge axis: 0 0 20 -0 1 0
+
+Edge number: 3
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 9.9999999999999995e-08 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Edge length: 20
+Edge centroid: 0 10 10
+Edge midpoint: 0 10 10
+Edge vertex_ids: 3 4
+Edge face_ids: 1 4
+Edge face_use_count: 2
+Edge axis: 0 10 0 0 0 1
+
+Edge number: 4
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08
+Edge length: 10
+Edge centroid: 0 5 0
+Edge midpoint: 0 5 0
+Edge vertex_ids: 4 2
+Edge face_ids: 1 5
+Edge face_use_count: 2
+Edge axis: 0 0 0 -0 1 0
+
+Edge number: 5
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 20.000000100000001
+Edge length: 20
+Edge centroid: 10 0 10
+Edge midpoint: 10 0 10
+Edge vertex_ids: 5 6
+Edge face_ids: 2 3
+Edge face_use_count: 2
+Edge axis: 10 0 0 0 0 1
+
+Edge number: 6
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 19.999999899999999 20.000000100000001
+Edge length: 10
+Edge centroid: 10 5 20
+Edge midpoint: 10 5 20
+Edge vertex_ids: 7 5
+Edge face_ids: 2 6
+Edge face_use_count: 2
+Edge axis: 10 0 20 -0 1 0
+
+Edge number: 7
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: 9.9999999000000006 10.000000099999999 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 20.000000100000001
+Edge length: 20
+Edge centroid: 10 10 10
+Edge midpoint: 10 10 10
+Edge vertex_ids: 7 8
+Edge face_ids: 2 4
+Edge face_use_count: 2
+Edge axis: 10 10 0 0 0 1
+
+Edge number: 8
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08
+Edge length: 10
+Edge centroid: 10 5 0
+Edge midpoint: 10 5 0
+Edge vertex_ids: 8 6
+Edge face_ids: 2 5
+Edge face_use_count: 2
+Edge axis: 10 0 0 -0 1 0
+
+Edge number: 9
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08 -9.9999999999999995e-08 9.9999999999999995e-08
+Edge length: 10
+Edge centroid: 5 0 0
+Edge midpoint: 5 0 0
+Edge vertex_ids: 6 2
+Edge face_ids: 3 5
+Edge face_use_count: 2
+Edge axis: 0 0 0 1 0 -0
+
+Edge number: 10
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08 19.999999899999999 20.000000100000001
+Edge length: 10
+Edge centroid: 5 0 20
+Edge midpoint: 5 0 20
+Edge vertex_ids: 5 1
+Edge face_ids: 3 6
+Edge face_use_count: 2
+Edge axis: 0 0 20 1 0 -0
+
+Edge number: 11
+Edge orientation: Reversed
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 10.000000099999999 9.9999999000000006 10.000000099999999 -9.9999999999999995e-08 9.9999999999999995e-08
+Edge length: 10
+Edge centroid: 5 10 0
+Edge midpoint: 5 10 0
+Edge vertex_ids: 8 4
+Edge face_ids: 4 5
+Edge face_use_count: 2
+Edge axis: 0 10 0 1 0 -0
+
+Edge number: 12
+Edge orientation: Forward
+Edge type: Line
+Edge degenerated: 0
+Edge bounding_box: -9.9999999999999995e-08 10.000000099999999 9.9999999000000006 10.000000099999999 19.999999899999999 20.000000100000001
+Edge length: 10
+Edge centroid: 5 10 20
+Edge midpoint: 5 10 20
+Edge vertex_ids: 7 3
+Edge face_ids: 4 6
+Edge face_use_count: 2
+Edge axis: 0 10 20 1 0 -0
+
+Number of vertices: 8
+
+Vertex number: 1
+Vertex orientation: Reversed
+Vertex coordinates: 0 0 20
+Vertex edge_ids: 1 2 10
+
+Vertex number: 2
+Vertex orientation: Forward
+Vertex coordinates: 0 0 0
+Vertex edge_ids: 1 4 9
+
+Vertex number: 3
+Vertex orientation: Reversed
+Vertex coordinates: 0 10 20
+Vertex edge_ids: 2 3 12
+
+Vertex number: 4
+Vertex orientation: Reversed
+Vertex coordinates: 0 10 0
+Vertex edge_ids: 3 4 11
+
+Vertex number: 5
+Vertex orientation: Forward
+Vertex coordinates: 10 0 20
+Vertex edge_ids: 5 6 10
+
+Vertex number: 6
+Vertex orientation: Reversed
+Vertex coordinates: 10 0 0
+Vertex edge_ids: 5 8 9
+
+Vertex number: 7
+Vertex orientation: Forward
+Vertex coordinates: 10 10 20
+Vertex edge_ids: 6 7 12
+
+Vertex number: 8
+Vertex orientation: Forward
+Vertex coordinates: 10 10 0
+Vertex edge_ids: 7 8 11
+
+**********
+Visualization
+**********
+
+Number of visualization vertices: 8 (Id, X, Y, Z)
+1 0 0 20
+2 0 0 0
+3 0 10 20
+4 0 10 0
+5 10 0 20
+6 10 0 0
+7 10 10 20
+8 10 10 0
+
+**********
+Face mesh number: 1
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 0 0 0
+2 0 0 20
+3 0 10 0
+4 0 10 20
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 2 1 3
+2 2 3 4
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 1 1 2
+Edge polyline: 2 2 4
+Edge polyline: 3 3 4
+Edge polyline: 4 1 3
+**********
+Face mesh number: 2
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 10 0 0
+2 10 0 20
+3 10 10 0
+4 10 10 20
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 2 1 3
+2 2 3 4
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 5 1 2
+Edge polyline: 6 2 4
+Edge polyline: 7 3 4
+Edge polyline: 8 1 3
+**********
+Face mesh number: 3
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 0 0 0
+2 10 0 0
+3 0 0 20
+4 10 0 20
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 4 2 1
+2 4 1 3
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 9 1 2
+Edge polyline: 5 2 4
+Edge polyline: 10 3 4
+Edge polyline: 1 1 3
+**********
+Face mesh number: 4
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 0 10 0
+2 10 10 0
+3 0 10 20
+4 10 10 20
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 4 2 1
+2 4 1 3
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 11 1 2
+Edge polyline: 7 2 4
+Edge polyline: 12 3 4
+Edge polyline: 3 1 3
+**********
+Face mesh number: 5
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 0 0 0
+2 0 10 0
+3 10 0 0
+4 10 10 0
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 4 2 1
+2 4 1 3
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 4 1 2
+Edge polyline: 11 2 4
+Edge polyline: 8 3 4
+Edge polyline: 9 1 3
+**********
+Face mesh number: 6
+**********
+Number of nodes: 4 (Id, X, Y, Z)
+1 0 0 20
+2 0 10 20
+3 10 0 20
+4 10 10 20
+**********
+Number of triangles: 2 (Id, N1, N2, N3)
+1 4 2 1
+2 4 1 3
+**********
+Number of edge polylines: 4 (Edge Id, N1, N2, N3 ...)
+Edge polyline: 2 1 2
+Edge polyline: 12 2 4
+Edge polyline: 6 3 4
+Edge polyline: 10 1 3

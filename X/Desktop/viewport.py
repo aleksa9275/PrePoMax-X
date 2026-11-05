@@ -16,6 +16,7 @@ from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
 from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, ReferenceCadTool, run_process
 from cad_job import CadImportJob
+from cad_scene import read_cad_parts
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
@@ -275,15 +276,25 @@ class Viewport(QtWidgets.QMainWindow):
             QtWidgets.QTreeWidgetItem(root, ["Conversion", cad["conversion"]])
         unit = "Model units" if cad["lengthUnit"] == "model" else cad["lengthUnit"]
         QtWidgets.QTreeWidgetItem(root, ["Length unit", unit])
+        if "parts" in cad:
+            for part in cad["parts"]:
+                item = QtWidgets.QTreeWidgetItem(root, [part["name"], f'{part["triangleCount"]} triangles'])
+                self.populate_cad_entities(item, part["entities"], part["id"])
+        else:
+            self.populate_cad_entities(root, cad["entities"])
+        self.model_tree.expandToDepth(1)
+
+    def populate_cad_entities(self, root, metadata, part_id=None):
         for kind, label in (("solid", "Solids"), ("shell", "Shells"), ("face", "Faces"), ("edge", "Edges")):
-            entities = cad["entities"].get(kind, [])
+            entities = metadata.get(kind, [])
             group = QtWidgets.QTreeWidgetItem(root, [label, str(len(entities))])
             for entity in entities:
                 properties = entity["properties"]
                 item = QtWidgets.QTreeWidgetItem(group, [f"{kind.title()} {entity['id']}",
                                                          ", ".join(map(str, properties.get("type", [])))])
                 if kind == "face":
-                    self.cad_faces[entity["id"]] = item
+                    key = (part_id, entity["id"]) if part_id is not None else entity["id"]
+                    self.cad_faces[key] = item
                 for name in ("volume", "surface_area", "center_of_mass", "area", "length", "radius", "convexity"):
                     if name in properties:
                         values = properties[name]
@@ -291,7 +302,6 @@ class Viewport(QtWidgets.QMainWindow):
                                             for value in values)
                         measurement = QtWidgets.QTreeWidgetItem(item, [name.replace("_", " ").capitalize(), display])
                         measurement.setToolTip(1, ", ".join(map(str, values)))
-        self.model_tree.expandToDepth(1)
 
     def edit_tree_item(self, item, column):
         tab = item.data(0, QtCore.Qt.ItemDataRole.UserRole)
@@ -525,8 +535,7 @@ class Viewport(QtWidgets.QMainWindow):
                 QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CursorShape.WaitCursor)
                 try:
                     with tempfile.TemporaryDirectory(prefix="prepomaxx-cad-") as directory:
-                        _, vis = self.cad_tool.convert(path, Path(directory) / "import")
-                        scene = decode(vis)
+                        scene = read_cad_parts(path, self.cad_tool, decode, Path(directory) / "import")
                 finally:
                     QtWidgets.QApplication.restoreOverrideCursor()
                 scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"
@@ -643,6 +652,18 @@ class Viewport(QtWidgets.QMainWindow):
             for element in scene["elements"]:
                 face_ids.InsertNextValue(element["sourceFaceId"])
             grid.GetCellData().AddArray(face_ids)
+            if "parts" in cad:
+                for records, target, fields in (
+                    (nodes, grid.GetPointData(), ("SourceNodeId", "SourcePartId")),
+                    (scene["elements"], grid.GetCellData(), ("SourceElementId", "SourcePartId")),
+                ):
+                    for name in fields:
+                        array = vtkIdTypeArray()
+                        array.SetName(name)
+                        key = name[0].lower() + name[1:]
+                        for record in records:
+                            array.InsertNextValue(record[key])
+                        target.AddArray(array)
             edge_grid = vtkUnstructuredGrid()
             edge_grid.SetPoints(points)
             for segment in cad["edgeSegments"]:
@@ -716,11 +737,19 @@ class Viewport(QtWidgets.QMainWindow):
         if "cad" in self.scene:
             face_id = self.grid.GetCellData().GetArray("SourceFaceId").GetValue(cell)
             self.selection = {"sourceFaceId": face_id}
-            item = self.cad_faces[face_id]
+            part_ids = self.grid.GetCellData().GetArray("SourcePartId")
+            key = face_id
+            if part_ids is not None:
+                part_id = part_ids.GetValue(cell)
+                self.selection["sourcePartId"] = part_id
+                key = (part_id, face_id)
+            item = self.cad_faces[key]
+            item.parent().setExpanded(True)
             self.model_tree.setCurrentItem(item)
             item.setExpanded(True)
             self.model_tree.scrollToItem(item)
-            self.statusBar().showMessage(f"CAD face {face_id} · source ID")
+            description = f"CAD part {part_id}, face {face_id}" if part_ids is not None else f"CAD face {face_id}"
+            self.statusBar().showMessage(description + " · source IDs")
             return self.selection
         self.selection = {
             "elementId": int(self.grid.GetCellData().GetGlobalIds().GetValue(cell)),
@@ -762,7 +791,7 @@ class Viewport(QtWidgets.QMainWindow):
 def verify_cad_view(window, check):
     scene = window.scene
     cad = scene["cad"]
-    check("original VIS node and triangle IDs retained",
+    check("renderer node and triangle IDs retained" if "parts" in cad else "original VIS node and triangle IDs retained",
           [window.grid.GetPointData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfPoints())]
           == [node["id"] for node in scene["nodes"]]
           and [window.grid.GetCellData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfCells())]
@@ -777,7 +806,10 @@ def verify_cad_view(window, check):
           == [element["sourceFaceId"] for element in scene["elements"]])
     hits = set()
     for i, element in enumerate(scene["elements"]):
-        if element["sourceFaceId"] in hits:
+        source_id = element["sourceFaceId"]
+        part_id = element.get("sourcePartId")
+        key = (part_id, source_id) if part_id is not None else source_id
+        if key in hits:
             continue
         triangle = window.grid.GetCell(i).GetPoints()
         centroid = [sum(triangle.GetPoint(j)[axis] for j in range(3)) / 3 for axis in range(3)]
@@ -786,14 +818,29 @@ def verify_cad_view(window, check):
         x, y, _ = window.renderer.GetDisplayPoint()
         selection = window.pick(x, y)
         if selection and window.picker.GetCellId() == i:
-            source_id = element["sourceFaceId"]
-            check(f"CAD pick resolves source face {source_id}",
-                  selection == {"sourceFaceId": source_id}
-                  and window.model_tree.currentItem() is window.cad_faces[source_id])
-            hits.add(source_id)
+            expected = {"sourceFaceId": source_id}
+            if part_id is not None:
+                expected["sourcePartId"] = part_id
+            check(f"CAD pick resolves source face {key}",
+                  selection == expected and window.model_tree.currentItem() is window.cad_faces[key])
+            hits.add(key)
     check("visible CAD face picked", bool(hits))
-    return {"nodes": len(scene["nodes"]), "triangles": len(scene["elements"]), "edgeSegments": len(cad["edgeSegments"]),
-            "sourceFaces": len(window.cad_faces), "pickedSourceFaceIds": sorted(hits)}
+    result = {"nodes": len(scene["nodes"]), "triangles": len(scene["elements"]),
+              "edgeSegments": len(cad["edgeSegments"]), "sourceFaces": len(window.cad_faces)}
+    if "parts" in cad:
+        check("visible face picked in every CAD part", {part for part, _ in hits} == {p["id"] for p in cad["parts"]})
+        for records, data, fields in (
+            (scene["nodes"], window.grid.GetPointData(), ("sourceNodeId", "sourcePartId")),
+            (scene["elements"], window.grid.GetCellData(), ("sourceElementId", "sourcePartId")),
+        ):
+            for key in fields:
+                array = data.GetArray(key[0].upper() + key[1:])
+                check(f"VTK preserves {key}", [array.GetValue(i) for i in range(len(records))]
+                      == [row[key] for row in records])
+        result.update(partCount=len(cad["parts"]), pickedPartFaces=sorted(hits))
+    else:
+        result["pickedSourceFaceIds"] = sorted(hits)
+    return result
 
 
 def verify_mesh_view(window, check):

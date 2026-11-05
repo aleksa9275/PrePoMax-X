@@ -1,0 +1,2210 @@
+{
+  "parts": [
+    {
+      "edges": [
+        {
+          "centroid": [
+            0.0,
+            0.0,
+            10.0
+          ],
+          "geometryId": 20001,
+          "id": 1,
+          "length": 20.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            0.0,
+            5.0,
+            20.0
+          ],
+          "geometryId": 120001,
+          "id": 2,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            0.0,
+            10.0,
+            10.0
+          ],
+          "geometryId": 220001,
+          "id": 3,
+          "length": 20.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "geometryId": 320001,
+          "id": 4,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            10.0,
+            0.0,
+            10.0
+          ],
+          "geometryId": 420001,
+          "id": 5,
+          "length": 20.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            10.0,
+            5.0,
+            20.0
+          ],
+          "geometryId": 520001,
+          "id": 6,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            10.0,
+            10.0,
+            10.0
+          ],
+          "geometryId": 620001,
+          "id": 7,
+          "length": 20.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            10.0,
+            5.0,
+            0.0
+          ],
+          "geometryId": 720001,
+          "id": 8,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            5.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 820001,
+          "id": 9,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            5.0,
+            0.0,
+            20.0
+          ],
+          "geometryId": 920001,
+          "id": 10,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            5.0,
+            10.0,
+            0.0
+          ],
+          "geometryId": 1020001,
+          "id": 11,
+          "length": 10.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            5.0,
+            10.0,
+            20.0
+          ],
+          "geometryId": 1120001,
+          "id": 12,
+          "length": 10.0,
+          "type": "Line"
+        }
+      ],
+      "faces": [
+        {
+          "area": 199.99999999999997,
+          "centroid": [
+            0.0,
+            5.0,
+            10.0
+          ],
+          "geometryId": 40001,
+          "id": 1,
+          "normal": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 199.99999999999997,
+          "centroid": [
+            10.0,
+            5.0,
+            10.0
+          ],
+          "geometryId": 140001,
+          "id": 2,
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 199.99999999999997,
+          "centroid": [
+            5.0,
+            0.0,
+            10.0
+          ],
+          "geometryId": 240001,
+          "id": 3,
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 199.99999999999997,
+          "centroid": [
+            5.0,
+            10.0,
+            10.0
+          ],
+          "geometryId": 340001,
+          "id": 4,
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 99.99999999999999,
+          "centroid": [
+            5.0,
+            5.0,
+            0.0
+          ],
+          "geometryId": 440001,
+          "id": 5,
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 99.99999999999999,
+          "centroid": [
+            5.0,
+            5.0,
+            20.0
+          ],
+          "geometryId": 540001,
+          "id": 6,
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "type": "Plane"
+        }
+      ],
+      "metadata": {
+        "coordinateSystem": "global",
+        "entities": {
+          "edge": [
+            {
+              "id": 1,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  3
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  0.0,
+                  0.0,
+                  10.0
+                ],
+                "orientation": "Forward",
+                "source_id": 1.0,
+                "source_vertex_ids": [
+                  1,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  20.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  10.0000001,
+                  19.9999999,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  0.0,
+                  5.0,
+                  20.0
+                ],
+                "orientation": "Forward",
+                "source_id": 2.0,
+                "source_vertex_ids": [
+                  3,
+                  1
+                ]
+              }
+            },
+            {
+              "id": 3,
+              "properties": {
+                "axis": [
+                  0.0,
+                  10.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  1e-07,
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  4
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  0.0,
+                  10.0,
+                  10.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 3.0,
+                "source_vertex_ids": [
+                  3,
+                  4
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  0.0,
+                  5.0,
+                  0.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 4.0,
+                "source_vertex_ids": [
+                  4,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "properties": {
+                "axis": [
+                  10.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  3
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  10.0,
+                  0.0,
+                  10.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 5.0,
+                "source_vertex_ids": [
+                  5,
+                  6
+                ]
+              }
+            },
+            {
+              "id": 6,
+              "properties": {
+                "axis": [
+                  10.0,
+                  0.0,
+                  20.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  10.0000001,
+                  19.9999999,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  10.0,
+                  5.0,
+                  20.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 6.0,
+                "source_vertex_ids": [
+                  7,
+                  5
+                ]
+              }
+            },
+            {
+              "id": 7,
+              "properties": {
+                "axis": [
+                  10.0,
+                  10.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  9.9999999,
+                  10.0000001,
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  4
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  10.0,
+                  10.0,
+                  10.0
+                ],
+                "orientation": "Forward",
+                "source_id": 7.0,
+                "source_vertex_ids": [
+                  7,
+                  8
+                ]
+              }
+            },
+            {
+              "id": 8,
+              "properties": {
+                "axis": [
+                  10.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  10.0,
+                  5.0,
+                  0.0
+                ],
+                "orientation": "Forward",
+                "source_id": 8.0,
+                "source_vertex_ids": [
+                  8,
+                  6
+                ]
+              }
+            },
+            {
+              "id": 9,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  3,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  5.0,
+                  0.0,
+                  0.0
+                ],
+                "orientation": "Forward",
+                "source_id": 9.0,
+                "source_vertex_ids": [
+                  6,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 10,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  20.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07,
+                  19.9999999,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  3,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  5.0,
+                  0.0,
+                  20.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 10.0,
+                "source_vertex_ids": [
+                  5,
+                  1
+                ]
+              }
+            },
+            {
+              "id": 11,
+              "properties": {
+                "axis": [
+                  0.0,
+                  10.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  4,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  5.0,
+                  10.0,
+                  0.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 11.0,
+                "source_vertex_ids": [
+                  8,
+                  4
+                ]
+              }
+            },
+            {
+              "id": 12,
+              "properties": {
+                "axis": [
+                  0.0,
+                  10.0,
+                  20.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  9.9999999,
+                  10.0000001,
+                  19.9999999,
+                  20.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  4,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  5.0,
+                  10.0,
+                  20.0
+                ],
+                "orientation": "Forward",
+                "source_id": 12.0,
+                "source_vertex_ids": [
+                  7,
+                  3
+                ]
+              }
+            }
+          ],
+          "face": [
+            {
+              "id": 1,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  20.0000001
+                ],
+                "edge_ids": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "orientation": "Reversed",
+                "source_id": 1.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "properties": {
+                "axis": [
+                  10.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  20.0000001
+                ],
+                "edge_ids": [
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "orientation": "Forward",
+                "source_id": 2.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 3,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  20.0000001
+                ],
+                "edge_ids": [
+                  9,
+                  5,
+                  10,
+                  1
+                ],
+                "orientation": "Reversed",
+                "source_id": 3.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "properties": {
+                "axis": [
+                  0.0,
+                  10.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  9.9999999,
+                  10.0000001,
+                  -1e-07,
+                  20.0000001
+                ],
+                "edge_ids": [
+                  11,
+                  7,
+                  12,
+                  3
+                ],
+                "orientation": "Forward",
+                "source_id": 4.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "edge_ids": [
+                  4,
+                  11,
+                  8,
+                  9
+                ],
+                "orientation": "Reversed",
+                "source_id": 5.0,
+                "x_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "y_direction": [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 6,
+              "properties": {
+                "axis": [
+                  0.0,
+                  0.0,
+                  20.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  -1e-07,
+                  10.0000001,
+                  -1e-07,
+                  10.0000001,
+                  19.9999999,
+                  20.0000001
+                ],
+                "edge_ids": [
+                  2,
+                  12,
+                  6,
+                  10
+                ],
+                "orientation": "Forward",
+                "source_id": 6.0,
+                "x_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "y_direction": [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              }
+            }
+          ],
+          "shell": [
+            {
+              "id": 1,
+              "properties": {
+                "closed": 1.0,
+                "face_ids": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "orientation": "Forward",
+                "source_id": 1.0
+              }
+            }
+          ],
+          "solid": [
+            {
+              "id": 1,
+              "properties": {
+                "face_ids": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "orientation": "Forward",
+                "shell_ids": [
+                  1
+                ],
+                "source_id": 1.0
+              }
+            }
+          ]
+        },
+        "formatVersion": 2,
+        "lengthUnit": "model"
+      },
+      "part": {
+        "boundingBox": [
+          -1e-07,
+          10.0000001,
+          -1e-07,
+          10.0000001,
+          -1e-07,
+          20.0000001
+        ],
+        "centerOfMass": [
+          5.0,
+          5.0,
+          10.0
+        ],
+        "elementCount": 12,
+        "id": 1,
+        "inertiaAtCenterOfMass": [
+          [
+            83333.33333333331,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            83333.33333333331,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            33333.33333333334
+          ]
+        ],
+        "inertiaAtOrigin": [
+          [
+            333333.33333333326,
+            -49999.999999999985,
+            -99999.99999999997
+          ],
+          [
+            -49999.999999999985,
+            333333.33333333326,
+            -99999.99999999997
+          ],
+          [
+            -99999.99999999997,
+            -99999.99999999997,
+            133333.3333333333
+          ]
+        ],
+        "name": "Solid_part-1",
+        "nodeCount": 8,
+        "surfaceArea": 999.9999999999999,
+        "volume": 1999.9999999999995
+      },
+      "unitSystem": "MM_TON_S_C",
+      "vertices": [
+        {
+          "coordinates": [
+            0.0,
+            0.0,
+            20.0
+          ],
+          "geometryId": 10001,
+          "nodeId": 1
+        },
+        {
+          "coordinates": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 110001,
+          "nodeId": 2
+        },
+        {
+          "coordinates": [
+            0.0,
+            10.0,
+            20.0
+          ],
+          "geometryId": 210001,
+          "nodeId": 3
+        },
+        {
+          "coordinates": [
+            0.0,
+            10.0,
+            0.0
+          ],
+          "geometryId": 310001,
+          "nodeId": 4
+        },
+        {
+          "coordinates": [
+            10.0,
+            0.0,
+            20.0
+          ],
+          "geometryId": 410001,
+          "nodeId": 5
+        },
+        {
+          "coordinates": [
+            10.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 510001,
+          "nodeId": 6
+        },
+        {
+          "coordinates": [
+            10.0,
+            10.0,
+            20.0
+          ],
+          "geometryId": 610001,
+          "nodeId": 7
+        },
+        {
+          "coordinates": [
+            10.0,
+            10.0,
+            0.0
+          ],
+          "geometryId": 710001,
+          "nodeId": 8
+        }
+      ]
+    },
+    {
+      "edges": [
+        {
+          "centroid": [
+            30.0,
+            0.0,
+            6.0
+          ],
+          "geometryId": 20002,
+          "id": 1,
+          "length": 12.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            30.0,
+            4.0,
+            12.0
+          ],
+          "geometryId": 120002,
+          "id": 2,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            30.0,
+            8.0,
+            6.0
+          ],
+          "geometryId": 220002,
+          "id": 3,
+          "length": 12.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            30.0,
+            4.0,
+            0.0
+          ],
+          "geometryId": 320002,
+          "id": 4,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            38.0,
+            0.0,
+            6.0
+          ],
+          "geometryId": 420002,
+          "id": 5,
+          "length": 12.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            38.0,
+            4.0,
+            12.0
+          ],
+          "geometryId": 520002,
+          "id": 6,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            38.0,
+            8.0,
+            6.0
+          ],
+          "geometryId": 620002,
+          "id": 7,
+          "length": 12.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            38.0,
+            4.0,
+            0.0
+          ],
+          "geometryId": 720002,
+          "id": 8,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            34.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 820002,
+          "id": 9,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            34.0,
+            0.0,
+            12.0
+          ],
+          "geometryId": 920002,
+          "id": 10,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            34.0,
+            8.0,
+            0.0
+          ],
+          "geometryId": 1020002,
+          "id": 11,
+          "length": 8.0,
+          "type": "Line"
+        },
+        {
+          "centroid": [
+            34.0,
+            8.0,
+            12.0
+          ],
+          "geometryId": 1120002,
+          "id": 12,
+          "length": 8.0,
+          "type": "Line"
+        }
+      ],
+      "faces": [
+        {
+          "area": 96.0,
+          "centroid": [
+            30.0,
+            4.0,
+            6.0
+          ],
+          "geometryId": 40002,
+          "id": 1,
+          "normal": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 96.0,
+          "centroid": [
+            38.0,
+            4.0,
+            6.0
+          ],
+          "geometryId": 140002,
+          "id": 2,
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 96.0,
+          "centroid": [
+            34.0,
+            0.0,
+            6.0
+          ],
+          "geometryId": 240002,
+          "id": 3,
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 96.0,
+          "centroid": [
+            34.0,
+            8.0,
+            6.0
+          ],
+          "geometryId": 340002,
+          "id": 4,
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 64.0,
+          "centroid": [
+            34.0,
+            4.0,
+            0.0
+          ],
+          "geometryId": 440002,
+          "id": 5,
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "type": "Plane"
+        },
+        {
+          "area": 64.0,
+          "centroid": [
+            34.0,
+            4.0,
+            12.0
+          ],
+          "geometryId": 540002,
+          "id": 6,
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "type": "Plane"
+        }
+      ],
+      "metadata": {
+        "coordinateSystem": "global",
+        "entities": {
+          "edge": [
+            {
+              "id": 1,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  30.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  3
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  30.0,
+                  0.0,
+                  6.0
+                ],
+                "orientation": "Forward",
+                "source_id": 1.0,
+                "source_vertex_ids": [
+                  1,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  12.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  30.0000001,
+                  -1e-07,
+                  8.0000001,
+                  11.9999999,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  30.0,
+                  4.0,
+                  12.0
+                ],
+                "orientation": "Forward",
+                "source_id": 2.0,
+                "source_vertex_ids": [
+                  3,
+                  1
+                ]
+              }
+            },
+            {
+              "id": 3,
+              "properties": {
+                "axis": [
+                  30.0,
+                  8.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  30.0000001,
+                  7.9999999,
+                  8.0000001,
+                  -1e-07,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  4
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  30.0,
+                  8.0,
+                  6.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 3.0,
+                "source_vertex_ids": [
+                  3,
+                  4
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  30.0000001,
+                  -1e-07,
+                  8.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  1,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  30.0,
+                  4.0,
+                  0.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 4.0,
+                "source_vertex_ids": [
+                  4,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "properties": {
+                "axis": [
+                  38.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  37.9999999,
+                  38.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  3
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  38.0,
+                  0.0,
+                  6.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 5.0,
+                "source_vertex_ids": [
+                  5,
+                  6
+                ]
+              }
+            },
+            {
+              "id": 6,
+              "properties": {
+                "axis": [
+                  38.0,
+                  0.0,
+                  12.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  37.9999999,
+                  38.0000001,
+                  -1e-07,
+                  8.0000001,
+                  11.9999999,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  38.0,
+                  4.0,
+                  12.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 6.0,
+                "source_vertex_ids": [
+                  7,
+                  5
+                ]
+              }
+            },
+            {
+              "id": 7,
+              "properties": {
+                "axis": [
+                  38.0,
+                  8.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  37.9999999,
+                  38.0000001,
+                  7.9999999,
+                  8.0000001,
+                  -1e-07,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  4
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  38.0,
+                  8.0,
+                  6.0
+                ],
+                "orientation": "Forward",
+                "source_id": 7.0,
+                "source_vertex_ids": [
+                  7,
+                  8
+                ]
+              }
+            },
+            {
+              "id": 8,
+              "properties": {
+                "axis": [
+                  38.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  37.9999999,
+                  38.0000001,
+                  -1e-07,
+                  8.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  2,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  38.0,
+                  4.0,
+                  0.0
+                ],
+                "orientation": "Forward",
+                "source_id": 8.0,
+                "source_vertex_ids": [
+                  8,
+                  6
+                ]
+              }
+            },
+            {
+              "id": 9,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  3,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  34.0,
+                  0.0,
+                  0.0
+                ],
+                "orientation": "Forward",
+                "source_id": 9.0,
+                "source_vertex_ids": [
+                  6,
+                  2
+                ]
+              }
+            },
+            {
+              "id": 10,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  12.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  -1e-07,
+                  1e-07,
+                  11.9999999,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  3,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  34.0,
+                  0.0,
+                  12.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 10.0,
+                "source_vertex_ids": [
+                  5,
+                  1
+                ]
+              }
+            },
+            {
+              "id": 11,
+              "properties": {
+                "axis": [
+                  30.0,
+                  8.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  7.9999999,
+                  8.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  4,
+                  5
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  34.0,
+                  8.0,
+                  0.0
+                ],
+                "orientation": "Reversed",
+                "source_id": 11.0,
+                "source_vertex_ids": [
+                  8,
+                  4
+                ]
+              }
+            },
+            {
+              "id": 12,
+              "properties": {
+                "axis": [
+                  30.0,
+                  8.0,
+                  12.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  7.9999999,
+                  8.0000001,
+                  11.9999999,
+                  12.0000001
+                ],
+                "degenerated": 0.0,
+                "face_ids": [
+                  4,
+                  6
+                ],
+                "face_use_count": 2.0,
+                "midpoint": [
+                  34.0,
+                  8.0,
+                  12.0
+                ],
+                "orientation": "Forward",
+                "source_id": 12.0,
+                "source_vertex_ids": [
+                  7,
+                  3
+                ]
+              }
+            }
+          ],
+          "face": [
+            {
+              "id": 1,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  30.0000001,
+                  -1e-07,
+                  8.0000001,
+                  -1e-07,
+                  12.0000001
+                ],
+                "edge_ids": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "orientation": "Reversed",
+                "source_id": 1.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "properties": {
+                "axis": [
+                  38.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  37.9999999,
+                  38.0000001,
+                  -1e-07,
+                  8.0000001,
+                  -1e-07,
+                  12.0000001
+                ],
+                "edge_ids": [
+                  5,
+                  6,
+                  7,
+                  8
+                ],
+                "orientation": "Forward",
+                "source_id": 2.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 3,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  -1e-07,
+                  1e-07,
+                  -1e-07,
+                  12.0000001
+                ],
+                "edge_ids": [
+                  9,
+                  5,
+                  10,
+                  1
+                ],
+                "orientation": "Reversed",
+                "source_id": 3.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "properties": {
+                "axis": [
+                  30.0,
+                  8.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  7.9999999,
+                  8.0000001,
+                  -1e-07,
+                  12.0000001
+                ],
+                "edge_ids": [
+                  11,
+                  7,
+                  12,
+                  3
+                ],
+                "orientation": "Forward",
+                "source_id": 4.0,
+                "x_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "y_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  -1e-07,
+                  8.0000001,
+                  -1e-07,
+                  1e-07
+                ],
+                "edge_ids": [
+                  4,
+                  11,
+                  8,
+                  9
+                ],
+                "orientation": "Reversed",
+                "source_id": 5.0,
+                "x_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "y_direction": [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "id": 6,
+              "properties": {
+                "axis": [
+                  30.0,
+                  0.0,
+                  12.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "bounding_box": [
+                  29.9999999,
+                  38.0000001,
+                  -1e-07,
+                  8.0000001,
+                  11.9999999,
+                  12.0000001
+                ],
+                "edge_ids": [
+                  2,
+                  12,
+                  6,
+                  10
+                ],
+                "orientation": "Forward",
+                "source_id": 6.0,
+                "x_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "y_direction": [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              }
+            }
+          ],
+          "shell": [
+            {
+              "id": 1,
+              "properties": {
+                "closed": 1.0,
+                "face_ids": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "orientation": "Forward",
+                "source_id": 1.0
+              }
+            }
+          ],
+          "solid": [
+            {
+              "id": 1,
+              "properties": {
+                "face_ids": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "orientation": "Forward",
+                "shell_ids": [
+                  1
+                ],
+                "source_id": 1.0
+              }
+            }
+          ]
+        },
+        "formatVersion": 2,
+        "lengthUnit": "model"
+      },
+      "part": {
+        "boundingBox": [
+          29.9999999,
+          38.0000001,
+          -1e-07,
+          8.0000001,
+          -1e-07,
+          12.0000001
+        ],
+        "centerOfMass": [
+          34.0,
+          4.0,
+          6.0
+        ],
+        "elementCount": 12,
+        "id": 2,
+        "inertiaAtCenterOfMass": [
+          [
+            13312.000000000007,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            13312.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            8192.0
+          ]
+        ],
+        "inertiaAtOrigin": [
+          [
+            53248.00000000001,
+            -104448.0,
+            -156672.0
+          ],
+          [
+            -104448.0,
+            928768.0,
+            -18432.0
+          ],
+          [
+            -156672.0,
+            -18432.0,
+            908288.0
+          ]
+        ],
+        "name": "Solid_part-2",
+        "nodeCount": 8,
+        "surfaceArea": 512.0,
+        "volume": 768.0
+      },
+      "unitSystem": "MM_TON_S_C",
+      "vertices": [
+        {
+          "coordinates": [
+            30.0,
+            0.0,
+            12.0
+          ],
+          "geometryId": 10002,
+          "nodeId": 9
+        },
+        {
+          "coordinates": [
+            30.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 110002,
+          "nodeId": 10
+        },
+        {
+          "coordinates": [
+            30.0,
+            8.0,
+            12.0
+          ],
+          "geometryId": 210002,
+          "nodeId": 11
+        },
+        {
+          "coordinates": [
+            30.0,
+            8.0,
+            0.0
+          ],
+          "geometryId": 310002,
+          "nodeId": 12
+        },
+        {
+          "coordinates": [
+            38.0,
+            0.0,
+            12.0
+          ],
+          "geometryId": 410002,
+          "nodeId": 13
+        },
+        {
+          "coordinates": [
+            38.0,
+            0.0,
+            0.0
+          ],
+          "geometryId": 510002,
+          "nodeId": 14
+        },
+        {
+          "coordinates": [
+            38.0,
+            8.0,
+            12.0
+          ],
+          "geometryId": 610002,
+          "nodeId": 15
+        },
+        {
+          "coordinates": [
+            38.0,
+            8.0,
+            0.0
+          ],
+          "geometryId": 710002,
+          "nodeId": 16
+        }
+      ]
+    }
+  ]
+}

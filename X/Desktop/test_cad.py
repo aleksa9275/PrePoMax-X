@@ -7,8 +7,9 @@ from unittest.mock import Mock, patch
 
 from PyQt6 import QtCore, QtWidgets
 
-from viewport import ROOT, Viewport
+from viewport import ROOT, Viewport, decode, verify_cad_view
 from cad_import import CadImportCancelled
+from cad_scene import compose_cad_parts
 
 
 class CadWorkflow(unittest.TestCase):
@@ -68,7 +69,7 @@ class CadWorkflow(unittest.TestCase):
 
     def test_background_cancel_and_close_preserve_current_document(self):
         class WaitingTool:
-            def convert(self, source, work, *, cancel):
+            def convert_parts(self, source, work, *, cancel):
                 cancel.wait(5)
                 raise CadImportCancelled()
 
@@ -101,13 +102,13 @@ class CadWorkflow(unittest.TestCase):
         window.automated_workflow = True
         window.load(ROOT / "X/Desktop/nonsequential-cube.inp", as_model=True)
         model = window.scene
-        tool.convert.side_effect = ValueError("conversion failed")
+        tool.convert_parts.side_effect = ValueError("conversion failed")
         window.start_cad_import(source)
         self.wait_for(lambda: window.cad_job is None)
         self.assertEqual(window.cad_result["error"], "conversion failed")
         self.assertIs(window.scene, model)
-        tool.convert.side_effect = None
-        tool.convert.return_value = (None, vis)
+        tool.convert_parts.side_effect = None
+        tool.convert_parts.return_value = [(Path("part.brep"), vis)]
         window.start_cad_import(source)
         self.assertTrue(window.cad_job.wait(5000))
         window.cancel_operation()
@@ -133,16 +134,55 @@ class CadWorkflow(unittest.TestCase):
         self.assertIs(window.scene, model)
 
         window.cad_tool = Mock()
-        window.cad_tool.convert.side_effect = ValueError("conversion failed")
+        window.cad_tool.convert_parts.side_effect = ValueError("conversion failed")
         with self.assertRaisesRegex(ValueError, "conversion failed"):
             window.load(step)
         self.assertIs(window.scene, model)
-        window.cad_tool.convert.side_effect = None
-        window.cad_tool.convert.return_value = (None, vis)
+        window.cad_tool.convert_parts.side_effect = None
+        window.cad_tool.convert_parts.return_value = [(Path("part.brep"), vis)]
         window.load(step)
         self.assertEqual(window.current_path, step)
         self.assertEqual(window.scene["cad"]["conversion"], "Original 3.0.0 via CrossOver")
         self.assertFalse(window.run_action.isEnabled())
+
+    def test_two_parts_render_and_pick_their_own_source_faces(self):
+        window = Viewport()
+        self.addCleanup(window.deleteLater)
+        paths = [ROOT / f"X/Feasibility/Cad/fixtures/two-parts/part-{index}.vis" for index in (1, 2)]
+        scene = compose_cad_parts([(path.stem, decode(path)) for path in paths])
+        window.set_cad_document(scene, ROOT / "APIs/Python/Test_Scripts/Models/sweep_two_apart.brep")
+        self.assertIn((1, 1), window.cad_faces)
+        self.assertIn((2, 1), window.cad_faces)
+        self.assertIsNot(window.cad_faces[1, 1], window.cad_faces[2, 1])
+        window.show()
+        self.app.processEvents()
+        window.vtk.render()
+        result = verify_cad_view(window, lambda name, passed: self.assertTrue(passed, name))
+        self.assertEqual(result["partCount"], 2)
+        self.assertEqual({part for part, _ in result["pickedPartFaces"]}, {1, 2})
+        window.load(ROOT / "X/Feasibility/Cad/fixtures/l-bracket.vis")
+        self.assertIn(9, window.cad_faces)
+        self.assertNotIn((1, 1), window.cad_faces)
+        window.close()
+
+    def test_a_failed_second_part_never_replaces_the_current_document(self):
+        with TemporaryDirectory() as directory:
+            invalid = Path(directory) / "invalid.vis"
+            invalid.write_text("invalid")
+            tool = Mock()
+            tool.convert_parts.return_value = [
+                (Path("first.brep"), ROOT / "X/Feasibility/Cad/fixtures/two-parts/part-1.vis"),
+                (Path("second.brep"), invalid),
+            ]
+            window = Viewport(cad_tool=tool)
+            self.addCleanup(window.deleteLater)
+            window.automated_workflow = True
+            window.load(ROOT / "X/Desktop/nonsequential-cube.inp", as_model=True)
+            original = window.scene
+            window.start_cad_import(ROOT / "APIs/Python/Test_Scripts/Models/sweep_two_apart.brep")
+            self.wait_for(lambda: window.cad_job is None)
+            self.assertFalse(window.cad_result["success"])
+            self.assertIs(window.scene, original)
 
 
 if __name__ == "__main__":

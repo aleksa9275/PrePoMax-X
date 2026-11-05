@@ -1,4 +1,4 @@
-"""Single-part CAD conversion through the original NetGenMesher command protocol."""
+"""CAD conversion through the original NetGenMesher command protocol."""
 import hashlib
 import json
 import os
@@ -20,6 +20,8 @@ REFERENCE_RECEIPT = (Path(__file__).resolve().parents[2] /
                      ".project/reports/l-bracket-cad-reference/verification.json")
 MAX_CAD_BYTES = 16 * 1024 * 1024
 MAX_VIS_BYTES = 1024 * 1024
+MAX_CAD_PARTS = 32
+MAX_TOTAL_VIS_BYTES = 16 * 1024 * 1024
 
 
 class CadImportCancelled(ValueError):
@@ -86,6 +88,14 @@ def run_stage(command, work, log_name, *, cancel=None):
 
 def convert_cad(source, work, command, *, windows_paths=False, cancel=None):
     """Return the split BREP and VIS from a new workspace, after both stages succeed."""
+    outputs = convert_cad_parts(source, work, command, windows_paths=windows_paths, cancel=cancel, maximum_parts=1)
+    return outputs[0]
+
+
+def convert_cad_parts(source, work, command, *, windows_paths=False, cancel=None, maximum_parts=MAX_CAD_PARTS):
+    """Return all split BREP/VIS pairs after every conversion stage succeeds."""
+    if not 1 <= maximum_parts <= MAX_CAD_PARTS:
+        raise ValueError("CAD conversion supports at most 32 emitted parts.")
     suffix = source.suffix.lower()
     if suffix not in IMPORT_COMMANDS:
         raise ValueError("Choose a STEP or BREP file.")
@@ -108,21 +118,35 @@ def convert_cad(source, work, command, *, windows_paths=False, cancel=None):
     split_base = work / "part.brep"
     run_stage([*command, IMPORT_COMMANDS[suffix], tool_path(staged), tool_path(split_base)], work, "split.log",
               cancel=cancel)
-    parts = list(work.glob("part*.brep"))
-    if len(parts) != 1:
-        raise ValueError(f"Expected one CAD part from the split, got {len(parts)}.")
-    brep, = parts
-    require_output(brep, MAX_CAD_BYTES)
-    vis = work / "geometry.vis"
-    if vis.exists() or vis.is_symlink():
+    parts = sorted(work.glob("part*.brep"))
+    if not 1 <= len(parts) <= maximum_parts:
+        expected = "one CAD part" if maximum_parts == 1 else f"1 to {maximum_parts} CAD parts"
+        raise ValueError(f"Expected {expected} from the split, got {len(parts)}.")
+    for brep in parts:
+        require_output(brep, MAX_CAD_BYTES)
+    if sum(brep.stat().st_size for brep in parts) > 2 * MAX_CAD_BYTES:
+        raise ValueError("Combined CAD part output exceeds 32 MiB.")
+    if list(work.glob("geometry*.vis")):
         raise ValueError("The split unexpectedly wrote the VIS output.")
-    run_stage([*command, "BREP_VISUALIZATION", tool_path(brep), tool_path(vis), "0.01", "1", "0.26"],
-              work, "visualize.log", cancel=cancel)
-    require_output(vis, MAX_VIS_BYTES)
+    outputs = []
+    total_vis_bytes = 0
+    for index, brep in enumerate(parts, 1):
+        stem = "geometry" if len(parts) == 1 else f"geometry-{index:04d}"
+        vis = work / (stem + ".vis")
+        if vis.exists() or vis.is_symlink():
+            raise ValueError("A conversion stage unexpectedly wrote another part's VIS output.")
+        log = "visualize.log" if len(parts) == 1 else f"visualize-{index:04d}.log"
+        run_stage([*command, "BREP_VISUALIZATION", tool_path(brep), tool_path(vis), "0.01", "1", "0.26"],
+                  work, log, cancel=cancel)
+        require_output(vis, MAX_VIS_BYTES)
+        total_vis_bytes += vis.stat().st_size
+        if total_vis_bytes > MAX_TOTAL_VIS_BYTES:
+            raise ValueError("Combined visualization output exceeds 16 MiB.")
+        outputs.append((brep, vis))
     require_output(staged, MAX_CAD_BYTES)
     if file_sha256(staged) != hashlib.sha256(data).hexdigest():
         raise ValueError("The CAD tool modified its staged input.")
-    return brep, vis
+    return outputs
 
 
 class ReferenceCadTool:
@@ -153,5 +177,11 @@ class ReferenceCadTool:
     def convert(self, source, work, *, cancel=None):
         self.verify_runtime()
         outputs = convert_cad(source, work, self.command, windows_paths=True, cancel=cancel)
+        self.verify_runtime()
+        return outputs
+
+    def convert_parts(self, source, work, *, cancel=None):
+        self.verify_runtime()
+        outputs = convert_cad_parts(source, work, self.command, windows_paths=True, cancel=cancel)
         self.verify_runtime()
         return outputs

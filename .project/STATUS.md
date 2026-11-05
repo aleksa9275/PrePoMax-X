@@ -1,5 +1,15 @@
 # Project status
 
+## Current — tasks 0060–0062: multi-part CAD preview
+
+The checked reference import now converts and decodes all emitted
+parts before publishing one read-only document. The viewport displays
+them together, preserves source IDs within each part and resolves
+part/face selections to the model tree. Two original-app captures
+match, and 359 exact comparisons pass on Mac and Linux ARM64.
+Matching native C++ sources and native CAD execution remain open.
+[Verification](reports/multipart-cad-preview.md).
+
 ## Current — task 0059: responsive CAD import
 
 The Mac preview converts and decodes STEP/BREP imports in the

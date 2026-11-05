@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from cad_import import CadImportCancelled, REFERENCE_RECEIPT, ReferenceCadTool, convert_cad, run_process
+from cad_import import CadImportCancelled, REFERENCE_RECEIPT, ReferenceCadTool, convert_cad, convert_cad_parts, run_process
 
 
 TOOL = """
@@ -19,6 +19,8 @@ import sys
 mode, operation, source, target, *options = sys.argv[1:]
 source, target = Path(source), Path(target)
 if operation == "BREP_VISUALIZATION":
+    if mode == "second vis failure" and target.name == "geometry-0002.vis":
+        sys.exit(7)
     assert options == ["0.01", "1", "0.26"]
     assert source.read_text() in {"STEP", "BREP"}
     if mode != "no vis":
@@ -28,8 +30,8 @@ else:
     assert not options
     if mode != "no part":
         target.with_name("part_solid_0001.brep").write_text(source.read_text())
-    if mode == "two parts":
-        target.with_name("part_solid_0002.brep").write_text("another part")
+    if mode in {"two parts", "second vis failure"}:
+        target.with_name("part_solid_0002.brep").write_text(source.read_text())
     if mode == "modified input":
         source.write_text("modified")
     if mode == "stale vis":
@@ -78,6 +80,19 @@ class CadImport(unittest.TestCase):
             convert_cad(source, self.root, self.command())
         with patch("cad_import.MAX_CAD_BYTES", 2), self.assertRaisesRegex(ValueError, "no larger"):
             convert_cad(source, self.root / "oversized", self.command())
+
+    def test_all_parts_finish_before_outputs_are_returned(self):
+        source = self.root / "model.brep"
+        source.write_text("BREP")
+        outputs = convert_cad_parts(source, self.root / "two", self.command("two parts"))
+        self.assertEqual([brep.name for brep, _ in outputs], ["part_solid_0001.brep", "part_solid_0002.brep"])
+        self.assertEqual([vis.name for _, vis in outputs], ["geometry-0001.vis", "geometry-0002.vis"])
+        for _, vis in outputs:
+            self.assertEqual(vis.read_text(), "visualization")
+        with self.assertRaisesRegex(ValueError, "status 7"):
+            convert_cad_parts(source, self.root / "failed", self.command("second vis failure"))
+        with patch("cad_import.MAX_TOTAL_VIS_BYTES", 1), self.assertRaisesRegex(ValueError, "Combined visualization"):
+            convert_cad_parts(source, self.root / "too large", self.command("two parts"))
 
     def test_reference_refuses_missing_or_changed_runtime(self):
         runtime = self.root / "runtime"
