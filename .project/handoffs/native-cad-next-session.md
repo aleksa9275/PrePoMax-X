@@ -3,7 +3,12 @@
 Task 0068 adds visual CAD face/part regions, original-reader node/element set
 unions, highlighting, CAD/mesh/result switching and frozen region provenance.
 Read [the region report](../reports/cad-region-selection.md) and its receipt for
-actual source/candidate/publication checks. Next is the original-PMX-compatible
+actual source/candidate/publication checks. Implementation `d6a52ea3` is remote-
+verified with CI skipped. Current app: `/tmp/prepomaxx-task0068-delivery/PrePoMax-X Preview.app`;
+its sibling launcher enables native CAD, and the old task 0067 launcher forwards.
+Mac copied viewports and Linux ARM64 pass 46 region/assignment/solve checks;
+existing PMX and C3D8 paths pass. Task 0067's app is pruned; evidence/jobs remain.
+Next is [task 0069](../tasks/0069-cad-mesh-pmx-interoperability.md), the original-PMX-compatible
 CAD/mesh persistence boundary under D057. Keep D058/D059 and all correctness,
 quadratic-tetrahedron, full-parity and release gates. Earlier app paths below
 are historical after task 0068 closeout.

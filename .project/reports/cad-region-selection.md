@@ -58,12 +58,26 @@ solver, with container networking disabled. No hosted CI or Linux x64 run occurs
 
 [Verification and candidate receipt](cad-region-selection-verification.json).
 Local detailed evidence: `/tmp/prepomaxx-task0068-evidence`.
-The final app, copied-payload checks and normal CI-skipped research publication
-are recorded in the closing receipt.
+The retained app is `/tmp/prepomaxx-task0068-delivery/PrePoMax-X Preview.app`.
+The sibling `Native CAD Preview.command` enables the retained native CAD runtime;
+the earlier task 0067 launcher forwards to it. Both copied Mac viewports pass all
+46 checks. The app also passes 17 checked-PMX edit/save/reopen/solve checks and
+ten C3D8 native solve/render/original-ID picking checks. Its ad-hoc signature and
+all 2419 copied payload file hashes verify. The source identity names `d6a52ea3`
+with an empty source patch; Finder files alone set its dirty flag. The source CAD
+highlight capture was visually inspected. Seven duplicate directories were
+pruned; exact logical byte totals and preserved jobs/caches are in the receipt.
+
+Implementation
+[`d6a52ea3`](https://gitlab.com/aleksa9275/pre-po-max-x/-/commit/d6a52ea3910d0d80b41b682afa804179f3adfcd0)
+is pushed and remote-verified on `origin/research/native-feasibility`. Closing
+evidence is a normal documentation-only follow-up, also pushed with CI skipped.
+The local Podman VM is back in its original stopped state; its disk/images stay.
 
 ## Remaining work
 
-General CAD/mesh project save/reopen is next. Preserve original PMX compatibility
+[Task 0069](../tasks/0069-cad-mesh-pmx-interoperability.md) prepares the next
+original CAD/mesh PMX inventory and interoperable save/reopen increment. Preserve original PMX compatibility
 under D057; do not introduce a silent replacement format. This task does not
 provide mesh-face surface loads, pressure distribution, edge selection, arbitrary
 mesh multi-pick, region replacement/deletion, geometric edits or broader analysis

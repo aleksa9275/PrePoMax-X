@@ -1,6 +1,6 @@
 # Task 0068 — CAD region selection and analysis assignments
 
-Implemented and source-verified 5 November 2026 under the maintainer's project continuation.
+Completed 5 November 2026 under the maintainer's project continuation.
 [Report and actual publication](../reports/cad-region-selection.md).
 Build on task 0067's retained CAD and original face/domain mesh associations.
 
