@@ -7,6 +7,8 @@ background. Cancel and window closing stop the active import.
 The current scene stays visible and is replaced only after successful
 decoding. Source desktop and process cleanup checks pass, and the
 original conversion replay still matches its captured bytes.
+The exact-commit GitLab pipeline passes all six automatic jobs,
+including the extracted and installed Linux x64 workflows.
 [Verification](reports/responsive-cad-import.md).
 
 ## Current — tasks 0057 and 0058: checked CAD reference import

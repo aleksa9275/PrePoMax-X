@@ -35,7 +35,21 @@ The ad-hoc-signed Mac package also completed background STEP and BREP
 imports through its two viewport transports with a system-only PATH.
 It retained the original VIS hash and six visible source face picks.
 The packaged native INP solve and its result display passed.
+The package's viewport, conversion and worker hashes match the
+published application code. Duplicate Mac staging and cache payloads
+were pruned after verification.
+The exact-commit Linux ARM64 archive passed its VIS viewport,
+INP solve/render and analytical checks under Xvfb and Mesa.
 [Verification receipt](responsive-cad-import-verification.json).
+
+Implementation `c354b712` was pushed and verified on
+`origin/research/native-feasibility`. All six automatic jobs passed.
+The x64 research job passed all six process lifecycle tests and the
+348 VIS checks. The native x64 job passed the extracted and installed
+VIS/INP workflows and the APT remove, reinstall and purge checks.
+Historical compatibility stayed manual.
+[Exact-commit pipeline #3030894447](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3030894447) ·
+[Native x64 job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17763279626).
 
 The task keeps the existing single-part and input-size limits.
 CrossOver reference execution, matching native C++ source recovery,
