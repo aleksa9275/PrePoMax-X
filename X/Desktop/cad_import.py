@@ -4,8 +4,10 @@ import json
 import os
 from pathlib import Path
 import platform
+import signal
 import stat
 import subprocess
+import time
 
 
 IMPORT_COMMANDS = {
@@ -20,6 +22,44 @@ MAX_CAD_BYTES = 16 * 1024 * 1024
 MAX_VIS_BYTES = 1024 * 1024
 
 
+class CadImportCancelled(ValueError):
+    pass
+
+
+def run_process(command, *, cwd=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60, cancel=None):
+    """Run one owned process group and collect its output, with cooperative caller cancellation."""
+    if cancel is not None and cancel.is_set():
+        raise CadImportCancelled("CAD import cancelled.")
+    with subprocess.Popen(command, cwd=cwd, stdout=stdout, stderr=stderr,
+                          start_new_session=os.name == "posix") as process:
+        deadline = time.monotonic() + timeout
+        try:
+            while True:
+                if cancel is not None and cancel.is_set():
+                    raise CadImportCancelled("CAD import cancelled.")
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise subprocess.TimeoutExpired(command, timeout)
+                try:
+                    output, errors = process.communicate(timeout=min(0.1, remaining))
+                    break
+                except subprocess.TimeoutExpired:
+                    continue
+            if cancel is not None and cancel.is_set():
+                raise CadImportCancelled("CAD import cancelled.")
+            return subprocess.CompletedProcess(command, process.returncode, output, errors)
+        except BaseException:
+            if os.name == "posix":
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            else:
+                process.kill()
+            process.communicate()
+            raise
+
+
 def file_sha256(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
@@ -30,11 +70,11 @@ def require_output(path, maximum):
         raise ValueError(f"Missing, invalid or oversized CAD output: {path.name}")
 
 
-def run_stage(command, work, log_name):
+def run_stage(command, work, log_name, *, cancel=None):
     log = work / log_name
     try:
         with log.open("xb") as stream:
-            result = subprocess.run(command, cwd=work, stdout=stream, stderr=subprocess.STDOUT, timeout=60)
+            result = run_process(command, cwd=work, stdout=stream, stderr=subprocess.STDOUT, cancel=cancel)
     except subprocess.TimeoutExpired as error:
         raise ValueError(f"{log.stem} exceeded the 60-second CAD conversion limit.") from error
     if result.returncode:
@@ -44,7 +84,7 @@ def run_stage(command, work, log_name):
         raise ValueError(f"{log.stem} exited with status {result.returncode}. {detail}")
 
 
-def convert_cad(source, work, command, *, windows_paths=False):
+def convert_cad(source, work, command, *, windows_paths=False, cancel=None):
     """Return the split BREP and VIS from a new workspace, after both stages succeed."""
     suffix = source.suffix.lower()
     if suffix not in IMPORT_COMMANDS:
@@ -66,7 +106,8 @@ def convert_cad(source, work, command, *, windows_paths=False):
         return "Z:" + str(path).replace("/", "\\") if windows_paths else str(path)
 
     split_base = work / "part.brep"
-    run_stage([*command, IMPORT_COMMANDS[suffix], tool_path(staged), tool_path(split_base)], work, "split.log")
+    run_stage([*command, IMPORT_COMMANDS[suffix], tool_path(staged), tool_path(split_base)], work, "split.log",
+              cancel=cancel)
     parts = list(work.glob("part*.brep"))
     if len(parts) != 1:
         raise ValueError(f"Expected one CAD part from the split, got {len(parts)}.")
@@ -76,7 +117,7 @@ def convert_cad(source, work, command, *, windows_paths=False):
     if vis.exists() or vis.is_symlink():
         raise ValueError("The split unexpectedly wrote the VIS output.")
     run_stage([*command, "BREP_VISUALIZATION", tool_path(brep), tool_path(vis), "0.01", "1", "0.26"],
-              work, "visualize.log")
+              work, "visualize.log", cancel=cancel)
     require_output(vis, MAX_VIS_BYTES)
     require_output(staged, MAX_CAD_BYTES)
     if file_sha256(staged) != hashlib.sha256(data).hexdigest():
@@ -109,8 +150,8 @@ class ReferenceCadTool:
             if path.is_symlink() or not path.is_file() or file_sha256(path) != digest:
                 raise ValueError(f"CAD reference runtime hash mismatch: {name}")
 
-    def convert(self, source, work):
+    def convert(self, source, work, *, cancel=None):
         self.verify_runtime()
-        outputs = convert_cad(source, work, self.command, windows_paths=True)
+        outputs = convert_cad(source, work, self.command, windows_paths=True, cancel=cancel)
         self.verify_runtime()
         return outputs

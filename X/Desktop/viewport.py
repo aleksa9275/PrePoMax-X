@@ -14,7 +14,8 @@ import tempfile
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
-from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, ReferenceCadTool
+from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, ReferenceCadTool, run_process
+from cad_job import CadImportJob
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
@@ -99,7 +100,7 @@ def mesh_command():
             ["dotnet", str(ROOT / "X/Desktop/MeshScene/bin/Release/net10.0/PrePoMaxX.MeshScene.dll")])
 
 
-def decode(path):
+def decode(path, *, cancel=None):
     """Use the original reader assemblies in separate processes; no second parser."""
     packaged = getattr(sys, "frozen", False)
     if path.suffix.lower() == ".inp":
@@ -113,13 +114,14 @@ def decode(path):
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
         raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8 FRD snapshot.")
-    return run_reader(command)
+    return run_reader(command, cancel=cancel)
 
 
-def run_reader(command):
-    result = subprocess.run(command, capture_output=True, text=True, timeout=60)
+def run_reader(command, *, cancel=None):
+    result = run_process(command, cancel=cancel)
     if result.returncode:
-        raise ValueError(result.stderr.strip() or result.stdout.strip() or "Original reader failed")
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise ValueError(detail.decode("utf-8", errors="replace") or "Original reader failed")
     scene = json.loads(result.stdout)
     if scene.get("success") is not True:
         raise ValueError("Original reader did not accept input")
@@ -127,12 +129,16 @@ def run_reader(command):
 
 
 class Viewport(QtWidgets.QMainWindow):
+    cad_completed = QtCore.pyqtSignal(dict)
+
     def __init__(self, transport="frame-bridge", *, cad_tool=None):
         super().__init__()
         self.setWindowTitle("PrePoMax-X — native viewport candidate")
         self.resize(1000, 720)
         self.scene = None
         self.cad_tool = cad_tool
+        self.cad_job = None
+        self.cad_result = None
         self.selection = None
         self.current_path = None
         self.model_path = None
@@ -203,7 +209,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
         self.run_action = jobbar.addAction("Run analysis", self.run_model)
         self.example_action = jobbar.addAction("Solve example", self.run_example)
-        self.cancel_action = jobbar.addAction("Cancel", self.job.cancel)
+        self.cancel_action = jobbar.addAction("Cancel", self.cancel_operation)
         self.cancel_action.setEnabled(False)
         jobbar.addAction("Job files", self.open_job_directory)
         self.job_label = QtWidgets.QLabel("Ready · static solid preview")
@@ -228,6 +234,10 @@ class Viewport(QtWidgets.QMainWindow):
         model_dock.setWidget(self.model_tree)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, model_dock)
         self.update_model_tree()
+
+    @property
+    def busy(self):
+        return self.job.active or self.cad_job is not None
 
     def update_model_tree(self):
         self.model_tree.clear()
@@ -289,7 +299,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.configure_model(tab)
 
     def add_set_dialog(self):
-        if self.job.active or self.model_scene is None:
+        if self.busy or self.model_scene is None:
             return
         dialog = QtWidgets.QDialog(self)
         dialog.setWindowTitle('Add mesh set')
@@ -331,7 +341,7 @@ class Viewport(QtWidgets.QMainWindow):
         dialog.exec()
 
     def add_named_set(self, kind, name, labels):
-        if self.job.active or self.model_scene is None or self.pmx_session is not None:
+        if self.busy or self.model_scene is None or self.pmx_session is not None:
             raise ValueError('Open an INP mesh and finish any active job before editing sets.')
         if len(labels) > 12000:
             raise ValueError('The set label list is too long.')
@@ -351,7 +361,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.update_model_tree()
 
     def configure_model(self, tab=0):
-        if self.job.active:
+        if self.busy:
             return
         if self.pmx_session is not None:
             self.edit_pmx()
@@ -367,7 +377,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.update_model_tree()
 
     def run_model(self):
-        if self.job.active:
+        if self.busy:
             return
         if not self.analysis_valid:
             self.configure_model()
@@ -380,6 +390,8 @@ class Viewport(QtWidgets.QMainWindow):
                 self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
 
     def run_example(self):
+        if self.busy:
+            return
         if not self.confirm_discard():
             return
         definition = json.loads((examples() / 'cube-analysis.json').read_text())
@@ -388,6 +400,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.run_model()
 
     def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None, pmx_sha256=None):
+        if self.busy:
+            raise ValueError("Finish the active operation before starting an analysis.")
         try:
             if definition is None:
                 self.load(mesh)
@@ -404,7 +418,10 @@ class Viewport(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(self, "Cannot start static analysis", str(error))
 
     def job_state(self, state):
-        active = state in ('Starting', 'Running', 'Cancelling')
+        importing = self.cad_job is not None
+        if importing:
+            state = "Cancelling CAD" if self.cad_job.cancel_requested.is_set() else "Importing CAD"
+        active = importing or state in ('Starting', 'Running', 'Cancelling')
         cad = self.scene is not None and "cad" in self.scene
         self.run_action.setEnabled(not active and not cad)
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
@@ -413,7 +430,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
-        self.cancel_action.setEnabled(active and state != 'Cancelling')
+        self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD'))
         self.job_label.setText(state)
 
     def refresh_job_output(self):
@@ -457,7 +474,10 @@ class Viewport(QtWidgets.QMainWindow):
                 as_model = Path(path).suffix.lower() == '.inp'
                 if as_model and not self.confirm_discard():
                     return
-                self.load(Path(path), as_model=as_model)
+                if Path(path).suffix.lower() in IMPORT_COMMANDS:
+                    self.start_cad_import(Path(path))
+                else:
+                    self.load(Path(path), as_model=as_model)
             except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
                 QtWidgets.QMessageBox.critical(self, "Cannot open file", str(error))
 
@@ -471,7 +491,7 @@ class Viewport(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.critical(self, 'Cannot open static PMX', str(error))
 
     def open_pmx(self, path):
-        if self.job.active:
+        if self.busy:
             raise ValueError('Finish the active job before opening a static PMX.')
         if not self.confirm_discard():
             return
@@ -485,10 +505,12 @@ class Viewport(QtWidgets.QMainWindow):
         self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition['analysis'], pmx=pmx)
 
     def edit_pmx(self):
-        if not self.job.active and self.pmx_session is not None:
+        if not self.busy and self.pmx_session is not None:
             PmxDialog(self, self.pmx_session).exec()
 
     def load(self, path, *, as_model=False, definition=None):
+        if self.busy:
+            raise ValueError("Finish the active operation before opening a document.")
         suffix = path.suffix.lower()
         if suffix == ".vis" or suffix in IMPORT_COMMANDS:
             if self.job.active:
@@ -508,12 +530,7 @@ class Viewport(QtWidgets.QMainWindow):
                 finally:
                     QtWidgets.QApplication.restoreOverrideCursor()
                 scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"
-            self.show_scene(scene, path)
-            self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
-            self.analysis_valid = self.editor_dirty = False
-            self.edit_pmx_action.setVisible(False)
-            self.job_state(self.job.state)
-            self.update_model_tree()
+            self.set_cad_document(scene, path)
             return
         mesh_bytes = path.read_bytes() if as_model else None
         scene = decode(path)
@@ -527,6 +544,59 @@ class Viewport(QtWidgets.QMainWindow):
             if leaving_cad:
                 self.job_state(self.job.state)
                 self.update_model_tree()
+
+    def set_cad_document(self, scene, path):
+        self.show_scene(scene, path)
+        self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
+        self.analysis_valid = self.editor_dirty = False
+        self.edit_pmx_action.setVisible(False)
+        self.job_state(self.job.state)
+        self.update_model_tree()
+
+    def start_cad_import(self, path):
+        if self.busy:
+            raise ValueError("Finish the active operation before importing CAD.")
+        if self.cad_tool is None:
+            raise ValueError("STEP/BREP reference import requires --cad-reference RUNTIME BOTTLE.")
+        if not self.confirm_discard():
+            return
+        self.cad_result = None
+        self.cad_job = CadImportJob(path, self.cad_tool, decode, self)
+        self.cad_job.finished.connect(self.cad_import_finished)
+        self.job_state(self.job.state)
+        self.cad_job.start()
+
+    def cancel_operation(self):
+        if self.cad_job is not None:
+            self.cad_job.cancel()
+            self.job_state(self.job.state)
+        else:
+            self.job.cancel()
+
+    def cad_import_finished(self):
+        job = self.cad_job
+        result = job.result or {"success": False, "error": "CAD import ended without a result."}
+        if job.cancel_requested.is_set():
+            result = {"success": False, "cancelled": True}
+        self.cad_job = None
+        try:
+            if result["success"]:
+                self.set_cad_document(result["scene"], job.source)
+        except (OSError, ValueError, KeyError) as error:
+            result = {"success": False, "error": str(error)}
+        self.cad_result = result
+        self.job_state(self.job.state)
+        state = "CAD import complete" if result["success"] else (
+            "CAD import cancelled" if result.get("cancelled") else "CAD import failed")
+        self.job_label.setText(state)
+        if result.get("error"):
+            self.job_output.setPlainText(result["error"])
+            if not self.closing_after_job and not getattr(self, "automated_workflow", False):
+                QtWidgets.QMessageBox.critical(self, "Cannot import CAD", result["error"])
+        job.deleteLater()
+        self.cad_completed.emit(result)
+        if self.closing_after_job:
+            QtCore.QTimer.singleShot(0, self.close)
 
     def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None):
         self.show_scene(scene, path)
@@ -672,6 +742,11 @@ class Viewport(QtWidgets.QMainWindow):
             self.job.cancel()
             event.ignore()
             return
+        if self.cad_job is not None:
+            self.closing_after_job = True
+            self.cancel_operation()
+            event.ignore()
+            return
         self.vtk.Finalize()
         super().closeEvent(event)
 
@@ -780,10 +855,12 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe or args.pmx_probe)
+    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
+        elif args.input.suffix.lower() in IMPORT_COMMANDS:
+            window.start_cad_import(args.input.resolve())
         else:
             window.load(args.input.resolve(), as_model=args.input.suffix.lower() == '.inp')
     window.show()
@@ -793,6 +870,8 @@ def main():
     def verify():
         try:
             checks = []
+            if window.cad_result is not None and not window.cad_result["success"]:
+                raise ValueError(window.cad_result.get("error", "CAD import cancelled."))
             if args.run_example:
                 if not window.job.result or not window.job.result['success']:
                     raise ValueError('Native desktop job failed: ' + str(window.job.result))
@@ -884,7 +963,10 @@ def main():
                 app.exit(1)
         QtCore.QTimer.singleShot(1200, begin_example)
     elif args.self_test:
-        QtCore.QTimer.singleShot(1200, verify)
+        if window.cad_job is not None:
+            window.cad_completed.connect(lambda _: QtCore.QTimer.singleShot(500, verify))
+        else:
+            QtCore.QTimer.singleShot(1200, verify)
     return app.exec()
 
 

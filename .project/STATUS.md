@@ -1,5 +1,14 @@
 # Project status
 
+## Current — task 0059: responsive CAD import
+
+The Mac preview converts and decodes STEP/BREP imports in the
+background. Cancel and window closing stop the active import.
+The current scene stays visible and is replaced only after successful
+decoding. Source desktop and process cleanup checks pass, and the
+original conversion replay still matches its captured bytes.
+[Verification](reports/responsive-cad-import.md).
+
 ## Current — tasks 0057 and 0058: checked CAD reference import
 
 The original 3.0.0 STEP split and BREP visualization replay produce

@@ -69,7 +69,10 @@ BREP in the open dialog.
 This read-only preview accepts files up to 16 MiB whose split produces
 one BREP file. It runs conversion in a temporary workspace before
 opening the validated VIS scene. Each conversion stage has a 60-second
-limit. The macOS app carries the reference hash receipt, and CrossOver
+limit. Imports opened through the file dialog or command line run in the
+background. The current document stays visible until conversion and decoding
+finish. Use **Cancel** to stop the import. Closing the window waits for the
+cancelled worker to finish. The macOS app carries the reference hash receipt, and CrossOver
 and the Windows runtime are supplied separately.
 [Reference replay and setup](../Feasibility/Cad/README.md).
 

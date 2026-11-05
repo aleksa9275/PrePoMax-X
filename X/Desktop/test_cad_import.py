@@ -1,12 +1,16 @@
 """Exercise the CAD process boundary without requiring the Windows runtime."""
 import json
+import os
 from pathlib import Path
 import sys
+import subprocess
+from threading import Event, Thread
+import time
 from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from cad_import import REFERENCE_RECEIPT, ReferenceCadTool, convert_cad
+from cad_import import CadImportCancelled, REFERENCE_RECEIPT, ReferenceCadTool, convert_cad, run_process
 
 
 TOOL = """
@@ -86,6 +90,48 @@ class CadImport(unittest.TestCase):
                 (runtime / name).write_bytes(b"incorrect")
             with self.assertRaisesRegex(ValueError, "hash mismatch"):
                 ReferenceCadTool(runtime, "reference", wine=self.tool)
+
+    @unittest.skipUnless(os.name == "posix", "Process group ownership uses POSIX sessions")
+    def test_cancel_and_timeout_stop_owned_descendants(self):
+        child = self.root / "child.py"
+        heartbeat = self.root / "heartbeat"
+        child.write_text("from pathlib import Path\nimport time\np=Path(" + repr(str(heartbeat)) + ")\n"
+                         "while True:\n    p.write_text(str(time.monotonic_ns()))\n    time.sleep(0.01)\n")
+        self.tool.write_text("import subprocess,sys,time\n"
+                             "subprocess.Popen([sys.executable," + repr(str(child)) + "])\n"
+                             "time.sleep(60)\n")
+        cancel = Event()
+
+        def cancel_after_child_starts():
+            deadline = time.monotonic() + 5
+            while not heartbeat.exists() and time.monotonic() < deadline:
+                time.sleep(0.01)
+            cancel.set()
+
+        requester = Thread(target=cancel_after_child_starts)
+        requester.start()
+        try:
+            with self.assertRaises(CadImportCancelled):
+                run_process([sys.executable, str(self.tool)], cancel=cancel)
+        finally:
+            requester.join()
+        self.assertTrue(heartbeat.exists())
+        stopped = heartbeat.read_bytes()
+        time.sleep(0.1)
+        self.assertEqual(heartbeat.read_bytes(), stopped)
+
+        with self.assertRaises(subprocess.TimeoutExpired):
+            run_process([sys.executable, str(self.tool)], timeout=0.2)
+        stopped = heartbeat.read_bytes()
+        time.sleep(0.1)
+        self.assertEqual(heartbeat.read_bytes(), stopped)
+
+    def test_cancelled_process_never_starts(self):
+        cancel = Event()
+        cancel.set()
+        with self.assertRaises(CadImportCancelled), patch("cad_import.subprocess.Popen") as launch:
+            run_process(self.command(), cancel=cancel)
+        launch.assert_not_called()
 
 
 if __name__ == "__main__":

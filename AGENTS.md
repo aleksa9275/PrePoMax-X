@@ -1,5 +1,12 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0059 runs CAD import and VIS decoding in a background worker,
+with cancellation and deferred window closing. The previous document
+is retained until success. Read .project/reports/responsive-cad-import.md
+for verification and publication. The reference runtime, matching native
+C++ source requirement and all existing correctness, tetrahedron,
+parity and release gates remain.
+
 Tasks 0057 and 0058 replay the pinned original STEP/BREP conversion
 and connect it to the macOS preview via the opt-in CrossOver reference
 tool. The original L-bracket BREP and VIS bytes match. Read

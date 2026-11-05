@@ -1,0 +1,103 @@
+{
+  "macDesktopTestsPassed": 24,
+  "buildBoundaryTestsPassed": 9,
+  "portableProcessTestsPassed": {
+    "osx-arm64": 6,
+    "linux-arm64": 6
+  },
+  "realCadCancellation": {
+    "success": true,
+    "guiTimerTicks": 8,
+    "previousScenePreserved": true,
+    "noNetgenProcessAfterCancel": true
+  },
+  "crossOverConsoleCancellationLeftNoOwnedProcess": true,
+  "referenceReplay": {
+    "success": true,
+    "os": "Darwin",
+    "architecture": "arm64",
+    "mode": "windows-reference-through-crossover",
+    "runs": [
+      {
+        "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+        "visSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+        "sceneMatches": true
+      },
+      {
+        "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+        "visSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+        "sceneMatches": true
+      }
+    ],
+    "stepSha256": "ed653a2eddc136286d57a01c5bc0c8e91822aadb0347a4a7f3593674e1157041",
+    "executableSha256": "1a09dbe76f91ef72f5d305b5d99d37f8d6218a258cb60c221962d539e61f64c4",
+    "originalBytesMatch": true,
+    "decodedSceneSha256": "b945408122cb4e1ccb22059423982c4da7ce46736853d35c94d5998e0097d26e"
+  },
+  "packageBuildBase": "96bac328c16713749e6bc4d4b59b4d22342523e9",
+  "packageSourceHashes": {
+    "viewportSha256": "ef3fc52a3719d40740b84a381f2d7cdccf17b417924268a67e4fc95f46db3b8c",
+    "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+    "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+    "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+    "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+    "cadImportSha256": "bca59a61f072095056ef1d39707e741aa4c9d8a0ce3b9d605a6f27b25661f1bf",
+    "cadJobSha256": "3345278b4e44db8f3db2ddb4da9f2d374d5082b9afc504794215d4f3bb96a1bf",
+    "desktopJobsSha256": "b654c9f034d01a2575a59536b136045f645342658c98941ceeac848b924e3c1e",
+    "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+    "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613"
+  },
+  "systemOnlyPath": true,
+  "packaged": {
+    "step": {
+      "transport": "frame-bridge",
+      "renderer": "vtkCocoaRenderWindow",
+      "sourceSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+      "checksPassed": 15,
+      "cad": {
+        "nodes": 38,
+        "triangles": 72,
+        "edgeSegments": 45,
+        "sourceFaces": 9,
+        "pickedSourceFaceIds": [
+          2,
+          3,
+          4,
+          5,
+          7,
+          9
+        ],
+        "conversion": "Original 3.0.0 via CrossOver"
+      }
+    },
+    "brep": {
+      "transport": "native-cocoa",
+      "renderer": "vtkCocoaRenderWindow",
+      "sourceSha256": "5ce58d27bc42d04270343e134a232e383ea23cdfba6693be409cbe0749a22209",
+      "checksPassed": 14,
+      "cad": {
+        "nodes": 38,
+        "triangles": 72,
+        "edgeSegments": 45,
+        "sourceFaces": 9,
+        "pickedSourceFaceIds": [
+          2,
+          3,
+          4,
+          5,
+          7,
+          9
+        ],
+        "conversion": "Original 3.0.0 via CrossOver"
+      }
+    },
+    "solve": {
+      "transport": "frame-bridge",
+      "renderer": "vtkCocoaRenderWindow",
+      "sourceSha256": "cc92986fba3ef21a6c5e3233f677a180fa74f672fa679b3aa0d3f26af611fd78",
+      "checksPassed": 10,
+      "analyticalChecksPassed": 7
+    }
+  },
+  "screenshotSha256": "1452b2eff6b7382e3f83d43a06076ba24e3e12c7a64f06afc8136b81041fd546"
+}
