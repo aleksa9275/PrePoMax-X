@@ -50,6 +50,15 @@ same package, installation and test requirements.
 [Initial pipeline #3029587252](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029587252) ·
 [Runner timeout](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17755041224#L995).
 
+The rerun at `b04cc799` passed all six automatic jobs. The x64 desktop
+job verified CAD inspection and the native INP solve in the extracted
+archive and after ordinary-user installation from the Ubuntu package.
+The APT remove, reinstall and purge checks passed. Historical compatibility
+stayed manual. The hosted job logs supplied the archive and installer
+hashes in the receipt.
+[Passing pipeline #3029612730](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029612730) ·
+[x64 desktop job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17755224626).
+
 Windows part construction and local selection numbering remain in the
 Windows reader. The next CAD increment requires a corresponding native
 source/build for STEP/BREP import. Native CAD repair and volume meshing,

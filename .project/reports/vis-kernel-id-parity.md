@@ -42,8 +42,13 @@ managed application release's source correspondence is tracked separately.
 [Upstream maintainer's STEP import description](https://prepomax.discourse.group/t/step-import-source-code-questions/3312/3).
 
 Implementation `ade88e61` was pushed and verified on
-`origin/research/native-feasibility`.
-[Exact-commit pipeline #3029605997](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029605997).
+`origin/research/native-feasibility`. The follow-up CI commit
+`b04cc799` has the same application code. Its native Linux x64 research
+job passed all 348 VIS checks with the same geometry and scene hashes.
+All six automatic jobs passed, including the extracted and installed
+desktop workflows.
+[Passing pipeline #3029612730](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029612730) ·
+[Linux x64 reader job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17755224627).
 
 Native STEP/BREP import, CAD repair and volume meshing remain open, along
 with both correctness failures, the tetrahedron gate, broader 3.0.0 parity

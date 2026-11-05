@@ -298,5 +298,22 @@
       ]
     },
     "nativeSolverAndAnalyticalChecksPassed": true
+  },
+  "gitlab": {
+    "initialPipeline": 3029587252,
+    "initialDesktopJob": 17755041224,
+    "initialDesktopOutcome": "10-minute job timeout during pinned PyQt6 wheel download, before packaging",
+    "verifiedCommit": "b04cc7996386fd4900d8a67f968b233a7996d1cb",
+    "includesKernelIdFix": "ade88e611674ba44d4a120db78566cc26cb67381",
+    "verifiedPipeline": 3029612730,
+    "passedAutomaticJobs": 6,
+    "readerJob": 17755224627,
+    "readerChecksPassed": 348,
+    "readerAndSceneHashesMatch": true,
+    "desktopJob": 17755224626,
+    "extractedAndInstalledDesktopChecksPassed": true,
+    "aptLifecyclePassed": true,
+    "archiveSha256": "3513062ead3d6d1e7a59035ed8faa9feab9ba9c9fbcda7e1936c47ccc222043e",
+    "debSha256": "35cfb96cb61eb503bc2bfda36c33f89c69a5e1f41146161b8f8469388130f755"
   }
 }
