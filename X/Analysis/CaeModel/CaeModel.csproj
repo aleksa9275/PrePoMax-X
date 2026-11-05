@@ -67,5 +67,6 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.Parsing.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.Parsing.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs" Link="CalNodeFormatting.cs" />
   </ItemGroup>
 </Project>

@@ -284,13 +284,13 @@ class Viewport(QtWidgets.QMainWindow):
                 child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
         step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
         step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
-        if self.cad_mesh is not None:
+        if self.cad_document is not None:
             self.populate_cad_tree(self.cad_document.scene["cad"])
         self.model_tree.expandToDepth(1)
 
     def populate_cad_tree(self, cad):
-        path = self.cad_document.source if self.cad_mesh is not None else self.current_path
-        root = QtWidgets.QTreeWidgetItem(self.model_tree, [path.name, "Source CAD" if self.cad_mesh is not None else "Read-only CAD"])
+        path = self.cad_document.source if self.cad_document is not None and self.model_scene is not None else self.current_path
+        root = QtWidgets.QTreeWidgetItem(self.model_tree, [path.name, "Source CAD" if self.model_scene is not None else "Read-only CAD"])
         if "conversion" in cad:
             QtWidgets.QTreeWidgetItem(root, ["Conversion", cad["conversion"]])
         unit = "Model units" if cad["lengthUnit"] == "model" else cad["lengthUnit"]
@@ -458,7 +458,8 @@ class Viewport(QtWidgets.QMainWindow):
             else:
                 self.show_scene(self.model_scene, self.model_path)
             self.job.start(mesh, analysis, self.jobs_root, definition=definition,
-                           mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256, cad_mesh=self.cad_mesh)
+                           mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256, cad_mesh=self.cad_mesh,
+                           pmx_bytes=self.pmx_session.contents if pmx_sha256 is not None else None)
             self.job_output.setPlainText(f"Job: {self.job.directory}\nSource: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             self.job_label.setText("Cannot start")
@@ -475,7 +476,7 @@ class Viewport(QtWidgets.QMainWindow):
         if meshing:
             state = "Cancelling mesh" if self.mesh_job.cancel_requested.is_set() else "Meshing CAD"
         active = importing or meshing or state in ('Starting', 'Running', 'Cancelling')
-        self.mesh_action.setEnabled(not active and self.cad_document is not None)
+        self.mesh_action.setEnabled(not active and self.cad_document is not None and self.pmx_session is None)
         cad = self.scene is not None and "cad" in self.scene and self.model_scene is None
         self.run_action.setEnabled(not active and not cad)
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
@@ -557,7 +558,20 @@ class Viewport(QtWidgets.QMainWindow):
             scene = decode(mesh)
         if hashlib.sha256(pmx.mesh_bytes).hexdigest() != scene['SourceSha256']:
             raise ValueError('The displayed PMX mesh differs from the validated model.')
-        self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition['analysis'], pmx=pmx)
+        document = None
+        if pmx.cad_model and isinstance(self.cad_tool, NativeCadTool):
+            with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-cad-') as directory:
+                brep = Path(directory)/'saved.brep'
+                brep.write_bytes(pmx.project['cadGeometry'][0]['Brep'].encode('utf-8'))
+                document = CadDocument(brep, self.cad_tool, decode)
+            document.source = pmx.path
+            document.scene['cad']['parts'][0]['name'] = pmx.project['cadGeometry'][0]['Name']
+        try:
+            self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition['analysis'], pmx=pmx, cad_document=document)
+        except BaseException:
+            if document is not None:
+                document.close()
+            raise
 
     def edit_pmx(self):
         if not self.busy and self.pmx_session is not None:
@@ -725,11 +739,12 @@ class Viewport(QtWidgets.QMainWindow):
         if self.closing_after_job:
             QtCore.QTimer.singleShot(0, self.close)
 
-    def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None, cad_mesh=None):
+    def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None, cad_mesh=None, cad_document=None):
         self.regions.reset()
         self.show_scene(scene, path)
         if cad_mesh is None:
             self.release_cad()
+            self.cad_document = cad_document
         else:
             if self.cad_mesh is not None:
                 self.cad_mesh.close()
@@ -1015,7 +1030,11 @@ def main():
                         help="Exercise static PMX edit, save, reopen and solve in the desktop")
     parser.add_argument("--cad-workflow-probe", type=Path, nargs=3, metavar=("CAD", "ANALYSIS", "OUTPUT"),
                         help="Exercise native CAD to linear tetrahedra, editor and real static results")
+    parser.add_argument("--cad-pmx-probe", type=Path, nargs=2, metavar=("PMX", "OUTPUT"),
+                        help="Verify CAD PMX native edit/save/reopen/solve")
     args = parser.parse_args()
+    if args.cad_pmx_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe):
+        parser.error("Use --cad-pmx-probe with --cad-native separately from other inputs/probes")
     if args.cad_workflow_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example):
         parser.error("Use --cad-workflow-probe with --cad-native separately from other inputs/probes")
     if args.viewport_probe and (args.self_test or args.run_example):
@@ -1044,7 +1063,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe)
+    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1128,7 +1147,11 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.cad_workflow_probe:
+    if args.cad_pmx_probe:
+        from cad_pmx_probe import begin
+        source, output = (p.resolve() for p in args.cad_pmx_probe)
+        QtCore.QTimer.singleShot(500, lambda: begin(app, window, source, output))
+    elif args.cad_workflow_probe:
         from cad_workflow_probe import begin
         source, definition, output = (p.resolve() for p in args.cad_workflow_probe)
         QtCore.QTimer.singleShot(500, lambda: begin(app, window, source, definition, output))

@@ -1,16 +1,17 @@
 using System.Formats.Nrbf;
 
-internal static class StaticGraph
+internal static partial class StaticGraph
 {
     private const int CollectionLimit = 4096;
 
     internal static object ValidateEditContract(SerializationRecord root,
-        IEnumerable<SerializationRecord> records, byte[] graph)
+        IEnumerable<SerializationRecord> records, byte[] graph, bool cadModel = false)
     {
         var slots = RootSlots(root);
         var controller = Record(slots[0], "PrePoMax.Controller");
         var history = Record(controller.GetRawValue("_commands"), "PrePoMax.Commands.CommandsCollection");
-        if (List(history.GetRawValue("_commands")).Length != 0 || history.GetInt32("_currPositionIndex") != -1)
+        if (cadModel) ValidateCadHistory(root);
+        if (!cadModel && (List(history.GetRawValue("_commands")).Length != 0 || history.GetInt32("_currPositionIndex") != -1))
             throw new InvalidDataException("The static edit requires an empty command history.");
         ReadCommandHistory(root); // Check the saved Controller back-reference.
         RequireEmptyDictionary(Record(slots[1]), "analysis jobs");
@@ -24,22 +25,26 @@ internal static class StaticGraph
             "_initialConditions", "_surfaceInteractions", "_userViews");
         if (model.HasMember("_materialOrientations"))
             EmptyDictionaries(model, "_materialOrientations");
-        if (Record(model.GetRawValue("_calculixKeywordOverrides")).GetInt32("_size") != 0 ||
-            Record(Record(model.GetRawValue("_calculixUserKeywords")).GetRawValue("_list"))
-                .GetInt32("_size") != 0)
+        bool noOverrides = cadModel && model.GetRawValue("_calculixKeywordOverrides") == null ||
+            Record(model.GetRawValue("_calculixKeywordOverrides")).GetInt32("_size") == 0;
+        bool noUserKeywords = cadModel && model.GetRawValue("_calculixUserKeywords") == null ||
+            Record(Record(model.GetRawValue("_calculixUserKeywords")).GetRawValue("_list")).GetInt32("_size") == 0;
+        if (!noOverrides || !noUserKeywords)
             throw new InvalidDataException("The static edit refuses custom CalculiX keywords.");
         var parameters = Record(model.GetRawValue("_parameters"), "CaeModel.EquationParameterCollection");
         EmptyDictionaries(parameters, "_parameters", "_overriddenParameters");
 
         var mesh = Record(model.GetRawValue("_mesh"), "CaeMesh.FeMesh");
         var geometry = Record(model.GetRawValue("_geometry"), "CaeMesh.FeMesh");
-        EmptyDictionaries(geometry, "_parts", "_meshSetupItems");
+        if (cadModel) ValidateCadGeometry(root);
+        else EmptyDictionaries(geometry, "_parts", "_meshSetupItems");
         EmptyDictionaries(mesh, "_coordinateSystems", "_referencePoints", "_surfaces", "_meshSetupItems");
         foreach (var item in Entries(mesh, "_parts"))
         {
             var part = Named(item, "CaeMesh.MeshPart");
             Active(part);
-            if (EnumValue(part, "_linearHexaType", "CaeMesh.FeElementTypeLinearHexa") != 10)
+            if (cadModel ? EnumValue(part, "_linearTetraType", "CaeMesh.FeElementTypeLinearTetra") != 10 :
+                EnumValue(part, "_linearHexaType", "CaeMesh.FeElementTypeLinearHexa") != 10)
                 throw new InvalidDataException("The static edit requires full-integration C3D8 parts.");
         }
 

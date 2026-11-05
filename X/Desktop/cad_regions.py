@@ -51,6 +51,10 @@ class CadRegions(QtCore.QObject):
         self.refresh()
 
     @property
+    def view_available(self):
+        return self.window.cad_document is not None and self.window.model_scene is not None
+
+    @property
     def available(self):
         return self.window.cad_mesh is not None and self.window.model_scene is not None
 
@@ -64,9 +68,10 @@ class CadRegions(QtCore.QObject):
         available = self.available
         busy = self.window.busy
         self.toolbar.setVisible(available)
-        for action in (self.view_action, self.mode_action, self.create, self.clear_action, self.label_action):
+        self.view_action.setVisible(self.view_available)
+        for action in (self.mode_action, self.create, self.clear_action, self.label_action):
             action.setVisible(available)
-        self.view.setEnabled(available and not busy)
+        self.view.setEnabled(self.view_available and not busy)
         self.mode.setEnabled(available and not busy)
         self.create.setEnabled(available and not busy and bool(self.refs))
         self.clear_action.setEnabled(available and not busy and bool(self.refs))
@@ -74,13 +79,13 @@ class CadRegions(QtCore.QObject):
         self.view.model().item(2).setEnabled(self.result is not None)
         scene = self.window.scene or {}
         key = 'cad' if 'cad' in scene else 'results' if 'fields' in scene else 'mesh'
-        self.window.field_action.setVisible(not available or key == 'results')
+        self.window.field_action.setVisible(not self.view_available or key == 'results')
         with QtCore.QSignalBlocker(self.view):
             self.view.setCurrentIndex(self.view.findData(key))
 
     def on_scene(self):
         w = self.window
-        if self.available and 'fields' in w.scene:
+        if self.view_available and 'fields' in w.scene:
             mesh = w.model_scene
             if ({n['id'] for n in mesh['nodes']} == {n['id'] for n in w.scene['nodes']} and
                 {e['id']: e['nodeIds'] for e in mesh['elements']} ==
@@ -90,7 +95,7 @@ class CadRegions(QtCore.QObject):
         self.refresh()
 
     def change_view(self, index):
-        if not self.available or self.window.busy:
+        if not self.view_available or self.window.busy:
             self.refresh()
             return
         w = self.window

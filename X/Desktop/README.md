@@ -143,3 +143,10 @@ invalid material reference, edits modulus/load, then solves baseline and edited
 models. `X/Build/verify-editable-solid.py --app <copied-app> --output <new-dir>`
 checks its retained deck and DAT values against the independent analytical cube,
 including changed-load/displacement rejection controls and unchanged tolerances.
+
+The checked original one-part CAD/C3D4 PMX subset now supports **Open static PMX…**
+→ **Edit PMX…** → Save As → reopen → native solve. CAD/mesh/regions remain in
+the original file; only the audited modulus/axial force values are editable.
+The native CAD profile also displays the saved BREP. Jobs freeze the complete
+source PMX. Arbitrary new native CAD-session save is still pending.
+[Boundary and checks](../../.project/reports/desktop-cad-pmx.md).

@@ -1,5 +1,17 @@
 # Project status
 
+## Current — tasks 0069/0070: original CAD PMX persistence
+
+The original 3.0.0 CAD/C3D4 fixture has 276 nodes/843 elements. Safe native readers
+and controlled desktop material/load edit, Save As, reopen and solve pass on Mac/
+Linux ARM64. Original-app readback/resave preserves CAD, mesh and assignments.
+A shared original E8 node formatter fixes the strict original-export comparison;
+all decoded fields and native Mac/Linux deck hashes match. Jobs freeze source PMX.
+[Reference](reports/cad-pmx-reference.md) · [Desktop evidence](reports/desktop-cad-pmx.md).
+Saving arbitrary newly authored native CAD sessions and general PMX remain next.
+D058/D059, both correctness failures, quadratic tetrahedra and full parity/release
+gates remain open.
+
 ## Current — task 0068: visual CAD regions
 
 CAD face/part picks and source-tree multi-selection create named node/element

@@ -9,7 +9,7 @@ internal static class Program
 {
     static int Main(string[] args)
     {
-        if(args.Length!=2 || args[0] is not ("--inventory" or "--static-graph" or "--command-history" or "--edit-strings" or "--static-edit-contract"))
+        if(args.Length!=2 || args[0] is not ("--inventory" or "--static-graph" or "--command-history" or "--edit-strings" or "--static-edit-contract" or "--cad-static-graph" or "--cad-edit-contract"))
         { Console.WriteLine("{\"success\":false,\"error\":\"Expected a supported inspection command and a bounded NRBF file\"}"); return 2; }
         try
         {
@@ -26,6 +26,8 @@ internal static class Program
                 object summary = args[0] switch
                 {
                     "--static-graph" => StaticGraph.Read(root),
+                    "--cad-static-graph" => new { definition = StaticGraph.Read(root), geometry = StaticGraph.ReadCadGeometry(root) },
+                    "--cad-edit-contract" => StaticGraph.ValidateEditContract(root, records.Values, ReadGraphBytes(stream), true),
                     "--command-history" => StaticGraph.ReadCommandHistory(root),
                     "--static-edit-contract" => StaticGraph.ValidateEditContract(root, records.Values, ReadGraphBytes(stream)),
                     _ => StaticGraph.LocateEditStrings(root, records.Values, ReadGraphBytes(stream))
@@ -66,6 +68,7 @@ internal static class Program
         }
         catch(Exception error)
         {
+            if (Environment.GetEnvironmentVariable("PREPOMAXX_PMX_TRACE") == "1") Console.Error.WriteLine(error);
             Console.WriteLine(JsonSerializer.Serialize(new {success=false,errorType=error.GetType().Name,error=error.Message}));
             return 1;
         }

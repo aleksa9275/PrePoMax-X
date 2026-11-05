@@ -115,7 +115,7 @@ namespace FileInOut.Output.Calculix
                 }
                 //
                 if (_modelSpace == ModelSpaceEnum.ThreeD)
-                    sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", node.Id, node.X, node.Y, node.Z).AppendLine();
+                    CalNodeFormatting.Append3D(sb, node);
                 else if (_modelSpace.IsTwoD())
                     sb.AppendFormat("{0}, {1:E8}, {2:E8}", node.Id, node.X, node.Y).AppendLine();
                 else throw new NotSupportedException();

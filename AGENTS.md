@@ -1,5 +1,12 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0069/0070 add original CAD/C3D4 PMX projection and controlled native edit/
+save/reopen/solve, with original-app readback. Read .project/reports/cad-pmx-reference.md
+and .project/reports/desktop-cad-pmx.md. The original CalNode E8 formatter is
+shared for this CAD PMX compatibility path; standalone mesh export is unchanged.
+New native CAD-session serialization/general PMX remain open, along with all
+correctness, quadratic-tetrahedron, parity and release gates. Preserve D058/D059.
+
 Task 0068 adds visual CAD face/part region selection, original-reader set unions,
 highlighting and CAD/mesh/result switching. Read
 .project/reports/cad-region-selection.md and the native CAD handoff for actual

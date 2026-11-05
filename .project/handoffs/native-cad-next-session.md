@@ -1,4 +1,16 @@
-# Native CAD continuation — 5 November 2026
+# Native CAD continuation — 6 November 2026
+
+Tasks 0069/0070 add a checked original CAD/C3D4 PMX boundary: safe projection,
+controlled modulus/force Save As, reopen, original-app readback and native solve.
+Read [reference](../reports/cad-pmx-reference.md) and
+[desktop evidence](../reports/desktop-cad-pmx.md) with their receipts for actual
+publication and candidate identity. Original CalNode E8 is shared only for the
+CAD PMX export path; original-export/native and Mac/Linux decoded fields match
+exactly. Jobs freeze complete source PMX. General new native-session serialization
+is still next under D057, alongside broader original PMX graphs. Keep D058/D059
+and all correctness/tetrahedron/parity/release gates. Prior app paths are historical
+after closeout; keep the one candidate named in the current receipt.
+
 
 Task 0068 adds visual CAD face/part regions, original-reader node/element set
 unions, highlighting, CAD/mesh/result switching and frozen region provenance.

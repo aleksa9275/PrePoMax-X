@@ -3,6 +3,23 @@ using System.Text.Json;
 
 try
 {
+    if (args.Length == 2 && args[0] == "--model-kind")
+    {
+        using var input = File.OpenRead(args[1]);
+        using var binary = new BinaryReader(input);
+        if (input.Length > 128L*1024*1024) throw new InvalidDataException("Model frame too large.");
+        int marker = binary.ReadInt32();
+        if (marker is not (0 or 1)) throw new InvalidDataException("Invalid geometry marker.");
+        int geometryNodeCount = marker == 1 ? binary.ReadInt32() : 0;
+        if (geometryNodeCount < 0 || geometryNodeCount > 250000) throw new InvalidDataException("Invalid geometry count.");
+        Console.WriteLine(JsonSerializer.Serialize(new { cadModel = geometryNodeCount > 0 }));
+        return 0;
+    }
+    if (args.Length == 2 && args[0] == "--cad-model")
+    {
+        Console.WriteLine(JsonSerializer.Serialize(CadModel.Read(args[1])));
+        return 0;
+    }
     if (args.Length >= 4 && args[0] == "--compare-results")
     {
         Console.WriteLine(JsonSerializer.Serialize(ResultFields.Compare(args[1], args[2], args[3..])));
@@ -46,7 +63,7 @@ try
     }));
     return 0;
 }
-catch (Exception error) when (error is IOException or InvalidDataException or ArgumentException)
+catch (Exception error) when (error is IOException or InvalidDataException or ArgumentException or NotSupportedException)
 {
     Console.Error.WriteLine(error.Message);
     return 1;

@@ -1,0 +1,244 @@
+{
+  "tasks": [
+    "0069",
+    "0070"
+  ],
+  "recordedDate": "2026-11-06",
+  "originalArchiveSha256": "f4499f51e20536ad60d5e5bd87f67e4986a0dfdaf9e020bfc92b1dd1c85e30d9",
+  "originalExeSha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+  "sourceCorrespondenceVerified": false,
+  "capture": {
+    "geometryPart": "Solid_part-1",
+    "meshPart": "Solid_part-1",
+    "geometryId": 1,
+    "meshPartId": 1,
+    "nodes": 276,
+    "elements": 843
+  },
+  "framing": {
+    "inputSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6",
+    "fileBytes": 32469,
+    "header": "PrePoMax v3.0.0",
+    "versionNumbers": [
+      3,
+      0,
+      0
+    ],
+    "mainFrame": {
+      "offset": 36,
+      "compressedBytes": 32429,
+      "inflatedBytes": 158780,
+      "nrbfBytes": 102018,
+      "nrbfSha256": "c57b37b2c66f776274f8631f3e47d93492040cd70fb99cacceb69416f80a1a54",
+      "opaqueModelBytes": 56754,
+      "opaqueModelSha256": "e2caa0d48f8ec018bf3274c5579e7ff47a596c53cc231ffa591c735f877d51e5"
+    },
+    "opaqueTail": {
+      "offset": 32465,
+      "bytes": 4,
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    "inputUnchanged": true
+  },
+  "modelFrameSha256": "e2caa0d48f8ec018bf3274c5579e7ff47a596c53cc231ffa591c735f877d51e5",
+  "geometry": [
+    {
+      "Name": "Solid_part-1",
+      "Id": 1,
+      "BrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81"
+    }
+  ],
+  "originalAppReadback": {
+    "cadParts": 1,
+    "partName": "Solid_part-1",
+    "partId": 1,
+    "volume": 1999.9999999999995,
+    "faces": 6,
+    "nodes": 276,
+    "elements": 843
+  },
+  "macContractTests": {
+    "success": true,
+    "checks": [
+      {
+        "name": "original CAD/C3D4 mesh and assigned regions",
+        "passed": true
+      },
+      {
+        "name": "original CAD BREP and matching topology ownership",
+        "passed": true
+      },
+      {
+        "name": "portable changed modulus and axial force",
+        "passed": true
+      },
+      {
+        "name": "all CAD and mesh records retained",
+        "passed": true
+      },
+      {
+        "name": "exact original binary geometry/mesh frame preserved",
+        "passed": true
+      },
+      {
+        "name": "only three audited string records change; history untouched",
+        "passed": true
+      },
+      {
+        "name": "original app resave retains native-edited semantics",
+        "passed": true
+      },
+      {
+        "name": "quadratic mutation target unambiguous",
+        "passed": true
+      },
+      {
+        "name": "old-header refused",
+        "passed": true
+      },
+      {
+        "name": "truncated-mesh refused",
+        "passed": true
+      },
+      {
+        "name": "nonfinite-cad-coordinate refused",
+        "passed": true
+      },
+      {
+        "name": "quadratic-tetra-gate refused",
+        "passed": true
+      },
+      {
+        "name": "unsupported-history refused",
+        "passed": true
+      },
+      {
+        "name": "saved-results refused",
+        "passed": true
+      },
+      {
+        "name": "existing output refused",
+        "passed": true
+      },
+      {
+        "name": "invalid physical edit publishes no file",
+        "passed": true
+      },
+      {
+        "name": "original file unchanged",
+        "passed": true
+      }
+    ],
+    "inputSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6",
+    "scope": "Checked one-part CAD/C3D4 PMX; full project corpus and release gates remain"
+  },
+  "linuxContractTests": {
+    "success": true,
+    "checks": [
+      {
+        "name": "original CAD/C3D4 mesh and assigned regions",
+        "passed": true
+      },
+      {
+        "name": "original CAD BREP and matching topology ownership",
+        "passed": true
+      },
+      {
+        "name": "portable changed modulus and axial force",
+        "passed": true
+      },
+      {
+        "name": "all CAD and mesh records retained",
+        "passed": true
+      },
+      {
+        "name": "exact original binary geometry/mesh frame preserved",
+        "passed": true
+      },
+      {
+        "name": "only three audited string records change; history untouched",
+        "passed": true
+      },
+      {
+        "name": "quadratic mutation target unambiguous",
+        "passed": true
+      },
+      {
+        "name": "old-header refused",
+        "passed": true
+      },
+      {
+        "name": "truncated-mesh refused",
+        "passed": true
+      },
+      {
+        "name": "nonfinite-cad-coordinate refused",
+        "passed": true
+      },
+      {
+        "name": "quadratic-tetra-gate refused",
+        "passed": true
+      },
+      {
+        "name": "unsupported-history refused",
+        "passed": true
+      },
+      {
+        "name": "saved-results refused",
+        "passed": true
+      },
+      {
+        "name": "existing output refused",
+        "passed": true
+      },
+      {
+        "name": "invalid physical edit publishes no file",
+        "passed": true
+      },
+      {
+        "name": "original file unchanged",
+        "passed": true
+      }
+    ],
+    "inputSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6",
+    "scope": "Checked one-part CAD/C3D4 PMX; full project corpus and release gates remain"
+  },
+  "c3d8Regression": {
+    "firstWrite": {
+      "inputSha256": "2b2b90d640d64b8a5a2d90ffab4ca63b52e640e3f71a6f0ae105e693d50188ea",
+      "outputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+      "editedGraphSha256": "7917120c95f52b8d018e64fb40f5be069b2d284c4c2ee70a432b65769d8c1d50",
+      "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+      "patchedStringRecords": [
+        555,
+        561,
+        563
+      ],
+      "portableReadbackPassed": true
+    },
+    "secondWrite": {
+      "inputSha256": "c5752e03f6a80c2b30fbf6d472cc83f7912def6bfcb1347f5aa4aefc67b36a61",
+      "outputSha256": "a6525b52a8edd1a19f7f16e1da179c265ef8eb9fc6f8519d7b3e0dcd00c67021",
+      "editedGraphSha256": "ac1b018d6db88a167bc49482297d19d8b23fa5627ca9c365f61361bbda3cef12",
+      "modelBlockSha256": "a47f3aef64a7845b4c3ae656f733ba39c6f2c4983e4ec18a3ec39313e3628dfa",
+      "patchedStringRecords": [
+        555,
+        561,
+        563
+      ],
+      "portableReadbackPassed": true
+    },
+    "deckSha256": "e1f70dd79279fd27e5b25ac36353152d8a0324926250c24de8cad7d5977c3c97",
+    "officialDeckSemanticsMatch": true,
+    "refused": [
+      "unpinned-default",
+      "saved-results",
+      "unsupported-formulation",
+      "unsupported-version",
+      "nonempty-command-history",
+      "existing-output"
+    ]
+  },
+  "localFixtures": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Feasibility/Pmx/artifacts/task0069",
+  "publication": "Prepared; actual remote/candidate identity recorded at closeout"
+}

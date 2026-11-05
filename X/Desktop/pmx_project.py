@@ -50,13 +50,24 @@ class PmxSession:
         with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-open-') as directory:
             copy = Path(directory) / 'project.pmx'
             copy.write_bytes(self.contents)
+            initial_reader = self.writer['reader']
+            with copy.open('rb') as stream:
+                _, _, model = initial_reader['read_frames'](stream)
+            model_file = Path(directory)/'model.bin'
+            model_file.write_bytes(model)
+            self.cad_model = initial_reader['decode'](self.mesh_host, ['--model-kind', model_file])['cadModel']
+            if self.cad_model:
+                self.writer = run_path(str(tools / 'write-cad-edit.py'))
+                decks = self.writer['decks']
             reader = self.writer['reader']
             self.project = reader['inspect'](copy, self.mesh_host, self.graph_host)
             with copy.open('rb') as stream:
-                framing, graph, _ = reader['read_frames'](stream)
-            targets = decks['validate_shape'](self.project, framing, graph, self.graph_host)
+                framing, graph, _ = initial_reader['read_frames'](stream)
+            targets = self.project['editTargets'] if self.cad_model else decks['validate_shape'](self.project, framing, graph, self.graph_host)
             self.mesh_bytes = decks['mesh_input'](self.project).encode('utf-8')
             self.definition = decks['project_definition'](self.project['graph'])
+            if self.cad_model:
+                self.definition['originalNodeExport'] = True
             deck = Path(directory) / 'check.inp'
             decks['build_deck'](self.mesh_bytes, self.definition, self.deck_host, deck)
             self.deck_sha256 = hashlib.sha256(deck.read_bytes()).hexdigest()
@@ -95,6 +106,8 @@ class PmxDialog(QtWidgets.QDialog):
             ('Material', graph['materials'][0]['name']),
             ('Load region', graph['steps'][0]['loads'][0]['region']),
         )
+        if session.cad_model:
+            fields += (('Geometry', 'Saved CAD preserved; controlled material/load edits'),)
         for name, value in fields:
             label = QtWidgets.QLabel(value)
             label.setTextFormat(QtCore.Qt.TextFormat.PlainText)

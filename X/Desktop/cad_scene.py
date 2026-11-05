@@ -12,13 +12,13 @@ def read_cad_parts(source, tool, decoder, work, *, cancel=None):
     return scene
 
 
-def compose_cad_parts(parts):
+def compose_cad_parts(parts, *, force_parts=False):
     if not parts:
         raise ValueError("CAD import produced no decoded parts.")
     for _, scene in parts:
         if scene.get("success") is not True or not scene["nodes"] or not scene["elements"]:
             raise ValueError("Every CAD part must decode successfully with display triangles.")
-    if len(parts) == 1:
+    if len(parts) == 1 and not force_parts:
         return parts[0][1]
     nodes, elements, segments, records = [], [], [], []
     length_unit = parts[0][1]["cad"]["lengthUnit"]

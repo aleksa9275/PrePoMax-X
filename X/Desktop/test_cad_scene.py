@@ -39,6 +39,16 @@ class CadPartIdentity(unittest.TestCase):
         original = triangle_scene("single", 1)
         self.assertIs(compose_cad_parts([("single", original)]), original)
 
+    def test_native_single_part_keeps_part_scope_for_picking_and_mesh_regions(self):
+        original = triangle_scene("single", 1)
+        result = compose_cad_parts([("single", original)], force_parts=True)
+        self.assertEqual(result["cad"]["parts"][0]["id"], 1)
+        self.assertEqual(result["elements"][0]["sourcePartId"], 1)
+        self.assertEqual(result["elements"][0]["sourceElementId"], 7)
+        self.assertEqual(result["elements"][0]["sourceFaceId"], 1)
+        self.assertEqual(result["cad"]["edgeSegments"][0]["sourcePartId"], 1)
+        self.assertNotIn("parts", original["cad"])
+
     def test_refuses_invalid_part_identity_and_units(self):
         first = triangle_scene("first", 1)
         changes = [

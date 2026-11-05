@@ -17,7 +17,7 @@ class CadDocument:
         try:
             self.parts = tool.convert_parts(self.source, self.root / "import", cancel=cancel)
             self.snapshot = self.root / "import" / ("source" + self.source.suffix.lower())
-            self.scene = compose_cad_parts([(b.stem, decoder(v, cancel=cancel)) for b, v in self.parts])
+            self.scene = compose_cad_parts([(b.stem, decoder(v, cancel=cancel)) for b, v in self.parts], force_parts=True)
             self.scene["cad"]["conversion"] = tool.description
             self.identities = {p: file_sha256(p) for p in [self.snapshot, *[p for pair in self.parts for p in pair]]}
             self.tool_receipt = file_sha256(tool.receipt)

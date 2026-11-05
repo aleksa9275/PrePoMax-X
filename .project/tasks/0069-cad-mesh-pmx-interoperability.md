@@ -1,6 +1,7 @@
 # Task 0069 — CAD/mesh PMX interoperability boundary
 
-Prepared after task 0068; not started. D057 requires original PMX compatibility.
+Completed 6 November 2026. [Reference and safe projection](../reports/cad-pmx-reference.md).
+The desktop implementation is split into [task 0070](0070-desktop-cad-pmx.md). D057 requires original PMX compatibility.
 The next persistence increment must retain editable CAD/mesh/region semantics,
 not merely the frozen job folder or a replacement project format.
 

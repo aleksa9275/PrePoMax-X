@@ -65,6 +65,13 @@ internal static class PmxStaticDeck
         }
         MeshFiles.Measure(mesh);
         string deck = StaticAnalysisDeckWriter.Write(mesh, materials, sections, step);
+        if (model.OriginalNodeExport)
+        {
+            int start = deck.IndexOf("*Node\n", StringComparison.Ordinal);
+            int end = deck.IndexOf("*Element", start, StringComparison.OrdinalIgnoreCase);
+            if (start < 0 || end <= start) throw new InvalidDataException("Original node block is missing.");
+            deck = deck[..start] + CalNodeFormatting.Write3D(mesh.Nodes) + deck[end..];
+        }
         int sectionOffset = deck.IndexOf("*Solid section", StringComparison.OrdinalIgnoreCase);
         if (sectionOffset <= 0 || deck[sectionOffset - 1] != '\n')
             throw new InvalidDataException("Original deck has no section boundary for the density keyword.");
@@ -75,6 +82,6 @@ internal static class PmxStaticDeck
     }
 
     private sealed record ControlledDefinition(AnalysisSpec Analysis, string[] Density, int OutputFrequency,
-        CapturedOutput[] Outputs);
+        CapturedOutput[] Outputs, bool OriginalNodeExport = false);
     private sealed record CapturedOutput(string Name, string Type, int Variables);
 }

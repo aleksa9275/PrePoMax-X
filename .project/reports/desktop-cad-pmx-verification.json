@@ -1,0 +1,499 @@
+{
+  "task": "0070",
+  "scope": "Controlled original one-part CAD PMX editing; arbitrary new native session save remains open",
+  "publication": "Prepared; actual remote/candidate identity recorded at closeout",
+  "hostedCi": "No runs; D058 hold",
+  "linuxX64": "Deferred to Windows/Podman near finishing under D059",
+  "workflows": {
+    "macSource": {
+      "success": true,
+      "checks": [
+        {
+          "name": "original CAD/C3D4 project opens",
+          "passed": true
+        },
+        {
+          "name": "saved CAD is available without remeshing",
+          "passed": true
+        },
+        {
+          "name": "source CAD faces display",
+          "passed": true
+        },
+        {
+          "name": "cad capture",
+          "passed": true
+        },
+        {
+          "name": "real CAD PMX editor opens",
+          "passed": true
+        },
+        {
+          "name": "invalid modulus publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "CAD PMX Save As validates original graph and deck",
+          "passed": true
+        },
+        {
+          "name": "existing PMX destination refused",
+          "passed": true
+        },
+        {
+          "name": "saved equations reopen in fresh session",
+          "passed": true
+        },
+        {
+          "name": "saved CAD BREP and named regions unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported project preserves current CAD model",
+          "passed": true
+        },
+        {
+          "name": "native CAD PMX solve completes",
+          "passed": true
+        },
+        {
+          "name": "job freezes exact source PMX including CAD",
+          "passed": true
+        },
+        {
+          "name": "original tetrahedral results loaded",
+          "passed": true
+        },
+        {
+          "name": "source CAD and model remain after solve",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views survive reopen and solve",
+          "passed": true
+        },
+        {
+          "name": "result capture",
+          "passed": true
+        },
+        {
+          "name": "original PMX stays unchanged",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0070-evidence/source-format/workflow.json",
+      "sha256": "7da59c3b583a23886f9256488bbcd7e68a6b7b6ad8c33d86462fd8a7341872a3",
+      "job": {
+        "workspace": "/private/tmp/prepomaxx-task0070-evidence/source-format-jobs/20261105-225633-ba9be9b0ca5f",
+        "directory": "/private/tmp/prepomaxx-task0070-evidence/source-format-jobs/20261105-225633-ba9be9b0ca5f/solve",
+        "inputDirectory": "/private/tmp/prepomaxx-task0070-evidence/source-format-jobs/20261105-225633-ba9be9b0ca5f/inputs"
+      }
+    },
+    "linuxArm64Desktop": {
+      "success": true,
+      "checks": [
+        {
+          "name": "original CAD/C3D4 project opens",
+          "passed": true
+        },
+        {
+          "name": "saved CAD is available without remeshing",
+          "passed": true
+        },
+        {
+          "name": "source CAD faces display",
+          "passed": true
+        },
+        {
+          "name": "cad capture",
+          "passed": true
+        },
+        {
+          "name": "real CAD PMX editor opens",
+          "passed": true
+        },
+        {
+          "name": "invalid modulus publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "CAD PMX Save As validates original graph and deck",
+          "passed": true
+        },
+        {
+          "name": "existing PMX destination refused",
+          "passed": true
+        },
+        {
+          "name": "saved equations reopen in fresh session",
+          "passed": true
+        },
+        {
+          "name": "saved CAD BREP and named regions unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported project preserves current CAD model",
+          "passed": true
+        },
+        {
+          "name": "native CAD PMX solve completes",
+          "passed": true
+        },
+        {
+          "name": "job freezes exact source PMX including CAD",
+          "passed": true
+        },
+        {
+          "name": "original tetrahedral results loaded",
+          "passed": true
+        },
+        {
+          "name": "source CAD and model remain after solve",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views survive reopen and solve",
+          "passed": true
+        },
+        {
+          "name": "result capture",
+          "passed": true
+        },
+        {
+          "name": "original PMX stays unchanged",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0070-evidence/linux/gui/workflow.json",
+      "sha256": "92f2dd5883704b407d3522dba5b9df3c3beee66035a288c45a17ef5de850482a",
+      "job": {
+        "workspace": "/out/gui-jobs/20261105-230113-6938c5eaa4b5",
+        "directory": "/out/gui-jobs/20261105-230113-6938c5eaa4b5/solve",
+        "inputDirectory": "/out/gui-jobs/20261105-230113-6938c5eaa4b5/inputs"
+      }
+    }
+  },
+  "tests": {
+    "desktop": {
+      "passed": 38,
+      "localLog": "/tmp/prepomaxx-task0070-evidence/desktop-tests-final.log",
+      "sha256": "2f1d7a8b8c4aa708bcca3a4d92d9524f0d67bdd5191917944d4e58e21aff3ffd"
+    },
+    "analysisGuards": {
+      "passed": 12,
+      "localLog": "/tmp/prepomaxx-task0070-evidence/analysis-guards.log",
+      "sha256": "a951d3a5c8fae699e03e0750f5a727e7368d55121b2aea96862aa7fd2454052b"
+    },
+    "buildGuards": {
+      "passed": 9,
+      "localLog": "/tmp/prepomaxx-task0070-evidence/build-guards.log",
+      "sha256": "44da5ff3d8732677572559b618a09686fa21efd87af4d2b415dc65f98118d47f"
+    }
+  },
+  "comparisons": {
+    "originalExport": {
+      "success": true,
+      "checks": {
+        "nodes": true,
+        "elements": true,
+        "nodeIdsInValueOrder": true,
+        "fields": true
+      },
+      "originalDeckSha256": "75daa7a8e21d201778b9fbf6b946e7954319f2b4598e3ebe0d3d5cae61de3457",
+      "nativeDeckSha256": "9afe8a34ff69d0b308f4c273e307e3f18988f91812a9b8d964d4fa5fc4261b61",
+      "scope": "Same pinned native solver, original-app export vs CAD PMX reconstruction with original E8 node formatting"
+    },
+    "macLinux": {
+      "success": true,
+      "checks": {
+        "nodes": true,
+        "elements": true,
+        "nodeIdsInValueOrder": true,
+        "fields": true
+      },
+      "decksIdentical": true,
+      "scope": "Native Mac/Linux ARM64 CAD PMX source workflow"
+    }
+  },
+  "currentSourceSuites": {
+    "schemaVersion": 1,
+    "profile": "fast",
+    "areas": [
+      "core",
+      "analysis",
+      "execution",
+      "results"
+    ],
+    "host": {
+      "os": "Darwin",
+      "architecture": "Arm64"
+    },
+    "recordedAtUtc": "2026-11-05T22:56:59.228210+00:00",
+    "steps": [
+      {
+        "area": "core",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Core/verify.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0070-evidence/current-checks/core-current.json"
+        ],
+        "result": "core-current.json",
+        "log": "core-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "01f2b82f29c0a6945f600d38f34c296f8a584dba41a8f60ab8b525a58d36e76c",
+        "checks": null,
+        "openCorrectnessChecks": [
+          {
+            "name": "quadratic tetrahedron affine integral",
+            "passed": false,
+            "expected": 28,
+            "actual": 26.794910717854155,
+            "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+          },
+          {
+            "name": "quadratic pyramid classification",
+            "passed": false,
+            "expected": true,
+            "actual": false,
+            "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+          }
+        ],
+        "fullyAccepted": false,
+        "elapsedSeconds": 9.362
+      },
+      {
+        "area": "analysis",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Analysis/verify-analysis.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0070-evidence/current-checks/analysis-current.json"
+        ],
+        "result": "analysis-current.json",
+        "log": "analysis-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "5bab3376b8abc1f9abed27508cc331bfd1f6d1aa32d3760dd0c2c6d732019e4f",
+        "checks": 54,
+        "openCorrectnessChecks": [
+          {
+            "name": "quadratic tetrahedron affine integral",
+            "passed": false,
+            "expected": 28,
+            "actual": 26.794910717854155,
+            "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+          },
+          {
+            "name": "quadratic pyramid classification",
+            "passed": false,
+            "expected": true,
+            "actual": false,
+            "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+          }
+        ],
+        "fullyAccepted": false,
+        "elapsedSeconds": 14.614
+      },
+      {
+        "area": "execution",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Execution/verify-execution.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0070-evidence/current-checks/execution-current.json"
+        ],
+        "result": "execution-current.json",
+        "log": "execution-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "045389503f7fb58fd7cbab46eff0e397f9d984a5312e7e9275c91917eb125b3f",
+        "checks": 49,
+        "elapsedSeconds": 15.58
+      },
+      {
+        "area": "results",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Results/verify-results.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0070-evidence/current-checks/results-current.json"
+        ],
+        "result": "results-current.json",
+        "log": "results-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "99c0a09188825fe196e391200ae3726ae58af3374ce6612b9bfebc99afa854ff",
+        "checks": 78,
+        "elapsedSeconds": 7.126
+      }
+    ],
+    "success": true,
+    "plannedStepCount": 4,
+    "solverExecuted": false,
+    "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+    "repository": {
+      "head": "b2d5ad9ec8399682fbb53e94b0fd291a40f7ef60",
+      "dirty": true,
+      "patch": "source.patch",
+      "patchSha256": "70e91fb83597c4221fe41edb6a1cde23150071e49c3c650127093e856ad862a4",
+      "changedCode": [
+        {
+          "path": "CaeModel/CaeModel.csproj",
+          "state": "modified",
+          "sha256": "a3d0aa54de8802a31a12cfdfe84c01c2a59dc5bfe731c682eba4803f972c822e"
+        },
+        {
+          "path": "CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs",
+          "state": "untracked",
+          "sha256": "64f0b03fbf71eb865ffcc2b4efa5006be1612d076b5518aced73cf8df271a3bb"
+        },
+        {
+          "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalNode.cs",
+          "state": "modified",
+          "sha256": "b04e54c5d26f954091fad77a55ae714452d43fe8297eae617aebb436fd0b0675"
+        },
+        {
+          "path": "X/Analysis/CaeModel/CaeModel.csproj",
+          "state": "modified",
+          "sha256": "e5e7e9d2d800fc5c86bbbd8e25d1f468503792b79635d2f58ca2270bcc2018b0"
+        },
+        {
+          "path": "X/Analysis/analysis-sources.json",
+          "state": "modified",
+          "sha256": "b677eff34ece08eb9aab643f23ca546476adaa50dd9f5afc6387800c849c9be9"
+        },
+        {
+          "path": "X/Analysis/analysis_layout.py",
+          "state": "modified",
+          "sha256": "941c66a2d491e6a44f1fdd374af9de970c942bd89efbf1e2712f857e03962035"
+        },
+        {
+          "path": "X/Analysis/test_analysis_layout.py",
+          "state": "modified",
+          "sha256": "7b46dc5dfd085b77ee56c900f4784a7c92a00b46a51fe3706d697e1818b6048d"
+        },
+        {
+          "path": "X/Build/build.py",
+          "state": "modified",
+          "sha256": "80adcdd8c0dde478991dc2e4714c801285b5d5d16f5455696a734a0428dd7eae"
+        },
+        {
+          "path": "X/Desktop/cad_pmx_probe.py",
+          "state": "untracked",
+          "sha256": "ac1aa38508164dbb5ba91aadbf2455e5c5f8e22118f4143b176da5371e59bec0"
+        },
+        {
+          "path": "X/Desktop/cad_regions.py",
+          "state": "modified",
+          "sha256": "b026aa54e9f7a65e2328465b99082ab6c35d777a0614642e9dcde44e04186722"
+        },
+        {
+          "path": "X/Desktop/jobs.py",
+          "state": "modified",
+          "sha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4"
+        },
+        {
+          "path": "X/Desktop/pmx_project.py",
+          "state": "modified",
+          "sha256": "c3e31c3b860269972719fcd84b270704fcef9f2871acd7415b4f1169981db7d9"
+        },
+        {
+          "path": "X/Desktop/viewport.py",
+          "state": "modified",
+          "sha256": "f8f18c59b6d38737af16ff7799c5ae748f4ef8aebfff3deea930ef01443283ce"
+        },
+        {
+          "path": "X/Execution/Solve/PmxStaticDeck.cs",
+          "state": "modified",
+          "sha256": "66174cd5dc66809c4c962199de24a98f98345be9d9073089a6fbe0897e2efb2a"
+        },
+        {
+          "path": "X/Feasibility/Pmx/Program.cs",
+          "state": "modified",
+          "sha256": "ebc30923cfb78bbcd94ec5d40cb1d9fd9734113e0cf7171159cb6055398adbf2"
+        },
+        {
+          "path": "X/Feasibility/Pmx/StaticGraph.Cad.cs",
+          "state": "untracked",
+          "sha256": "8ba34ee02e6c0533b2fe5a21a92383ca10f6f36750d69f2a92b29c00c640d4fb"
+        },
+        {
+          "path": "X/Feasibility/Pmx/StaticGraph.cs",
+          "state": "modified",
+          "sha256": "837d8ba103ec8cb6c03585f1a11c984348b18376eeab84a0ea61c9712c849d5d"
+        },
+        {
+          "path": "X/Feasibility/Pmx/inspect-cad-project.py",
+          "state": "untracked",
+          "sha256": "22a859000b01f8021676ecb616646e3563f7c10c68082af31bcb5b3ca1451550"
+        },
+        {
+          "path": "X/Feasibility/Pmx/reconstruct-static-deck.py",
+          "state": "modified",
+          "sha256": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b"
+        },
+        {
+          "path": "X/Feasibility/Pmx/test-cad-project.py",
+          "state": "untracked",
+          "sha256": "dd31bb286ae1fc8696086498f56119b2e6d20c073142efee00c28cc21aa06a47"
+        },
+        {
+          "path": "X/Feasibility/Pmx/write-cad-edit.py",
+          "state": "untracked",
+          "sha256": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd"
+        },
+        {
+          "path": "X/Feasibility/PmxMesh/CadModel.cs",
+          "state": "untracked",
+          "sha256": "773ed35e3c49227aa060ed98a3b2810b91a19675f20ff74b9ddd274b57cdf1d5"
+        },
+        {
+          "path": "X/Feasibility/PmxMesh/Program.cs",
+          "state": "modified",
+          "sha256": "f629ddcfd7c0f47f69e5c8ab3da3cf9afd3d32ebe4f52fe40d478d1d29003a05"
+        }
+      ],
+      "scope": "changed build/test/shared source only; no user models or private files"
+    },
+    "upstreamPins": {
+      "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+      "revisions": [
+        {
+          "name": "3.0.0-rc2",
+          "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+        },
+        {
+          "name": "post-rc2-2026-10-17",
+          "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+        }
+      ]
+    },
+    "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+    "dotnetSdk": "10.0.403",
+    "elapsedSeconds": 46.924,
+    "pendingSteps": []
+  }
+}

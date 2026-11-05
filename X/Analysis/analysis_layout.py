@@ -17,7 +17,7 @@ BASELINE = core_verify.BASELINE
 EXTENSIONS = 'CaeGlobals/Extensions.cs'
 FORMATTING = 'CaeGlobals/Extensions.Calculix.cs'
 BOUNDARY = 'CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs'
-BOUNDARIES = {BOUNDARY, 'CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs'}
+BOUNDARIES = {BOUNDARY, 'CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs', 'CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs'}
 REMOVED = {
     'CaeGlobals/Equation/EquationContainer.cs': 'using System.Runtime.Remoting.Contexts;\n',
     'CaeGlobals/Equation/EquationString.cs': 'using System.Runtime.Remoting.Contexts;\n',
@@ -50,6 +50,11 @@ def source_rows(revision=BASELINE):
     if manifest['baseline'] != BASELINE:
         raise ValueError('Analysis baseline changed')
     native_rows = native_mesh_layout.rows()
+    original_node = 'CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalNode.cs'
+    statement = 'sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", node.Id, node.X, node.Y, node.Z).AppendLine();'
+    expected_node = original(native_mesh_layout.PIN, original_node).decode('utf-8-sig').replace(statement, 'CalNodeFormatting.Append3D(sb, node);')
+    if (ROOT / original_node).read_text(encoding='utf-8-sig') != expected_node or statement not in (ROOT / 'CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs').read_text():
+        raise ValueError('Original node formatter extraction changed')
     rows = manifest['sources']
     if len({row['path'] for row in rows}) != len(rows):
         raise ValueError('Duplicate source manifest entry')

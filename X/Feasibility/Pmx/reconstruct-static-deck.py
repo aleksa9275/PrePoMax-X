@@ -63,7 +63,10 @@ def mesh_input(project):
     lines = ['*Node']
     for node in mesh['nodes']:
         lines.append(', '.join(map(str, [node['id'], *node['coordinates']])))
-    lines.append('*Element, Type=C3D8')
+    types = {element['type'] for element in mesh['elements']}
+    if types != {'C3D8'} and not ('cadGeometry' in project and types == {'C3D4'}):
+        raise ValueError('Expected checked C3D8 or CAD C3D4 model elements.')
+    lines.append('*Element, Type=' + next(iter(types)))
     for element in mesh['elements']:
         lines.append(', '.join(map(str, [element['id'], *element['connectivity']])))
     for keyword, sets in (('Nset', graph['nodeSets']), ('Elset', graph['elementSets'])):
@@ -98,8 +101,10 @@ def build_deck(mesh_bytes, controlled_definition, deck_builder, output):
 
 
 def build_project_deck(project, deck_builder, output):
-    built = build_deck(mesh_input(project).encode('utf-8'), project_definition(project['graph']),
-                       deck_builder, output)
+    definition = project_definition(project['graph'])
+    if 'cadGeometry' in project:
+        definition['originalNodeExport'] = True
+    built = build_deck(mesh_input(project).encode('utf-8'), definition, deck_builder, output)
     return {'pmxSha256': project['inputSha256'], **built}
 
 
