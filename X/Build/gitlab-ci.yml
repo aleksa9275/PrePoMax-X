@@ -1,5 +1,38 @@
 # Compile native dependencies only when their sources/consumers/build inputs change.
 # Exercise the extracted x64 desktop preview on packaging/desktop changes.
+native-cad-linux-x64:
+  extends: .portable-packages
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0-noble
+  tags: [saas-linux-small-amd64]
+  timeout: 45m
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "research/native-feasibility" && $CI_PIPELINE_SOURCE == "push"'
+      changes:
+        - X/Build/NativeCad/**/*
+        - ThirdParty/Sources/NetgenMesher/**/*
+        - X/Feasibility/Cad/verify-native.py
+        - X/Feasibility/Cad/test_native.py
+        - .project/reports/native-cad-meshing-reference/**/*
+        - X/Build/gitlab-ci.yml
+    - when: never
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends python3 g++ cmake make zlib1g-dev binutils patch
+  script:
+    - python3 ThirdParty/Sources/verify-sources.py
+    - python3 -m unittest discover -s X/Feasibility/Cad -p test_native.py
+    - dotnet build X/Feasibility/Cad/Inspect/Inspect.csproj -c Release --source /tmp --artifacts-path /tmp/native-cad-inspector
+    - python3 X/Build/NativeCad/build.py --output X/Build/artifacts/native-cad-linux-x64 --jobs 2
+    - python3 X/Feasibility/Cad/verify-native.py --mesher X/Build/artifacts/native-cad-linux-x64/runtime/bin/NetGenMesher --inspector /tmp/native-cad-inspector/bin/Inspect/release/PrePoMaxX.InspectVis.dll --output X/Build/artifacts/native-cad-linux-x64-check
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - X/Build/artifacts/native-cad-linux-x64/build-receipt.json
+      - X/Build/artifacts/native-cad-linux-x64/build.log
+      - X/Build/artifacts/native-cad-linux-x64-check/
+
 native-cpu-workflow-linux-x64:
   extends: .portable-packages
   stage: test

@@ -16,6 +16,7 @@ research-linux-x64:
     - python3 X/Feasibility/Research/run-research.py --expect-architecture X64 --output-dir X/Feasibility/Research/artifacts/linux-x64
     - python3 -m unittest discover -s X/Desktop -p test_cad_import.py
     - python3 -m unittest discover -s X/Desktop -p test_cad_scene.py
+    - python3 -m unittest discover -s X/Feasibility/Cad -p test_native.py
     - dotnet build X/Feasibility/Cad/Inspect/Inspect.csproj -c Release --source /tmp --artifacts-path /tmp/prepomaxx-vis
     - python3 X/Feasibility/Cad/verify-vis.py --inspector /tmp/prepomaxx-vis/bin/Inspect/release/PrePoMaxX.InspectVis.dll --output X/Feasibility/Research/artifacts/linux-x64/vis.json
     - python3 X/Feasibility/Cad/verify-parts.py --inspector /tmp/prepomaxx-vis/bin/Inspect/release/PrePoMaxX.InspectVis.dll --output X/Feasibility/Research/artifacts/linux-x64/cad-parts.json

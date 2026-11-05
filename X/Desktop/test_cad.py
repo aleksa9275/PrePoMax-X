@@ -96,7 +96,7 @@ class CadWorkflow(unittest.TestCase):
     def test_background_failure_success_and_late_cancel(self):
         vis = ROOT / "X/Feasibility/Cad/fixtures/l-bracket.vis"
         source = ROOT / "APIs/Python/Test_Scripts/Models/L_bracket_r.step"
-        tool = Mock()
+        tool = Mock(description="Native Netgen 5.3.1 / OCCT 8.0.1")
         window = Viewport(cad_tool=tool)
         self.addCleanup(window.deleteLater)
         window.automated_workflow = True
@@ -119,7 +119,7 @@ class CadWorkflow(unittest.TestCase):
         self.wait_for(lambda: window.cad_job is None)
         self.assertTrue(window.cad_result["success"])
         self.assertEqual(window.current_path, source)
-        self.assertEqual(window.scene["cad"]["conversion"], "Original 3.0.0 via CrossOver")
+        self.assertEqual(window.scene["cad"]["conversion"], "Native Netgen 5.3.1 / OCCT 8.0.1")
 
     def test_reference_import_is_opt_in_and_uses_the_existing_cad_document(self):
         mesh = ROOT / "X/Desktop/nonsequential-cube.inp"
@@ -129,11 +129,11 @@ class CadWorkflow(unittest.TestCase):
         self.addCleanup(window.deleteLater)
         window.load(mesh, as_model=True)
         model = window.model_scene
-        with self.assertRaisesRegex(ValueError, "requires --cad-reference"):
+        with self.assertRaisesRegex(ValueError, "requires --cad-native"):
             window.load(step)
         self.assertIs(window.scene, model)
 
-        window.cad_tool = Mock()
+        window.cad_tool = Mock(description="Original 3.0.0 via CrossOver")
         window.cad_tool.convert_parts.side_effect = ValueError("conversion failed")
         with self.assertRaisesRegex(ValueError, "conversion failed"):
             window.load(step)

@@ -9,6 +9,7 @@ ignored build/cache directories or versioned release artifacts, not source trees
 | Component | Recovered source | Correspondence / release status |
 | --- | --- | --- |
 | CalculiX CrunchiX 2.22 | [source and provenance](CalculiX/2.22/README.md) | Official source recovered; matching bundled Windows PaStiX/MKL patch/build chain and native builds remain unproven |
+| Original PrePoMax NetgenMesher / modified Netgen 5.3.1 | [source and patches](NetgenMesher/c5ecb0ba/README.md) | Newly public source pinned and retained unchanged; native OCCT 8.0.1 build and bounded CAD/meshing experiments |
 
 Run `python3 ThirdParty/Sources/verify-sources.py` from any directory to check the
 pinned source-manifest bytes and every extracted file. Archive hashes identify
@@ -16,8 +17,9 @@ the downloaded official bytes; they are not an upstream signature claim.
 
 This is an incremental source inventory. Existing upstream SDK/native folders
 elsewhere in ThirdParty are preserved. Their presence is not evidence that all
-corresponding implementation sources have been recovered. NetGenMesher, patched
-Gmsh, QuadWild, Q-Morph, ActiViz and all transitive runtime/package sources still
+corresponding implementation sources have been recovered. Patched Gmsh and
+QuadWild now have public upstream repositories pinned in the CAD report; their
+native builds, Q-Morph, ActiViz and transitive runtime/package sources still
 need the exact-source/license/build review recorded in `.project/DEPENDENCIES.md`.
 The final repository must carry corresponding source for every shipped component;
 source gaps remain release blockers.

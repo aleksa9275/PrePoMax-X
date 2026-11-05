@@ -24,6 +24,57 @@ MAX_CAD_PARTS = 32
 MAX_TOTAL_VIS_BYTES = 16 * 1024 * 1024
 
 
+class NativeCadTool:
+    """Explicit native research runtime, checked before and after conversion."""
+    description = "Native Netgen 5.3.1 / OCCT 8.0.1"
+
+    def __init__(self, runtime):
+        self.runtime = Path(runtime).resolve()
+        self.receipt = self.runtime / "build-receipt.json"
+        self.receipt_sha256 = file_sha256(self.receipt)
+        data = json.loads(self.receipt.read_text())
+        if data.get("nativeHost") != {"system": platform.system(), "machine": platform.machine()}:
+            raise ValueError("The native CAD runtime was built for another host architecture.")
+        if (data.get("netgenRevision") != "c5ecb0ba3782b91649e06823e858480f6fe33aeb"
+                or data.get("occt", {}).get("revision") != "b8f597c677811d1f9f4d8a97f5ae2825c0353a42"):
+            raise ValueError("The native CAD runtime has another source identity.")
+        self.expected = {}
+        for row in data["runtimeFiles"]:
+            path = Path(row["path"])
+            if (not path.parts or path.is_absolute() or ".." in path.parts or row["path"] in self.expected
+                    or path.parts[0] not in ("bin", "lib")):
+                raise ValueError("Invalid native CAD runtime inventory.")
+            self.expected[row["path"]] = row["sha256"]
+        if "bin/NetGenMesher" not in self.expected or not any(p.startswith("lib/libnglib.") for p in self.expected):
+            raise ValueError("Incomplete native CAD runtime inventory.")
+        self.command = (str(self.runtime / "bin/NetGenMesher"),)
+        self.verify_runtime()
+
+    def verify_runtime(self):
+        if self.receipt.is_symlink() or file_sha256(self.receipt) != self.receipt_sha256:
+            raise ValueError("Native CAD build receipt changed.")
+        files = {p.relative_to(self.runtime).as_posix(): p
+                 for folder in ("bin", "lib") for p in (self.runtime / folder).rglob("*") if p.is_file() or p.is_symlink()}
+        if files.keys() != self.expected.keys():
+            raise ValueError("Native CAD runtime inventory changed.")
+        for name, digest in self.expected.items():
+            path = files[name]
+            if path.is_symlink() or file_sha256(path) != digest:
+                raise ValueError("Native CAD runtime hash mismatch: " + name)
+
+    def convert(self, source, work, *, cancel=None):
+        self.verify_runtime()
+        outputs = convert_cad(source, work, self.command, cancel=cancel)
+        self.verify_runtime()
+        return outputs
+
+    def convert_parts(self, source, work, *, cancel=None):
+        self.verify_runtime()
+        outputs = convert_cad_parts(source, work, self.command, cancel=cancel)
+        self.verify_runtime()
+        return outputs
+
+
 class CadImportCancelled(ValueError):
     pass
 
@@ -151,6 +202,7 @@ def convert_cad_parts(source, work, command, *, windows_paths=False, cancel=None
 
 class ReferenceCadTool:
     """Explicit local compatibility tool using the pinned 3.0.0 runtime."""
+    description = "Original 3.0.0 via CrossOver"
 
     def __init__(self, runtime, bottle, receipt=REFERENCE_RECEIPT, wine=CROSSOVER_WINE):
         if platform.system() != "Darwin":

@@ -83,6 +83,12 @@ remain scoped to their own part, including coincident nodes shared in
 space. If any part fails or the import is cancelled, the prior document
 stays visible.
 
+`--cad-native /path/to/native-cad/runtime` enables the checked original
+Netgen/OCCT native research build for STEP/BREP imports. It uses the same
+background import, cancellation and source part/face picks as the reference
+adapter. The receipt and runtime hashes are checked before and after conversion.
+[Build and native comparison criteria](../Build/NativeCad/README.md).
+
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge
 uses native VTK offscreen GPU rendering and copies a frame to Qt. It displays

@@ -1,5 +1,17 @@
 # Project status
 
+## Current — tasks 0063–0064: original native CAD and meshing
+
+The newly published original NetgenMesher/modified Netgen source is recovered,
+retained unchanged and built with pinned OCCT 8.0.1. macOS ARM64 imports STEP
+and multi-part BREP in the native desktop and generates independently measured
+linear volume meshes. The original Windows L-bracket mesh has identical
+connectivity and near-identical coordinates. Native visualization has recorded
+rounding and planar-diagonal differences; the strict original-scene comparison
+remains failed. Linux ARM64 passes the same native experiment in a separate
+verification container; new native x64 CAD CI awaits publication. Desktop mesh authoring/analysis handoff and broad CAD editing remain
+next. [Actual evidence and limits](reports/native-cad-meshing.md).
+
 ## Current — tasks 0060–0062: multi-part CAD preview
 
 The checked reference import now converts and decodes all emitted

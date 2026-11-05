@@ -1,0 +1,24 @@
+{
+  "observed": "2026-11-05",
+  "application": {
+    "repository": "https://github.com/PrePoMax/PrePoMax",
+    "head": "24624d4515168f12bf315049748856f6234c62f3",
+    "baselineSwitched": false
+  },
+  "netgen": {
+    "repository": "https://github.com/PrePoMax/NetgenMesher",
+    "revision": "c5ecb0ba3782b91649e06823e858480f6fe33aeb",
+    "sourceRetained": true
+  },
+  "gmsh": {
+    "repository": "https://github.com/PrePoMax/Gmsh",
+    "branch": "prepomax-quadqs-transfinite",
+    "revision": "4156db5d5647087b1575c3f4b8a65a891b81102b",
+    "nativeBuild": "pending"
+  },
+  "quadwild": {
+    "repository": "https://github.com/PrePoMax/QuadWild",
+    "revision": "df747a1f795065738fe8972f595d1e801cb70c82",
+    "nativeBuild": "pending"
+  }
+}

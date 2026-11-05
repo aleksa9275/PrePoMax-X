@@ -1,6 +1,7 @@
 """Exercise the CAD process boundary without requiring the Windows runtime."""
 import json
 import os
+import platform
 from pathlib import Path
 import sys
 import subprocess
@@ -10,7 +11,7 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from cad_import import CadImportCancelled, REFERENCE_RECEIPT, ReferenceCadTool, convert_cad, convert_cad_parts, run_process
+from cad_import import CadImportCancelled, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, convert_cad, convert_cad_parts, file_sha256, run_process
 
 
 TOOL = """
@@ -51,6 +52,33 @@ class CadImport(unittest.TestCase):
 
     def command(self, mode="success"):
         return [sys.executable, str(self.tool), mode]
+
+    def test_native_runtime_rejects_tamper_extra_files_and_wrong_host(self):
+        runtime = self.root / "native"
+        for name in ("bin/NetGenMesher", "lib/libnglib.dylib"):
+            path = runtime / name
+            path.parent.mkdir(exist_ok=True, parents=True)
+            path.write_bytes(b"test runtime")
+        receipt = {"nativeHost": {"system": platform.system(), "machine": platform.machine()},
+                   "netgenRevision": "c5ecb0ba3782b91649e06823e858480f6fe33aeb",
+                   "occt": {"revision": "b8f597c677811d1f9f4d8a97f5ae2825c0353a42"},
+                   "runtimeFiles": [{"path": name, "sha256": file_sha256(runtime / name)}
+                                    for name in ("bin/NetGenMesher", "lib/libnglib.dylib")]}
+        record = runtime / "build-receipt.json"
+        record.write_text(json.dumps(receipt))
+        tool = NativeCadTool(runtime)
+        extra = runtime / "lib/unlisted.dylib"
+        extra.write_bytes(b"extra")
+        with self.assertRaisesRegex(ValueError, "inventory"):
+            tool.verify_runtime()
+        extra.unlink()
+        (runtime / "lib/libnglib.dylib").write_bytes(b"modified")
+        with self.assertRaisesRegex(ValueError, "hash mismatch"):
+            tool.verify_runtime()
+        receipt["nativeHost"]["machine"] = "another CPU"
+        record.write_text(json.dumps(receipt))
+        with self.assertRaisesRegex(ValueError, "architecture"):
+            NativeCadTool(runtime)
 
     def test_split_and_visualize_step_and_brep(self):
         for suffix in (".STEP", ".brep"):

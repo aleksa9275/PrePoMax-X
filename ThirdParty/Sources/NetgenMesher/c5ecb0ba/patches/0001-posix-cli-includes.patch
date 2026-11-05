@@ -1,0 +1,24 @@
+--- a/NetGenMesher 8.0.1/NetGenLibTest/NetGenLibTest.cpp	upstream
++++ b/NetGenMesher 8.0.1/NetGenLibTest/NetGenLibTest.cpp	portable
+@@ -1,6 +1,11 @@
+ // NetGenLibTest.cpp : Defines the entry point for the console application.
+ //
++#ifdef _WIN32
+ #include "stdafx.h"
++#else
++#include <cstring>
++#include "posix_paths.hpp"
++#endif
+ #include <iostream>
+ #include <fstream>
+ #include <string>
+@@ -50,7 +55,9 @@
+ #include "TopTools_IndexedDataMapOfShapeListOfShape.hxx"
+ #include "TopTools_ListOfShape.hxx"
+ 
++#ifdef _WIN32
+ #include "windows.h"
++#endif
+ //#include "nglib.h"
+ 
+ namespace nglib {

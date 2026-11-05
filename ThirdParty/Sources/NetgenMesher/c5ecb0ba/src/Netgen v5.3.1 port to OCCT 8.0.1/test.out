@@ -1,0 +1,37 @@
+compound
+shell 1
+face 1 -, -
+face 2 -, -
+face 3 -, -
+face 4 -, -
+face 5 -, -
+face 6 -, -
+face 7 +, +
+face 8 +, +
+face 9 +, +
+face 10 +, +
+Bounding Box = [(-27.8984, -10.8266, -34.564) - (-7.89781, 9.174, 7.73649)]
+OCC CONTENTS
+============
+SOLIDS   : 1
+SHELLS   : 1
+FACES    : 10
+WIRES    : 10
+EDGES    : 44
+VERTICES : 88
+Compounds: 1
+CompSolids: 0
+
+compound
+Bounding Box = [(-0.0484885, -0.0684885, -5.57423e-06) - (0.0524885, 0.0534885, 0.0313514)]
+OCC CONTENTS
+============
+SOLIDS   : 0
+SHELLS   : 0
+FACES    : 213
+WIRES    : 213
+EDGES    : 941
+VERTICES : 1882
+Compounds: 1
+CompSolids: 0
+

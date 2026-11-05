@@ -1,0 +1,35 @@
+{
+  "execution": "Official PrePoMax 3.0.0 NetGenMesher.exe through CrossOver 26.2 on Mac ARM64",
+  "runtimeInventory": "../l-bracket-cad-reference/verification.json",
+  "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+  "parametersSha256": "eff09fe4d5b70e84a90f58de53f34f96a4d8e7bfcd5980c8b2b88980ff14d467",
+  "original": {
+    "sha256": "23aaba8be137ccd534b2a90d76f50894ddee3f846441505de1b3e9069bf8d68f",
+    "nodes": 169,
+    "tetrahedra": 356,
+    "surfaceTriangles": 330,
+    "sourceFaceIds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "domains": [
+      1
+    ],
+    "volume": 36249.77615820389,
+    "minimumTetraVolume": 19.954428871590117,
+    "boundaryConforms": true,
+    "allTetrahedraPositiveAfterOriginalPermutation": true
+  },
+  "firstNativeComparison": {
+    "volumeConnectivityExact": true,
+    "surfaceConnectivityAndCadIdsExact": true,
+    "maximumCoordinateAbsoluteDifference": 4.127302943857103e-10
+  }
+}

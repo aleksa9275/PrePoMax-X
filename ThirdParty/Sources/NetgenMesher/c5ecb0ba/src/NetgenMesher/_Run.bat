@@ -1,0 +1,1 @@
+"%~dp0Debug\NetGenMesher.exe" BREP_ASSEMBLY_SPLIT "C:\Temp\geometry.brep" "C:\Temp\i75MHCyW.brep"

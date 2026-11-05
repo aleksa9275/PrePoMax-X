@@ -28,7 +28,6 @@ class CadImportJob(QtCore.QThread):
                                        cancel=self.cancel_requested)
             if self.cancel_requested.is_set():
                 raise CadImportCancelled("CAD import cancelled.")
-            scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"
             self.result = {"success": True, "scene": scene}
         except CadImportCancelled:
             self.result = {"success": False, "cancelled": True}

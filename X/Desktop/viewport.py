@@ -14,7 +14,7 @@ import tempfile
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
-from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, ReferenceCadTool, run_process
+from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, run_process
 from cad_job import CadImportJob
 from cad_scene import read_cad_parts
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
@@ -526,7 +526,7 @@ class Viewport(QtWidgets.QMainWindow):
             if self.job.active:
                 raise ValueError("Finish the active job before opening CAD geometry.")
             if suffix != ".vis" and self.cad_tool is None:
-                raise ValueError("STEP/BREP reference import requires --cad-reference RUNTIME BOTTLE.")
+                raise ValueError("STEP/BREP import requires --cad-native RUNTIME or --cad-reference RUNTIME BOTTLE.")
             if not self.confirm_discard():
                 return
             if suffix == ".vis":
@@ -538,7 +538,6 @@ class Viewport(QtWidgets.QMainWindow):
                         scene = read_cad_parts(path, self.cad_tool, decode, Path(directory) / "import")
                 finally:
                     QtWidgets.QApplication.restoreOverrideCursor()
-                scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"
             self.set_cad_document(scene, path)
             return
         mesh_bytes = path.read_bytes() if as_model else None
@@ -566,7 +565,7 @@ class Viewport(QtWidgets.QMainWindow):
         if self.busy:
             raise ValueError("Finish the active operation before importing CAD.")
         if self.cad_tool is None:
-            raise ValueError("STEP/BREP reference import requires --cad-reference RUNTIME BOTTLE.")
+            raise ValueError("STEP/BREP import requires --cad-native RUNTIME or --cad-reference RUNTIME BOTTLE.")
         if not self.confirm_discard():
             return
         self.cad_result = None
@@ -874,8 +873,11 @@ def main():
     parser.add_argument("--jobs-root", type=Path, help="New job folders under this directory")
     parser.add_argument("--viewport", choices=("frame-bridge", "native-cocoa"), default="frame-bridge",
                         help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
-    parser.add_argument("--cad-reference", nargs=2, metavar=("RUNTIME", "BOTTLE"),
-                        help="Enable single-part STEP/BREP inspection with the pinned 3.0.0 runtime in a CrossOver bottle")
+    cad_modes = parser.add_mutually_exclusive_group()
+    cad_modes.add_argument("--cad-reference", nargs=2, metavar=("RUNTIME", "BOTTLE"),
+                        help="Enable STEP/BREP inspection with the pinned 3.0.0 runtime in a CrossOver bottle")
+    cad_modes.add_argument("--cad-native", type=Path, metavar="RUNTIME",
+                        help="Enable STEP/BREP inspection with a checked native Netgen/OCCT research build")
     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
     parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
     parser.add_argument("--pmx-probe", type=Path, nargs=2, metavar=("INPUT", "OUTPUT"),
@@ -888,6 +890,11 @@ def main():
     if args.pmx_probe and (args.self_test or args.run_example or args.viewport_probe or args.editor_probe or args.input):
         parser.error("Use --pmx-probe separately from other probes and input")
     cad_tool = None
+    if args.cad_native:
+        try:
+            cad_tool = NativeCadTool(args.cad_native)
+        except (OSError, ValueError, KeyError) as error:
+            parser.error(str(error))
     if args.cad_reference:
         runtime, bottle = args.cad_reference
         receipt = (Path(sys._MEIPASS) / "cad-reference/verification.json"

@@ -15,6 +15,11 @@
       "id": "arpack-ng-3.9.1",
       "manifest": "ARPACK-ng/3.9.1/source-manifest.json",
       "manifestSha256": "9134295ed0acc1d83e747fd51deddb3535fc1e42c6709412ee4ec238180f27d5"
+    },
+    {
+      "id": "netgenmesher-c5ecb0ba",
+      "manifest": "NetgenMesher/c5ecb0ba/source-manifest.json",
+      "manifestSha256": "030bf3f899131c78114ea8275af17a2ff2edf3105713e80be9278d69a30438f0"
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "success": false,
+  "os": "Darwin",
+  "architecture": "arm64",
+  "mode": "direct-candidate",
+  "runs": [
+    {
+      "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+      "visSha256": "5ba7fcf43a85d5b125b837fb6078b0fb149e723ab0ac998cdfaab898cbc5bdf5",
+      "sceneMatches": false
+    }
+  ],
+  "stepSha256": "ed653a2eddc136286d57a01c5bc0c8e91822aadb0347a4a7f3593674e1157041",
+  "executableSha256": "db6b41d284c36eaa1e94784652ccf256d6b6c0159e5f9e46279e0c198e3e5e0b",
+  "error": "first run does not match the original decoded L-bracket scene."
+}

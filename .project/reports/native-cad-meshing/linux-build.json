@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "nativeHost": {
+    "system": "Linux",
+    "machine": "aarch64"
+  },
+  "netgenRevision": "c5ecb0ba3782b91649e06823e858480f6fe33aeb",
+  "sourceManifestSha256": "030bf3f899131c78114ea8275af17a2ff2edf3105713e80be9278d69a30438f0",
+  "occt": {
+    "version": "8.0.1",
+    "revision": "b8f597c677811d1f9f4d8a97f5ae2825c0353a42",
+    "url": "https://codeload.github.com/Open-Cascade-SAS/OCCT/tar.gz/b8f597c677811d1f9f4d8a97f5ae2825c0353a42",
+    "sha256": "dba62b81078dd43cec23feba89432be301582341001edad1b93342ad8bda35ea"
+  },
+  "occtPrefix": "/native/occt-install",
+  "sourcesFromOriginalProject": 141,
+  "patches": [
+    {
+      "path": "0001-posix-cli-includes.patch",
+      "sha256": "c04a25151f097b84b88f444b13e091522d6af5c9e348ea96013f2d7ce15e277a"
+    },
+    {
+      "path": "0002-posix-assembly-paths.patch",
+      "sha256": "381780f9b76dd26bb75ecefc7e2ab2676bbdc170fbca5e3f5a1163ac9afacadd"
+    }
+  ],
+  "cmakeSha256": "38f5761c41c1e171ffc9d32fa6ad4bbe411b4ec1ad2d6feb92dda1ed582a4928",
+  "adapterFiles": [
+    {
+      "path": "compat/posix_paths.hpp",
+      "sha256": "86bacc6a6a4a8ed45b0260db715198cd7c626c47cddd61a3bc11bf280820f9ee"
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "path": "bin/NetGenMesher",
+      "sha256": "a31bde872bc9cf9f658ec88294c4b9cdddd17044d1b086d57f67aee72357b8df"
+    },
+    {
+      "path": "lib/libTKBO.so.8.0",
+      "sha256": "f36beeac206a381500f3be291d0de085742e7fae65a9076681dd1c5140c087be"
+    },
+    {
+      "path": "lib/libTKBRep.so.8.0",
+      "sha256": "92c734ecdccdeebc8aeb98822455de8084e632a223fd25946d279786d992ce69"
+    },
+    {
+      "path": "lib/libTKBool.so.8.0",
+      "sha256": "3caf535f5e709097a21b9422fd8aac018b13639a7366e3dbb5f3c7088764e93b"
+    },
+    {
+      "path": "lib/libTKCAF.so.8.0",
+      "sha256": "86a552ae95a002c1c11da5a7139bac05334b365eede1c98874ea8044c52d8218"
+    },
+    {
+      "path": "lib/libTKCDF.so.8.0",
+      "sha256": "6709732878d4e16a76b42947e3ef0e2a762bde2e6fa11469517f0a7cee4a474a"
+    },
+    {
+      "path": "lib/libTKDE.so.8.0",
+      "sha256": "b17e36b3f3977e05cb3d9afa78bfb517f8b26888e9d90ab7e069df6de1ed3771"
+    },
+    {
+      "path": "lib/libTKDEIGES.so.8.0",
+      "sha256": "022cce0f28bea7ea39add6abe6899183ec1895666c98dcf5da0570844b80be9b"
+    },
+    {
+      "path": "lib/libTKDESTEP.so.8.0",
+      "sha256": "04a0619d814d94af1f5d5a3a702ed8a9f983083dabe7cd7918f3fb03b7b8704a"
+    },
+    {
+      "path": "lib/libTKDESTL.so.8.0",
+      "sha256": "472237b16c3c3d8c6dbbf92911a2856cd0267ddfe5776e855b4c19721efb2f4b"
+    },
+    {
+      "path": "lib/libTKFillet.so.8.0",
+      "sha256": "a52602f3683dd5a39750975726c53e9a58a6cbf1e2409b3120f3c8b32f474240"
+    },
+    {
+      "path": "lib/libTKG2d.so.8.0",
+      "sha256": "cc3a16c84835b192aac5ccdcf5f31313ce20584c6f416088d126f6ed8f0c29ae"
+    },
+    {
+      "path": "lib/libTKG3d.so.8.0",
+      "sha256": "ee4f0d0674d597f5abc60ba80ac4de561ca874f1c14b43253905324b1efa7c0e"
+    },
+    {
+      "path": "lib/libTKGeomAlgo.so.8.0",
+      "sha256": "ab0616c52bf652fb487dd25898f94e4789cf40d6b7b336be70854eaed5b164b2"
+    },
+    {
+      "path": "lib/libTKGeomBase.so.8.0",
+      "sha256": "c0e21ad7dd99231320d87e6b69c813c4a19399192ff284700b5e1f8a2b60a0f5"
+    },
+    {
+      "path": "lib/libTKHLR.so.8.0",
+      "sha256": "2396d10d7fd177fdd32a926e80639a9a78671a74386aa915fb8fe96853655b8d"
+    },
+    {
+      "path": "lib/libTKLCAF.so.8.0",
+      "sha256": "a8d84f182e7f654bcf0c2803f1971feb3df06f39d7d18a4d0c56b066d777f8b4"
+    },
+    {
+      "path": "lib/libTKMath.so.8.0",
+      "sha256": "c9c6dc581c54fc98b1eb9835f3f575b25fb65fffdca977001c6209fe880183f4"
+    },
+    {
+      "path": "lib/libTKMesh.so.8.0",
+      "sha256": "9a7350fe7afd79d8b270d41e17b81ca10dc2adc8107c0bf848a1b8882710cf55"
+    },
+    {
+      "path": "lib/libTKOffset.so.8.0",
+      "sha256": "1e126aaa69080bc8ce102aefde8c6976cce91aa1c4f3c9ca633a73e6878bf694"
+    },
+    {
+      "path": "lib/libTKPrim.so.8.0",
+      "sha256": "2bea83ea6a32695f0103b17f22a90cec4fa6478c78eae94a66720a4581e416fb"
+    },
+    {
+      "path": "lib/libTKService.so.8.0",
+      "sha256": "b9a5c34144f87725cb2a2ced5a299db178e94690764d6f922039edfa56a9b00b"
+    },
+    {
+      "path": "lib/libTKShHealing.so.8.0",
+      "sha256": "acb41318ab8d5a242f7ec2b827525a737e7a1a34f08d3c6badec64f15cfed5dc"
+    },
+    {
+      "path": "lib/libTKTopAlgo.so.8.0",
+      "sha256": "b0403cb13f440eb752381620e9d5b83d84bb815e245d96e8f438f4d550693869"
+    },
+    {
+      "path": "lib/libTKV3d.so.8.0",
+      "sha256": "e7601dc992dfaf909d7a7845fd69dad922209e162bdbf52a991a7368fafd1536"
+    },
+    {
+      "path": "lib/libTKVCAF.so.8.0",
+      "sha256": "3f288c101615e5072747e6a80fa559436e9c87bf1ed80514212540df04907b65"
+    },
+    {
+      "path": "lib/libTKXCAF.so.8.0",
+      "sha256": "13fa4f5da0da95b8d65acb71b7b80cf9e5aac74b772209b3b03fe78da9997b57"
+    },
+    {
+      "path": "lib/libTKXSBase.so.8.0",
+      "sha256": "e88533cf85d94deb1fd0412459789968387ff1b6510892cadcb58d635f6f1d37"
+    },
+    {
+      "path": "lib/libTKernel.so.8.0",
+      "sha256": "58c81f2d62393d8419c2e9893c7b9ca83bf589031ea27cd1cccafe19a7169d69"
+    },
+    {
+      "path": "lib/libnglib.so",
+      "sha256": "b04392c745673f9cc6717a22fb7037090ad1149d6b31fc6e20fa4a42dc033478"
+    }
+  ],
+  "executableSha256": "a31bde872bc9cf9f658ec88294c4b9cdddd17044d1b086d57f67aee72357b8df",
+  "releaseAccepted": false
+}

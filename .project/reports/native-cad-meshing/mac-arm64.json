@@ -1,0 +1,460 @@
+{
+  "success": true,
+  "host": "Darwin",
+  "architecture": "arm64",
+  "nativeExecutableSha256": "6018c4dd94d7873e68c4c24ae2a51b45f5a2662a12fc193523792921e7c2313a",
+  "fixtures": [
+    {
+      "source": "L_bracket_r.step",
+      "sourceSha256": "ed653a2eddc136286d57a01c5bc0c8e91822aadb0347a4a7f3593674e1157041",
+      "runs": [
+        [
+          {
+            "part": 1,
+            "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+            "visSha256": "5ba7fcf43a85d5b125b837fb6078b0fb149e723ab0ac998cdfaab898cbc5bdf5",
+            "comparison": {
+              "exactDecodedSceneMatch": false,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [
+                1,
+                6
+              ],
+              "measurementDifferences": [
+                {
+                  "path": "metadata/edge/19/properties/centroid/0",
+                  "reference": 23.633802276324193,
+                  "native": 23.633802276324197,
+                  "absoluteDelta": 3.552713678800501e-15
+                },
+                {
+                  "path": "metadata/edge/20/properties/centroid/1",
+                  "reference": 23.633802276324186,
+                  "native": 23.63380227632418,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/face/6/properties/centroid/1",
+                  "reference": 32.16303174301811,
+                  "native": 32.163031743018124,
+                  "absoluteDelta": 1.4210854715202004e-14
+                },
+                {
+                  "path": "metadata/face/7/properties/centroid/1",
+                  "reference": 32.16303174301811,
+                  "native": 32.16303174301812,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/shell/0/properties/centroid/1",
+                  "reference": 32.8720238095238,
+                  "native": 32.87202380952382,
+                  "absoluteDelta": 1.4210854715202004e-14
+                },
+                {
+                  "path": "metadata/solid/0/properties/center_of_mass/0",
+                  "reference": 32.16303174301812,
+                  "native": 32.16303174301811,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/solid/0/properties/center_of_mass/1",
+                  "reference": 32.163031743018124,
+                  "native": 32.16303174301812,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/0",
+                  "reference": 31746049.241350316,
+                  "native": 31746049.241350345,
+                  "absoluteDelta": 2.9802322387695312e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/1",
+                  "reference": 17756937.48653644,
+                  "native": 17756937.486536425,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/2",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 1.862645149230957e-09,
+                  "absoluteDelta": 9.313225746154785e-10
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/3",
+                  "reference": 17756937.48653644,
+                  "native": 17756937.486536425,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/4",
+                  "reference": 31746049.24135033,
+                  "native": 31746049.241350345,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/5",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 9.313225746154785e-10,
+                  "absoluteDelta": 1.862645149230957e-09
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/6",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 1.862645149230957e-09,
+                  "absoluteDelta": 9.313225746154785e-10
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/7",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 9.313225746154785e-10,
+                  "absoluteDelta": 1.862645149230957e-09
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/8",
+                  "reference": 62888521.78542389,
+                  "native": 62888521.78542395,
+                  "absoluteDelta": 5.960464477539063e-08
+                }
+              ]
+            },
+            "mesh": {
+              "sha256": "3ac6810f46dc58dcda792040162d7bb62c04063456972d197479e6eac608f3a4",
+              "nodes": 169,
+              "tetrahedra": 356,
+              "surfaceTriangles": 330,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 36249.77615820389,
+              "minimumTetraVolume": 19.954428871590114,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true,
+              "originalComparison": {
+                "originalSha256": "23aaba8be137ccd534b2a90d76f50894ddee3f846441505de1b3e9069bf8d68f",
+                "volumeConnectivityExact": true,
+                "surfaceConnectivityAndCadIdsExact": true,
+                "maximumCoordinateAbsoluteDifference": 4.127302943857103e-10,
+                "coordinateAbsoluteBound": 1e-08
+              }
+            }
+          }
+        ],
+        [
+          {
+            "part": 1,
+            "brepSha256": "7e768b0f462d2f897190168b5e9ee73c280aff44127cec4567a95568f35329b6",
+            "visSha256": "5ba7fcf43a85d5b125b837fb6078b0fb149e723ab0ac998cdfaab898cbc5bdf5",
+            "comparison": {
+              "exactDecodedSceneMatch": false,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [
+                1,
+                6
+              ],
+              "measurementDifferences": [
+                {
+                  "path": "metadata/edge/19/properties/centroid/0",
+                  "reference": 23.633802276324193,
+                  "native": 23.633802276324197,
+                  "absoluteDelta": 3.552713678800501e-15
+                },
+                {
+                  "path": "metadata/edge/20/properties/centroid/1",
+                  "reference": 23.633802276324186,
+                  "native": 23.63380227632418,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/face/6/properties/centroid/1",
+                  "reference": 32.16303174301811,
+                  "native": 32.163031743018124,
+                  "absoluteDelta": 1.4210854715202004e-14
+                },
+                {
+                  "path": "metadata/face/7/properties/centroid/1",
+                  "reference": 32.16303174301811,
+                  "native": 32.16303174301812,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/shell/0/properties/centroid/1",
+                  "reference": 32.8720238095238,
+                  "native": 32.87202380952382,
+                  "absoluteDelta": 1.4210854715202004e-14
+                },
+                {
+                  "path": "metadata/solid/0/properties/center_of_mass/0",
+                  "reference": 32.16303174301812,
+                  "native": 32.16303174301811,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/solid/0/properties/center_of_mass/1",
+                  "reference": 32.163031743018124,
+                  "native": 32.16303174301812,
+                  "absoluteDelta": 7.105427357601002e-15
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/0",
+                  "reference": 31746049.241350316,
+                  "native": 31746049.241350345,
+                  "absoluteDelta": 2.9802322387695312e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/1",
+                  "reference": 17756937.48653644,
+                  "native": 17756937.486536425,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/2",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 1.862645149230957e-09,
+                  "absoluteDelta": 9.313225746154785e-10
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/3",
+                  "reference": 17756937.48653644,
+                  "native": 17756937.486536425,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/4",
+                  "reference": 31746049.24135033,
+                  "native": 31746049.241350345,
+                  "absoluteDelta": 1.4901161193847656e-08
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/5",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 9.313225746154785e-10,
+                  "absoluteDelta": 1.862645149230957e-09
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/6",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 1.862645149230957e-09,
+                  "absoluteDelta": 9.313225746154785e-10
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/7",
+                  "reference": 2.7939677238464355e-09,
+                  "native": 9.313225746154785e-10,
+                  "absoluteDelta": 1.862645149230957e-09
+                },
+                {
+                  "path": "metadata/solid/0/properties/inertia_at_center_of_mass/8",
+                  "reference": 62888521.78542389,
+                  "native": 62888521.78542395,
+                  "absoluteDelta": 5.960464477539063e-08
+                }
+              ]
+            },
+            "mesh": {
+              "sha256": "3ac6810f46dc58dcda792040162d7bb62c04063456972d197479e6eac608f3a4",
+              "nodes": 169,
+              "tetrahedra": 356,
+              "surfaceTriangles": 330,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 36249.77615820389,
+              "minimumTetraVolume": 19.954428871590114,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true,
+              "originalComparison": {
+                "originalSha256": "23aaba8be137ccd534b2a90d76f50894ddee3f846441505de1b3e9069bf8d68f",
+                "volumeConnectivityExact": true,
+                "surfaceConnectivityAndCadIdsExact": true,
+                "maximumCoordinateAbsoluteDifference": 4.127302943857103e-10,
+                "coordinateAbsoluteBound": 1e-08
+              }
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "source": "sweep_two_apart.brep",
+      "sourceSha256": "935d95427e275082fee8582ce0111ca05919730e0c01b6ad717a578d7d291b74",
+      "runs": [
+        [
+          {
+            "part": 1,
+            "brepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+            "visSha256": "b93fd5eb3a3419abeb4c18b90f6b9af52ec5e51122ba97f70d846bc327b85ec1",
+            "comparison": {
+              "exactDecodedSceneMatch": true,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [],
+              "measurementDifferences": []
+            },
+            "mesh": {
+              "sha256": "37cf4414ee14acb7880d77690c3a6efca5ec2fccaf5b63a8473e082c217052b9",
+              "nodes": 142,
+              "tetrahedra": 403,
+              "surfaceTriangles": 240,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 2000.0,
+              "minimumTetraVolume": 2.2545607293899965,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true
+            }
+          },
+          {
+            "part": 2,
+            "brepSha256": "eada45a6f97b4145a4bf1b9878da830d50440eaa565290d1c736cefa0079dffd",
+            "visSha256": "2f05756cea42d8cda5692d0508d47fb8b3dd6af8d03ac2df3478a407fc296824",
+            "comparison": {
+              "exactDecodedSceneMatch": false,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [
+                3,
+                4
+              ],
+              "measurementDifferences": []
+            },
+            "mesh": {
+              "sha256": "03a36b94bf15ade6e803bb3bb4d18fb1a290865095992dc6a27b72b7c2ba7046",
+              "nodes": 69,
+              "tetrahedra": 160,
+              "surfaceTriangles": 124,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 768.0,
+              "minimumTetraVolume": 2.321312274710254,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true
+            }
+          }
+        ],
+        [
+          {
+            "part": 1,
+            "brepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+            "visSha256": "b93fd5eb3a3419abeb4c18b90f6b9af52ec5e51122ba97f70d846bc327b85ec1",
+            "comparison": {
+              "exactDecodedSceneMatch": true,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [],
+              "measurementDifferences": []
+            },
+            "mesh": {
+              "sha256": "37cf4414ee14acb7880d77690c3a6efca5ec2fccaf5b63a8473e082c217052b9",
+              "nodes": 142,
+              "tetrahedra": 403,
+              "surfaceTriangles": 240,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 2000.0,
+              "minimumTetraVolume": 2.2545607293899965,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true
+            }
+          },
+          {
+            "part": 2,
+            "brepSha256": "eada45a6f97b4145a4bf1b9878da830d50440eaa565290d1c736cefa0079dffd",
+            "visSha256": "2f05756cea42d8cda5692d0508d47fb8b3dd6af8d03ac2df3478a407fc296824",
+            "comparison": {
+              "exactDecodedSceneMatch": false,
+              "sourceNodesAndEdgesExact": true,
+              "metadataWithinBounds": true,
+              "changedPlanarTriangulations": [
+                3,
+                4
+              ],
+              "measurementDifferences": []
+            },
+            "mesh": {
+              "sha256": "03a36b94bf15ade6e803bb3bb4d18fb1a290865095992dc6a27b72b7c2ba7046",
+              "nodes": 69,
+              "tetrahedra": 160,
+              "surfaceTriangles": 124,
+              "sourceFaceIds": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "domains": [
+                1
+              ],
+              "volume": 768.0,
+              "minimumTetraVolume": 2.321312274710254,
+              "boundaryConforms": true,
+              "allTetrahedraPositiveAfterOriginalPermutation": true
+            }
+          }
+        ]
+      ]
+    }
+  ],
+  "criteria": {
+    "metadataRelativeBound": 1e-12,
+    "metadataAbsoluteBound": 1e-10,
+    "inertiaAbsoluteBound": 1e-08,
+    "nodesEdgesAndIds": "exact",
+    "changedTriangles": "planes only, same boundary, area, orientation and first moment"
+  },
+  "tetrahedronEngineeringGateClosed": false
+}

@@ -1,0 +1,45 @@
+# Archive of earlier versions - several GB, nothing here is built from it
+_Old/
+.test-output/
+
+# Vendored third party SDKs and runtimes, restored by hand - see README.md
+opencascade-8.0.1/
+pthreads-win32_prebuilt-dll-2-9-1-release/
+zlib_win64/
+redist/
+
+# Build intermediates
+Netgen v5.3.1 port to OCCT 8.0.1/Netgen-master/netgen-5.3.1/windows/nglib/
+NetGenMesher 8.0.1/NetGenLibTest/x64/
+NetGenMesher 8.0.1/NetGenLibTest/NetGenLibTest/
+
+# Build output - the deployable copy lives in the PrePoMax repository under
+# ThirdParty/netgen, so it is not kept twice
+NetgenMesher/Debug/
+NetgenMesher/Release/
+NetgenMesher/Test/
+
+# Visual Studio local state
+.vs/
+*.user
+*.aps
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# Meshes, breps and logs left behind by manual test runs. Every one of these is
+# written by NetGenMesher itself; the inputs beside them - part1.stl, the .params
+# files and the whole Working folder - are kept.
+NetGenMesher 8.0.1/NetGenLibTest/geometry_*
+NetGenMesher 8.0.1/NetGenLibTest/face*.stl
+NetGenMesher 8.0.1/NetGenLibTest/step.stl
+NetGenMesher 8.0.1/NetGenLibTest/*.vol
+NetGenMesher 8.0.1/NetGenLibTest/test.out
+NetGenMesher 8.0.1/NetGenLibTest/edge_old.log
+NetGenMesher 8.0.1/Working folder/*.vol
+NetgenMesher/Test_solid_*
+
+# Old Visual Studio HTML build logs
+BuildLog_*.htm

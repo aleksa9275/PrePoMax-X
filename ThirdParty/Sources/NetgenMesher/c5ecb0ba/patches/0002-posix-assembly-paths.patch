@@ -1,0 +1,12 @@
+--- a/Netgen v5.3.1 port to OCCT 8.0.1/Netgen-master/netgen-5.3.1/nglib/nglib.cpp	upstream
++++ b/Netgen v5.3.1 port to OCCT 8.0.1/Netgen-master/netgen-5.3.1/nglib/nglib.cpp	portable
+@@ -10,6 +10,9 @@
+ 
+ */
+ #include <mystdlib.h>
++#ifndef _WIN32
++#include "posix_paths.hpp"
++#endif
+ #include <TColgp_Array1OfPnt.hxx>
+ #include <TopTools_IndexedMapOfShape.hxx>
+ #include <myadt.hpp>

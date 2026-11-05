@@ -20,6 +20,16 @@ WinForms/WPF/WindowsBase/System.Management, drawing and designer assemblies are 
 
 ## Native source gaps
 
+2026-11-05 recovery supersedes the source-availability observations below:
+upstream moved to GitHub and published its custom NetgenMesher/modified Netgen,
+patched Gmsh and modified QuadWild. The original NetgenMesher source at
+`c5ecb0ba` is now retained unchanged with a source manifest and separate POSIX
+patches. The native build pins official OCCT 8.0.1 source at `b8f597c6` and its
+archive hash. Patched Gmsh and QuadWild revisions are recorded for subsequent
+recovery/build work. This is source availability and bounded native execution,
+with Windows binary correspondence and full release source/runtime closure
+still separate requirements. [Actual native build and evidence](reports/native-cad-meshing.md).
+
 2026-10-14 follow-up: [task 0004 investigation](reports/native-feasibility.md)
 retains measured headers/interop boundaries, shipped binary hashes and source
 access results. Patched Gmsh's published branch returns 404 in the authenticated

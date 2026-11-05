@@ -6,7 +6,10 @@ import json
 def read_cad_parts(source, tool, decoder, work, *, cancel=None):
     outputs = tool.convert_parts(source, work, cancel=cancel)
     decoded = [(brep.stem, decoder(vis, cancel=cancel)) for brep, vis in outputs]
-    return compose_cad_parts(decoded)
+    scene = compose_cad_parts(decoded)
+    description = getattr(tool, "description", "CAD command protocol")
+    scene["cad"]["conversion"] = description if isinstance(description, str) else "CAD command protocol"
+    return scene
 
 
 def compose_cad_parts(parts):

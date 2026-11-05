@@ -1,0 +1,4 @@
+# This is a vendored upstream tree with mixed line endings, and the meshes and
+# parameter files are read by tools that are picky about them. Store and check
+# out every file byte for byte so a clone matches the working folder exactly.
+* -text
