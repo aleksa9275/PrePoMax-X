@@ -276,7 +276,30 @@
         ]
       }
     },
-    "stepScreenshotSha256": "5768f1925b05b72e4f616f45cebd716ce8877d615c138ffe861341ec86fb74b4"
+    "stepScreenshotSha256": "5768f1925b05b72e4f616f45cebd716ce8877d615c138ffe861341ec86fb74b4",
+    "packageInputsMatchedPublishedImplementation": true,
+    "removedDuplicateStagingAllocatedKiB": 2092700
   },
-  "linuxArm64CadBoundaryTests": 4
+  "linuxArm64CadBoundaryTests": 4,
+  "publishedImplementation": "a88d607029e6ce6b7b49ee13b75255c5f8904dde",
+  "directReplaySyntheticControlPassed": true,
+  "linuxArm64Desktop": {
+    "archiveSha256": "24035606ea12bb416c478329aa68fb7508d36457f1b3b55ddca0f60b691b06b9",
+    "archiveBytes": 343623037,
+    "cadChecksPassed": 14,
+    "inpSolveAndRenderChecksPassed": 11,
+    "analyticalChecksPassed": 7
+  },
+  "gitlab": {
+    "pipeline": 3029679970,
+    "passedAutomaticJobs": 6,
+    "researchJob": 17755593255,
+    "conversionBoundaryTestsPassed": 4,
+    "visChecksPassed": 348,
+    "desktopJob": 17755593254,
+    "extractedAndInstalledVisAndInpWorkflowsPassed": true,
+    "aptLifecyclePassed": true,
+    "archiveSha256": "28a098c8697db60eb323df4936f26ab1aebc1152eb73431555fb5aed0cc57f75",
+    "debSha256": "34a588e7daa1beb3bc2b240bc6846068e3e128bfd6c47720c7a7454905534aa3"
+  }
 }

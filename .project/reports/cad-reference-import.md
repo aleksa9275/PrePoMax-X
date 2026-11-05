@@ -35,7 +35,25 @@ triangles and 45 edge segments, and selected the same six source faces.
 The bundled native INP solve also passed. The source desktop suite
 passed 20 tests. Nine build boundary tests passed and the four portable
 conversion tests also passed on Linux ARM64.
+[Published checkpoint](https://gitlab.com/aleksa9275/pre-po-max-x/-/commit/a88d607029e6ce6b7b49ee13b75255c5f8904dde).
+
+The Mac package was built from the working tree before commit. Its
+viewport, conversion module and runtime receipt hashes match the
+published commit. Removing duplicate staging payloads reduced the
+temporary build directory by 2.00 GiB. The exact-commit Linux ARM64
+archive passed 14 VIS viewport checks, 11 INP solve/render checks and
+seven analytical checks. The direct comparison command also passed
+with a synthetic executable that replayed the captured outputs.
 [Verification receipt](cad-reference-import-verification.json).
+
+All six automatic GitLab jobs passed for `a88d6070`. The x64 research
+job passed the four conversion-boundary tests and the 348 VIS checks.
+The native x64 job passed the extracted VIS and INP workflows, the
+ordinary-user Ubuntu package workflow, and APT remove, reinstall and
+purge. Historical compatibility stayed manual. The hosted logs
+recorded the x64 archive and package hashes.
+[Exact-commit pipeline #3029679970](https://gitlab.com/aleksa9275/pre-po-max-x/-/pipelines/3029679970) ·
+[Native x64 job](https://gitlab.com/aleksa9275/pre-po-max-x/-/jobs/17755593254).
 
 This preview accepts one emitted BREP part and an input up to 16 MiB.
 The conversion stages run synchronously with a 60-second limit per
