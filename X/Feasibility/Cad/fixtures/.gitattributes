@@ -1,1 +1,2 @@
 l-bracket.vis -text whitespace=cr-at-eol
+two-parts/*.vis -text whitespace=cr-at-eol
