@@ -48,10 +48,26 @@ The initial mismatch receipt is retained with the final passing comparison.
 
 ## Verification and candidate
 
-Mac source desktop and Linux ARM64 each pass 18 CAD PMX workflow checks. The final
-copied Mac app, both viewport transports, existing PMX, CAD-region and C3D8 checks,
-publication identity and retained path are recorded in the closing
-[verification receipt](desktop-cad-pmx-verification.json).
+Mac source desktop, Linux ARM64 and both final copied Mac viewports each pass
+18 CAD PMX workflow checks. Both copied-app edited PMX outputs are byte-identical
+to the file reopened/resaved by original PrePoMax. The packaged old PMX workflow
+passes 17 checks, CAD/region/meshing passes 46, and C3D8 solve/render/picking passes
+ten. The native Cocoa CAD screen capture was visually inspected.
+[Verification receipt](desktop-cad-pmx-verification.json).
+
+Retained candidate: `/tmp/prepomaxx-task0070-delivery/PrePoMax-X Preview.app`.
+Its sibling `Native CAD Preview.command` enables the retained native CAD runtime;
+older task 0067/0068 launchers forward to it. All 2421 copied payload file hashes
+and ad-hoc signature verify. Source identity names implementation `4d0ee6b3`, with
+an empty source patch; Finder files alone set its dirty flag. Seven duplicate
+payload directories (4.69 GiB logical bytes), the extracted reference application
+and its isolated bottle were pruned. All generated/reference projects, jobs,
+evidence, original ZIP and useful native/tool/image caches remain. The user’s
+original bottle and installed app/state were unchanged; the test VM is stopped.
+
+Implementation [`4d0ee6b3`](https://gitlab.com/aleksa9275/pre-po-max-x/-/commit/4d0ee6b3a38097e4f34e899f61c4a2aa8c09cca7)
+is pushed and remote-verified on the research branch. Closing evidence is a
+normal documentation-only follow-up, also pushed with CI skipped.
 All four current Mac source suites pass after the formatter extraction; both
 known element failures and the tetrahedron gate remain explicit. Thirty-eight
 existing desktop tests, twelve analysis ownership/formatter guards and nine build

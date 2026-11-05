@@ -4,7 +4,13 @@ Tasks 0069/0070 add a checked original CAD/C3D4 PMX boundary: safe projection,
 controlled modulus/force Save As, reopen, original-app readback and native solve.
 Read [reference](../reports/cad-pmx-reference.md) and
 [desktop evidence](../reports/desktop-cad-pmx.md) with their receipts for actual
-publication and candidate identity. Original CalNode E8 is shared only for the
+publication and candidate identity. Implementation `4d0ee6b3` is remote-verified;
+no hosted jobs were started. Retained app:
+`/tmp/prepomaxx-task0070-delivery/PrePoMax-X Preview.app`; sibling launcher enables
+native CAD, old launchers forward. Both copied viewports pass 18 CAD PMX checks,
+old PMX/regions/C3D8 paths pass, and final saved PMX bytes match original-app
+readback. Superseded payloads and temporary reference bottle/extraction are pruned;
+projects/jobs/evidence/ZIP/tool caches remain. Original CalNode E8 is shared only for the
 CAD PMX export path; original-export/native and Mac/Linux decoded fields match
 exactly. Jobs freeze complete source PMX. General new native-session serialization
 is still next under D057, alongside broader original PMX graphs. Keep D058/D059

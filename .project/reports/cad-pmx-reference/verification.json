@@ -240,5 +240,19 @@
     ]
   },
   "localFixtures": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Feasibility/Pmx/artifacts/task0069",
-  "publication": "Prepared; actual remote/candidate identity recorded at closeout"
+  "publication": {
+    "implementation": "4d0ee6b3a38097e4f34e899f61c4a2aa8c09cca7",
+    "branch": "origin/research/native-feasibility",
+    "remoteObserved": "4d0ee6b3a38097e4f34e899f61c4a2aa8c09cca7",
+    "remoteVerified": true,
+    "pushOption": "ci.skip",
+    "hostedJobsStarted": false,
+    "scope": "Implementation remote verified; closing evidence is a documentation-only CI-skipped follow-up"
+  },
+  "referenceCleanup": {
+    "removedExtractedApp": "/tmp/prepomaxx-task0069-reference/PrePoMax v3.0.0",
+    "logicalBytes": 541459276,
+    "temporaryBottleRemoved": "/tmp/prepomaxx-task0069-bottles/Task0069-reference",
+    "kept": "Pinned ZIP, original/generated PMX/INP, graph/model bytes, readback/resave and logs; original user bottle unchanged"
+  }
 }
