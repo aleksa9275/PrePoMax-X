@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0057 and 0058 replay the pinned original STEP/BREP conversion
+and connect it to the macOS preview via the opt-in CrossOver reference
+tool. The original L-bracket BREP and VIS bytes match. Read
+.project/reports/cad-reference-import.md for scope and checks.
+Matching native C++ source, native CAD execution, Windows legacy
+verification and the correctness, tetrahedron, parity and release gates
+remain open.
+
 Task 0056 identifies upstream a55b39c6 as the binary drop matching all
 38 bundled 3.0.0 Netgen runtime files. Its managed partial-triangulation
 and unmatched-kernel-ID fixes are ported. Read

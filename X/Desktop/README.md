@@ -56,6 +56,23 @@ in the units declared by the file, with the stored value in each measurement's
 tooltip. VIS documents are read-only and the CAD IDs are source IDs.
 [Original L-bracket fixture](../Feasibility/Cad/fixtures/l-bracket.vis).
 
+On macOS, the local preview can also open STEP and BREP through the
+original 3.0.0 Windows CAD tool supplied by the operator. Create an
+isolated CrossOver Windows 10 64-bit bottle and supply the original
+`Meshers/Netgen` directory from the pinned release. The launcher checks
+all 38 runtime files before conversion. The same option enables STEP and
+BREP in the open dialog.
+
+    PrePoMax-X-Viewport.app/Contents/MacOS/PrePoMax-X-Viewport \
+      --cad-reference "/path/to/Meshers/Netgen" cad-reference "/path/to/L_bracket_r.step"
+
+This read-only preview accepts files up to 16 MiB whose split produces
+one BREP file. It runs conversion in a temporary workspace before
+opening the validated VIS scene. Each conversion stage has a 60-second
+limit. The macOS app carries the reference hash receipt, and CrossOver
+and the Windows runtime are supplied separately.
+[Reference replay and setup](../Feasibility/Cad/README.md).
+
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge
 uses native VTK offscreen GPU rendering and copies a frame to Qt. It displays

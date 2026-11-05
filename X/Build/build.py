@@ -151,9 +151,12 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
         "viewportProbeSha256": sha(ROOT / "X/Desktop/viewport_probe.py"),
         "analysisEditorSha256": sha(ROOT / "X/Desktop/analysis_editor.py"),
         "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),
+        "cadImportSha256": sha(ROOT / "X/Desktop/cad_import.py"),
         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],
         "dirty": build.report["repository"]["dirty"]}
+    if build.target["desktopPackageAdapter"] == "macos":
+        identity["cadReferenceReceiptSha256"] = sha(ROOT / ".project/reports/l-bracket-cad-reference/verification.json")
     if pmx_preview:
         identity["pmxDesktopSha256"] = sha(ROOT / "X/Desktop/pmx_project.py")
         identity["pmxToolHashes"] = file_hashes(build.output / "pmx-tools")

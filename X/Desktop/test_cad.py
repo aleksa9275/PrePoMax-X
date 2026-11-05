@@ -2,7 +2,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from PyQt6 import QtWidgets
 
@@ -55,6 +55,30 @@ class CadWorkflow(unittest.TestCase):
         self.assertTrue(window.run_action.isEnabled())
         self.assertTrue(window.add_set_action.isEnabled())
         self.assertEqual(window.scene["elements"][0]["id"], 7001)
+
+    def test_reference_import_is_opt_in_and_uses_the_existing_cad_document(self):
+        mesh = ROOT / "X/Desktop/nonsequential-cube.inp"
+        step = ROOT / "APIs/Python/Test_Scripts/Models/L_bracket_r.step"
+        vis = ROOT / "X/Feasibility/Cad/fixtures/l-bracket.vis"
+        window = Viewport()
+        self.addCleanup(window.deleteLater)
+        window.load(mesh, as_model=True)
+        model = window.model_scene
+        with self.assertRaisesRegex(ValueError, "requires --cad-reference"):
+            window.load(step)
+        self.assertIs(window.scene, model)
+
+        window.cad_tool = Mock()
+        window.cad_tool.convert.side_effect = ValueError("conversion failed")
+        with self.assertRaisesRegex(ValueError, "conversion failed"):
+            window.load(step)
+        self.assertIs(window.scene, model)
+        window.cad_tool.convert.side_effect = None
+        window.cad_tool.convert.return_value = (None, vis)
+        window.load(step)
+        self.assertEqual(window.current_path, step)
+        self.assertEqual(window.scene["cad"]["conversion"], "Original 3.0.0 via CrossOver")
+        self.assertFalse(window.run_action.isEnabled())
 
 
 if __name__ == "__main__":

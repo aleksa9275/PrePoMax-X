@@ -16,3 +16,21 @@ and measurements needed for read-only inspection. The 1 MiB VIS input limit
 applies to both modes. Windows part creation and selection numbering still
 live in the legacy reader.
 [Task 0052 reference](../../../.project/reports/l-bracket-cad-reference.md).
+
+## Replay STEP conversion
+
+Supply the original 3.0.0 `Meshers/Netgen` directory and an isolated
+CrossOver Windows 10 64-bit bottle on macOS. The replay validates the 38
+executable and DLL hashes, runs both conversion commands twice in fresh
+directories and compares the BREP, VIS and portable scene against the
+recorded original.
+
+    python3 X/Feasibility/Cad/replay-import.py --reference-runtime /path/to/Meshers/Netgen \
+      --bottle cad-reference --inspector /tmp/prepomaxx-vis/bin/Inspect/release/PrePoMaxX.InspectVis.dll \
+      --output "/tmp/cad replay"
+
+For a direct candidate comparison, replace the reference options with
+`--mesher /absolute/path/to/NetGenMesher`. The candidate must produce
+repeatable bytes and an identical decoded scene. The report also says
+whether its raw BREP and VIS match the original. A fixture match leaves
+source correspondence and native platform acceptance as separate checks.

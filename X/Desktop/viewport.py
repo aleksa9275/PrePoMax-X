@@ -14,6 +14,7 @@ import tempfile
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
+from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, ReferenceCadTool
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
@@ -126,11 +127,12 @@ def run_reader(command):
 
 
 class Viewport(QtWidgets.QMainWindow):
-    def __init__(self, transport="frame-bridge"):
+    def __init__(self, transport="frame-bridge", *, cad_tool=None):
         super().__init__()
         self.setWindowTitle("PrePoMax-X — native viewport candidate")
         self.resize(1000, 720)
         self.scene = None
+        self.cad_tool = cad_tool
         self.selection = None
         self.current_path = None
         self.model_path = None
@@ -146,7 +148,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.job.completed.connect(self.job_completed)
         self.jobs_root = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.StandardLocation.AppLocalDataLocation)) / 'jobs'
         toolbar = self.addToolBar("View")
-        self.open_action = toolbar.addAction("Open INP / FRD / VIS", self.open_dialog)
+        open_label = "Open mesh, results or CAD" if cad_tool else "Open INP / FRD / VIS"
+        self.open_action = toolbar.addAction(open_label, self.open_dialog)
         self.pmx_action = toolbar.addAction("Open static PMX…", self.open_pmx_dialog)
         self.pmx_action.setVisible(pmx_available())
         self.edit_pmx_action = toolbar.addAction("Edit PMX…", self.edit_pmx)
@@ -258,6 +261,8 @@ class Viewport(QtWidgets.QMainWindow):
 
     def populate_cad_tree(self, cad):
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.current_path.name, "Read-only CAD"])
+        if "conversion" in cad:
+            QtWidgets.QTreeWidgetItem(root, ["Conversion", cad["conversion"]])
         unit = "Model units" if cad["lengthUnit"] == "model" else cad["lengthUnit"]
         QtWidgets.QTreeWidgetItem(root, ["Length unit", unit])
         for kind, label in (("solid", "Solids"), ("shell", "Shells"), ("face", "Faces"), ("edge", "Edges")):
@@ -442,8 +447,11 @@ class Viewport(QtWidgets.QMainWindow):
             QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(str(self.job.workspace)))
 
     def open_dialog(self):
+        supported = "*.inp *.frd *.vis"
+        if self.cad_tool:
+            supported += " " + " ".join("*" + suffix for suffix in IMPORT_COMMANDS)
         path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open mesh, results or geometry", "",
-                                                        "Supported files (*.inp *.frd *.vis)")
+                                                        f"Supported files ({supported})")
         if path:
             try:
                 as_model = Path(path).suffix.lower() == '.inp'
@@ -481,12 +489,26 @@ class Viewport(QtWidgets.QMainWindow):
             PmxDialog(self, self.pmx_session).exec()
 
     def load(self, path, *, as_model=False, definition=None):
-        if path.suffix.lower() == ".vis":
+        suffix = path.suffix.lower()
+        if suffix == ".vis" or suffix in IMPORT_COMMANDS:
             if self.job.active:
-                raise ValueError("Finish the active job before opening VIS geometry.")
+                raise ValueError("Finish the active job before opening CAD geometry.")
+            if suffix != ".vis" and self.cad_tool is None:
+                raise ValueError("STEP/BREP reference import requires --cad-reference RUNTIME BOTTLE.")
             if not self.confirm_discard():
                 return
-            self.show_scene(decode(path), path)
+            if suffix == ".vis":
+                scene = decode(path)
+            else:
+                QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CursorShape.WaitCursor)
+                try:
+                    with tempfile.TemporaryDirectory(prefix="prepomaxx-cad-") as directory:
+                        _, vis = self.cad_tool.convert(path, Path(directory) / "import")
+                        scene = decode(vis)
+                finally:
+                    QtWidgets.QApplication.restoreOverrideCursor()
+                scene["cad"]["conversion"] = "Original 3.0.0 via CrossOver"
+            self.show_scene(scene, path)
             self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
             self.analysis_valid = self.editor_dirty = False
             self.edit_pmx_action.setVisible(False)
@@ -730,6 +752,8 @@ def main():
     parser.add_argument("--jobs-root", type=Path, help="New job folders under this directory")
     parser.add_argument("--viewport", choices=("frame-bridge", "native-cocoa"), default="frame-bridge",
                         help="Experimental native Cocoa child view is opt-in; the tested bridge remains default")
+    parser.add_argument("--cad-reference", nargs=2, metavar=("RUNTIME", "BOTTLE"),
+                        help="Enable single-part STEP/BREP inspection with the pinned 3.0.0 runtime in a CrossOver bottle")
     parser.add_argument("--viewport-probe", type=Path, help="Write native event/display/transport evidence into a new directory")
     parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
     parser.add_argument("--pmx-probe", type=Path, nargs=2, metavar=("INPUT", "OUTPUT"),
@@ -741,10 +765,19 @@ def main():
         parser.error("Use --editor-probe separately from other probes and input")
     if args.pmx_probe and (args.self_test or args.run_example or args.viewport_probe or args.editor_probe or args.input):
         parser.error("Use --pmx-probe separately from other probes and input")
+    cad_tool = None
+    if args.cad_reference:
+        runtime, bottle = args.cad_reference
+        receipt = (Path(sys._MEIPASS) / "cad-reference/verification.json"
+                   if getattr(sys, "frozen", False) else REFERENCE_RECEIPT)
+        try:
+            cad_tool = ReferenceCadTool(Path(runtime), bottle, receipt)
+        except (OSError, ValueError, KeyError) as error:
+            parser.error(str(error))
     app = QtWidgets.QApplication([sys.argv[0]])
     app.setOrganizationName("PrePoMax-X")
     app.setApplicationName("PrePoMax-X Preview")
-    window = Viewport(args.viewport)
+    window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
     window.automated_workflow = bool((args.run_example and args.self_test) or args.editor_probe or args.pmx_probe)
@@ -780,6 +813,8 @@ def main():
             check("native render window", window.vtk.GetRenderWindow().GetClassName() in target["renderWindows"])
             if "cad" in window.scene:
                 result["cad"] = verify_cad_view(window, check)
+                if "conversion" in window.scene["cad"]:
+                    result["cad"]["conversion"] = window.scene["cad"]["conversion"]
                 selection = window.selection
             else:
                 selection = verify_mesh_view(window, check)

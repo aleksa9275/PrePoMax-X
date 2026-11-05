@@ -1,5 +1,15 @@
 # Project status
 
+## Current — tasks 0057 and 0058: checked CAD reference import
+
+The original 3.0.0 STEP split and BREP visualization replay produce
+the exact recorded L-bracket bytes through CrossOver. The opt-in macOS
+preview opens a single-part STEP or BREP through that external runtime
+and displays its read-only CAD scene. The replay also accepts an explicit
+candidate executable for fixture comparison. Corresponding native C++
+source recovery and native CAD execution remain open.
+[Verification](reports/cad-reference-import.md).
+
 ## Current — task 0056: VIS kernel IDs
 
 All 38 release Netgen runtime files match the upstream binary drop at

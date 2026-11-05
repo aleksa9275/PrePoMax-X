@@ -90,6 +90,7 @@ def package(build, root, solver_build=None):
         '--name', 'PrePoMax-X-Viewport', '--osx-bundle-identifier', 'org.prepomaxx.preview', '--target-architecture', 'arm64', '--collect-all', 'vtkmodules',
         '--add-data', f"{output / 'hosts'}:hosts", '--add-data', f"{output / 'source-identity.json'}:.",
         '--add-data', f"{root / 'X/Build/targets.json'}:.", '--add-data', f'{example_dir}:examples',
+        '--add-data', f"{root / '.project/reports/l-bracket-cad-reference/verification.json'}:cad-reference",
         *pmx, '--distpath', output / 'dist', '--workpath', output / 'build', '--specpath', output,
         root / 'X/Desktop/viewport.py'])
     app = output / 'dist/PrePoMax-X-Viewport.app'
