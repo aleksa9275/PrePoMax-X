@@ -1,5 +1,15 @@
 # Project status
 
+## Current — task 0068: visual CAD regions
+
+CAD face/part picks and source-tree multi-selection create named node/element
+regions through the original INP reader. Highlighting and CAD/mesh/result views
+preserve edits; the editor assigns the new sets and jobs freeze CAD references.
+Mac/Linux ARM64 selection/assignment/native static solves pass.
+[Evidence](reports/cad-region-selection.md). General CAD/mesh PMX persistence is
+next. Both correctness failures, quadratic tetrahedra, parity and release gates
+remain open; no hosted CI under D058, Linux x64 deferred under D059.
+
 ## Current — task 0067: native CAD to static results
 
 Native Mac/Linux ARM64 complete the two-part CAD → original first-order VOL/INP

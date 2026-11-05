@@ -43,6 +43,7 @@ class CadMesh:
         self.root = Path(self.storage.name)
         self.document = document
         self.size = maximum_size
+        self.authored_regions = []
         try:
             document.verify()
             self.parameters = self.root / "parameters"
@@ -87,6 +88,7 @@ class CadMesh:
                    "sourceSha256": self.document.identities[self.document.snapshot],
                    "toolReceiptSha256": self.document.tool_receipt,
                    "maximumSize": self.size, "elementOrder": 1, "meshingThreads": 1,
+                   "authoredRegions": self.authored_regions,
                    "baseMeshSha256": self.identities[self.mesh], "mapping": self.scene["cadMesh"], "files": inputs,
                    "scope": "Frozen native CAD/meshing job provenance; not project persistence"}
         tool_bytes = self.document.tool.receipt.read_bytes()

@@ -1,5 +1,14 @@
 # Native CAD continuation — 5 November 2026
 
+Task 0068 adds visual CAD face/part regions, original-reader node/element set
+unions, highlighting, CAD/mesh/result switching and frozen region provenance.
+Read [the region report](../reports/cad-region-selection.md) and its receipt for
+actual source/candidate/publication checks. Next is the original-PMX-compatible
+CAD/mesh persistence boundary under D057. Keep D058/D059 and all correctness,
+quadratic-tetrahedron, full-parity and release gates. Earlier app paths below
+are historical after task 0068 closeout.
+
+
 Task 0067 completes the bounded native CAD → first-order C3D4 → static results
 workflow, verified through the real desktop on Mac/Linux ARM64. Read
 [the new report](../reports/native-cad-static-workflow.md) and its receipt first.

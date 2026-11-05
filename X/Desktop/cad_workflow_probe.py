@@ -73,13 +73,17 @@ def begin(app, window, source, definition_path, output):
                   {s['name'] for s in scene['nodeSets']})
             state['meshRoot'] = window.cad_mesh.root
             state['meshHash'] = hashlib.sha256(window.mesh_bytes).hexdigest()
+            from cad_region_probe import prepare, assign
+            prepare(app, window, output, check)
             window.definition = json.loads(definition_path.read_text())  # Explicit analytical test inputs.
+            assign(window.definition)
             QtCore.QTimer.singleShot(100, apply_controls)
             window.configure_action.trigger()
             if state.get('error'):
                 raise state['error']
             check('applied analysis can run', window.analysis_valid)
             window.run_model()
+            check('region edits and view switching are disabled while solving', not window.regions.create.isEnabled() and not window.regions.view.isEnabled())
         except Exception as error:
             finish(error)
 
@@ -103,6 +107,13 @@ def begin(app, window, source, definition_path, output):
             identity = json.loads((frozen / 'identity.json').read_text())
             check('frozen job records original mesh and both CAD parts', identity['baseMeshSha256'] == state['meshHash'] and
                   len(identity['mapping']['parts']) == 2 and identity['elementOrder'] == 1)
+            check('frozen job retains selected CAD region provenance', len(identity['authoredRegions']) == 8 and
+                  identity['authoredRegions'][3]['name'] == 'SelectedSolids')
+            before = window.mesh_bytes
+            window.regions.view.setCurrentIndex(window.regions.view.findData('cad'))
+            window.regions.view.setCurrentIndex(window.regions.view.findData('results'))
+            check('CAD and result views retain selected model and decoded results', window.regions.result is not None and window.scene is window.regions.result[0] and
+                  window.current_path.name == 'analysis.frd' and window.mesh_bytes == before)
             check('frozen native recipe verified', hashlib.sha256((frozen / 'tool-build-receipt.json').read_bytes()).hexdigest() == identity['toolReceiptSha256'])
             check('all frozen CAD bytes verified', all(hashlib.sha256((frozen / row['file']).read_bytes()).hexdigest() == row['sha256'] for row in identity['files']))
             window.raise_()
@@ -124,7 +135,8 @@ def begin(app, window, source, definition_path, output):
                 raise ValueError('Changed mesher output was accepted')
             window.release_cad()
             check('document cleanup keeps immutable job inputs', not state['cadRoot'].exists() and
-                  not state['meshRoot'].exists() and (frozen / 'identity.json').is_file())
+                  not state['meshRoot'].exists() and (frozen / 'identity.json').is_file() and
+                  not window.regions.refs and window.regions.result is None)
             finish()
         except Exception as error:
             finish(error)

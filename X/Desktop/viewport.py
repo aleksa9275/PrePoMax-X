@@ -17,6 +17,7 @@ from analysis_editor import AnalysisDialog, new_definition
 from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, run_process
 from cad_job import CadImportJob, CadMeshJob
 from cad_document import CadDocument
+from cad_regions import CadRegions
 from cad_scene import read_cad_parts
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
@@ -171,7 +172,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.fields = QtWidgets.QComboBox()
         self.fields.setMinimumWidth(330)
         self.fields.currentIndexChanged.connect(self.set_field)
-        toolbar.addWidget(self.fields)
+        self.field_action = toolbar.addWidget(self.fields)
         self.transport = transport
         if transport == "native-cocoa":
             from native_cocoa import NativeCocoaView
@@ -240,16 +241,25 @@ class Viewport(QtWidgets.QMainWindow):
         self.model_tree.itemDoubleClicked.connect(self.edit_tree_item)
         model_dock.setWidget(self.model_tree)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, model_dock)
+        self.regions = CadRegions(self, toolbar, jobbar)
         self.update_model_tree()
 
     @property
     def busy(self):
-        return self.job.active or self.cad_job is not None or self.mesh_job is not None
+        return self.job.active or self.job.state in ('Starting', 'Running', 'Cancelling') or self.cad_job is not None or self.mesh_job is not None
 
     def update_model_tree(self):
+        self.regions.begin_tree()
+        try:
+            self._update_model_tree()
+        finally:
+            self.regions.end_tree()
+            self.regions.refresh()
+
+    def _update_model_tree(self):
         self.model_tree.clear()
         self.cad_faces = {}
-        if self.scene and "cad" in self.scene:
+        if self.scene and "cad" in self.scene and self.model_scene is None:
             self.populate_cad_tree(self.scene["cad"])
             return
         if self.model_scene is None:
@@ -274,10 +284,13 @@ class Viewport(QtWidgets.QMainWindow):
                 child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
         step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
         step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
+        if self.cad_mesh is not None:
+            self.populate_cad_tree(self.cad_document.scene["cad"])
         self.model_tree.expandToDepth(1)
 
     def populate_cad_tree(self, cad):
-        root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.current_path.name, "Read-only CAD"])
+        path = self.cad_document.source if self.cad_mesh is not None else self.current_path
+        root = QtWidgets.QTreeWidgetItem(self.model_tree, [path.name, "Source CAD" if self.cad_mesh is not None else "Read-only CAD"])
         if "conversion" in cad:
             QtWidgets.QTreeWidgetItem(root, ["Conversion", cad["conversion"]])
         unit = "Model units" if cad["lengthUnit"] == "model" else cad["lengthUnit"]
@@ -285,6 +298,7 @@ class Viewport(QtWidgets.QMainWindow):
         if "parts" in cad:
             for part in cad["parts"]:
                 item = QtWidgets.QTreeWidgetItem(root, [part["name"], f'{part["triangleCount"]} triangles'])
+                self.regions.decorate(item, ("part", part["id"], 0))
                 self.populate_cad_entities(item, part["entities"], part["id"])
         else:
             self.populate_cad_entities(root, cad["entities"])
@@ -301,6 +315,7 @@ class Viewport(QtWidgets.QMainWindow):
                 if kind == "face":
                     key = (part_id, entity["id"]) if part_id is not None else entity["id"]
                     self.cad_faces[key] = item
+                    self.regions.decorate(item, ("face", part_id, entity["id"]))
                 for name in ("volume", "surface_area", "center_of_mass", "area", "length", "radius", "convexity"):
                     if name in properties:
                         values = properties[name]
@@ -362,10 +377,26 @@ class Viewport(QtWidgets.QMainWindow):
         if len(labels) > 12000:
             raise ValueError('The set label list is too long.')
         ids = ','.join(re.split(r'[,\s]+', labels.strip()))
+        self.write_mesh_set(kind, name, ids, 'add-set')
+
+    def add_cad_region_set(self, kind, name):
+        if self.busy:
+            raise ValueError('Finish the active operation before creating a CAD region set.')
+        sources = self.regions.sources(kind)
+        self.cad_document.verify()
+        refs = sorted(self.regions.refs)
+        before = hashlib.sha256(self.mesh_bytes).hexdigest()
+        scene = self.write_mesh_set(kind, name, ','.join(sources), 'add-region-set')
+        self.cad_mesh.authored_regions.append({'name': name, 'kind': kind, 'sourceSets': sources,
+            'regions': [{'kind': r[0], 'partId': r[1], 'entityId': r[2]} for r in refs],
+            'inputMeshSha256': before, 'outputMeshSha256': self.model_scene['SourceSha256']})
+        return scene['authoredSet']
+
+    def write_mesh_set(self, kind, name, labels, operation):
         with tempfile.TemporaryDirectory(prefix='prepomaxx-set-') as directory:
             original, updated = (Path(directory) / file for file in ('mesh.inp', 'updated.inp'))
             original.write_bytes(self.mesh_bytes)
-            scene = run_reader(mesh_command() + ['add-set', str(original), str(updated), kind, name, ids])
+            scene = run_reader(mesh_command() + [operation, str(original), str(updated), kind, name, labels])
             mesh_bytes = updated.read_bytes()
             if hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
                 raise ValueError('Edited mesh changed while loading the new set.')
@@ -377,6 +408,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.analysis_valid = False
         self.editor_dirty = True
         self.update_model_tree()
+        return scene
 
     def configure_model(self, tab=0):
         if self.busy:
@@ -444,7 +476,7 @@ class Viewport(QtWidgets.QMainWindow):
             state = "Cancelling mesh" if self.mesh_job.cancel_requested.is_set() else "Meshing CAD"
         active = importing or meshing or state in ('Starting', 'Running', 'Cancelling')
         self.mesh_action.setEnabled(not active and self.cad_document is not None)
-        cad = self.scene is not None and "cad" in self.scene
+        cad = self.scene is not None and "cad" in self.scene and self.model_scene is None
         self.run_action.setEnabled(not active and not cad)
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
@@ -454,6 +486,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.example_action.setEnabled(not active)
         self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD', 'Cancelling mesh'))
         self.job_label.setText(state)
+        self.regions.refresh()
 
     def refresh_job_output(self):
         if not self.job.directory or not self.job.active:
@@ -576,8 +609,11 @@ class Viewport(QtWidgets.QMainWindow):
         if self.cad_document is not None:
             self.cad_document.close()
         self.cad_mesh = self.cad_document = None
+        self.regions.reset()
+        self.regions.refresh()
 
     def set_cad_document(self, scene, path, *, document=None):
+        self.regions.reset()
         self.show_scene(scene, path)
         self.release_cad()
         self.cad_document = document
@@ -690,6 +726,7 @@ class Viewport(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(0, self.close)
 
     def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None, cad_mesh=None):
+        self.regions.reset()
         self.show_scene(scene, path)
         if cad_mesh is None:
             self.release_cad()
@@ -787,6 +824,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.renderer.GetActiveCamera().SetPosition(3, 2, 4)
         self.renderer.GetActiveCamera().SetFocalPoint(0.5, 0.5, 0.5)
         self.set_field(0)
+        self.regions.on_scene()
         self.fit()
         if cad:
             self.statusBar().showMessage(f'{len(scene["elements"])} display triangles · '
@@ -833,7 +871,10 @@ class Viewport(QtWidgets.QMainWindow):
                 key = (part_id, face_id)
             item = self.cad_faces[key]
             item.parent().setExpanded(True)
-            self.model_tree.setCurrentItem(item)
+            if part_ids is None or not self.regions.available:
+                self.model_tree.setCurrentItem(item)
+            else:
+                self.regions.picked(part_id, face_id)
             item.setExpanded(True)
             self.model_tree.scrollToItem(item)
             description = f"CAD part {part_id}, face {face_id}" if part_ids is not None else f"CAD face {face_id}"

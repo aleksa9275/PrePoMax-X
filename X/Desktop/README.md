@@ -99,6 +99,13 @@ BREP/VIS, VOL, parameters, native recipe and base/submitted mesh identities.
 General CAD/mesh project persistence and quadratic tetrahedra remain unsupported
 in this bounded preview. [Workflow and checks](../../.project/reports/native-cad-static-workflow.md).
 
+After meshing, choose **CAD geometry**, then **Pick faces** or **Pick parts**.
+Click to select; Ctrl/Command-click or multi-select source tree items to combine
+regions. Orange surfaces show the selection. **Set from CAD…** creates named
+node sets from faces/parts or element sets from parts, available in **Configure…**.
+**Mesh** and **Results** restore those views without losing the edited model.
+Jobs retain each region's source association. [Selection and checks](../../.project/reports/cad-region-selection.md).
+
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge
 uses native VTK offscreen GPU rendering and copies a frame to Qt. It displays

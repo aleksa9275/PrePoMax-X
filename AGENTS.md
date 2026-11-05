@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0068 adds visual CAD face/part region selection, original-reader set unions,
+highlighting and CAD/mesh/result switching. Read
+.project/reports/cad-region-selection.md and the native CAD handoff for actual
+checks/publication/candidate. Next is an explicit original-PMX-compatible CAD/mesh
+persistence boundary. D058 forbids hosted CI; D059 defers Linux x64 to Windows/
+Podman near finishing. Keep both correctness failures, quadratic tetrahedra and
+all full parity/release gates open.
+
 Task 0067 completes the bounded native CAD → C3D4 mesh → static native solve →
 original FRD desktop path on Mac/Linux ARM64, with original VOL/parameter code
 and frozen CAD job inputs. Read .project/reports/native-cad-static-workflow.md

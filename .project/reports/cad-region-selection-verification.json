@@ -1,0 +1,425 @@
+{
+  "task": "0068",
+  "scope": "Bounded CAD face/part sets and static assignments; general persistence and full parity remain open",
+  "publication": "Prepared; final remote identity/candidate recorded at closeout",
+  "hostedCi": "No runs; D058 hold",
+  "linuxX64": "Deferred to Podman on Windows near finishing under D059",
+  "workflows": {
+    "macSource": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "source CAD view retains edited model",
+          "passed": true
+        },
+        {
+          "name": "analysis controls available from linked CAD",
+          "passed": true
+        },
+        {
+          "name": "real face pick resolves part 1",
+          "passed": true
+        },
+        {
+          "name": "face highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "real face pick resolves part 2",
+          "passed": true
+        },
+        {
+          "name": "face highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "equal local face IDs remain isolated by part",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "original C# union includes both picked faces exactly once",
+          "passed": true
+        },
+        {
+          "name": "face-to-element conversion rejects without editing",
+          "passed": true
+        },
+        {
+          "name": "real part pick resolves part 1",
+          "passed": true
+        },
+        {
+          "name": "part highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "real part pick resolves part 2",
+          "passed": true
+        },
+        {
+          "name": "part highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "CAD region action opens its real dialog",
+          "passed": true
+        },
+        {
+          "name": "invalid region name keeps dialog and mesh intact",
+          "passed": true
+        },
+        {
+          "name": "selected parts create a section region",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "CAD regions retain source associations",
+          "passed": true
+        },
+        {
+          "name": "unmapped CAD face rejects without changing model or provenance",
+          "passed": true
+        },
+        {
+          "name": "selected CAD overlay captured",
+          "passed": true
+        },
+        {
+          "name": "mesh view preserves CAD selection and set edits",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "region edits and view switching are disabled while solving",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen job retains selected CAD region provenance",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views retain selected model and decoded results",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "nodes": 211,
+      "elements": 563,
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "localReport": "/tmp/prepomaxx-task0068-evidence/source-retry/workflow.json",
+      "sha256": "364bf1be65f4bdc41f401922dd060229cc596b523cf760cc120c3d7f7189f358",
+      "job": {
+        "workspace": "/private/tmp/prepomaxx-task0068-evidence/source-retry-jobs/20261105-213727-6b303de93970",
+        "inputDirectory": "/private/tmp/prepomaxx-task0068-evidence/source-retry-jobs/20261105-213727-6b303de93970/inputs",
+        "directory": "/private/tmp/prepomaxx-task0068-evidence/source-retry-jobs/20261105-213727-6b303de93970/solve"
+      }
+    },
+    "linuxArm64Desktop": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "source CAD view retains edited model",
+          "passed": true
+        },
+        {
+          "name": "analysis controls available from linked CAD",
+          "passed": true
+        },
+        {
+          "name": "real face pick resolves part 1",
+          "passed": true
+        },
+        {
+          "name": "face highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "real face pick resolves part 2",
+          "passed": true
+        },
+        {
+          "name": "face highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "equal local face IDs remain isolated by part",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "original C# union includes both picked faces exactly once",
+          "passed": true
+        },
+        {
+          "name": "face-to-element conversion rejects without editing",
+          "passed": true
+        },
+        {
+          "name": "real part pick resolves part 1",
+          "passed": true
+        },
+        {
+          "name": "part highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "real part pick resolves part 2",
+          "passed": true
+        },
+        {
+          "name": "part highlight matches CAD selection",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "CAD region action opens its real dialog",
+          "passed": true
+        },
+        {
+          "name": "invalid region name keeps dialog and mesh intact",
+          "passed": true
+        },
+        {
+          "name": "selected parts create a section region",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "multi-selection follows actual source tree items",
+          "passed": true
+        },
+        {
+          "name": "CAD regions retain source associations",
+          "passed": true
+        },
+        {
+          "name": "unmapped CAD face rejects without changing model or provenance",
+          "passed": true
+        },
+        {
+          "name": "selected CAD overlay captured",
+          "passed": true
+        },
+        {
+          "name": "mesh view preserves CAD selection and set edits",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "region edits and view switching are disabled while solving",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen job retains selected CAD region provenance",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views retain selected model and decoded results",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "nodes": 211,
+      "elements": 563,
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "localReport": "/tmp/prepomaxx-task0068-evidence/linux/gui/workflow.json",
+      "sha256": "467653230748c1f7cd553c9ca39f1b7c0e8b30855d6d0c10c785b637c4ff7db9",
+      "job": {
+        "workspace": "/out/gui-jobs/20261105-213953-33e0fffc350a",
+        "inputDirectory": "/out/gui-jobs/20261105-213953-33e0fffc350a/inputs",
+        "directory": "/out/gui-jobs/20261105-213953-33e0fffc350a/solve"
+      }
+    }
+  },
+  "localEvidence": "/tmp/prepomaxx-task0068-evidence",
+  "tests": {
+    "macDesktop": {
+      "passed": 37,
+      "localLog": "/tmp/prepomaxx-task0068-evidence/desktop-tests-final.log",
+      "sha256": "d2d5cca03fe0d9161b2d50ebb8daeed52d14f83e5bf1603be7f561a1ae55e03a"
+    },
+    "buildGuards": {
+      "passed": 9,
+      "localLog": "/tmp/prepomaxx-task0068-evidence/build-tests.log",
+      "sha256": "7c758af7411e05fc2e6c4fb89045f7a03d9a5957d5305092903a23a66373d034"
+    },
+    "linuxRegionUnions": {
+      "passed": 4,
+      "localLog": "/tmp/prepomaxx-task0068-evidence/linux/region-tests.log",
+      "sha256": "7eec3e52846fd2ca5e480983dff1088e30590ca1ebdb2f7b7a423da4971c38c4"
+    }
+  }
+}

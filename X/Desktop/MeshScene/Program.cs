@@ -10,10 +10,10 @@ using PrePoMaxX.MeshDeck;
 if (args.Length > 0 && args[0] is "netgen-parameters" or "from-vol")
     return NativeMeshCommands.Run(args);
 
-bool addSet = args.Length == 6 && args[0] == "add-set";
+bool addSet = args.Length == 6 && args[0] is "add-set" or "add-region-set";
 if (args.Length != 1 && !addSet)
 {
-    Console.Error.WriteLine("Usage: PrePoMaxX.MeshScene <mesh.inp> | add-set <mesh.inp> <new.inp> <node|element> <name> <ids>");
+    Console.Error.WriteLine("Usage: PrePoMaxX.MeshScene <mesh.inp> | add-set <mesh.inp> <new.inp> <node|element> <name> <ids> | add-region-set <mesh.inp> <new.inp> <node|element> <name> <source-set-names>");
     return 2;
 }
 try
@@ -27,6 +27,7 @@ try
         elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds }),
         nodeSets = mesh.NodeSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
         elementSets = mesh.ElementSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
+        authoredSet = addSet ? new { kind = args[3], name = args[4], ids = (args[3] == "node" ? mesh.NodeSets : mesh.ElementSets)[args[4]] } : null,
         warnings = mesh.Warnings, omittedKeywords = mesh.OmittedKeywords,
         solverExecuted = false
     }));
@@ -65,16 +66,32 @@ static (InpMeshData Mesh, byte[] Bytes) AddSet(string[] arguments)
     if (arguments[5].Length > 12_000)
         throw new InvalidDataException("The set label list is too long.");
     string[] tokens = arguments[5].Split(',');
-    if (tokens.Length > 1000)
-        throw new InvalidDataException("A set requires at most 1000 IDs.");
     var ids = new HashSet<int>();
-    foreach (string token in tokens)
+    if (arguments[0] == "add-region-set")
     {
-        if (!int.TryParse(token, NumberStyles.None, CultureInfo.InvariantCulture, out int id) || id < 1 ||
-            !(kind == "node" ? original.Nodes.ContainsKey(id) : original.Elements.ContainsKey(id)))
-            throw new InvalidDataException("Each ID must belong to the selected mesh entity kind.");
-        if (!ids.Add(id))
-            throw new InvalidDataException("Duplicate IDs are not allowed in a new set.");
+        if (tokens.Length > 256 || tokens.Distinct(StringComparer.OrdinalIgnoreCase).Count() != tokens.Length)
+            throw new InvalidDataException("Choose at most 256 distinct source mesh sets.");
+        foreach (string token in tokens)
+        {
+            if (!sets.TryGetValue(token, out int[] members) || members.Length == 0)
+                throw new InvalidDataException("Each source set must exist for the selected mesh entity kind.");
+            ids.UnionWith(members);
+        }
+        if (ids.Count > 100000)
+            throw new InvalidDataException("A CAD region set requires at most 100000 mesh IDs.");
+    }
+    else
+    {
+        if (tokens.Length > 1000)
+            throw new InvalidDataException("A set requires at most 1000 IDs.");
+        foreach (string token in tokens)
+        {
+            if (!int.TryParse(token, NumberStyles.None, CultureInfo.InvariantCulture, out int id) || id < 1 ||
+                !(kind == "node" ? original.Nodes.ContainsKey(id) : original.Elements.ContainsKey(id)))
+                throw new InvalidDataException("Each ID must belong to the selected mesh entity kind.");
+            if (!ids.Add(id))
+                throw new InvalidDataException("Duplicate IDs are not allowed in a new set.");
+        }
     }
 
     // Preserve the source records. Pass the combined deck through the original
