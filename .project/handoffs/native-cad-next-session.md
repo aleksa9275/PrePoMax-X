@@ -6,7 +6,12 @@ workflow, verified through the real desktop on Mac/Linux ARM64. Read
 Linux x64 tests are explicitly deferred to Podman on Windows at finishing (D059).
 No hosted CI runs/retries without explicit new instruction (D058).
 The current candidate and remote publication identity are recorded in the new
-receipt; the task 0064 app below is historical and will be pruned at closeout.
+receipt. Implementation `817d47fd` is remote-verified; no hosted jobs were run.
+Retained Mac candidate: `/tmp/prepomaxx-task0067-delivery/PrePoMax-X Preview.app`.
+The sibling `Native CAD Preview.command` enables the retained native runtime.
+Its source patch is empty; dirty reflects only Finder files. Both copied-app
+viewports pass 18 native workflow checks, and the existing C3D8 path passes ten.
+Superseded task 0064/preliminary payloads below are pruned; jobs and evidence stay.
 Next: geometry-backed mesh region selection and an explicit reviewed CAD/mesh
 persistence boundary. General PMX, broader meshers/analyses, Windows/net48, both
 known correctness failures, the quadratic tetrahedron gate and all parity/release
@@ -36,7 +41,7 @@ exact source nodes, edges and IDs. Valid-box repair, translation, split and STEP
 roundtrip pass on both native targets and the Windows reference. Three BREP
 operation outputs are byte-identical across all three paths.
 
-Current local Mac app:
+Prior task 0064 app (historical path; pruned):
 `/tmp/prepomaxx-task0064-current/dist/PrePoMax-X-Viewport.app`.
 Explicit native CAD runtime: `/tmp/prepomaxx-task0063-recipe/runtime`.
 Run the app executable with `model.step --cad-native <runtime>` for the native

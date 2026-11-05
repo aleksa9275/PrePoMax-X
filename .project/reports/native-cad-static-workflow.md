@@ -81,16 +81,26 @@ differ because of last-bit coordinate differences; byte identity is not claimed.
 
 [Machine-readable receipt](native-cad-static-workflow-verification.json).
 Local detailed evidence/jobs: `/tmp/prepomaxx-task0067-evidence`.
-The current local app and its publication identity are recorded in the receipt.
-Only one current generated candidate is retained after verification; reusable
+The retained local candidate is
+`/tmp/prepomaxx-task0067-delivery/PrePoMax-X Preview.app`.
+`/tmp/prepomaxx-task0067-delivery/Native CAD Preview.command` launches its explicit
+native CAD profile with the retained Mac runtime. Its ad-hoc signature and all
+2,419 copied payload file hashes verify. It identifies implementation `817d47fd`
+with an empty source patch; only pre-existing Finder files set its dirty flag.
+The copied final app passes 18 workflow checks in each viewport and ten existing
+C3D8 native solve/render/picking checks. The receipt records package identity.
+Fifteen superseded generated directories were pruned (8.33 GiB logical payload
+bytes); one current candidate remains. Reusable
 native tools, caches and previous job/evidence folders remain available.
 
 ## Publication and remaining work
 
 D051 authorizes normal publication to `origin/research/native-feasibility`.
 Push with `-o ci.skip`; D058 continues to block automatic pipelines. No hosted
-check or retry is authorized by this task. Exact publication is recorded in the
-receipt and handoff after remote verification. D059 defers Linux x64 execution
+check or retry is authorized by this task. Implementation
+[`817d47fd`](https://gitlab.com/aleksa9275/pre-po-max-x/-/commit/817d47fdb377518683abed9474007e2eff0adbb0)
+is pushed and remote-verified on the research branch. The closing evidence is
+published as a normal CI-skipped documentation follow-up. D059 defers Linux x64 execution
 to Podman on a Windows machine during the finishing phase; it is still pending.
 
 The next bounded increment is geometry-backed mesh region selection and a

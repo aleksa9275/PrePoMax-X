@@ -5,7 +5,14 @@
   "hostedCi": "Not started; D058 hold; push uses ci.skip",
   "linuxX64": "Deferred to Podman on Windows near finishing under D059",
   "publication": {
-    "status": "Prepared; remote identity recorded at closeout"
+    "implementation": "817d47fdb377518683abed9474007e2eff0adbb0",
+    "branch": "origin/research/native-feasibility",
+    "remoteObserved": "817d47fdb377518683abed9474007e2eff0adbb0",
+    "remoteVerified": true,
+    "pushOption": "ci.skip",
+    "hostedJobsStarted": false,
+    "workflowSha256": "0302dc23f02b96a17a911c1fe7cd933650d87b3aa96bf637eb0237923357d3f8",
+    "scope": "Implementation remote verified; this closing evidence is a normal CI-skipped documentation follow-up"
   },
   "localEvidence": "/tmp/prepomaxx-task0067-evidence",
   "checks": {
@@ -897,6 +904,331 @@
         "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
       }
     },
-    "scope": "Prepublication working tree, source hashes verified; final publication candidate recorded at closeout"
+    "scope": "Prepublication working tree, source hashes verified; final publication candidate recorded at closeout",
+    "pruned": true
+  },
+  "candidate": {
+    "app": "/tmp/prepomaxx-task0067-delivery/PrePoMax-X Preview.app",
+    "sourceIdentity": {
+      "viewportSha256": "4f17550730656a6a0975906830d951130c2201a9292d9675cbba5c7e9b2532f5",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "85c7844e293f9604736998303df9a6e26605d24029b04f6f21e758333806c8b6",
+      "cadJobSha256": "c1e763b51195c3393776bd1a94a1b21d54a3fd6a7efb6ec605510b248b78aa94",
+      "cadDocumentSha256": "f65db6b1482048e888437cdb3b0c9f5e0d94fa5928c9029e76bee1ddfdd7e072",
+      "cadWorkflowProbeSha256": "9fa54499397d96662aca6965be21786e7c7b2028eb65dcb8f7340f7e17464b8f",
+      "cadSceneSha256": "a914db43434c91c9344e8e1842525c116bfa4ea5249fe60a859313500b5237d6",
+      "desktopJobsSha256": "c6169106aab887b3af29983bda3d38f36ca978bc6bb45c345af590a9bb775470",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "817d47fdb377518683abed9474007e2eff0adbb0",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "2e14d970acf188e30c3aee9944e97234ac6c40a0aae6cb7ce2b0e6bbeb757054",
+      "pmxToolHashes": {
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "b09d081e6ec61a68c7d1b318dc765cf9663d761361471ff84b76ca2cda233df3",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "packageManifest": "/tmp/prepomaxx-task0067-final/package.json",
+    "packageManifestSha256": "254fb1aa1046702bab38060c5b9ac2d6c72b48716205a48c732b1a7969eaf335",
+    "appFileCount": 2419,
+    "copiedFileHashesMatch": true,
+    "adHocSignatureVerified": true,
+    "sourcePatchBytes": 0,
+    "dirtyReason": "Only the four pre-existing untracked Finder .DS_Store files; source patch is empty",
+    "scope": "Local opt-in native CAD/static preview; no release or clean-Mac acceptance"
+  },
+  "finalCopiedAppChecks": {
+    "bridge": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/final-bridge/workflow.json",
+      "sha256": "18f9449b36910e2301ab80e42b165e3d189c25c7ba53c188e78ae383b207a136"
+    },
+    "nativeCocoa": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/final-cocoa/workflow.json",
+      "sha256": "d0f90d166de9156d8971f54db8bc34b0db1447fa771aaec17fc7196042c20158"
+    },
+    "existingC3D8": {
+      "success": true,
+      "checks": [
+        {
+          "name": "desktop native solve and result loading",
+          "passed": true
+        },
+        {
+          "name": "native render window",
+          "passed": true
+        },
+        {
+          "name": "original IDs retained",
+          "passed": true
+        },
+        {
+          "name": "field scalar mapping",
+          "passed": true
+        },
+        {
+          "name": "VTK hit resolves original element ID",
+          "passed": true
+        },
+        {
+          "name": "nearest vertex resolves original node ID",
+          "passed": true
+        },
+        {
+          "name": "selected coordinates preserved",
+          "passed": true
+        },
+        {
+          "name": "selected nodal value uses original value order",
+          "passed": true
+        },
+        {
+          "name": "resize renders",
+          "passed": true
+        },
+        {
+          "name": "displayed frame has mesh/legend pixels",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/final-cube.json",
+      "sha256": "83d99c77fa70a8daff1a6101a51a05ddea54f6fb485c8fc9f3e2ea2a04fc1346"
+    }
+  },
+  "cleanup": {
+    "removed": [
+      {
+        "path": "/tmp/prepomaxx-task0064-current/dist",
+        "logicalBytes": 890711928
+      },
+      {
+        "path": "/tmp/prepomaxx-task0064-current/hosts",
+        "logicalBytes": 355559691
+      },
+      {
+        "path": "/tmp/prepomaxx-task0064-current/examples",
+        "logicalBytes": 1540
+      },
+      {
+        "path": "/tmp/prepomaxx-task0064-current/pyinstaller-cache",
+        "logicalBytes": 897029164
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/dist",
+        "logicalBytes": 2285335037
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/build",
+        "logicalBytes": 20232286
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/hosts",
+        "logicalBytes": 621456381
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/pmx-tools",
+        "logicalBytes": 26181
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/examples",
+        "logicalBytes": 1540
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-current/pyinstaller-cache",
+        "logicalBytes": 950990913
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-final/dist",
+        "logicalBytes": 2285334917
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-final/build",
+        "logicalBytes": 20220722
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-final/hosts",
+        "logicalBytes": 621456321
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-final/pmx-tools",
+        "logicalBytes": 26181
+      },
+      {
+        "path": "/tmp/prepomaxx-task0067-final/examples",
+        "logicalBytes": 1540
+      }
+    ],
+    "logicalBytesRemoved": 8948384342,
+    "candidate": "/tmp/prepomaxx-task0067-delivery/PrePoMax-X Preview.app",
+    "copiedPayloadHashMatch": true,
+    "preserved": "All job/evidence folders; native CAD Mac/Linux runtimes; source/solver/OCCT caches; final packager cache; metadata and reproduction receipts",
+    "launcher": {
+      "path": "/tmp/prepomaxx-task0067-delivery/Native CAD Preview.command",
+      "sha256": "f7f2fd8962a11dd98e99d94837b9c0ba3a6fcf0536f4f50071e6ff0735fbb2ec"
+    }
+  },
+  "linuxDesktopEnvironment": {
+    "image": "localhost/prepomaxx-task0067-gui:arm64",
+    "id": "2dab3f990038f5b7168054ddd27dfd540301d3c15871aba916edbb39bccdf135",
+    "nativeExecution": true,
+    "network": "none",
+    "display": "Qt frame bridge with Xvfb/Mesa; source host paths explicitly supplied",
+    "solverRelocation": "/tmp/prepomaxx-task0067-evidence/linux/solver-preview/relocation.json",
+    "earlierRefusal": "Pinned external libopenblas.so.0 hash differed in the runtime image; refused before solver execution, then verified relocation passed"
   }
 }
