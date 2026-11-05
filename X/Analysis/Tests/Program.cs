@@ -148,6 +148,34 @@ Check("expanded assemblies have no desktop platform references", () => {
     foreach(var a in assemblies)foreach(var r in a.GetReferencedAssemblies())
         Require(r.Name is "CaeGlobals" or "CaeMesh" or "CaeResults" or "UnitsNet" or "NCalc" or "mscorlib" or "netstandard" or "System" || (r.Name.StartsWith("System.") && !r.Name.Contains("Windows") && !r.Name.Contains("Drawing.Common")));
 });
+// A unit tetrahedron with deliberately distinct VOL/original node ordering.
+string vol = "mesh3d\ndimension\n3\nsurfaceelements\n4\n1 1 1 0 3 1 2 3\n2 2 1 0 3 1 2 4\n3 3 1 0 3 1 3 4\n4 4 1 0 3 2 3 4\nvolumeelements\n1\n7 4 1 3 2 4\nedgesegmentsgi2\n1\n1 0 1 2 -1 -1 0 0 1 0 9 1\npoints\n4\n0 0 0\n1 0 0\n0 1 0\n0 0 1\nendmesh\n";
+void RejectVol(string value) {
+    try { FileInOut.Input.NetgenVolFileReader.ReadLinearSolidData(value); }
+    catch (Exception e) when (e is System.IO.InvalidDataException or NotSupportedException or FormatException or ArgumentException or IndexOutOfRangeException or OverflowException) { return; }
+    throw new Exception("Malformed VOL accepted");
+}
+Check("original VOL tetra permutation, signed volume and source IDs", () => {
+    var m=FileInOut.Input.NetgenVolFileReader.ReadLinearSolidData(vol);
+    var e=(LinearTetraElement)m.Elements[5];
+    Require(e.NodeIds.SequenceEqual(new[]{1,2,3,4}) && e.PartId==7);
+    Near(e.GetVolume(m.Nodes),1d/6); Require(m.FaceNodeIds[4].SetEquals(new[]{2,3,4}) && m.EdgeNodeIds[9].SetEquals(new[]{1,2}));
+});
+Check("VOL decimal convention independent of current culture", () => {
+    var previous=CultureInfo.CurrentCulture;
+    try { CultureInfo.CurrentCulture=CultureInfo.GetCultureInfo("de-DE");
+        var m=FileInOut.Input.NetgenVolFileReader.ReadLinearSolidData(vol.Replace("1 0 0\n", "1.5 0 0\n"));
+        Near(m.Nodes[2].X,1.5);
+    } finally { CultureInfo.CurrentCulture=previous; }
+});
+Check("quadratic VOL tetra remains gated",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 10 1 3 2 4 1 2 3 4 1 2")));
+Check("inverted VOL tetra rejected",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 4 1 2 3 4")));
+Check("VOL missing node rejected",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 4 1 3 2 99")));
+Check("VOL truncated count rejected",()=>RejectVol(vol.Replace("points\n4", "points\n5")));
+Check("VOL nonfinite coordinate rejected",()=>RejectVol(vol.Replace("0 0 1\n", "0 0 NaN\n")));
+Check("VOL mismatched exterior boundary rejected",()=>RejectVol(vol.Replace("4 4 1 0 3 2 3 4", "4 4 1 0 3 1 2 3")));
+Check("VOL duplicate section rejected",()=>RejectVol(vol+"points\n1\n0 0 0\n"));
+Check("VOL oversized declared count rejected",()=>RejectVol(vol.Replace("points\n4", "points\n100001")));
 Console.WriteLine(JsonSerializer.Serialize(new {postRc2,success=failed==0,passed=checks.Count-failed,failed,checks,
     types=types.Select(t=>t.AssemblyQualifiedName),assemblies=assemblies.Select(a=>new{name=a.GetName().Name,references=a.GetReferencedAssemblies().Select(r=>r.FullName)}),
     runtime=new {os=RuntimeInformation.OSDescription,architecture=RuntimeInformation.ProcessArchitecture.ToString()},

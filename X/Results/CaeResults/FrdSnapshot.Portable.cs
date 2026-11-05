@@ -116,8 +116,10 @@ namespace CaeResults
                             if (nodes == null || elements != null || fields.Count > 0) throw new InvalidDataException("One element block after nodes is required.");
                             var empty = new HashSet<int>();
                             elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
-                            if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 || e.Value.GetType() != typeof(LinearHexaElement) || e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
-                                throw new NotSupportedException("Only complete C3D8 result meshes with valid node references are supported.");
+                            if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 ||
+                                (e.Value.GetType() != typeof(LinearHexaElement) && e.Value.GetType() != typeof(LinearTetraElement)) ||
+                                e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
+                                throw new NotSupportedException("Only complete C3D8/C3D4 result meshes with valid node references are supported; quadratic tetrahedra remain gated.");
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {

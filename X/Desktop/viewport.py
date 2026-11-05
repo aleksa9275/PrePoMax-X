@@ -15,7 +15,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
 from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, run_process
-from cad_job import CadImportJob
+from cad_job import CadImportJob, CadMeshJob
+from cad_document import CadDocument
 from cad_scene import read_cad_parts
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
@@ -114,7 +115,7 @@ def decode(path, *, cancel=None):
         command = ([str(Path(sys._MEIPASS) / "hosts/results/PrePoMaxX.InspectResults")] if packaged else
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
-        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8 FRD snapshot.")
+        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8/C3D4 FRD snapshot.")
     return run_reader(command, cancel=cancel)
 
 
@@ -131,6 +132,7 @@ def run_reader(command, *, cancel=None):
 
 class Viewport(QtWidgets.QMainWindow):
     cad_completed = QtCore.pyqtSignal(dict)
+    mesh_completed = QtCore.pyqtSignal(dict)
 
     def __init__(self, transport="frame-bridge", *, cad_tool=None):
         super().__init__()
@@ -140,6 +142,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.cad_tool = cad_tool
         self.cad_job = None
         self.cad_result = None
+        self.cad_document = self.cad_mesh = self.mesh_job = None
+        self.mesh_result = None
         self.selection = None
         self.current_path = None
         self.model_path = None
@@ -157,6 +161,8 @@ class Viewport(QtWidgets.QMainWindow):
         toolbar = self.addToolBar("View")
         open_label = "Open mesh, results or CAD" if cad_tool else "Open INP / FRD / VIS"
         self.open_action = toolbar.addAction(open_label, self.open_dialog)
+        self.mesh_action = toolbar.addAction("Mesh CAD…", self.mesh_cad_dialog)
+        self.mesh_action.setEnabled(False)
         self.pmx_action = toolbar.addAction("Open static PMX…", self.open_pmx_dialog)
         self.pmx_action.setVisible(pmx_available())
         self.edit_pmx_action = toolbar.addAction("Edit PMX…", self.edit_pmx)
@@ -238,7 +244,7 @@ class Viewport(QtWidgets.QMainWindow):
 
     @property
     def busy(self):
-        return self.job.active or self.cad_job is not None
+        return self.job.active or self.cad_job is not None or self.mesh_job is not None
 
     def update_model_tree(self):
         self.model_tree.clear()
@@ -363,6 +369,8 @@ class Viewport(QtWidgets.QMainWindow):
             mesh_bytes = updated.read_bytes()
             if hashlib.sha256(mesh_bytes).hexdigest() != scene['SourceSha256']:
                 raise ValueError('Edited mesh changed while loading the new set.')
+        if self.cad_mesh is not None:
+            scene["cadMesh"] = self.cad_mesh.scene["cadMesh"]
         if self.scene is self.model_scene:
             self.scene = scene
         self.model_scene, self.mesh_bytes = scene, mesh_bytes
@@ -418,7 +426,7 @@ class Viewport(QtWidgets.QMainWindow):
             else:
                 self.show_scene(self.model_scene, self.model_path)
             self.job.start(mesh, analysis, self.jobs_root, definition=definition,
-                           mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256)
+                           mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256, cad_mesh=self.cad_mesh)
             self.job_output.setPlainText(f"Job: {self.job.directory}\nSource: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             self.job_label.setText("Cannot start")
@@ -431,7 +439,11 @@ class Viewport(QtWidgets.QMainWindow):
         importing = self.cad_job is not None
         if importing:
             state = "Cancelling CAD" if self.cad_job.cancel_requested.is_set() else "Importing CAD"
-        active = importing or state in ('Starting', 'Running', 'Cancelling')
+        meshing = self.mesh_job is not None
+        if meshing:
+            state = "Cancelling mesh" if self.mesh_job.cancel_requested.is_set() else "Meshing CAD"
+        active = importing or meshing or state in ('Starting', 'Running', 'Cancelling')
+        self.mesh_action.setEnabled(not active and self.cad_document is not None)
         cad = self.scene is not None and "cad" in self.scene
         self.run_action.setEnabled(not active and not cad)
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
@@ -440,7 +452,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
-        self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD'))
+        self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD', 'Cancelling mesh'))
         self.job_label.setText(state)
 
     def refresh_job_output(self):
@@ -534,8 +546,13 @@ class Viewport(QtWidgets.QMainWindow):
             else:
                 QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CursorShape.WaitCursor)
                 try:
-                    with tempfile.TemporaryDirectory(prefix="prepomaxx-cad-") as directory:
-                        scene = read_cad_parts(path, self.cad_tool, decode, Path(directory) / "import")
+                    if isinstance(self.cad_tool, NativeCadTool):
+                        document = CadDocument(path, self.cad_tool, decode)
+                        self.set_cad_document(document.scene, path, document=document)
+                        return
+                    else:
+                        with tempfile.TemporaryDirectory(prefix="prepomaxx-cad-") as directory:
+                            scene = read_cad_parts(path, self.cad_tool, decode, Path(directory) / "import")
                 finally:
                     QtWidgets.QApplication.restoreOverrideCursor()
             self.set_cad_document(scene, path)
@@ -553,8 +570,17 @@ class Viewport(QtWidgets.QMainWindow):
                 self.job_state(self.job.state)
                 self.update_model_tree()
 
-    def set_cad_document(self, scene, path):
+    def release_cad(self):
+        if self.cad_mesh is not None:
+            self.cad_mesh.close()
+        if self.cad_document is not None:
+            self.cad_document.close()
+        self.cad_mesh = self.cad_document = None
+
+    def set_cad_document(self, scene, path, *, document=None):
         self.show_scene(scene, path)
+        self.release_cad()
+        self.cad_document = document
         self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
         self.analysis_valid = self.editor_dirty = False
         self.edit_pmx_action.setVisible(False)
@@ -578,6 +604,9 @@ class Viewport(QtWidgets.QMainWindow):
         if self.cad_job is not None:
             self.cad_job.cancel()
             self.job_state(self.job.state)
+        elif self.mesh_job is not None:
+            self.mesh_job.cancel()
+            self.job_state(self.job.state)
         else:
             self.job.cancel()
 
@@ -589,10 +618,12 @@ class Viewport(QtWidgets.QMainWindow):
         self.cad_job = None
         try:
             if result["success"]:
-                self.set_cad_document(result["scene"], job.source)
+                self.set_cad_document(result["scene"], job.source, document=result.get("document"))
         except (OSError, ValueError, KeyError) as error:
             result = {"success": False, "error": str(error)}
         self.cad_result = result
+        if not result["success"] and job.document is not None:
+            job.document.close()
         self.job_state(self.job.state)
         state = "CAD import complete" if result["success"] else (
             "CAD import cancelled" if result.get("cancelled") else "CAD import failed")
@@ -606,8 +637,66 @@ class Viewport(QtWidgets.QMainWindow):
         if self.closing_after_job:
             QtCore.QTimer.singleShot(0, self.close)
 
-    def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None):
+    def mesh_cad_dialog(self):
+        if self.busy or self.cad_document is None:
+            return
+        size, accepted = QtWidgets.QInputDialog.getDouble(self, "Mesh CAD — linear tetrahedra",
+            "Maximum element size (model units)",
+            max(max(n[axis] for n in self.cad_document.scene["nodes"]) -
+                min(n[axis] for n in self.cad_document.scene["nodes"]) for axis in ("x", "y", "z")) / 10,
+            0.000001, 1000000000, 6)
+        if accepted:
+            self.start_cad_mesh(size)
+
+    def start_cad_mesh(self, maximum_size):
+        if self.busy or self.cad_document is None:
+            raise ValueError("Open native CAD and finish the current operation before meshing.")
+        if not self.confirm_discard():
+            return
+        self.mesh_result = None
+        self.mesh_job = CadMeshJob(self.cad_document, mesh_command(), run_reader, maximum_size, self)
+        self.mesh_job.finished.connect(self.cad_mesh_finished)
+        self.job_state(self.job.state)
+        self.mesh_job.start()
+
+    def cad_mesh_finished(self):
+        job = self.mesh_job
+        result = job.result or {"success": False, "error": "Mesher did not return a result."}
+        if job.cancel_requested.is_set():
+            result = {"success": False, "cancelled": True}
+        self.mesh_job = None
+        try:
+            if result["success"]:
+                mesh = result["mesh"]
+                if mesh.document is not self.cad_document:
+                    raise ValueError("CAD document changed before mesh publication.")
+                self.set_model(mesh.mesh, mesh.scene, mesh.mesh_bytes, None, cad_mesh=mesh)
+                self.editor_dirty = True
+        except (OSError, ValueError, KeyError) as error:
+            result = {"success": False, "error": str(error)}
+        if not result["success"] and job.mesh is not None:
+            job.mesh.close()
+        self.mesh_result = result
+        self.job_state(self.job.state)
+        self.job_label.setText("CAD mesh ready" if result["success"] else
+                              "Meshing cancelled" if result.get("cancelled") else "Meshing failed")
+        if result.get("error"):
+            self.job_output.setPlainText(result["error"])
+            if not self.closing_after_job and not getattr(self, "automated_workflow", False):
+                QtWidgets.QMessageBox.critical(self, "Cannot mesh CAD", result["error"])
+        job.deleteLater()
+        self.mesh_completed.emit(result)
+        if self.closing_after_job:
+            QtCore.QTimer.singleShot(0, self.close)
+
+    def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None, cad_mesh=None):
         self.show_scene(scene, path)
+        if cad_mesh is None:
+            self.release_cad()
+        else:
+            if self.cad_mesh is not None:
+                self.cad_mesh.close()
+            self.cad_mesh = cad_mesh
         self.model_path, self.model_scene, self.mesh_bytes = path.resolve(), scene, mesh_bytes
         self.definition = copy.deepcopy(definition) if definition is not None else new_definition()
         self.pmx_session = pmx
@@ -770,12 +859,13 @@ class Viewport(QtWidgets.QMainWindow):
             self.job.cancel()
             event.ignore()
             return
-        if self.cad_job is not None:
+        if self.cad_job is not None or self.mesh_job is not None:
             self.closing_after_job = True
             self.cancel_operation()
             event.ignore()
             return
         self.vtk.Finalize()
+        self.release_cad()
         super().closeEvent(event)
 
     def confirm_discard(self):
@@ -882,7 +972,11 @@ def main():
     parser.add_argument("--editor-probe", type=Path, help="Exercise edited controls and two native jobs; write evidence to a new directory")
     parser.add_argument("--pmx-probe", type=Path, nargs=2, metavar=("INPUT", "OUTPUT"),
                         help="Exercise static PMX edit, save, reopen and solve in the desktop")
+    parser.add_argument("--cad-workflow-probe", type=Path, nargs=3, metavar=("CAD", "ANALYSIS", "OUTPUT"),
+                        help="Exercise native CAD to linear tetrahedra, editor and real static results")
     args = parser.parse_args()
+    if args.cad_workflow_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example):
+        parser.error("Use --cad-workflow-probe with --cad-native separately from other inputs/probes")
     if args.viewport_probe and (args.self_test or args.run_example):
         parser.error("Use --viewport-probe separately from solve/self-test")
     if args.editor_probe and (args.self_test or args.run_example or args.viewport_probe or args.input):
@@ -909,7 +1003,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe)
+    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -993,7 +1087,11 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.pmx_probe:
+    if args.cad_workflow_probe:
+        from cad_workflow_probe import begin
+        source, definition, output = (p.resolve() for p in args.cad_workflow_probe)
+        QtCore.QTimer.singleShot(500, lambda: begin(app, window, source, definition, output))
+    elif args.pmx_probe:
         from pmx_project import run_probe
         source, output = (path.resolve() for path in args.pmx_probe)
         QtCore.QTimer.singleShot(500, lambda: run_probe(app, window, source, output))

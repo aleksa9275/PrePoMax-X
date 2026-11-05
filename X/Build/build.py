@@ -153,6 +153,8 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
         "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),
         "cadImportSha256": sha(ROOT / "X/Desktop/cad_import.py"),
         "cadJobSha256": sha(ROOT / "X/Desktop/cad_job.py"),
+        "cadDocumentSha256": sha(ROOT / "X/Desktop/cad_document.py"),
+        "cadWorkflowProbeSha256": sha(ROOT / "X/Desktop/cad_workflow_probe.py"),
         "cadSceneSha256": sha(ROOT / "X/Desktop/cad_scene.py"),
         "desktopJobsSha256": sha(ROOT / "X/Desktop/jobs.py"), "target": build.target_id,
         "targetCatalogSha256": sha(CATALOG_PATH), "gitHead": build.report["repository"]["head"],

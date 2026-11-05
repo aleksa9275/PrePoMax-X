@@ -113,7 +113,7 @@ def main():
             test_command=['dotnet',work/'build/bin/Tests/release/PrePoMaxX.Tests.dll']+(['--post-rc2'] if post else [])
             tests=json.loads(run(test_command).stdout)
             report['tests']=tests
-            if not tests['success'] or tests['passed'] != 44 or tests['failed']: raise ValueError('Analysis tests incomplete or failed')
+            if not tests['success'] or tests['passed'] != 54 or tests['failed']: raise ValueError('Analysis tests incomplete or failed')
             report['regression'] = {}
             for project, assembly, expected_count, arguments in [('Mapping','CoreTests',25,[]),('Data','CoreDataTests',30,['--self-test']),('Elements','ElementTests',95,[]),('Mesh','MeshDeckTests',69,[])]:
                 result = json.loads(run(['dotnet',work/'build/bin'/project/'release'/('PrePoMaxX.'+assembly+'.dll'),*arguments]).stdout)

@@ -59,7 +59,8 @@ def verify(pin=BASELINE):
   if path.startswith('CaeResults/'):assert legacy.count(path.split('/',1)[1])==1,'Original result type ownership changed'
  for owner in ['CaeGlobals','CaeMesh']:
   base=ET.parse(ROOT/f'X/Analysis/{owner}/{owner}.csproj');project=ET.parse(ROOT/f'X/Results/{owner}/{owner}.csproj')
-  original_items=[c.attrib['Include']for c in base.findall('.//Compile')];items=[c.attrib['Include']for c in project.findall('.//Compile')]
+  native_only={'$(RepositoryRoot)'+p for p in analysis_layout.native_mesh_layout.ADDITIONS}|{'MeshSetupItem.Portable.cs'}
+  original_items=[c.attrib['Include']for c in base.findall('.//Compile') if c.attrib['Include'] not in native_only];items=[c.attrib['Include']for c in project.findall('.//Compile')]
   extra=['$(RepositoryRoot)CaeGlobals/Tools.Results.cs']if owner=='CaeGlobals'else['$(RepositoryRoot)CaeMesh/Globals.cs','$(RepositoryRoot)CaeMesh/CalculixNameShortener.cs']
   assert sorted(items)==sorted(original_items+extra),'Results base closure differs'
  mesh_legacy=[c.attrib['Include'].replace('\\','/')for c in ET.parse(ROOT/'CaeMesh/CaeMesh.csproj').findall('.//m:Compile',ns)]

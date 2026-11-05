@@ -235,6 +235,7 @@
     <Compile Include="Meshing\Netgen\SetupItems\NetgenMesh.cs" />
     <Compile Include="Meshing\Base\MesherTypeEnum.cs" />
     <Compile Include="Meshing\Base\MeshSetupItem.cs" />
+    <Compile Include="Meshing\Base\MeshSetupItem.Legacy.cs" />
     <Compile Include="Nodes\MergeCoincidentNodes.cs" />
     <Compile Include="Parts\IStoreAsNameInCommands.cs" />
     <Compile Include="Parts\NodalDataStructures.cs" />

@@ -1,5 +1,17 @@
 # Project status
 
+## Current — task 0067: native CAD to static results
+
+Native Mac/Linux ARM64 complete the two-part CAD → original first-order VOL/INP
+→ editable static analysis → CalculiX → original FRD/viewport path: 211 nodes,
+563 C3D4 elements, analytical displacement/stress checks. Both packaged Mac
+viewports and the Linux ARM64 Qt bridge pass. Frozen jobs retain verified CAD,
+mesh and native recipe inputs; cancellation preserves the previous document.
+Existing checked PMX/C3D8 workflows pass. [Evidence](reports/native-cad-static-workflow.md).
+Linux x64 is deferred to Podman on Windows near finishing under D059. No hosted
+CI runs/retries under D058. Full parity, persistence, both correctness failures,
+quadratic tetrahedra and release acceptance remain open.
+
 ## Current — task 0066: original CAD command roundtrips
 
 Native Mac/Linux ARM64 and the pinned Windows reference pass valid-box repair,

@@ -1,5 +1,18 @@
 # Native CAD continuation — 5 November 2026
 
+Task 0067 completes the bounded native CAD → first-order C3D4 → static results
+workflow, verified through the real desktop on Mac/Linux ARM64. Read
+[the new report](../reports/native-cad-static-workflow.md) and its receipt first.
+Linux x64 tests are explicitly deferred to Podman on Windows at finishing (D059).
+No hosted CI runs/retries without explicit new instruction (D058).
+The current candidate and remote publication identity are recorded in the new
+receipt; the task 0064 app below is historical and will be pruned at closeout.
+Next: geometry-backed mesh region selection and an explicit reviewed CAD/mesh
+persistence boundary. General PMX, broader meshers/analyses, Windows/net48, both
+known correctness failures, the quadratic tetrahedron gate and all parity/release
+acceptance stay open.
+
+
 Read current STATUS, D058 and [the native CAD report](../reports/native-cad-meshing.md).
 The original custom sources are recovered; earlier "source unlocated" notes are
 historical. Original source bytes and separate POSIX patches are under

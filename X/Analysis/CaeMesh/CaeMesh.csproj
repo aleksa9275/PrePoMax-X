@@ -37,5 +37,11 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/3D/ParabolicTetraElement.cs" Link="Elements/3D/ParabolicTetraElement.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/3D/ParabolicWedgeElement.cs" Link="Elements/3D/ParabolicWedgeElement.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/CoordinateSystem.cs" Link="CoordinateSystem.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Base/MeshSetupItem.cs" Link="CaeMesh/Meshing/Base/MeshSetupItem.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Base/MeshingParameters.cs" Link="CaeMesh/Meshing/Base/MeshingParameters.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Base/MesherTypeEnum.cs" Link="CaeMesh/Meshing/Base/MesherTypeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/TransfiniteThreeSidedEnum.cs" Link="CaeMesh/Meshing/Gmsh/Enums/TransfiniteThreeSidedEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Netgen/Enums/NetgenTransfiniteFacesEnum.cs" Link="CaeMesh/Meshing/Netgen/Enums/NetgenTransfiniteFacesEnum.cs" />
+    <Compile Include="MeshSetupItem.Portable.cs" />
   </ItemGroup>
 </Project>

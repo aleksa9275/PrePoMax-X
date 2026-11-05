@@ -236,6 +236,7 @@
     <Compile Include="FileInOut\Input\UnvMesh\UnvFeDescriptorId.cs" />
     <Compile Include="FileInOut\Input\UnvMesh\UnvFileReader.cs" />
     <Compile Include="FileInOut\Input\Netgen\NetgenVolFileReader.cs" />
+    <Compile Include="FileInOut\Input\Netgen\NetgenVolFileReader.Parsing.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalCentrifLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\CalBuckleStep.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalGravityLoad.cs" />

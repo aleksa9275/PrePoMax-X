@@ -1,6 +1,8 @@
 # Task 0067 — Native CAD to static results workflow
 
-Prepared next increment under the maintainer's native CAD/meshing continuation.
+Completed 5 November 2026 under the maintainer's explicit continuation.
+[Implementation and checks](../reports/native-cad-static-workflow.md); publication
+and retained candidate identity are in the linked verification receipt.
 Task 0063 supplies original native import/meshing and task 0064 connects CAD
 inspection. Complete one bounded desktop path from checked CAD through a native
 first-order mesh, original engineering objects/deck, CalculiX and original results.
@@ -21,6 +23,6 @@ first-order mesh, original engineering objects/deck, CalculiX and original resul
   the job. Preserve current INP, checked PMX, C3D8 and reference CAD workflows.
 
 Use Mac/Linux ARM64 local builds and the retained OCCT cache for routine work.
-Reserve hosted x64 CAD/kernel/package checks for the integration milestone under
-task 0065's quota policy. General CAD/project persistence, broad analyses, native
+Linux x64 is deferred to Podman on a Windows machine at the finishing phase
+under D059. Do not start hosted checks under D058. General CAD/project persistence, broad analyses, native
 Windows acceptance and full 3.0.0/four-target/release requirements stay separate.

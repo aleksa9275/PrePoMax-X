@@ -53,5 +53,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleDOFConverter.cs" Link="UnitSystem/StringToDouble/StringAngleDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs" Link="UnitSystem/StringToDouble/StringLengthDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleConverter.cs" Link="UnitSystem/StringToDouble/StringAngleConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Comparers/CompareDoubleArray.cs" Link="Comparers/CompareDoubleArray.cs" />
   </ItemGroup>
 </Project>

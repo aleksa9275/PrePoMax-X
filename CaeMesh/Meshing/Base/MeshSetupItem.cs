@@ -8,7 +8,6 @@
 // Contributors:
 
 using CaeGlobals;
-using Octree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ using System.Threading.Tasks;
 namespace CaeMesh
 {
     [Serializable]
-    public abstract class MeshSetupItem : NamedClass, ISerializable
+    public abstract partial class MeshSetupItem : NamedClass, ISerializable
     {
         // Variables                                                                                                                
         protected int[] _creationIds;               //ISerializable
@@ -69,13 +68,6 @@ namespace CaeMesh
             // Do not clear the selection
             //_creationIds = null;
             //_creationData = null;
-        }
-        public void CopyFrom(MeshSetupItem meshSetupItem)
-        {
-            base.CopyFrom(meshSetupItem);
-            //
-            _creationIds = meshSetupItem.CreationIds?.ToArray();
-            _creationData = meshSetupItem.CreationData?.DeepCopy(true, false);
         }
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)

@@ -1,0 +1,902 @@
+{
+  "task": "0067",
+  "recordedDate": "2026-11-05",
+  "scope": "Bounded first-order native CAD static workflow; full parity/release gates remain open",
+  "hostedCi": "Not started; D058 hold; push uses ci.skip",
+  "linuxX64": "Deferred to Podman on Windows near finishing under D059",
+  "publication": {
+    "status": "Prepared; remote identity recorded at closeout"
+  },
+  "localEvidence": "/tmp/prepomaxx-task0067-evidence",
+  "checks": {
+    "core": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0067-evidence/current-checks/core-current.json",
+      "sha256": "e985b37bc1f1bfc8e1b6013315cea24e7250673c4fd5455949b3c55f96646813",
+      "passed": null
+    },
+    "analysis": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0067-evidence/final-checks/analysis-current.json",
+      "sha256": "14b0bbaa6e095e32fa08b09f0c938bfb69951b46057a2a949049e2405e959faf",
+      "passed": 54,
+      "staticPassed": 70,
+      "regressionPassed": {
+        "Mapping": 25,
+        "Data": 30,
+        "Elements": 95,
+        "Mesh": 69
+      },
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ]
+    },
+    "execution": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0067-evidence/final-checks/execution-current.json",
+      "sha256": "2a4a6561b21164bab00f4be796a5b9fa9de4b17217f0620e72bc1c20db42b0e4",
+      "passed": 49
+    },
+    "results": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0067-evidence/results-checks/results-current.json",
+      "sha256": "461d02be47ff18fb91a63317d92273ab1f35a60e714128c776fab7c2f31b20fd",
+      "passed": 78
+    }
+  },
+  "workflows": {
+    "sourceMac": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/source-gui/workflow.json",
+      "reportSha256": "2ace75183f426bf5bff2fe99d06e5af1105d5caf47310b121cb39030cc96cea8",
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "nodes": 211,
+      "elements": 563,
+      "job": {
+        "workspace": "/private/tmp/prepomaxx-task0067-evidence/source-jobs/20261105-154106-db81e2ae3290",
+        "directory": "/private/tmp/prepomaxx-task0067-evidence/source-jobs/20261105-154106-db81e2ae3290/solve",
+        "inputDirectory": "/private/tmp/prepomaxx-task0067-evidence/source-jobs/20261105-154106-db81e2ae3290/inputs"
+      },
+      "solverOutputs": {
+        "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+        "analysis.frd": "55196b4128df3e5db3b6bdf6c69857c2e800a3f4f073e9579c39307c3b637143",
+        "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+        "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "_output_analysis.txt": "9421945606304f5932261147f1db426f72e50fb55102f988ad33d3a1338f78a7",
+        "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.inp": "349fc30c3c442b28ac876d0c2d1b328fe1602d9c15afa7a2212b7e7ee79d150f",
+        "analysis.dat": "015d6fb63b45f81bb3960a5db247eb09383aec79c269f9b238f5ae2b168e6e75"
+      }
+    },
+    "packagedMacBridge": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/package-bridge/workflow.json",
+      "reportSha256": "0213f0009d0c042092b86c71f3a762f84402866887389323566d613735d1480f",
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "nodes": 211,
+      "elements": 563,
+      "job": {
+        "workspace": "/private/tmp/prepomaxx-task0067-evidence/package-bridge-jobs/20261105-154713-616fd0cdac9c",
+        "directory": "/private/tmp/prepomaxx-task0067-evidence/package-bridge-jobs/20261105-154713-616fd0cdac9c/solve",
+        "inputDirectory": "/private/tmp/prepomaxx-task0067-evidence/package-bridge-jobs/20261105-154713-616fd0cdac9c/inputs"
+      },
+      "solverOutputs": {
+        "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+        "analysis.frd": "322d6799576cede02e3a3aecd9604c8240f6e5264a6595eea4bd0fdd1e1b7627",
+        "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+        "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "_output_analysis.txt": "3d08ae777b2dca7b531b83cb8925ccab81daa1aa8447463007f2c5576615173f",
+        "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.inp": "349fc30c3c442b28ac876d0c2d1b328fe1602d9c15afa7a2212b7e7ee79d150f",
+        "analysis.dat": "015d6fb63b45f81bb3960a5db247eb09383aec79c269f9b238f5ae2b168e6e75"
+      }
+    },
+    "packagedMacCocoa": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/package-cocoa/workflow.json",
+      "reportSha256": "6402af0197017990309164013dd6f8b2ba1ca67ce57468afb194360fd189dd21",
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "nodes": 211,
+      "elements": 563,
+      "job": {
+        "workspace": "/private/tmp/prepomaxx-task0067-evidence/package-cocoa-jobs/20261105-154746-ca391043e5f7",
+        "directory": "/private/tmp/prepomaxx-task0067-evidence/package-cocoa-jobs/20261105-154746-ca391043e5f7/solve",
+        "inputDirectory": "/private/tmp/prepomaxx-task0067-evidence/package-cocoa-jobs/20261105-154746-ca391043e5f7/inputs"
+      },
+      "solverOutputs": {
+        "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+        "analysis.frd": "0a90879c96179c80af106513861a43526bbea08928fdce705180efed7dc3975e",
+        "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+        "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "_output_analysis.txt": "0e1c19bbdfa0415effc20556542474bfdab699d99f0d4a1d7fda527bfd7499fb",
+        "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.inp": "349fc30c3c442b28ac876d0c2d1b328fe1602d9c15afa7a2212b7e7ee79d150f",
+        "analysis.dat": "015d6fb63b45f81bb3960a5db247eb09383aec79c269f9b238f5ae2b168e6e75"
+      }
+    },
+    "linuxArm64Cli": {
+      "success": true,
+      "checks": [
+        {
+          "name": "two native parts merged without fusing nodes",
+          "passed": true
+        },
+        {
+          "name": "original linear tetrahedral cells",
+          "passed": true
+        },
+        {
+          "name": "native solver executed and completed",
+          "passed": true
+        },
+        {
+          "name": "original FRD preserves all tetrahedra",
+          "passed": true
+        },
+        {
+          "name": "analytical displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen CAD and meshing bytes match",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/linux/workflow/workflow.json",
+      "reportSha256": "6ee437baeb28a44bfcde96485c99f61fe90d3f2aa11c5a6a206df12ff2c0e2a8",
+      "maximumDisplacementError": 9.99999999907325e-09
+    },
+    "linuxArm64Desktop": {
+      "success": true,
+      "checks": [
+        {
+          "name": "native retained two-part import",
+          "passed": true
+        },
+        {
+          "name": "meshing disables replacement and solve",
+          "passed": true
+        },
+        {
+          "name": "all parts publish one linear tetrahedral model",
+          "passed": true
+        },
+        {
+          "name": "source CAD face and edge sets retained",
+          "passed": true
+        },
+        {
+          "name": "real static editor opens for generated C3D4",
+          "passed": true
+        },
+        {
+          "name": "invalid material blocks submission",
+          "passed": true
+        },
+        {
+          "name": "original C# validation accepts C3D4 controls",
+          "passed": true
+        },
+        {
+          "name": "applied analysis can run",
+          "passed": true
+        },
+        {
+          "name": "actual native CalculiX completes",
+          "passed": true
+        },
+        {
+          "name": "original FRD reader and viewport retain C3D4",
+          "passed": true
+        },
+        {
+          "name": "analytical affine displacement at every node",
+          "passed": true
+        },
+        {
+          "name": "analytical unit axial stress at every node",
+          "passed": true
+        },
+        {
+          "name": "frozen job records original mesh and both CAD parts",
+          "passed": true
+        },
+        {
+          "name": "frozen native recipe verified",
+          "passed": true
+        },
+        {
+          "name": "all frozen CAD bytes verified",
+          "passed": true
+        },
+        {
+          "name": "result display captured",
+          "passed": true
+        },
+        {
+          "name": "retained input tampering blocks a later submission",
+          "passed": true
+        },
+        {
+          "name": "document cleanup keeps immutable job inputs",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/linux/gui-final/workflow.json",
+      "reportSha256": "f071f54fd1ebb12906866318f5c48ccec7d429cd7fc0c3f66ffe47d20ce6f776",
+      "maximumDisplacementError": 9.99999999907325e-09,
+      "nodes": 211,
+      "elements": 563,
+      "job": {
+        "workspace": "/out/gui-final-jobs/20261105-155336-6298d7c13249",
+        "directory": "/out/gui-final-jobs/20261105-155336-6298d7c13249/solve",
+        "inputDirectory": "/out/gui-final-jobs/20261105-155336-6298d7c13249/inputs"
+      },
+      "solverOutputs": {
+        "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+        "analysis.frd": "08333c5812a46ca3eedc3ad4704a6f10aed7248867d14a5443c8b009fa5bb9de",
+        "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+        "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "_output_analysis.txt": "21884e963e40566c018c7d079f7914a12b9afb4d245ecfd2bf1fe40afe566c36",
+        "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "analysis.inp": "a74b8b43aebcc2d02a1a266beae8cde981c17ef29a1f588ef76bbb80f0415ab8",
+        "analysis.dat": "6d267096d1d7a2fc0bae7da2e84f1e71490a07a03d60d7f6182e0f43eacc1aa5"
+      }
+    },
+    "checkedPmxRegression": {
+      "success": true,
+      "checks": [
+        {
+          "name": "PMX action is available",
+          "passed": true
+        },
+        {
+          "name": "Baseline project opened in the model tree and viewport",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Opened baseline material and load",
+          "passed": true
+        },
+        {
+          "name": "Invalid modulus leaves no file",
+          "passed": true
+        },
+        {
+          "name": "Save As publishes a verified PMX",
+          "passed": true
+        },
+        {
+          "name": "Save As refuses an existing file",
+          "passed": true
+        },
+        {
+          "name": "Opened the static PMX dialog",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen shows saved equations",
+          "passed": true
+        },
+        {
+          "name": "Fresh reopen renders the original mesh IDs",
+          "passed": true
+        },
+        {
+          "name": "Unsupported PMX preserves the active model",
+          "passed": true
+        },
+        {
+          "name": "Run analysis launched the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Native solver completed the PMX job",
+          "passed": true
+        },
+        {
+          "name": "Frozen inputs identify the reopened PMX and validated definition",
+          "passed": true
+        },
+        {
+          "name": "Executed deck matches the original C# validation",
+          "passed": true
+        },
+        {
+          "name": "Result fields loaded in the viewport with the PMX model retained",
+          "passed": true
+        },
+        {
+          "name": "Both project files are unchanged after solve",
+          "passed": true
+        }
+      ],
+      "localReport": "/tmp/prepomaxx-task0067-evidence/pmx-regression/verification.json",
+      "reportSha256": "0d47b84669088dc194e9bc3f5627345ce2134fbc8b58f574928dc671e68d40dc",
+      "job": {}
+    }
+  },
+  "regressionLogs": {
+    "desktop": {
+      "passed": 33,
+      "path": "/tmp/prepomaxx-task0067-evidence/desktop-tests-final.log",
+      "sha256": "9e85528b11cbbb3b2f0306fba18c71245d3b131c3c8fe6fbad15f3ed564ec8ad"
+    },
+    "analysisGuards": {
+      "passed": 11,
+      "path": "/tmp/prepomaxx-task0067-evidence/analysis-guards-final.log",
+      "sha256": "e6e73dc2ce3180d4a2d4c628714406530aee66ab105dcfbdd5cfa3439f2be6cd"
+    },
+    "resultsGuards": {
+      "passed": 9,
+      "path": "/tmp/prepomaxx-task0067-evidence/results-guards.log",
+      "sha256": "aa5ebffb24ae7529df2ea26a2abb6b8308b6b3bcd7766c4993af4853d7d19469"
+    },
+    "buildGuards": {
+      "passed": 9,
+      "path": "/tmp/prepomaxx-task0067-evidence/build-guards.log",
+      "sha256": "44da5ff3d8732677572559b618a09686fa21efd87af4d2b415dc65f98118d47f"
+    }
+  },
+  "linuxArm64AnalysisTests": {
+    "postRc2": false,
+    "success": true,
+    "passed": 54,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "original arithmetic equation",
+        "passed": true
+      },
+      {
+        "name": "original expression functions and pi",
+        "passed": true
+      },
+      {
+        "name": "original conditional expression",
+        "passed": true
+      },
+      {
+        "name": "original distance callbacks",
+        "passed": true
+      },
+      {
+        "name": "original dotted parameter cache and updates",
+        "passed": true
+      },
+      {
+        "name": "original array evaluation",
+        "passed": true
+      },
+      {
+        "name": "unknown equation parameter rejected",
+        "passed": true
+      },
+      {
+        "name": "nonfinite equation rejected",
+        "passed": true
+      },
+      {
+        "name": "pressure quantity conversion GPa to MPa",
+        "passed": true
+      },
+      {
+        "name": "temperature Fahrenheit to Celsius",
+        "passed": true
+      },
+      {
+        "name": "length mm to inches",
+        "passed": true
+      },
+      {
+        "name": "force kN to N",
+        "passed": true
+      },
+      {
+        "name": "original material positive modulus validation",
+        "passed": true
+      },
+      {
+        "name": "original duplicate elastic exclusion",
+        "passed": true
+      },
+      {
+        "name": "original equation presence and property lookup",
+        "passed": true
+      },
+      {
+        "name": "original orthotropic material stability",
+        "passed": true
+      },
+      {
+        "name": "original orthotropic unstable data rejected",
+        "passed": true
+      },
+      {
+        "name": "original lamina material validation",
+        "passed": true
+      },
+      {
+        "name": "original lamina unstable data rejected",
+        "passed": true
+      },
+      {
+        "name": "pinned lamina stability behavior is preserved",
+        "passed": true
+      },
+      {
+        "name": "pinned composite-strength capability is preserved",
+        "passed": true
+      },
+      {
+        "name": "original nonelastic material types callable",
+        "passed": true
+      },
+      {
+        "name": "original elastic serializable field contract without unsafe serializer",
+        "passed": true
+      },
+      {
+        "name": "original legacy elastic constructor contract",
+        "passed": true
+      },
+      {
+        "name": "original CalculiX numeric formatter",
+        "passed": true
+      },
+      {
+        "name": "actual isotropic keyword fragment",
+        "passed": true
+      },
+      {
+        "name": "equation material export preserves equations",
+        "passed": true
+      },
+      {
+        "name": "culture-aware evaluation and invariant deck without source mutation",
+        "passed": true
+      },
+      {
+        "name": "null material rejected",
+        "passed": true
+      },
+      {
+        "name": "empty material rejected",
+        "passed": true
+      },
+      {
+        "name": "inactive material rejected",
+        "passed": true
+      },
+      {
+        "name": "invalid material rejected",
+        "passed": true
+      },
+      {
+        "name": "temperature dependence not silently omitted",
+        "passed": true
+      },
+      {
+        "name": "extra property not silently omitted",
+        "passed": true
+      },
+      {
+        "name": "multiple rows not silently omitted",
+        "passed": true
+      },
+      {
+        "name": "negative modulus rejected at material boundary",
+        "passed": true
+      },
+      {
+        "name": "nonfinite constant rejected at material boundary",
+        "passed": true
+      },
+      {
+        "name": "unstable isotropic Poisson ratio rejected -1",
+        "passed": true
+      },
+      {
+        "name": "unstable isotropic Poisson ratio rejected 0.5",
+        "passed": true
+      },
+      {
+        "name": "unstable isotropic Poisson ratio rejected 1",
+        "passed": true
+      },
+      {
+        "name": "non-simple keyword name rejected",
+        "passed": true
+      },
+      {
+        "name": "material field array corruption rejected",
+        "passed": true
+      },
+      {
+        "name": "original assembly identities and serialized type markers",
+        "passed": true
+      },
+      {
+        "name": "expanded assemblies have no desktop platform references",
+        "passed": true
+      },
+      {
+        "name": "original VOL tetra permutation, signed volume and source IDs",
+        "passed": true
+      },
+      {
+        "name": "VOL decimal convention independent of current culture",
+        "passed": true
+      },
+      {
+        "name": "quadratic VOL tetra remains gated",
+        "passed": true
+      },
+      {
+        "name": "inverted VOL tetra rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL missing node rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL truncated count rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL nonfinite coordinate rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL mismatched exterior boundary rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL duplicate section rejected",
+        "passed": true
+      },
+      {
+        "name": "VOL oversized declared count rejected",
+        "passed": true
+      }
+    ],
+    "types": [
+      "CaeGlobals.EquationContainer, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeGlobals.EquationString, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeGlobals.MyNCalc, CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeGlobals.OrderedDictionary`2[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.Material, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.Elastic, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.MaterialProperty, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.ElasticEngineeringConstants, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.ElasticLamina, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "CaeModel.MaterialDeckWriter, CaeModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    ],
+    "assemblies": [
+      {
+        "name": "CaeGlobals",
+        "references": [
+          "System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Collections, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.ComponentModel.Primitives, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Collections.Concurrent, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.ComponentModel.TypeConverter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "NCalc, Version=1.3.8.0, Culture=neutral, PublicKeyToken=973cde3f1cafed03",
+          "UnitsNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=f8601875a1f041da",
+          "System.Linq, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Threading, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        ]
+      },
+      {
+        "name": "CaeMesh",
+        "references": [
+          "System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Collections, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "System.Drawing.Primitives, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Linq, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        ]
+      },
+      {
+        "name": "CaeModel",
+        "references": [
+          "System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Collections, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "CaeGlobals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "System.Drawing.Primitives, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Linq, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Text.RegularExpressions, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Threading, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+          "System.Memory, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51"
+        ]
+      }
+    ],
+    "runtime": {
+      "os": "Ubuntu 24.04.5 LTS",
+      "architecture": "Arm64"
+    },
+    "limitations": [
+      "Material fragment only; no section/step/BC/load/solve",
+      "NCalc 1.3.8 retains NU1701 compatibility warning",
+      "No production serializer selected or unsafe serialization enabled"
+    ]
+  },
+  "preliminaryCandidate": {
+    "app": "/tmp/prepomaxx-task0067-current/dist/PrePoMax-X-Viewport.app",
+    "sourceIdentity": {
+      "viewportSha256": "4f17550730656a6a0975906830d951130c2201a9292d9675cbba5c7e9b2532f5",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "85c7844e293f9604736998303df9a6e26605d24029b04f6f21e758333806c8b6",
+      "cadJobSha256": "c1e763b51195c3393776bd1a94a1b21d54a3fd6a7efb6ec605510b248b78aa94",
+      "cadDocumentSha256": "f65db6b1482048e888437cdb3b0c9f5e0d94fa5928c9029e76bee1ddfdd7e072",
+      "cadWorkflowProbeSha256": "9fa54499397d96662aca6965be21786e7c7b2028eb65dcb8f7340f7e17464b8f",
+      "cadSceneSha256": "a914db43434c91c9344e8e1842525c116bfa4ea5249fe60a859313500b5237d6",
+      "desktopJobsSha256": "c6169106aab887b3af29983bda3d38f36ca978bc6bb45c345af590a9bb775470",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "a293e892971214e6141b44e16838ef916701b5c3",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "2e14d970acf188e30c3aee9944e97234ac6c40a0aae6cb7ce2b0e6bbeb757054",
+      "pmxToolHashes": {
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "b09d081e6ec61a68c7d1b318dc765cf9663d761361471ff84b76ca2cda233df3",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "scope": "Prepublication working tree, source hashes verified; final publication candidate recorded at closeout"
+  }
+}

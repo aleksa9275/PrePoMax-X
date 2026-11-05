@@ -1,5 +1,12 @@
 # Decision register
 
+D059 — Deferred Linux x64 verification, 2026-11-05: the maintainer resumes
+task 0067 and chooses Podman on a Windows machine for Linux x64 testing at
+the finishing phase. Continue native Mac/Linux ARM64 development and local
+verification now. Linux x64 remains pending until that actual environment is
+executed. D058's hosted CI hold remains; this does not authorize a hosted run,
+change any engineering check or close platform/release acceptance.
+
 D058 — Hosted runner quota hold, 2026-11-05: the maintainer warns that the
 first uncached x64 CAD build consumes the remaining monthly CI allowance and
 hosted CI will be unavailable for the next 25 days. Let the current test finish;

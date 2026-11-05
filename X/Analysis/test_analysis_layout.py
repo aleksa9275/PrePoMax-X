@@ -7,7 +7,25 @@ import analysis_layout as layout
 
 class SourceContracts(unittest.TestCase):
     def test_current_closure(self):
-        self.assertEqual(len(layout.source_rows()), 146)
+        self.assertEqual(len(layout.source_rows()), 155)
+
+    def test_vol_permutation_edit_rejected(self):
+        read = Path.read_text
+        def changed(path, *args, **kwargs):
+            value = read(path, *args, **kwargs)
+            if path == layout.ROOT / (layout.native_mesh_layout.VOL + '.Parsing.cs'):
+                return value.replace('nodes[1] = int.Parse(record[4]);', 'nodes[1] = int.Parse(record[3]);')
+            return value
+        with patch.object(Path, 'read_text', changed), self.assertRaises(ValueError):
+            layout.native_mesh_layout.rows()
+
+    def test_original_windows_selection_copy_edit_rejected(self):
+        read = Path.read_text
+        def changed(path, *args, **kwargs):
+            value = read(path, *args, **kwargs)
+            return value.replace('DeepCopy(true, false)', 'DeepCopy(false, false)') if path == layout.ROOT / (layout.native_mesh_layout.SETUP + '.Legacy.cs') else value
+        with patch.object(Path, 'read_text', changed), self.assertRaises(ValueError):
+            layout.native_mesh_layout.rows()
 
     def test_equation_algorithm_edit_rejected(self):
         original = layout.original

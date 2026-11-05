@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0067 completes the bounded native CAD → C3D4 mesh → static native solve →
+original FRD desktop path on Mac/Linux ARM64, with original VOL/parameter code
+and frozen CAD job inputs. Read .project/reports/native-cad-static-workflow.md
+and .project/handoffs/native-cad-next-session.md. D058 forbids hosted CI runs or
+retries without explicit maintainer instruction. D059 defers Linux x64 tests to
+Podman on Windows near finishing. Normal research-branch publication remains
+authorized with CI skipped. General CAD/mesh persistence, both correctness
+failures, quadratic tetrahedra, full 3.0.0 parity and all release gates stay open.
+
 Tasks 0060–0062 add bounded multi-part reference conversion, part-scoped
 source identities and desktop display/picking of all emitted parts.
 The two-body original Windows app capture and repeat tool outputs

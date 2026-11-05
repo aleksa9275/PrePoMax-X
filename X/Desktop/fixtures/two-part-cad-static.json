@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "Elastic",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section-1",
+      "material": "Elastic",
+      "elementSet": "PART_1_SOLID_1"
+    },
+    {
+      "name": "Section-2",
+      "material": "Elastic",
+      "elementSet": "PART_2_SOLID_1"
+    }
+  ],
+  "step": {
+    "name": "Static",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Transverse",
+        "nodeSet": "ALL_NODES",
+        "displacements": [
+          "0",
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Bottom-1",
+        "nodeSet": "PART_1_FACE_5",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      },
+      {
+        "name": "Top-1",
+        "nodeSet": "PART_1_FACE_6",
+        "displacements": [
+          null,
+          null,
+          "0.02"
+        ]
+      },
+      {
+        "name": "Bottom-2",
+        "nodeSet": "PART_2_FACE_5",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      },
+      {
+        "name": "Top-2",
+        "nodeSet": "PART_2_FACE_6",
+        "displacements": [
+          null,
+          null,
+          "0.012"
+        ]
+      }
+    ],
+    "loads": [],
+    "nodalHistorySets": [
+      "PART_1_FACE_6",
+      "PART_2_FACE_6"
+    ],
+    "elementHistorySets": [
+      "PART_1_SOLID_1",
+      "PART_2_SOLID_1"
+    ]
+  }
+}

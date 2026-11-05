@@ -58,7 +58,7 @@ class DesktopJob(QtCore.QObject):
         return self.process is not None and self.process.state() != QtCore.QProcess.ProcessState.NotRunning
 
     def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *,
-              definition=None, mesh_bytes=None, pmx_sha256=None):
+              definition=None, mesh_bytes=None, pmx_sha256=None, cad_mesh=None):
         if self.active:
             raise ValueError('A job is already running.')
         mesh = Path(mesh).resolve()
@@ -92,6 +92,10 @@ class DesktopJob(QtCore.QObject):
                 'scope': 'Immutable submitted job input; not project persistence'}
             if pmx_sha256 is not None:
                 identity['sourcePmxSha256'] = pmx_sha256
+            if cad_mesh is not None:
+                cad = cad_mesh.freeze(self.input_directory / 'cad')
+                identity['sourceCadSha256'] = cad['sourceSha256']
+                identity['baseCadMeshSha256'] = cad['baseMeshSha256']
             (self.input_directory / 'input-identity.json').write_text(json.dumps(identity, indent=2) + '\n')
         self.stdout, self.stderr = bytearray(), bytearray()
         self.result, self.requested_cancel = None, False

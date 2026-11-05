@@ -7,6 +7,9 @@ using CaeModel;
 using FileInOut.Input;
 using PrePoMaxX.MeshDeck;
 
+if (args.Length > 0 && args[0] is "netgen-parameters" or "from-vol")
+    return NativeMeshCommands.Run(args);
+
 bool addSet = args.Length == 6 && args[0] == "add-set";
 if (args.Length != 1 && !addSet)
 {

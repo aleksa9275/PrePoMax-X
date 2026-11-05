@@ -64,5 +64,8 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalOpParameter.cs" Link="Keywords/CalOpParameter.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Distributions/Distribution.cs" Link="Distributions/Distribution.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs" Link="StaticAnalysisDeckWriter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.Parsing.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.Parsing.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" />
   </ItemGroup>
 </Project>

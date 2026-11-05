@@ -6,6 +6,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 import static_layout
+import native_mesh_layout
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -48,6 +49,7 @@ def source_rows(revision=BASELINE):
     manifest = json.loads((HERE / 'analysis-sources.json').read_text())
     if manifest['baseline'] != BASELINE:
         raise ValueError('Analysis baseline changed')
+    native_rows = native_mesh_layout.rows()
     rows = manifest['sources']
     if len({row['path'] for row in rows}) != len(rows):
         raise ValueError('Duplicate source manifest entry')
@@ -87,11 +89,11 @@ def source_rows(revision=BASELINE):
             elif upstream != baseline:
                 raise ValueError('Unreviewed upstream analysis source changed: ' + name)
     variant_additions = set().union(*(set(v) for v in manifest.get('reviewedVariants', {}).values())) - {r['path'] for r in rows}
-    expected = {r['path'] for r in core_rows + rows} | variant_additions
+    expected = {r['path'] for r in core_rows + rows + native_rows} | variant_additions
     actual = []
     for owner in ['CaeGlobals', 'CaeMesh', 'CaeResults', 'CaeModel']:
         project = ET.parse(HERE / owner / (owner + '.csproj'))
-        owned = [c.attrib['Include'].replace('$(RepositoryRoot)', '') for c in project.findall('.//Compile')]
+        owned = [c.attrib['Include'].replace('$(RepositoryRoot)', '') for c in project.findall('.//Compile') if c.attrib['Include'] != 'MeshSetupItem.Portable.cs']
         if any(not p.startswith(owner + '/') for p in owned):
             raise ValueError('Original assembly ownership changed: ' + owner)
         actual.extend(owned)
@@ -110,6 +112,10 @@ def source_rows(revision=BASELINE):
                 if (ROOT / p).exists():
                     raise ValueError('Upstream-only type must not silently enter the baseline build')
                 continue
+            if p in native_mesh_layout.PORTABLE_ONLY:
+                if p[len(owner) + 1:] in included:
+                    raise ValueError('Portable-only VOL boundary entered Windows build')
+                continue
             if included.count(p[len(owner) + 1:]) != 1:
                 raise ValueError('Source must remain in original net48 project exactly once: ' + p)
     if set(actual) != expected or len(actual) != len(expected):
@@ -117,7 +123,7 @@ def source_rows(revision=BASELINE):
     upstream_packages = {p.attrib['id']: p.attrib['version'] for p in ET.parse(ROOT / 'CaeGlobals/packages.config').getroot()}
     if any(upstream_packages[k] != v for k, v in PACKAGES.items()):
         raise ValueError('Portable packages no longer match upstream versions')
-    selected = [dict(r) for r in core_rows + rows]
+    selected = [dict(r) for r in core_rows + rows + native_rows]
     for name, expected_hash in variants.items():
         data = original(revision, name)
         if hashlib.sha256(data).hexdigest() != expected_hash:

@@ -89,6 +89,16 @@ background import, cancellation and source part/face picks as the reference
 adapter. The receipt and runtime hashes are checked before and after conversion.
 [Build and native comparison criteria](../Build/NativeCad/README.md).
 
+With that native profile, **Mesh CAD…** accepts an explicit maximum size in
+model units and creates first-order tetrahedra through the original meshing
+parameter writer and VOL parser. All parts publish together. Source face/edge
+node sets and domain element sets are available in **Configure…**; choose units,
+material, sections and constraints explicitly, then **Run analysis**. Cancelling
+or a failed mesh preserves the previous document. Jobs retain verified CAD,
+BREP/VIS, VOL, parameters, native recipe and base/submitted mesh identities.
+General CAD/mesh project persistence and quadratic tetrahedra remain unsupported
+in this bounded preview. [Workflow and checks](../../.project/reports/native-cad-static-workflow.md).
+
 The default QWidget QVTK adapter stalled on this Mac; QOpenGLWidget produced a
 black displayed frame despite valid picker/API results. The current bridge
 uses native VTK offscreen GPU rendering and copies a frame to Qt. It displays

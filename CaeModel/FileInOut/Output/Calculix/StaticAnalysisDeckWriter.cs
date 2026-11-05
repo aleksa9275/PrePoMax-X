@@ -26,12 +26,13 @@ namespace CaeModel
             string meshText = MeshDeckWriter.WriteMesh(mesh);
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
-            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => t != "C3D8")))
-                throw new NotSupportedException("The first static-deck boundary supports full-integration C3D8 solid elements only.");
+            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => t != "C3D8" && t != "C3D4")))
+                throw new NotSupportedException("The static-deck boundary supports C3D8 and first-order C3D4 solids only; quadratic tetrahedra remain gated.");
             foreach (var element in checkedMesh.Elements.Values)
             {
-                double measure=((LinearHexaElement)element).GetVolume(checkedMesh.Nodes);
-                if (!Finite(measure) || measure==0) throw new CaeException("Original element measure is zero or nonfinite.");
+                double measure=((FeElement3D)element).GetVolume(checkedMesh.Nodes);
+                if (!Finite(measure) || measure==0 || (element is LinearTetraElement && measure<0))
+                    throw new CaeException("Original element measure is zero, nonfinite or an inverted tetrahedron.");
             }
             foreach (string name in checkedMesh.NodeSets.Keys.Concat(checkedMesh.ElementSets.Keys)) Name(name);
             var materialList = materials.ToArray(); var sectionList = sections.ToArray();
