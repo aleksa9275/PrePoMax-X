@@ -83,6 +83,7 @@ def begin(app,w,source,output):
             operation('translate',[7,-3,5]);return
         check('all three edited bodies remesh',len(w.model_scene['cadMesh']['parts'])==3)
         scene=w.model_scene;nodes=scene['nodes'];parts=scene['cadMesh']['parts']
+        report['mesh']={'nodes':len(scene['nodes']),'elements':len(scene['elements']),'parts':len(parts)}
         definition=json.loads((examples()/'cube-analysis.json').read_text())
         definition['materials']=[{'name':'Elastic','youngsModulus':'1000','poissonsRatio':'0'}]
         definition['sections']=[{'name':'Section'+str(i),'material':'Elastic','elementSet':f'PART_{i}_SOLID_1'} for i in range(1,4)]
@@ -94,7 +95,7 @@ def begin(app,w,source,output):
                 name=label+str(i);w.add_named_set('node',name,','.join(ids))
                 constraints.append({'name':name,'nodeSet':name,'displacements':[None,None,str(.001*z)]})
         definition['step'].update(constraints=constraints,loads=[],nodalHistorySets=[],elementHistorySets=[])
-        w.definition=definition;w.analysis_valid=True
+        w.definition=definition;w.analysis_valid=True;w.update_model_tree()
         state.update(document=w.cad_document,mesh=w.cad_mesh,meshBytes=w.mesh_bytes,definition=deepcopy(w.definition),scene=w.scene)
         operation('export',[])
     @guarded
