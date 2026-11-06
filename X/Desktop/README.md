@@ -1,5 +1,17 @@
 # Native viewport candidate
 
+**Mesh CAD…** now offers **Linear C3D4** (default) or **Quadratic C3D10 —
+preview/export only**. The quadratic path retains ten-node tetrahedra, six-node
+CAD surfaces and midside region memberships. **Export mesh…** publishes a new
+mesh-only INP after original-reader validation. It omits analysis/project state.
+
+Quadratic measurement and analysis remain gated: the original element's affine
+integral fails its analytical check. Configure/Run controls and direct desktop
+job calls refuse C3D10; the original static-deck validator independently refuses
+it. Curved Jacobian/quality, full quadratic formulation support and quadratic PMX
+persistence are not accepted by this preview.
+[Current quadratic scope and checks](../../.project/reports/quadratic-cad-preview.md).
+
 With `--cad-native RUNTIME`, **CAD tools…** beside Open provides selected-part
 translation, axis-angle rotation, mirror, explicit-center scaling, translated/
 rotated copies, plane splitting, ShapeFix repair option 1 and selected/all-part

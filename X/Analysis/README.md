@@ -1,5 +1,12 @@
 # PrePoMax-X portable static analysis increment
 
+Task 0084 adds a separate quadratic tetrahedron **preview** transport using the
+original VOL permutations and C3D10 mesh writer. It checks complete midside/face
+incidence and positive corner orientation without calling quadratic numerical
+measurement/integration. Static analysis still admits C3D8/C3D4 only; C3D10 remains
+refused. The original affine-integration failure and curved-quality gate stay
+open. [Current evidence](../../.project/reports/quadratic-cad-preview.md).
+
 This source-linked superset builds original CaeGlobals/CaeMesh/CaeResults/
 CaeModel types in their original assemblies. There is one engineering source
 implementation. Keep its output directories separate from X/Core and never copy
