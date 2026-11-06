@@ -150,3 +150,10 @@ the original file; only the audited modulus/axial force values are editable.
 The native CAD profile also displays the saved BREP. Jobs freeze the complete
 source PMX. Arbitrary new native CAD-session save is still pending.
 [Boundary and checks](../../.project/reports/desktop-cad-pmx.md).
+
+Tasks 0071–0073 extend **Edit PMX…** for this CAD subset with Poisson's ratio,
+density in tonne/mm³, signed global X/Y/Z force per node and region selectors
+for the solid section, supports and load. Selectors use existing compatible
+nonempty named sets; Save As preserves their names and membership, CAD, mesh
+and history. Reopen the saved copy before running it. The all-zero load remains
+outside the checked static deck contract. [Evidence](../../.project/reports/pmx-region-assignments.md).

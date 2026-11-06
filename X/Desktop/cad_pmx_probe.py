@@ -43,6 +43,16 @@ def begin(app, window, source, output):
             check('invalid Poisson ratio publishes nothing',dialog.save(saved) is None and not saved.exists())
             dialog.poisson.setText('0.25');dialog.density.setText('8.1e-9')
             dialog.force.setText('-3');dialog.force2.setText('4');dialog.force3.setText('-12')
+            if 'X0_Copy' in dialog.session.project['graph']['nodeSets']:
+                check('load choices contain only existing node regions',
+                      all(dialog.load_region.itemText(i) in dialog.session.project['graph']['nodeSets']
+                          for i in range(dialog.load_region.count())))
+                dialog.section_region.setCurrentText('SOLID_Copy')
+                dialog.load_region.setCurrentText('X0_Copy')
+                for name, region in [('X0','X1_Copy'),('Y0','Y0_Copy'),('Z0','Z0_Copy')]:
+                    dialog.support_regions[name].setCurrentText(region)
+                state['reassigned']=True
+            check('PMX editor capture',dialog.grab().save(str(output/'editor.png')))
             receipt=dialog.save(saved)
             check('CAD PMX Save As validates original graph and deck',receipt and receipt['portableReadbackPassed'] and receipt['unchangedGeometryMeshAndHistory'])
             report['write']=receipt
@@ -62,6 +72,8 @@ def begin(app, window, source, output):
             window.regions.view.setCurrentIndex(window.regions.view.findData('cad'))
             window.regions.view.setCurrentIndex(window.regions.view.findData('results'))
             check('CAD and result views survive reopen and solve',window.current_path.name=='analysis.frd' and window.regions.result is not None)
+            window.fields.setCurrentIndex(1)
+            check('original result field maps to contour and legend',window.mapper.GetScalarVisibility() and window.legend.GetVisibility())
             capture('result')
             check('original PMX stays unchanged',hashlib.sha256(source.read_bytes()).hexdigest()==state['sourceHash'])
             finish()
@@ -81,6 +93,13 @@ def begin(app, window, source, output):
         check('saved equations reopen in fresh session',window.pmx_session is not original and window.pmx_session.modulus=='84500.5' and window.pmx_session.force=='-3')
         check('all signed global force components reopen',window.pmx_session.forces==['-3','4','-12'])
         check('saved Poisson ratio and density reopen',window.pmx_session.poisson=='0.25' and window.pmx_session.density=='8.1E-9')
+        if state.get('reassigned'):
+            graph=window.pmx_session.project['graph']
+            check('solid section assignment reopens',graph['sections'][0]['region']=='SOLID_Copy')
+            check('load assignment reopens',graph['steps'][0]['loads'][0]['region']=='X0_Copy')
+            check('all support assignments reopen',
+                  {item['name']:item['region'] for item in graph['steps'][0]['constraints']}==
+                  {'X0':'X1_Copy','Y0':'Y0_Copy','Z0':'Z0_Copy'})
         check('saved CAD BREP and named regions unchanged',window.pmx_session.project['cadGeometry']==original.project['cadGeometry'] and window.pmx_session.project['graph']['nodeSets']==original.project['graph']['nodeSets'])
         malformed=output/'unsupported.pmx';malformed.write_bytes(source.read_bytes().replace(b'PrePoMax v3.0.0',b'PrePoMax v2.6.0',1))
         before=window.pmx_session

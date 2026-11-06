@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0071–0073 broaden checked original CAD/C3D4 PMX persistence with Poisson's
+ratio/density, signed vector forces and compatible existing section/support/load
+region reassignment. Read .project/reports/pmx-material-properties.md,
+.project/reports/pmx-vector-loads.md and .project/reports/pmx-region-assignments.md
+for actual checks, current candidate and publication. New native-session
+serialization, new/deleted sets, general PMX and all correctness, quadratic
+tetrahedron, parity and release gates remain open. Preserve D058/D059.
+
 Tasks 0069/0070 add original CAD/C3D4 PMX projection and controlled native edit/
 save/reopen/solve, with original-app readback. Read .project/reports/cad-pmx-reference.md
 and .project/reports/desktop-cad-pmx.md. The original CalNode E8 formatter is

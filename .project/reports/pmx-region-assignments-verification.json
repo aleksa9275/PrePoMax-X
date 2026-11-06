@@ -1,0 +1,1109 @@
+{
+  "tasks": [
+    "0071",
+    "0072",
+    "0073"
+  ],
+  "recordedDate": "2026-11-06",
+  "originalExeSha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+  "referencePmxSha256": "c0a8055d27620e2f0ec5495a14a6b2ac8e8fa8ab01730ea3493e4287923ab037",
+  "mac": {
+    "material": {
+      "success": true,
+      "checks": [
+        {
+          "name": "modulus and Poisson ratio persisted",
+          "passed": true
+        },
+        {
+          "name": "density persisted in original units",
+          "passed": true
+        },
+        {
+          "name": "CAD and mesh semantics preserved",
+          "passed": true
+        },
+        {
+          "name": "exact binary CAD/mesh frame preserved",
+          "passed": true
+        },
+        {
+          "name": "repeated editing accepts a negative Poisson ratio",
+          "passed": true
+        },
+        {
+          "name": "shared original string definition and references preserved",
+          "passed": true
+        },
+        {
+          "name": "shared-string edit changes only the selected member",
+          "passed": true
+        },
+        {
+          "name": "poisson-upper refused without publication",
+          "passed": true
+        },
+        {
+          "name": "poisson-lower refused without publication",
+          "passed": true
+        },
+        {
+          "name": "density-zero refused without publication",
+          "passed": true
+        },
+        {
+          "name": "density-negative refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nan refused without publication",
+          "passed": true
+        },
+        {
+          "name": "infinite refused without publication",
+          "passed": true
+        },
+        {
+          "name": "excessive-exponent refused without publication",
+          "passed": true
+        },
+        {
+          "name": "existing destination unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported wire input refused",
+          "passed": true
+        },
+        {
+          "name": "incorrect slot offset refused",
+          "passed": true
+        },
+        {
+          "name": "consecutive wire metadata obeys depth limit",
+          "passed": true
+        },
+        {
+          "name": "original app resave preserves edited semantics",
+          "passed": true
+        },
+        {
+          "name": "original source unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+    },
+    "vector": {
+      "success": true,
+      "checks": [
+        {
+          "name": "all component slots are audited",
+          "passed": true
+        },
+        {
+          "name": "all signed components persist",
+          "passed": true
+        },
+        {
+          "name": "original CLoad magnitude equals 13 N",
+          "passed": true
+        },
+        {
+          "name": "shared zero strings do not change supports",
+          "passed": true
+        },
+        {
+          "name": "CAD topology, mesh and binary model preserved",
+          "passed": true
+        },
+        {
+          "name": "negative axial force has positive magnitude",
+          "passed": true
+        },
+        {
+          "name": "existing nonzero-force engineering gate preserved",
+          "passed": true
+        },
+        {
+          "name": "reopened vector can be changed again",
+          "passed": true
+        },
+        {
+          "name": "short refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nonfinite refused without publication",
+          "passed": true
+        },
+        {
+          "name": "equation refused without publication",
+          "passed": true
+        },
+        {
+          "name": "excessive refused without publication",
+          "passed": true
+        },
+        {
+          "name": "older axial-only contract still refuses transverse loads",
+          "passed": true
+        },
+        {
+          "name": "original app resave retains vector/material/CAD semantics",
+          "passed": true
+        },
+        {
+          "name": "source PMX unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+    },
+    "assignments": {
+      "success": true,
+      "checks": [
+        {
+          "name": "all assignment members audited",
+          "passed": true
+        },
+        {
+          "name": "referenced assignment members retain baseline semantics",
+          "passed": true
+        },
+        {
+          "name": "all referenced member slots audited",
+          "passed": true
+        },
+        {
+          "name": "solid section uses compatible element region",
+          "passed": true
+        },
+        {
+          "name": "load moves to opposite face",
+          "passed": true
+        },
+        {
+          "name": "supports persist all chosen node regions",
+          "passed": true
+        },
+        {
+          "name": "all set names and membership remain unchanged",
+          "passed": true
+        },
+        {
+          "name": "all object names remain unchanged",
+          "passed": true
+        },
+        {
+          "name": "CAD and mesh semantics preserved",
+          "passed": true
+        },
+        {
+          "name": "binary CAD/mesh bytes unchanged",
+          "passed": true
+        },
+        {
+          "name": "receipt names all changed assignment slots",
+          "passed": true
+        },
+        {
+          "name": "reopened assignments can return to original regions",
+          "passed": true
+        },
+        {
+          "name": "missing refused without publication",
+          "passed": true
+        },
+        {
+          "name": "wrong-load-kind refused without publication",
+          "passed": true
+        },
+        {
+          "name": "wrong-section-kind refused without publication",
+          "passed": true
+        },
+        {
+          "name": "unknown-support refused without publication",
+          "passed": true
+        },
+        {
+          "name": "unknown-field refused without publication",
+          "passed": true
+        },
+        {
+          "name": "invalid-support-map refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nonstring-region refused without publication",
+          "passed": true
+        },
+        {
+          "name": "original app resave retains assignments and shared names",
+          "passed": true
+        },
+        {
+          "name": "original project unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "c0a8055d27620e2f0ec5495a14a6b2ac8e8fa8ab01730ea3493e4287923ab037"
+    },
+    "desktop": {
+      "success": true,
+      "transport": "frame-bridge",
+      "checks": [
+        {
+          "name": "original CAD/C3D4 project opens",
+          "passed": true
+        },
+        {
+          "name": "saved CAD is available without remeshing",
+          "passed": true
+        },
+        {
+          "name": "source CAD faces display",
+          "passed": true
+        },
+        {
+          "name": "cad capture",
+          "passed": true
+        },
+        {
+          "name": "real CAD PMX editor opens",
+          "passed": true
+        },
+        {
+          "name": "invalid modulus publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "invalid Poisson ratio publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "load choices contain only existing node regions",
+          "passed": true
+        },
+        {
+          "name": "CAD PMX Save As validates original graph and deck",
+          "passed": true
+        },
+        {
+          "name": "existing PMX destination refused",
+          "passed": true
+        },
+        {
+          "name": "saved equations reopen in fresh session",
+          "passed": true
+        },
+        {
+          "name": "all signed global force components reopen",
+          "passed": true
+        },
+        {
+          "name": "saved Poisson ratio and density reopen",
+          "passed": true
+        },
+        {
+          "name": "solid section assignment reopens",
+          "passed": true
+        },
+        {
+          "name": "load assignment reopens",
+          "passed": true
+        },
+        {
+          "name": "all support assignments reopen",
+          "passed": true
+        },
+        {
+          "name": "saved CAD BREP and named regions unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported project preserves current CAD model",
+          "passed": true
+        },
+        {
+          "name": "native CAD PMX solve completes",
+          "passed": true
+        },
+        {
+          "name": "job freezes exact source PMX including CAD",
+          "passed": true
+        },
+        {
+          "name": "original tetrahedral results loaded",
+          "passed": true
+        },
+        {
+          "name": "source CAD and model remain after solve",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views survive reopen and solve",
+          "passed": true
+        },
+        {
+          "name": "result capture",
+          "passed": true
+        },
+        {
+          "name": "original PMX stays unchanged",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "c0a8055d27620e2f0ec5495a14a6b2ac8e8fa8ab01730ea3493e4287923ab037",
+        "outputSha256": "319becd5477e599747f1167104d181a135d86b914dfd13fd4255c4bdcd9462bf",
+        "modelBlockSha256": "e2caa0d48f8ec018bf3274c5579e7ff47a596c53cc231ffa591c735f877d51e5",
+        "cadBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "editedMembers": [
+          "modulus",
+          "poisson",
+          "density",
+          "force",
+          "force2",
+          "force3",
+          "magnitude",
+          "sectionRegion",
+          "loadRegion",
+          "supportRegion:X0",
+          "supportRegion:Y0",
+          "supportRegion:Z0"
+        ],
+        "portableReadbackPassed": true,
+        "unchangedGeometryMeshAndHistory": true
+      },
+      "job": {
+        "success": true,
+        "state": "Completed",
+        "command": [
+          "dotnet",
+          "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve.dll",
+          "--registry",
+          "/tmp/prepomaxx-task0070-delivery/PrePoMax-X Preview.app/Contents/Resources/native-solver/build-registry.json",
+          "run-static-pmx",
+          "osx-arm64-2.22-spooles-local-preview",
+          "/tmp/prepomaxx-task0070-delivery/PrePoMax-X Preview.app/Contents/Resources/native-solver/bin",
+          "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50/inputs/mesh.inp",
+          "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50/inputs/analysis.json",
+          "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50/solve",
+          "3600"
+        ],
+        "directory": "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50/solve",
+        "cancelRequested": false,
+        "inputDirectory": "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50/inputs",
+        "workspace": "/private/tmp/prepomaxx-task0073-evidence/jobs/20261106-093107-9fd19f8b3f50",
+        "outcome": {
+          "success": true,
+          "solverExecuted": true,
+          "buildId": "osx-arm64-2.22-spooles-local-preview",
+          "registrySha256": "57c34bfd74acd566070cefac14bff441fe6066c933b71e33e170f8bb22491413",
+          "build": {
+            "id": "osx-arm64-2.22-spooles-local-preview",
+            "os": "Darwin",
+            "architecture": "Arm64",
+            "version": "2.22",
+            "executable": "ccx",
+            "files": {
+              "ccx": "d776387858acb7c13704d56fbc2f62a86f5f5b2460b4e720e86e65522f78ead5",
+              "libgcc_s.1.1.dylib": "fd4d92a79bfc4d7da66eaef5ef618ad9dc01f103dd569ca31f92cb87aad856eb",
+              "libgfortran.5.dylib": "c738e2e8c022e6e6c6f32f9b46cc0aeeb39d51f25e99e61b233caa8445425a3f",
+              "libgomp.1.dylib": "fd9e0816a5d1c61a85054cd04f0b35c2ff66217eef9a0bd6e03796532877a8b1",
+              "libomp.dylib": "7fd28cb0ea6020f4d7c90339a046296c6a3f9955bdafb6ec4f8dc1d93de787eb",
+              "libopenblas.0.dylib": "d1f0316617152a4557ce23a19bc47c7b833c22fd15fa7a61830edd8d04f04a6a",
+              "libquadmath.0.dylib": "239bfe66a63393aa0876bc6f02459dde3b866e25181f80daea2e21558c6d1d9d"
+            },
+            "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+            "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+            "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+            "scope": "Relocated ad-hoc local static-solid preview; original backend unchanged; not release acceptance"
+          },
+          "os": "Darwin",
+          "architecture": "Arm64",
+          "status": "OK",
+          "exitCode": 0,
+          "versionMatches": true,
+          "outputsPresent": true,
+          "requiredOutputs": [
+            ".frd",
+            ".sta"
+          ],
+          "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:          276\n   elements:          843\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            1\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:          180\n   single point constraints:          156\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:           10\n   terms in all sets:         2961\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            4\n   data points in all amplitudes:            4\n   print requests:            0\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 672\n number of nonzero lower triangular matrix elements\n 9375\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.010074\n________________________________________\n",
+          "stderr": "",
+          "failureReason": null,
+          "numericalAcceptance": false,
+          "outputs": {
+            "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+            "analysis.frd": "2f13cfe885d13684857da394909200cd83cb1dd801d9c25519075d7ce8224696",
+            "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+            "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "_output_analysis.txt": "9c0b274f76d77b67168a0850c7b226670ea1a4d4eb81447341d6b1b0b580c340",
+            "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "analysis.inp": "018bb055eb3dbffe6382ef50a0ba74d1342cbc9891e26922bd91c7f616ba096f",
+            "analysis.dat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      }
+    }
+  },
+  "linuxArm64": {
+    "material": {
+      "success": true,
+      "checks": [
+        {
+          "name": "modulus and Poisson ratio persisted",
+          "passed": true
+        },
+        {
+          "name": "density persisted in original units",
+          "passed": true
+        },
+        {
+          "name": "CAD and mesh semantics preserved",
+          "passed": true
+        },
+        {
+          "name": "exact binary CAD/mesh frame preserved",
+          "passed": true
+        },
+        {
+          "name": "repeated editing accepts a negative Poisson ratio",
+          "passed": true
+        },
+        {
+          "name": "shared original string definition and references preserved",
+          "passed": true
+        },
+        {
+          "name": "shared-string edit changes only the selected member",
+          "passed": true
+        },
+        {
+          "name": "poisson-upper refused without publication",
+          "passed": true
+        },
+        {
+          "name": "poisson-lower refused without publication",
+          "passed": true
+        },
+        {
+          "name": "density-zero refused without publication",
+          "passed": true
+        },
+        {
+          "name": "density-negative refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nan refused without publication",
+          "passed": true
+        },
+        {
+          "name": "infinite refused without publication",
+          "passed": true
+        },
+        {
+          "name": "excessive-exponent refused without publication",
+          "passed": true
+        },
+        {
+          "name": "existing destination unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported wire input refused",
+          "passed": true
+        },
+        {
+          "name": "incorrect slot offset refused",
+          "passed": true
+        },
+        {
+          "name": "consecutive wire metadata obeys depth limit",
+          "passed": true
+        },
+        {
+          "name": "original source unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+    },
+    "vector": {
+      "success": true,
+      "checks": [
+        {
+          "name": "all component slots are audited",
+          "passed": true
+        },
+        {
+          "name": "all signed components persist",
+          "passed": true
+        },
+        {
+          "name": "original CLoad magnitude equals 13 N",
+          "passed": true
+        },
+        {
+          "name": "shared zero strings do not change supports",
+          "passed": true
+        },
+        {
+          "name": "CAD topology, mesh and binary model preserved",
+          "passed": true
+        },
+        {
+          "name": "negative axial force has positive magnitude",
+          "passed": true
+        },
+        {
+          "name": "existing nonzero-force engineering gate preserved",
+          "passed": true
+        },
+        {
+          "name": "reopened vector can be changed again",
+          "passed": true
+        },
+        {
+          "name": "short refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nonfinite refused without publication",
+          "passed": true
+        },
+        {
+          "name": "equation refused without publication",
+          "passed": true
+        },
+        {
+          "name": "excessive refused without publication",
+          "passed": true
+        },
+        {
+          "name": "older axial-only contract still refuses transverse loads",
+          "passed": true
+        },
+        {
+          "name": "source PMX unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+    },
+    "assignments": {
+      "success": true,
+      "checks": [
+        {
+          "name": "all assignment members audited",
+          "passed": true
+        },
+        {
+          "name": "referenced assignment members retain baseline semantics",
+          "passed": true
+        },
+        {
+          "name": "all referenced member slots audited",
+          "passed": true
+        },
+        {
+          "name": "solid section uses compatible element region",
+          "passed": true
+        },
+        {
+          "name": "load moves to opposite face",
+          "passed": true
+        },
+        {
+          "name": "supports persist all chosen node regions",
+          "passed": true
+        },
+        {
+          "name": "all set names and membership remain unchanged",
+          "passed": true
+        },
+        {
+          "name": "all object names remain unchanged",
+          "passed": true
+        },
+        {
+          "name": "CAD and mesh semantics preserved",
+          "passed": true
+        },
+        {
+          "name": "binary CAD/mesh bytes unchanged",
+          "passed": true
+        },
+        {
+          "name": "receipt names all changed assignment slots",
+          "passed": true
+        },
+        {
+          "name": "reopened assignments can return to original regions",
+          "passed": true
+        },
+        {
+          "name": "missing refused without publication",
+          "passed": true
+        },
+        {
+          "name": "wrong-load-kind refused without publication",
+          "passed": true
+        },
+        {
+          "name": "wrong-section-kind refused without publication",
+          "passed": true
+        },
+        {
+          "name": "unknown-support refused without publication",
+          "passed": true
+        },
+        {
+          "name": "unknown-field refused without publication",
+          "passed": true
+        },
+        {
+          "name": "invalid-support-map refused without publication",
+          "passed": true
+        },
+        {
+          "name": "nonstring-region refused without publication",
+          "passed": true
+        },
+        {
+          "name": "original project unchanged",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "c0a8055d27620e2f0ec5495a14a6b2ac8e8fa8ab01730ea3493e4287923ab037"
+    },
+    "desktop": {
+      "success": true,
+      "transport": "frame-bridge",
+      "checks": [
+        {
+          "name": "original CAD/C3D4 project opens",
+          "passed": true
+        },
+        {
+          "name": "saved CAD is available without remeshing",
+          "passed": true
+        },
+        {
+          "name": "source CAD faces display",
+          "passed": true
+        },
+        {
+          "name": "cad capture",
+          "passed": true
+        },
+        {
+          "name": "real CAD PMX editor opens",
+          "passed": true
+        },
+        {
+          "name": "invalid modulus publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "invalid Poisson ratio publishes nothing",
+          "passed": true
+        },
+        {
+          "name": "load choices contain only existing node regions",
+          "passed": true
+        },
+        {
+          "name": "PMX editor capture",
+          "passed": true
+        },
+        {
+          "name": "CAD PMX Save As validates original graph and deck",
+          "passed": true
+        },
+        {
+          "name": "existing PMX destination refused",
+          "passed": true
+        },
+        {
+          "name": "saved equations reopen in fresh session",
+          "passed": true
+        },
+        {
+          "name": "all signed global force components reopen",
+          "passed": true
+        },
+        {
+          "name": "saved Poisson ratio and density reopen",
+          "passed": true
+        },
+        {
+          "name": "solid section assignment reopens",
+          "passed": true
+        },
+        {
+          "name": "load assignment reopens",
+          "passed": true
+        },
+        {
+          "name": "all support assignments reopen",
+          "passed": true
+        },
+        {
+          "name": "saved CAD BREP and named regions unchanged",
+          "passed": true
+        },
+        {
+          "name": "unsupported project preserves current CAD model",
+          "passed": true
+        },
+        {
+          "name": "native CAD PMX solve completes",
+          "passed": true
+        },
+        {
+          "name": "job freezes exact source PMX including CAD",
+          "passed": true
+        },
+        {
+          "name": "original tetrahedral results loaded",
+          "passed": true
+        },
+        {
+          "name": "source CAD and model remain after solve",
+          "passed": true
+        },
+        {
+          "name": "CAD and result views survive reopen and solve",
+          "passed": true
+        },
+        {
+          "name": "original result field maps to contour and legend",
+          "passed": true
+        },
+        {
+          "name": "result capture",
+          "passed": true
+        },
+        {
+          "name": "original PMX stays unchanged",
+          "passed": true
+        }
+      ],
+      "write": {
+        "inputSha256": "c0a8055d27620e2f0ec5495a14a6b2ac8e8fa8ab01730ea3493e4287923ab037",
+        "outputSha256": "319becd5477e599747f1167104d181a135d86b914dfd13fd4255c4bdcd9462bf",
+        "modelBlockSha256": "e2caa0d48f8ec018bf3274c5579e7ff47a596c53cc231ffa591c735f877d51e5",
+        "cadBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "editedMembers": [
+          "modulus",
+          "poisson",
+          "density",
+          "force",
+          "force2",
+          "force3",
+          "magnitude",
+          "sectionRegion",
+          "loadRegion",
+          "supportRegion:X0",
+          "supportRegion:Y0",
+          "supportRegion:Z0"
+        ],
+        "portableReadbackPassed": true,
+        "unchangedGeometryMeshAndHistory": true
+      },
+      "job": {
+        "success": true,
+        "state": "Completed",
+        "command": [
+          "dotnet",
+          "/pmx-cached/hosts/bin/Solve/release/PrePoMaxX.Solve.dll",
+          "--registry",
+          "/cached/solver-preview/build-registry.json",
+          "run-static-pmx",
+          "linux-arm64-2.22-spooles-local-preview",
+          "/cached/solver-preview/bin",
+          "/out/gui-verified-jobs/20261106-093634-100ec08d12bc/inputs/mesh.inp",
+          "/out/gui-verified-jobs/20261106-093634-100ec08d12bc/inputs/analysis.json",
+          "/out/gui-verified-jobs/20261106-093634-100ec08d12bc/solve",
+          "3600"
+        ],
+        "directory": "/out/gui-verified-jobs/20261106-093634-100ec08d12bc/solve",
+        "cancelRequested": false,
+        "inputDirectory": "/out/gui-verified-jobs/20261106-093634-100ec08d12bc/inputs",
+        "workspace": "/out/gui-verified-jobs/20261106-093634-100ec08d12bc",
+        "outcome": {
+          "success": true,
+          "solverExecuted": true,
+          "buildId": "linux-arm64-2.22-spooles-local-preview",
+          "registrySha256": "ba0161d8e8f35985d9b4ef9bc1e07b8eb440258ddbc15e2c49bb553fb7f2e8f5",
+          "build": {
+            "id": "linux-arm64-2.22-spooles-local-preview",
+            "os": "Linux",
+            "architecture": "Arm64",
+            "version": "2.22",
+            "executable": "ccx",
+            "files": {
+              "ccx": "59f34d9354898ed869e875588a3399fcb68d997014aa365b344c46d5d46d9474",
+              "libgcc_s.so.1": "45a54623a113b2184fadceb5da70a227b47afcbb4b83362451a06a62349228bf",
+              "libgfortran.so.5": "f7b9769f1c9aace2fdd9fce3b794e8004c5938ff540c8ecbdd57141840a54f31",
+              "libgomp.so.1": "f6600eece63dd9d85d9d46acb4cfd691e263eecff79b48da6acdfbb5fc65e656",
+              "libopenblas.so.0": "8d1bb32a2c4f3e961986687fe91e50841e62af9e65e7828d93f1ffb289f7c984"
+            },
+            "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+            "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+            "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+            "scope": "Relocated native static-solid preview; original backend unchanged"
+          },
+          "os": "Linux",
+          "architecture": "Arm64",
+          "status": "OK",
+          "exitCode": 0,
+          "versionMatches": true,
+          "outputsPresent": true,
+          "requiredOutputs": [
+            ".frd",
+            ".sta"
+          ],
+          "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:          276\n   elements:          843\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            1\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:          180\n   single point constraints:          156\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:           10\n   terms in all sets:         2961\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            4\n   data points in all amplitudes:            4\n   print requests:            0\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 672\n number of nonzero lower triangular matrix elements\n 9375\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.020098\n________________________________________\n",
+          "stderr": "",
+          "failureReason": null,
+          "numericalAcceptance": false,
+          "outputs": {
+            "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+            "analysis.frd": "70b1d729904f4484fb3b89564944a60f373fc3ec495496b4465c0b5ecd35300a",
+            "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+            "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "_output_analysis.txt": "0d3e1ac3bf1bf474247768ab8fb3d6d5c17bdd6d545f09d9488834ef4cc5e261",
+            "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "analysis.inp": "018bb055eb3dbffe6382ef50a0ba74d1342cbc9891e26922bd91c7f616ba096f",
+            "analysis.dat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      }
+    }
+  },
+  "originalExportComparison": {
+    "success": true,
+    "checks": {
+      "nodes": true,
+      "elements": true,
+      "nodeIdsInValueOrder": true,
+      "fields": true
+    },
+    "originalDeckSha256": "5882ee3b84b8fe35ccce7d55b7fe36139446969e1e5adbe4eddbc8afcb84cc5a",
+    "nativeDeckSha256": "018bb055eb3dbffe6382ef50a0ba74d1342cbc9891e26922bd91c7f616ba096f",
+    "scope": "One pinned native solver; exact original decoded fields; no tolerance relaxation"
+  },
+  "currentEngineeringSuites": {
+    "schemaVersion": 1,
+    "profile": "fast",
+    "areas": [
+      "core",
+      "analysis",
+      "execution",
+      "results"
+    ],
+    "host": {
+      "os": "Darwin",
+      "architecture": "Arm64"
+    },
+    "recordedAtUtc": "2026-11-06T09:32:12.845202+00:00",
+    "steps": [
+      {
+        "area": "core",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Core/verify.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0073-evidence/current-checks/core-current.json"
+        ],
+        "result": "core-current.json",
+        "log": "core-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "474631a4e83caef1d095b6ccda83785acb9eb605339bbbb27d7e37c7c09466b2",
+        "checks": null,
+        "openCorrectnessChecks": [
+          {
+            "name": "quadratic tetrahedron affine integral",
+            "passed": false,
+            "expected": 28,
+            "actual": 26.794910717854155,
+            "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+          },
+          {
+            "name": "quadratic pyramid classification",
+            "passed": false,
+            "expected": true,
+            "actual": false,
+            "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+          }
+        ],
+        "fullyAccepted": false,
+        "elapsedSeconds": 10.396
+      },
+      {
+        "area": "analysis",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Analysis/verify-analysis.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0073-evidence/current-checks/analysis-current.json"
+        ],
+        "result": "analysis-current.json",
+        "log": "analysis-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "2ed9a2f9677a221c62f7478cc60b4320f961fddb8954bd53d6ced0cb6594b00b",
+        "checks": 54,
+        "openCorrectnessChecks": [
+          {
+            "name": "quadratic tetrahedron affine integral",
+            "passed": false,
+            "expected": 28,
+            "actual": 26.794910717854155,
+            "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+          },
+          {
+            "name": "quadratic pyramid classification",
+            "passed": false,
+            "expected": true,
+            "actual": false,
+            "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+          }
+        ],
+        "fullyAccepted": false,
+        "elapsedSeconds": 14.364
+      },
+      {
+        "area": "execution",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Execution/verify-execution.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0073-evidence/current-checks/execution-current.json"
+        ],
+        "result": "execution-current.json",
+        "log": "execution-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "286fc41233c7e2b1ed04a5a11ce767ab7f12d5fcc7bf20c2af89ed9e4198578d",
+        "checks": 49,
+        "elapsedSeconds": 14.739
+      },
+      {
+        "area": "results",
+        "revision": "current",
+        "arguments": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "X/Results/verify-results.py",
+          "--expect-os",
+          "Darwin",
+          "--expect-architecture",
+          "Arm64",
+          "--output",
+          "/private/tmp/prepomaxx-task0073-evidence/current-checks/results-current.json"
+        ],
+        "result": "results-current.json",
+        "log": "results-current.log",
+        "status": "passed",
+        "exitCode": 0,
+        "resultSha256": "b59c8c9846e2fba582244a78ffdba4352713bcf65075a06473b397b6e42f3bcf",
+        "checks": 78,
+        "elapsedSeconds": 6.523
+      }
+    ],
+    "success": true,
+    "plannedStepCount": 4,
+    "solverExecuted": false,
+    "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+    "repository": {
+      "head": "919df90c1441b35f4aeefb91727b037ce9287f52",
+      "dirty": true,
+      "patch": "source.patch",
+      "patchSha256": "4291154c7ab4bef7e3ef37cd2380ec4bdd7b62017eb0041bdccb88001d4043db",
+      "changedCode": [
+        {
+          "path": "X/Desktop/cad_pmx_probe.py",
+          "state": "modified",
+          "sha256": "2d86da9fab293b72fb50da73ec3bf62f89bffc7bc8c1d42f74fa5ba94f0e0c38"
+        },
+        {
+          "path": "X/Desktop/pmx_project.py",
+          "state": "modified",
+          "sha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e"
+        },
+        {
+          "path": "X/Feasibility/Pmx/StaticGraph.Properties.cs",
+          "state": "modified",
+          "sha256": "baeebe0e8f52681fee8e1ac92448e07fdc346f20f712a1afb83e19a822fac942"
+        },
+        {
+          "path": "X/Feasibility/Pmx/test-cad-assignments.py",
+          "state": "untracked",
+          "sha256": "e3240d7f89f26c9b78ca5d68a8ce99102aa27b682f8dc75955ca067ae0612990"
+        },
+        {
+          "path": "X/Feasibility/Pmx/write-cad-properties.py",
+          "state": "modified",
+          "sha256": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d"
+        }
+      ],
+      "scope": "changed build/test/shared source only; no user models or private files"
+    },
+    "upstreamPins": {
+      "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+      "revisions": [
+        {
+          "name": "3.0.0-rc2",
+          "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+        },
+        {
+          "name": "post-rc2-2026-10-17",
+          "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+        }
+      ]
+    },
+    "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+    "dotnetSdk": "10.0.403",
+    "elapsedSeconds": 46.212,
+    "pendingSteps": []
+  },
+  "regressions": {
+    "desktopTests": 38,
+    "analysisGuards": 12,
+    "buildGuards": 9,
+    "legacyCadPmx": 17
+  },
+  "publication": {
+    "0071": "72f12c2a53c5cc40bab1f78e1f8895e3f2049651",
+    "0072": "919df90c1441b35f4aeefb91727b037ce9287f52",
+    "remoteVerified": true,
+    "ciSkipped": true,
+    "hostedJobsStarted": false
+  },
+  "candidate": "Combined package/copy evidence follows in the closing documentation checkpoint",
+  "linuxX64": "Deferred under D059"
+}

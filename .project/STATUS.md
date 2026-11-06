@@ -2,14 +2,13 @@
 
 ## Current — tasks 0071–0073: broader persistent PMX editing
 
-Task 0071 adds Poisson's ratio and density to the checked CAD/C3D4 PMX editor.
-Native Mac desktop/save/reopen/solve and original-app readback pass; original
-export/native reconstruction produce exactly equal decoded fields.
-[Material evidence](reports/pmx-material-properties.md). Task 0072 also passes
-signed vector force save/reopen/solve and exact original-export comparisons.
-[Vector evidence](reports/pmx-vector-loads.md). Task 0073 adds compatible existing
-named-region reassignment next.
-Combined Linux ARM64 checks and one replacement Mac package follow at closeout.
+Tasks 0071/0072 add Poisson's ratio/density and signed three-axis force persistence.
+Task 0073 adds compatible existing named-region reassignment for sections,
+supports and loads. All three pass native Mac and Linux ARM64 checks, original
+3.0.0 readback/resave and exact decoded original-export/native result comparisons.
+[Material](reports/pmx-material-properties.md) · [Vector forces](reports/pmx-vector-loads.md) ·
+[Assignments and combined verification](reports/pmx-region-assignments.md).
+One replacement Mac package and its copied-app probes follow at closeout.
 New native-session serialization/general PMX and all prior gates remain open;
 D058/D059 stay in force.
 

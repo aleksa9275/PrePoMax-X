@@ -75,6 +75,10 @@ def verify(source, mesh, graph, deck, resave=None):
         try: writer['patch_members'](records, [broken], {'modulus': '1 MPa'})
         except ValueError: check('incorrect slot offset refused', True)
         else: raise ValueError('Accepted incorrect slot')
+        libraries = b''.join(struct.pack('<BiB',12,10000+i,1)+b'x' for i in range(130))
+        try: writer['contract'](records[:-1]+libraries+records[-1:],graph)
+        except ValueError as error: check('consecutive wire metadata obeys depth limit','Wire depth/record limit' in str(error))
+        else: raise ValueError('Accepted excessive wire metadata recursion')
         if resave:
             official = reader['inspect'](resave, mesh, graph)
             check('original app resave preserves edited semantics', all(official[k] == edited[k] for k in ['mesh','graph','cadGeometry']))

@@ -110,8 +110,36 @@ def contract(graph, graph_decoder):
         return reader['base']['decode'](graph_decoder, ['--cad-property-contract', path])
 
 
+def assign_regions(expected, assignments):
+    if assignments is None:
+        return {}
+    if not isinstance(assignments, dict) or set(assignments)-{'section','load','supports'}:
+        raise ValueError('Unknown region assignment fields.')
+    values = {}
+    def assign(owner, selected, regions, role):
+        if not isinstance(selected, str) or selected not in regions or not regions[selected]:
+            raise ValueError('Choose a compatible existing nonempty named region.')
+        if selected != owner['region']:
+            owner['region'] = selected
+            values[role] = selected
+    if 'section' in assignments:
+        assign(expected['sections'][0], assignments['section'], expected['elementSets'], 'sectionRegion')
+    step = expected['steps'][0]
+    if 'load' in assignments:
+        assign(step['loads'][0], assignments['load'], expected['nodeSets'], 'loadRegion')
+    if 'supports' in assignments:
+        supports = {support['name']:support for support in step['constraints']}
+        selected = assignments['supports']
+        if not isinstance(selected, dict) or set(selected)-supports.keys():
+            raise ValueError('Unknown support assignment.')
+        for name, region in selected.items():
+            assign(supports[name], region, expected['nodeSets'], 'supportRegion:'+name)
+    return values
+
+
 def write_edit(source, output, mesh_decoder, graph_decoder, *, deck_builder,
-               modulus_mpa='105000', force_n='50', poisson=None, density=None, force_vector=None):
+               modulus_mpa='105000', force_n='50', poisson=None, density=None, force_vector=None,
+               assignments=None):
     source, output = Path(source), Path(output)
     if output.exists() or output.is_symlink() or source.resolve() == output.resolve():
         raise FileExistsError('Choose a new PMX destination.')
@@ -129,8 +157,9 @@ def write_edit(source, output, mesh_decoder, graph_decoder, *, deck_builder,
     components = force_vector if force_vector is not None else [force_n,
         stored['force2'].removesuffix(' N'), stored['force3'].removesuffix(' N')]
     values.update(force_values(components, deck_builder))
-    patched = patch_members(graph, targets, values)
     expected = deepcopy(baseline['graph'])
+    values.update(assign_regions(expected, assignments))
+    patched = patch_members(graph, targets, values)
     properties = {prop['type']: prop['rows'] for prop in expected['materials'][0]['properties']}
     properties['CaeModel.Elastic'][0][:2] = [values['modulus'], values['poisson']]
     properties['CaeModel.Density'][0][0] = values['density']

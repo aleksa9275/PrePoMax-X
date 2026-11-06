@@ -151,7 +151,7 @@ internal sealed class NrbfWire
         switch (kind)
         {
             case 12: // A library record is metadata, not a member value.
-                reader.ReadInt32(); Text(); return Value(depth, array);
+                reader.ReadInt32(); Text(); return Value(depth + 1, array);
             case 1:
                 id = ObjectId(); int source = reader.ReadInt32();
                 if (!metadata.TryGetValue(source, out var existing)) throw new InvalidDataException("Unknown wire class metadata.");

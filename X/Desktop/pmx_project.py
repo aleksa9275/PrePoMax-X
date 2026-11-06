@@ -84,7 +84,7 @@ class PmxSession:
             self.density = values['density'].removesuffix(' t/mm³')
             self.forces = [self.force, values['force2'].removesuffix(' N'), values['force3'].removesuffix(' N')]
 
-    def save_as(self, destination, modulus, force, *, poisson=None, density=None, forces=None):
+    def save_as(self, destination, modulus, force, *, poisson=None, density=None, forces=None, assignments=None):
         destination = Path(destination)
         if destination.suffix.lower() != '.pmx':
             raise ValueError('Choose a .pmx destination.')
@@ -93,7 +93,8 @@ class PmxSession:
         with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-save-') as directory:
             source = Path(directory) / 'original.pmx'
             source.write_bytes(self.contents)
-            properties = {'poisson': poisson, 'density': density, 'force_vector': forces} if self.cad_model else {}
+            properties = {'poisson': poisson, 'density': density, 'force_vector': forces,
+                          'assignments': assignments} if self.cad_model else {}
             return self.writer['write_edit'](
                 source, destination, self.mesh_host, self.graph_host, deck_builder=self.deck_host,
                 modulus_mpa=modulus, force_n=force, **properties)
@@ -112,7 +113,6 @@ class PmxDialog(QtWidgets.QDialog):
             ('Mesh', f"{len(mesh['nodes'])} nodes · {len(mesh['elements'])} elements"),
             ('Units', graph['unitSystem']),
             ('Material', graph['materials'][0]['name']),
-            ('Load region', graph['steps'][0]['loads'][0]['region']),
         )
         if session.cad_model:
             fields += (('Geometry', 'Saved CAD preserved; controlled material/load edits'),)
@@ -120,6 +120,27 @@ class PmxDialog(QtWidgets.QDialog):
             label = QtWidgets.QLabel(value)
             label.setTextFormat(QtCore.Qt.TextFormat.PlainText)
             form.addRow(name, label)
+        if session.cad_model:
+            def region_box(regions, current):
+                combo = QtWidgets.QComboBox()
+                combo.addItems([name for name, labels in regions.items() if labels])
+                combo.setCurrentIndex(combo.findText(current))
+                return combo
+            self.section_region = region_box(graph['elementSets'], graph['sections'][0]['region'])
+            self.load_region = region_box(graph['nodeSets'], graph['steps'][0]['loads'][0]['region'])
+            form.addRow('Solid section region', self.section_region)
+            self.support_regions = {}
+            for support in graph['steps'][0]['constraints']:
+                combo = region_box(graph['nodeSets'], support['region'])
+                self.support_regions[support['name']] = combo
+                label = QtWidgets.QLabel('Support '+support['name'])
+                label.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+                form.addRow(label, combo)
+            form.addRow('Load region', self.load_region)
+        else:
+            label = QtWidgets.QLabel(graph['steps'][0]['loads'][0]['region'])
+            label.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+            form.addRow('Load region', label)
         self.modulus = QtWidgets.QLineEdit(session.modulus)
         self.force = QtWidgets.QLineEdit(session.force)
         form.addRow('Young’s modulus (MPa)', self.modulus)
@@ -156,7 +177,9 @@ class PmxDialog(QtWidgets.QDialog):
     def save(self, path):
         try:
             properties = ({'poisson': self.poisson.text().strip(), 'density': self.density.text().strip(),
-                           'forces': [self.force.text().strip(), self.force2.text().strip(), self.force3.text().strip()]}
+                           'forces': [self.force.text().strip(), self.force2.text().strip(), self.force3.text().strip()],
+                           'assignments': {'section': self.section_region.currentText(), 'load': self.load_region.currentText(),
+                                           'supports': {name:combo.currentText() for name,combo in self.support_regions.items()}}}
                           if self.session.cad_model else {})
             receipt = self.session.save_as(path, self.modulus.text().strip(), self.force.text().strip(), **properties)
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:

@@ -34,10 +34,18 @@ internal static partial class StaticGraph
         RequireExclusiveRecords(records, density);
         RequireExclusiveRecords(records, owners.Select(item => item.Owner).ToArray());
         var wire = new NrbfWire(graph);
-        return owners.Select(item => {
+        var targets = owners.Select(item => {
             if (item.Owner.GetBoolean("_constant")) throw new InvalidDataException("Constant equation storage is unsupported.");
             return StringSlot(wire, item.Owner, "_equation", item.Role);
-        }).ToArray();
+        }).ToList();
+        var section = Named(Entries(model, "_sections").Single(), "CaeModel.SolidSection");
+        targets.Add(StringSlot(wire, section, "_regionName", "sectionRegion"));
+        targets.Add(StringSlot(wire, load, "_regionName", "loadRegion"));
+        var supports = Entries(step, "_boundaryConditions").ToArray();
+        RequireExclusiveRecords(records, supports.Select(pair => pair.Value).ToArray());
+        foreach (var support in supports)
+            targets.Add(StringSlot(wire, support.Value, "_regionName", "supportRegion:" + support.Key));
+        return targets;
     }
 
     private static EditMember StringSlot(NrbfWire wire, ClassRecord owner, string field, string role)
