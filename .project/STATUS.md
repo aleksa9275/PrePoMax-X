@@ -10,7 +10,14 @@ comparisons agree. [Current evidence](reports/nonlinear-loaded-solids.md).
 B006 retains an inherited quadratic-pyramid wedge-pressure accuracy discrepancy;
 the hexahedron route passes that case. D029's original failures and all other
 original functionality/PMX/four-target/release requirements remain open.
-Source publication and copied candidate verification are being recorded.
+Implementation `630b6ccd` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0090-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Both copied Mac viewports complete the
+five-case nonlinear workflow; prior solid and PMX regressions also pass. Payload,
+source identity, empty patch and ad-hoc signature verify. Superseded task 0089
+app/duplicate package payloads are pruned; models, jobs/evidence and shared tools
+remain. The receipt marks the B006 analytical check and full numerical acceptance
+false while recording successful functional integration.
 
 ## Prior — task 0089: connected solid formulations
 

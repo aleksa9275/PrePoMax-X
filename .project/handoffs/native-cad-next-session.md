@@ -1,5 +1,23 @@
 # Native CAD continuation — 6 November 2026
 
+Latest task 0090: native solid workflow now includes density/plastic hardening,
+pressure/gravity, geometric nonlinearity and increment/plastic-strain results.
+Read [the report](../reports/nonlinear-loaded-solids.md) and its receipt for actual
+source, native/reference checks and the retained copied candidate. Source
+`630b6ccd` is remote-verified with CI skipped. Current app is
+`/tmp/prepomaxx-task0090-delivery/PrePoMax-X Preview.app`, with sibling native CAD
+launcher. Prior task 0089 app and duplicate new package payloads are removed;
+models, jobs, source/reference/log evidence and shared tools remain.
+
+B006 retains an original C3D13→wedge pressure accuracy discrepancy reproduced by
+the original Windows solver; the hexahedron route passes that analytical case.
+The integrated workflow records this check and full numerical acceptance false.
+D029's original integration/classifier failures, full native-session PMX and all
+remaining original mesh/analysis/model/results functions stay required. Continue
+larger usable implementation milestones with focused integration/regressions,
+not per-line tasks or repeated complete sweeps. D057/D058/D059 and four-target/
+release obligations remain; only unavailable Intel/PARDISO is excepted.
+
 Task 0089 is the current functional milestone. Read
 [solid formulation workflow](../reports/solid-formulation-workflow.md) and its
 receipt. All original mechanical 3D solid formulation choices now connect through

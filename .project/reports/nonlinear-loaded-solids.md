@@ -94,5 +94,26 @@ Linux x64 is deferred to Windows/Podman near finishing.
 
 ## Candidate and publication
 
-Source integration is complete. Publication and copied candidate verification
-are being recorded in the receipt before this task is closed.
+Implementation **630b6ccddfcac84b1aa4cf8e33b41ba42132b860** is pushed and
+remote-verified on origin/research/native-feasibility with CI explicitly skipped.
+The package identifies that exact source, no changed code and an empty patch;
+the dirty flag is the four pre-existing Finder files. The copied Mac app completes
+the five-case nonlinear workflow in both viewport modes, plus the prior mixed-
+solid/pyramid workflow and representative PMX save/reopen/solve regression.
+
+Current app: `/tmp/prepomaxx-task0090-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables the retained native CAD runtime.
+Use **Solve example… → Pressure-loaded solids**, **Gravity-loaded column**,
+**Plastic tension — yield and hardening** or **Geometric nonlinear tension**.
+Configure… exposes the corresponding editable definitions; use the Results row
+to switch increments and field components after a solve.
+
+All **2,434 copied file hashes**, **2,276 symlink targets** and the ad-hoc signature
+verify. The superseded task 0089 app and duplicate package build/payload/cache
+directories are pruned; its launcher forwards to this candidate. Models, original
+input files, frozen jobs, exports, screenshots, raw native/reference results,
+source/manifest/log receipts, installed user app/state and shared tools remain.
+Actual removals/free-space figures are in the receipt. Evidence is retained at
+`/tmp/prepomaxx-task0090-evidence`; source/package metadata is at
+`/tmp/prepomaxx-task0090-package`. This remains an internal preview with the open
+correctness/parity/release requirements above.
