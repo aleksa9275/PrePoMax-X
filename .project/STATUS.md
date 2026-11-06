@@ -1,6 +1,23 @@
 # Project status
 
-## Current — tasks 0078–0080: CAD history, rotation and model exchange
+## Current — tasks 0081–0083: mirror, scaling and transform copies
+
+Tasks 0081–0083 add original native CAD mirror, positive uniform/non-uniform
+scaling and translated/rotated copies. Originals remain byte-identical for copies;
+numbered outputs, origins and recipes are frozen in jobs. Native Mac/Linux ARM64
+pass 99 CAD checks, 50 desktop tests and 91 combined editing/history/STEP/remesh/
+analytical workflow checks; both copied Mac viewports pass 91 with visible contours.
+CAD PMX/C3D8 regressions pass 28/17 on both hosts; nine Mac build guards pass.
+Mac has 402 nodes/898 C3D4, Linux 402/900; strict mesh/deck/field equality remains
+open, with independent analytical checks passing. [Evidence](reports/cad-mirror-scale-copies.md).
+Source `b938adac` is pushed/remote-verified with CI skipped and an empty source
+patch. Current app: `/tmp/prepomaxx-task0083-delivery/PrePoMax-X Preview.app`;
+sibling native CAD launcher enables the retained runtime, and older launchers
+forward to it. Superseded app/build payloads are pruned; projects/jobs/evidence
+and shared tools remain. New native-session PMX, both correctness failures,
+quadratic tetrahedra and every D057/D058/D059/parity/release gate remain open.
+
+## Prior — tasks 0078–0080: CAD history, rotation and model exchange
 
 Tasks 0078–0080 add bounded owned geometry undo/redo, original axis-angle
 rotation and whole-model STEP assembly export with checked solid correspondence.

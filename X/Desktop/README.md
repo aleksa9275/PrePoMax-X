@@ -1,9 +1,14 @@
 # Native viewport candidate
 
 With `--cad-native RUNTIME`, **CAD tools…** beside Open provides selected-part
-translation, axis-angle rotation, plane splitting, ShapeFix repair option 1 and
-selected/all-part STEP export. Values use model units; rotation uses degrees.
-Geometry edits run in the background; Cancel and closing stop the worker,
+translation, axis-angle rotation, mirror, explicit-center scaling, translated/
+rotated copies, plane splitting, ShapeFix repair option 1 and selected/all-part
+STEP export. Values use model units; rotation uses degrees.
+Positive scale factors are bounded to 0.000001–1000; an identity-only scale is
+refused. Copies retain all original parts and append 1–16 numbered outputs within
+32 total parts. Copy k applies k translations or rotation angles. Each copy
+requires one supported solid; overlapping copies are not joined. Geometry edits run in the
+background; Cancel and closing stop the worker,
 retaining the previous document on failure. Successful edits retain an owned
 undo checkpoint and clear dependent mesh/analysis. Undo/redo restores exact CAD
 bytes and requires remeshing; it does not restore mesh/analysis or replay PMX
@@ -14,7 +19,7 @@ uses unchanged assembly gathering. Opened PMX geometry may be exported but canno
 be mutated through these tools. Submitted CAD jobs retain exact edit recipes and
 inputs. STEP geometry exchange does not preserve arbitrary assembly metadata;
 new native-session PMX save remains open.
-[Checks and current candidate](../../.project/reports/cad-history-rotation-export.md).
+[Checks and current candidate](../../.project/reports/cad-mirror-scale-copies.md).
 
 Task 0044 adds a model tree and **Configure… / Run analysis** for the existing
 static-solid definition. Units, isotropic elastic materials, solid sections,

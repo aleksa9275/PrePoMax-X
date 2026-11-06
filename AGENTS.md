@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0081–0083 add original CAD mirror, positive uniform/non-uniform scaling
+and translated/rotated copies with owned undo/redo and frozen numbered outputs.
+Read .project/reports/cad-mirror-scale-copies.md for actual source, verification,
+publication and retained candidate. Originals remain byte-identical for copy
+operations; partial/extra/cancelled outputs cannot replace the model. Native
+Mac/Linux ARM64 analytical workflows pass, while their six-body meshes differ
+and exact mesh/deck/field parity remains open. Native-session PMX, both known
+correctness failures, quadratic tetrahedra and all release gates remain open.
+Preserve D058/D059.
+
 Tasks 0078–0080 add bounded owned CAD undo/redo, original axis-angle rotation
 and checked whole-model STEP assembly export. Read
 .project/reports/cad-history-rotation-export.md for actual source, checks,

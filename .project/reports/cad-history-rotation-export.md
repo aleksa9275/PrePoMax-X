@@ -108,3 +108,8 @@ Windows/net48 and all four-target/installers/Homebrew/signing/notarization/relea
 requirements remain open. No frontend/default-format/backend/precision decision
 or release acceptance is made. Notify the maintainer when Developer ID or
 notarization actually requires their involvement.
+
+
+Task 0083 retention update: task 0080's copied app is superseded and pruned after
+verified mirror/scale/copy integration. Evidence/projects/jobs remain. Read
+[the current report](cad-mirror-scale-copies.md) for the retained candidate.

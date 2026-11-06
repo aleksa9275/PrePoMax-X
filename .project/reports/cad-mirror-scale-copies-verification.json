@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "tasks": {
+    "0081": "ba5a3900e0b115faf1b466c39ab30fbd97f84d4e",
+    "0082": "fb9da6c4b7fdd29ca539f785d11bf96bde54e224",
+    "0083": "b938adac7742d2318d0eee54607e1963d3769862"
+  },
+  "status": "complete within bounded native CAD editing/exchange scope",
+  "publication": {
+    "branch": "origin/research/native-feasibility",
+    "implementationRemoteVerified": true,
+    "sourceCommit": "b938adac7742d2318d0eee54607e1963d3769862",
+    "pushCiSkip": true,
+    "commitSkipCi": true,
+    "hostedJobsRequested": 0,
+    "policy": "D051 research publication; D058 hosted hold; D059 Windows/Podman Linux x64 deferral"
+  },
+  "candidate": {
+    "app": "/tmp/prepomaxx-task0083-delivery/PrePoMax-X Preview.app",
+    "launcher": "/tmp/prepomaxx-task0083-delivery/Native CAD Preview.command",
+    "runtime": "/tmp/prepomaxx-task0063-recipe/runtime",
+    "files": 2422,
+    "checks": {
+      "payload": true,
+      "symlinks": true
+    },
+    "sourceIdentity": {
+      "viewportSha256": "5e251d261eae06375adadadc90427c419639b6e068a150ad2c41ae467b04b32a",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+      "cadJobSha256": "c1e763b51195c3393776bd1a94a1b21d54a3fd6a7efb6ec605510b248b78aa94",
+      "cadDocumentSha256": "a3b372d48ea99706bfe3dd5ed125c0750293558a3e6802ecc342951dbbf3ad2a",
+      "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+      "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+      "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+      "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+      "cadRegionsSha256": "b026aa54e9f7a65e2328465b99082ab6c35d777a0614642e9dcde44e04186722",
+      "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+      "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+      "desktopJobsSha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "b938adac7742d2318d0eee54607e1963d3769862",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e",
+      "pmxToolHashes": {
+        "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+        "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+        "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "sourcePatchBytes": 0,
+    "adHocSignatureVerified": true,
+    "packageManifestSha256": "773e02a28de7cc1da6eb48895f0474f2bc68e92e357549f35738a0f50049eb4b"
+  },
+  "verification": {
+    "nativeMac": {
+      "path": "/tmp/prepomaxx-task0083-evidence/native/verification.json",
+      "sha256": "15c4ab128f7944ab3671cb0a1cc76831fcf4c1b2e303f39ef62af5dfbfb66433",
+      "success": true,
+      "checks": 99
+    },
+    "nativeLinuxArm64": {
+      "path": "/tmp/prepomaxx-task0083-evidence/linux/native/verification.json",
+      "sha256": "cf49319dd9f568b7554b0ace836d31a1d61e839faae1d343f7e0c4f942a13f49",
+      "success": true,
+      "checks": 99
+    },
+    "sourceMac": {
+      "path": "/tmp/prepomaxx-task0083-evidence/source-gui/workflow.json",
+      "sha256": "c9eac2cffbfcca949fb6656fe2f8b49ffc4d7048a5bbec19662e540594d8d41c",
+      "success": true,
+      "checks": 91
+    },
+    "copiedMacBridge": {
+      "path": "/tmp/prepomaxx-task0083-evidence/bridge/workflow.json",
+      "sha256": "19fb3246947cf094cb8b2711c687578ee2556f9a1630c31b95a23f8d89515d48",
+      "success": true,
+      "checks": 91
+    },
+    "copiedMacCocoa": {
+      "path": "/tmp/prepomaxx-task0083-evidence/cocoa/workflow.json",
+      "sha256": "c6713a8143bdb05b66ab3b6bffc6f89d7dabe06fa80c971a7714560f965abb72",
+      "success": true,
+      "checks": 91
+    },
+    "desktopLinuxArm64": {
+      "path": "/tmp/prepomaxx-task0083-evidence/linux/gui/workflow.json",
+      "sha256": "2ee0b40a0486fa3a7321628a6c3969b048089857a68eb2f617ba7aa81a6f46c7",
+      "success": true,
+      "checks": 91
+    },
+    "cadPmxMac": {
+      "path": "/tmp/prepomaxx-task0083-evidence/pmx/workflow.json",
+      "sha256": "051c8b2146901dc76b3efc318ad0338282b18e931a99c92efbbc6efbf611ae52",
+      "success": true,
+      "checks": 28
+    },
+    "c3d8PmxMac": {
+      "path": "/tmp/prepomaxx-task0083-evidence/old-pmx/verification.json",
+      "sha256": "17fbff0cf2bd973ff1f215f8d8823ae8cd1b24d752b807b219858503299a9870",
+      "success": true,
+      "checks": 17
+    },
+    "cadPmxLinuxArm64": {
+      "path": "/tmp/prepomaxx-task0083-evidence/linux/pmx/workflow.json",
+      "sha256": "e7a2b2ccbdf03e4d416ab5e171697322bcc79e9c778a216874696f08f472a4df",
+      "success": true,
+      "checks": 28
+    },
+    "c3d8PmxLinuxArm64": {
+      "path": "/tmp/prepomaxx-task0083-evidence/linux/old-pmx/verification.json",
+      "sha256": "50d8f2f4e9d4bf0117664032d602c0d23112358a54cc58aef857d5d94797f6ea",
+      "success": true,
+      "checks": 17
+    }
+  },
+  "regressions": {
+    "desktopMac": 50,
+    "desktopLinuxArm64": 50,
+    "buildGuardsMac": 9,
+    "logs": {
+      "desktop-tests.log": {
+        "path": "/tmp/prepomaxx-task0083-evidence/desktop-tests.log",
+        "sha256": "3e3b6a7e196d7cef1bb0883e5c30d7f6a30e4f22eee8d95b488833201e3543a3"
+      },
+      "linux/desktop-tests.log": {
+        "path": "/tmp/prepomaxx-task0083-evidence/linux/desktop-tests.log",
+        "sha256": "ce7a4b6dd207267b1ebfe4200549bcd94cd47f464afc124c7960525827d5013e"
+      },
+      "build-tests.log": {
+        "path": "/tmp/prepomaxx-task0083-evidence/build-tests.log",
+        "sha256": "44da5ff3d8732677572559b618a09686fa21efd87af4d2b415dc65f98118d47f"
+      }
+    },
+    "scope": "Changed-area Python/CAD verification; original engineering sources and solver runtime unchanged. Full numerical/platform/release matrix was not rerun."
+  },
+  "meshes": {
+    "mac": {
+      "nodes": 402,
+      "elements": 898,
+      "parts": 6
+    },
+    "linuxArm64": {
+      "nodes": 402,
+      "elements": 900,
+      "parts": 6
+    }
+  },
+  "crossPlatform": {
+    "strictlyEqual": false,
+    "checks": {
+      "nodes": false,
+      "elements": false,
+      "nodeIdsInValueOrder": true,
+      "fields": false,
+      "deckSha256": false
+    },
+    "fieldMaxAbsoluteDifferences": {},
+    "analyticalChecksPassOnBoth": true,
+    "macMesh": {
+      "nodes": 402,
+      "elements": 898,
+      "parts": 6
+    },
+    "linuxMesh": {
+      "nodes": 402,
+      "elements": 900,
+      "parts": 6
+    },
+    "macMaximumDisplacementError": 3.469446951953614e-18,
+    "linuxMaximumDisplacementError": 3.469446951953614e-18,
+    "scope": "Strict mesh/deck/field equality remains different. No elementwise field-difference magnitude is claimed across differing meshes; analytical checks pass independently. No tolerance or coordinate precision changes."
+  },
+  "retention": {
+    "candidate": "/tmp/prepomaxx-task0083-delivery/PrePoMax-X Preview.app",
+    "removed": [
+      {
+        "path": "/tmp/prepomaxx-task0083-final/dist",
+        "logicalBytes": 2285715097
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-final/build",
+        "logicalBytes": 20614395
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-final/hosts",
+        "logicalBytes": 621501089
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-final/pmx-tools",
+        "logicalBytes": 42248
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-final/examples",
+        "logicalBytes": 1540
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-final/pyinstaller-cache",
+        "logicalBytes": 950990913
+      },
+      {
+        "path": "/tmp/prepomaxx-task0080-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1156337415
+      }
+    ],
+    "logicalBytesRemoved": 5035202697,
+    "freeBytesBefore": 183729500160,
+    "freeBytesAfter": 188165681152,
+    "preserved": "CAD/STEP/PMX/mesh projects, frozen jobs, evidence, manifests/source snapshots and shared native CAD/solver/Python/.NET/package/Podman/source caches; installed user app/state untouched."
+  },
+  "diagnosticsRetained": [
+    "Strict six-body native mesh/deck/field differences are retained in cross-platform.json and mac-linux-deck.diff; no index-paired numerical difference is claimed across differing meshes."
+  ],
+  "reference": {
+    "reused": ".project/reports/native-cad-operations/windows-reference.json",
+    "translationSplitRepairOriginalWindowsBrepHashesMatchOnBothNativeTargets": true,
+    "newWindowsMirrorScaleOrCopiesExecution": false
+  },
+  "openGates": [
+    "Original-compatible new native-session PMX serialization and broader project graph",
+    "Exact native geometry visualization, mesh, edited-deck and field parity",
+    "Both known original element correctness failures",
+    "Quadratic-tetrahedron measurement gate",
+    "Windows/net48 and native Linux x64 verification; full four-target parity",
+    "Broader CAD/analysis/meshers, assembly metadata and arbitrary STEP geometry equivalence",
+    "Clean-OS/installers/Homebrew/Developer ID/notarization/release acceptance"
+  ]
+}

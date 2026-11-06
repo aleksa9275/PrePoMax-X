@@ -1,5 +1,32 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0081–0083 add original native mirror, scaling and transform copies.
+Read [the current report](../reports/cad-mirror-scale-copies.md) and its receipt.
+Mirror uses a plane point/normal; positive scale factors are 0.000001–1000 with
+explicit center. Copies retain every original part byte and append 1–16 original
+numbered outputs within 32 total parts. Complete inventories, copy origins and
+raw output hashes are checked/frozen. Partial/extra/cancelled copies never publish.
+All operations retain owned undo/redo, invalidate dependent mesh/analysis and
+keep PMX geometry immutable. No imprinting/joining/assembly metadata is claimed.
+
+Current candidate: `/tmp/prepomaxx-task0083-delivery/PrePoMax-X Preview.app`,
+source `b938adac` pushed/remote-verified with CI skipped and an empty package
+source patch. Its sibling native CAD launcher enables the retained native runtime;
+older launchers forward to it. Native Mac/Linux ARM64 pass 99 CAD checks, 50
+desktop tests and 91 combined workflow checks; both copied Mac viewports pass 91,
+including visible contours and eight frozen edit recipes. CAD PMX/C3D8 regressions
+pass 28/17 on both hosts; nine Mac build guards pass. Mac mesh 402 nodes/898 C3D4,
+Linux 402/900: strict mesh/deck/field equality remains open. Independent affine/
+unit-stress checks pass without tolerance changes; do not pair field arrays across
+different meshes. No new original Windows mirror/scale/copy execution occurred.
+
+Superseded task 0080 app/build duplicates are pruned; all projects/jobs/evidence,
+small source/manifest records and shared tools remain. Read the final receipt for
+actual retention and post-cleanup payload/signature checks. Older app paths below
+are historical. Native-session PMX remains a major open boundary under D057;
+keep D058's hosted hold, D059's Windows/Podman x64 deferral, both correctness
+failures, quadratic tetrahedra and all full-parity/installers/release gates.
+
 Tasks 0078–0080 add bounded owned CAD undo/redo, original rotation and checked
 whole-model STEP export. Read [the current report](../reports/cad-history-rotation-export.md)
 and its verification receipt first. History restores exact owned geometry bytes,

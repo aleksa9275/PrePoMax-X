@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-06 tasks 0081–0083 add original native CAD mirror, scaling and numbered
+translated/rotated copies. The six-solid workflow passes native editing, owned
+history, checked STEP exchange, remeshing, affine/unit-stress solve and frozen
+provenance. [Current evidence/candidate](reports/cad-mirror-scale-copies.md).
+Mac/Linux meshes differ; exact native parity, new native-session PMX, both
+correctness failures, quadratic tetrahedra and all release gates remain open.
+D057/D058/D059 remain in force.
+
 2026-11-06 tasks 0078–0080 add bounded owned geometry undo/redo, original
 axis-angle rotation and all-body STEP exchange with checked native solid origins.
 Mac/Linux ARM64 and both copied Mac viewports pass combined editing, remeshing,
