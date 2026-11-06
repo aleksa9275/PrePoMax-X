@@ -269,7 +269,7 @@ class Viewport(QtWidgets.QMainWindow):
         if self.model_scene is None:
             QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP or VIS file', 'or Solve example'])
             return
-        units = self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
+        units = 'Model units · C3D10 preview' if self.quadratic_preview else self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, units or 'Choose units'])
         root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
         QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
