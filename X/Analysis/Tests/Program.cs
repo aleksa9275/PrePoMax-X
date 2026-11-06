@@ -169,6 +169,24 @@ Check("VOL decimal convention independent of current culture", () => {
     } finally { CultureInfo.CurrentCulture=previous; }
 });
 Check("quadratic VOL tetra remains gated",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 10 1 3 2 4 1 2 3 4 1 2")));
+string qvol = "mesh3d\ndimension\n3\nsurfaceelements\n4\n1 1 1 0 6 1 2 3 6 7 5\n2 2 1 0 6 1 2 4 9 8 5\n3 3 1 0 6 1 3 4 10 8 7\n4 4 1 0 6 2 3 4 10 9 6\nvolumeelements\n1\n7 10 1 3 2 4 7 5 8 6 10 9\nedgesegmentsgi2\n1\n1 0 1 2 -1 -1 0 0 1 0 9 1\npoints\n10\n0 0 0\n1 0 0\n0 1 0\n0 0 1\n0.5 0 0\n0.5 0.5 0\n0 0.5 0\n0 0 0.5\n0.5 0 0.5\n0 0.5 0.5\nendmesh\n";
+Check("quadratic preview preserves original ten-node and face permutations",()=> {
+    var m=FileInOut.Input.NetgenVolFileReader.ReadQuadraticPreviewData(qvol);
+    Require(m.ElementOrder==2 && m.Elements[5] is ParabolicTetraElement && m.Elements[5].NodeIds.SequenceEqual(Enumerable.Range(1,10)));
+    Require(m.FaceNodeIds[1].SetEquals(new[]{1,2,3,5,6,7}) && m.EdgeNodeIds[9].SetEquals(new[]{1,2,5}));
+    Require(m.Elements[5].GetVtkCellType()==24);
+});
+void RejectQuadratic(string text) {
+    try { FileInOut.Input.NetgenVolFileReader.ReadQuadraticPreviewData(text); }
+    catch(Exception e) when(e is System.IO.InvalidDataException or NotSupportedException or FormatException or ArgumentException) { return; }
+    throw new Exception("Malformed quadratic preview accepted");
+}
+Check("quadratic preview refuses missing midside and inverted corners",()=> {
+    RejectQuadratic(qvol.Replace("7 10 1 3 2 4 7 5 8 6 10 9","7 10 1 3 2 4 7 5 8 6 10 11"));
+    RejectQuadratic(qvol.Replace("7 10 1 3 2 4 7 5 8 6 10 9","7 10 1 2 3 4 7 5 8 6 10 9"));
+});
+Check("quadratic preview refuses swapped CAD face midsides",()=>RejectQuadratic(qvol.Replace("6 1 2 3 6 7 5","6 1 2 3 7 6 5")));
+Check("quadratic preview keeps the linear admission gate",()=>RejectVol(qvol));
 Check("inverted VOL tetra rejected",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 4 1 2 3 4")));
 Check("VOL missing node rejected",()=>RejectVol(vol.Replace("7 4 1 3 2 4", "7 4 1 3 2 99")));
 Check("VOL truncated count rejected",()=>RejectVol(vol.Replace("points\n4", "points\n5")));
