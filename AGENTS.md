@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0084–0086 add native C3D10 CAD meshing, preview, midside CAD regions and
+mesh-only INP export. Read .project/reports/quadratic-cad-preview.md and its
+receipt for source, actual checks and the retained candidate. Quadratic numerical
+measurement, static solve and curved Jacobian/quality remain blocked; original
+affine integration still fails (26.794910717854155 versus 28), and pyramid
+classification still fails. Original algorithms/tolerances are unchanged. Linear
+C3D4/C3D8 analysis remains operational. Keep D029/D057/D058/D059, exact native
+parity, native-session PMX and every four-target/release gate open.
+
 Tasks 0081–0083 add original CAD mirror, positive uniform/non-uniform scaling
 and translated/rotated copies with owned undo/redo and frozen numbered outputs.
 Read .project/reports/cad-mirror-scale-copies.md for actual source, verification,

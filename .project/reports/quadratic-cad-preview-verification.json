@@ -1,0 +1,635 @@
+{
+  "schemaVersion": 1,
+  "tasks": {
+    "0084": "0e28e432f26824eac80978d633aabbdca69ffe9e",
+    "0085": "d365fbbada2a96bdddc5430ce5600d50d9b35593",
+    "0086": "76fbb7d7790fb71a99347f8445d6a0dc343cfca9",
+    "visualQa": "d4e98084d9f75cc85a3ea2dd35d35b5d7a08e93f",
+    "packagedSource": "ec57aa53a3cca4354885b21da14d2c55883b0bd5"
+  },
+  "status": "complete within quadratic mesh preview/export boundary",
+  "candidate": {
+    "app": "/tmp/prepomaxx-task0086-delivery/PrePoMax-X Preview.app",
+    "launcher": "/tmp/prepomaxx-task0086-delivery/Native CAD Preview.command",
+    "runtime": "/tmp/prepomaxx-task0063-recipe/runtime",
+    "files": 2422,
+    "checks": {
+      "payload": true,
+      "symlinks": true
+    },
+    "sourceIdentity": {
+      "viewportSha256": "4c1f0227f9f4c1530270c351a7f5bf9b6181851a7caf78ee046e194ece002d21",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "32ee6455e69b21f05ab8a2f84e7f0857986cebe07f351b3eb72d0c2158262777",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+      "cadJobSha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2",
+      "cadDocumentSha256": "916a045159878d941f7337ad476d20f43fcebf7fbb9b7202b96671731b4afb3f",
+      "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+      "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+      "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+      "quadraticProbeSha256": "4ea6e0908d672d7d53cc84d42c67d46148212f0fcd858aa1e248504dbca5c054",
+      "meshExportSha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953",
+      "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+      "cadRegionsSha256": "b026aa54e9f7a65e2328465b99082ab6c35d777a0614642e9dcde44e04186722",
+      "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+      "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+      "desktopJobsSha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "ec57aa53a3cca4354885b21da14d2c55883b0bd5",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e",
+      "pmxToolHashes": {
+        "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+        "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+        "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "sourcePatchBytes": 0,
+    "adHocSignatureVerified": true,
+    "packageManifestSha256": "a13c1730d9d0d4e54900f5a9c11cc0c942c28be3c56e821cc094ee762c6e7d57"
+  },
+  "publication": {
+    "branch": "origin/research/native-feasibility",
+    "implementationRemoteVerified": true,
+    "pushCiSkip": true,
+    "commitSkipCi": true,
+    "hostedJobsRequested": 0,
+    "D058": "hosted hold preserved",
+    "D059": "Linux x64 deferred to Windows/Podman"
+  },
+  "verification": {
+    "nativeMacTwoBody": {
+      "path": "/tmp/prepomaxx-task0086-evidence/native/verification.json",
+      "sha256": "d42b9633835bb1c5359934a0a47348f7fc31c519a584f65c29fd339be1e59b64",
+      "success": true,
+      "checks": 11
+    },
+    "nativeMacCurved": {
+      "path": "/tmp/prepomaxx-task0086-evidence/curved-native/verification.json",
+      "sha256": "bc4a5749fc5e66399c61bbad7a2ad91563a81d55de6acc85de934770196acd72",
+      "success": true,
+      "checks": 11
+    },
+    "nativeLinuxTwoBody": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/native/verification.json",
+      "sha256": "a1fe082c22bd3dbfbd7f2c5562334f31aa7a697ffd23dec5d954d6b022ee9cac",
+      "success": true,
+      "checks": 11
+    },
+    "nativeLinuxCurved": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/curved-native/verification.json",
+      "sha256": "99573ff6454445a3b4e25748a7e1300bda3a31e0fcd39a7fcfe0726a164cbcee",
+      "success": true,
+      "checks": 11
+    },
+    "sourceMacQuadratic": {
+      "path": "/tmp/prepomaxx-task0086-evidence/source-gui/workflow.json",
+      "sha256": "ad5634257662e02b7057378da7988773bce370f550b8cb90db88084c5505c0db",
+      "success": true,
+      "checks": 27
+    },
+    "linuxQuadratic": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/gui/workflow.json",
+      "sha256": "ad5634257662e02b7057378da7988773bce370f550b8cb90db88084c5505c0db",
+      "success": true,
+      "checks": 27
+    },
+    "copiedMacBridgeQuadratic": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-bridge/workflow.json",
+      "sha256": "ad5634257662e02b7057378da7988773bce370f550b8cb90db88084c5505c0db",
+      "success": true,
+      "checks": 27
+    },
+    "copiedMacCocoaQuadratic": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-cocoa/workflow.json",
+      "sha256": "e2978999ce050ad5773c9298ee7b2a9cdcb22ec47049306df9178d0b771ab80c",
+      "success": true,
+      "checks": 27
+    },
+    "copiedMacBridgeLinear": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-linear-bridge/workflow.json",
+      "sha256": "9272a2b964414eac5b4f29727f42f1dc37637061a1aa56497d5b825da13bd24e",
+      "success": true,
+      "checks": 91
+    },
+    "copiedMacCocoaLinear": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-linear-cocoa/workflow.json",
+      "sha256": "a5a83a59c7e216b543e82848e621dd0eb9b51a6df74375c075dfded92f20cfc5",
+      "success": true,
+      "checks": 91
+    },
+    "linuxLinear": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/linear/workflow.json",
+      "sha256": "dee287baa1e3c7ca840135b71832850b703c6e764b22b888f26f65e9d7c31cb9",
+      "success": true,
+      "checks": 91
+    },
+    "copiedMacCadPmx": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-pmx/workflow.json",
+      "sha256": "435e419b74498b59f27f44cd60c62b72f1ff2cdef0eb07f48dab6f6cf24b6a5f",
+      "success": true,
+      "checks": 28
+    },
+    "copiedMacC3d8Pmx": {
+      "path": "/tmp/prepomaxx-task0086-evidence/final-old-pmx/verification.json",
+      "sha256": "5d66f671b568124d2f4333d2f6b037eece75f0148f191244c51e2e6e8e1caa30",
+      "success": true,
+      "checks": 17
+    },
+    "linuxCadPmx": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/pmx/workflow.json",
+      "sha256": "b91f91051607010d94cb7bc1cf57458aae88278dd9b58ce291852d49a6d85061",
+      "success": true,
+      "checks": 28
+    },
+    "linuxC3d8Pmx": {
+      "path": "/tmp/prepomaxx-task0086-evidence/linux/old-pmx/verification.json",
+      "sha256": "533512c8facfaf29ce4a135d687dded6c6e2f26820abfe85a0c88a2407a94ddf",
+      "success": true,
+      "checks": 17
+    }
+  },
+  "regressions": {
+    "desktopMac": 52,
+    "desktopLinuxArm64": 52,
+    "buildGuards": 9,
+    "analysisOwnershipGuards": 12,
+    "logs": {
+      "desktop-tests.log": {
+        "path": "/tmp/prepomaxx-task0086-evidence/desktop-tests.log",
+        "sha256": "4d1cd779f02a7ed982b0c0ef8941fb090bf6af1cd9a916a0fa4dfd28a560b6d7"
+      },
+      "linux/desktop-tests.log": {
+        "path": "/tmp/prepomaxx-task0086-evidence/linux/desktop-tests.log",
+        "sha256": "18e3825d9c680d578b4852777e4248dc80b0d53ea0754994d5c9bbde198c6cb7"
+      },
+      "analysis-guards.log": {
+        "path": "/tmp/prepomaxx-task0086-evidence/analysis-guards.log",
+        "sha256": "8c065e804e58773dc23e796b22d77a932408e8892f778d2855527e5c479142f7"
+      },
+      "build-tests.log": {
+        "path": "/tmp/prepomaxx-task0086-evidence/build-tests.log",
+        "sha256": "44da5ff3d8732677572559b618a09686fa21efd87af4d2b415dc65f98118d47f"
+      }
+    },
+    "macCurrentEngineeringProfile": {
+      "schemaVersion": 1,
+      "profile": "fast",
+      "areas": [
+        "core",
+        "analysis",
+        "execution",
+        "results"
+      ],
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "recordedAtUtc": "2026-11-06T15:02:23.464326+00:00",
+      "steps": [
+        {
+          "area": "core",
+          "revision": "current",
+          "arguments": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "X/Core/verify.py",
+            "--expect-os",
+            "Darwin",
+            "--expect-architecture",
+            "Arm64",
+            "--output",
+            "/private/tmp/prepomaxx-task0086-current-checks/core-current.json"
+          ],
+          "result": "core-current.json",
+          "log": "core-current.log",
+          "status": "passed",
+          "exitCode": 0,
+          "resultSha256": "2ac51cf6ea811efb3490f380a0d230d2cda3cda6f2dc90697f86056b2c2f9fad",
+          "checks": null,
+          "openCorrectnessChecks": [
+            {
+              "name": "quadratic tetrahedron affine integral",
+              "passed": false,
+              "expected": 28,
+              "actual": 26.794910717854155,
+              "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+            },
+            {
+              "name": "quadratic pyramid classification",
+              "passed": false,
+              "expected": true,
+              "actual": false,
+              "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+            }
+          ],
+          "fullyAccepted": false,
+          "elapsedSeconds": 9.109
+        },
+        {
+          "area": "analysis",
+          "revision": "current",
+          "arguments": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "X/Analysis/verify-analysis.py",
+            "--expect-os",
+            "Darwin",
+            "--expect-architecture",
+            "Arm64",
+            "--output",
+            "/private/tmp/prepomaxx-task0086-current-checks/analysis-current.json"
+          ],
+          "result": "analysis-current.json",
+          "log": "analysis-current.log",
+          "status": "passed",
+          "exitCode": 0,
+          "resultSha256": "0e8c4a09a2e10f2bbd4d9ef350f37b98354107591b7e7aa5ca9cec6bd7f24350",
+          "checks": 58,
+          "openCorrectnessChecks": [
+            {
+              "name": "quadratic tetrahedron affine integral",
+              "passed": false,
+              "expected": 28,
+              "actual": 26.794910717854155,
+              "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+            },
+            {
+              "name": "quadratic pyramid classification",
+              "passed": false,
+              "expected": true,
+              "actual": false,
+              "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+            }
+          ],
+          "fullyAccepted": false,
+          "elapsedSeconds": 13.78
+        },
+        {
+          "area": "execution",
+          "revision": "current",
+          "arguments": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "X/Execution/verify-execution.py",
+            "--expect-os",
+            "Darwin",
+            "--expect-architecture",
+            "Arm64",
+            "--output",
+            "/private/tmp/prepomaxx-task0086-current-checks/execution-current.json"
+          ],
+          "result": "execution-current.json",
+          "log": "execution-current.log",
+          "status": "passed",
+          "exitCode": 0,
+          "resultSha256": "074d4eb3c4209e62c030f55b899b306b80584242265122ab2b3a10e9c2c218d1",
+          "checks": 49,
+          "elapsedSeconds": 14.519
+        },
+        {
+          "area": "results",
+          "revision": "current",
+          "arguments": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "X/Results/verify-results.py",
+            "--expect-os",
+            "Darwin",
+            "--expect-architecture",
+            "Arm64",
+            "--output",
+            "/private/tmp/prepomaxx-task0086-current-checks/results-current.json"
+          ],
+          "result": "results-current.json",
+          "log": "results-current.log",
+          "status": "passed",
+          "exitCode": 0,
+          "resultSha256": "c0bd7070d09a67a7e6d20ece503181a21de2dfcd0951db2b63ced40f53648cdf",
+          "checks": 78,
+          "elapsedSeconds": 6.618
+        }
+      ],
+      "success": true,
+      "plannedStepCount": 4,
+      "solverExecuted": false,
+      "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+      "repository": {
+        "head": "d365fbbada2a96bdddc5430ce5600d50d9b35593",
+        "dirty": true,
+        "patch": "source.patch",
+        "patchSha256": "1210f2843e3c183ec21ecc99c2e90f8b06d20c4ac787cef26e740b959b7a80c5",
+        "changedCode": [
+          {
+            "path": "X/Build/build.py",
+            "state": "modified",
+            "sha256": "c814c37df50049ee2351dbf7b18086fc8449a08a46f371eec0c176828757282a"
+          },
+          {
+            "path": "X/Desktop/cad_job.py",
+            "state": "modified",
+            "sha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2"
+          },
+          {
+            "path": "X/Desktop/mesh_export.py",
+            "state": "untracked",
+            "sha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953"
+          },
+          {
+            "path": "X/Desktop/quadratic_probe.py",
+            "state": "untracked",
+            "sha256": "4ea6e0908d672d7d53cc84d42c67d46148212f0fcd858aa1e248504dbca5c054"
+          },
+          {
+            "path": "X/Desktop/test_native_mesh_lifecycle.py",
+            "state": "modified",
+            "sha256": "485307252f23e5bc588bf74f33a0a927f03376aec973d5f5d0eea6e4657fa414"
+          },
+          {
+            "path": "X/Desktop/test_quadratic_preview.py",
+            "state": "untracked",
+            "sha256": "5811ca55499a20fc4a7741a970fe6d2bbc1224e0550f55735d647027f8a76741"
+          },
+          {
+            "path": "X/Desktop/viewport.py",
+            "state": "modified",
+            "sha256": "a83e29264cdf26a64c40f4c1fd3acee25d459a84a3ff173669d9ee9e4a626d4f"
+          }
+        ],
+        "scope": "changed build/test/shared source only; no user models or private files"
+      },
+      "upstreamPins": {
+        "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+        "revisions": [
+          {
+            "name": "3.0.0-rc2",
+            "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+          },
+          {
+            "name": "post-rc2-2026-10-17",
+            "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+          }
+        ]
+      },
+      "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+      "dotnetSdk": "10.0.403",
+      "elapsedSeconds": 44.198,
+      "pendingSteps": []
+    },
+    "linuxCurrentAnalysisProfile": {
+      "schemaVersion": 1,
+      "profile": "fast",
+      "areas": [
+        "analysis"
+      ],
+      "host": {
+        "os": "Linux",
+        "architecture": "Arm64"
+      },
+      "recordedAtUtc": "2026-11-06T15:04:57.854471+00:00",
+      "steps": [
+        {
+          "area": "analysis",
+          "revision": "current",
+          "arguments": [
+            "/usr/bin/python3",
+            "X/Analysis/verify-analysis.py",
+            "--expect-os",
+            "Linux",
+            "--expect-architecture",
+            "Arm64",
+            "--output",
+            "/out/current-analysis-checks/analysis-current.json"
+          ],
+          "result": "analysis-current.json",
+          "log": "analysis-current.log",
+          "status": "passed",
+          "exitCode": 0,
+          "resultSha256": "bee15a09ed68542c69561a1da832d11c090b3855e105a5e1c557e01f7f5295b9",
+          "checks": 58,
+          "openCorrectnessChecks": [
+            {
+              "name": "quadratic tetrahedron affine integral",
+              "passed": false,
+              "expected": 28,
+              "actual": 26.794910717854155,
+              "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+            },
+            {
+              "name": "quadratic pyramid classification",
+              "passed": false,
+              "expected": true,
+              "actual": false,
+              "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+            }
+          ],
+          "fullyAccepted": false,
+          "elapsedSeconds": 17.498
+        }
+      ],
+      "success": true,
+      "plannedStepCount": 1,
+      "solverExecuted": false,
+      "scope": "Existing engineering checks only; no desktop/native solver/release acceptance",
+      "repository": {
+        "head": "d365fbbada2a96bdddc5430ce5600d50d9b35593",
+        "dirty": true,
+        "patch": "source.patch",
+        "patchSha256": "1210f2843e3c183ec21ecc99c2e90f8b06d20c4ac787cef26e740b959b7a80c5",
+        "changedCode": [
+          {
+            "path": "X/Build/build.py",
+            "state": "modified",
+            "sha256": "c814c37df50049ee2351dbf7b18086fc8449a08a46f371eec0c176828757282a"
+          },
+          {
+            "path": "X/Desktop/cad_job.py",
+            "state": "modified",
+            "sha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2"
+          },
+          {
+            "path": "X/Desktop/mesh_export.py",
+            "state": "untracked",
+            "sha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953"
+          },
+          {
+            "path": "X/Desktop/quadratic_probe.py",
+            "state": "untracked",
+            "sha256": "4ea6e0908d672d7d53cc84d42c67d46148212f0fcd858aa1e248504dbca5c054"
+          },
+          {
+            "path": "X/Desktop/test_native_mesh_lifecycle.py",
+            "state": "modified",
+            "sha256": "485307252f23e5bc588bf74f33a0a927f03376aec973d5f5d0eea6e4657fa414"
+          },
+          {
+            "path": "X/Desktop/test_quadratic_preview.py",
+            "state": "untracked",
+            "sha256": "5811ca55499a20fc4a7741a970fe6d2bbc1224e0550f55735d647027f8a76741"
+          },
+          {
+            "path": "X/Desktop/viewport.py",
+            "state": "modified",
+            "sha256": "a83e29264cdf26a64c40f4c1fd3acee25d459a84a3ff173669d9ee9e4a626d4f"
+          }
+        ],
+        "scope": "changed build/test/shared source only; no user models or private files"
+      },
+      "upstreamPins": {
+        "baseline": "de8f73032a72746e3d6d9afd53d9fbd289eb310a",
+        "revisions": [
+          {
+            "name": "3.0.0-rc2",
+            "commit": "912fb3d08014f246d48bef14d62a2cba0fdf5bb0"
+          },
+          {
+            "name": "post-rc2-2026-10-17",
+            "commit": "f6273e39983e06042ae8b06e9a3dd0f729ea4b91"
+          }
+        ]
+      },
+      "runnerSha256": "48d1fd474cd6f31122fd1fccead31c835d16effb0be80c87c1619afb29a29f06",
+      "dotnetSdk": "10.0.402",
+      "elapsedSeconds": 23.218,
+      "pendingSteps": []
+    }
+  },
+  "quadraticMeshing": {
+    "mac": {
+      "nodes": 2548,
+      "elements": 1154
+    },
+    "linuxArm64": {
+      "nodes": 2548,
+      "elements": 1154
+    }
+  },
+  "quadraticCrossPlatform": {
+    "checks": {
+      "nodes": false,
+      "elements": false,
+      "nodeSets": true,
+      "elementSets": true,
+      "meshBytes": false
+    },
+    "strictlyEqual": false,
+    "mac": {
+      "nodes": 2548,
+      "elements": 1154,
+      "meshSha256": "eadf796df4138d90c3f14111bacac66657b2aaafca51f3a73d4dda858354af04"
+    },
+    "linuxArm64": {
+      "nodes": 2548,
+      "elements": 1154,
+      "meshSha256": "707d45b3c80ce8e663a53e566534d1d5ad0278065937e0f43ed44044fffd6dc2"
+    },
+    "scope": "Quadratic preview topology/coordinates only; no numerical field or curved-quality acceptance."
+  },
+  "numericalAcceptance": {
+    "quadraticSolverExecuted": false,
+    "fullyAccepted": false,
+    "openCorrectnessChecks": [
+      {
+        "name": "quadratic tetrahedron affine integral",
+        "passed": false,
+        "expected": 28,
+        "actual": 26.794910717854155,
+        "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+      },
+      {
+        "name": "quadratic pyramid classification",
+        "passed": false,
+        "expected": true,
+        "actual": false,
+        "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+      }
+    ],
+    "scope": "Original kernel, static C3D10 admission and measurement refusal remain unchanged; preview checks corner orientation and topology, not curved Jacobian validity."
+  },
+  "retention": {
+    "candidate": "/tmp/prepomaxx-task0086-delivery/PrePoMax-X Preview.app",
+    "removed": [
+      {
+        "path": "/tmp/prepomaxx-task0086-final/dist",
+        "logicalBytes": 2285765177
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-final/build",
+        "logicalBytes": 20660591
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-final/hosts",
+        "logicalBytes": 621510633
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-final/pmx-tools",
+        "logicalBytes": 42248
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-final/examples",
+        "logicalBytes": 1540
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-final/pyinstaller-cache",
+        "logicalBytes": 950990913
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/dist",
+        "logicalBytes": 2285765241
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/build",
+        "logicalBytes": 20678084
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/hosts",
+        "logicalBytes": 621510569
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/pmx-tools",
+        "logicalBytes": 42248
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/examples",
+        "logicalBytes": 1540
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-verified/pyinstaller-cache",
+        "logicalBytes": 950990913
+      },
+      {
+        "path": "/tmp/prepomaxx-task0086-preliminary/PrePoMax-X Preview.app",
+        "logicalBytes": 1156368043
+      },
+      {
+        "path": "/tmp/prepomaxx-task0083-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1156343003
+      }
+    ],
+    "logicalBytesRemoved": 10070670743,
+    "freeBytesBefore": 179210289152,
+    "freeBytesAfter": 188086603776,
+    "preserved": "All CAD/STEP/INP/PMX/mesh projects, frozen jobs/previews, screenshots, diagnostics/source snapshots/manifests and shared native/Python/.NET/package/Podman/source caches; installed user app/state untouched."
+  },
+  "diagnosticsRetained": [
+    "/tmp/prepomaxx-task0084-build.log: missing local restore assets; isolated check driver builds successfully",
+    "/tmp/prepomaxx-task0084-checks: initial analysis exact-count guard expected 54 while all 58 tests passed; count contract updated",
+    "/tmp/prepomaxx-task0085-build.log: stalled shared build stopped; build-final log passes with shared servers disabled",
+    "/tmp/prepomaxx-task0086-evidence/source-gui.log: action-initialization NameError corrected before source GUI success",
+    "/tmp/prepomaxx-task0086-evidence/linux/analysis-checks: GUI image lacked Git; cached research image current-analysis-checks passes",
+    "Initial copied-app screenshots retain the model-unit label corrected at visual QA; final screenshots supersede them"
+  ],
+  "openGates": [
+    "Original quadratic tetrahedron affine integration and quadratic pyramid classification failures",
+    "Quadratic numerical measurement, native C3D10 solves and curved Jacobian/quality acceptance",
+    "Exact native geometry/mesh/deck/field parity",
+    "New native-session PMX and general project graphs",
+    "Windows/net48, Linux x64, full four-target/formulation/analysis parity",
+    "Installers/Homebrew/clean OS/Developer ID/notarization/release acceptance"
+  ],
+  "newOriginalWindowsExecution": false
+}

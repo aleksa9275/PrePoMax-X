@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-06 tasks 0084–0086 add checked native C3D10 CAD mesh preview/export:
+original ten-node transport, midside CAD regions, real order controls and gated
+reopen. [Current scope/candidate](reports/quadratic-cad-preview.md). Quadratic
+measurement/analysis/curved quality remain unaccepted; the original affine
+integrator and pyramid classifier still fail. Mac/Linux preview checks and linear
+analytical/PMX regressions pass. Native-session PMX, exact native parity and all
+D029/D057/D058/D059/four-target/release requirements remain open.
+
 2026-11-06 tasks 0081–0083 add original native CAD mirror, scaling and numbered
 translated/rotated copies. The six-solid workflow passes native editing, owned
 history, checked STEP exchange, remeshing, affine/unit-stress solve and frozen

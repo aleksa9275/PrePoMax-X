@@ -111,3 +111,9 @@ four-target/installer/Homebrew/signing/notarization/release gates remain open.
 No production frontend, default format, backend or precision decision is made.
 This remains an internal ad-hoc-signed, unnotarized preview. Notify the maintainer
 when Developer ID or notarization actually requires their involvement.
+
+
+Task 0086 retention update: task 0083's copied app is superseded and pruned after
+verified quadratic preview and linear/PMX regressions. All projects/jobs/evidence
+remain; [the current candidate](quadratic-cad-preview.md) also preserves the
+linear mirror/scale/copy workflow.

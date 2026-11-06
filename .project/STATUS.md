@@ -1,6 +1,24 @@
 # Project status
 
-## Current — tasks 0081–0083: mirror, scaling and transform copies
+## Current — tasks 0084–0086: quadratic CAD mesh preview/export
+
+Native C3D10 meshing, ten-node transport, midside CAD sets, desktop order controls,
+VTK preview and mesh-only INP export/reopen are implemented. Quadratic numerical
+measurement/solve and curved quality remain blocked; both original correctness
+failures remain false. [Evidence](reports/quadratic-cad-preview.md).
+Mac/Linux ARM64 and both final copied viewports pass 27 quadratic workflow checks;
+two native fixtures pass 11 each. The curved fixture has 2548 nodes/1154 C3D10.
+Both hosts pass 52 desktop tests; four current Mac engineering suites, Linux
+current analysis and 12/9 Mac ownership/build guards pass. Linear workflow/PMX
+regressions pass 91/28/17 on both hosts and both copied linear viewports pass 91.
+Strict quadratic coordinates/connectivity differ across hosts; parity stays open.
+Current app: `/tmp/prepomaxx-task0086-delivery/PrePoMax-X Preview.app`, sibling
+native CAD launcher; packaged source `ec57aa53` is pushed/remote-verified with
+CI skipped and empty source patch. Superseded/generated payloads are pruned;
+projects/previews/jobs/evidence/shared tools remain. New native-session PMX and
+all D029/D057/D058/D059/four-target/installer/release gates remain open.
+
+## Prior — tasks 0081–0083: mirror, scaling and transform copies
 
 Tasks 0081–0083 add original native CAD mirror, positive uniform/non-uniform
 scaling and translated/rotated copies. Originals remain byte-identical for copies;
