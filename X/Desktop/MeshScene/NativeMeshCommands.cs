@@ -104,7 +104,9 @@ internal static class NativeMeshCommands
             WriteNew(args[1], exported);
             Console.WriteLine(JsonSerializer.Serialize(new { success = true, SourceSha256 = Hash(exported), meshOnly = true,
                 nodes = mesh.Nodes.Values.Select(n => new { id = n.Id, x = n.X, y = n.Y, z = n.Z }),
-                elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds }),
+                elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds, vtkNodeIds = e.GetVtkNodeIds() }),
+                elementBlocks = mesh.ElementBlocks.Select((b,i) => new { index=i, name=b.Name, formulation=b.InpElementTypeNames.Single(),
+                    count=b.ElementLabels.Count, compatibleFormulations=StaticAnalysisDeckWriter.CompatibleSolidFormulations(b.InpElementTypeNames.Single()) }),
                 nodeSets = mesh.NodeSets.Select(e => new { name = e.Key, count = e.Value.Length }),
                 elementSets = mesh.ElementSets.Select(e => new { name = e.Key, count = e.Value.Length }),
                 cadMesh = new { schemaVersion = 1, elementType = quadratic ? "C3D10" : "C3D4", elementOrder = quadratic ? 2 : 1, analysisEligible = true,

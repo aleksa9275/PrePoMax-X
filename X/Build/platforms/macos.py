@@ -82,7 +82,7 @@ def package(build, root, solver_build=None):
     output = build.output
     example_dir = output / 'examples'
     example_dir.mkdir()
-    for name in ('cube-mesh.inp', 'cube-analysis.json'):
+    for name in ('cube-mesh.inp', 'cube-analysis.json', 'mixed-solids.inp', 'mixed-solids.json', 'mixed-pyramids.inp', 'mixed-pyramids.json'):
         shutil.copy2(root / 'X/Analysis/StaticDeck' / name, example_dir / name)
     pmx = (['--add-data', f"{output / 'pmx-tools'}:pmx-tools", '--hidden-import', 'decimal']
            if (output / 'pmx-tools').is_dir() else [])

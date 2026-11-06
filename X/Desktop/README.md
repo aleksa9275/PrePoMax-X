@@ -1,5 +1,13 @@
 # Native viewport candidate
 
+Task 0089 adds **Solid formulations…** and connects imported mixed solid meshes
+to original configuration, native static solving and results: C3D4/C3D10/C3D10T,
+C3D6/C3D15 and C3D8/C3D8R/C3D8I/C3D20/C3D20R. C3D5/C3D13 use an explicit
+original collapsed-wedge/hexahedron choice in Configure → Model / units. Original
+VTK permutations and restored pyramid display retain original mesh identities.
+**Solve example…** offers the cube, all-formulation mixed solids and both pyramid
+conversion routes. [Current behavior and evidence](../../.project/reports/solid-formulation-workflow.md).
+
 **Mesh CAD…** offers **Linear C3D4** (default) and **Quadratic C3D10**.
 Both connect to Configure… / Run analysis and original FRD results. C3D10 retains
 all ten nodes, six-node CAD surfaces and midside regions; static solver decks
@@ -70,8 +78,8 @@ app. Windows/Linux managed cross-builds do not establish native desktop support.
 Qt/Python owns only this experimental window and VTK transport. Original C#
 readers decode INP and FRD in separate processes, retaining their actual assembly
 ownership. There is no second engineering parser/model or selected persistence
-format. The results reader supports the existing bounded C3D8 static snapshot;
-other analysis/mesh/UI functionality is not established by this preview.
+format. The results reader supports the connected 3D solid static workflows described
+above; other analysis families and full UI orchestration remain outstanding.
 
     dotnet build X/Desktop/MeshScene/MeshScene.csproj -c Release --source X/Analysis/artifacts/offline-feed
     dotnet build X/Feasibility/Cad/Inspect/Inspect.csproj -c Release --source X/Analysis/artifacts/offline-feed

@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0089 connects all original mechanical 3D tetrahedron/wedge/hexahedron
+formulations, mixed solid meshes and both explicit original pyramid conversions
+through desktop configuration, native solve, original FRD/VTK mapping and mesh
+export/reopen. Read .project/reports/solid-formulation-workflow.md and its receipt
+for actual scope/checks/candidate/publication. Other element/mesher/calculation/
+model/PMX functionality remains required. Preserve D029 original measurement/
+classifier failures, D057/D058/D059 and all four-target/release requirements.
+
 2026-11-06 delivery cadence reaffirmation: prioritize larger, usable functional
 milestones and substantial implementation. Use focused checks during development
 and representative workflow/regression checks at integration boundaries. Reuse

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_0",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_1"
+    },
+    {
+      "name": "Section_1",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_2"
+    },
+    {
+      "name": "Section_2",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_3"
+    },
+    {
+      "name": "Section_3",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_4"
+    },
+    {
+      "name": "Section_4",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_5"
+    },
+    {
+      "name": "Section_5",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_6"
+    },
+    {
+      "name": "Section_6",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_7"
+    },
+    {
+      "name": "Section_7",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_8"
+    },
+    {
+      "name": "Section_8",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_9"
+    },
+    {
+      "name": "Section_9",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_10"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Lateral",
+        "nodeSet": "ALL",
+        "displacements": [
+          "0",
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      },
+      {
+        "name": "Top",
+        "nodeSet": "TOP",
+        "displacements": [
+          null,
+          null,
+          "0.001"
+        ]
+      }
+    ],
+    "loads": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": []
+  }
+}

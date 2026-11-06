@@ -93,7 +93,7 @@ Check("malformed force vector rejected",()=>Reject(()=>AnalysisFiles.Create(Spec
 Check("oversized equation rejected",()=>Reject(()=>AnalysisFiles.Create(Spec() with{Materials=new[]{new MaterialSpec("ELASTIC",new string('1',4097),"0.3")}})));
 Check("mesh with model definitions is rejected",()=>Reject(()=>StaticAnalysisDeckWriter.Write(InpFileReader.ReadMeshData(deck.Split('\n')),baseline.Materials,baseline.Sections,baseline.Step)));
 Check("unsupported element formulation is rejected",()=>{
-    string mesh=File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"cube-mesh.inp")).Replace("TYPE=C3D8","TYPE=C3D8R");
+    string mesh=File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"cube-mesh.inp")).Replace("TYPE=C3D8","TYPE=DC3D8");
     Reject(()=>StaticAnalysisDeckWriter.Write(InpFileReader.ReadMeshData(mesh.Split('\n')),baseline.Materials,baseline.Sections,baseline.Step));
 });
 Check("zero original element measure is rejected",()=>{

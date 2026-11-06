@@ -132,7 +132,7 @@ def verify(run,work,here,root):
     for index,(name,value) in enumerate(variants.items()):
         path=work/('bad-'+str(index)+'.json');path.write_text(value)
         controls.append((name,['dotnet',binary,'build-static',mesh,path,work/'bad.inp'],1))
-    for name,content in [('mesh contains model definitions',text),('unsupported formulation',mesh.read_text().replace('TYPE=C3D8','TYPE=C3D8R'))]:
+    for name,content in [('mesh contains model definitions',text),('unsupported formulation',mesh.read_text().replace('TYPE=C3D8','TYPE=DC3D8'))]:
         path=work/(name.replace(' ','-')+'.inp');path.write_text(content)
         controls.append((name,['dotnet',binary,'build-static',path,definition,work/'bad.inp'],1))
     controls.append(('input alias output',['dotnet',binary,'build-static',mesh,definition,mesh],1))

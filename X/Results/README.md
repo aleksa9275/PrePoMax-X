@@ -6,6 +6,9 @@ assemblies. CaeMesh nodes/elements retain original ownership. Required original
 Tools IO/math methods are mechanically moved to a shared partial; full original
 FeResults/FeMesh orchestration and unit-converter setup remain net48-only.
 There is one engineering decoder and one field-math implementation.
+Task 0089 also restores solver-collapsed pyramids with the original conversion
+helpers, retains original decoded solver connectivity separately and carries
+original GetVtkNodeIds permutations to the renderer.
 
 With native .NET 10 and the exact packages cached by X/Analysis:
 
@@ -14,7 +17,7 @@ dotnet build X/Results/PrePoMaxX.Results.slnx -c Release --disable-build-servers
 dotnet X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll inspect-frd .project/reports/windows-reference/solver/uniaxial.frd
 ```
 
-`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed C3D8/C3D4/C3D10 3D static
+`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed linear/quadratic tetrahedron, wedge and hexahedron 3D static
 results, with one complete node block, one element block and full single-record-
 per-node fields. It supports the original ASCII and float/double binary formats,
 displacement, force, stress, total strain and stress-error fields. Vector/tensor

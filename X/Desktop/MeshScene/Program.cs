@@ -11,20 +11,23 @@ if (args.Length > 0 && args[0] is "netgen-parameters" or "from-vol" or "netgen-q
     return NativeMeshCommands.Run(args);
 
 bool addSet = args.Length == 6 && args[0] is "add-set" or "add-region-set";
-if (args.Length != 1 && !addSet)
+bool setFormulations = args.Length == 4 && args[0] == "set-solid-formulations";
+if (args.Length != 1 && !addSet && !setFormulations)
 {
-    Console.Error.WriteLine("Usage: PrePoMaxX.MeshScene <mesh.inp> | add-set <mesh.inp> <new.inp> <node|element> <name> <ids> | add-region-set <mesh.inp> <new.inp> <node|element> <name> <source-set-names>");
+    Console.Error.WriteLine("Usage: PrePoMaxX.MeshScene <mesh.inp> | add-set <mesh.inp> <new.inp> <node|element> <name> <ids> | add-region-set <mesh.inp> <new.inp> <node|element> <name> <source-set-names> | set-solid-formulations <mesh.inp> <new.inp> <choices.json>");
     return 2;
 }
 try
 {
-    var (mesh, source) = addSet ? AddSet(args) : (MeshFiles.Read(args[0]), File.ReadAllBytes(args[0]));
+    var (mesh, source) = addSet ? AddSet(args) : setFormulations ? SetFormulations(args) : (MeshFiles.Read(args[0]), File.ReadAllBytes(args[0]));
     Console.WriteLine(JsonSerializer.Serialize(new {
         success = true, schemaVersion = 1, meshOnly = true,
         SourceSha256 = Convert.ToHexStringLower(SHA256.HashData(source)),
         engineeringOwner = "Original CaeModel/CaeMesh INP mesh reader; renderer DTO only",
         nodes = mesh.Nodes.Values.Select(n => new { id = n.Id, x = n.X, y = n.Y, z = n.Z }),
-        elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds }),
+        elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds, vtkNodeIds = e.GetVtkNodeIds() }),
+        elementBlocks = mesh.ElementBlocks.Select((b,i) => new { index=i, name=b.Name, formulation=b.InpElementTypeNames.Single(),
+            count=b.ElementLabels.Count, compatibleFormulations=StaticAnalysisDeckWriter.CompatibleSolidFormulations(b.InpElementTypeNames.Single()) }),
         nodeSets = mesh.NodeSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
         elementSets = mesh.ElementSets.Select(entry => new { name = entry.Key, count = entry.Value.Length }),
         authoredSet = addSet ? new { kind = args[3], name = args[4], ids = (args[3] == "node" ? mesh.NodeSets : mesh.ElementSets)[args[4]] } : null,
@@ -34,10 +37,48 @@ try
     return 0;
 }
 catch (Exception e) when (e is IOException or InvalidDataException or ArgumentException or CaeGlobals.CaeException or
-    FormatException or OverflowException or NotSupportedException or IndexOutOfRangeException)
+    FormatException or OverflowException or NotSupportedException or IndexOutOfRangeException or JsonException)
 {
     Console.Error.WriteLine(JsonSerializer.Serialize(new { success = false, error = e.Message }));
     return 1;
+}
+
+static (InpMeshData Mesh, byte[] Bytes) SetFormulations(string[] arguments)
+{
+    var original = MeshFiles.Read(arguments[1]);
+    if (original.Warnings.Length != 0 || original.OmittedKeywords.Length != 0)
+        throw new InvalidDataException("Formulation editing requires a standalone mesh without omissions or fallback warnings.");
+    if (new FileInfo(arguments[3]).Length > 64*1024)
+        throw new InvalidDataException("Formulation choices exceed the bounded input size.");
+    var choices = JsonSerializer.Deserialize<string[]>(File.ReadAllText(arguments[3]));
+    if (choices == null || choices.Length != original.ElementBlocks.Count)
+        throw new InvalidDataException("Provide one formulation choice per original element block.");
+    for (int i=0; i<choices.Length; i++)
+        if (!StaticAnalysisDeckWriter.CompatibleSolidFormulations(original.ElementBlocks[i].InpElementTypeNames.Single()).Contains(choices[i]))
+            throw new InvalidDataException("The requested formulation is not compatible with the original solid topology.");
+    // Change only TYPE in original headers: preserve pyramid input and every
+    // coordinate/connectivity/set record, using the original reader for readback.
+    string text = File.ReadAllText(arguments[1]);
+    int block = 0;
+    string updated = Regex.Replace(text, @"(?im)^\*ELEMENT\b[^\r\n]*", m => {
+        string choice=choices[block++];
+        return Regex.Replace(m.Value, @"(?i)(\bTYPE\s*=\s*)[^,\r\n]+", n => n.Groups[1].Value+choice);
+    });
+    if (block != choices.Length) throw new InvalidDataException("Element block inventory changed during editing.");
+    var checkedMesh = InpFileReader.ReadMeshData(updated.Replace("\r", "").Split('\n'));
+    bool SameSets(Dictionary<string,int[]> a, Dictionary<string,int[]> b) => a.Count==b.Count &&
+        a.All(e=>b.TryGetValue(e.Key,out var ids) && e.Value.Order().SequenceEqual(ids.Order()));
+    if (checkedMesh.Nodes.Count!=original.Nodes.Count || checkedMesh.Elements.Count!=original.Elements.Count ||
+        checkedMesh.Warnings.Length!=0 || checkedMesh.OmittedKeywords.Length!=0 ||
+        original.Nodes.Any(e=>!checkedMesh.Nodes.TryGetValue(e.Key,out var n) || n.X!=e.Value.X || n.Y!=e.Value.Y || n.Z!=e.Value.Z) ||
+        original.Elements.Any(e=>!checkedMesh.Elements.TryGetValue(e.Key,out var other) || !e.Value.NodeIds.SequenceEqual(other.NodeIds)) ||
+        !SameSets(original.NodeSets,checkedMesh.NodeSets) || !SameSets(original.ElementSets,checkedMesh.ElementSets) ||
+        checkedMesh.ElementBlocks.Where((b,i)=>b.InpElementTypeNames.Single()!=choices[i]).Any())
+        throw new InvalidDataException("Formulation readback changed original mesh identities, topology or sets.");
+    byte[] bytes=Encoding.UTF8.GetBytes(updated);
+    using var output=new FileStream(arguments[2],FileMode.CreateNew,FileAccess.Write,FileShare.None);
+    output.Write(bytes);
+    return (checkedMesh,bytes);
 }
 
 static (InpMeshData Mesh, byte[] Bytes) AddSet(string[] arguments)

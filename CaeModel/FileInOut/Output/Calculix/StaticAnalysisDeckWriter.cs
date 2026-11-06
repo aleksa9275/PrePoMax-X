@@ -16,18 +16,37 @@ namespace CaeModel
 {
     public static class StaticAnalysisDeckWriter
     {
+        // Original mechanical solid formulation choices (CaeMesh/Elements/FeElementType.cs).
+        // A topology-compatible choice changes solver behavior, never node ordering.
+        public static string[] CompatibleSolidFormulations(string formulation)
+        {
+            switch (formulation)
+            {
+                case "C3D4": return new[] { "C3D4" };
+                case "C3D10": case "C3D10T": return new[] { "C3D10", "C3D10T" };
+                case "C3D6": return new[] { "C3D6" };
+                case "C3D15": return new[] { "C3D15" };
+                case "C3D8": case "C3D8R": case "C3D8I": return new[] { "C3D8", "C3D8R", "C3D8I" };
+                case "C3D20": case "C3D20R": return new[] { "C3D20", "C3D20R" };
+                case "C3D5": case "C3D5I": case "C3D5R": return new[] { formulation };
+                case "C3D13": case "C3D13I": case "C3D13R": return new[] { formulation };
+                default: return new string[0];
+            }
+        }
+
         public static string Write(InpMeshData mesh, IEnumerable<Material> materials,
-                                   IEnumerable<SolidSection> sections, StaticStep step)
+                                   IEnumerable<SolidSection> sections, StaticStep step,
+                                   ConvertPyramidsToEnum? pyramidConversion = null)
         {
             if (mesh == null || materials == null || sections == null || step == null)
                 throw new ArgumentNullException("Static deck components cannot be null.");
             if (mesh.OmittedKeywords == null || mesh.OmittedKeywords.Length != 0)
                 throw new CaeException("Static deck input must contain mesh data only; existing model keywords cannot be discarded.");
-            string meshText = MeshDeckWriter.WriteMesh(mesh);
+            string meshText = MeshDeckWriter.WriteMesh(mesh, pyramidConversion);
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
-            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => t != "C3D8" && t != "C3D4" && t != "C3D10")))
-                throw new NotSupportedException("The current static-deck boundary supports C3D8, C3D4 and C3D10 solids.");
+            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => CompatibleSolidFormulations(t).Length == 0)))
+                throw new NotSupportedException("Mechanical 3D solid formulations are required for this static analysis.");
             foreach (var element in checkedMesh.Elements.Values)
             {
                 // This is an input orientation check, not quadratic measurement.

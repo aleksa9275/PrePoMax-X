@@ -15,10 +15,15 @@ public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode)
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
     string[] NodalHistorySets,string[] ElementHistorySets);
-public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step);
+public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
+    string? PyramidConversion = null);
 
 public static class AnalysisFiles
 {
+    public static CaeMesh.ConvertPyramidsToEnum? PyramidConversion(AnalysisSpec spec) => spec.PyramidConversion switch {
+        null => null, "wedges" => CaeMesh.ConvertPyramidsToEnum.Wedges,
+        "hexahedrons" => CaeMesh.ConvertPyramidsToEnum.Hexahedrons,
+        _ => throw new InvalidDataException("Choose explicit pyramid conversion: wedges or hexahedrons.") };
     public const int MaximumDefinitionBytes=2*1024*1024;
     public static AnalysisSpec Read(string path)
     {
@@ -107,7 +112,7 @@ public static class AnalysisFiles
         // Deck admission is owned by StaticAnalysisDeckWriter. The optional
         // PrePoMax measurement command is not the CalculiX element formulation.
         var values=Create(spec);
-        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step);
+        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec));
     }
     public static void WriteNew(string path,string text)
     {

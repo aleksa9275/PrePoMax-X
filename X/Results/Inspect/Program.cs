@@ -12,7 +12,8 @@ try
  var snapshot=FrdFileReader.ReadStaticSnapshot(args[1]);
  var result=new{success=true,snapshot.SourceSha256,snapshot.UnitSystemHeader,quantityUnits="as stored; no unit conversion or inference",fullResultsPreprocessing=false,solverExecuted=false,
  nodes=snapshot.NodeIdsInValueOrder.Select(id=>new{id,x=snapshot.Nodes[id].X,y=snapshot.Nodes[id].Y,z=snapshot.Nodes[id].Z}),
- elements=snapshot.Elements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,vtkCellType=e.GetVtkCellType(),nodeIds=e.NodeIds}),nodeIdsInValueOrder=snapshot.NodeIdsInValueOrder,
+ elements=snapshot.Elements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,vtkCellType=e.GetVtkCellType(),nodeIds=e.NodeIds,vtkNodeIds=e.GetVtkNodeIds()}),nodeIdsInValueOrder=snapshot.NodeIdsInValueOrder,
+ solverElements=snapshot.SolverElements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,nodeIds=e.NodeIds}),
  fields=snapshot.Fields.Select(f=>new{name=f.Data.Name,stepId=f.Data.StepId,incrementId=f.Data.StepIncrementId,time=f.Data.Time,stepType=f.Data.StepType.ToString(),components=f.Field.GetComponentNames().ToDictionary(n=>n,n=>f.Field.GetComponentValues(n))})};
  Console.WriteLine(JsonSerializer.Serialize(result));return 0;
 }

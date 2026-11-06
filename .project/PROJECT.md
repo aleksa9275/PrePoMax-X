@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-06 task 0089 delivers a connected imported-solid workflow across all
+original mechanical tetrahedron/wedge/hexahedron formulations and explicit
+pyramid conversion, including desktop selection, native solve, original result
+ordering and mixed examples. [Current evidence](reports/solid-formulation-workflow.md).
+This follows the larger functional milestone cadence. All other original mesh/
+analysis/model workflows and the unchanged full cross-platform objective remain.
+
 2026-11-06 reaffirmation of the original specification (D060): the required final product has
 **IDENTICAL PrePoMax 3.0.0 functionality, all mesh types and all calculations,
 with the unavailable Intel/PARDISO solver as the sole exception**. Preview boundaries never reduce that requirement.

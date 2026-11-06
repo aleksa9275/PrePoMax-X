@@ -14,6 +14,7 @@ import tempfile
 from PyQt6 import QtCore, QtGui, QtWidgets
 from jobs import DesktopJob, examples
 from analysis_editor import AnalysisDialog, new_definition
+from solid_formulations import SolidFormulationDialog
 from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, run_process
 from cad_job import CadImportJob, CadMeshJob
 from cad_document import CadDocument
@@ -117,7 +118,7 @@ def decode(path, *, cancel=None):
         command = ([str(Path(sys._MEIPASS) / "hosts/results/PrePoMaxX.InspectResults")] if packaged else
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
-        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8/C3D4/C3D10 FRD snapshot.")
+        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed 3D solid static FRD snapshot.")
     return run_reader(command, cancel=cancel)
 
 
@@ -216,9 +217,11 @@ class Viewport(QtWidgets.QMainWindow):
         self.export_mesh_action = jobbar.addAction("Export mesh…", self.export_mesh_dialog)
         self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
         self.add_set_action.setEnabled(False)
+        self.formulation_action = jobbar.addAction("Solid formulations…", self.formulations_dialog)
+        self.formulation_action.setEnabled(False)
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
         self.run_action = jobbar.addAction("Run analysis", self.run_model)
-        self.example_action = jobbar.addAction("Solve example", self.run_example)
+        self.example_action = jobbar.addAction("Solve example…", lambda:self.run_example(select=True))
         self.cancel_action = jobbar.addAction("Cancel", self.cancel_operation)
         self.cancel_action.setEnabled(False)
         jobbar.addAction("Job files", self.open_job_directory)
@@ -277,6 +280,11 @@ class Viewport(QtWidgets.QMainWindow):
             group = QtWidgets.QTreeWidgetItem(root, [label])
             for item in self.model_scene.get(key, []):
                 QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
+        blocks = self.model_scene.get('elementBlocks', [])
+        if blocks:
+            group = QtWidgets.QTreeWidgetItem(root, ['Solid formulations', str(len(blocks))])
+            for block in blocks:
+                QtWidgets.QTreeWidgetItem(group, [block.get('name') or 'Unnamed block', block['formulation']])
         if self.quadratic_mesh:
             QtWidgets.QTreeWidgetItem(root,['C3D10','Quadratic static solid'])
         for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
@@ -420,6 +428,32 @@ class Viewport(QtWidgets.QMainWindow):
     def quadratic_mesh(self):
         return self.model_scene is not None and any(e.get('vtkCellType')==24 or e.get('type')=='ParabolicTetraElement' for e in self.model_scene['elements'])
 
+    def formulations_dialog(self):
+        if self.busy or self.model_scene is None or self.pmx_session is not None:return
+        dialog=SolidFormulationDialog(self,self.model_scene)
+        if dialog.exec()!=QtWidgets.QDialog.DialogCode.Accepted:return
+        try:self.change_formulations(dialog.values())
+        except (OSError,ValueError,subprocess.SubprocessError) as error:
+            if self.automated_workflow:raise
+            QtWidgets.QMessageBox.critical(self,'Cannot change solid formulations',str(error))
+
+    def change_formulations(self, choices):
+        if self.busy or self.model_scene is None or self.pmx_session is not None:
+            raise ValueError('Finish the active operation and open an editable mesh before changing formulations.')
+        if choices==[b['formulation'] for b in self.model_scene.get('elementBlocks',[])]:return
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-formulations-') as directory:
+            original,updated,definition=(Path(directory)/name for name in ('mesh.inp','updated.inp','choices.json'))
+            original.write_bytes(self.mesh_bytes);definition.write_text(json.dumps(choices))
+            scene=run_reader([*mesh_command(),'set-solid-formulations',str(original),str(updated),str(definition)])
+            contents=updated.read_bytes()
+            if hashlib.sha256(contents).hexdigest()!=scene['SourceSha256']:
+                raise ValueError('Formulation mesh changed during readback.')
+        if self.cad_mesh is not None:scene['cadMesh']=self.cad_mesh.scene['cadMesh']
+        self.regions.result=None
+        self.model_scene,self.mesh_bytes=scene,contents
+        self.analysis_valid=False;self.editor_dirty=True
+        self.show_scene(scene,self.model_path);self.update_model_tree();self.job_state(self.job.state)
+
     def export_mesh_dialog(self):
         if self.busy or self.model_scene is None:return
         name,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export mesh-only INP',str(self.model_path.with_name(self.model_path.stem+'-mesh.inp')),'Mesh-only INP (*.inp)',options=QtWidgets.QFileDialog.Option.DontConfirmOverwrite)
@@ -463,13 +497,23 @@ class Viewport(QtWidgets.QMainWindow):
             else:
                 self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
 
-    def run_example(self):
+    def run_example(self, *, select=False):
         if self.busy:
             return
         if not self.confirm_discard():
             return
-        definition = json.loads((examples() / 'cube-analysis.json').read_text())
-        self.load(examples() / 'cube-mesh.inp', as_model=True, definition=definition)
+        name,mesh_name,definition_name='Cube','cube-mesh.inp','cube-analysis.json'
+        if select:
+            choices={'Cube':('cube-mesh.inp','cube-analysis.json'),
+                'Mixed solids — all mechanical formulations':('mixed-solids.inp','mixed-solids.json'),
+                'Pyramids — collapsed wedges':('mixed-pyramids.inp','mixed-pyramids.json'),
+                'Pyramids — collapsed hexahedrons':('mixed-pyramids.inp','mixed-pyramids.json')}
+            name,accepted=QtWidgets.QInputDialog.getItem(self,'Solve analytical example','Example',list(choices),0,False)
+            if not accepted:return
+            mesh_name,definition_name=choices[name]
+        definition = json.loads((examples() / definition_name).read_text())
+        if name=='Pyramids — collapsed hexahedrons':definition['pyramidConversion']='hexahedrons'
+        self.load(examples() / mesh_name, as_model=True, definition=definition)
         self.analysis_valid = True
         self.run_model()
 
@@ -510,6 +554,9 @@ class Viewport(QtWidgets.QMainWindow):
         self.export_mesh_action.setEnabled(not active and self.model_scene is not None)
         self.run_action.setToolTip("Run the configured static analysis")
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
+        self.formulation_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None
+                                          and bool(self.model_scene.get('elementBlocks')) and
+                                          all(b['compatibleFormulations'] for b in self.model_scene.get('elementBlocks',[])))
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
@@ -815,9 +862,9 @@ class Viewport(QtWidgets.QMainWindow):
             cell_type = element.get("vtkCellType")
             if cell_type is None:
                 if element["type"] != "LinearHexaElement":
-                    raise ValueError("FRD snapshot supports C3D8 only")
+                    raise ValueError("An explicit VTK cell type is required for this result element")
                 cell_type = 12
-            mapped = [indices[n] for n in element["nodeIds"]]
+            mapped = [indices[n] for n in element.get("vtkNodeIds", element["nodeIds"])]
             grid.InsertNextCell(cell_type, len(mapped), mapped)
             cell_ids.InsertNextValue(element["id"])
         grid.GetCellData().SetGlobalIds(cell_ids)
@@ -1071,7 +1118,11 @@ def main():
     parser.add_argument('--cad-edit-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
+    parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
     args = parser.parse_args()
+    if args.solid_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,
+            args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe]):
+        parser.error('Use --solid-workflow-probe separately from other inputs/probes')
     if args.cad_quadratic_probe and (not args.cad_native or any([args.input,args.self_test,args.editor_probe,args.pmx_probe,args.viewport_probe,args.run_example,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe])):
         parser.error('Use --cad-quadratic-probe with --cad-native separately from other inputs/probes')
     if args.cad_edit_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe or args.cad_pmx_probe):
@@ -1106,7 +1157,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1190,7 +1241,10 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.cad_quadratic_probe:
+    if args.solid_workflow_probe:
+        from solid_workflow_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.solid_workflow_probe.resolve()))
+    elif args.cad_quadratic_probe:
         from quadratic_probe import begin
         source,output=(p.resolve() for p in args.cad_quadratic_probe)
         QtCore.QTimer.singleShot(1000,lambda:begin(app,window,source,output))

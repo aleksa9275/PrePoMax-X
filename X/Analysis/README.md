@@ -1,5 +1,13 @@
 # PrePoMax-X portable static analysis increment
 
+Task 0089 connects all original mechanical solid formulation choices for the
+existing linear-static definition, including mixed meshes and explicit original
+C3D5/C3D13 conversion. Optional `pyramidConversion` in the analysis definition is
+`wedges` or `hexahedrons`; omission refuses a pyramid solve. The original
+CalElement conversion and original solver formulations are used unchanged.
+`mixed-solids.inp/.json` and `mixed-pyramids.inp/.json` are runnable examples.
+[Milestone evidence](../../.project/reports/solid-formulation-workflow.md).
+
 Tasks 0087/0088 support C3D10 **native linear-static calculation**, alongside
 C3D8/C3D4, with original deck keywords and original ten-node FRD decoding.
 CalculiX owns its quadratic formulation and integration-point Jacobian checks;

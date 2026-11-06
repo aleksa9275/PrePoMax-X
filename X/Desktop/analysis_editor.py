@@ -127,6 +127,16 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.units.addItem('m · N · s · °C (stress: Pa)', 'm-N-s-C')
         self.units.setCurrentIndex(max(0, self.units.findData(definition['unitSystem'])))
         form.addRow('Mesh unit system', self.units)
+        self.pyramid_conversion = None
+        if any(e.get('vtkCellType') in (14,27) for e in scene['elements']) or definition.get('pyramidConversion'):
+            self.pyramid_conversion = QtWidgets.QComboBox()
+            self.pyramid_conversion.setObjectName('pyramidConversion')
+            self.pyramid_conversion.addItem('Choose original solver export…', None)
+            self.pyramid_conversion.addItem('Collapsed wedges', 'wedges')
+            self.pyramid_conversion.addItem('Collapsed hexahedrons', 'hexahedrons')
+            self.pyramid_conversion.setCurrentIndex(max(0,self.pyramid_conversion.findData(definition.get('pyramidConversion'))))
+            self.pyramid_conversion.currentIndexChanged.connect(self.mark_changed)
+            form.addRow('Pyramid conversion', self.pyramid_conversion)
         warning = QtWidgets.QLabel('Choosing units interprets the existing mesh coordinates; it does not rescale them. '
             'Enter quantities such as 210 GPa or 25 N, or original supported equations. '
             'Only mesh data is imported from INP; existing analysis definitions are not imported.')
@@ -218,6 +228,10 @@ class AnalysisDialog(QtWidgets.QDialog):
     def collect(self):
         value = copy.deepcopy(self.original)
         value['unitSystem'] = self.units.currentData()
+        if self.pyramid_conversion is not None:
+            choice=self.pyramid_conversion.currentData()
+            if choice is None: value.pop('pyramidConversion',None)
+            else: value['pyramidConversion']=choice
         value['materials'], value['sections'] = self.materials.values(), self.sections.values()
         value['step']['constraints'] = [{'name': row['name'], 'nodeSet': row['nodeSet'],
             'displacements': [row[f'u{i}'] or None for i in range(3)]} for row in self.supports.values()]

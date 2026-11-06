@@ -24,6 +24,7 @@ namespace CaeResults
         public string UnitSystemHeader { get; }
         public IReadOnlyDictionary<int, FeNode> Nodes { get; }
         public IReadOnlyDictionary<int, FeElement> Elements { get; }
+        public IReadOnlyDictionary<int, FeElement> SolverElements { get; }
         // Index i in every component belongs to NodeIdsInValueOrder[i].
         public IReadOnlyList<int> NodeIdsInValueOrder { get; }
         public IReadOnlyList<FrdStaticField> Fields { get; }
@@ -32,7 +33,12 @@ namespace CaeResults
         {
             SourceSha256 = hash; UnitSystemHeader = units;
             Nodes = new ReadOnlyDictionary<int, FeNode>(nodes);
-            Elements = new ReadOnlyDictionary<int, FeElement>(elements);
+            SolverElements = new ReadOnlyDictionary<int, FeElement>(elements);
+            // Same original restoration used by FeMesh for solver-exported pyramids.
+            // Retain raw solver connectivity separately for provenance/comparison.
+            Elements = new ReadOnlyDictionary<int, FeElement>(elements.ToDictionary(e => e.Key, e =>
+                (FeElement)LinearPyramidElement.FromCollapsedElement(e.Value) ??
+                ParabolicPyramidElement.FromCollapsedElement(e.Value) ?? e.Value));
             NodeIdsInValueOrder = Array.AsReadOnly(order); Fields = fields.AsReadOnly();
         }
     }
@@ -117,9 +123,9 @@ namespace CaeResults
                             var empty = new HashSet<int>();
                             elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
                             if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 ||
-                                (e.Value.GetType() != typeof(LinearHexaElement) && e.Value.GetType() != typeof(LinearTetraElement) && e.Value.GetType() != typeof(ParabolicTetraElement)) ||
+                                (e.Value is not FeElement3D) ||
                                 e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
-                                throw new NotSupportedException("Only complete C3D8/C3D4/C3D10 result meshes with valid node references are currently supported.");
+                                throw new NotSupportedException("Complete 3D solid result meshes with valid node references are required.");
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {

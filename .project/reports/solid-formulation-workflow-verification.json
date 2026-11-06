@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "task": "0089",
+  "scope": "Connected original mechanical 3D solid formulation workflow; full functionality remains required",
+  "verification": {
+    "sourceMac": {
+      "path": "/tmp/prepomaxx-task0089-evidence/source-gui/workflow.json",
+      "sha256": "98a071ecb88cc9c2a197f270a4f738522faa5768cc76952d8cbb23948b5d0c2f",
+      "success": true,
+      "checks": 59
+    },
+    "nativeLinux": {
+      "path": "/tmp/prepomaxx-task0089-evidence/linux/solid-workflow/workflow.json",
+      "sha256": "12fbef4553f35e2aa4ae7cf50ebfc76664114c816357e1f7065773af8958def2",
+      "success": true,
+      "checks": 59
+    },
+    "linuxPmx": {
+      "path": "/tmp/prepomaxx-task0089-evidence/linux/pmx-regression/verification.json",
+      "sha256": "021a4b81844d3a591c02714728f8ba4594c6004d146f48d27b69704d98e4372d",
+      "success": true,
+      "checks": 17
+    }
+  },
+  "originalWindowsReference": {
+    "success": true,
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "mixed": {
+        "exitCode": 0,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "447289162cc1f317018a89e67285d446e7f3f768dddf4d340dbbad8f0c3c4bc7",
+        "exactMeshEqual": true,
+        "maximumFieldDifference": {
+          "DISP": 0,
+          "STRESS": 2.9990645e-13,
+          "TOSTRAIN": 2.9990644999999997e-16,
+          "FORC": 1.2794688042e-13
+        },
+        "comparisonPassed": true,
+        "exactFieldsEqual": false
+      },
+      "pyramid-wedges": {
+        "exitCode": 0,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "1429fb10359366dade5f287e459958e61b4860eb163993ed9bdda52629811cac",
+        "exactMeshEqual": true,
+        "maximumFieldDifference": {
+          "DISP": 0,
+          "STRESS": 9.337157e-15,
+          "TOSTRAIN": 9.337157000000001e-18,
+          "FORC": 8.630978e-15
+        },
+        "comparisonPassed": true,
+        "exactFieldsEqual": false
+      },
+      "pyramid-hexahedrons": {
+        "exitCode": 0,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "30f034b19723c31b22fa2cabb8904fbed5bff28de3b544013206f50de0a00376",
+        "exactMeshEqual": true,
+        "maximumFieldDifference": {
+          "DISP": 0,
+          "STRESS": 8.5074831e-15,
+          "TOSTRAIN": 8.507493e-18,
+          "FORC": 1.0272988e-14
+        },
+        "comparisonPassed": true,
+        "exactFieldsEqual": false
+      }
+    },
+    "bounds": {
+      "DISP": 1e-09,
+      "STRESS": 0.0001,
+      "TOSTRAIN": 1e-07,
+      "FORC": 1e-05
+    }
+  },
+  "regressions": {
+    "analysis": {
+      "path": "/tmp/prepomaxx-task0089-engineering-final/analysis-current.json",
+      "sha256": "cfe1de376fc33840375a3d22b0ce2576aa0a36d9c6e494d017cd326e343f3387",
+      "success": true
+    },
+    "results": {
+      "path": "/tmp/prepomaxx-task0089-engineering-final/results-current.json",
+      "sha256": "cd5e5eed86b3e3323934aaf257f1df50cf193bee22d1cedba3da23242ae9ea05",
+      "success": true
+    },
+    "desktop-tests.log": {
+      "path": "/tmp/prepomaxx-task0089-evidence/desktop-tests.log",
+      "sha256": "30a164c617bfa3c4ddd7e76c04026019c5e1977c29f381d3f453d869b83f79c3",
+      "success": true
+    },
+    "build-guards.log": {
+      "path": "/tmp/prepomaxx-task0089-evidence/build-guards.log",
+      "sha256": "44da5ff3d8732677572559b618a09686fa21efd87af4d2b415dc65f98118d47f",
+      "success": true
+    }
+  },
+  "candidate": {
+    "status": "packaging pending"
+  },
+  "publication": {
+    "status": "source checkpoint pending",
+    "hostedJobsRequested": 0,
+    "D058": "preserved",
+    "D059": "preserved"
+  },
+  "openGates": [
+    "Both original numerical/classifier failures and quadratic tetrahedron measurement gate",
+    "General curved quality and exact native parity",
+    "Other mesh authoring, shell/beam/2D/axisymmetric families, nonlinear/dynamic/thermal and broader model/material/load/results operations",
+    "D057 full PMX and new native-session persistence",
+    "Native Windows/net48/Linux x64 and complete four-target execution",
+    "Installers/Homebrew/signing/notarization/clean-system/full release acceptance"
+  ],
+  "diagnosticsRetained": [
+    "Initial analysis CLI control still expected C3D8R rejection; changed to thermal DC3D8 because C3D8R is now intentionally supported. All 73 existing typed static checks already passed. Failure retained under /tmp/prepomaxx-task0089-engineering."
+  ]
+}

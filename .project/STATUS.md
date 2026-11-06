@@ -1,6 +1,18 @@
 # Project status
 
-## Current — tasks 0087/0088: C3D10 native calculations
+## Current — task 0089: connected solid formulations
+
+Imported solid models now connect all original mechanical tetrahedron/wedge/
+hexahedron formulation choices, mixed meshes and both explicit pyramid export
+routes to desktop configuration, native solving and original FRD/VTK results.
+Solid formulations… edits compatible solver types without changing mesh identity;
+Solve example… offers mixed solid and pyramid workflows. Native Mac/Linux ARM64
+complete the integrated workflow; original Windows solver comparisons agree.
+[Behavior, evidence and candidate](reports/solid-formulation-workflow.md).
+Final candidate/publication is recorded at closeout. All remaining original
+functionality, D029/D057/D058/D059 and four-target/release acceptance remain open.
+
+## Prior — tasks 0087/0088: C3D10 native calculations
 
 D060 confirms IDENTICAL 3.0.0 functionality, all mesh types/calculations, with
 the unavailable Intel/PARDISO solver as the sole exception. Native C3D10 static deck/solve/ten-node FRD and desktop

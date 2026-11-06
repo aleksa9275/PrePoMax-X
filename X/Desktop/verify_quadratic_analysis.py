@@ -33,7 +33,7 @@ def main():
         scene=run([*host(a.results),'inspect-frd',folder/'solve/analysis.frd'])
         (folder/'results.json').write_text(json.dumps(scene,indent=2)+'\n')
         original=run([*host(a.mesh_host),folder/'mesh.inp'])
-        check(name+' all ten-node IDs/connectivity survive FRD',[{k:e[k] for k in ('id','vtkCellType','nodeIds')} for e in scene['elements']]==original['elements'] and len(scene['nodes'])==len(original['nodes']))
+        check(name+' all ten-node IDs/connectivity survive FRD',[{k:e[k] for k in ('id','vtkCellType','nodeIds')} for e in scene['elements']]==[{k:e[k] for k in ('id','vtkCellType','nodeIds')} for e in original['elements']] and len(scene['nodes'])==len(original['nodes']))
         errors=field_errors(scene);r[name]={'errors':errors,'meshSha256':hashlib.sha256(mesh).hexdigest(),'nodes':len(scene['nodes']),'elements':len(scene['elements'])}
         # Curved 100-mm fixture includes original E8 coordinates, CalculiX
         # extrapolation and six-significant-digit FRD fields. Bounds are fixed
