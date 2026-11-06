@@ -5,7 +5,7 @@ internal static partial class StaticGraph
     private const int CollectionLimit = 4096;
 
     internal static object ValidateEditContract(SerializationRecord root,
-        IEnumerable<SerializationRecord> records, byte[] graph, bool cadModel = false)
+        IEnumerable<SerializationRecord> records, byte[] graph, bool cadModel = false, string? editScope = null)
     {
         var slots = RootSlots(root);
         var controller = Record(slots[0], "PrePoMax.Controller");
@@ -85,6 +85,7 @@ internal static partial class StaticGraph
         var elastic = List(material.GetRawValue("_properties")).Select(item => Record(item))
             .Single(item => item.TypeName.FullName == "CaeModel.Elastic");
         RequireExclusiveRecords(records, model, material, elastic, section, step, load);
+        if (editScope != null) return LocatePropertySlots(root, records, graph);
         return LocateEditStrings(root, records, graph);
     }
 

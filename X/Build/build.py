@@ -196,7 +196,7 @@ def publish_pmx_preview(build):
                    "-o", build.output / "hosts" / name, "-v:quiet"], "publish-" + name + ".log")
     tools = build.output / "pmx-tools"
     tools.mkdir()
-    for name in ("inspect-pmx.py", "inspect-static-project.py", "reconstruct-static-deck.py", "write-controlled-edit.py", "inspect-cad-project.py", "write-cad-edit.py"):
+    for name in ("inspect-pmx.py", "inspect-static-project.py", "reconstruct-static-deck.py", "write-controlled-edit.py", "inspect-cad-project.py", "write-cad-edit.py", "write-cad-properties.py"):
         shutil.copy2(ROOT / "X/Feasibility/Pmx" / name, tools / name)
     build.report["hostFiles"] = file_hashes(build.output / "hosts")
 

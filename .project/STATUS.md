@@ -1,5 +1,16 @@
 # Project status
 
+## Current — tasks 0071–0073: broader persistent PMX editing
+
+Task 0071 adds Poisson's ratio and density to the checked CAD/C3D4 PMX editor.
+Native Mac desktop/save/reopen/solve and original-app readback pass; original
+export/native reconstruction produce exactly equal decoded fields.
+[Material evidence](reports/pmx-material-properties.md). Tasks 0072/0073 extend
+signed vector forces and compatible existing named-region reassignment next.
+Combined Linux ARM64 checks and one replacement Mac package follow at closeout.
+New native-session serialization/general PMX and all prior gates remain open;
+D058/D059 stay in force.
+
 ## Current — tasks 0069/0070: original CAD PMX persistence
 
 The original 3.0.0 CAD/C3D4 fixture has 276 nodes/843 elements. Safe native readers
