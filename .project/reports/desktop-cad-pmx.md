@@ -1,5 +1,8 @@
 # Native desktop CAD PMX save and reopen
 
+Task 0070's candidate is superseded and pruned after verified tasks 0071–0073.
+See [the current candidate and broader editor](pmx-region-assignments.md).
+
 Task 0070 opens the checked single-part original CAD/C3D4 PMX, edits Young's
 modulus and positive axial nodal force, saves a new original PMX, reopens it and
 runs the native solver. Existing CAD/mesh/result views preserve the model.

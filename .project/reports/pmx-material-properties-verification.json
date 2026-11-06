@@ -269,8 +269,176 @@
     "scope": "One pinned native solver; exact original decoded fields; no tolerance relaxation"
   },
   "originalExeSha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
-  "linuxArm64": "Combined changed-area verification at task 0073 closeout",
+  "linuxArm64": {
+    "success": true,
+    "checks": [
+      {
+        "name": "modulus and Poisson ratio persisted",
+        "passed": true
+      },
+      {
+        "name": "density persisted in original units",
+        "passed": true
+      },
+      {
+        "name": "CAD and mesh semantics preserved",
+        "passed": true
+      },
+      {
+        "name": "exact binary CAD/mesh frame preserved",
+        "passed": true
+      },
+      {
+        "name": "repeated editing accepts a negative Poisson ratio",
+        "passed": true
+      },
+      {
+        "name": "shared original string definition and references preserved",
+        "passed": true
+      },
+      {
+        "name": "shared-string edit changes only the selected member",
+        "passed": true
+      },
+      {
+        "name": "poisson-upper refused without publication",
+        "passed": true
+      },
+      {
+        "name": "poisson-lower refused without publication",
+        "passed": true
+      },
+      {
+        "name": "density-zero refused without publication",
+        "passed": true
+      },
+      {
+        "name": "density-negative refused without publication",
+        "passed": true
+      },
+      {
+        "name": "nan refused without publication",
+        "passed": true
+      },
+      {
+        "name": "infinite refused without publication",
+        "passed": true
+      },
+      {
+        "name": "excessive-exponent refused without publication",
+        "passed": true
+      },
+      {
+        "name": "existing destination unchanged",
+        "passed": true
+      },
+      {
+        "name": "unsupported wire input refused",
+        "passed": true
+      },
+      {
+        "name": "incorrect slot offset refused",
+        "passed": true
+      },
+      {
+        "name": "consecutive wire metadata obeys depth limit",
+        "passed": true
+      },
+      {
+        "name": "original source unchanged",
+        "passed": true
+      }
+    ],
+    "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+  },
   "hostedJobsStarted": false,
   "linuxX64": "Deferred under D059",
-  "candidate": "Retained task0070 candidate remains until the combined task0073 package"
+  "candidate": "Retained task0070 candidate remains until the combined task0073 package",
+  "finalPackagedContracts": {
+    "success": true,
+    "checks": [
+      {
+        "name": "modulus and Poisson ratio persisted",
+        "passed": true
+      },
+      {
+        "name": "density persisted in original units",
+        "passed": true
+      },
+      {
+        "name": "CAD and mesh semantics preserved",
+        "passed": true
+      },
+      {
+        "name": "exact binary CAD/mesh frame preserved",
+        "passed": true
+      },
+      {
+        "name": "repeated editing accepts a negative Poisson ratio",
+        "passed": true
+      },
+      {
+        "name": "shared original string definition and references preserved",
+        "passed": true
+      },
+      {
+        "name": "shared-string edit changes only the selected member",
+        "passed": true
+      },
+      {
+        "name": "poisson-upper refused without publication",
+        "passed": true
+      },
+      {
+        "name": "poisson-lower refused without publication",
+        "passed": true
+      },
+      {
+        "name": "density-zero refused without publication",
+        "passed": true
+      },
+      {
+        "name": "density-negative refused without publication",
+        "passed": true
+      },
+      {
+        "name": "nan refused without publication",
+        "passed": true
+      },
+      {
+        "name": "infinite refused without publication",
+        "passed": true
+      },
+      {
+        "name": "excessive-exponent refused without publication",
+        "passed": true
+      },
+      {
+        "name": "existing destination unchanged",
+        "passed": true
+      },
+      {
+        "name": "unsupported wire input refused",
+        "passed": true
+      },
+      {
+        "name": "incorrect slot offset refused",
+        "passed": true
+      },
+      {
+        "name": "consecutive wire metadata obeys depth limit",
+        "passed": true
+      },
+      {
+        "name": "original app resave preserves edited semantics",
+        "passed": true
+      },
+      {
+        "name": "original source unchanged",
+        "passed": true
+      }
+    ],
+    "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+  },
+  "finalCandidateAndPublication": "pmx-region-assignments-verification.json"
 }

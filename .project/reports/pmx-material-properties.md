@@ -23,9 +23,10 @@ solver. No numerical tolerance changes.
 
 [Verification](pmx-material-properties-verification.json). Detailed local evidence:
 `/tmp/prepomaxx-task0071-evidence`. The sandbox display-less test attempt is
-retained; actual display-enabled desktop tests are recorded separately. Linux
-ARM64 changed-area checks and one combined package follow at task 0073 closeout.
-The current task 0070 candidate stays available until its replacement is verified.
+retained; actual display-enabled desktop tests pass 38 cases with the current
+solver host explicitly configured. Linux ARM64 and the combined copied-app
+package now pass at [task 0073 closeout](pmx-region-assignments.md). The task 0070
+candidate is superseded and pruned; the final receipt names the retained app.
 
 New native-session serialization/general PMX, broader materials/analyses,
 Windows native execution, both correctness failures, quadratic tetrahedra and

@@ -1,5 +1,27 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0071–0073 are complete within the checked original CAD/C3D4 PMX boundary:
+material Poisson's ratio/density, signed vector forces and existing named-region
+assignment edits persist through Save As/reopen/native solve. Read
+[the combined report](../reports/pmx-region-assignments.md) and its final receipt.
+Source `3de11f59` is pushed/remote-verified with CI skipped. Retained candidate:
+`/tmp/prepomaxx-task0073-delivery/PrePoMax-X Preview.app`; sibling launcher enables
+the retained native CAD runtime and older launchers forward to it. Both copied
+Mac viewports and Linux ARM64 pass 28 checks, including displayed color pixels.
+The final C3D8 PMX path passes 17. Bundled contracts pass 20/15/21 checks; the
+four current engineering suites and 38 desktop/12 analysis/9 build guards pass,
+retaining both correctness failures and the quadratic-tetrahedron gate.
+
+Mac/Linux edited PMX bytes/deck hashes and original decoded fields match exactly.
+Each feature has original-app reopen/export/resave evidence. Original/reference
+projects, frozen jobs, screenshots, pinned ZIP and shared native/Python/.NET/tool
+caches remain. Superseded app/staging/per-build caches and the isolated temporary
+reference extraction/bottle are pruned; older candidate paths below are historical.
+New native-session serialization and the full original project corpus remain
+next under D057. Preserve D058/D059, both correctness failures, quadratic tetrahedra
+and all Windows/four-target/installer/signing/notarization/parity/release gates.
+
+
 Tasks 0069/0070 add a checked original CAD/C3D4 PMX boundary: safe projection,
 controlled modulus/force Save As, reopen, original-app readback and native solve.
 Read [reference](../reports/cad-pmx-reference.md) and

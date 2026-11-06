@@ -20,6 +20,6 @@ exactly equal decoded result fields through the same native solver.
 [Verification](pmx-vector-loads-verification.json).
 
 Detailed local evidence: `/tmp/prepomaxx-task0072-evidence`. Combined Linux ARM64
-verification and one current Mac package follow at task 0073 closeout. No hosted
+verification and the current Mac package pass at [task 0073 closeout](pmx-region-assignments.md). No hosted
 CI runs; D058/D059, both correctness failures, quadratic tetrahedra, general PMX,
 new native-session serialization and all parity/release gates stay open.

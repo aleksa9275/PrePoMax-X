@@ -258,7 +258,68 @@
     "nativeDeckSha256": "972ec99792bb882ec88734e003afd488ee33bac7a6e60c03e488ac103288faf6",
     "scope": "One pinned native solver; exact original decoded fields; no tolerance relaxation"
   },
-  "linuxArm64": "Combined changed-area verification at task 0073 closeout",
+  "linuxArm64": {
+    "success": true,
+    "checks": [
+      {
+        "name": "all component slots are audited",
+        "passed": true
+      },
+      {
+        "name": "all signed components persist",
+        "passed": true
+      },
+      {
+        "name": "original CLoad magnitude equals 13 N",
+        "passed": true
+      },
+      {
+        "name": "shared zero strings do not change supports",
+        "passed": true
+      },
+      {
+        "name": "CAD topology, mesh and binary model preserved",
+        "passed": true
+      },
+      {
+        "name": "negative axial force has positive magnitude",
+        "passed": true
+      },
+      {
+        "name": "existing nonzero-force engineering gate preserved",
+        "passed": true
+      },
+      {
+        "name": "reopened vector can be changed again",
+        "passed": true
+      },
+      {
+        "name": "short refused without publication",
+        "passed": true
+      },
+      {
+        "name": "nonfinite refused without publication",
+        "passed": true
+      },
+      {
+        "name": "equation refused without publication",
+        "passed": true
+      },
+      {
+        "name": "excessive refused without publication",
+        "passed": true
+      },
+      {
+        "name": "older axial-only contract still refuses transverse loads",
+        "passed": true
+      },
+      {
+        "name": "source PMX unchanged",
+        "passed": true
+      }
+    ],
+    "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+  },
   "hostedJobsStarted": false,
   "linuxX64": "Deferred under D059",
   "retainedInitialFailures": [
@@ -275,5 +336,72 @@
     "commit": "72f12c2a53c5cc40bab1f78e1f8895e3f2049651",
     "remoteVerified": true,
     "ciSkipped": true
-  }
+  },
+  "finalPackagedContracts": {
+    "success": true,
+    "checks": [
+      {
+        "name": "all component slots are audited",
+        "passed": true
+      },
+      {
+        "name": "all signed components persist",
+        "passed": true
+      },
+      {
+        "name": "original CLoad magnitude equals 13 N",
+        "passed": true
+      },
+      {
+        "name": "shared zero strings do not change supports",
+        "passed": true
+      },
+      {
+        "name": "CAD topology, mesh and binary model preserved",
+        "passed": true
+      },
+      {
+        "name": "negative axial force has positive magnitude",
+        "passed": true
+      },
+      {
+        "name": "existing nonzero-force engineering gate preserved",
+        "passed": true
+      },
+      {
+        "name": "reopened vector can be changed again",
+        "passed": true
+      },
+      {
+        "name": "short refused without publication",
+        "passed": true
+      },
+      {
+        "name": "nonfinite refused without publication",
+        "passed": true
+      },
+      {
+        "name": "equation refused without publication",
+        "passed": true
+      },
+      {
+        "name": "excessive refused without publication",
+        "passed": true
+      },
+      {
+        "name": "older axial-only contract still refuses transverse loads",
+        "passed": true
+      },
+      {
+        "name": "original app resave retains vector/material/CAD semantics",
+        "passed": true
+      },
+      {
+        "name": "source PMX unchanged",
+        "passed": true
+      }
+    ],
+    "sourceSha256": "e03db8e19cdc841804a19e555a4913bf705f96c94cdb61ef52964159e2f6d6e6"
+  },
+  "finalCandidateAndPublication": "pmx-region-assignments-verification.json"
 }

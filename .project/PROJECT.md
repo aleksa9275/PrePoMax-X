@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-06 tasks 0071–0073 broaden the checked original CAD/C3D4 PMX editor with
+Poisson's ratio/density, signed vector force and compatible existing named-region
+reassignment. Original-app readback and native Mac/Linux ARM64 save/reopen/solve
+pass, with exact decoded result comparisons. [Current evidence/candidate](reports/pmx-region-assignments.md).
+New native-session serialization, general PMX and all correctness/parity/release
+requirements remain open; D058's hosted hold and D059's x64 deferral continue.
+
 2026-11-03 retention correction: the maintainer reports the local editable-solid
 preview seems to work and requests reclaiming tested package/build copies.
 [Task 0046](reports/storage-cleanup.md) removes generated payloads and supersedes

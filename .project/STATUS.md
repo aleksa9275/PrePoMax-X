@@ -8,7 +8,12 @@ supports and loads. All three pass native Mac and Linux ARM64 checks, original
 3.0.0 readback/resave and exact decoded original-export/native result comparisons.
 [Material](reports/pmx-material-properties.md) · [Vector forces](reports/pmx-vector-loads.md) ·
 [Assignments and combined verification](reports/pmx-region-assignments.md).
-One replacement Mac package and its copied-app probes follow at closeout.
+Current app: `/tmp/prepomaxx-task0073-delivery/PrePoMax-X Preview.app`;
+sibling launcher enables native CAD. Both copied Mac viewports and Linux ARM64
+pass 28 combined workflow checks, including visible contour pixels. Original
+decoded Mac/Linux fields match exactly; the copied C3D8 PMX path passes 17.
+Final candidate source `3de11f59` is published/remote-verified with CI skipped;
+the source patch is empty. Superseded payloads/reference extraction are pruned.
 New native-session serialization/general PMX and all prior gates remain open;
 D058/D059 stay in force.
 

@@ -1,8 +1,9 @@
 # Task 0072 — Persistent PMX signed vector loads
 
 Authorized 6 November 2026 as the second of three further bounded tasks.
-Implemented; Mac interoperability/native workflow passes. Linux ARM64 and the
-combined package follow at task 0073 closeout. [Evidence](../reports/pmx-vector-loads.md).
+Completed 6 November 2026, including Mac/original-app interoperability, Linux
+ARM64 and the combined copied-app package. [Evidence](../reports/pmx-vector-loads.md)
+and [final verification](../reports/pmx-region-assignments.md).
 Extend the checked original CAD/C3D4 PMX editor from positive axial force to
 finite signed global three-axis force per node. Keep magnitude consistent
 with the original CLoad owner, preserve shared zero equations, and verify
