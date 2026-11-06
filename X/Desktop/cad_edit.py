@@ -61,12 +61,37 @@ def scaling(values):
     return {'center':center,'factors':factors}
 
 
+def pattern(values,operation,part_count):
+    keys={'translation','copies'} if operation=='copy_translate' else {'center','axis','degrees','copies'}
+    if not isinstance(values,dict) or set(values)!=keys:
+        raise ValueError('Provide transform parameters and a whole-number copy count.')
+    count=values['copies']
+    if type(count) is not int or not 1<=count<=16 or part_count+count>MAX_CAD_PARTS:
+        raise ValueError('Use 1–16 copies within the 32-part preview limit.')
+    if operation=='copy_translate':
+        result={'translation':vector(values['translation'],'Copy translation')}
+        if not any(result['translation']):raise ValueError('Copy translation must be nonzero.')
+    else:result=rotation({k:v for k,v in values.items() if k!='copies'})
+    return {**result,'copies':count}
+
+
 def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     source = selected_part(document, part_id)
     if len(document.edits) >= MAX_EDITS:
         raise ValueError('This native preview supports at most 32 CAD edits per document.')
     def numbers(values):return ' '.join(format(v,'.17g') for v in values)
-    if operation=='translate':
+    is_copy=operation in ('copy_translate','copy_rotate')
+    if is_copy:
+        description=pattern(values,operation,len(document.parts))
+        inventory=solid_inventory([decoder(document.parts[part_id-1][1],cancel=cancel)])
+        if len(inventory)!=1:raise ValueError('Copying requires one supported solid in the selected part.')
+        if operation=='copy_translate':
+            parameters='Transform type: Translate\nDirection: '+numbers(description['translation'])+'\n'
+        else:
+            parameters='Transform type: Rotate\nPoint: '+numbers(description['center'])+'\nDirection: '+numbers(description['axis'])+'\nAngle: '+format(description['degrees'],'.17g')+'\n'
+        parameters+='Number of copies: '+str(description['copies'])+'\n'
+        arguments=['BREP_TRANSFORM']
+    elif operation=='translate':
         description=vector(values,'Translation')
         if not any(description):raise ValueError('Provide a nonzero translation.')
         parameters='Transform type: Translate\nDirection: '+numbers(description)+'\n'
@@ -122,9 +147,17 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
                   work,'operation.log',cancel=cancel)
         if file_sha256(staged_source)!=document.identities[source] or definition.read_text(encoding='utf-8')!=parameters:
             raise ValueError('CAD command modified its staged input or parameters.')
-        require_output(result,MAX_CAD_BYTES)
+        outputs=[result.with_name(result.stem+f'_{i:04d}.brep') for i in range(1,description['copies']+1)] if is_copy else [result]
+        if is_copy and set(work.glob(prefix+'-output*.brep'))!=set(outputs):
+            raise ValueError('CAD copy command returned an unexpected output inventory.')
+        generated=[]
         converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
-        generated=converter(result,work/'decoded',cancel=cancel)
+        for index,path in enumerate(outputs,1):
+            require_output(path,MAX_CAD_BYTES)
+            decoded=converter(path,work/f'decoded-{index:04d}',cancel=cancel)
+            if is_copy and (len(decoded)!=1 or len(solid_inventory([decoder(decoded[0][1],cancel=cancel)]))!=1):
+                raise ValueError('Each CAD copy must retain one supported solid part.')
+            generated.extend(decoded)
         if operation in ('translate','rotate','mirror','scale','repair') and len(generated)!=1:
             raise ValueError('Transform/controlled repair must retain one selected CAD part.')
         extra=[]
@@ -134,24 +167,27 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
             if len(generated)<2 or origins_file.read_text().split()!=['1']*len(generated):
                 raise ValueError('Plane split must yield multiple solids with checked original source-solid origins.')
             extra.append(origins_file)
-        if len(document.parts)-1+len(generated)>MAX_CAD_PARTS:
-            raise ValueError('Edited CAD exceeds the 32-part preview limit.')
-        edited.parts=[]
-        origins=[]
-        for old_id,pair in enumerate(document.parts,1):
-            for brep,vis in generated if old_id==part_id else [pair]:
-                new_id=len(edited.parts)+1
-                b,v=inputs/f'part-{new_id:04d}.brep',inputs/f'part-{new_id:04d}.vis'
-                shutil.copyfile(brep,b);shutil.copyfile(vis,v)
-                edited.parts.append((b,v));origins.append(old_id)
+        ordered=[(old_id,pair) for old_id,pair in enumerate(document.parts,1)] if is_copy else [
+            (old_id,pair) for old_id,previous in enumerate(document.parts,1) for pair in (generated if old_id==part_id else [previous])]
+        if is_copy:ordered.extend((part_id,pair) for pair in generated)
+        if len(ordered)>MAX_CAD_PARTS:raise ValueError('Edited CAD exceeds the 32-part preview limit.')
+        edited.parts=[];origins=[]
+        for new_id,(old_id,(brep,vis)) in enumerate(ordered,1):
+            b,v=inputs/f'part-{new_id:04d}.brep',inputs/f'part-{new_id:04d}.vis'
+            shutil.copyfile(brep,b);shutil.copyfile(vis,v)
+            edited.parts.append((b,v));origins.append(old_id)
         edited.snapshot=inputs/('source'+document.snapshot.suffix)
         shutil.copyfile(document.snapshot,edited.snapshot)
-        for path in document.edit_files+[staged_source,definition,result,work/'operation.log',*extra]:
+        for path in document.edit_files+[staged_source,definition,*outputs,work/'operation.log',*extra]:
             target=inputs/(path.name if path.name!='operation.log' else prefix+'-command.log')
             shutil.copyfile(path,target);edited.edit_files.append(target)
         edit={'operation':operation,'selectedPartId':part_id,'parameters':description,
-              'inputBrepSha256':file_sha256(source),'outputBrepSha256':file_sha256(result),
+              'inputBrepSha256':file_sha256(source),
               'partOrigins':origins,'toolReceiptSha256':document.tool_receipt}
+        if is_copy:
+            edit['outputBreps']=[{'file':p.name,'sha256':file_sha256(p)} for p in outputs]
+            edit['partCopyNumbers']=[0]*len(document.parts)+list(range(1,description['copies']+1))
+        else:edit['outputBrepSha256']=file_sha256(result)
         edited.edits.append(edit)
         edited.edits_snapshot=json.dumps(edited.edits,sort_keys=True,allow_nan=False)
         history=inputs/(prefix+'-receipt.json');history.write_text(json.dumps(edit,indent=2)+'\n')

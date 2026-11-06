@@ -16,3 +16,13 @@ non-uniform scaling: analytical volumes/centroids/bounds, face/edge/vertex IDs,
 untouched inputs, origins and invalid factors. Positive factors are bounded
 to 0.000001–1000 and an identity-only scale is refused. The original kernel
 converts non-uniform surfaces to splines; no geometric formatter was changed.
+
+Task 0083: translated/rotated numbered outputs retain every original part byte,
+append part-scoped copies and record all original output hashes. The preview
+allows 1–16 copies within 32 total parts; incomplete/extra/cancelled output
+inventories are discarded before publication. Mac/Linux ARM64 pass 99 native
+transactions and 50 desktop checks. Both source desktops pass 91 combined
+workflow checks through eight edits, undo/redo, six-solid remeshing, STEP readback
+and affine/unit-stress solve. Mac has 402 nodes/898 C3D4; Linux has 402/900.
+Strict mesh/deck/field equality remains open; native analytical acceptance is
+separate. Final copied-app and PMX/retention evidence follows at closeout.

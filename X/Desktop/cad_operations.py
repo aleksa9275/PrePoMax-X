@@ -47,6 +47,8 @@ class CadOperations(QtCore.QObject):
         self.rotate_action=self.menu.addAction('Rotate part…',lambda:self.dialog('rotate'))
         self.mirror_action=self.menu.addAction('Mirror part…',lambda:self.dialog('mirror'))
         self.scale_action=self.menu.addAction('Scale part…',lambda:self.dialog('scale'))
+        self.copy_translate_action=self.menu.addAction('Copy part by translation…',lambda:self.dialog('copy_translate'))
+        self.copy_rotate_action=self.menu.addAction('Copy part by rotation…',lambda:self.dialog('copy_rotate'))
         self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
         self.repair_action=self.menu.addAction('Repair part…',lambda:self.dialog('repair'))
         self.export_action=self.menu.addAction('Export part as STEP…',lambda:self.dialog('export'))
@@ -61,6 +63,8 @@ class CadOperations(QtCore.QObject):
         self.redo_action.setEnabled(self.translate_action.isEnabled() and bool(self.history.redo))
         self.mirror_action.setEnabled(self.translate_action.isEnabled())
         self.scale_action.setEnabled(self.translate_action.isEnabled())
+        self.copy_translate_action.setEnabled(self.translate_action.isEnabled())
+        self.copy_rotate_action.setEnabled(self.translate_action.isEnabled())
         self.split_action.setEnabled(self.translate_action.isEnabled())
         self.rotate_action.setEnabled(self.translate_action.isEnabled())
         self.repair_action.setEnabled(self.translate_action.isEnabled())
@@ -71,7 +75,7 @@ class CadOperations(QtCore.QObject):
     def dialog(self,operation):
         w=self.window
         if w.busy or w.cad_document is None:return
-        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle({'translate':'Translate CAD part','rotate':'Rotate CAD part','mirror':'Mirror CAD part','scale':'Scale CAD part','split':'Split CAD part by plane','repair':'Repair CAD part','export':'Export selected CAD part as STEP','export_all':'Export all CAD parts as STEP'}[operation])
+        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle({'translate':'Translate CAD part','rotate':'Rotate CAD part','mirror':'Mirror CAD part','scale':'Scale CAD part','copy_translate':'Copy CAD part by translation','copy_rotate':'Copy CAD part by rotation','split':'Split CAD part by plane','repair':'Repair CAD part','export':'Export selected CAD part as STEP','export_all':'Export all CAD parts as STEP'}[operation])
         form=QtWidgets.QFormLayout(dialog)
         part=QtWidgets.QComboBox()
         for entry in w.cad_document.scene['cad']['parts']:
@@ -80,14 +84,17 @@ class CadOperations(QtCore.QObject):
             part.setEnabled(False);part.clear();part.addItem('All CAD parts')
         form.addRow('CAD part',part)
         fields=[]
-        labels=['Translation '+axis+' (model units)' for axis in ('X','Y','Z')] if operation=='translate' else [group+' '+axis for group in ('Plane origin','Plane normal') for axis in ('X','Y','Z')]
+        labels=['Translation '+axis+' (model units)' for axis in ('X','Y','Z')] if operation in ('translate','copy_translate') else [group+' '+axis for group in ('Plane origin','Plane normal') for axis in ('X','Y','Z')]
         if operation=='mirror':labels=[group+' '+axis for group in ('Mirror plane point (model units)','Mirror plane normal') for axis in ('X','Y','Z')]
         if operation=='scale':labels=[group+' '+axis for group in ('Scale center (model units)','Scale factor') for axis in ('X','Y','Z')]
         if operation=='repair':labels=['Repair tolerance (model units)']
-        if operation=='rotate':labels=[group+' '+axis for group in ('Rotation center (model units)','Rotation axis') for axis in ('X','Y','Z')]+['Angle (degrees)']
+        if operation in ('rotate','copy_rotate'):labels=[group+' '+axis for group in ('Rotation center (model units)','Rotation axis') for axis in ('X','Y','Z')]+['Angle (degrees)']
+        if operation in ('copy_translate','copy_rotate'):
+            labels+=['Number of copies (1–16)']
+            note=QtWidgets.QLabel('Original parts are retained. Copy k applies k translations or rotation angles.');note.setWordWrap(True);form.addRow(note)
         if operation in ('export','export_all'):labels=[]
         for index,label in enumerate(labels):
-            field=QtWidgets.QLineEdit('1' if operation=='scale' and index>=3 else '0.000001' if operation=='repair' else '90' if operation=='rotate' and index==6 else '1' if operation in ('split','rotate','mirror') and index==5 else '0')
+            field=QtWidgets.QLineEdit('1' if operation in ('copy_translate','copy_rotate') and index==len(labels)-1 else '1' if operation=='scale' and index>=3 else '0.000001' if operation=='repair' else '90' if operation in ('rotate','copy_rotate') and index==6 else '1' if operation in ('split','rotate','copy_rotate','mirror') and index==5 else '0')
             field.setObjectName('cadParameter'+str(index))
             form.addRow(label,field);fields.append(field)
         message=QtWidgets.QLabel();message.setWordWrap(True);message.setTextFormat(QtCore.Qt.TextFormat.PlainText)
@@ -106,6 +113,10 @@ class CadOperations(QtCore.QObject):
                     values=Path(name)
                     if not values.suffix:values=values.with_suffix('.step')
                     if values.exists() or values.is_symlink():raise FileExistsError('Choose a new STEP filename.')
+                elif operation in ('copy_translate','copy_rotate'):
+                    from cad_edit import pattern
+                    parameters={'translation':[f.text() for f in fields[:3]]} if operation=='copy_translate' else {'center':[f.text() for f in fields[:3]],'axis':[f.text() for f in fields[3:6]],'degrees':fields[6].text()}
+                    values=pattern({**parameters,'copies':int(fields[-1].text())},operation,len(w.cad_document.parts))
                 elif operation=='translate':
                     values=vector([f.text() for f in fields],'Translation')
                     if not any(values):raise ValueError('Provide a nonzero translation.')

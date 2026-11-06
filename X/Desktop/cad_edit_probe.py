@@ -68,13 +68,13 @@ def begin(app,w,source,output):
         if state['phase']=='reopen':
             check('exported edited STEP reopens in desktop',len(w.cad_document.parts)==1)
             props=w.cad_document.scene['cad']['parts'][0]['entities']['solid'][0]['properties']
-            check('reopened edited solid retains analytical volume',math.isclose(props['volume'][0],1000,rel_tol=1e-12,abs_tol=1e-9))
+            check('reopened edited solid retains analytical volume',math.isclose(props['volume'][0],750,rel_tol=1e-12,abs_tol=1e-9))
             check('original external CAD file unchanged',hashlib.sha256(source.read_bytes()).hexdigest()==state['sourceHash'])
             capture('reopened');state['phase']='reopen-all';w.start_cad_import(whole);return
         if state['phase']=='reopen-all':
             solids=[solid for part in w.cad_document.scene['cad']['parts'] for solid in part['entities']['solid']]
-            check('whole STEP reopens all three edited solids',len(solids)==3)
-            check('whole STEP retains total analytical volume',math.isclose(sum(s['properties']['volume'][0] for s in solids),2768,rel_tol=1e-12,abs_tol=1e-9))
+            check('whole STEP reopens all six edited solids',len(solids)==6)
+            check('whole STEP retains total analytical volume',math.isclose(sum(s['properties']['volume'][0] for s in solids),4768,rel_tol=1e-12,abs_tol=1e-9))
             capture('reopened-all');finish();return
         check('two original CAD parts retained',len(w.cad_document.parts)==2)
         state['originalDocRoot']=w.cad_document.root
@@ -88,12 +88,12 @@ def begin(app,w,source,output):
             w.definition={'placeholder':'discard only after successful edit'};w.analysis_valid=True
             w.regions.refs.add(('face',1,1))
             operation('translate',[7,-3,5]);return
-        check('all three edited bodies remesh',len(w.model_scene['cadMesh']['parts'])==3)
+        check('all six edited bodies remesh',len(w.model_scene['cadMesh']['parts'])==6)
         scene=w.model_scene;nodes=scene['nodes'];parts=scene['cadMesh']['parts']
         report['mesh']={'nodes':len(scene['nodes']),'elements':len(scene['elements']),'parts':len(parts)}
         definition=json.loads((examples()/'cube-analysis.json').read_text())
         definition['materials']=[{'name':'Elastic','youngsModulus':'1000','poissonsRatio':'0'}]
-        definition['sections']=[{'name':'Section'+str(i),'material':'Elastic','elementSet':f'PART_{i}_SOLID_1'} for i in range(1,4)]
+        definition['sections']=[{'name':'Section'+str(i),'material':'Elastic','elementSet':f'PART_{i}_SOLID_1'} for i in range(1,len(parts)+1)]
         constraints=[{'name':'Transverse','nodeSet':'ALL_NODES','displacements':['0','0',None]}]
         for i,part in enumerate(parts,1):
             selected=[n for n in nodes if n['id']>part['nodeOffset'] and (i==len(parts) or n['id']<=parts[i]['nodeOffset'])]
@@ -129,7 +129,23 @@ def begin(app,w,source,output):
             operation('repair',[1e-6])
         elif name=='repair':
             check('all four geometry edit receipts retained',[e['operation'] for e in w.cad_document.edits]==['translate','rotate','split','repair'])
-            capture('edited');state['phase']='edited';w.start_cad_mesh(3)
+            operation('mirror',[0,0,0,1,0,0])
+        elif name in ('mirror','scale','copy_translate','copy_rotate'):
+            document=w.cad_document
+            w.operations.undo_action.trigger();check(name+' undo restores previous geometry',w.cad_document.edits[-1]['operation']=={'mirror':'repair','scale':'mirror','copy_translate':'scale','copy_rotate':'copy_translate'}[name])
+            w.operations.redo_action.trigger();check(name+' redo restores exact owned document',w.cad_document is document)
+            if name=='mirror':operation('scale',[-2,2,10,1.5,.5,1])
+            elif name=='scale':
+                state['preCopyHashes']=[[hashlib.sha256(p.read_bytes()).hexdigest() for p in pair] for pair in document.parts]
+                operation('copy_translate',[0,20,0,2])
+            elif name=='copy_translate':
+                check('translated copies preserve all original CAD bytes',[[hashlib.sha256(p.read_bytes()).hexdigest() for p in pair] for pair in document.parts[:3]]==state['preCopyHashes'])
+                check('translated copies retain scoped origins and copy numbers',document.edits[-1]['partOrigins']==[1,2,3,1,1] and document.edits[-1]['partCopyNumbers']==[0,0,0,1,2])
+                operation('copy_rotate',[-20,0,0,0,0,1,90,1])
+            else:
+                check('all eight active geometry recipes retained',[e['operation'] for e in document.edits]==['translate','rotate','split','repair','mirror','scale','copy_translate','copy_rotate'])
+                check('rotated copy has scoped source identity',document.edits[-1]['partOrigins']==[1,2,3,4,5,1] and document.edits[-1]['partCopyNumbers']==[0,0,0,0,0,1])
+                capture('edited');state['phase']='edited';w.start_cad_mesh(3)
         elif name=='export':
             report['export']=result['receipt']
             check('STEP export preserves active model and mesh',w.cad_document is state['document'] and w.cad_mesh is state['mesh'] and w.mesh_bytes==state['meshBytes'] and w.definition==state['definition'])
@@ -137,12 +153,12 @@ def begin(app,w,source,output):
             reopened=CadDocument(step,w.cad_document.tool,decode)
             try:
                 props=reopened.scene['cad']['parts'][0]['entities']['solid'][0]['properties']
-                check('exported edited part center matches analytical result',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(props['center_of_mass'],[2,2,10])))
+                check('exported edited part center matches analytical result',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(props['center_of_mass'],[-2,2,10])))
             finally:reopened.close()
             operation('export_all',[])
         else:
             report['wholeExport']=result['receipt']
-            check('whole export maps all three edited solids',result['receipt']['reimportedSolids']==3 and len(result['receipt']['solidOrigins'])==3)
+            check('whole export maps all six edited solids',result['receipt']['reimportedSolids']==6 and len(result['receipt']['solidOrigins'])==6)
             check('whole STEP export preserves active mesh analysis and unsaved state',w.cad_document is state['document'] and w.cad_mesh is state['mesh'] and w.mesh_bytes==state['meshBytes'] and w.definition==state['definition'] and w.editor_dirty)
             w.run_model()
     @guarded
@@ -155,8 +171,9 @@ def begin(app,w,source,output):
         check('analytical affine displacement at every edited mesh node',max(errors)<=2e-8 and max(map(abs,fields['DISP']['U1']))<=1e-12 and max(map(abs,fields['DISP']['U2']))<=1e-12)
         check('analytical unit axial stress at every edited mesh node',max(abs(v-1) for v in fields['STRESS']['S33'])<=1e-6)
         frozen=Path(result['inputDirectory'])/'cad';identity=json.loads((frozen/'identity.json').read_text())
-        check('job freezes all geometry edit receipts and part origins',len(identity['geometryEdits'])==4 and identity['geometryEdits'][2]['partOrigins']==[1,1,2])
-        check('job freezes exact original operation inputs and recipes',all((frozen/f'cad-operation-{i:04d}-input.brep').is_file() and (frozen/f'cad-operation-{i:04d}-parameters.txt').is_file() for i in range(1,5)))
+        check('job freezes all geometry edit receipts and part origins',len(identity['geometryEdits'])==8 and identity['geometryEdits'][2]['partOrigins']==[1,1,2])
+        check('job freezes exact original operation inputs and recipes',all((frozen/f'cad-operation-{i:04d}-input.brep').is_file() and (frozen/f'cad-operation-{i:04d}-parameters.txt').is_file() for i in range(1,9)))
+        check('job freezes every numbered native copy output',all((frozen/('cad-'+f['file'])).is_file() and hashlib.sha256((frozen/('cad-'+f['file'])).read_bytes()).hexdigest()==f['sha256'] for edit in identity['geometryEdits'] if 'outputBreps' in edit for f in edit['outputBreps']))
         check('all frozen CAD file hashes verify',all(hashlib.sha256((frozen/f['file']).read_bytes()).hexdigest()==f['sha256'] for f in identity['files']))
         w.fields.setCurrentIndex(1);capture('results')
         state['phase']='reopen';w.start_cad_import(step)

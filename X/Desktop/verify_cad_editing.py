@@ -134,6 +134,39 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 try:apply_edit(document,decode,1,'scale',{'center':[0,0,0],'factors':factors})
                 except ValueError:check('invalid scale refused '+str(factors),True)
                 else:raise ValueError('Invalid scale accepted')
+        if 'copies' in operations:
+            cases=[('copy_translate',{'translation':[15,20,0],'copies':2},[[20,25,10],[35,45,10]]),
+                   ('copy_rotate',{'center':[-20,0,0],'axis':[0,0,1],'degrees':90,'copies':2},[[-25,25,10],[-45,-5,10]])]
+            for operation,parameters,centers in cases:
+                edited=apply_edit(document,decode,1,operation,parameters)
+                try:
+                    values=solids(edited)
+                    check(operation+' retains originals and appends two copies',len(edited.parts)==4)
+                    check(operation+' retains every original BREP and VIS byte',all(file_sha256(a)==file_sha256(b) for old,new in zip(document.parts,edited.parts) for a,b in zip(old,new)))
+                    check(operation+' ordered copy centroids are analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for actual,expected in zip(values[2:],centers) for a,b in zip(actual['center_of_mass'],expected)))
+                    check(operation+' copy volumes are analytical',all(math.isclose(v['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9) for v in values[2:]))
+                    original=decode(document.parts[0][1])
+                    check(operation+' retains each copy source face edge vertex IDs',all([e['id'] for e in decode(v)['cad']['entities'][kind]]==[e['id'] for e in original['cad']['entities'][kind]] for b,v in edited.parts[2:] for kind in ['face','edge','vertex']))
+                    receipt=edited.edits[-1]
+                    check(operation+' maps copy numbers and part origins',receipt['partOrigins']==[1,2,1,1] and receipt['partCopyNumbers']==[0,0,1,2])
+                    check(operation+' freezes every original command output',all(file_sha256(edited.root/'inputs'/f['file'])==f['sha256'] for f in receipt['outputBreps']) and len(receipt['outputBreps'])==2)
+                    target=output/(operation+'.step');export=prepare_export(edited,decode,None)
+                    try:
+                        exchange=export.publish(target)
+                        check(operation+' all-body STEP readback preserves four solids',exchange['reimportedSolids']==4)
+                    finally:export.close()
+                    report['operations'][operation]=receipt;shutil.copytree(edited.root,output/operation)
+                finally:edited.close()
+            invalid=[('copy_translate',{'translation':[1,0,0],'copies':n}) for n in [0,-1,17,True,1.5]]
+            invalid+=[('copy_translate',{'translation':[0,0,0],'copies':1}),('copy_rotate',{'center':[0,0,0],'axis':[0,0,0],'degrees':90,'copies':1})]
+            for operation,values in invalid:
+                try:apply_edit(document,decode,1,operation,values)
+                except ValueError:check('invalid copies refused '+str(values),True)
+                else:raise ValueError('Invalid copies accepted')
+            from cad_edit import pattern
+            try:pattern({'translation':[1,0,0],'copies':1},'copy_translate',32)
+            except ValueError:check('copy part limit rejected before native execution',True)
+            else:raise ValueError('Copy part limit accepted')
         if 'repair' in operations:
             edited=apply_edit(document,decode,1,'repair',1e-6)
             try:
@@ -206,6 +239,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','rotate','mirror','scale','split','repair','export','export_all','history'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','mirror','scale','split','repair','export','export_all','history'])
+    parser.add_argument('--operation',action='append',choices=['translate','rotate','mirror','scale','copies','split','repair','export','export_all','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','mirror','scale','copies','split','repair','export','export_all','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)
