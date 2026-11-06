@@ -17,6 +17,8 @@ all unexecuted functionality/platform/release acceptance open. Publish normally
 to origin/research/native-feasibility with CI skipped.
 
 Implementation and source Mac/Linux ARM64 verification are complete within the
-specified increment. Actual numerical evidence, original Windows solver
+specified increment. Implementation `6609d7d4` is pushed/remote-verified with
+CI skipped. The copied current app passes both quadratic viewports and affected
+linear/PMX workflows. Actual numerical evidence, original Windows solver
 comparison, desktop checks, remaining gates and publication/candidate closeout
 are in [the report](../reports/quadratic-native-static.md) and its receipt.

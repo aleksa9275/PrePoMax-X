@@ -84,8 +84,11 @@ Source Mac and Linux ARM64 each pass **37 desktop workflow checks** and **52
 unit tests**. Native Linux also passes 11 CAD mesh/topology/frozen-input checks,
 the 91-check edited-six-body linear workflow and CAD/C3D8 PMX regressions **28/17**.
 Mac ownership/build guards pass **12/9**. Current Mac analysis/results checks
-pass, including 73 static checks and all 78 result checks. Other current suite
-results and final copied-app checks are recorded in the receipt at closeout.
+pass, including 73 static checks and all 78 result checks. All four current Mac engineering suites pass. The copied app passes **37 checks
+in each viewport mode**, 12 numerical checks, the 91-check linear workflow and
+**28/17** CAD/C3D8 PMX regressions. Both result screenshots show quadratic
+contours; all 2,422 copied payload hashes, 2,276 symlink targets and the ad-hoc
+signature verify.
 The first sandboxed Mac offscreen test could not create OpenGL and exited 139;
 the actual native graphics run passes all 52 tests. Both diagnostics remain.
 
@@ -96,9 +99,25 @@ comparison closes full formulation/analysis, general PMX or release acceptance.
 
 ## Publication and current candidate
 
-Implementation is on the research branch. Final source/publication, copied-app
-verification and retained candidate identity are added to the receipt at closeout.
-D058 prohibits hosted CI; all research publication uses skipped CI. D059 keeps
-Linux x64 pending for Windows/Podman. Native Windows/net48, all remaining required
-functionality, D057 full original PMX interoperability, installers/Homebrew,
-clean-system/signing/notarization and release acceptance remain open.
+Implementation **6609d7d458ccd37511163dc401cdcb6bf83708b0** is pushed and
+remote-verified on `origin/research/native-feasibility`. The package identifies
+that exact source, with no changed code and an empty source patch; its dirty flag
+comes from four pre-existing Finder files. Commit/push both skip CI; zero hosted
+jobs were requested. Closing documentation is published normally on the same
+branch.
+
+Current candidate: `/tmp/prepomaxx-task0088-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables
+`/tmp/prepomaxx-task0063-recipe/runtime`. The task 0086 launcher forwards to it.
+Evidence is `/tmp/prepomaxx-task0088-evidence` and numerical/original-Windows
+reference evidence is `/tmp/prepomaxx-task0087-evidence`. Source/package/log and
+manifest records are `/tmp/prepomaxx-task0088-package`; generated package payloads
+are disposable after the verified copy. The superseded task 0086 app is removed;
+all project/geometry/mesh/PMX inputs, frozen jobs, reference results, screenshots,
+source/manifest/log evidence, installed app/state and shared caches remain.
+Actual cleanup bytes and post-cleanup hash checks are in the receipt.
+
+D058 prohibits hosted CI and D059 keeps Linux x64 pending for Windows/Podman.
+Native Windows/net48, all remaining required functionality, D057 full original
+PMX interoperability, installers/Homebrew, clean-system/signing/notarization and
+release acceptance remain open. No final functionality requirement is waived.

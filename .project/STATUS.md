@@ -12,7 +12,14 @@ Jacobian refusal; the pinned original Windows solver through CrossOver closely
 agrees on identical decks. Source desktops pass 37 workflow checks and 52 tests
 each. All other original element/analysis/model workflows remain mandatory,
 alongside D057/D058/D059/exact-parity/four-target/release requirements.
-Final publication and retained candidate are recorded at closeout.
+Implementation `6609d7d4` is pushed/remote-verified with CI skipped. The copied
+Mac app passes 37 checks in both viewports, 12 numerical checks and 91/28/17
+linear/CAD-PMX/C3D8-PMX checks; all four current Mac engineering suites pass.
+Current candidate: `/tmp/prepomaxx-task0088-delivery/PrePoMax-X Preview.app`;
+sibling native CAD launcher enables the retained runtime. Source patch is empty;
+2,422 copied payload hashes, 2,276 symlinks and the ad-hoc signature verify.
+Superseded task 0086 app and duplicate new build payloads are pruned; projects,
+jobs/evidence and shared tools remain. Both original failures are still false.
 
 ## Prior — tasks 0084–0086: quadratic CAD mesh preview/export
 

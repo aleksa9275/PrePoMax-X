@@ -14,6 +14,8 @@ Keep original measurement/classifier failures, D057/D058/D059 and all full
 functionality/four-target/distribution/release requirements explicit.
 
 Implementation and source Mac/Linux ARM64 verification are complete within the
-specified increment. Actual numerical evidence, original Windows solver
+specified increment. Implementation `6609d7d4` is pushed/remote-verified with
+CI skipped. The copied current app passes both quadratic viewports and affected
+linear/PMX workflows. Actual numerical evidence, original Windows solver
 comparison, desktop checks, remaining gates and publication/candidate closeout
 are in [the report](../reports/quadratic-native-static.md) and its receipt.

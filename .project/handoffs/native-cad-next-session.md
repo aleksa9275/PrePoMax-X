@@ -16,6 +16,15 @@ an inverted curved element despite positive corners. General curved quality,
 other formulations/analysis families, exact equality, native-session PMX and
 all D057/D058/D059/four-target/release gates remain open.
 
+Current candidate: `/tmp/prepomaxx-task0088-delivery/PrePoMax-X Preview.app`,
+source `6609d7d4` pushed/remote-verified with CI skipped and empty source patch.
+Sibling native CAD launcher enables the retained runtime; task 0086 launcher
+forwards to it. Both copied Mac viewports pass 37 quadratic workflow checks;
+12 numerical and 91/28/17 linear/CAD-PMX/C3D8-PMX checks pass in the copy.
+All four current Mac engineering suites, 52 desktop tests per native host and
+12/9 ownership/build guards pass. Superseded task 0086 app and duplicate new
+package payloads are pruned; all projects/jobs/evidence/shared tools remain.
+
 The older preview/analysis-refusal description is superseded by tasks 0087/0088.
 Native Mac/Linux ARM64 analytical checks and original Windows CalculiX reference
 comparisons pass within the recorded bounds, not exact field equality. Windows
