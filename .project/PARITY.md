@@ -12,6 +12,12 @@ checkpoint. Nothing in the coverage table below removes a missing capability
 from the final requirement. A failed PrePoMax measurement check does not prove
 that the separate CalculiX formulation is unavailable.
 
+D061 sequencing, 6 November 2026: deliver full original functionality first,
+then implement the [recorded correctness fixes and improvements](reports/deferred-correctness-improvements.md).
+Inherited failures remain explicit and original algorithms/tolerances remain
+during the parity phase. Necessary port/integration repairs still proceed.
+Deferral closes no numerical, exact-parity, platform or release gate.
+
 ## Mandatory breadth
 
 | Original area | Required scope, still open beyond the verified increments |

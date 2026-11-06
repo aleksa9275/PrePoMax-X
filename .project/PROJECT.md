@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-06 sequencing decision D061: continue toward full original 3.0.0
+functionality first, then implement correctness fixes and improvements. The
+[deferred backlog](reports/deferred-correctness-improvements.md) records observed
+issues, evidence and proposed remedies. Original algorithms/tolerances and
+explicit failed checks remain; required functionality and release gates remain
+unchanged. The proposed immediate correctness increment is deferred.
+
 2026-11-06 task 0090 connects original density/plastic hardening, pressure,
 gravity, nonlinear static controls and increment/plastic-strain results through
 the desktop solid workflow. [Scope and evidence](reports/nonlinear-loaded-solids.md).

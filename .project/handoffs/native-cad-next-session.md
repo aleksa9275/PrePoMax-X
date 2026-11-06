@@ -1,5 +1,14 @@
 # Native CAD continuation — 6 November 2026
 
+Latest maintainer direction, 6 November 2026 (D061): achieve full original
+PrePoMax 3.0.0 parity first; implement recorded correctness fixes/improvements
+afterward. Continue larger usable original-functionality milestones now, not the
+proposed combined correctness increment. Read the
+[deferred backlog](../reports/deferred-correctness-improvements.md) for evidence
+and proposals. Preserve original algorithms/tolerances, failed-check evidence
+and existing safeguards. Required port/integration repairs remain in scope;
+no original functionality or parity/release gate is removed. D057–D060 remain.
+
 Latest task 0090: native solid workflow now includes density/plastic hardening,
 pressure/gravity, geometric nonlinearity and increment/plastic-strain results.
 Read [the report](../reports/nonlinear-loaded-solids.md) and its receipt for actual

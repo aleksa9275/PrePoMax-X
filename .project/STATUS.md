@@ -1,5 +1,14 @@
 # Project status
 
+Latest maintainer direction, D061: full PrePoMax 3.0.0 parity first, numerical
+fixes/improvements afterward. Continue original-functionality implementation;
+the proposed combined correctness increment is deferred. Findings and proposed
+remedies are recorded in the
+[post-parity backlog](reports/deferred-correctness-improvements.md). Original
+behavior, existing safeguards, explicit failures and all parity/release gates
+remain intact. This is a documentation-only sequencing update; task 0090's
+candidate and implementation remain current.
+
 ## Current — task 0090: nonlinear and distributed-load solids
 
 Original density/plastic hardening, pressure/gravity, geometric nonlinear static

@@ -1,5 +1,20 @@
 # Decision register
 
+D061 — Parity first, correctness improvements afterward, 2026-11-06: the
+maintainer explicitly directs recording discovered discrepancies and proposed
+fixes, continuing as is toward full PrePoMax 3.0.0 parity, then implementing fixes
+and improvements. The proposed combined correctness increment is deferred;
+continue larger original-functionality milestones now. Preserve original
+algorithms/conversions/tolerances, explicit failed checks, existing measurement
+safeguards and reference evidence. Necessary port/integration repairs to match
+original behavior and all missing original functions remain in scope. Deferral
+does not mark failures passed, omit original functionality or close exact-parity/
+correctness/four-target/release gates. D060's sole unavailable Intel/PARDISO
+exception and D057/D058/D059 remain. See the
+[post-parity backlog](reports/deferred-correctness-improvements.md), covering
+D029's integration/classifier findings, B006 pressure accuracy, small solver
+field differences and native mesher reproducibility.
+
 D060 — Reaffirmed original full-functionality requirement, 2026-11-06: the maintainer requires
 **IDENTICAL PrePoMax 3.0.0 functionality, including all mesh types and all
 calculations, with the unavailable Intel/PARDISO solver as the sole exception**. Bounded previews are development

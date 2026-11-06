@@ -25,3 +25,10 @@ from functional execution. D029's two original kernel failures remain separate.
 [Report](../reports/nonlinear-loaded-solids.md) and
 [receipt](../reports/nonlinear-loaded-solids-verification.json) retain input/output
 hashes, native and original reference paths, comparison bounds and actual results.
+
+D061, 6 November 2026: the maintainer defers correcting this inherited discrepancy
+until after full original functionality parity. Continue original behavior and
+the current explicit conversion choices. Proposed diagnosis/remedy and related
+findings are in the [post-parity backlog](../reports/deferred-correctness-improvements.md).
+The failed analytical check remains false; the proposed correctness increment
+is not the next implementation task.

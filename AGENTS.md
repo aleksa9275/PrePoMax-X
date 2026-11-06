@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-06 maintainer sequencing, D061: achieve full PrePoMax 3.0.0 parity
+first; implement numerical fixes and improvements afterward. Read
+.project/reports/deferred-correctness-improvements.md for recorded issues and
+proposals. Defer the suggested combined correctness increment; continue larger
+original-functionality milestones. Preserve original algorithms/tolerances,
+explicit failures and existing safeguards. Port/integration repairs needed to
+match original behavior remain in scope. All original functions remain required;
+deferral closes no parity/correctness/platform/release gate. D057/D058/D059/D060
+remain in force.
+
 Task 0090 connects density/plastic hardening, pressure/gravity, original geometric
 nonlinear static controls and increment/plastic-strain results through the solid
 desktop workflow. Read .project/reports/nonlinear-loaded-solids.md and its receipt
