@@ -33,6 +33,17 @@ def selected_part(document, part_id):
     return document.parts[part_id-1][0]
 
 
+def rotation(values):
+    if not isinstance(values,dict) or set(values)!={'center','axis','degrees'}:
+        raise ValueError('Provide a rotation center, axis and angle in degrees.')
+    center=vector(values['center'],'Rotation center');axis=vector(values['axis'],'Rotation axis')
+    degrees=float(values['degrees'])
+    if not any(axis):raise ValueError('Rotation axis must be nonzero.')
+    if not math.isfinite(degrees) or not 0<abs(degrees)<360:
+        raise ValueError('Use a finite nonzero rotation angle strictly between -360 and 360 degrees.')
+    return {'center':center,'axis':axis,'degrees':degrees}
+
+
 def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     source = selected_part(document, part_id)
     if len(document.edits) >= MAX_EDITS:
@@ -42,6 +53,10 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         description=vector(values,'Translation')
         if not any(description):raise ValueError('Provide a nonzero translation.')
         parameters='Transform type: Translate\nDirection: '+numbers(description)+'\n'
+        arguments=['BREP_TRANSFORM']
+    elif operation=='rotate':
+        description=rotation(values)
+        parameters='Transform type: Rotate\nPoint: '+numbers(description['center'])+'\nDirection: '+numbers(description['axis'])+'\nAngle: '+format(description['degrees'],'.17g')+'\n'
         arguments=['BREP_TRANSFORM']
     elif operation=='split':
         if not isinstance(values,dict) or set(values)!={'origin','normal'}:
@@ -85,8 +100,8 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         require_output(result,MAX_CAD_BYTES)
         converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
         generated=converter(result,work/'decoded',cancel=cancel)
-        if operation in ('translate','repair') and len(generated)!=1:
-            raise ValueError('Translation/controlled repair must retain one selected CAD part.')
+        if operation in ('translate','rotate','repair') and len(generated)!=1:
+            raise ValueError('Transform/controlled repair must retain one selected CAD part.')
         extra=[]
         if operation=='split':
             origins_file=result.with_suffix('.brep.origins')

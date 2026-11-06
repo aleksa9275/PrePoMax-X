@@ -83,6 +83,22 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 try:apply_edit(document,decode,1,'split',values)
                 except ValueError:check('invalid or non-intersecting plane refused '+str(values),True)
                 else:raise ValueError('Non-splitting plane accepted')
+        if 'rotate' in operations:
+            edited=apply_edit(document,decode,1,'rotate',{'center':[1,2,3],'axis':[0,0,1],'degrees':90})
+            try:
+                values=solids(edited);scene=decode(edited.parts[0][1])
+                check('rotation volume is analytical',math.isclose(values[0]['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9))
+                check('off-origin axis rotation center is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],[-2,6,10])))
+                bounds=[v for axis in ('x','y','z') for v in [min(n[axis] for n in scene['nodes']),max(n[axis] for n in scene['nodes'])]]
+                check('rotation bounds are analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(bounds,[-7,3,1,11,0,20])))
+                check('rotation retains untouched BREP and VIS bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
+                check('rotation retains original face identities',[f['id'] for f in scene['cad']['entities']['face']]==[f['id'] for f in decode(document.parts[0][1])['cad']['entities']['face']])
+                report['operations']['rotate']=edited.edits[-1];shutil.copytree(edited.root,output/'rotate')
+            finally:edited.close()
+            for values in [{'center':[0,0,0],'axis':[0,0,0],'degrees':90},{'center':[0,0,0],'axis':[0,0,1],'degrees':0},{'center':[0,0,0],'axis':[0,0,1],'degrees':float('inf')}]:
+                try:apply_edit(document,decode,1,'rotate',values)
+                except ValueError:check('invalid rotation refused '+str(values),True)
+                else:raise ValueError('Invalid rotation accepted')
         if 'repair' in operations:
             edited=apply_edit(document,decode,1,'repair',1e-6)
             try:
@@ -136,6 +152,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','split','repair','export','history'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair','export','history'])
+    parser.add_argument('--operation',action='append',choices=['translate','rotate','split','repair','export','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','split','repair','export','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)
