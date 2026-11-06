@@ -27,11 +27,26 @@ def begin(app, window, source, output):
         window.editor_dirty=False;window.close();app.exit(0 if error is None else 1)
     def capture(name):
         window.raise_();app.processEvents()
+        # Cocoa presents its child view after the current event returns. Wait
+        # through a display cycle before capturing the actual screen contents.
+        settled=QtCore.QEventLoop(window)
+        QtCore.QTimer.singleShot(250,settled.quit)
+        settled.exec()
         if window.transport=='frame-bridge':pixmap=window.grab()
         else:
             origin=window.mapToGlobal(QtCore.QPoint(0,0))
             pixmap=window.screen().grabWindow(0,origin.x(),origin.y(),window.width(),window.height())
         check(name+' capture',pixmap.save(str(output/(name+'.png'))))
+        if name=='result':
+            frame=pixmap.toImage()
+            scale=frame.width()/window.width()
+            origin=window.vtk.mapTo(window,QtCore.QPoint(0,0))
+            x0,y0=round(origin.x()*scale),round(origin.y()*scale)
+            x1=min(frame.width(),x0+round(window.vtk.width()*scale*.8))
+            y1=min(frame.height(),y0+round(window.vtk.height()*scale))
+            colored=sum(frame.pixelColor(x,y).saturation()>140
+                        for x in range(x0,x1,8) for y in range(y0,y1,8))
+            check('displayed result has colored mesh pixels',colored>20)
     def dialog_edit():
         dialog=app.activeModalWidget()
         try:
