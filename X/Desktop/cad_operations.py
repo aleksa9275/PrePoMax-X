@@ -36,6 +36,7 @@ class CadOperations(QtCore.QObject):
         self.menu=QtWidgets.QMenu(self.button);self.button.setMenu(self.menu)
         self.translate_action=self.menu.addAction('Translate part…',lambda:self.dialog('translate'))
         self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
+        self.repair_action=self.menu.addAction('Repair part…',lambda:self.dialog('repair'))
         self.toolbar_action=toolbar.addWidget(self.button)
         self.refresh()
 
@@ -43,12 +44,13 @@ class CadOperations(QtCore.QObject):
         w=self.window
         self.translate_action.setEnabled(not w.busy and w.cad_document is not None and w.pmx_session is None)
         self.split_action.setEnabled(self.translate_action.isEnabled())
+        self.repair_action.setEnabled(self.translate_action.isEnabled())
         self.button.setEnabled(self.translate_action.isEnabled())
 
     def dialog(self,operation):
         w=self.window
         if w.busy or w.cad_document is None:return
-        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle('Translate CAD part' if operation=='translate' else 'Split CAD part by plane')
+        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle({'translate':'Translate CAD part','split':'Split CAD part by plane','repair':'Repair CAD part'}[operation])
         form=QtWidgets.QFormLayout(dialog)
         part=QtWidgets.QComboBox()
         for entry in w.cad_document.scene['cad']['parts']:
@@ -56,8 +58,9 @@ class CadOperations(QtCore.QObject):
         form.addRow('CAD part',part)
         fields=[]
         labels=['Translation '+axis+' (model units)' for axis in ('X','Y','Z')] if operation=='translate' else [group+' '+axis for group in ('Plane origin','Plane normal') for axis in ('X','Y','Z')]
+        if operation=='repair':labels=['Repair tolerance (model units)']
         for index,label in enumerate(labels):
-            field=QtWidgets.QLineEdit('1' if operation=='split' and index==5 else '0')
+            field=QtWidgets.QLineEdit('0.000001' if operation=='repair' else '1' if operation=='split' and index==5 else '0')
             field.setObjectName('cadParameter'+str(index))
             form.addRow(label,field);fields.append(field)
         message=QtWidgets.QLabel();message.setWordWrap(True);message.setTextFormat(QtCore.Qt.TextFormat.PlainText)
@@ -70,10 +73,15 @@ class CadOperations(QtCore.QObject):
                 if operation=='translate':
                     values=vector([f.text() for f in fields],'Translation')
                     if not any(values):raise ValueError('Provide a nonzero translation.')
-                else:
+                elif operation=='split':
                     values={'origin':vector([f.text() for f in fields[:3]],'Plane origin'),
                             'normal':vector([f.text() for f in fields[3:]],'Plane normal')}
                     if not any(values['normal']):raise ValueError('Plane normal must be nonzero.')
+                else:
+                    import math
+                    values=float(fields[0].text())
+                    if not math.isfinite(values) or not 0<values<=1:
+                        raise ValueError('Repair tolerance must be positive and at most 1 model unit.')
                 if self.start(part.currentData(),operation,values):dialog.accept()
             except (OSError,ValueError) as error:message.setText(str(error))
         buttons.accepted.connect(submit);form.addRow(buttons);dialog.exec()

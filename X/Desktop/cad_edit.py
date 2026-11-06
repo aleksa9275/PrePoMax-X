@@ -53,6 +53,13 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         description={'origin':origin,'normal':normal,'extent':extent}
         parameters='Tool type: Plane\nExtent: '+numbers(extent)+'\nPlane origin: '+numbers(origin)+'\nPlane normal: '+numbers(normal)+'\n'
         arguments=['BREP_SPLIT']
+    elif operation=='repair':
+        tolerance=float(values)
+        if not math.isfinite(tolerance) or not 0<tolerance<=1:
+            raise ValueError('Repair tolerance must be finite, positive and at most 1 model unit.')
+        description={'option':1,'tolerance':tolerance}
+        parameters='Repair option: 1\nTolerance: '+format(tolerance,'.17g')+'\n'
+        arguments=['BREP_REPAIR']
     else:raise ValueError('Unsupported native CAD edit.')
     edited = CadDocument.__new__(CadDocument)
     edited.storage = TemporaryDirectory(prefix='prepomaxx-cad-edit-')
@@ -69,15 +76,16 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         definition = work/(prefix+'-parameters.txt')
         definition.write_text(parameters,encoding='utf-8')
         result = work/(prefix+'-output.brep')
-        run_stage([*document.tool.command,*arguments,str(staged_source),str(result),str(definition)],
+        suffix=['1',format(tolerance,'.17g')] if operation=='repair' else [str(definition)]
+        run_stage([*document.tool.command,*arguments,str(staged_source),str(result),*suffix],
                   work,'operation.log',cancel=cancel)
         if file_sha256(staged_source)!=document.identities[source] or definition.read_text(encoding='utf-8')!=parameters:
             raise ValueError('CAD command modified its staged input or parameters.')
         require_output(result,MAX_CAD_BYTES)
         converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
         generated=converter(result,work/'decoded',cancel=cancel)
-        if operation=='translate' and len(generated)!=1:
-            raise ValueError('Translation must preserve a single selected solid.')
+        if operation in ('translate','repair') and len(generated)!=1:
+            raise ValueError('Translation/controlled repair must retain one selected CAD part.')
         extra=[]
         if operation=='split':
             origins_file=result.with_suffix('.brep.origins')

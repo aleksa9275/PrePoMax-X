@@ -14,7 +14,7 @@ from cad_edit import apply_edit
 ROOT=Path(__file__).resolve().parents[2]
 
 
-def verify(runtime,inspector,output,operations=('translate',)):
+def verify(runtime,inspector,output,operations=('translate','split','repair')):
     output.mkdir(parents=True,exist_ok=False)
     checks=[]
     def check(name,passed):
@@ -66,6 +66,23 @@ def verify(runtime,inspector,output,operations=('translate',)):
                 try:apply_edit(document,decode,1,'split',values)
                 except ValueError:check('invalid or non-intersecting plane refused '+str(values),True)
                 else:raise ValueError('Non-splitting plane accepted')
+        if 'repair' in operations:
+            edited=apply_edit(document,decode,1,'repair',1e-6)
+            try:
+                values=solids(edited)
+                check('valid-box repair matches original Windows BREP bytes',edited.edits[-1]['outputBrepSha256']==pins['repair']['brepSha256'])
+                check('repair preserves both part measurements',values==baseline)
+                check('repair preserves untouched part bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
+                shutil.copytree(edited.root,output/'repair');report['operations']['repair']=edited.edits[-1]
+                edited.edits[-1]['parameters']['tolerance']=.5
+                try:edited.verify()
+                except ValueError:check('changed in-memory edit history refused',True)
+                else:raise ValueError('Tampered edit history accepted')
+            finally:edited.close()
+            for value in [0,-1,float('nan'),2]:
+                try:apply_edit(document,decode,1,'repair',value)
+                except ValueError:check('invalid repair tolerance refused '+str(value),True)
+                else:raise ValueError('Invalid tolerance accepted')
         for part,values in [(0,[1,0,0]),(1,[0,0,0]),(1,[float('nan'),0,0]),(1,[1,2])]:
             try:apply_edit(document,decode,part,'translate',values)
             except (ValueError,TypeError):check('invalid translation refused '+str((part,values)),True)
@@ -82,6 +99,6 @@ def verify(runtime,inspector,output,operations=('translate',)):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','split'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split'])
+    parser.add_argument('--operation',action='append',choices=['translate','split','repair'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

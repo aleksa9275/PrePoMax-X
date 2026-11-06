@@ -15,6 +15,12 @@ second body remains byte-identical. The initial compound-import attempt is
 retained; the final native translation/split checks pass. Zero and nonintersecting
 plane definitions are refused without publishing a replacement document.
 
+Task 0076 adds original ShapeFix option 1 repair with an explicit finite positive
+tolerance, bounded to at most one model unit in this preview. The valid-box BREP
+matches the retained original Windows repair exactly; both bodies' measurements
+and unselected bytes remain. Invalid tolerances and changed in-memory edit history
+are refused. Repairing defective geometry broadly is still unverified.
+
 An owned transaction copies inputs, runs the pinned native command, splits and
 decodes every resulting part, checks source/runtime identity, then publishes the
 new document on the GUI thread. Failure/cancellation retains the previous CAD,
