@@ -127,7 +127,7 @@ Invalid("missing element set rejected",(m,s,t)=>s[0].RegionName="Absent");
 Invalid("wrong section region kind rejected",(m,s,t)=>s[0].RegionType=RegionTypeEnum.NodeSetName);
 Invalid("inactive section rejected",(m,s,t)=>s[0].Active=false);
 Invalid("selection state not silently omitted",(m,s,t)=>s[0].CreationData=new Selection());
-Invalid("nonlinear geometry rejected",(m,s,t)=>t.Nlgeom=true);
+Check("original nonlinear geometry keyword is preserved",()=>{var data=AnalysisFiles.Create(Spec());data.Step.Nlgeom=true;Require(StaticAnalysisDeckWriter.Write(Mesh(),data.Materials,data.Sections,data.Step).Contains(", Nlgeom"));});
 Invalid("perturbation rejected",(m,s,t)=>t.Perturbation=true);
 Invalid("no-analysis step rejected",(m,s,t)=>t.RunAnalysis=false);
 Invalid("explicit solver substitution rejected",(m,s,t)=>t.SolverType=SolverTypeEnum.Spooles);

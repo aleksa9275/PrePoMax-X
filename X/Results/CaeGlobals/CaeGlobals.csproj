@@ -54,5 +54,7 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs" Link="UnitSystem/StringToDouble/StringLengthDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleConverter.cs" Link="UnitSystem/StringToDouble/StringAngleConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.Results.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/IMasterSlaveMultiRegion.cs" Link="IMasterSlaveMultiRegion.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAccelerationConverter.cs" Link="UnitSystem/StringToDouble/StringAccelerationConverter.cs" />
   </ItemGroup>
 </Project>

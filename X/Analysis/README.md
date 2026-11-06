@@ -1,5 +1,17 @@
 # PrePoMax-X portable static analysis increment
 
+Task 0090 extends this workflow with optional material `density`,
+`plasticCurve` stress/plastic-strain pairs and original `hardening` choices;
+step `nonlinearGeometry`, `pressures` and `gravityLoads`. Pressure chooses either
+`nodeSet` for complete exterior faces or `elementSet` plus `face` 1–6. Gravity
+uses `elementSet` and three `acceleration` quantities, requiring density. See the
+four runnable pressure-solids/gravity-column/plastic-tension/finite-tension pairs
+and [integration evidence](../../.project/reports/nonlinear-loaded-solids.md).
+Original types/converters/keywords and pyramid face correspondence are shared.
+B006 retains the original quadratic-pyramid wedge-pressure accuracy discrepancy;
+the pressure example explicitly selects hexahedron conversion. All other original
+functionality, PMX and release requirements remain open.
+
 Task 0089 connects all original mechanical solid formulation choices for the
 existing linear-static definition, including mixed meshes and explicit original
 C3D5/C3D13 conversion. Optional `pyramidConversion` in the analysis definition is

@@ -15,7 +15,8 @@ def verify(run, cli, root, work):
     original = json.loads(run(command).stdout)
     if original != {'success': True, 'solverExecuted': False, 'unitSystem': 'mm-N-s-C',
             'nodes': 8, 'elements': 1, 'materials': 1, 'sections': 1, 'constraints': 3,
-            'loads': 1, 'deckSha256': expected_hash}:
+            'loads': 1, 'nonlinearGeometry': False, 'pressureLoads': 0, 'gravityLoads': 0,
+            'deckSha256': expected_hash}:
         raise ValueError('Desktop validation does not match original standalone deck')
     spec = json.loads(analysis.read_text())
     changed = copy.deepcopy(spec)

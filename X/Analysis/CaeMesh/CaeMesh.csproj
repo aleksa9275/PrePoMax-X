@@ -43,5 +43,6 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/TransfiniteThreeSidedEnum.cs" Link="CaeMesh/Meshing/Gmsh/Enums/TransfiniteThreeSidedEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Netgen/Enums/NetgenTransfiniteFacesEnum.cs" Link="CaeMesh/Meshing/Netgen/Enums/NetgenTransfiniteFacesEnum.cs" />
     <Compile Include="MeshSetupItem.Portable.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/FeSurface.cs" Link="FeSurface.cs" />
   </ItemGroup>
 </Project>

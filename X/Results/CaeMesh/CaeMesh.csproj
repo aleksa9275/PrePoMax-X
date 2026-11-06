@@ -39,5 +39,6 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/CoordinateSystem.cs" Link="CoordinateSystem.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Globals.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/CalculixNameShortener.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/FeSurface.cs" Link="FeSurface.cs" />
   </ItemGroup>
 </Project>

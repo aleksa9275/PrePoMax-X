@@ -81,7 +81,8 @@ internal static class Program
                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,solverExecuted=false,
                     unitSystem=validationSpec.UnitSystem,nodes=validationMesh.Nodes.Count,elements=validationMesh.Elements.Count,
                     materials=validationSpec.Materials.Length,sections=validationSpec.Sections.Length,
-                    constraints=validationSpec.Step.Constraints.Length,loads=validationSpec.Step.Loads.Length,
+                    constraints=validationSpec.Step.Constraints.Length,loads=validationSpec.Step.Loads.Length+(validationSpec.Step.Pressures?.Length??0)+(validationSpec.Step.GravityLoads?.Length??0),
+                    nonlinearGeometry=validationSpec.Step.NonlinearGeometry,pressureLoads=validationSpec.Step.Pressures?.Length??0,gravityLoads=validationSpec.Step.GravityLoads?.Length??0,
                     deckSha256=Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(validationDeck)))}));return 0;
             }
             var registry=SolverBuilds.Read(registryPath);

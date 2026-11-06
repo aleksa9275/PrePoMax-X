@@ -49,6 +49,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Steps\Loads\VariablePressure.Legacy.cs" />
+    <Compile Include="Steps\Loads\DLoad.Legacy.cs" />
     <Compile Include="Amplitudes\Amplitude.cs" />
     <Compile Include="Amplitudes\AmplitudeTabular.cs" />
     <Compile Include="Constraints\PointSpringData.cs" />

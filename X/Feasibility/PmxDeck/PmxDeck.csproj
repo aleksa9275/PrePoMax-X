@@ -8,7 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../Analysis/StaticDeck/StaticDeck.csproj" />
-    <Compile Include="../../../CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" Link="CalDensity.cs" />
     <Compile Include="../../Execution/Solve/PmxStaticDeck.cs" Link="PmxStaticDeck.cs" />
   </ItemGroup>
 </Project>

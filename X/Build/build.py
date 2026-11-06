@@ -152,6 +152,7 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
         "analysisEditorSha256": sha(ROOT / "X/Desktop/analysis_editor.py"),
         "solidFormulationsSha256": sha(ROOT / "X/Desktop/solid_formulations.py"),
         "solidWorkflowProbeSha256": sha(ROOT / "X/Desktop/solid_workflow_probe.py"),
+        "nonlinearWorkflowProbeSha256": sha(ROOT / "X/Desktop/nonlinear_workflow_probe.py"),
         "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),
         "cadImportSha256": sha(ROOT / "X/Desktop/cad_import.py"),
         "cadJobSha256": sha(ROOT / "X/Desktop/cad_job.py"),

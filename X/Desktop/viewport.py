@@ -171,10 +171,19 @@ class Viewport(QtWidgets.QMainWindow):
         self.edit_pmx_action = toolbar.addAction("Edit PMX…", self.edit_pmx)
         self.edit_pmx_action.setVisible(False)
         toolbar.addAction("Fit", self.fit)
+        self.addToolBarBreak()
+        self.results_toolbar=self.addToolBar('Results')
+        self.results_toolbar.setVisible(False)
         self.fields = QtWidgets.QComboBox()
         self.fields.setMinimumWidth(330)
         self.fields.currentIndexChanged.connect(self.set_field)
-        self.field_action = toolbar.addWidget(self.fields)
+        self.field_action = self.results_toolbar.addWidget(self.fields)
+        self.frames = QtWidgets.QComboBox()
+        self.frames.setObjectName('resultIncrement')
+        self.frames.setToolTip('Stored result step, increment and time / load factor')
+        self.frames.currentIndexChanged.connect(self.set_frame)
+        self.frame_action=self.results_toolbar.addWidget(self.frames)
+        self.frame_action.setVisible(False)
         self.transport = transport
         if transport == "native-cocoa":
             from native_cocoa import NativeCocoaView
@@ -213,6 +222,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.picker.AddPickList(self.actor)
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
+        self.addToolBarBreak()
         jobbar = self.addToolBar("Static analysis")
         self.export_mesh_action = jobbar.addAction("Export mesh…", self.export_mesh_dialog)
         self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
@@ -296,7 +306,15 @@ class Viewport(QtWidgets.QMainWindow):
             for record in records:
                 child = QtWidgets.QTreeWidgetItem(group, [record['name'], record[region]])
                 child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
-        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static step / output'])
+        mechanical=[m for m in self.definition['materials'] if m.get('density') or m.get('plasticCurve')]
+        for tab,label,records in [(6,'Density / plasticity',mechanical),(7,'Pressure',(self.definition['step'].get('pressures') or [])),
+                                  (8,'Gravity',(self.definition['step'].get('gravityLoads') or []))]:
+            group=QtWidgets.QTreeWidgetItem(root,[label,str(len(records))]);group.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
+            for record in records:
+                description=(f"Density {record.get('density','—')} · {len(record.get('plasticCurve') or [])} plastic rows" if tab==6
+                    else record.get('nodeSet') or record.get('elementSet',''))
+                child=QtWidgets.QTreeWidgetItem(group,[record['name'],description]);child.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
+        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
         step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
         if self.cad_document is not None:
             self.populate_cad_tree(self.cad_document.scene["cad"])
@@ -507,7 +525,11 @@ class Viewport(QtWidgets.QMainWindow):
             choices={'Cube':('cube-mesh.inp','cube-analysis.json'),
                 'Mixed solids — all mechanical formulations':('mixed-solids.inp','mixed-solids.json'),
                 'Pyramids — collapsed wedges':('mixed-pyramids.inp','mixed-pyramids.json'),
-                'Pyramids — collapsed hexahedrons':('mixed-pyramids.inp','mixed-pyramids.json')}
+                'Pyramids — collapsed hexahedrons':('mixed-pyramids.inp','mixed-pyramids.json'),
+                'Pressure-loaded solids':('pressure-solids.inp','pressure-solids.json'),
+                'Gravity-loaded column':('gravity-column.inp','gravity-column.json'),
+                'Plastic tension — yield and hardening':('plastic-tension.inp','plastic-tension.json'),
+                'Geometric nonlinear tension':('finite-tension.inp','finite-tension.json')}
             name,accepted=QtWidgets.QInputDialog.getItem(self,'Solve analytical example','Example',list(choices),0,False)
             if not accepted:return
             mesh_name,definition_name=choices[name]
@@ -899,29 +921,23 @@ class Viewport(QtWidgets.QMainWindow):
         self.fields.blockSignals(True)
         self.fields.clear()
         self.fields.addItem("CAD geometry" if cad else "Mesh (undeformed)", None)
-        if "fields" in scene:
-            value_order = {n: i for i, n in enumerate(scene["nodeIdsInValueOrder"])}
-            for field_index, field in enumerate(scene["fields"]):
-                for component, values in field["components"].items():
-                    if len(values) != len(value_order):
-                        raise ValueError("Field length does not match original node value order")
-                    name = f"{field_index}:{component}"
-                    array = vtkDoubleArray()
-                    array.SetName(name)
-                    for node in nodes:
-                        array.InsertNextValue(values[value_order[node["id"]]])
-                    grid.GetPointData().AddArray(array)
-                    label = f'{field["name"]} / {component} · step {field["stepId"]}:{field["incrementId"]}'
-                    self.fields.addItem(label, name)
+        self.frames.blockSignals(True);self.frames.clear()
+        frame_ids=list(dict.fromkeys((f['stepId'],f['incrementId'],f['time']) for f in scene.get('fields',[])))
+        for step,increment,time in frame_ids:
+            self.frames.addItem(f'Step {step} · increment {increment} · t={time:.9g}',(step,increment,time))
+        self.frames.setCurrentIndex(len(frame_ids)-1);self.frames.blockSignals(False)
         self.fields.blockSignals(False)
         self.scene, self.grid = scene, grid
+        self._result_arrays=[]
         self.current_path = path.resolve()
         self.selection = None
         self.mapper.SetInputData(grid)
         self.setWindowTitle(f"PrePoMax-X — {path.name} — native viewport candidate")
         self.renderer.GetActiveCamera().SetPosition(3, 2, 4)
         self.renderer.GetActiveCamera().SetFocalPoint(0.5, 0.5, 0.5)
-        self.set_field(0)
+        self.frame_action.setVisible(bool(frame_ids))
+        self.results_toolbar.setVisible(bool(frame_ids))
+        self.set_frame(self.frames.currentIndex())
         self.regions.on_scene()
         self.fit()
         if cad:
@@ -929,6 +945,28 @@ class Viewport(QtWidgets.QMainWindow):
                                          f'{len(cad["edgeSegments"])} CAD edge segments · read-only')
         else:
             self.statusBar().showMessage(f'{len(nodes)} nodes · {len(scene["elements"])} elements · values as stored · undeformed')
+
+    def set_frame(self, index):
+        if self.scene is None or not hasattr(self,'grid'):return
+        previous=self.fields.currentText().split(' · ')[0]
+        for name in getattr(self,'_result_arrays',[]):self.grid.GetPointData().RemoveArray(name)
+        self._result_arrays=[]
+        self.fields.blockSignals(True);self.fields.clear()
+        self.fields.addItem('CAD geometry' if 'cad' in self.scene else 'Mesh (undeformed)',None)
+        frame=self.frames.itemData(index)
+        if frame is not None:
+            order={n:i for i,n in enumerate(self.scene['nodeIdsInValueOrder'])}
+            for field_index,field in enumerate(self.scene['fields']):
+                if (field['stepId'],field['incrementId'],field['time'])!=tuple(frame):continue
+                for component,values in field['components'].items():
+                    if len(values)!=len(order):raise ValueError('Field length does not match original node value order')
+                    name=f'{field_index}:{component}';array=vtkDoubleArray();array.SetName(name)
+                    for node in self.scene['nodes']:array.InsertNextValue(values[order[node['id']]])
+                    self.grid.GetPointData().AddArray(array);self._result_arrays.append(name)
+                    self.fields.addItem(f'{field["name"]} / {component} · step {field["stepId"]}:{field["incrementId"]}',name)
+        selected=next((i for i in range(1,self.fields.count()) if self.fields.itemText(i).split(' · ')[0]==previous),1 if self.fields.count()>1 else 0)
+        self.fields.setCurrentIndex(selected);self.fields.blockSignals(False)
+        self.grid.Modified();self.set_field(selected)
 
     def set_field(self, index):
         if self.scene is None:
@@ -1119,7 +1157,11 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.nonlinear_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,
+            args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe]):
+        parser.error('Use --nonlinear-workflow-probe separately from other inputs/probes')
     if args.solid_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,
             args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe]):
         parser.error('Use --solid-workflow-probe separately from other inputs/probes')
@@ -1157,7 +1199,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1241,7 +1283,10 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.solid_workflow_probe:
+    if args.nonlinear_workflow_probe:
+        from nonlinear_workflow_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.nonlinear_workflow_probe.resolve()))
+    elif args.solid_workflow_probe:
         from solid_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.solid_workflow_probe.resolve()))
     elif args.cad_quadratic_probe:

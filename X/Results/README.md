@@ -32,7 +32,7 @@ PrePoMax measurement remains independently gated; broader result/analysis
 families remain mandatory full-functionality work under D060.
 [Actual quadratic evidence](../../.project/reports/quadratic-native-static.md).
 
-Inspection is bounded to 64 MiB, 100000 nodes/elements, 64 fields and 16 components
+Inspection is bounded to 64 MiB, 100000 nodes/elements, 4096 fields and 16 components
 per field. Reject unsupported analyses/element types/axisymmetric scaling,
 incomplete/truncated blocks, nonfinite values, unknown components and ambiguous
 reordered full field records. The original complete-field decoder uses row order

@@ -67,8 +67,8 @@ namespace CaeModel
             var materialText = new List<string>();
             foreach (var material in materialList)
             {
-                if (material == null || material.GetType()!=typeof(Material) || material.Properties.Any(p=>p==null || p.GetType()!=typeof(Elastic)) || !materialNames.Add(material.Name)) throw new CaeException("Null or duplicate material.");
-                materialText.Add(MaterialDeckWriter.WriteIsotropic(material));
+                if (material == null || material.GetType()!=typeof(Material) || !materialNames.Add(material.Name)) throw new CaeException("Null or duplicate material.");
+                materialText.Add(MaterialDeckWriter.WriteMechanical(material));
             }
             var usedMaterials = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var sectionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -89,11 +89,11 @@ namespace CaeModel
                 throw new CaeException("Every element requires exactly one section and every supplied material must be used.");
             if (step.GetType()!=typeof(StaticStep)) throw new NotSupportedException("Exact original StaticStep type required.");
             Active(step); Name(step.Name);
-            if (!step.RunAnalysis || step.Nlgeom || step.Perturbation || step.SolverType != SolverTypeEnum.Default ||
+            if (!step.RunAnalysis || step.Perturbation || step.SolverType != SolverTypeEnum.Default ||
                 step.DefinedFields.Count != 0 || step.GetNumberOfStepControls() != 0 ||
                 !Enum.IsDefined(typeof(IncrementationTypeEnum), step.IncrementationType) ||
                 (step.OutputFrequency != int.MinValue && step.OutputFrequency <= 0))
-                throw new NotSupportedException("Only a running linear static step with default solver and ordinary output is supported.");
+                throw new NotSupportedException("A running static step with default solver and ordinary global output is required.");
             double[] times = { step.TimePeriod, step.InitialTimeIncrement, step.MinTimeIncrement, step.MaxTimeIncrement };
             if (times.Any(t => !Finite(t) || t <= 0) || step.InitialTimeIncrement > step.TimePeriod ||
                 step.InitialTimeIncrement > step.MaxTimeIncrement || step.MinTimeIncrement > step.InitialTimeIncrement ||
@@ -125,30 +125,88 @@ namespace CaeModel
                             throw new CaeException("Overlapping displacement definitions for one node/DOF are unsupported.");
                 constraints.Add(Tuple.Create(bc,values));
             }
-            var loads = new List<Tuple<CLoad,double[]>>(); var loaded = new HashSet<Tuple<int,int>>();
+            var loads = new List<CalculixKeyword>(); var loaded = new HashSet<Tuple<int,int>>();
+            var densityElements = new HashSet<int>();
+            foreach(var section in sectionList)
+                if(materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))
+                    densityElements.UnionWith(Set(checkedMesh.ElementSets,section.RegionName));
+            Dictionary<string,int> incidence=null;
+            if(step.Loads.Values.OfType<DLoad>().Any(l=>l.RegionType==RegionTypeEnum.NodeSetName))
+                incidence=mesh.Elements.Values.SelectMany(e=>Faces((FeElement3D)e)).GroupBy(f=>FaceKey(f.Item2)).ToDictionary(g=>g.Key,g=>g.Count());
+            int pressureIndex=0;
             foreach (var entry in step.Loads)
             {
-                var load = entry.Value as CLoad;
-                if (load == null || load.GetType()!=typeof(CLoad) || entry.Key != load.Name) throw new NotSupportedException("Only named concentrated forces are supported.");
-                Active(load); Name(load.Name);
-                if (load.TwoD || load.Complex || load.PhaseDeg.Value != 0 || load.AmplitudeName != Amplitude.DefaultAmplitudeName ||
-                    load.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName || load.CreationData != null ||
-                    (load.CreationIds != null && load.CreationIds.Length != 0) || load.RegionType != RegionTypeEnum.NodeSetName)
-                    throw new NotSupportedException("Only global concentrated forces per node on named node sets are supported.");
-                var values = new[] { load.F1.Value, load.F2.Value, load.F3.Value };
-                if (values.Any(v => !Finite(v)) || values.All(v => v == 0)) throw new CaeException("Forces must be finite and nonzero.");
-                foreach (int id in Set(checkedMesh.NodeSets, load.RegionName))
-                    for (int d = 0; d < 3; d++)
-                        if (values[d] != 0 && !loaded.Add(Tuple.Create(id,d)))
-                            throw new CaeException("Overlapping concentrated loads for one node/DOF are unsupported.");
-                loads.Add(Tuple.Create(load,values));
+                var source=entry.Value;
+                if(source==null || entry.Key!=source.Name)throw new CaeException("A named mechanical load is required.");
+                Active(source);Name(source.Name);
+                if(source.TwoD || source.Complex || source.PhaseDeg.Value!=0 || source.AmplitudeName!=Amplitude.DefaultAmplitudeName ||
+                   source.CreationData!=null || (source.CreationIds!=null && source.CreationIds.Length!=0))
+                    throw new NotSupportedException("Ordinary constant global mechanical loads on named regions are required.");
+                if(source.GetType()==typeof(CLoad)) {
+                    var load=(CLoad)source;
+                    if(load.CoordinateSystemName!=CoordinateSystem.DefaultCoordinateSystemName || load.RegionType!=RegionTypeEnum.NodeSetName)
+                        throw new NotSupportedException("Global concentrated forces require named node sets.");
+                    var values=new[]{load.F1.Value,load.F2.Value,load.F3.Value};
+                    if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Forces must be finite and nonzero.");
+                    foreach(int id in Set(checkedMesh.NodeSets,load.RegionName))for(int d=0;d<3;d++)
+                        if(values[d]!=0 && !loaded.Add(Tuple.Create(id,d)))throw new CaeException("Overlapping concentrated loads for one node/DOF are unsupported.");
+                    loads.Add(new CalCLoad(new CLoad(load.Name,load.RegionName,RegionTypeEnum.NodeSetName,values[0],values[1],values[2],false,false,0),null,ComplexLoadTypeEnum.None));
+                }
+                else if(source.GetType()==typeof(GravityLoad)) {
+                    var load=(GravityLoad)source;
+                    if(load.RegionType!=RegionTypeEnum.ElementSetName)throw new NotSupportedException("Gravity requires a named element set.");
+                    var values=new[]{load.F1.Value,load.F2.Value,load.F3.Value};
+                    if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Gravity acceleration must be finite and nonzero.");
+                    if(Set(checkedMesh.ElementSets,load.RegionName).Any(id=>!densityElements.Contains(id)))throw new CaeException("Every gravity-loaded element requires a material density.");
+                    loads.Add(new CalGravityLoad(new GravityLoad(load.Name,load.RegionName,RegionTypeEnum.ElementSetName,values[0],values[1],values[2],false,false,0),ComplexLoadTypeEnum.None));
+                }
+                else if(source.GetType()==typeof(DLoad)) {
+                    var load=(DLoad)source;double magnitude=load.Magnitude.Value;
+                    if(!Finite(magnitude) || load.DistributionName!=Distribution.DefaultDistributionName)
+                        throw new CaeException("Pressure must be finite and constant over its selected region.");
+                    var targets=new List<Tuple<int,FeFaceName,int[]>>();
+                    if(load.RegionType==RegionTypeEnum.NodeSetName) {
+                        var nodes=new HashSet<int>(Set(mesh.NodeSets,load.RegionName));
+                        foreach(var e in mesh.Elements.Values)foreach(var face in Faces((FeElement3D)e))
+                            if(incidence[FaceKey(face.Item2)]==1 && face.Item2.All(nodes.Contains))targets.Add(Tuple.Create(e.Id,face.Item1,face.Item2));
+                    } else if(load.RegionType==RegionTypeEnum.ElementSetName) {
+                        if((int)load.ElementFaceName<1 || (int)load.ElementFaceName>6)throw new CaeException("An original element face S1–S6 is required.");
+                        foreach(int id in Set(mesh.ElementSets,load.RegionName)) {
+                            var faces=Faces((FeElement3D)mesh.Elements[id]).Where(f=>f.Item1==load.ElementFaceName).ToArray();
+                            if(faces.Length!=1)throw new CaeException("Selected face does not exist on every pressure-loaded element.");
+                            targets.Add(Tuple.Create(id,load.ElementFaceName,faces[0].Item2));
+                        }
+                    } else throw new NotSupportedException("Pressure requires a boundary node set or explicit element-set face.");
+                    if(targets.Count==0)throw new CaeException("Pressure region contains no complete exterior element faces.");
+                    var groups=new Dictionary<FeFaceName,HashSet<int>>();
+                    foreach(var target in targets) {
+                        // Original face node identities determine correspondence even
+                        // when original CalElement collapses a pyramid for the solver.
+                        var matches=Faces((FeElement3D)checkedMesh.Elements[target.Item1]).Where(f=>FaceKey(f.Item2)==FaceKey(target.Item3)).ToArray();
+                        if(matches.Length!=1)throw new CaeException("Original pressure face correspondence was lost during solver export.");
+                        var face=matches[0].Item1;
+                        if(!groups.ContainsKey(face))groups.Add(face,new HashSet<int>());
+                        groups[face].Add(target.Item1);
+                    }
+                    var surface=new FeSurface(load.Name){Type=FeSurfaceType.Element,SurfaceFaceTypes=FeSurfaceFaceTypes.SolidFaces};
+                    foreach(var group in groups.OrderBy(g=>g.Key)) {
+                        string name;
+                        do{name="_XPressure_"+(++pressureIndex);}while(checkedMesh.ElementSets.Keys.Any(n=>string.Equals(n,name,StringComparison.OrdinalIgnoreCase)));
+                        checkedMesh.ElementSets.Add(name,group.Value.OrderBy(id=>id).ToArray());surface.AddElementFace(group.Key,name);
+                    }
+                    var snapshot=new DLoad(load.Name,load.RegionName,load.RegionType,magnitude,false,false,0);
+                    loads.Add(new CalDLoad(snapshot,surface,ComplexLoadTypeEnum.None));
+                } else throw new NotSupportedException("Unsupported mechanical load type.");
             }
+            // New derived element sets are job-owned pressure-face references.
+            meshText=MeshDeckWriter.WriteMesh(checkedMesh);
             ValidateOutputs(checkedMesh, step);
             var previous = CultureInfo.CurrentCulture;
             try
             {
                 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-                var text = new StringBuilder("** PrePoMax-X bounded 3D linear-static analysis deck\n");
+                var text = new StringBuilder(step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic))
+                    ? "** PrePoMax-X 3D nonlinear-static analysis deck\n" : "** PrePoMax-X bounded 3D linear-static analysis deck\n");
                 // Solver decks use the original CalNode formatter. G17 remains
                 // correct for lossless mesh exchange, but can exceed CalculiX's
                 // 20-character numeric input field (e.g. 6.8000000000000001E-15).
@@ -165,13 +223,7 @@ namespace CaeModel
                     snapshot.U1.SetEquationFromValue(v[0]); snapshot.U2.SetEquationFromValue(v[1]); snapshot.U3.SetEquationFromValue(v[2]);
                     Append(text, new CalDisplacementRotation(snapshot, null, null, ComplexLoadTypeEnum.None));
                 }
-                foreach (var item in loads)
-                {
-                    var source = item.Item1; var v = item.Item2;
-                    var snapshot = new CLoad(source.Name, source.RegionName, RegionTypeEnum.NodeSetName, v[0], v[1], v[2], false, false, 0);
-                    var keyword = new CalCLoad(snapshot, null, ComplexLoadTypeEnum.None);
-                    Append(text,keyword);
-                }
+                foreach (var keyword in loads) Append(text,keyword);
                 Append(text, new CalOutputFrequency(step.OutputFrequency));
                 foreach (var entry in step.HistoryOutputs)
                 {
@@ -186,6 +238,17 @@ namespace CaeModel
                 Append(text,new CalEndStep()); return text.ToString();
             }
             finally { CultureInfo.CurrentCulture = previous; }
+        }
+
+        private static string FaceKey(IEnumerable<int> ids) { return string.Join(",",ids.Distinct().OrderBy(id=>id)); }
+        private static IEnumerable<Tuple<FeFaceName,int[]>> Faces(FeElement3D element)
+        {
+            for(int i=1;i<=6;i++) {
+                int[] ids;
+                try { ids=element.GetNodeIdsFromFaceName((FeFaceName)i); }
+                catch(NotSupportedException) { continue; }
+                if(ids.Distinct().Count()>=3)yield return Tuple.Create((FeFaceName)i,ids);
+            }
         }
 
         private static void ValidateOutputs(InpMeshData mesh, StaticStep step)
@@ -206,7 +269,7 @@ namespace CaeModel
                 {
                     var output=(ElementFieldOutput)value;
                     if (output.Output!=ElementFieldOutputOutputEnum.Default || output.Variables==0 ||
-                        (output.Variables & ~(ElementFieldVariable.E | ElementFieldVariable.S))!=0) throw new NotSupportedException("Only default E/S solid output is supported.");
+                        (output.Variables & ~(ElementFieldVariable.E | ElementFieldVariable.S | ElementFieldVariable.PEEQ))!=0) throw new NotSupportedException("Only ordinary E/S/PEEQ solid output is supported.");
                 }
                 else throw new NotSupportedException("Unsupported field output type.");
             }

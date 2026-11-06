@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0.3",
+      "plasticCurve": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "0.01"
+        ]
+      ],
+      "hardening": "Isotropic"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_0",
+      "material": "ELASTIC",
+      "elementSet": "SOLID_1"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 0.05,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 0.05,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Fix-X",
+        "nodeSet": "X0",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Fix-Y",
+        "nodeSet": "Y0",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      },
+      {
+        "name": "Top",
+        "nodeSet": "TOP",
+        "displacements": [
+          null,
+          null,
+          "0.01"
+        ]
+      }
+    ],
+    "loads": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": [],
+    "nonlinearGeometry": false
+  }
+}

@@ -1,5 +1,12 @@
 # PrePoMax-X project charter
 
+2026-11-06 task 0090 connects original density/plastic hardening, pressure,
+gravity, nonlinear static controls and increment/plastic-strain results through
+the desktop solid workflow. [Scope and evidence](reports/nonlinear-loaded-solids.md).
+B006 records an inherited quadratic-pyramid wedge-pressure discrepancy reproduced
+by the original Windows solver; algorithms/tolerances and all parity requirements
+remain intact. This continues the substantial functional delivery cadence.
+
 2026-11-06 task 0089 delivers a connected imported-solid workflow across all
 original mechanical tetrahedron/wedge/hexahedron formulations and explicit
 pyramid conversion, including desktop selection, native solve, original result

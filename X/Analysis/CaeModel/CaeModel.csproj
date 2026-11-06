@@ -68,5 +68,12 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" Link="CaeModel/FileInOut/Input/Netgen/NetgenVolKeywords.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs" Link="CalNodeFormatting.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/VariablePressure.cs" Link="Steps/Loads/VariablePressure.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/DLoad.cs" Link="Steps/Loads/DLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/GravityLoad.cs" Link="Steps/Loads/GravityLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalDLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalDLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalGravityLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalGravityLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalPlastic.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalPlastic.cs" />
   </ItemGroup>
 </Project>

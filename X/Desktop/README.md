@@ -1,5 +1,14 @@
 # Native viewport candidate
 
+Task 0090 adds Configure… controls for density/plastic curves, pressure, gravity
+and geometric nonlinearity. Solve example… offers pressure-loaded solids, a
+gravity column, plastic tension and geometric nonlinear tension. The Results
+row selects step/increment/time and original PE / PE plastic-strain output.
+[Current evidence and open correctness](../../.project/reports/nonlinear-loaded-solids.md).
+The original quadratic-pyramid wedge-pressure accuracy issue remains open (B006);
+the pressure example explicitly selects hexahedrons. Full functionality and PMX
+remain required.
+
 Task 0089 adds **Solid formulations…** and connects imported mixed solid meshes
 to original configuration, native static solving and results: C3D4/C3D10/C3D10T,
 C3D6/C3D15 and C3D8/C3D8R/C3D8I/C3D20/C3D20R. C3D5/C3D13 use an explicit

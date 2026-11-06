@@ -8,13 +8,17 @@ using PrePoMaxX.MeshDeck;
 
 namespace PrePoMaxX.StaticDeck;
 
-public sealed record MaterialSpec(string Name,string YoungsModulus,string PoissonsRatio);
+public sealed record MaterialSpec(string Name,string YoungsModulus,string PoissonsRatio,
+    string? Density=null,string[][]? PlasticCurve=null,string Hardening="Isotropic");
 public sealed record SectionSpec(string Name,string Material,string ElementSet);
 public sealed record ConstraintSpec(string Name,string NodeSet,string[] Displacements);
 public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode);
+public sealed record PressureSpec(string Name,string Magnitude,string? NodeSet=null,string? ElementSet=null,int? Face=null);
+public sealed record GravitySpec(string Name,string ElementSet,string[] Acceleration);
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
-    string[] NodalHistorySets,string[] ElementHistorySets);
+    string[] NodalHistorySets,string[] ElementHistorySets,bool NonlinearGeometry=false,
+    PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
     string? PyramidConversion = null);
 
@@ -57,6 +61,8 @@ public static class AnalysisFiles
         StringPressureConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"MPa":"Pa";
         StringLengthConverter.SetUnit=length;StringLengthDOFConverter.SetUnit=length;StringForceConverter.SetUnit="N";
         StringTemperatureConverter.SetUnit="°C";StringAngleDOFConverter.SetUnit="rad";
+        StringDensityConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"t/mm³":"kg/m³";
+        StringAccelerationConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"mm/s²":"m/s²";
         if(spec.Materials.Length==0 || spec.Materials.Length>1000 || spec.Sections.Length==0 || spec.Sections.Length>1000)
             throw new InvalidDataException("Bounded nonempty material/section arrays required.");
         string Equation(string text)
@@ -66,7 +72,16 @@ public static class AnalysisFiles
             if(value==null)throw new InvalidDataException("Null material.");
             var material=new Material(value.Name);var elastic=new Elastic(new[]{new[]{1d,.3,0}});
             elastic.YoungsPoissonsTemp[0][0].SetEquation(Equation(value.YoungsModulus));
-            elastic.YoungsPoissonsTemp[0][1].SetEquation(Equation(value.PoissonsRatio));material.AddProperty(elastic);return material;
+            elastic.YoungsPoissonsTemp[0][1].SetEquation(Equation(value.PoissonsRatio));material.AddProperty(elastic);
+            if(value.Density!=null){var density=new Density(new[]{new[]{1d,0d}});density.DensityTemp[0][0].SetEquation(Equation(value.Density));material.AddProperty(density);}
+            if(value.PlasticCurve!=null){
+                if(value.PlasticCurve.Length<1 || value.PlasticCurve.Length>10000 || value.PlasticCurve.Any(r=>r==null || r.Length!=2)) throw new InvalidDataException("Plastic curve rows require stress and plastic strain.");
+                if(!Enum.TryParse<PlasticHardening>(value.Hardening,out var hardening) || !Enum.IsDefined(hardening)) throw new InvalidDataException("Unknown original plastic hardening model.");
+                var plastic=new Plastic(value.PlasticCurve.Select(r=>new[]{1d,0d,0d}).ToArray()){Hardening=hardening};
+                for(int i=0;i<value.PlasticCurve.Length;i++)for(int j=0;j<2;j++)plastic.StressStrainTemp[i][j].SetEquation(Equation(value.PlasticCurve[i][j]));
+                material.AddProperty(plastic);
+            }
+            return material;
         }).ToArray();
         var sections=spec.Sections.Select(value=>value==null?throw new InvalidDataException("Null section."):
             new SolidSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,false)).ToArray();
@@ -83,7 +98,7 @@ public static class AnalysisFiles
         var step=new StaticStep(definition.Name){IncrementationType=IncrementationTypeEnum.Automatic,
             TimePeriod=definition.TimePeriod,InitialTimeIncrement=definition.InitialTimeIncrement,
             MinTimeIncrement=definition.MinimumTimeIncrement,MaxTimeIncrement=definition.MaximumTimeIncrement,
-            MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency};
+            MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency,Nlgeom=definition.NonlinearGeometry};
         foreach(var value in definition.Constraints)
         {
             if(value==null || value.Displacements==null || value.Displacements.Length!=3)throw new InvalidDataException("Three displacement components required; null means free.");
@@ -102,6 +117,23 @@ public static class AnalysisFiles
             step.Loads.Add(load.Name,load);
         }
         int index=0;
+        foreach(var value in definition.Pressures??Array.Empty<PressureSpec>()) {
+            if(value==null || (string.IsNullOrEmpty(value.NodeSet)==string.IsNullOrEmpty(value.ElementSet)) ||
+                (value.NodeSet!=null && value.Face!=null) || (value.ElementSet!=null && (value.Face is <1 or >6 || value.Face==null)))
+                throw new InvalidDataException("Pressure requires a boundary node set or an element set with an explicit face 1–6.");
+            var load=new DLoad(value.Name,value.NodeSet??value.ElementSet,value.NodeSet!=null?RegionTypeEnum.NodeSetName:RegionTypeEnum.ElementSetName,0,false,false,0);
+            load.ElementFaceName=value.Face.HasValue?(CaeMesh.FeFaceName)value.Face.Value:CaeMesh.FeFaceName.Empty;
+            load.Magnitude.SetEquation(Equation(value.Magnitude));
+            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");step.Loads.Add(load.Name,load);
+        }
+        foreach(var value in definition.GravityLoads??Array.Empty<GravitySpec>()) {
+            if(value==null || value.Acceleration==null || value.Acceleration.Length!=3)throw new InvalidDataException("Gravity requires three acceleration components.");
+            var load=new GravityLoad(value.Name,value.ElementSet,RegionTypeEnum.ElementSetName,false,false,0);
+            load.F1.SetEquation(Equation(value.Acceleration[0]),true);load.F2.SetEquation(Equation(value.Acceleration[1]),true);load.F3.SetEquation(Equation(value.Acceleration[2]),true);
+            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");step.Loads.Add(load.Name,load);
+        }
+        if(materials.Any(m=>m.Properties.Any(p=>p is Plastic)))
+            foreach(var field in step.FieldOutputs.Values.OfType<ElementFieldOutput>())field.Variables|=ElementFieldVariable.PEEQ;
         foreach(string set in definition.NodalHistorySets)step.AddHistoryOutput(new NodalHistoryOutput("NodeHistory-"+(++index),NodalHistoryVariable.U|NodalHistoryVariable.RF,set,RegionTypeEnum.NodeSetName));
         foreach(string set in definition.ElementHistorySets)step.AddHistoryOutput(new ElementHistoryOutput("ElementHistory-"+(++index),ElementHistoryVariable.S,set,RegionTypeEnum.ElementSetName));
         return(materials,sections,step);

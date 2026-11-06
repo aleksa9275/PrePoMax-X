@@ -1,6 +1,18 @@
 # Project status
 
-## Current — task 0089: connected solid formulations
+## Current — task 0090: nonlinear and distributed-load solids
+
+Original density/plastic hardening, pressure/gravity, geometric nonlinear static
+controls and increment/plastic-strain results now connect to native desktop
+analysis. Four new runnable examples are available. Native Mac/Linux ARM64
+complete the combined workflow; identical-deck original Windows solver
+comparisons agree. [Current evidence](reports/nonlinear-loaded-solids.md).
+B006 retains an inherited quadratic-pyramid wedge-pressure accuracy discrepancy;
+the hexahedron route passes that case. D029's original failures and all other
+original functionality/PMX/four-target/release requirements remain open.
+Source publication and copied candidate verification are being recorded.
+
+## Prior — task 0089: connected solid formulations
 
 Imported solid models now connect all original mechanical tetrahedron/wedge/
 hexahedron formulation choices, mixed meshes and both explicit pyramid export

@@ -129,7 +129,7 @@ namespace CaeResults
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {
-                            if (elements == null || fields.Count >= 64) throw new InvalidDataException("Fields require a complete mesh; at most 64 fields are supported.");
+                            if (elements == null || fields.Count >= 4096) throw new InvalidDataException("Fields require a complete mesh; at most 4096 fields are supported.");
                             int line = 0; GetFieldHeaderData(set.Lines, ref line, previous, out var metadata, out int count);
                             if (metadata.StepType != StepTypeEnum.Static || count != nodes.Count || !float.IsFinite(metadata.Time))
                                 throw new NotSupportedException("Only complete nodal fields in static steps are supported.");
@@ -140,9 +140,10 @@ namespace CaeResults
                                 FOFieldNames.Disp => new[] { "U1", "U2", "U3" },
                                 FOFieldNames.Forc => new[] { "F1", "F2", "F3" },
                                 FOFieldNames.Stress => new[] { "S11", "S22", "S33", "S12", "S23", "S13" },
+                                FOFieldNames.Pe => new[] { "PE" },
                                 FOFieldNames.ToStrain => new[] { "E11", "E22", "E33", "E12", "E23", "E13" },
                                 FOFieldNames.Error => new[] { "STR" },
-                                _ => throw new NotSupportedException("Only displacement, force, stress, total-strain and stress-error fields are supported.")
+                                _ => throw new NotSupportedException("Only displacement, force, stress, total-strain, equivalent plastic strain and stress-error fields are supported.")
                             };
                             if (!field.GetComponentNames().Where(n => n != FOComponentNames.All).ToHashSet().SetEquals(required))
                                 throw new InvalidDataException("Unexpected component names for the field type.");

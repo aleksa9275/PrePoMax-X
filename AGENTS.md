@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Task 0090 connects density/plastic hardening, pressure/gravity, original geometric
+nonlinear static controls and increment/plastic-strain results through the solid
+desktop workflow. Read .project/reports/nonlinear-loaded-solids.md and its receipt
+for actual checks/candidate/publication. B006 retains the original quadratic
+pyramid-to-wedge pressure accuracy failure; hexahedron conversion passes that
+case. Keep original algorithms/tolerances and D029/D057/D058/D059, all remaining
+original functionality, full PMX and every four-target/release requirement open.
+
 Task 0089 connects all original mechanical 3D tetrahedron/wedge/hexahedron
 formulations, mixed solid meshes and both explicit original pyramid conversions
 through desktop configuration, native solve, original FRD/VTK mapping and mesh

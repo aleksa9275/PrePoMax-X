@@ -80,6 +80,7 @@ class CadRegions(QtCore.QObject):
         scene = self.window.scene or {}
         key = 'cad' if 'cad' in scene else 'results' if 'fields' in scene else 'mesh'
         self.window.field_action.setVisible(not self.view_available or key == 'results')
+        self.window.frame_action.setVisible(bool(scene.get('fields')) and (not self.view_available or key=='results'))
         with QtCore.QSignalBlocker(self.view):
             self.view.setCurrentIndex(self.view.findData(key))
 

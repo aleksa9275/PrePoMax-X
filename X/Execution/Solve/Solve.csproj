@@ -3,7 +3,6 @@
   <ItemGroup>
     <ProjectReference Include="../CaeJob/CaeJob.csproj" />
     <ProjectReference Include="../../Analysis/StaticDeck/StaticDeck.csproj" />
-    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" Link="CalDensity.cs" />
     <None Include="../solver-builds.json" Link="solver-builds.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -107,7 +107,7 @@ class AnalysisDialog(QtWidgets.QDialog):
     def __init__(self, parent, scene, mesh_bytes, definition, tab=0):
         super().__init__(parent)
         self.setWindowTitle('Configure static solid analysis')
-        self.resize(820, 580)
+        self.resize(980, 680)
         self.scene, self.mesh_bytes = scene, mesh_bytes
         self.original = copy.deepcopy(definition)
         self.definition = None
@@ -189,6 +189,39 @@ class AnalysisDialog(QtWidgets.QDialog):
         step_form.addRow('U / RF histories', self.nodal_history)
         step_form.addRow('Stress histories', self.element_history)
         self.tabs.addTab(step_page, 'Step / output')
+        # Original optional mechanical properties remain attached to named materials.
+        properties=QtWidgets.QWidget();prop_layout=QtWidgets.QVBoxLayout(properties)
+        material_names=[m['name'] for m in definition['materials']]
+        self.mechanical_properties=Rows([('material','Material'),('density','Density'),('hardening','Plastic hardening')],
+            {'material':'','density':'','hardening':'Isotropic'},
+            [{'material':m['name'],'density':m.get('density',''),'hardening':m.get('hardening','Isotropic')} for m in definition['materials']],
+            {'material':material_names,'hardening':['Isotropic','Kinematic','Combined']})
+        prop_layout.addWidget(QtWidgets.QLabel('Density uses the selected unit system; quantities such as 1000 kg/m³ are accepted.'))
+        prop_layout.addWidget(self.mechanical_properties)
+        curves=[{'material':m['name'],'stress':r[0],'strain':r[1]} for m in definition['materials'] for r in (m.get('plasticCurve') or [])]
+        self.plastic_curve=Rows([('material','Material'),('stress','True yield stress'),('strain','Plastic strain')],
+            {'material':'','stress':'','strain':''},curves,{'material':material_names})
+        prop_layout.addWidget(QtWidgets.QLabel('Optional plastic curve: begin at plastic strain 0; enter rows in increasing strain order.'))
+        prop_layout.addWidget(self.plastic_curve);self.tabs.addTab(properties,'Density / plasticity')
+        pressure_rows=[{'name':r['name'],'nodeSet':r.get('nodeSet',''),'elementSet':r.get('elementSet',''),
+                        'face':'' if r.get('face') is None else str(r['face']),'magnitude':r['magnitude']} for r in (definition['step'].get('pressures') or [])]
+        self.pressures=Rows([('name','Name'),('nodeSet','Boundary node set'),('elementSet','Element set'),('face','Face 1–6'),('magnitude','Pressure')],
+            {'name':'','nodeSet':'','elementSet':'','face':'','magnitude':'0'},pressure_rows,
+            {'nodeSet':nodes,'elementSet':[v['name'] for v in scene.get('elementSets',[])]})
+        self.pressures.layout().insertWidget(0,QtWidgets.QLabel('Positive pressure acts inward. Choose a boundary node set OR an element set and its local face number.'))
+        if any(e.get('vtkCellType')==27 for e in scene['elements']):
+            caveat=QtWidgets.QLabel('Quadratic pyramids under pressure: hexahedron conversion matches the analytical example. '
+                'Wedge conversion retains a measured discrepancy in the original solver.')
+            caveat.setWordWrap(True);self.pressures.layout().insertWidget(1,caveat)
+        self.tabs.addTab(self.pressures,'Pressure')
+        gravity_rows=[{'name':r['name'],'elementSet':r['elementSet'],**{f'a{i}':v for i,v in enumerate(r['acceleration'])}} for r in (definition['step'].get('gravityLoads') or [])]
+        self.gravity=Rows([('name','Name'),('elementSet','Element set'),('a0','Acceleration 1'),('a1','Acceleration 2'),('a2','Acceleration 3')],
+            {'name':'','elementSet':'','a0':'0','a1':'0','a2':'0'},gravity_rows,{'elementSet':[v['name'] for v in scene.get('elementSets',[])]})
+        self.gravity.layout().insertWidget(0,QtWidgets.QLabel('Every gravity-loaded element requires a material density. Acceleration uses mesh length / s².'))
+        self.tabs.addTab(self.gravity,'Gravity')
+        self.nonlinear=QtWidgets.QCheckBox('Geometric nonlinearity (NLGEOM)')
+        self.nonlinear.setChecked(definition['step'].get('nonlinearGeometry',False))
+        step_form.insertRow(0,self.nonlinear)
         self.tabs.setCurrentIndex(tab)
         self.message = QtWidgets.QLabel('Project saving is not available in this preview. Run inputs are retained with the job.')
         self.message.setWordWrap(True)
@@ -203,13 +236,27 @@ class AnalysisDialog(QtWidgets.QDialog):
         apply_button.clicked.connect(self.apply)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
-        for rows in (self.materials, self.sections, self.supports, self.loads):
+        for rows in (self.materials, self.sections, self.supports, self.loads, self.mechanical_properties, self.plastic_curve, self.pressures, self.gravity):
             rows.changed.connect(self.mark_changed)
+        self.materials.changed.connect(self.refresh_material_options)
+        self.nonlinear.toggled.connect(self.mark_changed)
         self.units.currentIndexChanged.connect(self.mark_changed)
         for field in self.step_fields.values():
             field.textChanged.connect(self.mark_changed)
         self.nodal_history.itemChanged.connect(self.mark_changed)
         self.element_history.itemChanged.connect(self.mark_changed)
+
+    def refresh_material_options(self):
+        names=[r['name'] for r in self.materials.values() if r['name']]
+        for rows in (self.mechanical_properties,self.plastic_curve):
+            rows.choices['material']=names
+            for i in range(rows.table.rowCount()):
+                combo=rows.table.cellWidget(i,0);current=combo.currentData()
+                with QtCore.QSignalBlocker(combo):
+                    combo.clear();combo.addItem('Choose…','')
+                    for name in names:combo.addItem(name,name)
+                    if current and current not in names:combo.addItem(current+' (missing)',current)
+                    combo.setCurrentIndex(max(0,combo.findData(current)))
 
     def mark_changed(self, *args):
         self.definition = self.validation = None
@@ -233,6 +280,34 @@ class AnalysisDialog(QtWidgets.QDialog):
             if choice is None: value.pop('pyramidConversion',None)
             else: value['pyramidConversion']=choice
         value['materials'], value['sections'] = self.materials.values(), self.sections.values()
+        by_name={m['name']:m for m in value['materials']}
+        properties={}
+        for row in self.mechanical_properties.values():
+            name=row['material']
+            if name not in by_name:
+                if not row['density']:continue
+                raise ValueError('Mechanical properties refer to a missing material: '+name)
+            if name in properties:raise ValueError('Use one density/hardening row per material.')
+            properties[name]=row
+            if row['density']:by_name[name]['density']=row['density']
+        for row in self.plastic_curve.values():
+            name=row['material']
+            if name not in by_name:raise ValueError('Plastic curve refers to a missing material: '+name)
+            by_name[name].setdefault('plasticCurve',[]).append([row['stress'],row['strain']])
+            by_name[name]['hardening']=properties.get(name,{}).get('hardening','Isotropic')
+        pressures=[]
+        for row in self.pressures.values():
+            pressure={'name':row['name'],'magnitude':row['magnitude']}
+            if row['nodeSet']:pressure['nodeSet']=row['nodeSet']
+            if row['elementSet']:pressure['elementSet']=row['elementSet']
+            if row['face']:
+                try:pressure['face']=int(row['face'])
+                except ValueError:raise ValueError('Enter an integer pressure face number 1–6.')
+            pressures.append(pressure)
+        if pressures or 'pressures' in value['step']:value['step']['pressures']=pressures
+        gravity=[{'name':r['name'],'elementSet':r['elementSet'],'acceleration':[r[f'a{i}'] for i in range(3)]} for r in self.gravity.values()]
+        if gravity or 'gravityLoads' in value['step']:value['step']['gravityLoads']=gravity
+        if self.nonlinear.isChecked() or 'nonlinearGeometry' in value['step']:value['step']['nonlinearGeometry']=self.nonlinear.isChecked()
         value['step']['constraints'] = [{'name': row['name'], 'nodeSet': row['nodeSet'],
             'displacements': [row[f'u{i}'] or None for i in range(3)]} for row in self.supports.values()]
         value['step']['loads'] = [{'name': row['name'], 'nodeSet': row['nodeSet'],

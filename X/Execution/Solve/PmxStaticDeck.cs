@@ -75,8 +75,7 @@ internal static class PmxStaticDeck
         int sectionOffset = deck.IndexOf("*Solid section", StringComparison.OrdinalIgnoreCase);
         if (sectionOffset <= 0 || deck[sectionOffset - 1] != '\n')
             throw new InvalidDataException("Original deck has no section boundary for the density keyword.");
-        var keyword = new CalDensity(density, false);
-        deck = deck.Insert(sectionOffset, keyword.GetKeywordString() + keyword.GetDataString());
+        deck = deck.Insert(sectionOffset, MaterialDeckWriter.WriteDensity(density));
         deck = "*Heading\nUnit system: MM_TON_S_C\nModel space: ThreeD\n" + deck;
         return (deck, massDensity, materials[0].Name, step.Name);
     }

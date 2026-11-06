@@ -146,6 +146,19 @@ def render(root,revision=BASELINE):
         block,legacy=span(legacy,start,end);blocks.append(block)
     result[path]=legacy
     result['CaeGlobals/Tools.Results.cs']=text[:text.index('using System;')]+'using System;\nusing System.IO;\n\nnamespace CaeGlobals\n{\n    public static partial class Tools\n    {\n'+''.join(blocks)+'    }\n}\n'
+    # Original pressure preview/model evaluation stays in the legacy owner;
+    # transport data, equations and serialization remain in the shared original type.
+    path='CaeModel/Steps/Loads/VariablePressure.cs';text=read(path)
+    body,core=span(text,'        public abstract double GetPressureForPoint(', '        // ISerialization')
+    result[path]=core.replace('public abstract class VariablePressure','public abstract partial class VariablePressure',1)
+    result[path[:-3]+'.Legacy.cs']=container(text,'public abstract partial class VariablePressure',body)
+    path='CaeModel/Steps/Loads/DLoad.cs';text=read(path)
+    body,core=span(text,'        public FeResults GetPreview(', '        public new void GetObjectData(')
+    full='public class DLoad : VariablePressure, IDistribution, IPreviewable, ISerializable'
+    result[path]=core.replace(full,'public partial class DLoad : VariablePressure, ISerializable',1)
+    result[path[:-3]+'.Legacy.cs']=container(text,'public partial class DLoad : IDistribution, IPreviewable',body)
+    split('CaeMesh/FeSurface.cs','public class FeSurface : NamedClass',
+          '        public FeSurface(FeSurface surface)', '        // Methods')
     result.update(render_extensions(read('CaeGlobals/Extensions.cs')))
     for path,lines in REMOVED.items():
         text=result.get(path,read(path))
