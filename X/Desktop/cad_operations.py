@@ -42,7 +42,7 @@ class CadOperations(QtCore.QObject):
         self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
         self.repair_action=self.menu.addAction('Repair part…',lambda:self.dialog('repair'))
         self.export_action=self.menu.addAction('Export part as STEP…',lambda:self.dialog('export'))
-        self.toolbar_action=toolbar.addWidget(self.button)
+        self.toolbar_action=toolbar.insertWidget(window.mesh_action,self.button)
         self.refresh()
 
     def refresh(self):

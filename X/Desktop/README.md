@@ -1,5 +1,16 @@
 # Native viewport candidate
 
+With `--cad-native RUNTIME`, **CAD tools…** beside Open provides selected-part
+translation, plane splitting, ShapeFix repair option 1 and STEP export. Values
+use model units. Geometry edits run in the background; Cancel and closing stop
+the worker, retaining the previous document on failure. Successful edits clear
+the dependent mesh/analysis, so remesh before solving. STEP export checks native
+reimport before writing a new file and preserves the active mesh/analysis.
+Opened PMX geometry may be exported but cannot be mutated through these tools.
+Edited geometry recipes and exact inputs are retained in submitted CAD jobs.
+STEP export is selected-part exchange; new native-session PMX save remains open.
+[Checks and current candidate](../../.project/reports/desktop-cad-editing.md).
+
 Task 0044 adds a model tree and **Configure… / Run analysis** for the existing
 static-solid definition. Units, isotropic elastic materials, solid sections,
 displacement supports, forces per node, static increments and history requests
