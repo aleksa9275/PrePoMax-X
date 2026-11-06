@@ -116,6 +116,24 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 try:apply_edit(document,decode,1,'mirror',values)
                 except ValueError:check('invalid mirror refused '+str(values),True)
                 else:raise ValueError('Invalid mirror accepted')
+        if 'scale' in operations:
+            for label,factors,center,bounds in [('uniform',[2,2,2],[9,8,17],[-1,19,-2,18,-3,37]),('nonuniform',[2,.5,1.5],[9,3.5,13.5],[-1,19,1,6,-1.5,28.5])]:
+                edited=apply_edit(document,decode,1,'scale',{'center':[1,2,3],'factors':factors})
+                try:
+                    values=solids(edited);scene=decode(edited.parts[0][1]);original=decode(document.parts[0][1])
+                    check(label+' scale volume is analytical',math.isclose(values[0]['volume'][0],2000*math.prod(factors),rel_tol=1e-12,abs_tol=1e-9))
+                    check(label+' scale centroid is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],center)))
+                    actual=[v for axis in ('x','y','z') for v in [min(n[axis] for n in scene['nodes']),max(n[axis] for n in scene['nodes'])]]
+                    check(label+' scale bounds are analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(actual,bounds)))
+                    check(label+' scale retains face edge and vertex identities',all([e['id'] for e in scene['cad']['entities'][kind]]==[e['id'] for e in original['cad']['entities'][kind]] for kind in ['face','edge','vertex']))
+                    check(label+' scale retains untouched BREP and VIS bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
+                    check(label+' scale origin mapping retained',edited.edits[-1]['partOrigins']==[1,2])
+                    report['operations']['scale-'+label]=edited.edits[-1];shutil.copytree(edited.root,output/('scale-'+label))
+                finally:edited.close()
+            for factors in [[0,1,1],[-1,1,1],[1,1,1],[float('inf'),1,1],[1001,1,1]]:
+                try:apply_edit(document,decode,1,'scale',{'center':[0,0,0],'factors':factors})
+                except ValueError:check('invalid scale refused '+str(factors),True)
+                else:raise ValueError('Invalid scale accepted')
         if 'repair' in operations:
             edited=apply_edit(document,decode,1,'repair',1e-6)
             try:
@@ -188,6 +206,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','rotate','mirror','split','repair','export','export_all','history'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','mirror','split','repair','export','export_all','history'])
+    parser.add_argument('--operation',action='append',choices=['translate','rotate','mirror','scale','split','repair','export','export_all','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','mirror','scale','split','repair','export','export_all','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

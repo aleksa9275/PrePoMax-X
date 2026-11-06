@@ -52,6 +52,15 @@ def mirror(values):
     return {'origin':origin,'normal':normal}
 
 
+def scaling(values):
+    if not isinstance(values,dict) or set(values)!={'center','factors'}:
+        raise ValueError('Provide a scale center and three positive scale factors.')
+    center=vector(values['center'],'Scale center');factors=vector(values['factors'],'Scale factors')
+    if any(not 1e-6<=v<=1000 for v in factors) or factors==[1,1,1]:
+        raise ValueError('Use positive scale factors from 0.000001 to 1000; at least one must differ from 1.')
+    return {'center':center,'factors':factors}
+
+
 def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     source = selected_part(document, part_id)
     if len(document.edits) >= MAX_EDITS:
@@ -69,6 +78,10 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     elif operation=='mirror':
         description=mirror(values)
         parameters='Transform type: Mirror\nPoint: '+numbers(description['origin'])+'\nDirection: '+numbers(description['normal'])+'\n'
+        arguments=['BREP_TRANSFORM']
+    elif operation=='scale':
+        description=scaling(values)
+        parameters='Transform type: Scale\nPoint: '+numbers(description['center'])+'\nFactors: '+numbers(description['factors'])+'\n'
         arguments=['BREP_TRANSFORM']
     elif operation=='split':
         if not isinstance(values,dict) or set(values)!={'origin','normal'}:
@@ -112,7 +125,7 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         require_output(result,MAX_CAD_BYTES)
         converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
         generated=converter(result,work/'decoded',cancel=cancel)
-        if operation in ('translate','rotate','mirror','repair') and len(generated)!=1:
+        if operation in ('translate','rotate','mirror','scale','repair') and len(generated)!=1:
             raise ValueError('Transform/controlled repair must retain one selected CAD part.')
         extra=[]
         if operation=='split':
