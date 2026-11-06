@@ -1,5 +1,20 @@
 # Native CAD continuation — 6 November 2026
 
+Task 0089 is the current functional milestone. Read
+[solid formulation workflow](../reports/solid-formulation-workflow.md) and its
+receipt. All original mechanical 3D solid formulation choices now connect through
+imported mixed meshes, compatible desktop formulation selection, original static
+configuration, native solving, original FRD/VTK ordering and export/reopen.
+C3D5/C3D13 use explicit original wedge/hexahedron conversion and original pyramid
+restoration for display. Solve example… offers mixed solids and both pyramid
+routes. Current app: `/tmp/prepomaxx-task0089-delivery/PrePoMax-X Preview.app`,
+source `73a4b9d3`, with a sibling native CAD launcher. The task 0088 launcher
+forwards to it after removal of the superseded generated app. Native Mac/Linux
+ARM64 workflows and original Windows solver comparisons pass; original failures,
+other mesh authoring/calculation/model/PMX functionality and all full release
+requirements remain. Continue with substantial connected feature families under
+D050; preserve D029/D057/D058/D059. Earlier candidate paths below are historical.
+
 Next implementation must deliver larger functional milestones under the
 reaffirmed D050 cadence: group related work, use focused checks while coding and
 validate representative workflows at integration/candidate boundaries. Progress

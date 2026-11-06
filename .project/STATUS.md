@@ -9,8 +9,14 @@ Solid formulations… edits compatible solver types without changing mesh identi
 Solve example… offers mixed solid and pyramid workflows. Native Mac/Linux ARM64
 complete the integrated workflow; original Windows solver comparisons agree.
 [Behavior, evidence and candidate](reports/solid-formulation-workflow.md).
-Final candidate/publication is recorded at closeout. All remaining original
-functionality, D029/D057/D058/D059 and four-target/release acceptance remain open.
+Implementation `73a4b9d3` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0089-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Both copied Mac viewports complete the
+mixed-solid and both pyramid workflows; representative PMX/curved CAD regressions
+also pass. The copied payload, signature and empty source patch verify. The old
+task 0088 app and duplicate new build payloads are pruned, preserving all models,
+jobs/evidence and shared tools. All remaining original functionality,
+D029/D057/D058/D059 and four-target/release acceptance remain open.
 
 ## Prior — tasks 0087/0088: C3D10 native calculations
 

@@ -20,6 +20,30 @@
       "sha256": "021a4b81844d3a591c02714728f8ba4594c6004d146f48d27b69704d98e4372d",
       "success": true,
       "checks": 17
+    },
+    "copiedMacBridge": {
+      "path": "/tmp/prepomaxx-task0089-evidence/bridge/workflow.json",
+      "sha256": "aa786c83075785672e9aea921b0e3ccbd48284cfe8a4a009d4031eba2b323e6b",
+      "success": true,
+      "checks": 59
+    },
+    "copiedMacCocoa": {
+      "path": "/tmp/prepomaxx-task0089-evidence/cocoa/workflow.json",
+      "sha256": "52bf93b6107215a6c3856a9bfa0b03c2d2f12654cbc3167cea693898f4a69809",
+      "success": true,
+      "checks": 59
+    },
+    "copiedMacPmx": {
+      "path": "/tmp/prepomaxx-task0089-evidence/pmx/verification.json",
+      "sha256": "c25b5178a8ed3bdf33f97e5690f014c0f1968d2fd21b7e09939f3c4e938f369e",
+      "success": true,
+      "checks": 17
+    },
+    "copiedMacCurvedCad": {
+      "path": "/tmp/prepomaxx-task0089-evidence/cad-quadratic/workflow.json",
+      "sha256": "c9b9a09ed68aabedbb0edd644957f08f8476b2b7599371de388d4d9ffb366a7d",
+      "success": true,
+      "checks": 37
     }
   },
   "originalWindowsReference": {
@@ -127,13 +151,64 @@
     }
   },
   "candidate": {
-    "status": "packaging pending"
+    "app": "/tmp/prepomaxx-task0089-delivery/PrePoMax-X Preview.app",
+    "launcher": "/tmp/prepomaxx-task0089-delivery/Native CAD Preview.command",
+    "nativeCadRuntime": "/tmp/prepomaxx-task0063-recipe/runtime",
+    "success": true,
+    "files": 2426,
+    "symlinks": 2276,
+    "sourceIdentity": {
+      "viewportSha256": "ddd96be26076ebbda358670e9a0d9e4da428d3bbc4edf53737752a7ff61a0066",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "b3ccacbd1cdac6c084b00f5b924e4cf6c3789bb662feff39d3c9cc5a8491fadf",
+      "solidFormulationsSha256": "3d07e6cdb4f3da4343f68be5c6237205262ade1d5e1635add42c3172018f1bba",
+      "solidWorkflowProbeSha256": "582d4c44706ea2a9625852f144891e8f53bb4db717c5cf394e42196c50c33bca",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+      "cadJobSha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2",
+      "cadDocumentSha256": "42f34c050938f756e02f3eb1ad88422092766591fed9b0383201086ded826e1d",
+      "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+      "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+      "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+      "quadraticProbeSha256": "67e59829cd17a386b2d0854c554e5508241bc5e0d3550f45daace0e7875487c0",
+      "quadraticAnalysisSha256": "d292c0193842b8490e4efd9723884b873344e1b30228e3142d22985e3cd1f8ed",
+      "meshExportSha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953",
+      "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+      "cadRegionsSha256": "b026aa54e9f7a65e2328465b99082ab6c35d777a0614642e9dcde44e04186722",
+      "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+      "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+      "desktopJobsSha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "73a4b9d399de5b29d5c645af764522e84a15926c",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e",
+      "pmxToolHashes": {
+        "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+        "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+        "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "sourcePatchBytes": 0,
+    "adHocSignatureVerified": true,
+    "packageManifestSha256": "d306d670fb096e8237946671867b44a99a77c9dc806348ae00c159db5f5ca08e"
   },
   "publication": {
-    "status": "source checkpoint pending",
+    "sourceCommit": "73a4b9d399de5b29d5c645af764522e84a15926c",
+    "remote": "origin/research/native-feasibility",
+    "sourceRemoteVerified": true,
+    "commitSkipCi": true,
+    "pushCiSkip": true,
     "hostedJobsRequested": 0,
     "D058": "preserved",
-    "D059": "preserved"
+    "D059": "preserved",
+    "closingDocumentation": "published separately on the same branch"
   },
   "openGates": [
     "Both original numerical/classifier failures and quadratic tetrahedron measurement gate",
@@ -145,5 +220,42 @@
   ],
   "diagnosticsRetained": [
     "Initial analysis CLI control still expected C3D8R rejection; changed to thermal DC3D8 because C3D8R is now intentionally supported. All 73 existing typed static checks already passed. Failure retained under /tmp/prepomaxx-task0089-engineering."
-  ]
+  ],
+  "retention": {
+    "success": true,
+    "removed": [
+      {
+        "path": "/private/tmp/prepomaxx-task0089-package/dist",
+        "logicalBytes": 2285867981
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0089-package/build",
+        "logicalBytes": 20778478
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0089-package/hosts",
+        "logicalBytes": 621525921
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0089-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0088-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1156375516
+      }
+    ],
+    "logicalBytes": 5035538803,
+    "freeSpaceBefore": 183259664384,
+    "freeSpaceAfter": 187696234496,
+    "measuredFreeSpaceGain": 4436570112,
+    "candidateFileHashesVerified": 2426,
+    "preserved": "Current candidate, projects, CAD/INP/PMX files, jobs, screenshots, reference results, source/manifest/log evidence, installed user app/state and shared native/Python/.NET/Podman/source caches"
+  },
+  "status": "complete as a connected mechanical solid static formulation milestone; full project functionality remains required",
+  "visualQa": {
+    "copiedMixedSolids": "/tmp/prepomaxx-task0089-evidence/bridge/mixed-solids.png",
+    "sourcePyramids": "/tmp/prepomaxx-task0089-evidence/source-gui/pyramid-hexahedrons.png",
+    "observed": "Visible solid geometry, contours, formulation/model tree and completed job output"
+  }
 }

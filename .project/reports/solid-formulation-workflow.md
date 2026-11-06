@@ -73,8 +73,9 @@ platform acceptance or bitwise equality of all fields.
 Affected current analysis/results suites and existing Mac desktop regressions
 pass. The old rejection case for C3D8R is updated to a thermal DC3D8 case because
 C3D8R is now deliberately supported; the original mathematical checks are intact.
-A native Linux PMX regression passes with a rebuilt affected deck consumer. Final
-copied-candidate workflows and exact source identity are recorded at closeout.
+A native Linux PMX regression passes with a rebuilt affected deck consumer. The copied Mac candidate completes the same mixed-solid and both pyramid
+workflows in both viewport modes, plus representative PMX and curved-CAD C3D10
+regressions. Its payload, source identity and ad-hoc signature verify.
 
 ## Remaining scope and delivery
 
@@ -86,5 +87,24 @@ General curved quality, both known original failures, exact cross-platform
 parity, native Windows/net48/Linux x64, installers/Homebrew/signing/notarization
 and full release acceptance remain open. D057/D058/D059 remain in force.
 
-The implementation checkpoint and candidate are published/recorded at closeout.
-Hosted CI remains disabled; ordinary research pushes explicitly skip CI.
+Implementation **73a4b9d399de5b29d5c645af764522e84a15926c** is pushed and
+remote-verified on `origin/research/native-feasibility`, with CI explicitly
+skipped and no hosted jobs requested. The package identifies this exact source,
+no changed code and an empty source patch. The dirty flag comes from four
+pre-existing Finder files. Closing documentation follows on the same branch.
+
+Current app: `/tmp/prepomaxx-task0089-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables the retained native CAD runtime.
+Use **Solve example… → Mixed solids — all mechanical formulations**, or select
+one of the pyramid examples. Qt's toolbar overflow menu exposes controls when
+the window is narrow.
+
+All **2,426 copied file hashes**, symlink targets and the ad-hoc signature verify.
+The superseded task 0088 app and duplicate package build/payload/cache directories
+are pruned; its launcher forwards to the new candidate. Approximately 4.13 GiB
+of free space is reclaimed. Models, exports, frozen jobs, screenshots, source and
+reference/manifest/log evidence, installed user app/state and shared tool caches
+are preserved. Actual removed paths/bytes and post-cleanup checks are in the
+receipt. Evidence is `/tmp/prepomaxx-task0089-evidence`; retained package/source/
+manifest/log metadata is `/tmp/prepomaxx-task0089-package`. Hosted CI remains
+held under D058 and native x64 remains deferred under D059.

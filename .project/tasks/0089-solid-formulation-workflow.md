@@ -14,3 +14,11 @@ workflow at the candidate boundary. Keep the current candidate until the new
 one passes; publish to origin/research/native-feasibility with CI skipped.
 D029's original measurement/classifier failures, D057 full PMX, D058 hosted hold,
 D059 deferred x64 and all remaining full-functionality/release obligations stay.
+
+Completed as one connected functional milestone. Implementation `73a4b9d3` is
+pushed and remote-verified with CI skipped. Mac/Linux ARM64 and both copied Mac
+viewport modes complete mixed-solid and both pyramid workflows; original Windows
+solver comparisons, existing analysis/results/desktop regressions, representative
+PMX and curved CAD workflows pass. Current candidate, retained evidence and
+remaining requirements are in [the report](../reports/solid-formulation-workflow.md)
+and its receipt. Full functionality remains the unchanged completion criterion.
