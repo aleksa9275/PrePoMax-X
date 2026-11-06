@@ -1,5 +1,8 @@
 # Task 0074 — Native desktop CAD translation
 
+Completed 6 November 2026, including native Mac/Linux ARM64 and both copied Mac
+viewports. [Final evidence/candidate](../reports/desktop-cad-editing.md).
+
 Authorized 6 November 2026 as the first of four further tasks. Bring the task
 0066 original BREP_TRANSFORM translation into the native desktop for an explicit
 owned CAD part. Run in the background with cancellation; publish a fully decoded

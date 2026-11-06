@@ -1,5 +1,8 @@
 # Task 0076 — Native desktop controlled CAD repair
 
+Completed 6 November 2026, including native Mac/Linux ARM64 and both copied Mac
+viewports. [Final evidence/candidate](../reports/desktop-cad-editing.md).
+
 Authorized 6 November 2026 as the third of four further tasks. Expose original
 ShapeFix repair option 1 with an explicit positive model-unit tolerance. Use the
 same background/atomic document replacement, invalidation and provenance path.

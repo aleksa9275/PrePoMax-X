@@ -8,7 +8,15 @@ pass 33 transaction checks and the complete edited-three-body remesh/native
 solve/STEP-reopen desktop path. Translation/split/repair BREP bytes match retained
 original Windows references. Background cancellation/publication protects the
 old document; successful edits invalidate dependent meshes and freeze recipes.
-[Evidence](reports/desktop-cad-editing.md). One copied Mac package follows at closeout.
+[Evidence](reports/desktop-cad-editing.md). Current app:
+`/tmp/prepomaxx-task0077-delivery/PrePoMax-X Preview.app`, with sibling native CAD
+launcher. Both copied Mac viewports and Linux ARM64 pass 43 checks through edited
+three-body remeshing (208 nodes/533 C3D4), analytical solve and STEP reopen.
+Final CAD PMX/C3D8 PMX regressions pass 28/17. Source `b7daf541` is published and
+remote-verified with CI skipped; the source patch is empty. Strict cross-platform
+deck/field equality remains different at last-digit geometry/reaction values,
+recorded separately from passing analytical checks without tolerance changes.
+Superseded generated app/build copies are pruned; evidence/projects/jobs remain.
 D057/D058/D059 and all correctness/parity/release gates remain.
 
 ## Current — tasks 0071–0073: broader persistent PMX editing

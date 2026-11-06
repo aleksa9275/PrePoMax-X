@@ -1,5 +1,8 @@
 # Task 0075 — Native desktop CAD plane splitting
 
+Completed 6 November 2026, including native Mac/Linux ARM64 and both copied Mac
+viewports. [Final evidence/candidate](../reports/desktop-cad-editing.md).
+
 Authorized 6 November 2026 as the second of four further tasks. Add explicit
 part/plane-origin/normal controls around original BREP_SPLIT. Retain untouched
 parts, split output/source-solid origins and input recipes. Validate all resulting

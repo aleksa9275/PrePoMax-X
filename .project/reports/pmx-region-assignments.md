@@ -1,5 +1,8 @@
 # Persistent original PMX named-region assignments
 
+Task 0073's candidate is superseded and pruned after verified tasks 0074–0077.
+[Current candidate and CAD editing evidence](desktop-cad-editing.md).
+
 Task 0073 adds section, support and load region selectors to the checked original
 CAD/C3D4 PMX editor. Choices come from compatible existing nonempty element/node
 sets. Assignment edits preserve set names, labels, object names, original BREP,

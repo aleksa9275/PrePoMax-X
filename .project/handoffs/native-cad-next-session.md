@@ -1,5 +1,38 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0074–0077 are complete within their native CAD editing boundary. Read
+[the desktop CAD editing report](../reports/desktop-cad-editing.md) and its final
+receipt. **CAD tools…** provides selected-part translation, plane split, original
+ShapeFix option 1 repair and checked STEP export. Mutation of PMX geometry remains
+refused; export can read its owned CAD. A failed/cancelled edit preserves the old
+model; successful edits clear dependent mesh/regions/analysis. Jobs freeze exact
+operation inputs, parameters, command outputs, receipts and part-origin mapping.
+
+Retained candidate: `/tmp/prepomaxx-task0077-delivery/PrePoMax-X Preview.app`,
+source `b7daf541`, published/remote-verified with CI skipped and empty source patch.
+Its sibling native CAD launcher enables `/tmp/prepomaxx-task0063-recipe/runtime`;
+older task 0067/0068/0070/0073 launchers forward to it. Both copied Mac viewports
+and Linux ARM64 pass 43 checks: all four dialogs, edited three-part mesh (208
+nodes/533 C3D4), native affine-displacement/unit-stress solve, frozen provenance,
+visible contours and STEP reopen. Native transaction suites pass 33 on each host;
+desktop regressions 44 and build guards nine. Copied CAD PMX/C3D8 paths pass 28/17.
+
+Three bounded BREP outputs match the retained task 0066 original Windows hashes;
+no new original Windows GUI run occurred. Strict final Mac/Linux comparison
+matches topology, decoded coordinates and value order, but differs in G17 deck
+coordinates and tiny field components (maximum absolute difference ~1.318205e-13).
+The strict difference is retained; analytical checks pass independently and no
+tolerance/coordinate precision changed. Both earlier correctness failures,
+quadratic tetrahedra, exact native parity and all release gates remain open.
+
+Superseded app/staging/per-build cache copies are pruned. All generated CAD/STEP/
+PMX/mesh projects, jobs, receipts/screenshots and native/Python/.NET/package/image
+source/tool caches remain. Earlier app paths below are historical. New native CAD
+session PMX persistence is still next under D057; STEP exchange is not a PMX
+substitute. Preserve D058 hosted hold and D059 Windows/Podman x64 deferral, along
+with Windows/four-target/installer/signing/notarization/full parity requirements.
+
+
 Tasks 0071–0073 are complete within the checked original CAD/C3D4 PMX boundary:
 material Poisson's ratio/density, signed vector forces and existing named-region
 assignment edits persist through Save As/reopen/native solve. Read

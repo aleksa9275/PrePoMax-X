@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-06 tasks 0074–0077 add native desktop selected-part translation, plane
+split, controlled ShapeFix repair and checked STEP export. Mac/Linux ARM64 and
+both copied Mac viewports complete edited three-body remeshing, native analytical
+solve, frozen edit provenance and STEP reopen. [Current evidence/candidate](reports/desktop-cad-editing.md).
+Exact cross-platform deck/field equality remains open at last-digit values;
+no numerical tolerance/precision policy changed. New native-session PMX,
+correctness/tetrahedron/parity/release gates and D058/D059 remain.
+
 2026-11-06 tasks 0071–0073 broaden the checked original CAD/C3D4 PMX editor with
 Poisson's ratio/density, signed vector force and compatible existing named-region
 reassignment. Original-app readback and native Mac/Linux ARM64 save/reopen/solve
