@@ -17,6 +17,7 @@ from analysis_editor import AnalysisDialog, new_definition
 from cad_import import IMPORT_COMMANDS, REFERENCE_RECEIPT, NativeCadTool, ReferenceCadTool, run_process
 from cad_job import CadImportJob, CadMeshJob
 from cad_document import CadDocument
+from mesh_export import publish_mesh
 from cad_regions import CadRegions
 from cad_scene import read_cad_parts
 from pmx_project import PmxDialog, PmxSession, available as pmx_available
@@ -212,6 +213,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
         jobbar = self.addToolBar("Static analysis")
+        self.export_mesh_action = jobbar.addAction("Export mesh…", self.export_mesh_dialog)
         self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
         self.add_set_action.setEnabled(False)
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
@@ -275,6 +277,10 @@ class Viewport(QtWidgets.QMainWindow):
             group = QtWidgets.QTreeWidgetItem(root, [label])
             for item in self.model_scene.get(key, []):
                 QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
+        if self.quadratic_preview:
+            QtWidgets.QTreeWidgetItem(root,['C3D10 preview','Measurement/analysis gated'])
+            if self.cad_document is not None:self.populate_cad_tree(self.cad_document.scene['cad'])
+            self.model_tree.expandToDepth(1);return
         for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
                 (2, 'Solid sections', self.definition['sections'], 'elementSet'),
                 (3, 'Supports', self.definition['step']['constraints'], 'nodeSet'),
@@ -412,7 +418,33 @@ class Viewport(QtWidgets.QMainWindow):
         self.update_model_tree()
         return scene
 
+    @property
+    def quadratic_preview(self):
+        return self.model_scene is not None and any(e.get('vtkCellType')==24 or e.get('type')=='ParabolicTetraElement' for e in self.model_scene['elements'])
+
+    def require_analysis(self):
+        if not self.quadratic_preview:return True
+        message='C3D10 mesh preview/export is available. Quadratic tetrahedron analysis is gated by the unresolved original integration discrepancy.'
+        if getattr(self,'automated_workflow',False):raise ValueError(message)
+        QtWidgets.QMessageBox.information(self,'Quadratic analysis unavailable',message)
+        return False
+
+    def export_mesh_dialog(self):
+        if self.busy or self.model_scene is None:return
+        name,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export mesh-only INP',str(self.model_path.with_name(self.model_path.stem+'-mesh.inp')),'Mesh-only INP (*.inp)',options=QtWidgets.QFileDialog.Option.DontConfirmOverwrite)
+        if not name:return
+        try:
+            target=Path(name)
+            if not target.suffix:target=target.with_suffix('.inp')
+            self.mesh_export_result=publish_mesh(self.mesh_bytes,self.model_scene,target,decode)
+            self.job_label.setText('Mesh-only INP export complete')
+        except (OSError,ValueError) as error:
+            self.mesh_export_result={'success':False,'error':str(error)}
+            if getattr(self,'automated_workflow',False):raise
+            QtWidgets.QMessageBox.critical(self,'Cannot export mesh',str(error))
+
     def configure_model(self, tab=0):
+        if not self.require_analysis():return
         if self.busy:
             return
         if self.pmx_session is not None:
@@ -429,6 +461,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.update_model_tree()
 
     def run_model(self):
+        if not self.require_analysis():return
         if self.busy:
             return
         if not self.analysis_valid:
@@ -455,6 +488,7 @@ class Viewport(QtWidgets.QMainWindow):
         if self.busy:
             raise ValueError("Finish the active operation before starting an analysis.")
         try:
+            if not self.require_analysis():return
             if definition is None:
                 self.load(mesh)
             else:
@@ -482,9 +516,11 @@ class Viewport(QtWidgets.QMainWindow):
         active = importing or meshing or editing or state in ('Starting', 'Running', 'Cancelling')
         self.mesh_action.setEnabled(not active and self.cad_document is not None and self.pmx_session is None)
         cad = self.scene is not None and "cad" in self.scene and self.model_scene is None
-        self.run_action.setEnabled(not active and not cad)
-        self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
+        self.run_action.setEnabled(not active and not cad and not self.quadratic_preview)
+        self.configure_action.setEnabled(not active and not cad and not self.quadratic_preview and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
+        self.export_mesh_action.setEnabled(not active and self.model_scene is not None)
+        self.run_action.setToolTip("Quadratic analysis is gated by the original integration discrepancy" if self.quadratic_preview else "Run the supported static analysis")
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
@@ -699,21 +735,24 @@ class Viewport(QtWidgets.QMainWindow):
     def mesh_cad_dialog(self):
         if self.busy or self.cad_document is None:
             return
-        size, accepted = QtWidgets.QInputDialog.getDouble(self, "Mesh CAD — linear tetrahedra",
-            "Maximum element size (model units)",
-            max(max(n[axis] for n in self.cad_document.scene["nodes"]) -
-                min(n[axis] for n in self.cad_document.scene["nodes"]) for axis in ("x", "y", "z")) / 10,
-            0.000001, 1000000000, 6)
-        if accepted:
-            self.start_cad_mesh(size)
+        dialog=QtWidgets.QDialog(self);dialog.setWindowTitle('Mesh CAD')
+        form=QtWidgets.QFormLayout(dialog)
+        size=QtWidgets.QDoubleSpinBox();size.setObjectName('cadMaximumSize');size.setDecimals(6);size.setRange(.000001,1e9)
+        size.setValue(max(max(n[axis] for n in self.cad_document.scene['nodes'])-min(n[axis] for n in self.cad_document.scene['nodes']) for axis in ('x','y','z'))/10)
+        order=QtWidgets.QComboBox();order.setObjectName('cadMeshOrder');order.addItem('Linear C3D4',1);order.addItem('Quadratic C3D10 — preview/export only',2)
+        form.addRow('Maximum element size (model units)',size);form.addRow('Mesh order',order)
+        note=QtWidgets.QLabel('Quadratic measurement and analysis remain unavailable while the original integration discrepancy is unresolved.');note.setWordWrap(True);form.addRow(note)
+        buttons=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok|QtWidgets.QDialogButtonBox.StandardButton.Cancel)
+        buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);form.addRow(buttons)
+        if dialog.exec()==QtWidgets.QDialog.DialogCode.Accepted:self.start_cad_mesh(size.value(),element_order=order.currentData())
 
-    def start_cad_mesh(self, maximum_size):
+    def start_cad_mesh(self, maximum_size, *, element_order=1):
         if self.busy or self.cad_document is None:
             raise ValueError("Open native CAD and finish the current operation before meshing.")
         if not self.confirm_discard():
             return
         self.mesh_result = None
-        self.mesh_job = CadMeshJob(self.cad_document, mesh_command(), run_reader, maximum_size, self)
+        self.mesh_job = CadMeshJob(self.cad_document, mesh_command(), run_reader, maximum_size, self, element_order=element_order)
         self.mesh_job.finished.connect(self.cad_mesh_finished)
         self.job_state(self.job.state)
         self.mesh_job.start()
@@ -737,7 +776,7 @@ class Viewport(QtWidgets.QMainWindow):
             job.mesh.close()
         self.mesh_result = result
         self.job_state(self.job.state)
-        self.job_label.setText("CAD mesh ready" if result["success"] else
+        self.job_label.setText(("Quadratic mesh preview — analysis gated" if self.quadratic_preview else "CAD mesh ready") if result["success"] else
                               "Meshing cancelled" if result.get("cancelled") else "Meshing failed")
         if result.get("error"):
             self.job_output.setPlainText(result["error"])
@@ -1043,7 +1082,10 @@ def main():
                         help="Verify CAD PMX native edit/save/reopen/solve")
     parser.add_argument('--cad-edit-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
+    parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic preview, gated analysis and mesh-only export')
     args = parser.parse_args()
+    if args.cad_quadratic_probe and (not args.cad_native or any([args.input,args.self_test,args.editor_probe,args.pmx_probe,args.viewport_probe,args.run_example,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe])):
+        parser.error('Use --cad-quadratic-probe with --cad-native separately from other inputs/probes')
     if args.cad_edit_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe or args.cad_pmx_probe):
         parser.error('Use --cad-edit-probe with --cad-native separately from other inputs/probes')
     if args.cad_pmx_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe):
@@ -1076,7 +1118,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe)
+    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1160,7 +1202,11 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.cad_edit_probe:
+    if args.cad_quadratic_probe:
+        from quadratic_probe import begin
+        source,output=(p.resolve() for p in args.cad_quadratic_probe)
+        QtCore.QTimer.singleShot(1000,lambda:begin(app,window,source,output))
+    elif args.cad_edit_probe:
         from cad_edit_probe import begin
         source,output=(p.resolve() for p in args.cad_edit_probe)
         QtCore.QTimer.singleShot(1200,lambda:begin(app,window,source,output))

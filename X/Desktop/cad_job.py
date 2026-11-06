@@ -45,9 +45,10 @@ class CadImportJob(QtCore.QThread):
 
 
 class CadMeshJob(QtCore.QThread):
-    def __init__(self, document, command, reader, maximum_size, parent=None):
+    def __init__(self, document, command, reader, maximum_size, parent=None, *, element_order=1):
         super().__init__(parent)
         self.document, self.command, self.reader, self.maximum_size = document, command, reader, maximum_size
+        self.element_order = element_order
         self.cancel_requested = Event()
         self.result = None
         self.mesh = None
@@ -57,7 +58,7 @@ class CadMeshJob(QtCore.QThread):
 
     def run(self):
         try:
-            self.mesh = CadMesh(self.document, self.command, self.reader, self.maximum_size, cancel=self.cancel_requested)
+            self.mesh = CadMesh(self.document, self.command, self.reader, self.maximum_size, cancel=self.cancel_requested, element_order=self.element_order)
             if self.cancel_requested.is_set():
                 raise CadImportCancelled("CAD meshing cancelled.")
             self.result = {"success": True, "mesh": self.mesh}

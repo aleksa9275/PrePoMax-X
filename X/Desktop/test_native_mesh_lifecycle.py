@@ -28,7 +28,7 @@ class NativeMeshLifecycle(unittest.TestCase):
         return window
 
     def test_cancel_and_failed_mesh_keep_document_and_previous_scene(self):
-        for mode in ('cancel', 'failure', 'late-cancel'):
+        for mode,order in [(m,o) for m in ('cancel','failure','late-cancel') for o in (1,2)]:
             with self.subTest(mode=mode):
                 window = self.window()
                 document, scene = window.cad_document, window.scene
@@ -41,7 +41,7 @@ class NativeMeshLifecycle(unittest.TestCase):
                         raise ValueError('invalid native mesh')
                     return mesh
                 with patch('cad_job.CadMesh', side_effect=create):
-                    window.start_cad_mesh(3)
+                    window.start_cad_mesh(3,element_order=order)
                     self.assertTrue(window.busy)
                     self.assertFalse(window.open_action.isEnabled())
                     if mode == 'cancel':
