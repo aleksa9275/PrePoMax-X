@@ -9,7 +9,8 @@ from PyQt6 import QtCore,QtWidgets
 
 
 def begin(app,w,source,output):
-    from viewport import decode,ROOT
+    from viewport import decode
+    from jobs import examples
     from cad_document import CadDocument
     output.mkdir(parents=True,exist_ok=False)
     report={'success':False,'transport':w.transport,'checks':[]}
@@ -82,7 +83,8 @@ def begin(app,w,source,output):
             operation('translate',[7,-3,5]);return
         check('all three edited bodies remesh',len(w.model_scene['cadMesh']['parts'])==3)
         scene=w.model_scene;nodes=scene['nodes'];parts=scene['cadMesh']['parts']
-        definition=json.loads((ROOT/'X/Desktop/fixtures/two-part-cad-static.json').read_text())
+        definition=json.loads((examples()/'cube-analysis.json').read_text())
+        definition['materials']=[{'name':'Elastic','youngsModulus':'1000','poissonsRatio':'0'}]
         definition['sections']=[{'name':'Section'+str(i),'material':'Elastic','elementSet':f'PART_{i}_SOLID_1'} for i in range(1,4)]
         constraints=[{'name':'Transverse','nodeSet':'ALL_NODES','displacements':['0','0',None]}]
         for i,part in enumerate(parts,1):
