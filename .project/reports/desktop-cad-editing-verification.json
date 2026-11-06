@@ -1,0 +1,951 @@
+{
+  "tasks": [
+    "0074",
+    "0075",
+    "0076",
+    "0077"
+  ],
+  "recordedDate": "2026-11-06",
+  "macNative": {
+    "success": true,
+    "checks": [
+      {
+        "name": "translation preserves two owned CAD parts",
+        "passed": true
+      },
+      {
+        "name": "translation matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "translated center is analytical",
+        "passed": true
+      },
+      {
+        "name": "translation retains volume",
+        "passed": true
+      },
+      {
+        "name": "unselected BREP and VIS bytes unchanged",
+        "passed": true
+      },
+      {
+        "name": "unselected measured geometry unchanged",
+        "passed": true
+      },
+      {
+        "name": "edit provenance retains original part origins",
+        "passed": true
+      },
+      {
+        "name": "split retains unselected part plus two new solids",
+        "passed": true
+      },
+      {
+        "name": "split matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "both split volumes are analytical",
+        "passed": true
+      },
+      {
+        "name": "split centers are analytical",
+        "passed": true
+      },
+      {
+        "name": "split source origins map to selected original part",
+        "passed": true
+      },
+      {
+        "name": "split preserves unselected BREP/VIS bytes",
+        "passed": true
+      },
+      {
+        "name": "invalid or non-intersecting plane refused {'origin': [0, 0, 10], 'normal': [0, 0, 0]}",
+        "passed": true
+      },
+      {
+        "name": "invalid or non-intersecting plane refused {'origin': [0, 0, 100], 'normal': [0, 0, 1]}",
+        "passed": true
+      },
+      {
+        "name": "valid-box repair matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "repair preserves both part measurements",
+        "passed": true
+      },
+      {
+        "name": "repair preserves untouched part bytes",
+        "passed": true
+      },
+      {
+        "name": "changed in-memory edit history refused",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused 0",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused -1",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused nan",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused 2",
+        "passed": true
+      },
+      {
+        "name": "existing STEP bytes preserved",
+        "passed": true
+      },
+      {
+        "name": "STEP published only after native readback",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip retains one selected solid",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip volume is analytical",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip center is analytical",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (0, [1, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [0, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [nan, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [1, 2])",
+        "passed": true
+      },
+      {
+        "name": "original fixture unchanged",
+        "passed": true
+      }
+    ],
+    "operations": {
+      "translate": {
+        "operation": "translate",
+        "selectedPartId": 1,
+        "parameters": [
+          7.0,
+          -3.0,
+          5.0
+        ],
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "16bf8fe126166ca4aaf5d24771092f92867f74f003a0716b235ad3be8cfc9b61",
+        "partOrigins": [
+          1,
+          2
+        ],
+        "toolReceiptSha256": "5c389dcd76196a20d05a4a1de9f12ebdd2c3d8fcd2a58f156b32d61624a8c4c2"
+      },
+      "split": {
+        "operation": "split",
+        "selectedPartId": 1,
+        "parameters": {
+          "origin": [
+            0.0,
+            0.0,
+            10.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "extent": [
+            0,
+            10,
+            0,
+            10,
+            0,
+            20
+          ]
+        },
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "c2f47f772d6af8c97e635d9b6b5057bf028f1d94f404d8c49ab2a700cc7a1916",
+        "partOrigins": [
+          1,
+          1,
+          2
+        ],
+        "toolReceiptSha256": "5c389dcd76196a20d05a4a1de9f12ebdd2c3d8fcd2a58f156b32d61624a8c4c2"
+      },
+      "repair": {
+        "operation": "repair",
+        "selectedPartId": 1,
+        "parameters": {
+          "option": 1,
+          "tolerance": 0.5
+        },
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "partOrigins": [
+          1,
+          2
+        ],
+        "toolReceiptSha256": "5c389dcd76196a20d05a4a1de9f12ebdd2c3d8fcd2a58f156b32d61624a8c4c2"
+      },
+      "export": {
+        "selectedPartId": 1,
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputSha256": "5df88677c2b53793e1609b8cb9ec55fe5a076322f821d56afa6b729f5e1a5af3",
+        "toolReceiptSha256": "5c389dcd76196a20d05a4a1de9f12ebdd2c3d8fcd2a58f156b32d61624a8c4c2",
+        "geometryEditCount": 0,
+        "reimportedSolids": 1,
+        "nativeReadbackPassed": true
+      }
+    }
+  },
+  "macSourceDesktop": {
+    "success": true,
+    "transport": "frame-bridge",
+    "checks": [
+      {
+        "name": "CAD import succeeds",
+        "passed": true
+      },
+      {
+        "name": "two original CAD parts retained",
+        "passed": true
+      },
+      {
+        "name": "native C3D4 mesh succeeds",
+        "passed": true
+      },
+      {
+        "name": "translate real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "translate dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "translate runs in background",
+        "passed": true
+      },
+      {
+        "name": "translate completes",
+        "passed": true
+      },
+      {
+        "name": "successful edit releases old geometry and mesh",
+        "passed": true
+      },
+      {
+        "name": "successful edit clears stale mesh assignments and selection",
+        "passed": true
+      },
+      {
+        "name": "new geometry is marked unsaved",
+        "passed": true
+      },
+      {
+        "name": "split real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "split dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "split runs in background",
+        "passed": true
+      },
+      {
+        "name": "split completes",
+        "passed": true
+      },
+      {
+        "name": "split publishes three parts and checked origins",
+        "passed": true
+      },
+      {
+        "name": "repair real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "repair dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "repair runs in background",
+        "passed": true
+      },
+      {
+        "name": "repair completes",
+        "passed": true
+      },
+      {
+        "name": "all three geometry edit receipts retained",
+        "passed": true
+      },
+      {
+        "name": "edited screenshot",
+        "passed": true
+      },
+      {
+        "name": "native C3D4 mesh succeeds",
+        "passed": true
+      },
+      {
+        "name": "all three edited bodies remesh",
+        "passed": true
+      },
+      {
+        "name": "export real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "export dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "export runs in background",
+        "passed": true
+      },
+      {
+        "name": "export completes",
+        "passed": true
+      },
+      {
+        "name": "STEP export preserves active model and mesh",
+        "passed": true
+      },
+      {
+        "name": "STEP export retains unsaved editing state",
+        "passed": true
+      },
+      {
+        "name": "exported edited part center matches analytical result",
+        "passed": true
+      },
+      {
+        "name": "native solver completes edited geometry job",
+        "passed": true
+      },
+      {
+        "name": "analytical affine displacement at every edited mesh node",
+        "passed": true
+      },
+      {
+        "name": "analytical unit axial stress at every edited mesh node",
+        "passed": true
+      },
+      {
+        "name": "job freezes all geometry edit receipts and part origins",
+        "passed": true
+      },
+      {
+        "name": "job freezes exact original operation inputs and recipes",
+        "passed": true
+      },
+      {
+        "name": "all frozen CAD file hashes verify",
+        "passed": true
+      },
+      {
+        "name": "results screenshot",
+        "passed": true
+      },
+      {
+        "name": "CAD import succeeds",
+        "passed": true
+      },
+      {
+        "name": "exported edited STEP reopens in desktop",
+        "passed": true
+      },
+      {
+        "name": "reopened edited solid retains analytical volume",
+        "passed": true
+      },
+      {
+        "name": "original external CAD file unchanged",
+        "passed": true
+      },
+      {
+        "name": "reopened screenshot",
+        "passed": true
+      }
+    ],
+    "export": {
+      "selectedPartId": 1,
+      "inputBrepSha256": "60dfc389254c03e3a7d8d5b227ef69626ae022e98552864da3fec9df18fa980e",
+      "outputSha256": "f862cd07dd3ddb0d4855beefdffc8a010cb271356f1a0fbb10d8100a94f473d6",
+      "toolReceiptSha256": "5c389dcd76196a20d05a4a1de9f12ebdd2c3d8fcd2a58f156b32d61624a8c4c2",
+      "geometryEditCount": 3,
+      "reimportedSolids": 1,
+      "nativeReadbackPassed": true
+    },
+    "job": {
+      "success": true,
+      "state": "Completed",
+      "command": [
+        "dotnet",
+        "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Execution/Solve/bin/Release/net10.0/PrePoMaxX.Solve.dll",
+        "--registry",
+        "/tmp/prepomaxx-task0073-delivery/PrePoMax-X Preview.app/Contents/Resources/native-solver/build-registry.json",
+        "run-static",
+        "osx-arm64-2.22-spooles-local-preview",
+        "/tmp/prepomaxx-task0073-delivery/PrePoMax-X Preview.app/Contents/Resources/native-solver/bin",
+        "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345/inputs/mesh.inp",
+        "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345/inputs/analysis.json",
+        "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345/solve",
+        "3600"
+      ],
+      "directory": "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345/solve",
+      "cancelRequested": false,
+      "inputDirectory": "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345/inputs",
+      "workspace": "/private/tmp/prepomaxx-task0077-evidence/source-jobs/20261106-133605-1bfc0752e345",
+      "outcome": {
+        "success": true,
+        "solverExecuted": true,
+        "buildId": "osx-arm64-2.22-spooles-local-preview",
+        "registrySha256": "57c34bfd74acd566070cefac14bff441fe6066c933b71e33e170f8bb22491413",
+        "build": {
+          "id": "osx-arm64-2.22-spooles-local-preview",
+          "os": "Darwin",
+          "architecture": "Arm64",
+          "version": "2.22",
+          "executable": "ccx",
+          "files": {
+            "ccx": "d776387858acb7c13704d56fbc2f62a86f5f5b2460b4e720e86e65522f78ead5",
+            "libgcc_s.1.1.dylib": "fd4d92a79bfc4d7da66eaef5ef618ad9dc01f103dd569ca31f92cb87aad856eb",
+            "libgfortran.5.dylib": "c738e2e8c022e6e6c6f32f9b46cc0aeeb39d51f25e99e61b233caa8445425a3f",
+            "libgomp.1.dylib": "fd9e0816a5d1c61a85054cd04f0b35c2ff66217eef9a0bd6e03796532877a8b1",
+            "libomp.dylib": "7fd28cb0ea6020f4d7c90339a046296c6a3f9955bdafb6ec4f8dc1d93de787eb",
+            "libopenblas.0.dylib": "d1f0316617152a4557ce23a19bc47c7b833c22fd15fa7a61830edd8d04f04a6a",
+            "libquadmath.0.dylib": "239bfe66a63393aa0876bc6f02459dde3b866e25181f80daea2e21558c6d1d9d"
+          },
+          "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+          "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+          "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+          "scope": "Relocated ad-hoc local static-solid preview; original backend unchanged; not release acceptance"
+        },
+        "os": "Darwin",
+        "architecture": "Arm64",
+        "status": "OK",
+        "exitCode": 0,
+        "versionMatches": true,
+        "outputsPresent": true,
+        "requiredOutputs": [
+          ".frd",
+          ".sta"
+        ],
+        "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:          208\n   elements:          885\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            1\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            0\n   single point constraints:          516\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:           67\n   terms in all sets:         1711\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            7\n   data points in all amplitudes:            7\n   print requests:            0\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 108\n number of nonzero lower triangular matrix elements\n 412\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.005401\n________________________________________\n",
+        "stderr": "",
+        "failureReason": null,
+        "numericalAcceptance": false,
+        "outputs": {
+          "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+          "analysis.frd": "4a5ae3f923adfb2d6305838d12276a76761815cab9a72e1e65a812b8a7ce0221",
+          "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+          "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "_output_analysis.txt": "da9da25b0b4d6b79577f4945a7e8ed295d4a4be2da324e90be77d51c9d9e68ba",
+          "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "analysis.inp": "2c4308620e78d740b4707150d39759cfd6f53bf1ed448086a6ba71e7a307b09d",
+          "analysis.dat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "maximumDisplacementError": 3.469446951953614e-18
+  },
+  "linuxNative": {
+    "success": true,
+    "checks": [
+      {
+        "name": "translation preserves two owned CAD parts",
+        "passed": true
+      },
+      {
+        "name": "translation matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "translated center is analytical",
+        "passed": true
+      },
+      {
+        "name": "translation retains volume",
+        "passed": true
+      },
+      {
+        "name": "unselected BREP and VIS bytes unchanged",
+        "passed": true
+      },
+      {
+        "name": "unselected measured geometry unchanged",
+        "passed": true
+      },
+      {
+        "name": "edit provenance retains original part origins",
+        "passed": true
+      },
+      {
+        "name": "split retains unselected part plus two new solids",
+        "passed": true
+      },
+      {
+        "name": "split matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "both split volumes are analytical",
+        "passed": true
+      },
+      {
+        "name": "split centers are analytical",
+        "passed": true
+      },
+      {
+        "name": "split source origins map to selected original part",
+        "passed": true
+      },
+      {
+        "name": "split preserves unselected BREP/VIS bytes",
+        "passed": true
+      },
+      {
+        "name": "invalid or non-intersecting plane refused {'origin': [0, 0, 10], 'normal': [0, 0, 0]}",
+        "passed": true
+      },
+      {
+        "name": "invalid or non-intersecting plane refused {'origin': [0, 0, 100], 'normal': [0, 0, 1]}",
+        "passed": true
+      },
+      {
+        "name": "valid-box repair matches original Windows BREP bytes",
+        "passed": true
+      },
+      {
+        "name": "repair preserves both part measurements",
+        "passed": true
+      },
+      {
+        "name": "repair preserves untouched part bytes",
+        "passed": true
+      },
+      {
+        "name": "changed in-memory edit history refused",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused 0",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused -1",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused nan",
+        "passed": true
+      },
+      {
+        "name": "invalid repair tolerance refused 2",
+        "passed": true
+      },
+      {
+        "name": "existing STEP bytes preserved",
+        "passed": true
+      },
+      {
+        "name": "STEP published only after native readback",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip retains one selected solid",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip volume is analytical",
+        "passed": true
+      },
+      {
+        "name": "STEP roundtrip center is analytical",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (0, [1, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [0, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [nan, 0, 0])",
+        "passed": true
+      },
+      {
+        "name": "invalid translation refused (1, [1, 2])",
+        "passed": true
+      },
+      {
+        "name": "original fixture unchanged",
+        "passed": true
+      }
+    ],
+    "operations": {
+      "translate": {
+        "operation": "translate",
+        "selectedPartId": 1,
+        "parameters": [
+          7.0,
+          -3.0,
+          5.0
+        ],
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "16bf8fe126166ca4aaf5d24771092f92867f74f003a0716b235ad3be8cfc9b61",
+        "partOrigins": [
+          1,
+          2
+        ],
+        "toolReceiptSha256": "e9a908a55e3ab7f8370ca37ddc34abfe8e78ca42c5a726779895d9a283720366"
+      },
+      "split": {
+        "operation": "split",
+        "selectedPartId": 1,
+        "parameters": {
+          "origin": [
+            0.0,
+            0.0,
+            10.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "extent": [
+            0,
+            10,
+            0,
+            10,
+            0,
+            20
+          ]
+        },
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "c2f47f772d6af8c97e635d9b6b5057bf028f1d94f404d8c49ab2a700cc7a1916",
+        "partOrigins": [
+          1,
+          1,
+          2
+        ],
+        "toolReceiptSha256": "e9a908a55e3ab7f8370ca37ddc34abfe8e78ca42c5a726779895d9a283720366"
+      },
+      "repair": {
+        "operation": "repair",
+        "selectedPartId": 1,
+        "parameters": {
+          "option": 1,
+          "tolerance": 0.5
+        },
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "partOrigins": [
+          1,
+          2
+        ],
+        "toolReceiptSha256": "e9a908a55e3ab7f8370ca37ddc34abfe8e78ca42c5a726779895d9a283720366"
+      },
+      "export": {
+        "selectedPartId": 1,
+        "inputBrepSha256": "53d6637b01ad55430a085e574c44b2fe0971e1e5d6ce575d0d29dcb060980a81",
+        "outputSha256": "681eff19d0a7199a70d763c6917a42c11473eb0392dda6cc91f2282097fed33f",
+        "toolReceiptSha256": "e9a908a55e3ab7f8370ca37ddc34abfe8e78ca42c5a726779895d9a283720366",
+        "geometryEditCount": 0,
+        "reimportedSolids": 1,
+        "nativeReadbackPassed": true
+      }
+    }
+  },
+  "linuxSourceDesktop": {
+    "success": true,
+    "transport": "frame-bridge",
+    "checks": [
+      {
+        "name": "CAD import succeeds",
+        "passed": true
+      },
+      {
+        "name": "two original CAD parts retained",
+        "passed": true
+      },
+      {
+        "name": "native C3D4 mesh succeeds",
+        "passed": true
+      },
+      {
+        "name": "translate real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "translate dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "translate runs in background",
+        "passed": true
+      },
+      {
+        "name": "translate completes",
+        "passed": true
+      },
+      {
+        "name": "successful edit releases old geometry and mesh",
+        "passed": true
+      },
+      {
+        "name": "successful edit clears stale mesh assignments and selection",
+        "passed": true
+      },
+      {
+        "name": "new geometry is marked unsaved",
+        "passed": true
+      },
+      {
+        "name": "split real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "split dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "split runs in background",
+        "passed": true
+      },
+      {
+        "name": "split completes",
+        "passed": true
+      },
+      {
+        "name": "split publishes three parts and checked origins",
+        "passed": true
+      },
+      {
+        "name": "repair real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "repair dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "repair runs in background",
+        "passed": true
+      },
+      {
+        "name": "repair completes",
+        "passed": true
+      },
+      {
+        "name": "all three geometry edit receipts retained",
+        "passed": true
+      },
+      {
+        "name": "edited screenshot",
+        "passed": true
+      },
+      {
+        "name": "native C3D4 mesh succeeds",
+        "passed": true
+      },
+      {
+        "name": "all three edited bodies remesh",
+        "passed": true
+      },
+      {
+        "name": "export real dialog opens",
+        "passed": true
+      },
+      {
+        "name": "export dialog screenshot",
+        "passed": true
+      },
+      {
+        "name": "export runs in background",
+        "passed": true
+      },
+      {
+        "name": "export completes",
+        "passed": true
+      },
+      {
+        "name": "STEP export preserves active model and mesh",
+        "passed": true
+      },
+      {
+        "name": "STEP export retains unsaved editing state",
+        "passed": true
+      },
+      {
+        "name": "exported edited part center matches analytical result",
+        "passed": true
+      },
+      {
+        "name": "native solver completes edited geometry job",
+        "passed": true
+      },
+      {
+        "name": "analytical affine displacement at every edited mesh node",
+        "passed": true
+      },
+      {
+        "name": "analytical unit axial stress at every edited mesh node",
+        "passed": true
+      },
+      {
+        "name": "job freezes all geometry edit receipts and part origins",
+        "passed": true
+      },
+      {
+        "name": "job freezes exact original operation inputs and recipes",
+        "passed": true
+      },
+      {
+        "name": "all frozen CAD file hashes verify",
+        "passed": true
+      },
+      {
+        "name": "results screenshot",
+        "passed": true
+      },
+      {
+        "name": "CAD import succeeds",
+        "passed": true
+      },
+      {
+        "name": "exported edited STEP reopens in desktop",
+        "passed": true
+      },
+      {
+        "name": "reopened edited solid retains analytical volume",
+        "passed": true
+      },
+      {
+        "name": "original external CAD file unchanged",
+        "passed": true
+      },
+      {
+        "name": "reopened screenshot",
+        "passed": true
+      }
+    ],
+    "export": {
+      "selectedPartId": 1,
+      "inputBrepSha256": "60dfc389254c03e3a7d8d5b227ef69626ae022e98552864da3fec9df18fa980e",
+      "outputSha256": "11abe145e448ec5a6f2f7b9c8841698b80d77dcc3c99b88b008f5751b142ad7c",
+      "toolReceiptSha256": "e9a908a55e3ab7f8370ca37ddc34abfe8e78ca42c5a726779895d9a283720366",
+      "geometryEditCount": 3,
+      "reimportedSolids": 1,
+      "nativeReadbackPassed": true
+    },
+    "job": {
+      "success": true,
+      "state": "Completed",
+      "command": [
+        "dotnet",
+        "/pmx-cached/hosts/bin/Solve/release/PrePoMaxX.Solve.dll",
+        "--registry",
+        "/cached/solver-preview/build-registry.json",
+        "run-static",
+        "linux-arm64-2.22-spooles-local-preview",
+        "/cached/solver-preview/bin",
+        "/out/gui-jobs/20261106-133804-131a78e1cd79/inputs/mesh.inp",
+        "/out/gui-jobs/20261106-133804-131a78e1cd79/inputs/analysis.json",
+        "/out/gui-jobs/20261106-133804-131a78e1cd79/solve",
+        "3600"
+      ],
+      "directory": "/out/gui-jobs/20261106-133804-131a78e1cd79/solve",
+      "cancelRequested": false,
+      "inputDirectory": "/out/gui-jobs/20261106-133804-131a78e1cd79/inputs",
+      "workspace": "/out/gui-jobs/20261106-133804-131a78e1cd79",
+      "outcome": {
+        "success": true,
+        "solverExecuted": true,
+        "buildId": "linux-arm64-2.22-spooles-local-preview",
+        "registrySha256": "ba0161d8e8f35985d9b4ef9bc1e07b8eb440258ddbc15e2c49bb553fb7f2e8f5",
+        "build": {
+          "id": "linux-arm64-2.22-spooles-local-preview",
+          "os": "Linux",
+          "architecture": "Arm64",
+          "version": "2.22",
+          "executable": "ccx",
+          "files": {
+            "ccx": "59f34d9354898ed869e875588a3399fcb68d997014aa365b344c46d5d46d9474",
+            "libgcc_s.so.1": "45a54623a113b2184fadceb5da70a227b47afcbb4b83362451a06a62349228bf",
+            "libgfortran.so.5": "f7b9769f1c9aace2fdd9fce3b794e8004c5938ff540c8ecbdd57141840a54f31",
+            "libgomp.so.1": "f6600eece63dd9d85d9d46acb4cfd691e263eecff79b48da6acdfbb5fc65e656",
+            "libopenblas.so.0": "8d1bb32a2c4f3e961986687fe91e50841e62af9e65e7828d93f1ffb289f7c984"
+          },
+          "backend": "SPOOLES 2.2 serial; ARPACK-ng 3.9.1 int32 static; OpenBLAS LP64",
+          "sourceMatch": "Pinned core/SPOOLES/ARPACK sources and explicit native recipe; different from Windows backend build",
+          "sourceManifest": "ThirdParty/Sources/CalculiX/2.22/source-manifest.json",
+          "scope": "Relocated native static-solid preview; original backend unchanged"
+        },
+        "os": "Linux",
+        "architecture": "Arm64",
+        "status": "OK",
+        "exitCode": 0,
+        "versionMatches": true,
+        "outputsPresent": true,
+        "requiredOutputs": [
+          ".frd",
+          ".sta"
+        ],
+        "stdout": "\n************************************************************\n\nCalculiX Version 2.22, Copyright(C) 1998-2024 Guido Dhondt\nCalculiX comes with ABSOLUTELY NO WARRANTY. This is free\nsoftware, and you are welcome to redistribute it under\ncertain conditions, see gpl.htm\n\n************************************************************\n\nYou are using an executable made on Mon Aug  5 19:15:25 CEST 2024\n\n  The numbers below are estimated upper bounds\n\n  number of:\n\n   nodes:          208\n   elements:          885\n   one-dimensional elements:            0\n   two-dimensional elements:            0\n   integration points per element:            1\n   degrees of freedom per node:            3\n   layers per element:            1\n\n   distributed facial loads:            0\n   distributed volumetric loads:            0\n   concentrated loads:            0\n   single point constraints:          516\n   multiple point constraints:            1\n   terms in all multiple point constraints:            1\n   tie constraints:            0\n   dependent nodes tied by cyclic constraints:            0\n   dependent nodes in pre-tension constraints:            0\n\n   sets:           67\n   terms in all sets:         1711\n\n   materials:            1\n   constants per material and temperature:            2\n   temperature points per material:            1\n   plastic data points per material:            0\n\n   orientations:            0\n   amplitudes:            7\n   data points in all amplitudes:            7\n   print requests:            0\n   transformations:            0\n   property cards:            0\n\n\n STEP            1\n\n Static analysis was selected\n\n Decascading the MPC's\n\n Determining the structure of the matrix:\n Using up to 1 cpu(s) for setting up the structure of the matrix.\n number of equations\n 108\n number of nonzero lower triangular matrix elements\n 412\n\n Using up to 1 cpu(s) for the stress calculation.\n\n Using up to 1 cpu(s) for the symmetric stiffness/mass contributions.\n\n Factoring the system of equations using the symmetric spooles solver\n Using 1 cpu for spooles.\n\n Using up to 1 cpu(s) for the stress calculation.\n\n\n Job finished\n\n________________________________________\n\nTotal CalculiX Time: 0.013472\n________________________________________\n",
+        "stderr": "",
+        "failureReason": null,
+        "numericalAcceptance": false,
+        "outputs": {
+          "analysis.cvg": "65086dedb4572132b815ace04b294909c7f6f337111f9704fc310b02320f67f7",
+          "analysis.frd": "ff2f37e3b7ceba26433c73a3f8396333ab59c83977ffb72bddf6457711371c32",
+          "_error_analysis.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "analysis.sta": "01e324ec0ea28f4d1fd7f5e2da1277af53812b873e218be1604c17a4c8e4990d",
+          "analysis.12d": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "_output_analysis.txt": "2a4586d2dfe3a0e1e862c4cef76148bf552e611c7dd5aba03a38317196418ee9",
+          "spooles.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "analysis.inp": "b6c64fc76bced1e49289c954fe18d8f2b4604be4c93b1e796fcec8bd28673793",
+          "analysis.dat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "maximumDisplacementError": 3.469446951953614e-18
+  },
+  "desktopRegressionTests": 44,
+  "buildGuards": 9,
+  "hostedRunsRequested": false,
+  "linuxX64": "Deferred under D059",
+  "finalCopiedCandidate": "Closing verification follows",
+  "originalWindowsReference": "Task 0066 retained command receipts; no new Windows GUI execution",
+  "retainedDiagnostics": [
+    "/tmp/prepomaxx-task0075-evidence/native/verification.json",
+    "/tmp/prepomaxx-task0077-evidence/linux/native/verification.json"
+  ]
+}

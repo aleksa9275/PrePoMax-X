@@ -1039,7 +1039,11 @@ def main():
                         help="Exercise native CAD to linear tetrahedra, editor and real static results")
     parser.add_argument("--cad-pmx-probe", type=Path, nargs=2, metavar=("PMX", "OUTPUT"),
                         help="Verify CAD PMX native edit/save/reopen/solve")
+    parser.add_argument('--cad-edit-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),
+                        help='Verify native CAD dialogs, STEP export, remeshing and solve')
     args = parser.parse_args()
+    if args.cad_edit_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe or args.cad_pmx_probe):
+        parser.error('Use --cad-edit-probe with --cad-native separately from other inputs/probes')
     if args.cad_pmx_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example or args.cad_workflow_probe):
         parser.error("Use --cad-pmx-probe with --cad-native separately from other inputs/probes")
     if args.cad_workflow_probe and (not args.cad_native or args.input or args.self_test or args.editor_probe or args.pmx_probe or args.viewport_probe or args.run_example):
@@ -1070,7 +1074,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe)
+    window.automated_workflow = bool(args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1154,7 +1158,11 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.cad_pmx_probe:
+    if args.cad_edit_probe:
+        from cad_edit_probe import begin
+        source,output=(p.resolve() for p in args.cad_edit_probe)
+        QtCore.QTimer.singleShot(1200,lambda:begin(app,window,source,output))
+    elif args.cad_pmx_probe:
         from cad_pmx_probe import begin
         source, output = (p.resolve() for p in args.cad_pmx_probe)
         QtCore.QTimer.singleShot(500, lambda: begin(app, window, source, output))

@@ -2,6 +2,7 @@
 from copy import deepcopy
 import json
 import math
+import os
 from pathlib import Path
 import shutil
 from tempfile import TemporaryDirectory
@@ -129,3 +130,54 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     except BaseException:
         edited.close()
         raise
+
+
+class CadExport:
+    def __init__(self):
+        self.storage=TemporaryDirectory(prefix='prepomaxx-cad-export-')
+        self.root=Path(self.storage.name)
+
+    def publish(self,destination):
+        destination=Path(destination)
+        if destination.suffix.lower() not in ('.step','.stp'):
+            raise ValueError('Choose a new .step or .stp destination.')
+        if destination.exists() or destination.is_symlink():raise FileExistsError('Choose a new STEP filename.')
+        if file_sha256(self.path)!=self.receipt['outputSha256']:
+            raise ValueError('Validated STEP output changed before publication.')
+        # Keep final publication on the destination filesystem, including when
+        # the conversion workspace is on another volume/container mount.
+        with TemporaryDirectory(prefix='.prepomaxx-step-',dir=destination.parent) as directory:
+            staged=Path(directory)/'part.step'
+            shutil.copyfile(self.path,staged)
+            if file_sha256(staged)!=self.receipt['outputSha256']:
+                raise ValueError('STEP bytes changed while staging publication.')
+            os.link(staged,destination)
+        return dict(self.receipt)
+
+    def close(self):self.storage.cleanup()
+
+
+def prepare_export(document,decoder,part_id,*,cancel=None):
+    source=selected_part(document,part_id)
+    export=CadExport()
+    try:
+        original=export.root/'input.brep';shutil.copyfile(source,original)
+        export.path=export.root/'part.step'
+        run_stage([*document.tool.command,'SAVE_BREP_AS_STEP',str(original),str(export.path)],
+                  export.root,'export.log',cancel=cancel)
+        require_output(export.path,MAX_CAD_BYTES)
+        if file_sha256(original)!=document.identities[source]:raise ValueError('STEP export modified its staged input.')
+        reopened=document.tool.convert_parts(export.path,export.root/'readback',cancel=cancel)
+        scenes=[decoder(vis,cancel=cancel) for brep,vis in reopened]
+        original_scene=decoder(document.parts[part_id-1][1],cancel=cancel)
+        solids=sum(len(s['cad']['entities']['solid']) for s in scenes)
+        if not solids or solids!=len(original_scene['cad']['entities']['solid']):
+            raise ValueError('STEP readback changed the selected solid count.')
+        document.verify()
+        if cancel is not None and cancel.is_set():raise CadImportCancelled('STEP export cancelled.')
+        export.receipt={'selectedPartId':part_id,'inputBrepSha256':file_sha256(source),
+                        'outputSha256':file_sha256(export.path),'toolReceiptSha256':document.tool_receipt,
+                        'geometryEditCount':len(document.edits),'reimportedSolids':solids,'nativeReadbackPassed':True}
+        return export
+    except BaseException:
+        export.close();raise

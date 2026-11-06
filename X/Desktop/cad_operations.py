@@ -2,7 +2,7 @@
 from threading import Event
 from PyQt6 import QtCore, QtWidgets
 from cad_import import CadImportCancelled
-from cad_edit import apply_edit
+from cad_edit import apply_edit,prepare_export
 
 
 class CadEditJob(QtCore.QThread):
@@ -16,8 +16,12 @@ class CadEditJob(QtCore.QThread):
 
     def run(self):
         try:
-            self.output=apply_edit(self.document,self.decoder,self.part_id,self.operation,self.values,cancel=self.cancel_requested)
-            self.result={'success':True,'document':self.output}
+            if self.operation=='export':
+                self.output=prepare_export(self.document,self.decoder,self.part_id,cancel=self.cancel_requested)
+                self.result={'success':True,'export':self.output}
+            else:
+                self.output=apply_edit(self.document,self.decoder,self.part_id,self.operation,self.values,cancel=self.cancel_requested)
+                self.result={'success':True,'document':self.output}
         except CadImportCancelled:
             self.result={'success':False,'cancelled':True}
         except Exception as error:
@@ -37,6 +41,7 @@ class CadOperations(QtCore.QObject):
         self.translate_action=self.menu.addAction('Translate part…',lambda:self.dialog('translate'))
         self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
         self.repair_action=self.menu.addAction('Repair part…',lambda:self.dialog('repair'))
+        self.export_action=self.menu.addAction('Export part as STEP…',lambda:self.dialog('export'))
         self.toolbar_action=toolbar.addWidget(self.button)
         self.refresh()
 
@@ -45,12 +50,13 @@ class CadOperations(QtCore.QObject):
         self.translate_action.setEnabled(not w.busy and w.cad_document is not None and w.pmx_session is None)
         self.split_action.setEnabled(self.translate_action.isEnabled())
         self.repair_action.setEnabled(self.translate_action.isEnabled())
-        self.button.setEnabled(self.translate_action.isEnabled())
+        self.export_action.setEnabled(not w.busy and w.cad_document is not None)
+        self.button.setEnabled(self.translate_action.isEnabled() or self.export_action.isEnabled())
 
     def dialog(self,operation):
         w=self.window
         if w.busy or w.cad_document is None:return
-        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle({'translate':'Translate CAD part','split':'Split CAD part by plane','repair':'Repair CAD part'}[operation])
+        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle({'translate':'Translate CAD part','split':'Split CAD part by plane','repair':'Repair CAD part','export':'Export selected CAD part as STEP'}[operation])
         form=QtWidgets.QFormLayout(dialog)
         part=QtWidgets.QComboBox()
         for entry in w.cad_document.scene['cad']['parts']:
@@ -59,6 +65,7 @@ class CadOperations(QtCore.QObject):
         fields=[]
         labels=['Translation '+axis+' (model units)' for axis in ('X','Y','Z')] if operation=='translate' else [group+' '+axis for group in ('Plane origin','Plane normal') for axis in ('X','Y','Z')]
         if operation=='repair':labels=['Repair tolerance (model units)']
+        if operation=='export':labels=[]
         for index,label in enumerate(labels):
             field=QtWidgets.QLineEdit('0.000001' if operation=='repair' else '1' if operation=='split' and index==5 else '0')
             field.setObjectName('cadParameter'+str(index))
@@ -70,7 +77,16 @@ class CadOperations(QtCore.QObject):
         def submit():
             try:
                 from cad_edit import vector
-                if operation=='translate':
+                if operation=='export':
+                    name,_=QtWidgets.QFileDialog.getSaveFileName(dialog,'Export selected CAD part',
+                        str(w.cad_document.source.with_suffix('.step')),'STEP (*.step *.stp)',
+                        options=QtWidgets.QFileDialog.Option.DontConfirmOverwrite)
+                    if not name:return
+                    from pathlib import Path
+                    values=Path(name)
+                    if not values.suffix:values=values.with_suffix('.step')
+                    if values.exists() or values.is_symlink():raise FileExistsError('Choose a new STEP filename.')
+                elif operation=='translate':
                     values=vector([f.text() for f in fields],'Translation')
                     if not any(values):raise ValueError('Provide a nonzero translation.')
                 elif operation=='split':
@@ -88,9 +104,9 @@ class CadOperations(QtCore.QObject):
 
     def start(self,part_id,operation,values):
         w=self.window
-        if w.busy or w.cad_document is None or w.pmx_session is not None:
+        if w.busy or w.cad_document is None or (w.pmx_session is not None and operation!='export'):
             raise ValueError('Open native CAD and finish active operations before editing geometry.')
-        if w.model_scene is not None and not w.confirm_discard():return False
+        if operation!='export' and w.model_scene is not None and not w.confirm_discard():return False
         from viewport import decode
         self.result=None
         self.job=CadEditJob(w.cad_document,decode,part_id,operation,values,self)
@@ -104,13 +120,19 @@ class CadOperations(QtCore.QObject):
         if result['success']:
             try:
                 if job.document is not w.cad_document:raise ValueError('CAD document changed before publication.')
-                document=result['document']
-                w.set_cad_document(document.scene,document.source,document=document)
-                w.editor_dirty=True
+                job.document.verify()
+                if job.operation=='export':
+                    result={'success':True,'receipt':result['export'].publish(job.values)}
+                    job.output.close()
+                else:
+                    document=result['document']
+                    document.verify()
+                    w.set_cad_document(document.scene,document.source,document=document)
+                    w.editor_dirty=True
             except Exception as error:result={'success':False,'error':str(error)}
         if not result['success'] and job.output is not None:job.output.close()
         self.result=result;w.job_state(w.job.state)
-        w.job_label.setText('CAD edit complete' if result['success'] else 'CAD edit cancelled' if result.get('cancelled') else 'CAD edit failed')
+        w.job_label.setText(('STEP export complete' if job.operation=='export' else 'CAD edit complete') if result['success'] else 'CAD operation cancelled' if result.get('cancelled') else 'CAD operation failed')
         if result.get('error'):
             w.job_output.setPlainText(result['error'])
             if not w.closing_after_job and not getattr(w,'automated_workflow',False):

@@ -9,12 +9,12 @@ import sys
 
 from cad_import import NativeCadTool,file_sha256,run_process
 from cad_document import CadDocument
-from cad_edit import apply_edit
+from cad_edit import apply_edit,prepare_export
 
 ROOT=Path(__file__).resolve().parents[2]
 
 
-def verify(runtime,inspector,output,operations=('translate','split','repair')):
+def verify(runtime,inspector,output,operations=('translate','split','repair','export')):
     output.mkdir(parents=True,exist_ok=False)
     checks=[]
     def check(name,passed):
@@ -83,6 +83,26 @@ def verify(runtime,inspector,output,operations=('translate','split','repair')):
                 try:apply_edit(document,decode,1,'repair',value)
                 except ValueError:check('invalid repair tolerance refused '+str(value),True)
                 else:raise ValueError('Invalid tolerance accepted')
+        if 'export' in operations:
+            export=prepare_export(document,decode,1)
+            target=output/'export.step'
+            try:
+                target.write_bytes(b'preserve existing destination')
+                try:export.publish(target)
+                except FileExistsError:check('existing STEP bytes preserved',target.read_bytes()==b'preserve existing destination')
+                else:raise ValueError('STEP destination overwritten')
+                target=output/'verified.step'
+                receipt=export.publish(target)
+                check('STEP published only after native readback',receipt['nativeReadbackPassed'] and file_sha256(target)==receipt['outputSha256'])
+                report['operations']['export']=receipt
+            finally:export.close()
+            reopened=CadDocument(target,document.tool,decode)
+            try:
+                values=solids(reopened)
+                check('STEP roundtrip retains one selected solid',len(values)==1)
+                check('STEP roundtrip volume is analytical',math.isclose(values[0]['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9))
+                check('STEP roundtrip center is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],[5,5,10])))
+            finally:reopened.close()
         for part,values in [(0,[1,0,0]),(1,[0,0,0]),(1,[float('nan'),0,0]),(1,[1,2])]:
             try:apply_edit(document,decode,part,'translate',values)
             except (ValueError,TypeError):check('invalid translation refused '+str((part,values)),True)
@@ -99,6 +119,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair')):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','split','repair'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair'])
+    parser.add_argument('--operation',action='append',choices=['translate','split','repair','export'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair','export'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

@@ -77,5 +77,26 @@ class CadEditLifecycle(unittest.TestCase):
         self.assertIsNone(w.operations.job)
         w.editor_dirty=False;w.close()
 
+    def test_export_success_preserves_document_mesh_definition_and_unsaved_state(self):
+        w=self.window();doc,mesh,scene=w.cad_document,w.cad_mesh,w.scene
+        w.pmx_session=Mock()  # Geometry exchange may read an immutable PMX preview.
+        export=Mock();export.publish.return_value={'nativeReadbackPassed':True}
+        with patch('cad_operations.prepare_export',return_value=export):
+            w.operations.start(1,'export','unused.step');self.wait(lambda:w.operations.job is None)
+        self.assertTrue(w.operations.result['success']);export.publish.assert_called_once_with('unused.step')
+        export.close.assert_called_once();self.assertIs(w.cad_document,doc);self.assertIs(w.cad_mesh,mesh)
+        self.assertIs(w.scene,scene);self.assertTrue(w.analysis_valid);self.assertTrue(w.editor_dirty)
+        w.editor_dirty=False;w.close()
+
+    def test_late_export_cancel_publishes_nothing(self):
+        w=self.window();doc,mesh=w.cad_document,w.cad_mesh;export=Mock()
+        with patch('cad_operations.prepare_export',return_value=export):
+            w.operations.start(1,'export','unused.step')
+            self.assertTrue(w.operations.job.wait(5000));w.cancel_operation()
+            self.wait(lambda:w.operations.job is None)
+        self.assertTrue(w.operations.result['cancelled']);export.publish.assert_not_called()
+        export.close.assert_called_once();self.assertIs(w.cad_document,doc);self.assertIs(w.cad_mesh,mesh)
+        w.editor_dirty=False;w.close()
+
 
 if __name__=='__main__':unittest.main()

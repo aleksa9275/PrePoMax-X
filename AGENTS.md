@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0074–0077 add native desktop CAD translation, plane split, controlled
+ShapeFix repair and selected-part STEP export. Read
+.project/reports/desktop-cad-editing.md for actual native/reference checks,
+current candidate and publication. Successful edits invalidate dependent mesh/
+analysis; failures/cancellation preserve it. Jobs freeze edit inputs/recipes.
+PMX geometry mutation remains refused; STEP exchange is not native-session PMX
+persistence. General defective repair, general PMX, correctness/tetrahedron,
+parity and all release gates remain open. Preserve D058/D059.
+
 Tasks 0071–0073 broaden checked original CAD/C3D4 PMX persistence with Poisson's
 ratio/density, signed vector forces and compatible existing section/support/load
 region reassignment. Read .project/reports/pmx-material-properties.md,

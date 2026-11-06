@@ -37,6 +37,23 @@ Native Linux ARM64, the next three operations and combined copied-app evidence
 follow at task 0077 closeout. Detailed local evidence starts at
 `/tmp/prepomaxx-task0074-evidence`.
 
+Task 0077 adds selected-part STEP export. Native conversion and reimport run in
+the worker; the GUI publishes checked bytes atomically to a new file. A sibling
+staging directory keeps that final link on the destination filesystem, fixing
+the first Linux bind-mount EXDEV failure without allowing overwrite. Export
+preserves the active geometry, mesh, analysis and unsaved state, including when
+reading geometry from a checked PMX preview. It is geometry exchange, not PMX
+session persistence.
+
+The Mac and offline Linux ARM64 transaction suites each pass 33 checks against
+analytical measurements and the retained original Windows command hashes. No
+new Windows GUI run is claimed. Desktop regressions pass 44 tests and build
+guards pass nine. The source desktop completes all four real dialogs, remeshes
+three edited bodies (208 nodes/885 C3D4 elements), freezes all edit inputs/recipes,
+solves with native CalculiX and reopens the selected-part STEP. Every node passes
+the existing affine-displacement/unit-stress checks, with no tolerance changes.
+Final copied-app/visible-contour verification follows in the closing receipt.
+
 New native-session PMX persistence, broad defective-geometry repair, additional
 CAD operations, both correctness failures, quadratic tetrahedra and all parity/
 four-target/installer/signing/notarization/release gates remain. Preserve D058's
