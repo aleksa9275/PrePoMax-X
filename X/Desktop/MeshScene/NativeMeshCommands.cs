@@ -20,7 +20,8 @@ internal static class NativeMeshCommands
         try
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            if (args[0] == "netgen-parameters")
+            bool quadratic = args[0] is "netgen-quadratic-parameters" or "from-vol-quadratic-preview";
+            if (args[0] is "netgen-parameters" or "netgen-quadratic-parameters")
             {
                 if (args.Length != 3 || !double.TryParse(args[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double size) ||
                     !double.IsFinite(size) || size <= 0)
@@ -30,8 +31,8 @@ internal static class NativeMeshCommands
                 byte[] bytes;
                 try
                 {
-                    var parameters = new MeshingParameters("Native-linear-solid") {
-                        MaxH = size, MinH = 0, SecondOrder = false, MidsideNodesOnGeometry = false,
+                    var parameters = new MeshingParameters(quadratic ? "Native-quadratic-preview" : "Native-linear-solid") {
+                        MaxH = size, MinH = 0, SecondOrder = quadratic, MidsideNodesOnGeometry = quadratic,
                         QuadDominated = false, RelativeSize = false
                     };
                     string file = Path.Combine(temporary, "parameters");
@@ -41,7 +42,7 @@ internal static class NativeMeshCommands
                 finally { Directory.Delete(temporary, true); }
                 WriteNew(args[2], bytes);
                 Console.WriteLine(JsonSerializer.Serialize(new { success = true, sha256 = Hash(bytes), maximumSize = size,
-                    elementOrder = 1, parallelMeshingThreads = 1, owner = "Original CaeMesh.MeshingParameters.WriteToFile" }));
+                    elementOrder = quadratic ? 2 : 1, analysisEligible = !quadratic, parallelMeshingThreads = 1, owner = "Original CaeMesh.MeshingParameters.WriteToFile" }));
                 return 0;
             }
             if (args.Length < 3 || args.Length > 34)
@@ -58,7 +59,8 @@ internal static class NativeMeshCommands
                 if (info.Length <= 0 || info.Length > 16 * 1024 * 1024)
                     throw new InvalidDataException("VOL part exceeds its 16 MiB limit.");
                 byte[] bytes = File.ReadAllBytes(args[index]);
-                var original = NetgenVolFileReader.ReadLinearSolidData(new UTF8Encoding(false, true).GetString(bytes));
+                string text = new UTF8Encoding(false, true).GetString(bytes);
+                var original = quadratic ? NetgenVolFileReader.ReadQuadraticPreviewData(text) : NetgenVolFileReader.ReadLinearSolidData(text);
                 if (mesh.Nodes.Count + original.Nodes.Count > 100000 || mesh.Elements.Count + original.Elements.Count > 100000)
                     throw new InvalidDataException("Combined solid mesh exceeds 100000 nodes/elements.");
                 var domains = original.Elements.Values.Select(e => e.PartId).Distinct().Order()
@@ -67,13 +69,14 @@ internal static class NativeMeshCommands
                     mesh.Nodes.Add(node.Id + nodeOffset, new FeNode(node.Id + nodeOffset, node.X, node.Y, node.Z));
                 foreach (var element in original.Elements.Values)
                     mesh.Elements.Add(element.Id + elementOffset,
-                        new LinearTetraElement(element.Id + elementOffset, domains[element.PartId],
-                            element.NodeIds.Select(id => id + nodeOffset).ToArray()));
+                        (quadratic ? (FeElement)new ParabolicTetraElement(element.Id + elementOffset, domains[element.PartId],
+                            element.NodeIds.Select(id => id + nodeOffset).ToArray()) : new LinearTetraElement(element.Id + elementOffset, domains[element.PartId],
+                            element.NodeIds.Select(id => id + nodeOffset).ToArray())));
                 foreach (var domain in domains)
                 {
                     int[] ids = original.Elements.Values.Where(e => e.PartId == domain.Key).Select(e => e.Id + elementOffset).ToArray();
                     string name = $"PART_{partId}_SOLID_{domain.Key}";
-                    mesh.ElementBlocks.Add(new InpElementSet(name, new() { "C3D4" }, new(ids)));
+                    mesh.ElementBlocks.Add(new InpElementSet(name, new() { quadratic ? "C3D10" : "C3D4" }, new(ids)));
                     mesh.ElementSets.Add(name, ids);
                 }
                 foreach (var face in original.FaceNodeIds)
@@ -87,14 +90,16 @@ internal static class NativeMeshCommands
                 elementOffset = mesh.Elements.Keys.Max();
             }
             mesh.NodeSets.Add("ALL_NODES", mesh.Nodes.Keys.Order().ToArray());
-            var transport = NetgenVolFileReader.CreateLinearSolidMesh(mesh.Nodes, mesh.Elements, mesh.ElementBlocks,
-                mesh.NodeSets, mesh.ElementSets);
+            var transport = quadratic ? NetgenVolFileReader.CreateQuadraticPreviewMesh(mesh.Nodes, mesh.Elements, mesh.ElementBlocks, mesh.NodeSets, mesh.ElementSets) :
+                NetgenVolFileReader.CreateLinearSolidMesh(mesh.Nodes, mesh.Elements, mesh.ElementBlocks, mesh.NodeSets, mesh.ElementSets);
             byte[] exported = Encoding.UTF8.GetBytes(MeshDeckWriter.WriteMesh(transport));
             if (exported.Length > InpFileReader.MeshDataMaximumCharacters)
                 throw new InvalidDataException("Exported mesh exceeds its 16 MiB limit.");
             var checkedMesh = InpFileReader.ReadMeshData(Encoding.UTF8.GetString(exported).Split('\n'));
             if (checkedMesh.Nodes.Count != mesh.Nodes.Count || checkedMesh.Elements.Count != mesh.Elements.Count ||
-                checkedMesh.Warnings.Length != 0 || checkedMesh.OmittedKeywords.Length != 0)
+                checkedMesh.Warnings.Length != 0 || checkedMesh.OmittedKeywords.Length != 0 ||
+                mesh.Elements.Any(e => !checkedMesh.Elements.TryGetValue(e.Key, out var other) ||
+                    other.GetVtkCellType()!=e.Value.GetVtkCellType() || !other.NodeIds.SequenceEqual(e.Value.NodeIds)))
                 throw new InvalidDataException("Original INP reader did not retain the generated solid mesh.");
             WriteNew(args[1], exported);
             Console.WriteLine(JsonSerializer.Serialize(new { success = true, SourceSha256 = Hash(exported), meshOnly = true,
@@ -102,7 +107,8 @@ internal static class NativeMeshCommands
                 elements = mesh.Elements.Values.Select(e => new { id = e.Id, vtkCellType = e.GetVtkCellType(), nodeIds = e.NodeIds }),
                 nodeSets = mesh.NodeSets.Select(e => new { name = e.Key, count = e.Value.Length }),
                 elementSets = mesh.ElementSets.Select(e => new { name = e.Key, count = e.Value.Length }),
-                cadMesh = new { schemaVersion = 1, elementType = "C3D4", parts, engineeringOwner = "Original VOL parser, element permutation and CalElement writer" }
+                cadMesh = new { schemaVersion = 1, elementType = quadratic ? "C3D10" : "C3D4", elementOrder = quadratic ? 2 : 1, analysisEligible = !quadratic,
+                    geometryValidation = quadratic ? "Complete midside topology and positive corner orientation; curved Jacobians unverified" : "Positive original signed volumes", parts, engineeringOwner = "Original VOL parser, element permutation and CalElement writer" }
             }));
             return 0;
         }
