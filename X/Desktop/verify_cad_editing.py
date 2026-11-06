@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Real original native CAD edits; analytical and retained Windows comparisons."""
+import argparse
+import json
+import math
+from pathlib import Path
+import shutil
+import sys
+
+from cad_import import NativeCadTool,file_sha256,run_process
+from cad_document import CadDocument
+from cad_edit import apply_edit
+
+ROOT=Path(__file__).resolve().parents[2]
+
+
+def verify(runtime,inspector,output,operations=('translate',)):
+    output.mkdir(parents=True,exist_ok=False)
+    checks=[]
+    def check(name,passed):
+        checks.append({'name':name,'passed':bool(passed)})
+        if not passed:raise ValueError(name)
+    def decode(path,*,cancel=None):
+        command=['dotnet',str(inspector)] if inspector.suffix=='.dll' else [str(inspector)]
+        result=run_process([*command,'scene',str(path)],cancel=cancel)
+        if result.returncode:raise ValueError(result.stderr.decode(errors='replace'))
+        return json.loads(result.stdout)
+    def solids(document):
+        return [decode(v)['cad']['entities']['solid'][0]['properties'] for b,v in document.parts]
+    fixture=ROOT/'APIs/Python/Test_Scripts/Models/sweep_two_apart.brep'
+    before=file_sha256(fixture)
+    reference=json.loads((ROOT/'.project/reports/native-cad-operations/windows-reference.json').read_text())
+    pins={r['operation']:r for r in reference['operations']}
+    document=CadDocument(fixture,NativeCadTool(runtime),decode)
+    report={'success':False,'checks':checks,'operations':{}}
+    try:
+        baseline=solids(document)
+        if 'translate' in operations:
+            edited=apply_edit(document,decode,1,'translate',[7,-3,5])
+            try:
+                values=solids(edited)
+                check('translation preserves two owned CAD parts',len(edited.parts)==2)
+                check('translation matches original Windows BREP bytes',edited.edits[-1]['outputBrepSha256']==pins['translate']['brepSha256'])
+                check('translated center is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],[12,2,15])))
+                check('translation retains volume',math.isclose(values[0]['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9))
+                check('unselected BREP and VIS bytes unchanged',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
+                check('unselected measured geometry unchanged',values[1]==baseline[1])
+                check('edit provenance retains original part origins',edited.edits[-1]['partOrigins']==[1,2])
+                shutil.copytree(edited.root,output/'translate')
+                report['operations']['translate']=edited.edits[-1]
+            finally:edited.close()
+        for part,values in [(0,[1,0,0]),(1,[0,0,0]),(1,[float('nan'),0,0]),(1,[1,2])]:
+            try:apply_edit(document,decode,part,'translate',values)
+            except (ValueError,TypeError):check('invalid translation refused '+str((part,values)),True)
+            else:raise ValueError('Invalid translation accepted')
+        document.verify()
+        check('original fixture unchanged',file_sha256(fixture)==before)
+        report['success']=True
+    except Exception as error:report['error']=str(error)
+    finally:document.close()
+    (output/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
+    return report
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
+    parser.add_argument('--operation',action='append',choices=['translate'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate'])
+    print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

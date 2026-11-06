@@ -1,5 +1,15 @@
 # Project status
 
+## Current — tasks 0074–0077: native desktop CAD operations
+
+Task 0074 adds owned selected-part translation through the original native
+command. Its BREP matches the retained original Windows reference, unaffected
+parts stay byte-identical, and background cancellation/publication/lifecycle
+checks protect the previous document and mesh. Plane split, controlled repair
+and selected-part STEP export follow. [Evidence](reports/desktop-cad-editing.md).
+Combined Linux ARM64 and one copied Mac package follow at task 0077 closeout.
+D057/D058/D059 and all correctness/parity/release gates remain.
+
 ## Current — tasks 0071–0073: broader persistent PMX editing
 
 Tasks 0071/0072 add Poisson's ratio/density and signed three-axis force persistence.

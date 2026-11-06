@@ -14,6 +14,9 @@ class CadDocument:
         self.root = Path(self.storage.name)
         self.source = Path(source).resolve()
         self.tool = tool
+        self.edits = []
+        self.edits_snapshot = '[]'
+        self.edit_files = []
         try:
             self.parts = tool.convert_parts(self.source, self.root / "import", cancel=cancel)
             self.snapshot = self.root / "import" / ("source" + self.source.suffix.lower())
@@ -26,6 +29,8 @@ class CadDocument:
             raise
 
     def verify(self):
+        if json.dumps(self.edits,sort_keys=True,allow_nan=False)!=self.edits_snapshot:
+            raise ValueError('Native CAD edit history changed after validation.')
         self.tool.verify_runtime()
         if file_sha256(self.tool.receipt) != self.tool_receipt:
             raise ValueError("Native CAD tool identity changed since import.")
@@ -91,6 +96,8 @@ class CadMesh:
                    "authoredRegions": self.authored_regions,
                    "baseMeshSha256": self.identities[self.mesh], "mapping": self.scene["cadMesh"], "files": inputs,
                    "scope": "Frozen native CAD/meshing job provenance; not project persistence"}
+        if self.document.edits:
+            receipt['geometryEdits'] = self.document.edits
         tool_bytes = self.document.tool.receipt.read_bytes()
         if hashlib.sha256(tool_bytes).hexdigest() != self.document.tool_receipt:
             raise ValueError("CAD tool receipt changed while freezing the job.")

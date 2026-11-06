@@ -242,11 +242,13 @@ class Viewport(QtWidgets.QMainWindow):
         model_dock.setWidget(self.model_tree)
         self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, model_dock)
         self.regions = CadRegions(self, toolbar, jobbar)
+        from cad_operations import CadOperations
+        self.operations = CadOperations(self, toolbar)
         self.update_model_tree()
 
     @property
     def busy(self):
-        return self.job.active or self.job.state in ('Starting', 'Running', 'Cancelling') or self.cad_job is not None or self.mesh_job is not None
+        return self.job.active or self.job.state in ('Starting', 'Running', 'Cancelling') or self.cad_job is not None or self.mesh_job is not None or (getattr(self,'operations',None) is not None and self.operations.job is not None)
 
     def update_model_tree(self):
         self.regions.begin_tree()
@@ -475,7 +477,9 @@ class Viewport(QtWidgets.QMainWindow):
         meshing = self.mesh_job is not None
         if meshing:
             state = "Cancelling mesh" if self.mesh_job.cancel_requested.is_set() else "Meshing CAD"
-        active = importing or meshing or state in ('Starting', 'Running', 'Cancelling')
+        editing = getattr(self,'operations',None) is not None and self.operations.job is not None
+        if editing:state='Cancelling CAD edit' if self.operations.job.cancel_requested.is_set() else 'Editing CAD'
+        active = importing or meshing or editing or state in ('Starting', 'Running', 'Cancelling')
         self.mesh_action.setEnabled(not active and self.cad_document is not None and self.pmx_session is None)
         cad = self.scene is not None and "cad" in self.scene and self.model_scene is None
         self.run_action.setEnabled(not active and not cad)
@@ -485,9 +489,10 @@ class Viewport(QtWidgets.QMainWindow):
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
         self.example_action.setEnabled(not active)
-        self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD', 'Cancelling mesh'))
+        self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD', 'Cancelling mesh','Cancelling CAD edit'))
         self.job_label.setText(state)
         self.regions.refresh()
+        if getattr(self,'operations',None) is not None:self.operations.refresh()
 
     def refresh_job_output(self):
         if not self.job.directory or not self.job.active:
@@ -651,7 +656,9 @@ class Viewport(QtWidgets.QMainWindow):
         self.cad_job.start()
 
     def cancel_operation(self):
-        if self.cad_job is not None:
+        if self.operations.job is not None:
+            self.operations.job.cancel();self.job_state(self.job.state)
+        elif self.cad_job is not None:
             self.cad_job.cancel()
             self.job_state(self.job.state)
         elif self.mesh_job is not None:
@@ -915,7 +922,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.job.cancel()
             event.ignore()
             return
-        if self.cad_job is not None or self.mesh_job is not None:
+        if self.cad_job is not None or self.mesh_job is not None or self.operations.job is not None:
             self.closing_after_job = True
             self.cancel_operation()
             event.ignore()
@@ -928,7 +935,7 @@ class Viewport(QtWidgets.QMainWindow):
         if not self.editor_dirty:
             return True
         return QtWidgets.QMessageBox.question(self, 'Discard unsaved model edits?',
-            'INP session edits are kept in memory. Submitted run inputs remain in Job files. '
+            'Geometry and analysis edits are kept in memory. Submitted run inputs remain in Job files. '
             'Discard the current model edits?', QtWidgets.QMessageBox.StandardButton.Yes |
             QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No) == QtWidgets.QMessageBox.StandardButton.Yes
 
