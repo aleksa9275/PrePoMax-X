@@ -104,7 +104,9 @@ public static class AnalysisFiles
 
     public static string Build(CaeModel.InpMeshData mesh,AnalysisSpec spec)
     {
-        var values=Create(spec);MeshFiles.Measure(mesh);
+        // Deck admission is owned by StaticAnalysisDeckWriter. The optional
+        // PrePoMax measurement command is not the CalculiX element formulation.
+        var values=Create(spec);
         return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step);
     }
     public static void WriteNew(string path,string text)

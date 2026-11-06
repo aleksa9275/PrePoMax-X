@@ -1,11 +1,23 @@
 # PrePoMax-X portable static analysis increment
 
-Task 0084 adds a separate quadratic tetrahedron **preview** transport using the
-original VOL permutations and C3D10 mesh writer. It checks complete midside/face
-incidence and positive corner orientation without calling quadratic numerical
-measurement/integration. Static analysis still admits C3D8/C3D4 only; C3D10 remains
-refused. The original affine-integration failure and curved-quality gate stay
-open. [Current evidence](../../.project/reports/quadratic-cad-preview.md).
+Tasks 0087/0088 support C3D10 **native linear-static calculation**, alongside
+C3D8/C3D4, with original deck keywords and original ten-node FRD decoding.
+CalculiX owns its quadratic formulation and integration-point Jacobian checks;
+no original solver or PrePoMax numerical algorithm is changed. The static writer
+checks positive tetrahedron corner orientation without calling the failing
+quadratic measurement path. The separate PrePoMax measurement gate and pyramid
+classifier failure remain visible; neither is an accepted final functionality
+exclusion. All mesh/calculation families are required under D060.
+[Current evidence](../../.project/reports/quadratic-native-static.md).
+
+Solver node records use the shared original CalNode E8 formatter, avoiding
+CalculiX numeric-field overflow (B005). Mesh-only exchange remains G17.
+`StaticDeck/c3d10-force.inp` and `c3d10-force.json` are a force-driven analytical
+unit tetrahedron with four free displacement unknowns. Use them with the same
+`build-static`/`run-static` commands as the cube. Curved CAD fixture generation,
+real solves and original-result checks are in
+`X/Desktop/verify_quadratic_analysis.py`; this is test preparation, not a second
+product engineering implementation. Original/source/PMX/release gates remain.
 
 This source-linked superset builds original CaeGlobals/CaeMesh/CaeResults/
 CaeModel types in their original assemblies. There is one engineering source

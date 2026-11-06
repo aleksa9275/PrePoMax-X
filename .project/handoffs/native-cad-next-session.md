@@ -1,33 +1,26 @@
 # Native CAD continuation — 6 November 2026
 
-Tasks 0084–0086 add **Quadratic C3D10 — preview/export only** to Mesh CAD… .
-Read [the current report](../reports/quadratic-cad-preview.md) and its receipt.
-The original VOL permutations retain all ten nodes; preview checks shared midside
-identity, six-node boundary incidence and positive corner orientation, without
-calling quadratic measures/integration. Midside CAD regions, view switching and
-new-file mesh-only INP export/reopen work. Configure/Run and direct desktop job
-calls are gated; the original static validator independently refuses C3D10.
+Maintainer D060: **IDENTICAL PrePoMax 3.0.0 functionality, all mesh types and
+all calculations, except unavailable solvers**. Do not infer a reduced target
+from static-solid/preview increments. Every other original mesh formulation,
+calculation, material/load, model/results, persistence and desktop workflow
+remains mandatory. Read [required breadth](../PARITY.md).
 
-Original affine integration still gives 26.794910717854155 versus 28; pyramid
-classification remains false. Preserve D029 and both failures. Curved Jacobians/
-quality, quadratic numerical solves and broader quadratic formulations are not
-accepted. A separately reviewed correctness/solver boundary is the next quadratic
-priority; do not remove gates or change algorithms/tolerances silently.
+Tasks 0087/0088 implement C3D10 native static calculation and desktop
+configure/solve/FRD results. Read [the current report](../reports/quadratic-native-static.md)
+and receipt for source, checks, candidate and publication. The original
+PrePoMax measurement failure does not govern CalculiX's independent formulation.
+Keep that original failure/measurement gate and the pyramid classifier failure;
+no original algorithm or prior test tolerance changed. Native CalculiX rejects
+an inverted curved element despite positive corners. General curved quality,
+other formulations/analysis families, exact equality, native-session PMX and
+all D057/D058/D059/four-target/release gates remain open.
 
-Current app: `/tmp/prepomaxx-task0086-delivery/PrePoMax-X Preview.app`, packaged
-source `ec57aa53` pushed/remote-verified with CI skipped and empty source patch.
-Its sibling native CAD launcher enables the retained runtime, and older launchers
-forward to it. Mac/Linux and both copied viewports pass 27 quadratic checks (curved
-fixture 2548 nodes/1154 C3D10). Native two-body/curved fixtures each pass 11; desktop
-tests 52 per host; all four current Mac engineering suites and Linux current
-analysis pass. Mac ownership/build guards pass 12/9. Both copied linear viewports
-and Linux pass 91 analytical workflow checks; CAD PMX/C3D8 regressions pass 28/17.
-Strict quadratic coordinates/connectivity differ across hosts; preserve the
-negative exact-parity receipt and prior native differences. No Windows quadratic
-execution is claimed. Fourteen duplicate payload/cache/app directories are pruned;
-all projects/previews/jobs/evidence/source/manifest records and shared tools remain.
-Earlier app paths below are historical. Native-session PMX and every
-D057/D058/D059/parity/installers/notarization/release requirement remain open.
+The older preview/analysis-refusal description is superseded by tasks 0087/0088.
+Native Mac/Linux ARM64 analytical checks and original Windows CalculiX reference
+comparisons pass within the recorded bounds, not exact field equality. Windows
+reference uses CrossOver, not native Windows acceptance. Full source, frozen
+jobs, failure diagnostics and numerical differences are retained in the report.
 
 Tasks 0081–0083 add original native mirror, scaling and transform copies.
 Read [the current report](../reports/cad-mirror-scale-copies.md) and its receipt.

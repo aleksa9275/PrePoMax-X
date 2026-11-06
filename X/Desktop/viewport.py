@@ -117,7 +117,7 @@ def decode(path, *, cancel=None):
         command = ([str(Path(sys._MEIPASS) / "hosts/results/PrePoMaxX.InspectResults")] if packaged else
             ["dotnet", str(ROOT / "X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll")]) + ["inspect-frd", str(path)]
     else:
-        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8/C3D4 FRD snapshot.")
+        raise ValueError("Choose an INP mesh, a VIS geometry export, or a completed static C3D8/C3D4/C3D10 FRD snapshot.")
     return run_reader(command, cancel=cancel)
 
 
@@ -269,7 +269,7 @@ class Viewport(QtWidgets.QMainWindow):
         if self.model_scene is None:
             QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP or VIS file', 'or Solve example'])
             return
-        units = 'Model units · C3D10 preview' if self.quadratic_preview else self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
+        units = self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, units or 'Choose units'])
         root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
         QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
@@ -277,10 +277,8 @@ class Viewport(QtWidgets.QMainWindow):
             group = QtWidgets.QTreeWidgetItem(root, [label])
             for item in self.model_scene.get(key, []):
                 QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
-        if self.quadratic_preview:
-            QtWidgets.QTreeWidgetItem(root,['C3D10 preview','Measurement/analysis gated'])
-            if self.cad_document is not None:self.populate_cad_tree(self.cad_document.scene['cad'])
-            self.model_tree.expandToDepth(1);return
+        if self.quadratic_mesh:
+            QtWidgets.QTreeWidgetItem(root,['C3D10','Quadratic static solid'])
         for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
                 (2, 'Solid sections', self.definition['sections'], 'elementSet'),
                 (3, 'Supports', self.definition['step']['constraints'], 'nodeSet'),
@@ -419,15 +417,8 @@ class Viewport(QtWidgets.QMainWindow):
         return scene
 
     @property
-    def quadratic_preview(self):
+    def quadratic_mesh(self):
         return self.model_scene is not None and any(e.get('vtkCellType')==24 or e.get('type')=='ParabolicTetraElement' for e in self.model_scene['elements'])
-
-    def require_analysis(self):
-        if not self.quadratic_preview:return True
-        message='C3D10 mesh preview/export is available. Quadratic tetrahedron analysis is gated by the unresolved original integration discrepancy.'
-        if getattr(self,'automated_workflow',False):raise ValueError(message)
-        QtWidgets.QMessageBox.information(self,'Quadratic analysis unavailable',message)
-        return False
 
     def export_mesh_dialog(self):
         if self.busy or self.model_scene is None:return
@@ -444,7 +435,6 @@ class Viewport(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(self,'Cannot export mesh',str(error))
 
     def configure_model(self, tab=0):
-        if not self.require_analysis():return
         if self.busy:
             return
         if self.pmx_session is not None:
@@ -461,7 +451,6 @@ class Viewport(QtWidgets.QMainWindow):
             self.update_model_tree()
 
     def run_model(self):
-        if not self.require_analysis():return
         if self.busy:
             return
         if not self.analysis_valid:
@@ -488,7 +477,6 @@ class Viewport(QtWidgets.QMainWindow):
         if self.busy:
             raise ValueError("Finish the active operation before starting an analysis.")
         try:
-            if not self.require_analysis():return
             if definition is None:
                 self.load(mesh)
             else:
@@ -516,11 +504,11 @@ class Viewport(QtWidgets.QMainWindow):
         active = importing or meshing or editing or state in ('Starting', 'Running', 'Cancelling')
         self.mesh_action.setEnabled(not active and self.cad_document is not None and self.pmx_session is None)
         cad = self.scene is not None and "cad" in self.scene and self.model_scene is None
-        self.run_action.setEnabled(not active and not cad and not self.quadratic_preview)
-        self.configure_action.setEnabled(not active and not cad and not self.quadratic_preview and self.pmx_session is None)
+        self.run_action.setEnabled(not active and not cad)
+        self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
         self.export_mesh_action.setEnabled(not active and self.model_scene is not None)
-        self.run_action.setToolTip("Quadratic analysis is gated by the original integration discrepancy" if self.quadratic_preview else "Run the supported static analysis")
+        self.run_action.setToolTip("Run the configured static analysis")
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
@@ -739,9 +727,9 @@ class Viewport(QtWidgets.QMainWindow):
         form=QtWidgets.QFormLayout(dialog)
         size=QtWidgets.QDoubleSpinBox();size.setObjectName('cadMaximumSize');size.setDecimals(6);size.setRange(.000001,1e9)
         size.setValue(max(max(n[axis] for n in self.cad_document.scene['nodes'])-min(n[axis] for n in self.cad_document.scene['nodes']) for axis in ('x','y','z'))/10)
-        order=QtWidgets.QComboBox();order.setObjectName('cadMeshOrder');order.addItem('Linear C3D4',1);order.addItem('Quadratic C3D10 — preview/export only',2)
+        order=QtWidgets.QComboBox();order.setObjectName('cadMeshOrder');order.addItem('Linear C3D4',1);order.addItem('Quadratic C3D10',2)
         form.addRow('Maximum element size (model units)',size);form.addRow('Mesh order',order)
-        note=QtWidgets.QLabel('Quadratic measurement and analysis remain unavailable while the original integration discrepancy is unresolved.');note.setWordWrap(True);form.addRow(note)
+        note=QtWidgets.QLabel('Configure materials, sections, supports and loads before running static analysis.');note.setWordWrap(True);form.addRow(note)
         buttons=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok|QtWidgets.QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);form.addRow(buttons)
         if dialog.exec()==QtWidgets.QDialog.DialogCode.Accepted:self.start_cad_mesh(size.value(),element_order=order.currentData())
@@ -776,7 +764,7 @@ class Viewport(QtWidgets.QMainWindow):
             job.mesh.close()
         self.mesh_result = result
         self.job_state(self.job.state)
-        self.job_label.setText(("Quadratic mesh preview — analysis gated" if self.quadratic_preview else "CAD mesh ready") if result["success"] else
+        self.job_label.setText(("Quadratic CAD mesh ready" if self.quadratic_mesh else "CAD mesh ready") if result["success"] else
                               "Meshing cancelled" if result.get("cancelled") else "Meshing failed")
         if result.get("error"):
             self.job_output.setPlainText(result["error"])
@@ -1082,7 +1070,7 @@ def main():
                         help="Verify CAD PMX native edit/save/reopen/solve")
     parser.add_argument('--cad-edit-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
-    parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic preview, gated analysis and mesh-only export')
+    parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     args = parser.parse_args()
     if args.cad_quadratic_probe and (not args.cad_native or any([args.input,args.self_test,args.editor_probe,args.pmx_probe,args.viewport_probe,args.run_example,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe])):
         parser.error('Use --cad-quadratic-probe with --cad-native separately from other inputs/probes')

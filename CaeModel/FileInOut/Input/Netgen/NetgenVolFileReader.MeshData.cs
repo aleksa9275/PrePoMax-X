@@ -34,9 +34,13 @@ namespace FileInOut.Input
         public static NetgenLinearSolidData ReadLinearSolidData(string text)
         { return ReadSolidData(text, false); }
 
-        // Preview only: never calls the gated quadratic measure/integration code.
-        public static NetgenLinearSolidData ReadQuadraticPreviewData(string text)
+        // Transport never calls the gated quadratic measure/integration code.
+        public static NetgenLinearSolidData ReadQuadraticSolidData(string text)
         { return ReadSolidData(text, true); }
+
+        // Compatibility with the task 0084 preview API.
+        public static NetgenLinearSolidData ReadQuadraticPreviewData(string text)
+        { return ReadQuadraticSolidData(text); }
 
         private static NetgenLinearSolidData ReadSolidData(string text, bool quadratic)
         {
@@ -71,7 +75,7 @@ namespace FileInOut.Input
                     if (kind == "points" && row.Length != 3)
                         throw new InvalidDataException("VOL point needs three coordinates.");
                     if (kind == "volumeelements" && (row.Length != (quadratic ? 12 : 6) || row[1] != (quadratic ? "10" : "4")))
-                        throw new NotSupportedException("Mesh order differs from the requested linear or quadratic-preview profile; quadratic analysis remains gated.");
+                        throw new NotSupportedException("Mesh order differs from the requested linear or quadratic profile.");
                     if ((kind == "surfaceelements" || kind == "surfaceelementsuv") &&
                         (row.Length < (quadratic ? 11 : 8) || row[4] != (quadratic ? "6" : "3")))
                         throw new NotSupportedException("Tetrahedral mesh order must match its CAD triangles.");
@@ -145,12 +149,12 @@ namespace FileInOut.Input
                 FaceNodeIds = surfaces, EdgeNodeIds = edges };
         }
 
-        public static InpMeshData CreateQuadraticPreviewMesh(Dictionary<int, FeNode> nodes,
+        public static InpMeshData CreateQuadraticSolidMesh(Dictionary<int, FeNode> nodes,
             Dictionary<int, FeElement> elements, List<InpElementSet> blocks,
             Dictionary<string, int[]> nodeSets, Dictionary<string, int[]> elementSets)
         {
             if (elements.Count == 0 || elements.Values.Any(e => !(e is ParabolicTetraElement)))
-                throw new NotSupportedException("Quadratic preview requires C3D10 tetrahedra only.");
+                throw new NotSupportedException("Quadratic transport requires C3D10 tetrahedra only.");
             return new InpMeshData { Nodes = nodes, Elements = elements, ElementBlocks = blocks,
                 NodeSets = nodeSets, ElementSets = elementSets, Warnings = new string[0], OmittedKeywords = new string[0] };
         }

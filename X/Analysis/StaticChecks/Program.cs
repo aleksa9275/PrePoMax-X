@@ -99,6 +99,24 @@ Check("unsupported element formulation is rejected",()=>{
 Check("zero original element measure is rejected",()=>{
     var mesh=Mesh();foreach(int id in mesh.Nodes.Keys.ToArray()){var node=mesh.Nodes[id];node.Z=0;mesh.Nodes[id]=node;}Reject(()=>StaticAnalysisDeckWriter.Write(mesh,baseline.Materials,baseline.Sections,baseline.Step));
 });
+InpMeshData QuadraticMesh()=>MeshFiles.Read(Path.Combine(AppContext.BaseDirectory,"c3d10-force.inp"));
+AnalysisSpec QuadraticSpec()=>AnalysisFiles.Read(Path.Combine(AppContext.BaseDirectory,"c3d10-force.json"));
+Check("C3D10 solver deck is independent of gated PrePoMax measurement",()=>{
+    var mesh=QuadraticMesh();Reject(()=>MeshFiles.Measure(mesh));
+    string text=AnalysisFiles.Build(mesh,QuadraticSpec());
+    var reopened=InpFileReader.ReadMeshData(text.Split('\n'));
+    Require(reopened.Elements[17] is ParabolicTetraElement && reopened.Elements[17].NodeIds.SequenceEqual(Enumerable.Range(1,10)));
+});
+Check("C3D10 inverted and degenerate corner orientation refused",()=>{
+    foreach(double z in new[]{-1d,0d}){
+        var mesh=QuadraticMesh();var node=mesh.Nodes[4];node.Z=z;mesh.Nodes[4]=node;Reject(()=>AnalysisFiles.Build(mesh,QuadraticSpec()));
+    }
+});
+Check("solver node format matches original CalNode and transport remains lossless",()=>{
+    var mesh=QuadraticMesh();var node=mesh.Nodes[1];node.Y=6.8000000000000001E-15;mesh.Nodes[1]=node;
+    string exchange=MeshDeckWriter.WriteMesh(mesh),text=AnalysisFiles.Build(mesh,QuadraticSpec());
+    Require(text.Contains("1, 0.00000000E+000, 6.80000000E-015, 0.00000000E+000") && exchange.Contains("6.8000000000000001E-15"));
+});
 Check("missing sections rejected",()=>Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,Array.Empty<SolidSection>(),baseline.Step)));
 Check("overlapping section coverage rejected",()=>Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,new[]{baseline.Sections[0],new SolidSection("Duplicate","ELASTIC","SOLID",RegionTypeEnum.ElementSetName,1,false)},baseline.Step)));
 Check("missing element coverage rejected",()=>{var mesh=Mesh();mesh.ElementSets["EMPTY"]=Array.Empty<int>();var data=AnalysisFiles.Create(Spec());data.Sections[0].RegionName="EMPTY";Reject(()=>StaticAnalysisDeckWriter.Write(mesh,data.Materials,data.Sections,data.Step));});

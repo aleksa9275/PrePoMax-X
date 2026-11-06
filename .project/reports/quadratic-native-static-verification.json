@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "0087",
+    "0088"
+  ],
+  "scope": "Native C3D10 linear-static calculation and desktop configuration/results; full 3.0.0 functionality required under D060",
+  "verification": {
+    "nativeMacCalculations": {
+      "path": "/tmp/prepomaxx-task0087-evidence/native-mac5/verification.json",
+      "sha256": "9b6c4fc7fb78b61b206055dc5bdc008c2189a5e49b57872e5265d5d4366f6d06",
+      "success": true,
+      "checks": 12
+    },
+    "nativeLinuxCalculations": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/calculations/verification.json",
+      "sha256": "cda6adeddc94dd17ad2101b700d259a2f914fda160338ce73014ccb88df7a491",
+      "success": true,
+      "checks": 12
+    },
+    "nativeLinuxMesh": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/native/verification.json",
+      "sha256": "8fb2a3038cd7d33d32492e864110702ead900184d9c0558e68920541d9f1fd2e",
+      "success": true,
+      "checks": 11
+    },
+    "sourceMacDesktop": {
+      "path": "/tmp/prepomaxx-task0088-evidence/source-gui/workflow.json",
+      "sha256": "2e6e02457d9d9293cce718900309607d5dfdbb3b7047cb94cfbcc6cd6370c820",
+      "success": true,
+      "checks": 37
+    },
+    "nativeLinuxDesktop": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/gui-retained/workflow.json",
+      "sha256": "33182c776ab5d91cdf3bf9e8fb82a226f499f544a9bc003932e83d3cf7a4a6b4",
+      "success": true,
+      "checks": 37
+    },
+    "nativeLinuxLinear": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/linear/workflow.json",
+      "sha256": "6e245ebabe4bc1e258d9152a975d6d291de71628a82ed59645e32311c24421a1",
+      "success": true,
+      "checks": 91
+    },
+    "nativeLinuxCadPmx": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/pmx-current/workflow.json",
+      "sha256": "367ba5459acbea629a3b766fdb6ae513c1089e7c4a4546d6723549bdc768c78c",
+      "success": true,
+      "checks": 28
+    },
+    "nativeLinuxC3d8Pmx": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/old-pmx-current/verification.json",
+      "sha256": "9bf189f6ceded55f5c04b2132fb172f35f6ae90c8a1d4c92c218a11d7a9a925a",
+      "success": true,
+      "checks": 17
+    }
+  },
+  "originalWindowsReference": {
+    "success": true,
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "force": {
+        "exitCode": 0,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "3777e0e50a7f2490a1956537c299fe7065399a0e8ece9ed632ed23b152eb32f0",
+        "maximumFieldDifference": {
+          "DISP": 0,
+          "STRESS": 3.244726e-15,
+          "TOSTRAIN": 3.2447259999999998e-18,
+          "FORC": 2.27119e-16
+        },
+        "exactFieldsEqual": false
+      },
+      "curved": {
+        "exitCode": 0,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "a0dba992400e9266a0eaacae632a19fd99ff7a0dba8c0b738f1d9dc0d04cef37",
+        "maximumFieldDifference": {
+          "DISP": 1.9999999999913077e-16,
+          "STRESS": 4.96700923e-09,
+          "TOSTRAIN": 6.41237626e-12,
+          "FORC": 9.99999999985252e-12
+        },
+        "exactFieldsEqual": false
+      },
+      "invalid-jacobian": {
+        "exitCode": 201,
+        "command": [
+          "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+          "--bottle",
+          "PrePoMax-X-reference-2.6",
+          "/Users/aleksa/Library/Application Support/CrossOver/Bottles/PrePoMax-X-reference-2.6/drive_c/PrePoMax-X-reference/App/Solver/ccx_dynamic.exe",
+          "-i",
+          "analysis"
+        ],
+        "inputSha256": "12da56401c454ca3001b8c4456bc671c1c6c35accd80312e4bab30a562942d2d"
+      }
+    }
+  },
+  "nativeMacNumerical": {
+    "force": {
+      "errors": {
+        "displacement": 0.0,
+        "lateral": 0,
+        "axialStress": 9.99999999995449e-06,
+        "otherStress": 2.32571e-15,
+        "forceResultant": {
+          "F1": -3.0814879110195774e-33,
+          "F2": -3.0814879110195774e-33,
+          "F3": 1.87623571e-16
+        }
+      },
+      "meshSha256": "03fe20f57ff1529aca570f53eaba4e6c26d3a6d16f6d8f9b2ca1562eb78bd2f8",
+      "nodes": 10,
+      "elements": 1,
+      "bounds": {
+        "displacement": 2e-08,
+        "lateral": 1e-10,
+        "stress": 1e-05,
+        "forceResultant": 1e-05
+      }
+    },
+    "curvedGeometry": {
+      "boundaryNodes": 1854,
+      "interiorNodes": 694,
+      "curvedEdgeIncidences": 33,
+      "boundaryGroups": 221
+    },
+    "curved": {
+      "errors": {
+        "displacement": 1.2999999999966164e-07,
+        "lateral": 1.41954e-08,
+        "axialStress": 6.099999999997774e-05,
+        "otherStress": 3.82792e-05,
+        "forceResultant": {
+          "F1": -2.951217937770907e-10,
+          "F2": 1.0068844217837431e-10,
+          "F3": -7.094773317667884e-05
+        }
+      },
+      "meshSha256": "a61df526e5822ae56ed8d8f47b4c3a57cb4e4e3b66aeb9205fae6bc72f3f4b8b",
+      "nodes": 2548,
+      "elements": 1154,
+      "bounds": {
+        "displacement": 2e-07,
+        "lateral": 2e-08,
+        "stress": 0.0001,
+        "forceResultant": 0.0001
+      }
+    }
+  },
+  "nativeLinuxNumerical": {
+    "force": {
+      "errors": {
+        "displacement": 0.0,
+        "lateral": 0,
+        "axialStress": 9.99999999995449e-06,
+        "otherStress": 2.32571e-15,
+        "forceResultant": {
+          "F1": -3.0814879110195774e-33,
+          "F2": -3.0814879110195774e-33,
+          "F3": 1.87623571e-16
+        }
+      },
+      "meshSha256": "03fe20f57ff1529aca570f53eaba4e6c26d3a6d16f6d8f9b2ca1562eb78bd2f8",
+      "nodes": 10,
+      "elements": 1,
+      "bounds": {
+        "displacement": 2e-08,
+        "lateral": 1e-10,
+        "stress": 1e-05,
+        "forceResultant": 1e-05
+      }
+    },
+    "curvedGeometry": {
+      "boundaryNodes": 1854,
+      "interiorNodes": 694,
+      "curvedEdgeIncidences": 33,
+      "boundaryGroups": 227
+    },
+    "curved": {
+      "errors": {
+        "displacement": 1.2999999999966164e-07,
+        "lateral": 1.41893e-08,
+        "axialStress": 6.099999999997774e-05,
+        "otherStress": 3.8257e-05,
+        "forceResultant": {
+          "F1": 3.7297533810370015e-11,
+          "F2": 1.5310874368485373e-10,
+          "F3": 4.575267984589157e-05
+        }
+      },
+      "meshSha256": "33bfcf80fa14c49632ebed706bc1e040a6e9ff2a4aa5127b9e8f98c15f1b99e0",
+      "nodes": 2548,
+      "elements": 1154,
+      "bounds": {
+        "displacement": 2e-07,
+        "lateral": 2e-08,
+        "stress": 0.0001,
+        "forceResultant": 0.0001
+      }
+    }
+  },
+  "regressions": {
+    "analysis": {
+      "path": "/tmp/prepomaxx-task0088-checks/analysis-current.json",
+      "sha256": "82ff55c78a79c3a90551add8894bac90900d08a72c2c928accee80c2f2efba2c",
+      "success": true
+    },
+    "results": {
+      "path": "/tmp/prepomaxx-task0088-checks/results-current.json",
+      "sha256": "2b26e833ddab59bf82d8ee7b5a0e283769b4f8cf5dac13614921bb41422658bf",
+      "success": true
+    },
+    "core": {
+      "path": "/tmp/prepomaxx-task0088-other-checks/core-current.json",
+      "sha256": "c026dfc9f42eedeb31f90d8e7eab1a17b727c41262713691e68871f5a0b90005",
+      "success": true
+    },
+    "execution": {
+      "path": "/tmp/prepomaxx-task0088-other-checks/execution-current.json",
+      "sha256": "68e605d599380c36ccd5df62ff07d101d783598ed6526a4b0ac431a712e93140",
+      "success": true
+    },
+    "desktopMac": {
+      "path": "/tmp/prepomaxx-task0088-evidence/desktop-native-tests.log",
+      "sha256": "dbd684f7ae62bdfffb5aeaace1346e4230876712ab1d49b911641491bef625ea",
+      "passed": 52
+    },
+    "desktopLinux": {
+      "path": "/tmp/prepomaxx-task0088-evidence/linux/desktop-tests.log",
+      "sha256": "6d4c07ea53616f0da6261895131de13f2ebab35314bc00b7a3f523eb47f896e6",
+      "passed": 52
+    },
+    "ownership": {
+      "path": "/tmp/prepomaxx-task0088-evidence/analysis-guards.log",
+      "sha256": "17f31a5efa90c348b3f39986ae64b85b58a52d51cdc709976fdb2a2d0cd5ef99",
+      "passed": 12
+    },
+    "build": {
+      "path": "/tmp/prepomaxx-task0088-evidence/build-tests-final.log",
+      "sha256": "7c758af7411e05fc2e6c4fb89045f7a03d9a5957d5305092903a23a66373d034",
+      "passed": 9
+    }
+  },
+  "originalFailures": [
+    {
+      "name": "quadratic tetrahedron affine integral",
+      "passed": false,
+      "expected": 28,
+      "actual": 26.794910717854155,
+      "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+    },
+    {
+      "name": "quadratic pyramid classification",
+      "passed": false,
+      "expected": true,
+      "actual": false,
+      "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+    }
+  ],
+  "candidate": {
+    "status": "packaging pending"
+  },
+  "publication": {
+    "status": "source checkpoint pending",
+    "hostedJobsRequested": 0,
+    "D058": "preserved",
+    "D059": "preserved"
+  },
+  "openGates": [
+    "Original quadratic measurement/integration failure and pyramid classifier failure",
+    "General curved quality certification",
+    "Other original mesh formulations, all calculation families, full model/results/automation workflows",
+    "D057 full original PMX compatibility and new native-session serialization",
+    "Exact native parity and native Windows/Linux x64/net48/four-target checks",
+    "Installers/Homebrew/clean OS/Developer ID/notarization/release acceptance"
+  ],
+  "diagnosticsRetained": [
+    "native-mac initial measurement gate, differing DTO comparison, numeric node field overflow and curved precision diagnostics under /tmp/prepomaxx-task0087-evidence",
+    "Initial new test compile error retained under /tmp/prepomaxx-task0087-final-checks",
+    "Sandboxed Mac offscreen graphics exit 139; native graphics tests pass",
+    "Linux initial stale cached PmxDeck hash comparison; rebuilt affected consumer passes strict 17-check C3D8 regression",
+    "Linux first desktop job used disposable container default; rerun with /out/gui-jobs retains frozen inputs"
+  ]
+}

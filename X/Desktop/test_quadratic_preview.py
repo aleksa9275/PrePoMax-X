@@ -1,4 +1,4 @@
-"""Quadratic mesh inspection/export never authorizes a numerical job."""
+"""C3D10 configuration/job transport and checked lossless mesh export."""
 import hashlib
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -13,20 +13,25 @@ class QuadraticPreview(unittest.TestCase):
     @classmethod
     def setUpClass(cls):cls.app=QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
 
-    def test_quadratic_open_gates_controls_and_direct_job_calls(self):
+    def test_quadratic_open_allows_configuration_and_frozen_job_submission(self):
+        from quadratic_analysis import force_fixture
+        from analysis_editor import validate_definition
         w=Viewport();w.automated_workflow=True;self.addCleanup(w.deleteLater)
         with TemporaryDirectory() as directory:
             path=Path(directory)/'quadratic.inp'
-            path.write_text('*Node\n1,0,0,0\n2,1,0,0\n3,0,1,0\n4,0,0,1\n5,.5,0,0\n6,.5,.5,0\n7,0,.5,0\n8,0,0,.5\n9,.5,0,.5\n10,0,.5,.5\n*Element, Type=C3D10, Elset=SOLID\n1,1,2,3,4,5,6,7,8,9,10\n')
-            w.load(path,as_model=True)
-            self.assertTrue(w.quadratic_preview);self.assertFalse(w.run_action.isEnabled());self.assertFalse(w.configure_action.isEnabled())
+            mesh,spec=force_fixture();path.write_bytes(mesh)
+            w.load(path,as_model=True,definition=spec)
+            self.assertTrue(w.quadratic_mesh);self.assertTrue(w.run_action.isEnabled());self.assertTrue(w.configure_action.isEnabled())
             self.assertTrue(w.export_mesh_action.isEnabled())
+            self.assertTrue(validate_definition(mesh,spec)['success'])
+            w.analysis_valid=True
             with patch.object(w.job,'start') as start:
-                for action in [w.run_model,w.configure_model,lambda:w.start_job(path,None,definition=w.definition,mesh_bytes=w.mesh_bytes)]:
-                    with self.assertRaises(ValueError):action()
-                start.assert_not_called()
+                w.run_model()
+                start.assert_called_once()
+                self.assertEqual(start.call_args.kwargs['mesh_bytes'],mesh)
+                self.assertEqual(start.call_args.kwargs['definition'],spec)
             w.load(ROOT/'X/Desktop/nonsequential-cube.inp',as_model=True)
-            self.assertFalse(w.quadratic_preview);self.assertTrue(w.configure_action.isEnabled())
+            self.assertFalse(w.quadratic_mesh);self.assertTrue(w.configure_action.isEnabled())
         w.editor_dirty=False;w.close()
 
     def test_mesh_export_refuses_changed_bytes_readback_and_existing_destinations(self):

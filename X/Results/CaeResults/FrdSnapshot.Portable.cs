@@ -117,9 +117,9 @@ namespace CaeResults
                             var empty = new HashSet<int>();
                             elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
                             if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 ||
-                                (e.Value.GetType() != typeof(LinearHexaElement) && e.Value.GetType() != typeof(LinearTetraElement)) ||
+                                (e.Value.GetType() != typeof(LinearHexaElement) && e.Value.GetType() != typeof(LinearTetraElement) && e.Value.GetType() != typeof(ParabolicTetraElement)) ||
                                 e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
-                                throw new NotSupportedException("Only complete C3D8/C3D4 result meshes with valid node references are supported; quadratic tetrahedra remain gated.");
+                                throw new NotSupportedException("Only complete C3D8/C3D4/C3D10 result meshes with valid node references are currently supported.");
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {

@@ -5,6 +5,28 @@ target**. Continue tracking future upstream releases and maintaining open-source
 macOS/Linux distributions even if upstream does not accept the contribution.
 Windows x64, Linux x64, Linux ARM64 and Apple Silicon macOS ARM64 remain required.
 
+Maintainer clarification, 6 November 2026 (D060): **IDENTICAL functionality,
+including every original mesh type and calculation; unavailable solvers are the
+sole exception**. Static-solid or preview-only delivery is an intermediate
+checkpoint. Nothing in the coverage table below removes a missing capability
+from the final requirement. A failed PrePoMax measurement check does not prove
+that the separate CalculiX formulation is unavailable.
+
+## Mandatory breadth
+
+| Original area | Required scope, still open beyond the verified increments |
+|---|---|
+| Elements and meshes | All original line/beam/spring/gap, triangle/quadrilateral, tetrahedron/pyramid/wedge/hexahedron families; linear and quadratic forms and every supported formulation alias, including shell, membrane, plane and axisymmetric uses. Original pyramid conversion, element ordering, sets, surfaces, parts and mesh operations must retain their semantics. Sources: `CaeMesh/Elements`, original mesh/input/output owners. |
+| Meshing | Every original mesher, setup item, order, CAD midside behavior, mesh refinement/control, structured/extruded/revolved/transfinite and mesh editing workflow, as present in verified 3.0.0. Current native tetrahedral delivery does not substitute for the others. |
+| Calculations | Original static/nonlinear, frequency/complex-frequency, buckling, dynamic/modal/steady-state dynamics, heat transfer, coupled/uncoupled temperature-displacement, boundary-displacement and slip-wear steps, with their original supported combinations. Sources: `CaeModel/Steps`; exact stable-release correspondence remains required. |
+| Model semantics | All original materials, sections/composites, constraints/interactions/contact, amplitudes, initial/defined fields, coordinate systems, supports, mechanical/thermal loads, controls and outputs. Unsupported portable JSON fields remain missing implementation, not product exclusions. |
+| Application workflows | Full geometry/mesh/model/results operations, original PMX interoperability in both directions, undo/history/replay, imports/exports, selection, deformation/animation, plots/histories, automation and original numerical tools. |
+| Solver exception | Only specifically unavailable solver backends may be excluded. Preserve available original backends and analysis capabilities; record backend provenance and any actual capability gap explicitly. |
+
+This is a required-breadth index, not a claim that a source-file inventory proves
+stable 3.0.0 behavior or exhaustive workflow acceptance. Add reference/native
+fixtures as the shared original owners are connected; do not lower the target.
+
 ## Release identity
 
 | Item | Current state |
@@ -29,15 +51,15 @@ into the shared application; preserve intentional upstream behavior and units.
 
 | Area | Verified bounded coverage | Remaining parity work |
 |---|---|---|
-| Mesh input/decks | Original INP reader, IDs, bounded mesh export and static C3D8/C3D4 deck | Full import/export/model graph and supported element/analysis combinations |
+| Mesh input/decks | Original INP reader, IDs, bounded mesh export and static C3D8/C3D4/C3D10 deck; solver nodes use original CalNode formatting, exchange retains G17 | Full import/export/model graph and supported element/analysis combinations |
 | Materials/analysis editing | Model tree/Qt editor for original static-solid units/materials/sections/supports/nodal loads/step controls; original C# validation and real edited solve, plus session set creation from IDs or a picked ID and CAD face/part region multi-selection | Arbitrary mesh multi-pick, set replacement/deletion, broader assignments/materials/loads/steps and full original model operations |
 | Native solve | Mac ARM64/Linux x64 analytical static cube; desktop start/cancel/status | Analysis/backend breadth, capacity/performance and native other-target acceptance |
 | Visualization | INP/C3D8/C3D4 FRD, contours, original IDs/values; opt-in direct Mac child-view proof | Full vtkControl pipeline, clipping/highlighting, deformation, input/DPI/performance and other native desktops |
 | Results/history | Original bounded FRD fields/invariants and static-shaped DAT histories | Full original results orchestration, shell/dynamic outputs and interactive histories |
 | Persistence | Mac/Linux ARM64 checked C3D8 and one-part CAD/C3D4 PMX open/edit/save/reopen/solve, with original-app readback and immutable PMX jobs. Tasks 0071–0073 add Poisson's ratio/density, signed vector forces and compatible existing named-region reassignment, with exact original-export/native decoded fields | New native-session serialization and the full project/results/history corpus under D057 |
-| CAD/meshing | Original custom Netgen/OCCT import, linear meshing, CAD regions and static results on Mac/Linux ARM64. Tasks 0074–0077 add selected-part translation, plane split, controlled ShapeFix repair and STEP export/reopen, with three-body edited remesh/analytical solve and frozen recipes. Tasks 0078–0080 add bounded owned CAD undo/redo, axis-angle rotation and all-body STEP export with native solid correspondence. Tasks 0081–0083 add mirror, positive uniform/non-uniform scale and translated/rotated copies with six-solid analytical workflow and frozen outputs. Tasks 0084–0086 add native C3D10 mesh preview/export with full midside topology and explicit numerical refusal | Native x64 deferred to Windows/Podman (D059), strict visualization and edited-deck/field byte differences, new native-session PMX persistence, broad CAD/defective repair, remaining meshers and Windows behavior |
+| CAD/meshing | Original custom Netgen/OCCT import, linear meshing, CAD regions and static results on Mac/Linux ARM64. Tasks 0074–0077 add selected-part translation, plane split, controlled ShapeFix repair and STEP export/reopen, with three-body edited remesh/analytical solve and frozen recipes. Tasks 0078–0080 add bounded owned CAD undo/redo, axis-angle rotation and all-body STEP export with native solid correspondence. Tasks 0081–0083 add mirror, positive uniform/non-uniform scale and translated/rotated copies with six-solid analytical workflow and frozen outputs. Tasks 0084–0086 add native C3D10 mesh transport; tasks 0087/0088 connect original configuration, native static calculations, ten-node results and export/reopen with full midside topology | Native x64 deferred to Windows/Podman (D059), strict visualization and edited-deck/field byte differences, new native-session PMX persistence, broad CAD/defective repair, remaining meshers and Windows behavior |
 | Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
-| Engineering correctness | Strict accepted-scope checks retained | Both known element failures and quadratic-tetrahedron measurement gate remain |
+| Engineering correctness | Strict accepted-scope checks retained; tasks 0087/0088 verify native C3D10 force-driven/curved static calculations independently of PrePoMax measurement | Both known element failures and quadratic-tetrahedron measurement gate remain; general curved quality and full calculation parity are open |
 | Distribution | Internal ad-hoc Mac DMG, native Linux archive and Ubuntu 24.04 installer proof; shared four-RID hosts | Native Windows installer, Linux distro coverage and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
 
 ## Future release cadence

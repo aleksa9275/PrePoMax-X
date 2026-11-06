@@ -1,16 +1,19 @@
 # Native viewport candidate
 
-**Mesh CAD…** now offers **Linear C3D4** (default) or **Quadratic C3D10 —
-preview/export only**. The quadratic path retains ten-node tetrahedra, six-node
-CAD surfaces and midside region memberships. **Export mesh…** publishes a new
-mesh-only INP after original-reader validation. It omits analysis/project state.
+**Mesh CAD…** offers **Linear C3D4** (default) and **Quadratic C3D10**.
+Both connect to Configure… / Run analysis and original FRD results. C3D10 retains
+all ten nodes, six-node CAD surfaces and midside regions; static solver decks
+use the original PrePoMax node formatter and CalculiX's own element formulation.
+**Export mesh…** preserves lossless mesh-only INP bytes with original-reader
+readback. It omits analysis/project state.
 
-Quadratic measurement and analysis remain gated: the original element's affine
-integral fails its analytical check. Configure/Run controls and direct desktop
-job calls refuse C3D10; the original static-deck validator independently refuses
-it. Curved Jacobian/quality, full quadratic formulation support and quadratic PMX
-persistence are not accepted by this preview.
-[Current quadratic scope and checks](../../.project/reports/quadratic-cad-preview.md).
+The separate original PrePoMax quadratic measurement/integration discrepancy
+remains unresolved and its measurement command stays gated. That is independent
+of the verified native quadratic static solves. General curved quality, other
+formulations/analysis families and full PMX graphs remain required parity work.
+[Current calculations and checks](../../.project/reports/quadratic-native-static.md).
+The final target is identical PrePoMax 3.0.0 functionality, including all mesh
+types and calculations, except specifically unavailable solvers (D060).
 
 With `--cad-native RUNTIME`, **CAD tools…** beside Open provides selected-part
 translation, axis-angle rotation, mirror, explicit-center scaling, translated/
@@ -129,7 +132,7 @@ node sets and domain element sets are available in **Configure…**; choose unit
 material, sections and constraints explicitly, then **Run analysis**. Cancelling
 or a failed mesh preserves the previous document. Jobs retain verified CAD,
 BREP/VIS, VOL, parameters, native recipe and base/submitted mesh identities.
-General CAD/mesh project persistence and quadratic tetrahedra remain unsupported
+General CAD/mesh project persistence and broader element/analysis combinations remain outstanding
 in this bounded preview. [Workflow and checks](../../.project/reports/native-cad-static-workflow.md).
 
 After meshing, choose **CAD geometry**, then **Pick faces** or **Pick parts**.

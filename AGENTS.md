@@ -1,5 +1,17 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-06 maintainer clarification, D060: require IDENTICAL PrePoMax 3.0.0
+functionality, including ALL mesh types and ALL calculations, except specifically
+unavailable solvers. Preview/static boundaries never reduce the final scope.
+Tasks 0087/0088 add native C3D10 static calculations and desktop configure/solve/
+results. Read .project/reports/quadratic-native-static.md and its receipt.
+CalculiX's independent C3D10 formulation is no longer blocked by the separate
+original PrePoMax measurement discrepancy. Preserve the original measurement
+gate/failure and pyramid classifier failure, original algorithms and existing
+tolerances. General curved quality, other mesh/calculation families, exact
+native parity, full PMX and all D057/D058/D059/four-target/release gates remain.
+The task 0084–0086 blanket solver refusal below is historical and superseded.
+
 Tasks 0084–0086 add native C3D10 CAD meshing, preview, midside CAD regions and
 mesh-only INP export. Read .project/reports/quadratic-cad-preview.md and its
 receipt for source, actual checks and the retained candidate. Quadratic numerical

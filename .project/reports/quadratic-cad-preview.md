@@ -1,5 +1,9 @@
 # Quadratic CAD mesh preview and mesh-only export
 
+Historical tasks 0084–0086 report. Tasks 0087/0088 supersede the blanket solver
+refusal below with [native quadratic calculations](quadratic-native-static.md).
+The original PrePoMax measurement gate and both original failures remain.
+
 Tasks 0084–0086 add native **C3D10 quadratic tetrahedron meshing, preview, CAD
 regions and mesh-only INP export**. Quadratic numerical measurement and analysis
 remain blocked. [Verification receipt](quadratic-cad-preview-verification.json).

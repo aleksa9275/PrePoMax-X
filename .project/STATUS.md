@@ -1,6 +1,20 @@
 # Project status
 
-## Current — tasks 0084–0086: quadratic CAD mesh preview/export
+## Current — tasks 0087/0088: C3D10 native calculations
+
+D060 confirms IDENTICAL 3.0.0 functionality, all mesh types/calculations except
+unavailable solvers. Native C3D10 static deck/solve/ten-node FRD and desktop
+configure/results now work independently of the original PrePoMax measurement
+failure. The original measurement gate/classifier failure remain unchanged.
+[Current implementation, checks and delivery](reports/quadratic-native-static.md).
+Mac/Linux ARM64 pass force-driven and curved numerical tests plus negative-
+Jacobian refusal; the pinned original Windows solver through CrossOver closely
+agrees on identical decks. Source desktops pass 37 workflow checks and 52 tests
+each. All other original element/analysis/model workflows remain mandatory,
+alongside D057/D058/D059/exact-parity/four-target/release requirements.
+Final publication and retained candidate are recorded at closeout.
+
+## Prior — tasks 0084–0086: quadratic CAD mesh preview/export
 
 Native C3D10 meshing, ten-node transport, midside CAD sets, desktop order controls,
 VTK preview and mesh-only INP export/reopen are implemented. Quadratic numerical

@@ -44,7 +44,7 @@ class CadDocument:
 
 class CadMesh:
     def __init__(self, document, mesh_command, reader, maximum_size, *, cancel=None, element_order=1):
-        if type(element_order) is not int or element_order not in (1,2):raise ValueError("Choose mesh order 1 or 2 (preview only).")
+        if type(element_order) is not int or element_order not in (1,2):raise ValueError("Choose mesh order 1 or 2.")
         self.storage = TemporaryDirectory(prefix="prepomaxx-cad-mesh-")
         self.root = Path(self.storage.name)
         self.document = document
@@ -63,7 +63,7 @@ class CadMesh:
                 require_output(vol, 16 * 1024 * 1024)
                 self.volumes.append(vol)
             self.mesh = self.root / "mesh.inp"
-            self.scene = reader([*mesh_command, "from-vol-quadratic-preview" if element_order==2 else "from-vol", str(self.mesh), *map(str, self.volumes)], cancel=cancel)
+            self.scene = reader([*mesh_command, "from-vol-quadratic" if element_order==2 else "from-vol", str(self.mesh), *map(str, self.volumes)], cancel=cancel)
             self.mesh_bytes = self.mesh.read_bytes()
             self.identities = {p: file_sha256(p) for p in [self.parameters, self.mesh, *self.volumes]}
             if self.identities[self.mesh] != self.scene["SourceSha256"]:
@@ -94,7 +94,7 @@ class CadMesh:
         receipt = {"schemaVersion": 1, "sourceName": self.document.source.name,
                    "sourceSha256": self.document.identities[self.document.snapshot],
                    "toolReceiptSha256": self.document.tool_receipt,
-                   "maximumSize": self.size, "elementOrder": self.element_order, "analysisEligible": self.element_order==1, "meshingThreads": 1,
+                   "maximumSize": self.size, "elementOrder": self.element_order, "analysisEligible": True, "meshingThreads": 1,
                    "authoredRegions": self.authored_regions,
                    "baseMeshSha256": self.identities[self.mesh], "mapping": self.scene["cadMesh"], "files": inputs,
                    "scope": "Frozen native CAD/meshing job provenance; not project persistence"}

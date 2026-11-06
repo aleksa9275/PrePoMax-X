@@ -1,5 +1,14 @@
 # Dependency-aware roadmap
 
+2026-11-06 D060: finish **identical 3.0.0 functionality, all mesh types and all
+calculations, except unavailable solvers**. Keep intermediate preview limits
+out of the final acceptance definition. Tasks 0087/0088 close the blanket C3D10
+static refusal with independent native solver evidence and desktop integration.
+Next breadth work includes other solid formulations, shell/2D/beam workflows
+and the original non-static/thermal/nonlinear calculation families, alongside
+the full model/PMX/results graph. All are mandatory; the current static adapter
+does not define a smaller final product. [Required breadth](PARITY.md).
+
 2026-11-02 execution priority: use the [accelerated delivery sequence](proposals/accelerated-native-delivery.md)
 for the next work: faster checks → installable desktop preview → real CalculiX
 analysis/save-reopen → four-target alpha → full parity/release. Existing phases

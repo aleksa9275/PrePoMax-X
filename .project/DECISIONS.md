@@ -1,5 +1,21 @@
 # Decision register
 
+D060 — Full-functionality clarification, 2026-11-06: the maintainer requires
+**IDENTICAL PrePoMax 3.0.0 functionality, including all mesh types and all
+calculations, except unavailable solvers**. Bounded previews are development
+increments, never a reduced final product or authorization to omit element,
+analysis, material, load, result, editing or persistence functionality. Solver
+unavailability must be identified specifically; it does not automatically remove
+an analysis available through another supported original backend. Preserve shared
+original behavior and record any implementation limitation as outstanding work.
+Tasks 0087/0088 separate the original PrePoMax quadratic measurement discrepancy
+from native CalculiX's independent C3D10 formulation and deliver real quadratic
+static calculations. This supersedes tasks 0084–0086's blanket solver refusal;
+D029's original measurement failure/gate and pyramid classifier failure remain.
+Do not change original quadrature, solver algorithms or existing tolerances.
+D057 original PMX, D058 hosted hold, D059 deferred Linux x64 and all required
+four-target/full-functionality/distribution/release acceptance remain open.
+
 D059 — Deferred Linux x64 verification, 2026-11-05: the maintainer resumes
 task 0067 and chooses Podman on a Windows machine for Linux x64 testing at
 the finishing phase. Continue native Mac/Linux ARM64 development and local

@@ -4,5 +4,7 @@
     <ProjectReference Include="../StaticDeck/StaticDeck.csproj" />
     <None Include="../StaticDeck/cube-mesh.inp" Link="cube-mesh.inp" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../StaticDeck/cube-analysis.json" Link="cube-analysis.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../StaticDeck/c3d10-force.inp" Link="c3d10-force.inp" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../StaticDeck/c3d10-force.json" Link="c3d10-force.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

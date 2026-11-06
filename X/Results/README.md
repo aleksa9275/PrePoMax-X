@@ -14,7 +14,7 @@ dotnet build X/Results/PrePoMaxX.Results.slnx -c Release --disable-build-servers
 dotnet X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll inspect-frd .project/reports/windows-reference/solver/uniaxial.frd
 ```
 
-`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed C3D8 3D static
+`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed C3D8/C3D4/C3D10 3D static
 results, with one complete node block, one element block and full single-record-
 per-node fields. It supports the original ASCII and float/double binary formats,
 displacement, force, stress, total strain and stress-error fields. Vector/tensor
@@ -22,6 +22,12 @@ invariants use the original Field methods. NodeIdsInValueOrder explicitly maps
 component-array indices back to actual node IDs. File SHA256 and the raw unit
 header are retained; numeric quantities remain as stored, with no unit conversion
 or inference. JSON is tool output, not an application persistence-format choice.
+
+Tasks 0087/0088 retain original ten-node C3D10 connectivity and fields through
+native straight/curved CalculiX calculations and the desktop viewport. Original
+PrePoMax measurement remains independently gated; broader result/analysis
+families remain mandatory full-functionality work under D060.
+[Actual quadratic evidence](../../.project/reports/quadratic-native-static.md).
 
 Inspection is bounded to 64 MiB, 100000 nodes/elements, 64 fields and 16 components
 per field. Reject unsupported analyses/element types/axisymmetric scaling,

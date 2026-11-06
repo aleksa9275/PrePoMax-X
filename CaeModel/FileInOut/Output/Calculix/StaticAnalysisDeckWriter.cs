@@ -26,12 +26,18 @@ namespace CaeModel
             string meshText = MeshDeckWriter.WriteMesh(mesh);
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
-            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => t != "C3D8" && t != "C3D4")))
-                throw new NotSupportedException("The static-deck boundary supports C3D8 and first-order C3D4 solids only; quadratic tetrahedra remain gated.");
+            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => t != "C3D8" && t != "C3D4" && t != "C3D10")))
+                throw new NotSupportedException("The current static-deck boundary supports C3D8, C3D4 and C3D10 solids.");
             foreach (var element in checkedMesh.Elements.Values)
             {
-                double measure=((FeElement3D)element).GetVolume(checkedMesh.Nodes);
-                if (!Finite(measure) || measure==0 || (element is LinearTetraElement && measure<0))
+                // This is an input orientation check, not quadratic measurement.
+                // CalculiX evaluates C3D10 shape functions/Jacobians itself. The
+                // unresolved original PrePoMax Integrate/GetVolume path must not
+                // authorize, alter or prohibit that independent formulation.
+                double measure = element is ParabolicTetraElement
+                    ? new LinearTetraElement(element.Id, element.NodeIds.Take(4).ToArray()).GetVolume(checkedMesh.Nodes)
+                    : ((FeElement3D)element).GetVolume(checkedMesh.Nodes);
+                if (!Finite(measure) || measure==0 || ((element is LinearTetraElement || element is ParabolicTetraElement) && measure<0))
                     throw new CaeException("Original element measure is zero, nonfinite or an inverted tetrahedron.");
             }
             foreach (string name in checkedMesh.NodeSets.Keys.Concat(checkedMesh.ElementSets.Keys)) Name(name);
@@ -124,7 +130,12 @@ namespace CaeModel
             {
                 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
                 var text = new StringBuilder("** PrePoMax-X bounded 3D linear-static analysis deck\n");
-                text.Append(meshText.Substring(meshText.IndexOf('\n') + 1));
+                // Solver decks use the original CalNode formatter. G17 remains
+                // correct for lossless mesh exchange, but can exceed CalculiX's
+                // 20-character numeric input field (e.g. 6.8000000000000001E-15).
+                int elementsAt = meshText.IndexOf("*Element", StringComparison.Ordinal);
+                text.Append(CalNodeFormatting.Write3D(checkedMesh.Nodes));
+                text.Append(meshText.Substring(elementsAt));
                 foreach (string value in materialText) text.Append(value);
                 foreach (var section in sectionList) Append(text, new CalSolidSection(section));
                 Append(text, new CalStepHeader(step)); Append(text, new CalStaticStep(step));
