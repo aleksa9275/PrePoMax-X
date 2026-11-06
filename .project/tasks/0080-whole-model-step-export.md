@@ -1,7 +1,7 @@
 # Task 0080 — Checked whole-model STEP geometry exchange
 
 Authorized 6 November 2026 as the third of three further tasks. Export all owned
-CAD bodies into one STEP through original native compound/export commands,
+CAD bodies into one STEP through original native unchanged-assembly/export commands,
 retaining source-solid origins and checking every solid on native readback.
 Refuse body loss/changed supported geometry and existing destinations; preserve
 the active mesh, analysis and unsaved state. This is geometry exchange; original

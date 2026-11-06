@@ -106,7 +106,7 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 check('valid-box repair matches original Windows BREP bytes',edited.edits[-1]['outputBrepSha256']==pins['repair']['brepSha256'])
                 check('repair preserves both part measurements',values==baseline)
                 check('repair preserves untouched part bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
-                shutil.copytree(edited.root,output/'repair');report['operations']['repair']=edited.edits[-1]
+                shutil.copytree(edited.root,output/'repair');report['operations']['repair']=json.loads(json.dumps(edited.edits[-1]))
                 edited.edits[-1]['parameters']['tolerance']=.5
                 try:edited.verify()
                 except ValueError:check('changed in-memory edit history refused',True)
@@ -136,6 +136,25 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 check('STEP roundtrip volume is analytical',math.isclose(values[0]['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9))
                 check('STEP roundtrip center is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],[5,5,10])))
             finally:reopened.close()
+        if 'export_all' in operations:
+            export=prepare_export(document,decode,None)
+            target=output/'whole-model.step'
+            try:
+                receipt=export.publish(target)
+                check('whole model uses original unchanged assembly command',receipt['command']=='STEP_ASSEMBLY')
+                check('whole model retains both solid origins',len(receipt['solidOrigins'])==2 and {o['sourcePartId'] for o in receipt['solidOrigins']}=={1,2})
+                check('whole model output bytes verified',file_sha256(target)==receipt['outputSha256'])
+                try:export.publish(target)
+                except FileExistsError:check('whole model existing destination preserved',file_sha256(target)==receipt['outputSha256'])
+                else:raise ValueError('Whole STEP overwritten')
+                report['operations']['export_all']=receipt
+            finally:export.close()
+            reopened=CadDocument(target,document.tool,decode)
+            try:
+                values=solids(reopened)
+                check('whole model roundtrip retains two solids',len(values)==2)
+                check('whole model roundtrip retains analytical volumes',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-9) for a,b in zip(sorted(v['volume'][0] for v in values),[768,2000])))
+            finally:reopened.close()
         for part,values in [(0,[1,0,0]),(1,[0,0,0]),(1,[float('nan'),0,0]),(1,[1,2])]:
             try:apply_edit(document,decode,part,'translate',values)
             except (ValueError,TypeError):check('invalid translation refused '+str((part,values)),True)
@@ -152,6 +171,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','rotate','split','repair','export','history'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','split','repair','export','history'])
+    parser.add_argument('--operation',action='append',choices=['translate','rotate','split','repair','export','export_all','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','split','repair','export','export_all','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

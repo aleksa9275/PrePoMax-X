@@ -81,20 +81,28 @@ class CadEditLifecycle(unittest.TestCase):
         w.editor_dirty=False;w.close()
 
     def test_export_success_preserves_document_mesh_definition_and_unsaved_state(self):
+        self.export_success('export')
+        self.export_success('export_all')
+
+    def export_success(self,operation):
         w=self.window();doc,mesh,scene=w.cad_document,w.cad_mesh,w.scene
         w.pmx_session=Mock()  # Geometry exchange may read an immutable PMX preview.
         export=Mock();export.publish.return_value={'nativeReadbackPassed':True}
         with patch('cad_operations.prepare_export',return_value=export):
-            w.operations.start(1,'export','unused.step');self.wait(lambda:w.operations.job is None)
+            w.operations.start(None if operation=='export_all' else 1,operation,'unused.step');self.wait(lambda:w.operations.job is None)
         self.assertTrue(w.operations.result['success']);export.publish.assert_called_once_with('unused.step')
         export.close.assert_called_once();self.assertIs(w.cad_document,doc);self.assertIs(w.cad_mesh,mesh)
         self.assertIs(w.scene,scene);self.assertTrue(w.analysis_valid);self.assertTrue(w.editor_dirty)
         w.editor_dirty=False;w.close()
 
     def test_late_export_cancel_publishes_nothing(self):
+        self.export_cancel('export')
+        self.export_cancel('export_all')
+
+    def export_cancel(self,operation):
         w=self.window();doc,mesh=w.cad_document,w.cad_mesh;export=Mock()
         with patch('cad_operations.prepare_export',return_value=export):
-            w.operations.start(1,'export','unused.step')
+            w.operations.start(None if operation=='export_all' else 1,operation,'unused.step')
             self.assertTrue(w.operations.job.wait(5000));w.cancel_operation()
             self.wait(lambda:w.operations.job is None)
         self.assertTrue(w.operations.result['cancelled']);export.publish.assert_not_called()
@@ -155,6 +163,14 @@ class CadEditLifecycle(unittest.TestCase):
             self.assertFalse(w.operations.result['success']);self.assertIs(w.cad_document,original)
             self.assertIs(w.cad_mesh,mesh);candidate.close.assert_called_once()
             w.editor_dirty=False;w.close()
+
+
+    def test_step_readback_rejects_body_loss_changed_geometry_and_ambiguous_origins(self):
+        from cad_edit import match_solids
+        source={'partId':1,'solidId':1,'measurements':[1.,2.,3.]}
+        for reopened in [[],[dict(source,measurements=[2.,2.,3.])]]:
+            with self.assertRaises(ValueError):match_solids([source],reopened)
+        with self.assertRaises(ValueError):match_solids([source,source],[source,source])
 
 
 if __name__=='__main__':unittest.main()

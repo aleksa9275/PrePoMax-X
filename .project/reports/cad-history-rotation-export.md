@@ -25,7 +25,27 @@ volume/center/bounds, original face IDs, untouched part bytes and input refusals
 Rotation uses the existing cancellation, publication, checkpoint and frozen
 provenance path. New Windows execution and general CAD parity remain pending.
 
-Tasks 0079/0080 add original axis-angle rotation and checked whole-model STEP
-geometry exchange next. D057 original PMX compatibility, D058 hosted CI hold,
-D059 x64 deferral, strict native parity differences, both correctness failures,
-quadratic tetrahedra and all installer/signing/four-target/release gates remain.
+Task 0080 adds **Export all CAD parts as STEP…** through the recovered original
+`STEP_ASSEMBLY` command, which gathers bodies unchanged. It deliberately uses
+assembly gathering rather than the imprinting `BREP_COMPOUND` operation. Every
+source solid is matched uniquely on native readback by finite volume, area,
+centroid and inertia measurements (relative 1e-12/absolute 1e-9); solid count,
+source bytes and destination bytes are checked. Uncovered shells/faces/edges/
+vertices, changed measurements, missing solids and ambiguous origins are refused.
+These are bounded exchange checks, not proof of arbitrary CAD equivalence or
+assembly naming/hierarchy preservation. Both selected and whole-model exports
+preserve the active mesh/analysis and use a new filename, published atomically
+only after readback. Cancellation publishes nothing.
+
+The source desktop completes 62 checks: translation and rotation dialogs,
+exact owned undo/redo, split/repair, three-body mesh (206 nodes/517 C3D4), selected
+and whole-model STEP export/reopen, native affine-displacement/unit-stress solve,
+complete frozen edit provenance and visible contours. Forty-nine desktop checks
+and nine build guards pass on Mac; both native Mac/Linux ARM64 pass 50 transactions and
+49 desktop checks. Linux also completes all 62 combined GUI/analytical checks.
+Final copied-app evidence follows below.
+
+D057 original PMX compatibility, D058 hosted CI hold, D059 x64 deferral, strict
+native parity differences, both correctness failures, quadratic tetrahedra and
+all installer/signing/four-target/release gates remain. STEP exchange is not a
+native CAD-session PMX serializer; original session persistence remains open.

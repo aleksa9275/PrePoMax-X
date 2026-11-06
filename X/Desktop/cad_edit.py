@@ -172,27 +172,80 @@ class CadExport:
     def close(self):self.storage.cleanup()
 
 
+def solid_inventory(scenes):
+    inventory=[]
+    for part_id,scene in enumerate(scenes,1):
+        entities=scene['cad']['entities']
+        solids=entities['solid']
+        if (not solids or {e['id'] for e in entities['shell']}!={i for s in solids for i in s['properties'].get('shell_ids',[])}
+                or {e['id'] for e in entities['face']}!={i for s in solids for i in s['properties'].get('face_ids',[])}
+                or {e['id'] for e in entities['edge']}!={i for f in entities['face'] for i in f['properties'].get('edge_ids',[])}
+                or {e['id'] for e in entities['vertex']}!={i for e in entities['edge'] for i in e['properties'].get('vertex_ids',[])}):
+            raise ValueError('Whole-model STEP export requires supported solid geometry.')
+        for solid in solids:
+            props=solid['properties']
+            signature=[]
+            for key,length in [('volume',1),('surface_area',1),('center_of_mass',3),('inertia_at_center_of_mass',9)]:
+                values=props[key]
+                if len(values)!=length or any(not math.isfinite(v) for v in values):
+                    raise ValueError('STEP readback requires finite complete solid measurements.')
+                signature.extend(values)
+            if signature[0]<=0 or signature[1]<=0:
+                raise ValueError('STEP export requires positive solid volume and surface area.')
+            inventory.append({'partId':part_id,'solidId':solid['id'],'measurements':signature})
+    return inventory
+
+
+def match_solids(original,reopened):
+    if not original or len(original)!=len(reopened):
+        raise ValueError('STEP readback changed the solid count.')
+    unmatched=list(reopened);origins=[]
+    for source in original:
+        matches=[target for target in unmatched if all(
+            math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-9)
+            for a,b in zip(source['measurements'],target['measurements']))]
+        if len(matches)!=1:
+            raise ValueError('STEP readback changed solid measurements or has ambiguous solid origins.')
+        target=matches[0];unmatched.remove(target)
+        origins.append({'sourcePartId':source['partId'],'sourceSolidId':source['solidId'],
+                        'readbackPartId':target['partId'],'readbackSolidId':target['solidId']})
+    return origins
+
+
 def prepare_export(document,decoder,part_id,*,cancel=None):
-    source=selected_part(document,part_id)
+    if part_id is None:
+        if not isinstance(document.tool,NativeCadTool):
+            raise ValueError('STEP export requires the explicit native CAD profile.')
+        document.verify();selected=list(enumerate(document.parts,1))
+    else:
+        selected_part(document,part_id);selected=[(part_id,document.parts[part_id-1])]
     export=CadExport()
     try:
-        original=export.root/'input.brep';shutil.copyfile(source,original)
+        staged=[]
+        for index,(source_id,(brep,vis)) in enumerate(selected,1):
+            original=export.root/f'input-{index:04d}.brep';shutil.copyfile(brep,original)
+            staged.append(original)
+        original_scenes=[decoder(vis,cancel=cancel) for source_id,(brep,vis) in selected]
+        inventory=solid_inventory(original_scenes)
+        for solid in inventory:solid['partId']=selected[solid['partId']-1][0]
         export.path=export.root/'part.step'
-        run_stage([*document.tool.command,'SAVE_BREP_AS_STEP',str(original),str(export.path)],
+        command='STEP_ASSEMBLY' if part_id is None else 'SAVE_BREP_AS_STEP'
+        run_stage([*document.tool.command,command,*map(str,staged),str(export.path)],
                   export.root,'export.log',cancel=cancel)
         require_output(export.path,MAX_CAD_BYTES)
-        if file_sha256(original)!=document.identities[source]:raise ValueError('STEP export modified its staged input.')
+        if any(file_sha256(path)!=document.identities[pair[0]] for path,(source_id,pair) in zip(staged,selected)):
+            raise ValueError('STEP export modified its staged input.')
         reopened=document.tool.convert_parts(export.path,export.root/'readback',cancel=cancel)
         scenes=[decoder(vis,cancel=cancel) for brep,vis in reopened]
-        original_scene=decoder(document.parts[part_id-1][1],cancel=cancel)
-        solids=sum(len(s['cad']['entities']['solid']) for s in scenes)
-        if not solids or solids!=len(original_scene['cad']['entities']['solid']):
-            raise ValueError('STEP readback changed the selected solid count.')
+        origins=match_solids(inventory,solid_inventory(scenes))
         document.verify()
         if cancel is not None and cancel.is_set():raise CadImportCancelled('STEP export cancelled.')
-        export.receipt={'selectedPartId':part_id,'inputBrepSha256':file_sha256(source),
+        export.receipt={'selectedPartId':part_id,'scope':'whole-model' if part_id is None else 'selected-part',
+                        'command':command,'inputs':[{'partId':i,'brepSha256':file_sha256(pair[0])} for i,pair in selected],
                         'outputSha256':file_sha256(export.path),'toolReceiptSha256':document.tool_receipt,
-                        'geometryEditCount':len(document.edits),'reimportedSolids':solids,'nativeReadbackPassed':True}
+                        'geometryEditCount':len(document.edits),'reimportedSolids':len(origins),
+                        'solidOrigins':origins,'nativeReadbackPassed':True}
+        if part_id is not None:export.receipt['inputBrepSha256']=file_sha256(selected[0][1][0])
         return export
     except BaseException:
         export.close();raise
