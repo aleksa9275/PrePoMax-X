@@ -6,6 +6,15 @@ X/Y/Z values. It retains unselected BREP/VIS bytes and all original source data.
 The analytical box moved by (7,-3,5) matches the original Windows output BREP
 exactly and has the expected volume/center. Twelve initial native checks pass.
 
+Task 0075 adds selected-part plane splitting. Original BREP_SPLIT output and its
+source-solid origins are retained, then the original explicit solid-separation
+command creates individually owned result parts. The ordinary CAD import's
+compound grouping remains unchanged. The checked mid-height split yields two
+1,000-volume solids with the original Windows BREP hash, while the untouched
+second body remains byte-identical. The initial compound-import attempt is
+retained; the final native translation/split checks pass. Zero and nonintersecting
+plane definitions are refused without publishing a replacement document.
+
 An owned transaction copies inputs, runs the pinned native command, splits and
 decodes every resulting part, checks source/runtime identity, then publishes the
 new document on the GUI thread. Failure/cancellation retains the previous CAD,

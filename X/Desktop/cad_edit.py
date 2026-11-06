@@ -7,7 +7,7 @@ import shutil
 from tempfile import TemporaryDirectory
 
 from cad_document import CadDocument
-from cad_import import NativeCadTool, CadImportCancelled, MAX_CAD_BYTES, file_sha256, require_output, run_stage
+from cad_import import NativeCadTool, CadImportCancelled, MAX_CAD_BYTES, MAX_CAD_PARTS, file_sha256, require_output, run_stage
 from cad_scene import compose_cad_parts
 
 MAX_EDIT_BYTES = 256 * 1024 * 1024
@@ -36,13 +36,24 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     source = selected_part(document, part_id)
     if len(document.edits) >= MAX_EDITS:
         raise ValueError('This native preview supports at most 32 CAD edits per document.')
-    if operation != 'translate':
-        raise ValueError('Unsupported native CAD edit.')
-    direction = vector(values, 'Translation')
-    if not any(direction):
-        raise ValueError('Provide a nonzero translation.')
-    parameters = 'Transform type: Translate\nDirection: '+' '.join(format(v,'.17g') for v in direction)+'\n'
-    arguments = ['BREP_TRANSFORM']
+    def numbers(values):return ' '.join(format(v,'.17g') for v in values)
+    if operation=='translate':
+        description=vector(values,'Translation')
+        if not any(description):raise ValueError('Provide a nonzero translation.')
+        parameters='Transform type: Translate\nDirection: '+numbers(description)+'\n'
+        arguments=['BREP_TRANSFORM']
+    elif operation=='split':
+        if not isinstance(values,dict) or set(values)!={'origin','normal'}:
+            raise ValueError('Provide a plane origin and normal.')
+        origin,normal=vector(values['origin'],'Plane origin'),vector(values['normal'],'Plane normal')
+        if not any(normal):raise ValueError('Plane normal must be nonzero.')
+        scene=decoder(document.parts[part_id-1][1],cancel=cancel)
+        extent=[value for axis in ('x','y','z') for value in
+                (min(n[axis] for n in scene['nodes']),max(n[axis] for n in scene['nodes']))]
+        description={'origin':origin,'normal':normal,'extent':extent}
+        parameters='Tool type: Plane\nExtent: '+numbers(extent)+'\nPlane origin: '+numbers(origin)+'\nPlane normal: '+numbers(normal)+'\n'
+        arguments=['BREP_SPLIT']
+    else:raise ValueError('Unsupported native CAD edit.')
     edited = CadDocument.__new__(CadDocument)
     edited.storage = TemporaryDirectory(prefix='prepomaxx-cad-edit-')
     edited.root = Path(edited.storage.name)
@@ -63,9 +74,19 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         if file_sha256(staged_source)!=document.identities[source] or definition.read_text(encoding='utf-8')!=parameters:
             raise ValueError('CAD command modified its staged input or parameters.')
         require_output(result,MAX_CAD_BYTES)
-        generated = document.tool.convert_parts(result,work/'decoded',cancel=cancel)
-        if len(generated) != 1:
+        converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
+        generated=converter(result,work/'decoded',cancel=cancel)
+        if operation=='translate' and len(generated)!=1:
             raise ValueError('Translation must preserve a single selected solid.')
+        extra=[]
+        if operation=='split':
+            origins_file=result.with_suffix('.brep.origins')
+            require_output(origins_file,4096)
+            if len(generated)<2 or origins_file.read_text().split()!=['1']*len(generated):
+                raise ValueError('Plane split must yield multiple solids with checked original source-solid origins.')
+            extra.append(origins_file)
+        if len(document.parts)-1+len(generated)>MAX_CAD_PARTS:
+            raise ValueError('Edited CAD exceeds the 32-part preview limit.')
         edited.parts=[]
         origins=[]
         for old_id,pair in enumerate(document.parts,1):
@@ -76,10 +97,10 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
                 edited.parts.append((b,v));origins.append(old_id)
         edited.snapshot=inputs/('source'+document.snapshot.suffix)
         shutil.copyfile(document.snapshot,edited.snapshot)
-        for path in document.edit_files+[staged_source,definition,result,work/'operation.log']:
+        for path in document.edit_files+[staged_source,definition,result,work/'operation.log',*extra]:
             target=inputs/(path.name if path.name!='operation.log' else prefix+'-command.log')
             shutil.copyfile(path,target);edited.edit_files.append(target)
-        edit={'operation':operation,'selectedPartId':part_id,'parameters':direction,
+        edit={'operation':operation,'selectedPartId':part_id,'parameters':description,
               'inputBrepSha256':file_sha256(source),'outputBrepSha256':file_sha256(result),
               'partOrigins':origins,'toolReceiptSha256':document.tool_receipt}
         edited.edits.append(edit)

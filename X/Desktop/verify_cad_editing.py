@@ -49,6 +49,23 @@ def verify(runtime,inspector,output,operations=('translate',)):
                 shutil.copytree(edited.root,output/'translate')
                 report['operations']['translate']=edited.edits[-1]
             finally:edited.close()
+        if 'split' in operations:
+            edited=apply_edit(document,decode,1,'split',{'origin':[0,0,10],'normal':[0,0,1]})
+            try:
+                values=solids(edited)
+                check('split retains unselected part plus two new solids',len(edited.parts)==3)
+                check('split matches original Windows BREP bytes',edited.edits[-1]['outputBrepSha256']==pins['split']['brepSha256'])
+                check('both split volumes are analytical',all(math.isclose(v['volume'][0],1000,rel_tol=1e-12,abs_tol=1e-9) for v in values[:2]))
+                centers=sorted([v['center_of_mass'] for v in values[:2]],key=lambda v:v[2])
+                check('split centers are analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for actual,expected in zip(centers,[[5,5,5],[5,5,15]]) for a,b in zip(actual,expected)))
+                check('split source origins map to selected original part',edited.edits[-1]['partOrigins']==[1,1,2])
+                check('split preserves unselected BREP/VIS bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[2])))
+                shutil.copytree(edited.root,output/'split');report['operations']['split']=edited.edits[-1]
+            finally:edited.close()
+            for values in [{'origin':[0,0,10],'normal':[0,0,0]},{'origin':[0,0,100],'normal':[0,0,1]}]:
+                try:apply_edit(document,decode,1,'split',values)
+                except ValueError:check('invalid or non-intersecting plane refused '+str(values),True)
+                else:raise ValueError('Non-splitting plane accepted')
         for part,values in [(0,[1,0,0]),(1,[0,0,0]),(1,[float('nan'),0,0]),(1,[1,2])]:
             try:apply_edit(document,decode,part,'translate',values)
             except (ValueError,TypeError):check('invalid translation refused '+str((part,values)),True)
@@ -65,6 +82,6 @@ def verify(runtime,inspector,output,operations=('translate',)):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate'])
+    parser.add_argument('--operation',action='append',choices=['translate','split'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

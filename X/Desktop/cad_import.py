@@ -74,6 +74,12 @@ class NativeCadTool:
         self.verify_runtime()
         return outputs
 
+    def separate_solids(self, source, work, *, cancel=None):
+        self.verify_runtime()
+        outputs=convert_cad_parts(source,work,self.command,cancel=cancel,separate_solids=True)
+        self.verify_runtime()
+        return outputs
+
 
 class CadImportCancelled(ValueError):
     pass
@@ -143,7 +149,8 @@ def convert_cad(source, work, command, *, windows_paths=False, cancel=None):
     return outputs[0]
 
 
-def convert_cad_parts(source, work, command, *, windows_paths=False, cancel=None, maximum_parts=MAX_CAD_PARTS):
+def convert_cad_parts(source, work, command, *, windows_paths=False, cancel=None, maximum_parts=MAX_CAD_PARTS,
+                      separate_solids=False):
     """Return all split BREP/VIS pairs after every conversion stage succeeds."""
     if not 1 <= maximum_parts <= MAX_CAD_PARTS:
         raise ValueError("CAD conversion supports at most 32 emitted parts.")
@@ -167,7 +174,10 @@ def convert_cad_parts(source, work, command, *, windows_paths=False, cancel=None
         return "Z:" + str(path).replace("/", "\\") if windows_paths else str(path)
 
     split_base = work / "part.brep"
-    run_stage([*command, IMPORT_COMMANDS[suffix], tool_path(staged), tool_path(split_base)], work, "split.log",
+    if separate_solids and suffix!='.brep':
+        raise ValueError('Explicit solid separation requires BREP input.')
+    split_command='BREP_ASSEMBLY_SPLIT_TO_PARTS' if separate_solids else IMPORT_COMMANDS[suffix]
+    run_stage([*command, split_command, tool_path(staged), tool_path(split_base)], work, "split.log",
               cancel=cancel)
     parts = sorted(work.glob("part*.brep"))
     if not 1 <= len(parts) <= maximum_parts:

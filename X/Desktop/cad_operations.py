@@ -35,27 +35,31 @@ class CadOperations(QtCore.QObject):
         self.button.setPopupMode(QtWidgets.QToolButton.ToolButtonPopupMode.InstantPopup)
         self.menu=QtWidgets.QMenu(self.button);self.button.setMenu(self.menu)
         self.translate_action=self.menu.addAction('Translate part…',lambda:self.dialog('translate'))
+        self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
         self.toolbar_action=toolbar.addWidget(self.button)
         self.refresh()
 
     def refresh(self):
         w=self.window
         self.translate_action.setEnabled(not w.busy and w.cad_document is not None and w.pmx_session is None)
+        self.split_action.setEnabled(self.translate_action.isEnabled())
         self.button.setEnabled(self.translate_action.isEnabled())
 
     def dialog(self,operation):
         w=self.window
         if w.busy or w.cad_document is None:return
-        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle('Translate CAD part')
+        dialog=QtWidgets.QDialog(w);dialog.setWindowTitle('Translate CAD part' if operation=='translate' else 'Split CAD part by plane')
         form=QtWidgets.QFormLayout(dialog)
         part=QtWidgets.QComboBox()
         for entry in w.cad_document.scene['cad']['parts']:
             part.addItem(entry['name'],entry['id'])
         form.addRow('CAD part',part)
         fields=[]
-        for axis in ('X','Y','Z'):
-            field=QtWidgets.QLineEdit('0');field.setObjectName('cadDirection'+axis)
-            form.addRow('Translation '+axis+' (model units)',field);fields.append(field)
+        labels=['Translation '+axis+' (model units)' for axis in ('X','Y','Z')] if operation=='translate' else [group+' '+axis for group in ('Plane origin','Plane normal') for axis in ('X','Y','Z')]
+        for index,label in enumerate(labels):
+            field=QtWidgets.QLineEdit('1' if operation=='split' and index==5 else '0')
+            field.setObjectName('cadParameter'+str(index))
+            form.addRow(label,field);fields.append(field)
         message=QtWidgets.QLabel();message.setWordWrap(True);message.setTextFormat(QtCore.Qt.TextFormat.PlainText)
         form.addRow(message)
         buttons=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok|QtWidgets.QDialogButtonBox.StandardButton.Cancel)
@@ -63,8 +67,13 @@ class CadOperations(QtCore.QObject):
         def submit():
             try:
                 from cad_edit import vector
-                values=vector([f.text() for f in fields],'Translation')
-                if not any(values):raise ValueError('Provide a nonzero translation.')
+                if operation=='translate':
+                    values=vector([f.text() for f in fields],'Translation')
+                    if not any(values):raise ValueError('Provide a nonzero translation.')
+                else:
+                    values={'origin':vector([f.text() for f in fields[:3]],'Plane origin'),
+                            'normal':vector([f.text() for f in fields[3:]],'Plane normal')}
+                    if not any(values['normal']):raise ValueError('Plane normal must be nonzero.')
                 if self.start(part.currentData(),operation,values):dialog.accept()
             except (OSError,ValueError) as error:message.setText(str(error))
         buttons.accepted.connect(submit);form.addRow(buttons);dialog.exec()
