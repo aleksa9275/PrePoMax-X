@@ -622,19 +622,21 @@ class Viewport(QtWidgets.QMainWindow):
                 self.job_state(self.job.state)
                 self.update_model_tree()
 
-    def release_cad(self):
+    def release_cad(self,*,keep_geometry_history=False):
+        if not keep_geometry_history and getattr(self,'operations',None) is not None:
+            self.operations.history.clear()
         if self.cad_mesh is not None:
             self.cad_mesh.close()
-        if self.cad_document is not None:
+        if self.cad_document is not None and not keep_geometry_history:
             self.cad_document.close()
         self.cad_mesh = self.cad_document = None
         self.regions.reset()
         self.regions.refresh()
 
-    def set_cad_document(self, scene, path, *, document=None):
+    def set_cad_document(self, scene, path, *, document=None,keep_geometry_history=False):
         self.regions.reset()
         self.show_scene(scene, path)
-        self.release_cad()
+        self.release_cad(keep_geometry_history=keep_geometry_history)
         self.cad_document = document
         self.model_path = self.model_scene = self.mesh_bytes = self.definition = self.pmx_session = None
         self.analysis_valid = self.editor_dirty = False

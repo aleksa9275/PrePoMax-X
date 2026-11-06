@@ -10,6 +10,7 @@ import sys
 from cad_import import NativeCadTool,file_sha256,run_process
 from cad_document import CadDocument
 from cad_edit import apply_edit,prepare_export
+from cad_history import GeometryHistory
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -35,6 +36,22 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
     report={'success':False,'checks':checks,'operations':{}}
     try:
         baseline=solids(document)
+        if 'history' in operations:
+            history=GeometryHistory()
+            edited=apply_edit(document,decode,1,'translate',[7,-3,5])
+            translated_hashes=[[file_sha256(p) for p in pair] for pair in edited.parts]
+            active=edited
+            try:
+                history.validate_edit(document,edited);history.edited(document)
+                restored=history.target('undo');history.restored('undo',active);active=restored
+                check('native undo restores original BREP and VIS bytes',all(file_sha256(a)==file_sha256(b) for p,q in zip(active.parts,document.parts) for a,b in zip(p,q)))
+                restored=history.target('redo');history.restored('redo',active);active=restored
+                check('native redo restores translated BREP and VIS exactly',[[file_sha256(p) for p in pair] for pair in active.parts]==translated_hashes)
+                check('undo source remains independently owned',document.root.exists() and active.root.exists())
+                # The outer scope owns the initial document; detach it before
+                # releasing only the checkpoint-generated document here.
+                history.undo.clear();history.redo.clear()
+            finally:edited.close()
         if 'translate' in operations:
             edited=apply_edit(document,decode,1,'translate',[7,-3,5])
             try:
@@ -119,6 +136,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','split','repair','export'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair','export'])
+    parser.add_argument('--operation',action='append',choices=['translate','split','repair','export','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','split','repair','export','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

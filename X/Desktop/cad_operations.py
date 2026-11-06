@@ -3,6 +3,7 @@ from threading import Event
 from PyQt6 import QtCore, QtWidgets
 from cad_import import CadImportCancelled
 from cad_edit import apply_edit,prepare_export
+from cad_history import GeometryHistory
 
 
 class CadEditJob(QtCore.QThread):
@@ -34,10 +35,14 @@ class CadOperations(QtCore.QObject):
     def __init__(self, window, toolbar):
         super().__init__(window)
         self.window=window;self.job=None;self.result=None
+        self.history=GeometryHistory()
         self.button=QtWidgets.QToolButton()
         self.button.setText('CAD tools…')
         self.button.setPopupMode(QtWidgets.QToolButton.ToolButtonPopupMode.InstantPopup)
         self.menu=QtWidgets.QMenu(self.button);self.button.setMenu(self.menu)
+        self.undo_action=self.menu.addAction('Undo CAD geometry',lambda:self.restore_dialog('undo'))
+        self.redo_action=self.menu.addAction('Redo CAD geometry',lambda:self.restore_dialog('redo'))
+        self.menu.addSeparator()
         self.translate_action=self.menu.addAction('Translate part…',lambda:self.dialog('translate'))
         self.split_action=self.menu.addAction('Split part by plane…',lambda:self.dialog('split'))
         self.repair_action=self.menu.addAction('Repair part…',lambda:self.dialog('repair'))
@@ -48,6 +53,8 @@ class CadOperations(QtCore.QObject):
     def refresh(self):
         w=self.window
         self.translate_action.setEnabled(not w.busy and w.cad_document is not None and w.pmx_session is None)
+        self.undo_action.setEnabled(self.translate_action.isEnabled() and bool(self.history.undo))
+        self.redo_action.setEnabled(self.translate_action.isEnabled() and bool(self.history.redo))
         self.split_action.setEnabled(self.translate_action.isEnabled())
         self.repair_action.setEnabled(self.translate_action.isEnabled())
         self.export_action.setEnabled(not w.busy and w.cad_document is not None)
@@ -113,6 +120,24 @@ class CadOperations(QtCore.QObject):
         self.job.finished.connect(self.finished)
         w.job_state(w.job.state);self.job.start();return True
 
+    def restore_dialog(self,direction):
+        try:self.restore(direction)
+        except (OSError,ValueError) as error:
+            QtWidgets.QMessageBox.critical(self.window,'Cannot restore CAD geometry',str(error))
+
+    def restore(self,direction):
+        w=self.window
+        if w.busy or w.cad_document is None or w.pmx_session is not None:
+            raise ValueError('Finish active operations before restoring CAD geometry.')
+        previous=w.cad_document;previous.verify()
+        target=self.history.target(direction)
+        if w.model_scene is not None and not w.confirm_discard():return False
+        w.set_cad_document(target.scene,target.source,document=target,keep_geometry_history=True)
+        self.history.restored(direction,previous)
+        w.editor_dirty=True;w.job_state(w.job.state)
+        w.job_label.setText('CAD geometry '+direction+' complete; remesh before solving')
+        return True
+
     def finished(self):
         w=self.window;job=self.job;self.job=None
         result=job.result or {'success':False,'error':'CAD operation returned no result.'}
@@ -127,7 +152,9 @@ class CadOperations(QtCore.QObject):
                 else:
                     document=result['document']
                     document.verify()
-                    w.set_cad_document(document.scene,document.source,document=document)
+                    self.history.validate_edit(job.document,document)
+                    w.set_cad_document(document.scene,document.source,document=document,keep_geometry_history=True)
+                    self.history.edited(job.document)
                     w.editor_dirty=True
             except Exception as error:result={'success':False,'error':str(error)}
         if not result['success'] and job.output is not None:job.output.close()

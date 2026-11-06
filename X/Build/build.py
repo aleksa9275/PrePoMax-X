@@ -156,6 +156,7 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
         "cadDocumentSha256": sha(ROOT / "X/Desktop/cad_document.py"),
         "cadEditSha256": sha(ROOT / "X/Desktop/cad_edit.py"),
         "cadOperationsSha256": sha(ROOT / "X/Desktop/cad_operations.py"),
+        "cadHistorySha256": sha(ROOT / "X/Desktop/cad_history.py"),
         "cadEditProbeSha256": sha(ROOT / "X/Desktop/cad_edit_probe.py"),
         "cadRegionsSha256": sha(ROOT / "X/Desktop/cad_regions.py"),
         "cadWorkflowProbeSha256": sha(ROOT / "X/Desktop/cad_workflow_probe.py"),

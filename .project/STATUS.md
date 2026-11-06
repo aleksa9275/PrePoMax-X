@@ -1,5 +1,14 @@
 # Project status
 
+## Current — tasks 0078–0080: CAD history, rotation and model exchange
+
+Task 0078 adds bounded owned geometry undo/redo, preserving redo on failures and
+clearing dependent meshes after confirmation. Native checkpoint bytes and 48
+desktop lifecycle/resource tests pass on Mac. Original axis-angle rotation and
+whole-model STEP exchange follow; combined Linux ARM64 and copied-app checks
+close the batch. [Evidence](reports/cad-history-rotation-export.md).
+Native-session PMX and all D057/D058/D059/correctness/parity/release gates remain.
+
 ## Current — tasks 0074–0077: native desktop CAD operations
 
 Tasks 0074–0077 add selected-part translation, plane split, controlled ShapeFix

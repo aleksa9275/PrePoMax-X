@@ -102,7 +102,7 @@ def begin(app,w,source,output):
     def operated(result):
         name=state['operation'];check(name+' completes',result['success'])
         if name=='translate':
-            check('successful edit releases old geometry and mesh',not state['originalDocRoot'].exists() and not state['originalMeshRoot'].exists())
+            check('successful edit retains owned undo geometry and releases stale mesh',state['originalDocRoot'].exists() and not state['originalMeshRoot'].exists())
             check('successful edit clears stale mesh assignments and selection',w.cad_mesh is None and w.model_scene is None and w.definition is None and not w.regions.refs)
             check('new geometry is marked unsaved',w.editor_dirty)
             operation('split',[0,0,15,0,0,1])
