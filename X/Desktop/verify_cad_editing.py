@@ -99,6 +99,23 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
                 try:apply_edit(document,decode,1,'rotate',values)
                 except ValueError:check('invalid rotation refused '+str(values),True)
                 else:raise ValueError('Invalid rotation accepted')
+        if 'mirror' in operations:
+            edited=apply_edit(document,decode,1,'mirror',{'origin':[1,2,3],'normal':[1,1,0]})
+            try:
+                values=solids(edited);scene=decode(edited.parts[0][1]);original=decode(document.parts[0][1])
+                check('mirror retains positive analytical volume',math.isclose(values[0]['volume'][0],2000,rel_tol=1e-12,abs_tol=1e-9))
+                check('oblique off-origin mirror centroid is analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(values[0]['center_of_mass'],[-2,-2,10])))
+                bounds=[v for axis in ('x','y','z') for v in [min(n[axis] for n in scene['nodes']),max(n[axis] for n in scene['nodes'])]]
+                check('mirror bounds are analytical',all(math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-10) for a,b in zip(bounds,[-7,3,-7,3,0,20])))
+                check('mirror retains face edge and vertex identities',all([e['id'] for e in scene['cad']['entities'][kind]]==[e['id'] for e in original['cad']['entities'][kind]] for kind in ['face','edge','vertex']))
+                check('mirror retains untouched BREP and VIS bytes',all(file_sha256(a)==file_sha256(b) for a,b in zip(document.parts[1],edited.parts[1])))
+                check('mirror origin mapping is retained',edited.edits[-1]['partOrigins']==[1,2])
+                report['operations']['mirror']=edited.edits[-1];shutil.copytree(edited.root,output/'mirror')
+            finally:edited.close()
+            for values in [{'origin':[0,0,0],'normal':[0,0,0]},{'origin':[float('nan'),0,0],'normal':[0,0,1]}]:
+                try:apply_edit(document,decode,1,'mirror',values)
+                except ValueError:check('invalid mirror refused '+str(values),True)
+                else:raise ValueError('Invalid mirror accepted')
         if 'repair' in operations:
             edited=apply_edit(document,decode,1,'repair',1e-6)
             try:
@@ -171,6 +188,6 @@ def verify(runtime,inspector,output,operations=('translate','split','repair','ex
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     for name in ['runtime','inspector','output']:parser.add_argument(name,type=Path)
-    parser.add_argument('--operation',action='append',choices=['translate','rotate','split','repair','export','export_all','history'])
-    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','split','repair','export','export_all','history'])
+    parser.add_argument('--operation',action='append',choices=['translate','rotate','mirror','split','repair','export','export_all','history'])
+    a=parser.parse_args();r=verify(a.runtime,a.inspector.resolve(),a.output,a.operation or ['translate','rotate','mirror','split','repair','export','export_all','history'])
     print(json.dumps(r));raise SystemExit(0 if r['success'] else 1)

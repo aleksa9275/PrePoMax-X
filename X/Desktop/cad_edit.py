@@ -44,6 +44,14 @@ def rotation(values):
     return {'center':center,'axis':axis,'degrees':degrees}
 
 
+def mirror(values):
+    if not isinstance(values,dict) or set(values)!={'origin','normal'}:
+        raise ValueError('Provide a mirror plane point and normal.')
+    origin=vector(values['origin'],'Mirror plane point');normal=vector(values['normal'],'Mirror plane normal')
+    if not any(normal):raise ValueError('Mirror plane normal must be nonzero.')
+    return {'origin':origin,'normal':normal}
+
+
 def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     source = selected_part(document, part_id)
     if len(document.edits) >= MAX_EDITS:
@@ -57,6 +65,10 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
     elif operation=='rotate':
         description=rotation(values)
         parameters='Transform type: Rotate\nPoint: '+numbers(description['center'])+'\nDirection: '+numbers(description['axis'])+'\nAngle: '+format(description['degrees'],'.17g')+'\n'
+        arguments=['BREP_TRANSFORM']
+    elif operation=='mirror':
+        description=mirror(values)
+        parameters='Transform type: Mirror\nPoint: '+numbers(description['origin'])+'\nDirection: '+numbers(description['normal'])+'\n'
         arguments=['BREP_TRANSFORM']
     elif operation=='split':
         if not isinstance(values,dict) or set(values)!={'origin','normal'}:
@@ -100,7 +112,7 @@ def apply_edit(document, decoder, part_id, operation, values, *, cancel=None):
         require_output(result,MAX_CAD_BYTES)
         converter=document.tool.separate_solids if operation=='split' else document.tool.convert_parts
         generated=converter(result,work/'decoded',cancel=cancel)
-        if operation in ('translate','rotate','repair') and len(generated)!=1:
+        if operation in ('translate','rotate','mirror','repair') and len(generated)!=1:
             raise ValueError('Transform/controlled repair must retain one selected CAD part.')
         extra=[]
         if operation=='split':
