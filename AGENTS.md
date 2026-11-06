@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0078–0080 add bounded owned CAD undo/redo, original axis-angle rotation
+and checked whole-model STEP assembly export. Read
+.project/reports/cad-history-rotation-export.md for actual source, checks,
+publication and retained candidate. Undo/redo restores exact CAD bytes and
+invalidates dependent mesh/analysis; exports preserve the active model and
+check unique solid correspondence before a new-file publication. Mac/Linux
+ARM64 and both copied Mac viewports pass the combined analytical workflow.
+Native-session PMX, strict native equality, both correctness failures,
+quadratic tetrahedra and all parity/release gates remain open. Preserve D058/D059.
+
 Tasks 0074–0077 add native desktop CAD translation, plane split, controlled
 ShapeFix repair and selected-part STEP export. Read
 .project/reports/desktop-cad-editing.md for actual native/reference checks,

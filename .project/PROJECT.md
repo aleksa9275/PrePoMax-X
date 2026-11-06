@@ -1,5 +1,13 @@
 # PrePoMax-X project charter
 
+2026-11-06 tasks 0078–0080 add bounded owned geometry undo/redo, original
+axis-angle rotation and all-body STEP exchange with checked native solid origins.
+Mac/Linux ARM64 and both copied Mac viewports pass combined editing, remeshing,
+analytical solve, frozen provenance and selected/whole-model STEP reopen.
+[Current evidence/candidate](reports/cad-history-rotation-export.md).
+STEP remains geometry exchange; native-session PMX and exact cross-platform
+parity remain open, alongside D057/D058/D059 and all correctness/release gates.
+
 2026-11-06 tasks 0074–0077 add native desktop selected-part translation, plane
 split, controlled ShapeFix repair and checked STEP export. Mac/Linux ARM64 and
 both copied Mac viewports complete edited three-body remeshing, native analytical

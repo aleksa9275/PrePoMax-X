@@ -1,51 +1,110 @@
-# CAD geometry checkpoints, rotation and whole-model exchange
+# CAD geometry history, rotation and whole-model STEP exchange
 
-Task 0078 adds owned geometry undo/redo without command replay. Successful edits
-retain the previous verified CAD document; undo/redo restores its exact BREP/VIS
-bytes. Failed or cancelled edits keep redo; a successful branch releases redo.
-Restoration clears dependent mesh/analysis after confirmation and retains unsaved
-state. Opening another document or closing releases all checkpoint inputs.
+Tasks 0078–0080 complete three bounded native desktop increments: owned geometry
+undo/redo, original axis-angle rotation and checked whole-model STEP export.
+[Verification receipt](cad-history-rotation-export-verification.json).
+New native-session PMX serialization remains open under D057.
 
-The preview retains at most 32 checkpoints and 256 MiB of authoritative checkpoint
-inputs, including the current/candidate geometry. Rejected edits preserve the
-previous model. This is in-memory geometry history, not original PMX history
-replay, mesh/analysis undo or native-session serialization.
+## Behavior and boundaries
 
-Native Mac checkpoint byte restoration passes. Forty-eight desktop tests cover
-undo/redo, successful/failed branches, lifetime cleanup, checkpoint corruption,
-declined restoration and both count/byte limits, plus existing lifecycle paths.
-Initial harness/converted-byte expectation failures remain in the local receipt.
-Native Linux ARM64 and combined copied-app evidence follow at task 0080 closeout.
+**Undo CAD geometry / Redo CAD geometry** restores verified, independently owned
+BREP/VIS checkpoints without replaying commands. Failed/cancelled edits retain
+redo; a successful branch releases it. Restoring geometry clears dependent mesh,
+regions and analysis after confirmation and retains unsaved state. Opening another
+document or closing releases all checkpoint inputs. The preview allows at most
+32 checkpoints and 256 MiB of authoritative checkpoint inputs, including current/
+candidate geometry after successful publication; rejected edits preserve the old
+model. This is geometry history, not mesh/analysis undo, PMX history replay or
+project serialization.
 
-Task 0079 adds original axis-angle rotation: explicit center, nonzero axis and
-degrees strictly between -360 and 360, excluding zero. The original native
-BREP_TRANSFORM owns the transform; no kernel or coordinate formatter changes.
-Thirteen Mac native checks pass for off-origin 90-degree rotation, analytical
-volume/center/bounds, original face IDs, untouched part bytes and input refusals.
-Rotation uses the existing cancellation, publication, checkpoint and frozen
-provenance path. New Windows execution and general CAD parity remain pending.
+**Rotate part…** uses the original native `BREP_TRANSFORM` with an explicit center,
+nonzero axis and degrees strictly between -360 and 360, excluding zero. The
+original kernel owns axis normalization and geometry behavior. Off-origin
+90-degree rotation passes analytical volume/centroid/bounds and retains original
+face identities and untouched part bytes. Rotation uses the background worker,
+atomic publication, cancellation, geometry history and frozen job provenance.
 
-Task 0080 adds **Export all CAD parts as STEP…** through the recovered original
-`STEP_ASSEMBLY` command, which gathers bodies unchanged. It deliberately uses
-assembly gathering rather than the imprinting `BREP_COMPOUND` operation. Every
-source solid is matched uniquely on native readback by finite volume, area,
-centroid and inertia measurements (relative 1e-12/absolute 1e-9); solid count,
-source bytes and destination bytes are checked. Uncovered shells/faces/edges/
-vertices, changed measurements, missing solids and ambiguous origins are refused.
-These are bounded exchange checks, not proof of arbitrary CAD equivalence or
-assembly naming/hierarchy preservation. Both selected and whole-model exports
-preserve the active mesh/analysis and use a new filename, published atomically
-only after readback. Cancellation publishes nothing.
+**Export all CAD parts as STEP…** uses the recovered original `STEP_ASSEMBLY`,
+which gathers bodies unchanged. `BREP_COMPOUND` imprints bodies and is not used.
+Each source solid must have a unique native-readback match by finite volume,
+surface area, centroid and inertia measurements (relative 1e-12/absolute 1e-9).
+Solid count, staged source bytes, document integrity and destination bytes are
+checked. Uncovered shells/faces/edges/vertices, changed measurements, lost solids
+and ambiguous origins are refused. These are bounded exchange checks, not proof
+of arbitrary CAD equivalence or preservation of assembly names/hierarchy.
+Selected-part export now shares these readback checks. Both exports preserve the
+active mesh/analysis and unsaved state, publish atomically to a new filename and
+never overwrite an existing destination. Cancellation publishes nothing.
 
-The source desktop completes 62 checks: translation and rotation dialogs,
-exact owned undo/redo, split/repair, three-body mesh (206 nodes/517 C3D4), selected
-and whole-model STEP export/reopen, native affine-displacement/unit-stress solve,
-complete frozen edit provenance and visible contours. Forty-nine desktop checks
-and nine build guards pass on Mac; both native Mac/Linux ARM64 pass 50 transactions and
-49 desktop checks. Linux also completes all 62 combined GUI/analytical checks.
-Final copied-app evidence follows below.
+## Actual verification
 
-D057 original PMX compatibility, D058 hosted CI hold, D059 x64 deferral, strict
-native parity differences, both correctness failures, quadratic tetrahedra and
-all installer/signing/four-target/release gates remain. STEP exchange is not a
-native CAD-session PMX serializer; original session persistence remains open.
+- Native Mac ARM64 and Linux ARM64 each pass **50 CAD transaction checks**,
+  including exact checkpoint restoration, analytical rotation, original reference
+  translation/split/repair hashes, selected/whole-model export and refusal controls.
+- Both copied Mac viewports and the Linux ARM64 desktop each pass **62 workflow
+  checks** through real dialogs, translation/rotation undo/redo, split/repair,
+  remeshing, selected/whole STEP export/reopen, frozen provenance and native solve.
+  The edited three-solid mesh has **206 nodes / 517 C3D4 elements** on both hosts.
+- The affine displacement and unit axial stress checks pass at every result node.
+  Maximum displacement error is ~3.47e-18. Jobs freeze all four active operation
+  inputs, parameter files, receipts, outputs, hashes and source-part mappings.
+  Actual bridge/Cocoa screenshots show mesh contours and the configured model tree.
+- **49 desktop regression checks** pass on each native host; **nine build guards**
+  pass on Mac. Body-loss/changed-measurement/ambiguous-origin refusals, late export
+  cancellation, history corruption, successful/failed branches, checkpoint
+  count/byte limits, deferred close and lifetime cleanup are covered.
+- Existing CAD PMX and C3D8 PMX workflows pass **28 / 17 checks** respectively in
+  the final copied Mac app and against the current Linux ARM64 source.
+
+The strict final Mac/Linux comparison matches mesh topology, decoded coordinates
+and result value order, but differs in G17 deck coordinates and tiny field
+components: maximum absolute field difference ~9.61688e-14. The full strict
+comparison and deck diff remain in the evidence directory. Analytical checks pass
+independently; no coordinate formatter, engineering tolerance or solver precision
+changed. Exact native parity remains open. The earlier task 0077 strict difference
+also remains historical evidence.
+
+Original Windows translation/split/repair BREP hashes are reused from the retained
+task 0066 reference. No new Windows rotation/whole-export or original GUI execution
+is claimed. Original numerical/C# owners and native runtimes are unchanged, so
+verification targets the affected Python/CAD paths; the full numerical/platform/
+release matrix was not rerun. Initial task 0078 test-double and raw-versus-converted
+BREP assertion failures are retained alongside their corrected passing receipts.
+
+## Publication and retained candidate
+
+Normal research publication is remote-verified:
+
+- 0078: `e62da0fffb9e89367d583b70341fda9b4cc1b3be`
+- 0079: `ec24d84d55d81e8b970adad473627f42b3c78d47`
+- 0080 / packaged source: `390cf08b9c45363fadba217b5ace91175eb26b73`
+
+All commits contain `[skip ci]`; pushes use `-o ci.skip`. No hosted jobs were
+requested. D058's hold and D059's Windows/Podman Linux x64 deferral remain.
+
+Current candidate: `/tmp/prepomaxx-task0080-delivery/PrePoMax-X Preview.app`.
+Launch with sibling `/tmp/prepomaxx-task0080-delivery/Native CAD Preview.command`
+to enable `/tmp/prepomaxx-task0063-recipe/runtime`. Older task 0067/0068/0070/0073/
+0077 launchers forward to it. The package source patch is empty; the dirty flag
+reflects four pre-existing Finder metadata files. All **2,422 payload file hashes**,
+symlink targets and the copied app's ad-hoc signature pass after cleanup.
+This remains an internal, unnotarized native preview.
+
+Evidence: `/tmp/prepomaxx-task0080-evidence`; package manifest, logs and source
+snapshot: `/tmp/prepomaxx-task0080-final`. The tracked receipt pins their hashes.
+Seven superseded generated directories, including task 0077's copied app and the
+new build's duplicate payloads/caches, were pruned: 5,035,165,629 logical bytes,
+with 4,436,168,704 bytes (~4.13 GiB) of measured free-space gain. Generated CAD/
+STEP/PMX/mesh projects, all jobs/screenshots/receipts/source snapshots and shared
+native/Python/.NET/package/Podman/source caches remain. Installed user app/state
+was untouched. Historical candidate paths in earlier reports are superseded.
+
+## Open acceptance work
+
+Original-compatible native CAD-session PMX persistence, broader project graphs,
+assembly metadata, arbitrary CAD/defective repair, analysis/mesher breadth, exact
+native parity, both existing element correctness failures, quadratic tetrahedra,
+Windows/net48 and all four-target/installers/Homebrew/signing/notarization/release
+requirements remain open. No frontend/default-format/backend/precision decision
+or release acceptance is made. Notify the maintainer when Developer ID or
+notarization actually requires their involvement.

@@ -1,15 +1,20 @@
 # Native viewport candidate
 
 With `--cad-native RUNTIME`, **CAD tools…** beside Open provides selected-part
-translation, plane splitting, ShapeFix repair option 1 and STEP export. Values
-use model units. Geometry edits run in the background; Cancel and closing stop
-the worker, retaining the previous document on failure. Successful edits clear
-the dependent mesh/analysis, so remesh before solving. STEP export checks native
-reimport before writing a new file and preserves the active mesh/analysis.
-Opened PMX geometry may be exported but cannot be mutated through these tools.
-Edited geometry recipes and exact inputs are retained in submitted CAD jobs.
-STEP export is selected-part exchange; new native-session PMX save remains open.
-[Checks and current candidate](../../.project/reports/desktop-cad-editing.md).
+translation, axis-angle rotation, plane splitting, ShapeFix repair option 1 and
+selected/all-part STEP export. Values use model units; rotation uses degrees.
+Geometry edits run in the background; Cancel and closing stop the worker,
+retaining the previous document on failure. Successful edits retain an owned
+undo checkpoint and clear dependent mesh/analysis. Undo/redo restores exact CAD
+bytes and requires remeshing; it does not restore mesh/analysis or replay PMX
+history. The preview limits checkpoints to 32 and 256 MiB of authoritative inputs.
+STEP export checks native solid measurements and unambiguous origins before
+publishing a new filename, preserving the active mesh/analysis. All-part export
+uses unchanged assembly gathering. Opened PMX geometry may be exported but cannot
+be mutated through these tools. Submitted CAD jobs retain exact edit recipes and
+inputs. STEP geometry exchange does not preserve arbitrary assembly metadata;
+new native-session PMX save remains open.
+[Checks and current candidate](../../.project/reports/cad-history-rotation-export.md).
 
 Task 0044 adds a model tree and **Configure… / Run analysis** for the existing
 static-solid definition. Units, isotropic elastic materials, solid sections,

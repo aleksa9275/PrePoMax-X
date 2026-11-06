@@ -71,3 +71,9 @@ D058's hosted hold and D059's deferred Windows/Podman Linux x64 verification rem
 New native-session PMX persistence, broad CAD/repair/analysis coverage, Windows
 native execution, all correctness/parity/four-target/installer/signing/notarization/
 release gates stay open. No production frontend or precision policy is selected.
+
+
+Task 0080 retention update: the task 0077 candidate named above is superseded and
+its copied app is pruned. Evidence/projects/jobs remain. Read
+[the current CAD history/rotation/export report](cad-history-rotation-export.md)
+for the retained task 0080 candidate and final checks.

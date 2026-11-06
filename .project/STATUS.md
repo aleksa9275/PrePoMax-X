@@ -2,14 +2,20 @@
 
 ## Current — tasks 0078–0080: CAD history, rotation and model exchange
 
-Task 0078 adds bounded owned geometry undo/redo, preserving redo on failures and
-clearing dependent meshes after confirmation. Native checkpoint bytes and 48
-desktop lifecycle/resource tests pass on Mac. Original axis-angle rotation and
-whole-model STEP exchange follow; combined Linux ARM64 and copied-app checks
-close the batch. [Evidence](reports/cad-history-rotation-export.md).
+Tasks 0078–0080 add bounded owned geometry undo/redo, original axis-angle
+rotation and whole-model STEP assembly export with checked solid correspondence.
+Native Mac/Linux ARM64 pass 50 transactions, 49 desktop checks and the 62-check
+combined editing/remesh/analytical-solve/STEP-reopen workflow. Both copied Mac
+viewports pass those 62 checks with visible contours, 206 nodes/517 C3D4 and
+four frozen edit recipes. Source `390cf08b` is published/remote-verified with CI
+skipped and an empty package source patch. [Evidence](reports/cad-history-rotation-export.md).
+Current app: `/tmp/prepomaxx-task0080-delivery/PrePoMax-X Preview.app`; its sibling
+native CAD launcher enables the retained runtime. CAD PMX/C3D8 PMX regressions pass 28/17 on both hosts. Superseded app/build
+payloads are pruned; evidence/projects/jobs/shared tools remain. Strict native deck/field differences remain open
+(maximum field difference ~9.61688e-14); no tolerance/precision changes.
 Native-session PMX and all D057/D058/D059/correctness/parity/release gates remain.
 
-## Current — tasks 0074–0077: native desktop CAD operations
+## Prior — tasks 0074–0077: native desktop CAD operations
 
 Tasks 0074–0077 add selected-part translation, plane split, controlled ShapeFix
 repair and STEP export through the original native commands. Mac/Linux ARM64

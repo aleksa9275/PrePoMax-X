@@ -1,5 +1,29 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0078–0080 add bounded owned CAD undo/redo, original rotation and checked
+whole-model STEP export. Read [the current report](../reports/cad-history-rotation-export.md)
+and its verification receipt first. History restores exact owned geometry bytes,
+requires remeshing and does not restore analysis or replay PMX history. Failed
+branches retain redo; successful branches release it. Checkpoint inputs are
+bounded to 32/256 MiB. Whole export uses original unchanged `STEP_ASSEMBLY`, checks
+solid count/unique measured origins and publishes only to a new filename.
+
+Current candidate: `/tmp/prepomaxx-task0080-delivery/PrePoMax-X Preview.app`,
+source `390cf08b` published/remote-verified with CI skipped and empty source patch.
+Its sibling native CAD launcher uses `/tmp/prepomaxx-task0063-recipe/runtime`.
+Mac/Linux ARM64 pass 50 native transactions, 49 desktop checks and 62 combined
+workflow checks; both copied Mac viewports pass 62, with visible contours and
+206 nodes/517 C3D4. Jobs freeze all four edit recipes and exact input files.
+Strict native topology/decoded coordinates/value order match; deck bytes and
+tiny fields differ (maximum ~9.61688e-14), retained separately from analytical
+acceptance. New Windows rotation/whole-export execution remains pending.
+CAD PMX/C3D8 regressions pass 28/17 on both hosts. Superseded app/build copies
+are pruned; final cleanup and payload rechecks are in the receipt. Older candidate
+paths below are historical after replacement; retain all projects/jobs/evidence
+and shared tools. New native-session PMX persistence remains the major next
+boundary under D057. Keep D058's hosted hold, D059's Windows/Podman x64 deferral,
+both correctness failures, quadratic tetrahedra and every parity/release gate.
+
 Tasks 0074–0077 are complete within their native CAD editing boundary. Read
 [the desktop CAD editing report](../reports/desktop-cad-editing.md) and its final
 receipt. **CAD tools…** provides selected-part translation, plane split, original
