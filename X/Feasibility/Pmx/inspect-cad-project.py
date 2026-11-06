@@ -9,7 +9,7 @@ HERE = Path(__file__).resolve().parent
 base = run_path(str(HERE / 'inspect-static-project.py'))
 
 
-def inspect(path, mesh_decoder, graph_decoder):
+def inspect(path, mesh_decoder, graph_decoder, *, property_edits=False):
     with Path(path).open('rb') as stream:
         framing, records, model = base['read_frames'](stream)
     if framing['header'] != 'PrePoMax v3.0.0':
@@ -21,7 +21,7 @@ def inspect(path, mesh_decoder, graph_decoder):
         model_file.write_bytes(model)
         mesh = base['decode'](mesh_decoder, ['--cad-model', model_file])
         graph = base['decode'](graph_decoder, ['--cad-static-graph', graph_file])
-        targets = base['decode'](graph_decoder, ['--cad-edit-contract', graph_file])
+        targets = base['decode'](graph_decoder, ['--cad-property-contract' if property_edits else '--cad-edit-contract', graph_file])
         base['bind_mesh'](mesh, graph['definition'])
     geometry = graph['geometry']
     if (len(geometry) != 1 or [p['Name'] for p in geometry] != mesh['geometry']['partNames'] or

@@ -27,6 +27,8 @@ internal static partial class StaticGraph
             (Role: "poisson", Owner: Cell(elastic, "_youngsPoissonsTemp", 1)),
             (Role: "density", Owner: Cell(density, "_densityTemp", 0)),
             (Role: "force", Owner: Record(load.GetRawValue("_f1"), "CaeGlobals.EquationContainer")),
+            (Role: "force2", Owner: Record(load.GetRawValue("_f2"), "CaeGlobals.EquationContainer")),
+            (Role: "force3", Owner: Record(load.GetRawValue("_f3"), "CaeGlobals.EquationContainer")),
             (Role: "magnitude", Owner: Record(load.GetRawValue("_magnitude"), "CaeGlobals.EquationContainer"))
         };
         RequireExclusiveRecords(records, density);

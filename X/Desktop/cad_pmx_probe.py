@@ -41,7 +41,8 @@ def begin(app, window, source, output):
             dialog.poisson.setText('0.5')
             dialog.modulus.setText('84500.5')
             check('invalid Poisson ratio publishes nothing',dialog.save(saved) is None and not saved.exists())
-            dialog.poisson.setText('0.25');dialog.density.setText('8.1e-9');dialog.force.setText('42.25')
+            dialog.poisson.setText('0.25');dialog.density.setText('8.1e-9')
+            dialog.force.setText('-3');dialog.force2.setText('4');dialog.force3.setText('-12')
             receipt=dialog.save(saved)
             check('CAD PMX Save As validates original graph and deck',receipt and receipt['portableReadbackPassed'] and receipt['unchangedGeometryMeshAndHistory'])
             report['write']=receipt
@@ -77,7 +78,8 @@ def begin(app, window, source, output):
         QtCore.QTimer.singleShot(100,dialog_edit);window.edit_pmx_action.trigger()
         if state.get('error'):raise state['error']
         window.open_pmx(saved)
-        check('saved equations reopen in fresh session',window.pmx_session is not original and window.pmx_session.modulus=='84500.5' and window.pmx_session.force=='42.25')
+        check('saved equations reopen in fresh session',window.pmx_session is not original and window.pmx_session.modulus=='84500.5' and window.pmx_session.force=='-3')
+        check('all signed global force components reopen',window.pmx_session.forces==['-3','4','-12'])
         check('saved Poisson ratio and density reopen',window.pmx_session.poisson=='0.25' and window.pmx_session.density=='8.1E-9')
         check('saved CAD BREP and named regions unchanged',window.pmx_session.project['cadGeometry']==original.project['cadGeometry'] and window.pmx_session.project['graph']['nodeSets']==original.project['graph']['nodeSets'])
         malformed=output/'unsupported.pmx';malformed.write_bytes(source.read_bytes().replace(b'PrePoMax v3.0.0',b'PrePoMax v2.6.0',1))

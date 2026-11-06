@@ -13,13 +13,24 @@ import zlib
 
 HERE = Path(__file__).resolve().parent
 original = run_path(str(HERE/'write-cad-edit.py'))
-reader, decks = original['reader'], original['decks']
+legacy_reader, decks = original['reader'], original['decks']
 positive_decimal = original['positive_decimal']
 
 
-def decimal_value(value):
+def inspect(path, mesh_decoder, graph_decoder):
+    project = legacy_reader['inspect'](path, mesh_decoder, graph_decoder, property_edits=True)
+    magnitude = next(t['Value'] for t in project['editTargets'] if t['Role'] == 'magnitude')
+    if not magnitude.endswith(' N') or decimal_value(magnitude.removesuffix(' N'), digits=30) < 0:
+        raise ValueError('Expected a finite nonnegative stored load magnitude in N.')
+    return project
+
+
+reader = dict(legacy_reader, inspect=inspect)
+
+
+def decimal_value(value, *, digits=12):
     if not isinstance(value, str) or len(value) > 48 or not re.fullmatch(
-            r'[+-]?[0-9]{1,12}(?:\.[0-9]{1,12})?(?:[eE][+-]?[0-9]{1,2})?', value):
+            rf'[+-]?[0-9]{{1,{digits}}}(?:\.[0-9]{{1,{digits}}})?(?:[eE][+-]?[0-9]{{1,2}})?', value):
         raise ValueError('Use a finite decimal number with up to twelve fractional digits.')
     number = Decimal(value)
     if not number.is_finite() or abs(number) > Decimal('1e30') or (number and abs(number) < Decimal('1e-30')):
@@ -36,6 +47,16 @@ def material_values(modulus, poisson, density):
         raise ValueError('Density must be positive.')
     values.update(poisson=str(ratio.normalize()), density=str(mass.normalize())+' t/mm³')
     return values
+
+
+def force_values(components, deck_builder):
+    if not isinstance(components, (list, tuple)) or len(components) != 3:
+        raise ValueError('Provide three signed force components in N.')
+    equations = [str(decimal_value(value).normalize())+' N' for value in components]
+    original_values = reader['base']['decode'](deck_builder, ['--force-vector', *equations])
+    if not original_values['magnitude'].endswith(' N') or decimal_value(original_values['magnitude'].removesuffix(' N'), digits=30) < 0:
+        raise ValueError('Original load owner returned an invalid force magnitude.')
+    return dict(zip(['force','force2','force3'], equations), magnitude=original_values['magnitude'])
 
 
 def string_record(record_id, value):
@@ -90,7 +111,7 @@ def contract(graph, graph_decoder):
 
 
 def write_edit(source, output, mesh_decoder, graph_decoder, *, deck_builder,
-               modulus_mpa='105000', force_n='50', poisson=None, density=None):
+               modulus_mpa='105000', force_n='50', poisson=None, density=None, force_vector=None):
     source, output = Path(source), Path(output)
     if output.exists() or output.is_symlink() or source.resolve() == output.resolve():
         raise FileExistsError('Choose a new PMX destination.')
@@ -105,13 +126,15 @@ def write_edit(source, output, mesh_decoder, graph_decoder, *, deck_builder,
     stored = {target['Role']: target['Value'] for target in targets}
     values = material_values(modulus_mpa, poisson if poisson is not None else stored['poisson'],
                              density if density is not None else stored['density'].removesuffix(' t/mm³'))
-    values.update(force=positive_decimal(force_n)+' N', magnitude=positive_decimal(force_n)+' N')
+    components = force_vector if force_vector is not None else [force_n,
+        stored['force2'].removesuffix(' N'), stored['force3'].removesuffix(' N')]
+    values.update(force_values(components, deck_builder))
     patched = patch_members(graph, targets, values)
     expected = deepcopy(baseline['graph'])
     properties = {prop['type']: prop['rows'] for prop in expected['materials'][0]['properties']}
     properties['CaeModel.Elastic'][0][:2] = [values['modulus'], values['poisson']]
     properties['CaeModel.Density'][0][0] = values['density']
-    expected['steps'][0]['loads'][0]['force'][0] = values['force']
+    expected['steps'][0]['loads'][0]['force'] = [values[role] for role in ['force','force2','force3']]
     compressed = zlib.compress(struct.pack('<q', len(patched))+patched+model, wbits=-15)
     contents = header+struct.pack('<i', len(compressed))+compressed+tail
     with tempfile.TemporaryDirectory(prefix='.prepomaxx-cad-properties-', dir=output.parent) as directory:

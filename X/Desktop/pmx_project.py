@@ -75,14 +75,16 @@ class PmxSession:
         if not values['modulus'].endswith(' MPa') or not values['force'].endswith(' N'):
             raise ValueError('The PMX editor requires stored MPa and N equation values.')
         self.modulus = self.writer['positive_decimal'](values['modulus'].removesuffix(' MPa'))
-        self.force = self.writer['positive_decimal'](values['force'].removesuffix(' N'))
+        self.force = (str(self.writer['decimal_value'](values['force'].removesuffix(' N')).normalize())
+                      if self.cad_model else self.writer['positive_decimal'](values['force'].removesuffix(' N')))
         if self.cad_model:
             if not values['density'].endswith(' t/mm³'):
                 raise ValueError('The CAD PMX editor requires stored density in t/mm³.')
             self.poisson = values['poisson']
             self.density = values['density'].removesuffix(' t/mm³')
+            self.forces = [self.force, values['force2'].removesuffix(' N'), values['force3'].removesuffix(' N')]
 
-    def save_as(self, destination, modulus, force, *, poisson=None, density=None):
+    def save_as(self, destination, modulus, force, *, poisson=None, density=None, forces=None):
         destination = Path(destination)
         if destination.suffix.lower() != '.pmx':
             raise ValueError('Choose a .pmx destination.')
@@ -91,7 +93,7 @@ class PmxSession:
         with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-save-') as directory:
             source = Path(directory) / 'original.pmx'
             source.write_bytes(self.contents)
-            properties = {'poisson': poisson, 'density': density} if self.cad_model else {}
+            properties = {'poisson': poisson, 'density': density, 'force_vector': forces} if self.cad_model else {}
             return self.writer['write_edit'](
                 source, destination, self.mesh_host, self.graph_host, deck_builder=self.deck_host,
                 modulus_mpa=modulus, force_n=force, **properties)
@@ -126,7 +128,12 @@ class PmxDialog(QtWidgets.QDialog):
             self.density = QtWidgets.QLineEdit(session.density)
             form.addRow('Poisson’s ratio', self.poisson)
             form.addRow('Density (t/mm³)', self.density)
-        form.addRow('Axial force per node (N)', self.force)
+        form.addRow('Force X per node (N)' if session.cad_model else 'Axial force per node (N)', self.force)
+        if session.cad_model:
+            self.force2 = QtWidgets.QLineEdit(session.forces[1])
+            self.force3 = QtWidgets.QLineEdit(session.forces[2])
+            form.addRow('Force Y per node (N)', self.force2)
+            form.addRow('Force Z per node (N)', self.force3)
         self.message = QtWidgets.QLabel()
         self.message.setTextFormat(QtCore.Qt.TextFormat.PlainText)
         self.message.setWordWrap(True)
@@ -148,7 +155,8 @@ class PmxDialog(QtWidgets.QDialog):
 
     def save(self, path):
         try:
-            properties = ({'poisson': self.poisson.text().strip(), 'density': self.density.text().strip()}
+            properties = ({'poisson': self.poisson.text().strip(), 'density': self.density.text().strip(),
+                           'forces': [self.force.text().strip(), self.force2.text().strip(), self.force3.text().strip()]}
                           if self.session.cad_model else {})
             receipt = self.session.save_as(path, self.modulus.text().strip(), self.force.text().strip(), **properties)
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
