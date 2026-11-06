@@ -1,8 +1,8 @@
 # PrePoMax-X project charter
 
-2026-11-06 maintainer clarification (D060): the required final product has
+2026-11-06 reaffirmation of the original specification (D060): the required final product has
 **IDENTICAL PrePoMax 3.0.0 functionality, all mesh types and all calculations,
-except unavailable solvers**. Preview boundaries never reduce that requirement.
+with the unavailable Intel/PARDISO solver as the sole exception**. Preview boundaries never reduce that requirement.
 Tasks 0087/0088 extend C3D10 through native static calculations and desktop
 configuration/results, separating CalculiX's own formulation from the original
 PrePoMax measurement failure. [Scope and evidence](reports/quadratic-native-static.md).

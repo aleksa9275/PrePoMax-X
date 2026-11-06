@@ -5,9 +5,9 @@ target**. Continue tracking future upstream releases and maintaining open-source
 macOS/Linux distributions even if upstream does not accept the contribution.
 Windows x64, Linux x64, Linux ARM64 and Apple Silicon macOS ARM64 remain required.
 
-Maintainer clarification, 6 November 2026 (D060): **IDENTICAL functionality,
-including every original mesh type and calculation; unavailable solvers are the
-sole exception**. Static-solid or preview-only delivery is an intermediate
+Original specification reaffirmed, 6 November 2026 (D060): **IDENTICAL functionality,
+including every original mesh type and calculation; the unavailable Intel/PARDISO
+solver is the sole exception**. Static-solid or preview-only delivery is an intermediate
 checkpoint. Nothing in the coverage table below removes a missing capability
 from the final requirement. A failed PrePoMax measurement check does not prove
 that the separate CalculiX formulation is unavailable.
@@ -21,7 +21,7 @@ that the separate CalculiX formulation is unavailable.
 | Calculations | Original static/nonlinear, frequency/complex-frequency, buckling, dynamic/modal/steady-state dynamics, heat transfer, coupled/uncoupled temperature-displacement, boundary-displacement and slip-wear steps, with their original supported combinations. Sources: `CaeModel/Steps`; exact stable-release correspondence remains required. |
 | Model semantics | All original materials, sections/composites, constraints/interactions/contact, amplitudes, initial/defined fields, coordinate systems, supports, mechanical/thermal loads, controls and outputs. Unsupported portable JSON fields remain missing implementation, not product exclusions. |
 | Application workflows | Full geometry/mesh/model/results operations, original PMX interoperability in both directions, undo/history/replay, imports/exports, selection, deformation/animation, plots/histories, automation and original numerical tools. |
-| Solver exception | Only specifically unavailable solver backends may be excluded. Preserve available original backends and analysis capabilities; record backend provenance and any actual capability gap explicitly. |
+| Solver exception | The unavailable Intel/PARDISO solver is the sole exception. Preserve all other original backends and calculation capabilities; implementation gaps remain outstanding work. |
 
 This is a required-breadth index, not a claim that a source-file inventory proves
 stable 3.0.0 behavior or exhaustive workflow acceptance. Add reference/native

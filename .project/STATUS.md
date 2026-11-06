@@ -2,8 +2,8 @@
 
 ## Current — tasks 0087/0088: C3D10 native calculations
 
-D060 confirms IDENTICAL 3.0.0 functionality, all mesh types/calculations except
-unavailable solvers. Native C3D10 static deck/solve/ten-node FRD and desktop
+D060 confirms IDENTICAL 3.0.0 functionality, all mesh types/calculations, with
+the unavailable Intel/PARDISO solver as the sole exception. Native C3D10 static deck/solve/ten-node FRD and desktop
 configure/results now work independently of the original PrePoMax measurement
 failure. The original measurement gate/classifier failure remain unchanged.
 [Current implementation, checks and delivery](reports/quadratic-native-static.md).

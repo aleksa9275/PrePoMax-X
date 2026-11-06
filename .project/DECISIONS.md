@@ -1,12 +1,11 @@
 # Decision register
 
-D060 — Full-functionality clarification, 2026-11-06: the maintainer requires
+D060 — Reaffirmed original full-functionality requirement, 2026-11-06: the maintainer requires
 **IDENTICAL PrePoMax 3.0.0 functionality, including all mesh types and all
-calculations, except unavailable solvers**. Bounded previews are development
+calculations, with the unavailable Intel/PARDISO solver as the sole exception**. Bounded previews are development
 increments, never a reduced final product or authorization to omit element,
-analysis, material, load, result, editing or persistence functionality. Solver
-unavailability must be identified specifically; it does not automatically remove
-an analysis available through another supported original backend. Preserve shared
+analysis, material, load, result, editing or persistence functionality. This is the original specification, not an expansion or authorized scope change.
+Do not generalize the Intel solver exception to other backends or analysis types. Preserve shared
 original behavior and record any implementation limitation as outstanding work.
 Tasks 0087/0088 separate the original PrePoMax quadratic measurement discrepancy
 from native CalculiX's independent C3D10 formulation and deliver real quadratic
@@ -119,6 +118,18 @@ honesty and final four-target/parity/package requirements. The concrete
 installer preview then an engineering alpha; it does not select a frontend,
 format, native build/profile or numerical change. Task 0035 is planning only;
 CI/application code stays unchanged, normal publication policy remains.
+
+Maintainer reaffirmation, 6 November 2026: work in larger functional milestones
+that deliver usable original feature families through the shared application.
+Group related implementation into one substantial step; do not split each
+transport, guard or UI control into a separate delivery task. During development,
+reuse existing tests and run focused checks where they resolve a real risk or
+failure. Run representative end-to-end and affected regressions at integration
+boundaries; reserve full platform sweeps, repeated copied-app checks and package
+rebuilds for meaningful candidate milestones. Add tests for substantive behavior
+or defects, not every changed line. Report progress in completed user functions
+and remaining functionality. Testing checks progress toward the working product;
+it is not the project objective. Existing numerical expectations remain intact.
 
 D049 — Accepted PrePoMac investigation and VM execution-option research,
 2026-11-02: maintainer requests detailed solver/UI/Linux evaluation and is willing

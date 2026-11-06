@@ -1,5 +1,17 @@
 # Functional equivalence and platform acceptance
 
+Maintainer reaffirmation, 6 November 2026: work in larger functional milestones
+that deliver usable original feature families through the shared application.
+Group related implementation into one substantial step; do not split each
+transport, guard or UI control into a separate delivery task. During development,
+reuse existing tests and run focused checks where they resolve a real risk or
+failure. Run representative end-to-end and affected regressions at integration
+boundaries; reserve full platform sweeps, repeated copied-app checks and package
+rebuilds for meaningful candidate milestones. Add tests for substantive behavior
+or defects, not every changed line. Report progress in completed user functions
+and remaining functionality. Testing checks progress toward the working product;
+it is not the project objective. Existing numerical expectations remain intact.
+
 ## Development cadence — 2026-11-02
 
 Maintainer requests faster installable-product delivery and less repeated

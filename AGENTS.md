@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+2026-11-06 delivery cadence reaffirmation: prioritize larger, usable functional
+milestones and substantial implementation. Use focused checks during development
+and representative workflow/regression checks at integration boundaries. Reuse
+existing tests; add coverage for meaningful behavior/defects, not every line.
+Full repeated platform/package/viewports sweeps belong at candidate milestones.
+Measure progress by delivered original functions, not test counts. See D050 and
+.project/TEST_STRATEGY.md. The unchanged final specification is ALL original
+PrePoMax functions on all required platforms; the unavailable Intel/PARDISO
+solver is the sole solver exception. D060 reaffirms the original scope.
+
 2026-11-06 maintainer clarification, D060: require IDENTICAL PrePoMax 3.0.0
 functionality, including ALL mesh types and ALL calculations, except specifically
 unavailable solvers. Preview/static boundaries never reduce the final scope.

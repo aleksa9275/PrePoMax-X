@@ -1,7 +1,12 @@
 # Native CAD continuation — 6 November 2026
 
+Next implementation must deliver larger functional milestones under the
+reaffirmed D050 cadence: group related work, use focused checks while coding and
+validate representative workflows at integration/candidate boundaries. Progress
+is delivered original functionality. Read .project/TEST_STRATEGY.md.
+
 Maintainer D060: **IDENTICAL PrePoMax 3.0.0 functionality, all mesh types and
-all calculations, except unavailable solvers**. Do not infer a reduced target
+all calculations, with only the unavailable Intel/PARDISO solver excepted**. Do not infer a reduced target
 from static-solid/preview increments. Every other original mesh formulation,
 calculation, material/load, model/results, persistence and desktop workflow
 remains mandatory. Read [required breadth](../PARITY.md).
