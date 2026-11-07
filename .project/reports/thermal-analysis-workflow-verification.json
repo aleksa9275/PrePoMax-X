@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "0095",
+    "0096",
+    "0097"
+  ],
+  "date": "2026-11-07",
+  "success": true,
+  "implementationComplete": true,
+  "fullParityAccepted": false,
+  "fullNumericalAccepted": false,
+  "hostedCiRun": false,
+  "scope": "Original steady/transient solid thermal analysis and heat inputs/convection; broader parity remains open",
+  "evidenceRoot": "/tmp/prepomaxx-task0095-0097-evidence",
+  "checks": {
+    "macDesktop": {
+      "success": true,
+      "checks": 132,
+      "report": "/tmp/prepomaxx-task0095-0097-evidence/source-gui-final/workflow.json",
+      "cases": {
+        "steady-conduction": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0049999999999954525,
+          "frames": 1,
+          "histories": 356
+        },
+        "transient-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 9.49963e-14,
+          "frames": 20,
+          "histories": 16
+        },
+        "surface-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0005000000000006111,
+          "frames": 1,
+          "histories": 356
+        },
+        "body-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0001500000000000945,
+          "frames": 1,
+          "histories": 356
+        },
+        "film-cooling": {
+          "temperatureMaximumError": 3.333333334865074e-05,
+          "nodalFluxMaximumError": 0.0026666666666628203,
+          "frames": 1,
+          "histories": 356
+        },
+        "nodal-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0004000000000008441,
+          "frames": 1,
+          "histories": 112
+        }
+      }
+    },
+    "linuxArm64Desktop": {
+      "success": true,
+      "checks": 132,
+      "report": "/tmp/prepomaxx-task0095-0097-evidence/linux/workflow/workflow.json",
+      "cases": {
+        "steady-conduction": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0049999999999954525,
+          "frames": 1,
+          "histories": 356
+        },
+        "transient-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 9.49963e-14,
+          "frames": 20,
+          "histories": 16
+        },
+        "surface-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0005000000000006111,
+          "frames": 1,
+          "histories": 356
+        },
+        "body-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0001500000000000945,
+          "frames": 1,
+          "histories": 356
+        },
+        "film-cooling": {
+          "temperatureMaximumError": 3.333333334865074e-05,
+          "nodalFluxMaximumError": 0.0026666666666628203,
+          "frames": 1,
+          "histories": 356
+        },
+        "nodal-heating": {
+          "temperatureMaximumError": 0,
+          "nodalFluxMaximumError": 0.0004000000000008441,
+          "frames": 1,
+          "histories": 112
+        }
+      }
+    },
+    "originalWindowsSolver": {
+      "success": true,
+      "solverFiles": {
+        "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+        "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+        "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+        "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+        "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+        "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+      },
+      "runs": {
+        "surface-heating": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "ac048c69a510febf1464e264ea48f428729f50a70f582f0a4368c83ebd29a8b7",
+          "maximumDifference": {
+            "frd": 3.5779900000000005e-14,
+            "dat": 2.775362e-14
+          }
+        },
+        "nodal-heating": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "043074b5ebf63d5f655ff3cfbf4c0858990cf96d021bca293e17713bf6f3917c",
+          "maximumDifference": {
+            "frd": 7.81762e-15,
+            "dat": 5.9767e-15
+          }
+        },
+        "body-heating": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "4562563caad44200f882bab5d80f07a7b8feb2af4c754c971ed488d71c280abb",
+          "maximumDifference": {
+            "frd": 1.0624664000000001e-14,
+            "dat": 5.92321e-15
+          }
+        },
+        "film-cooling": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "6752023e31c1810841a321d5136ed7e5cca5df1f154384d05649f055b162b71f",
+          "maximumDifference": {
+            "frd": 3.0076409999999997e-13,
+            "dat": 1.9186201e-13
+          }
+        },
+        "steady-conduction": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "1c4e6630d02cfda70c94e888f1d7f29011de83093125e13be96d051b1c4b4e1c",
+          "maximumDifference": {
+            "frd": 3.71616e-13,
+            "dat": 2.2169654999999998e-13
+          }
+        },
+        "transient-heating": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "b84fd30323cc0a686469b836debe86e08aec15a70639e4cf52e18eae424293e7",
+          "maximumDifference": {
+            "frd": 2.2984100000000003e-13,
+            "dat": 8.677445e-15
+          }
+        }
+      },
+      "bounds": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "nativeWindowsAcceptance": false,
+      "scope": "Pinned original Windows CalculiX 2.22 via CrossOver; identical decks, original readers, no numerical algorithm changes"
+    },
+    "nativeComparison": {
+      "success": true,
+      "cases": {
+        "steady-conduction": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "transient-heating": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0.0
+        },
+        "surface-heating": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "body-heating": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "film-cooling": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "nodal-heating": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        }
+      }
+    },
+    "analysisEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0095-0097-engineering/analysis-current.json"
+    },
+    "resultsEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0095-0097-engineering-followup/results-current.json"
+    },
+    "executionEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0095-0097-engineering-followup/execution-current.json"
+    },
+    "desktopRegressions": {
+      "success": true,
+      "tests": 58,
+      "log": "/tmp/prepomaxx-task0095-0097-evidence/desktop-tests-final.log"
+    },
+    "analysisOwnership": {
+      "success": true,
+      "tests": 12,
+      "log": "/tmp/prepomaxx-task0095-0097-evidence/analysis-ownership-final.log"
+    },
+    "buildGuards": {
+      "success": true,
+      "tests": 9,
+      "log": "/tmp/prepomaxx-task0095-0097-evidence/build-tests.log"
+    },
+    "thermalTests": {
+      "success": true,
+      "tests": 6,
+      "log": "/tmp/prepomaxx-task0095-0097-evidence/thermal-tests-final.log"
+    },
+    "resultsOwnership": {
+      "success": true,
+      "tests": 9,
+      "log": "/tmp/prepomaxx-task0095-0097-evidence/results-ownership.log"
+    },
+    "thermalFieldOnly": {
+      "success": true,
+      "requiredOutputs": [
+        ".frd",
+        ".sta"
+      ],
+      "report": "/tmp/prepomaxx-task0095-0097-evidence/field-only/solve/run.json"
+    }
+  },
+  "linuxEnvironment": {
+    "image": "localhost/prepomaxx-task0067-gui:arm64",
+    "id": "2dab3f990038f5b7168054ddd27dfd540301d3c15871aba916edbb39bccdf135",
+    "network": "none",
+    "architecture": "aarch64",
+    "display": "Xvfb/Mesa and existing Qt fallback",
+    "hostLogs": "/tmp/prepomaxx-task0095-0097-evidence/linux",
+    "nativeWindowsApplicationAccepted": false,
+    "linuxX64Accepted": false
+  },
+  "retainedFailures": {
+    "D029QuadraticMeasurement": false,
+    "D029PyramidClassification": false,
+    "B006WedgePyramidPressure": false,
+    "B007BucklingSearchShift": false,
+    "numericalFixesDeferred": "D061"
+  },
+  "infrastructure": {
+    "retainedFailedLogs": true,
+    "notes": [
+      "Sandbox source GUI lacks Mac display; display-enabled retry passes.",
+      "Desktop suite initially lacked its explicit retained host; final 58 pass.",
+      "Results closure expanded with the original film converter; original unsupported-thermal assertion updated for supported functionality.",
+      "Podman stale unowned sockets removed only while VM stopped; disk, configuration, images and caches retained.",
+      "Linux /tmp bind alias refused; canonical /private/tmp mounts pass."
+    ]
+  },
+  "publication": {
+    "status": "implementation ready for research checkpoint",
+    "branch": "research/native-feasibility",
+    "hostedCi": "skipped under D058"
+  },
+  "candidate": {
+    "status": "pending final copied candidate verification"
+  }
+}

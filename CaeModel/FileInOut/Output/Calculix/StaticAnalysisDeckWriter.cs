@@ -277,10 +277,11 @@ namespace CaeModel
             }
         }
 
-        private static void ValidateOutputs(InpMeshData mesh, Step step)
+        internal static void ValidateOutputs(InpMeshData mesh, Step step)
         {
             if (step.FieldOutputs.Count == 0 || step.FieldOutputs.Count > 100 || step.HistoryOutputs.Count > 100)
                 throw new CaeException("Bounded nonempty field outputs are required.");
+            bool thermal=step is HeatTransferStep;
             foreach (var item in step.FieldOutputs)
             {
                 var value=item.Value; Active(value); Name(value.Name);
@@ -289,13 +290,13 @@ namespace CaeModel
                 if (value.GetType()==typeof(NodalFieldOutput))
                 {
                     var flags=((NodalFieldOutput)value).Variables;
-                    if (flags==0 || (flags & ~(NodalFieldVariable.U | NodalFieldVariable.RF))!=0) throw new NotSupportedException("Only U/RF nodal output is supported.");
+                    if (flags==0 || (flags & ~(thermal ? NodalFieldVariable.NT | NodalFieldVariable.RFL : NodalFieldVariable.U | NodalFieldVariable.RF))!=0) throw new NotSupportedException("Only U/RF nodal output is supported.");
                 }
                 else if (value.GetType()==typeof(ElementFieldOutput))
                 {
                     var output=(ElementFieldOutput)value;
                     if (output.Output!=ElementFieldOutputOutputEnum.Default || output.Variables==0 ||
-                        (output.Variables & ~(ElementFieldVariable.E | ElementFieldVariable.S | ElementFieldVariable.PEEQ))!=0) throw new NotSupportedException("Only ordinary E/S/PEEQ solid output is supported.");
+                        (output.Variables & ~(thermal ? ElementFieldVariable.HFL : ElementFieldVariable.E | ElementFieldVariable.S | ElementFieldVariable.PEEQ))!=0) throw new NotSupportedException("Only ordinary E/S/PEEQ solid output is supported.");
                 }
                 else throw new NotSupportedException("Unsupported field output type.");
             }
@@ -307,14 +308,14 @@ namespace CaeModel
                 if (value.GetType()==typeof(NodalHistoryOutput))
                 {
                     var flags=((NodalHistoryOutput)value).Variables;
-                    if (value.RegionType!=RegionTypeEnum.NodeSetName || flags==0 || (flags & ~(NodalHistoryVariable.U | NodalHistoryVariable.RF))!=0)
+                    if (value.RegionType!=RegionTypeEnum.NodeSetName || flags==0 || (flags & ~(thermal ? NodalHistoryVariable.NT | NodalHistoryVariable.RFL : NodalHistoryVariable.U | NodalHistoryVariable.RF))!=0)
                         throw new NotSupportedException("Unsupported nodal history output.");
                     Set(mesh.NodeSets,value.RegionName);
                 }
                 else if (value.GetType()==typeof(ElementHistoryOutput))
                 {
                     var flags=((ElementHistoryOutput)value).Variables;
-                    if (value.RegionType!=RegionTypeEnum.ElementSetName || flags==0 || (flags & ~ElementHistoryVariable.S)!=0)
+                    if (value.RegionType!=RegionTypeEnum.ElementSetName || flags==0 || (flags & ~(thermal ? ElementHistoryVariable.HFL : ElementHistoryVariable.S))!=0)
                         throw new NotSupportedException("Unsupported element history output.");
                     Set(mesh.ElementSets,value.RegionName);
                 }
@@ -327,7 +328,7 @@ namespace CaeModel
             if (keys.Length!=1 || sets[keys[0]]==null || sets[keys[0]].Length==0) throw new CaeException("Missing or empty named region: "+name);
             return sets[keys[0]];
         }
-        private static void Name(string name)
+        internal static void Name(string name)
         {
             if (name==null || name.Length>80 || !Regex.IsMatch(name,@"\A[A-Za-z_][A-Za-z0-9_-]*\z")) throw new CaeException("Simple keyword names up to 80 characters are required.");
         }

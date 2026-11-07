@@ -79,5 +79,25 @@
     <Compile Include="$(RepositoryRoot)CaeModel/Steps/BuckleStep.cs" Link="Steps/BuckleStep.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalFrequencyStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalFrequencyStep.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalBuckleStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalBuckleStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/HeatTransferStep.cs" Link="Steps/HeatTransferStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/BoundaryConditions/TemperatureBC.cs" Link="Steps/BoundaryConditions/TemperatureBC.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/InitialConditions/InitialCondition.cs" Link="InitialConditions/InitialCondition.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/InitialConditions/InitialTemperature.cs" Link="InitialConditions/InitialTemperature.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/CFlux.cs" Link="Steps/Loads/CFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/DFlux.cs" Link="Steps/Loads/DFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/BodyFlux.cs" Link="Steps/Loads/BodyFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/FilmHeatTransfer.cs" Link="Steps/Loads/FilmHeatTransfer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs" Link="FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalHeatTransferStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalHeatTransferStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalTemperatureBC.cs" Link="FileInOut/Output/Calculix/Keywords/Step/BC/CalTemperatureBC.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCFlux.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalCFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalDFlux.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalDFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalBodyFlux.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalBodyFlux.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalFilmHeatTransfer.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalFilmHeatTransfer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalConductivity.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalConductivity.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalSpecificHeat.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalSpecificHeat.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalSurface.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalSurface.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/IDistribution.cs" Link="IDistribution.cs" />
   </ItemGroup>
 </Project>

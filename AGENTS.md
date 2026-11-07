@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0095–0097 connect original steady/transient heat-transfer solid analysis,
+conductivity/capacity/temperature controls, nodal/body/surface heat inputs and
+convection, with original FRD/DAT fields, histories and frame animation. Read
+.project/reports/thermal-analysis-workflow.md and its receipt for actual checks,
+candidate and publication. Thermal source/keyword/solver algorithms and raw RFL
+semantics remain original; coupled/radiation/amplitude/other thermal families
+remain required. Preserve D029/B006/B007 and D057/D058/D059/D060/D061, original
+algorithms/tolerances and every four-target/full-parity/release obligation.
+
 Tasks 0092–0094 connect original frequency and linear buckling analysis,
 mode/factor results, deformation/outline/animation and original DAT history
 plot/table/CSV inspection. Read .project/reports/eigenmodes-results-tools.md and

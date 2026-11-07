@@ -490,7 +490,7 @@
     },
     {
       "path": "CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs",
-      "sha256": "9a08f35175cf06c62ac9ea41f5a37a263108c2e79cc8379c82dc1a0857f52eef",
+      "sha256": "83d88f8199fd35c88cf9a4880cb4db11256baed8895baae1bd04ac3063a67879",
       "kind": "new boundary"
     },
     {
@@ -567,6 +567,111 @@
       "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalBuckleStep.cs",
       "sha256": "e1a8e3a957b907de84c17a61ecf920a1b7f02c9d1f224ed4ff2334a5f6c04e4d",
       "kind": "unchanged"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToDouble/StringHeatTransferCoefficientConverter.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "7e406406db1facbc43f50ad04e3bd9ce82f9921e8c4b758c6365e5516d5020c1"
+    },
+    {
+      "path": "CaeModel/Steps/HeatTransferStep.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "78758e520372dd78efbcb96bea64afde50f66ad1f9be6d28d6edd50ab45912bf"
+    },
+    {
+      "path": "CaeModel/Steps/BoundaryConditions/TemperatureBC.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "22a6400c382170c476d30e8eabe53a152d0a98988edeeb10e1c03212fb51858e"
+    },
+    {
+      "path": "CaeModel/InitialConditions/InitialCondition.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "de666e04e6c63b8230d45089bdb83d69ee21e23b356a27b566055b78a19c5054"
+    },
+    {
+      "path": "CaeModel/InitialConditions/InitialTemperature.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "ba56afc71b697bf40aa2f7a703bd043028311703c836cbd5b083cfb079207f90"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/CFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "d2046c35f140ab822e0b5e0599d5a9c42d338e1b0cd0e3c0684153cc21173a86"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/DFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "e68c30242070c1130846fb2087e920e25e1945b0d8e8370196a12a4476137883"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/BodyFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "73ee8a1a16c2ccad1f13f41f0c7c88498e2a766506a4c296add40a8989e8e51c"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/FilmHeatTransfer.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "81bba73a5778a5f70343f7da6642d2663c08eeef7adeafcc19f59608d887cffb"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "6ea05e58fc6149ec5021312686e3d93d32d6ce8cf1ac1425b34911605e10f3bc"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalHeatTransferStep.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "74c2979d5153975d510bde55d371719c896203f67449aa8889f7e471618d7724"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/BC/CalTemperatureBC.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "c96c29ffa5924226fa7726b0ad7e420ff87812b0dd2da2e4afa160e8edd3d8f0"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "34e38e7318507ac1d85d96c77492b7c160faa3988dd15b66371867628ffc751f"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalDFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "037bbb1b9edeb4b5fcfe6b475f250157f5f1f506c0d5af8fe48151b084aba874"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalBodyFlux.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "69bc56782fa0ce9844422a79d5ad929a8e0a770242755912d9a715a8bfc3b0bc"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalFilmHeatTransfer.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "59175e485dbb3caab0bc06de49bf480ac7793319f0338ef742962dffa80fb923"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalConductivity.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "fd0347e419b0c1614d4215b3f0d7391d3d7c431c6d18354d39baac161c551888"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalSpecificHeat.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "ca7481c4be823ce8c54c3251dddf461ce275690885cea5fea0da445ebaed157c"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalSurface.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "e2d42aaed4ffbc0eb719ef3430f8f0053b9a330d3dc7bd46ca8a4ea0770a19c3"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "c5f7e4a5fec60551a9ac9990422062e9c38a3b30ae3283fbd28d1d92611d6dbf"
+    },
+    {
+      "path": "CaeModel/IDistribution.cs",
+      "kind": "thermal partial or original thermal source",
+      "sha256": "f83ab191fba4ae2198c9a73841243bb7b54812ea51762d2e23ee7cb0d47c01ff"
     }
   ],
   "reviewedVariants": {

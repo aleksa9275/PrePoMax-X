@@ -19,7 +19,7 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalInitialTemperature : CalculixKeyword
+    internal partial class CalInitialTemperature : CalculixKeyword
     {
         // Variables                                                                                                                
         private string _regionName;
@@ -32,19 +32,13 @@ namespace FileInOut.Output.Calculix
 
 
         // Constructor                                                                                                              
-        public CalInitialTemperature(FeModel model, InitialTemperature initialTemperature)
+        public CalInitialTemperature(InitialTemperature initialTemperature)
         {
+            if (initialTemperature.RegionType != RegionTypeEnum.NodeSetName ||
+                initialTemperature.DistributionName != Distribution.DefaultDistributionName) throw new NotSupportedException();
             _initialTemperature = initialTemperature;
-            _initialTemperatures = model.GetNodalTemperaturesFromVariableInitialTemperature(_initialTemperature);
-            //
-            _regionName = "";
-            if (_initialTemperature.RegionType == RegionTypeEnum.NodeSetName)
-                _regionName += _initialTemperature.RegionName;
-            else if (_initialTemperature.RegionType == RegionTypeEnum.SurfaceName)
-                _regionName += model.Mesh.Surfaces[_initialTemperature.RegionName].NodeSetName;
-            else throw new NotSupportedException();
+            _regionName = initialTemperature.RegionName;
         }
-
 
         // Methods                                                                                                                  
         public override string GetKeywordString()

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "THERMAL",
+      "conductivity": "1 mW/(mm\u00b7\u00b0C)"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid",
+      "material": "THERMAL",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "film-cooling",
+    "kind": "heat-transfer",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [],
+    "loads": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": [
+      "SOLID"
+    ],
+    "thermal": {
+      "steadyState": true
+    },
+    "temperatures": [
+      {
+        "name": "Cold",
+        "nodeSet": "BOTTOM",
+        "temperature": "100"
+      }
+    ],
+    "heatLoads": [
+      {
+        "name": "Convection",
+        "kind": "film",
+        "region": "TOP",
+        "magnitude": "2 mW/(mm\u00b2\u00b7\u00b0C)",
+        "sinkTemperature": "20 \u00b0C"
+      }
+    ]
+  }
+}

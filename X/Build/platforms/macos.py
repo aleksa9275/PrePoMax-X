@@ -84,6 +84,9 @@ def package(build, root, solver_build=None):
     example_dir.mkdir()
     for name in ('cube-mesh.inp', 'cube-analysis.json', 'mixed-solids.inp', 'mixed-solids.json', 'mixed-pyramids.inp', 'mixed-pyramids.json', 'pressure-solids.inp', 'pressure-solids.json', 'gravity-column.inp', 'gravity-column.json', 'plastic-tension.inp', 'plastic-tension.json', 'finite-tension.inp', 'finite-tension.json', 'axial-frequency.inp', 'axial-frequency.json', 'column-buckling.inp', 'column-buckling.json'):
         shutil.copy2(root / 'X/Analysis/StaticDeck' / name, example_dir / name)
+    for case in ('steady-conduction','transient-heating','surface-heating','body-heating','film-cooling','nodal-heating'):
+        for suffix in ('.inp','.json'):
+            shutil.copy2(root / 'X/Analysis/StaticDeck' / (case+suffix), example_dir / (case+suffix))
     pmx = (['--add-data', f"{output / 'pmx-tools'}:pmx-tools", '--hidden-import', 'decimal']
            if (output / 'pmx-tools').is_dir() else [])
     build.run([sys.executable, '-m', 'PyInstaller', '--noconfirm', '--windowed', '--onedir',

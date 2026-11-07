@@ -221,3 +221,13 @@ for the solid section, supports and load. Selectors use existing compatible
 nonempty named sets; Save As preserves their names and membership, CAD, mesh
 and history. Reopen the saved copy before running it. The all-zero load remains
 outside the checked static deck contract. [Evidence](../../.project/reports/pmx-region-assignments.md).
+
+Thermal analysis (tasks 0095–0097): Solve example… includes steady/transient
+conduction, surface/nodal/body heat inputs and convection. Configure… → Analysis
+type / modes selects Heat transfer; Heat transfer and Heat inputs / convection
+edit original physical controls. Density and specific heat are required for
+transient calculations; its initial temperature must be explicit. Use Histories…
+for original temperature/heat-flow/integration-point-flux plots, tables and CSV.
+Power is mW in mm–N–s and W in m–N–s. See the
+[thermal workflow report](../../.project/reports/thermal-analysis-workflow.md)
+for actual scope, analytical/reference checks, candidate and remaining functions.

@@ -113,7 +113,7 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.definition = None
         self.validation = None
         layout = QtWidgets.QVBoxLayout(self)
-        note = QtWidgets.QLabel('Mechanical solid analysis · regions use named sets from the imported mesh. '
+        note = QtWidgets.QLabel('Solid analysis · regions use named sets from the imported mesh. '
             'Equations and quantities are evaluated by the original model services.')
         note.setWordWrap(True)
         layout.addWidget(note)
@@ -186,8 +186,10 @@ class AnalysisDialog(QtWidgets.QDialog):
             step_form.addRow(label, field)
         self.nodal_history = self.history_list(nodes, definition['step']['nodalHistorySets'])
         self.element_history = self.history_list([item['name'] for item in scene.get('elementSets', [])], definition['step']['elementHistorySets'])
-        step_form.addRow('U / RF histories', self.nodal_history)
-        step_form.addRow('Stress histories', self.element_history)
+        self.nodal_history_label=QtWidgets.QLabel('U / RF histories')
+        self.element_history_label=QtWidgets.QLabel('Stress histories')
+        step_form.addRow(self.nodal_history_label, self.nodal_history)
+        step_form.addRow(self.element_history_label, self.element_history)
         self.tabs.addTab(step_page, 'Step / output')
         # Original optional mechanical properties remain attached to named materials.
         properties=QtWidgets.QWidget();prop_layout=QtWidgets.QVBoxLayout(properties)
@@ -224,7 +226,7 @@ class AnalysisDialog(QtWidgets.QDialog):
         step_form.insertRow(0,self.nonlinear)
         eigen=QtWidgets.QWidget();eigen_form=QtWidgets.QFormLayout(eigen)
         self.analysis_kind=QtWidgets.QComboBox();self.analysis_kind.setObjectName('analysisKind')
-        for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling')]:self.analysis_kind.addItem(label,key)
+        for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling'),('Heat transfer','heat-transfer')]:self.analysis_kind.addItem(label,key)
         self.analysis_kind.setCurrentIndex(max(0,self.analysis_kind.findData(definition['step'].get('kind','static'))))
         self.mode_count=QtWidgets.QSpinBox();self.mode_count.setRange(1,1000);self.mode_count.setValue(definition['step'].get('modes',10))
         self.frequency_lower=QtWidgets.QLineEdit('' if definition['step'].get('lowerFrequency') is None else str(definition['step']['lowerFrequency']))
@@ -233,13 +235,49 @@ class AnalysisDialog(QtWidgets.QDialog):
         eigen_form.addRow('Analysis type',self.analysis_kind);eigen_form.addRow('Requested modes / load factors',self.mode_count)
         eigen_form.addRow('Lower frequency [Hz], blank = unspecified',self.frequency_lower);eigen_form.addRow('Upper frequency [Hz], blank = unspecified',self.frequency_upper)
         eigen_form.addRow('Buckling accuracy',self.buckling_accuracy)
-        eigen_note=QtWidgets.QLabel('Frequency requires density and homogeneous supports; remove applied loads. Buckling uses homogeneous supports and a nonzero reference load. Mode amplitudes have arbitrary normalization. The original buckling search can omit factors below 1; reference-load scaling should be checked. Static time controls apply only to static analysis.')
+        eigen_note=QtWidgets.QLabel('Frequency requires density and homogeneous supports; remove applied loads. Buckling uses homogeneous supports and a nonzero reference load. Mode amplitudes have arbitrary normalization. The original buckling search can omit factors below 1; reference-load scaling should be checked. Time controls apply to static and heat-transfer analysis.')
         eigen_note.setWordWrap(True);eigen_form.addRow(eigen_note);self.tabs.addTab(eigen,'Analysis type / modes')
+        thermal_page=QtWidgets.QWidget();thermal_layout=QtWidgets.QVBoxLayout(thermal_page)
+        thermal_layout.addWidget(QtWidgets.QLabel('Thermal power: mW for mm · N · s; W for m · N · s. Surface flux is positive inward. Nodal power applies to every selected node.'))
+        self.thermal_properties=Rows([('material','Material'),('conductivity','Conductivity'),('specificHeat','Specific heat')],
+            {'material':'','conductivity':'','specificHeat':''},
+            [{'material':m['name'],'conductivity':m.get('conductivity',''),'specificHeat':m.get('specificHeat','')} for m in definition['materials']],{'material':material_names})
+        thermal_layout.addWidget(self.thermal_properties)
+        thermal_form=QtWidgets.QFormLayout();thermal_layout.addLayout(thermal_form)
+        controls=definition['step'].get('thermal') or {}
+        self.thermal_steady=QtWidgets.QCheckBox('Steady state');self.thermal_steady.setChecked(controls.get('steadyState',True))
+        self.thermal_direct=QtWidgets.QCheckBox('Fixed time increments (Direct)');self.thermal_direct.setChecked(controls.get('direct',False))
+        self.thermal_initial=QtWidgets.QLineEdit(controls.get('initialTemperature') or '')
+        self.thermal_deltmx=QtWidgets.QLineEdit('' if controls.get('maximumTemperatureChange') is None else str(controls['maximumTemperatureChange']))
+        thermal_form.addRow(self.thermal_steady);thermal_form.addRow(self.thermal_direct)
+        thermal_form.addRow('Uniform initial temperature (required for transient)',self.thermal_initial)
+        thermal_form.addRow('Maximum temperature change / increment (blank = original unlimited)',self.thermal_deltmx)
+        self.temperatures=Rows([('name','Name'),('nodeSet','Node set'),('temperature','Temperature')],
+            {'name':'','nodeSet':'','temperature':'0'},definition['step'].get('temperatures') or [],{'nodeSet':nodes})
+        thermal_layout.addWidget(QtWidgets.QLabel('Prescribed temperatures'));thermal_layout.addWidget(self.temperatures)
+        self.tabs.addTab(thermal_page,'Heat transfer')
+        heat_page=QtWidgets.QWidget();heat_layout=QtWidgets.QVBoxLayout(heat_page)
+        heat_note=QtWidgets.QLabel('Nodal: power per node. Body: power / volume on an element set. Surface: power / area on complete exterior faces of a node set. Film: coefficient in power / (area · °C), with sink temperature. Constant loads use original step semantics.')
+        heat_note.setWordWrap(True);heat_layout.addWidget(heat_note)
+        self.heat_loads=Rows([('name','Name'),('kind','Kind'),('region','Named region'),('magnitude','Power / flux / film coefficient'),('sinkTemperature','Film sink temperature')],
+            {'name':'','kind':'nodal','region':'','magnitude':'0','sinkTemperature':''},definition['step'].get('heatLoads') or [],
+            {'kind':['nodal','body','surface','film'],'region':list(dict.fromkeys(nodes+[v['name'] for v in scene.get('elementSets',[])]))})
+        heat_layout.addWidget(self.heat_loads);self.tabs.addTab(heat_page,'Heat inputs / convection')
+        for rows in (self.thermal_properties,self.temperatures,self.heat_loads):rows.changed.connect(self.mark_changed)
+        for field in (self.thermal_initial,self.thermal_deltmx):field.textChanged.connect(self.mark_changed)
+        for field in (self.thermal_steady,self.thermal_direct):field.toggled.connect(self.mark_changed)
         def update_kind():
-            kind=self.analysis_kind.currentData();static=kind=='static'
-            for key,field in self.step_fields.items():field.setEnabled(static or key in ('name','outputFrequency'))
-            self.nonlinear.setEnabled(static);self.mode_count.setEnabled(not static)
+            kind=self.analysis_kind.currentData();static=kind=='static';thermal=kind=='heat-transfer';eigen=kind in ('frequency','buckling')
+            for key,field in self.step_fields.items():field.setEnabled(static or thermal or key in ('name','outputFrequency'))
+            self.nonlinear.setEnabled(static);self.mode_count.setEnabled(eigen)
             self.frequency_lower.setEnabled(kind=='frequency');self.frequency_upper.setEnabled(kind=='frequency');self.buckling_accuracy.setEnabled(kind=='buckling')
+            for widget in (self.thermal_properties,self.thermal_steady,self.thermal_direct,self.thermal_initial,self.thermal_deltmx,self.temperatures,self.heat_loads):widget.setEnabled(thermal)
+            for widget in (self.supports,self.loads,self.pressures,self.gravity,self.plastic_curve):widget.setEnabled(not thermal or widget.table.rowCount()>0)
+            for column in (1,2):self.materials.table.setColumnHidden(column,thermal)
+            self.nodal_history_label.setText('Temperature / heat flow histories' if thermal else 'U / RF histories')
+            self.element_history_label.setText('Heat flux histories' if thermal else 'Stress histories')
+            self.nodal_history.setToolTip('Temperature / reaction heat flow' if thermal else 'Displacement / reaction force')
+            self.element_history.setToolTip('Integration-point heat flux' if thermal else 'Stress')
             self.mark_changed()
         self.analysis_kind.currentIndexChanged.connect(update_kind)
         self.mode_count.valueChanged.connect(self.mark_changed);self.frequency_lower.textChanged.connect(self.mark_changed);self.frequency_upper.textChanged.connect(self.mark_changed);self.buckling_accuracy.valueChanged.connect(self.mark_changed)
@@ -270,7 +308,7 @@ class AnalysisDialog(QtWidgets.QDialog):
 
     def refresh_material_options(self):
         names=[r['name'] for r in self.materials.values() if r['name']]
-        for rows in (self.mechanical_properties,self.plastic_curve):
+        for rows in (self.mechanical_properties,self.plastic_curve,self.thermal_properties):
             rows.choices['material']=names
             for i in range(rows.table.rowCount()):
                 combo=rows.table.cellWidget(i,0);current=combo.currentData()
@@ -342,8 +380,28 @@ class AnalysisDialog(QtWidgets.QDialog):
                 raise ValueError('Enter a valid number for ' + key)
         kind=self.analysis_kind.currentData()
         if kind!='static' or 'kind' in value['step']:value['step']['kind']=kind
-        if kind!='static' or 'modes' in value['step']:value['step']['modes']=self.mode_count.value()
-        for key,field in [('lowerFrequency',self.frequency_lower),('upperFrequency',self.frequency_upper)]:
+        if kind in ('frequency','buckling') or 'modes' in value['step']:value['step']['modes']=self.mode_count.value()
+        if kind=='heat-transfer':
+            for material in value['materials']:
+                for key in ('youngsModulus','poissonsRatio'):
+                    if not material.get(key):material.pop(key,None)
+            seen=set()
+            for row in self.thermal_properties.values():
+                name=row['material']
+                if name not in by_name:
+                    if not row['conductivity'] and not row['specificHeat']:continue
+                    raise ValueError('Thermal properties refer to a missing material: '+name)
+                if name in seen:raise ValueError('Use one thermal property row per material.')
+                seen.add(name)
+                for key in ('conductivity','specificHeat'):
+                    if row[key]:by_name[name][key]=row[key]
+            controls={'steadyState':self.thermal_steady.isChecked(),'direct':self.thermal_direct.isChecked()}
+            if self.thermal_initial.text().strip():controls['initialTemperature']=self.thermal_initial.text().strip()
+            if self.thermal_deltmx.text().strip():controls['maximumTemperatureChange']=float(self.thermal_deltmx.text())
+            value['step']['thermal']=controls
+            value['step']['temperatures']=self.temperatures.values()
+            value['step']['heatLoads']=[{key:v for key,v in row.items() if key!='sinkTemperature' or v} for row in self.heat_loads.values()]
+        for key,field in [('lowerFrequency' ,self.frequency_lower),('upperFrequency',self.frequency_upper)]:
             if field.text().strip():value['step'][key]=float(field.text())
             else:value['step'].pop(key,None)
         if kind=='buckling' or 'bucklingAccuracy' in value['step']:value['step']['bucklingAccuracy']=self.buckling_accuracy.value()
@@ -357,7 +415,7 @@ class AnalysisDialog(QtWidgets.QDialog):
             value = self.collect()
             outcome = validate_definition(self.mesh_bytes, value)
             self.definition, self.validation = value, outcome
-            self.message.setText('Valid mechanical definition. Original model/deck checks passed; no solver was started.')
+            self.message.setText('Valid analysis definition. Original model/deck checks passed; no solver was started.')
             return True
         except (OSError, ValueError, subprocess.SubprocessError) as error:
             self.definition = self.validation = None

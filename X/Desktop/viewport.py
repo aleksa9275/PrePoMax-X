@@ -235,7 +235,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.cancel_action = jobbar.addAction("Cancel", self.cancel_operation)
         self.cancel_action.setEnabled(False)
         jobbar.addAction("Job files", self.open_job_directory)
-        self.job_label = QtWidgets.QLabel("Ready · mechanical solid preview")
+        self.job_label = QtWidgets.QLabel("Ready · solid analysis preview")
         jobbar.addWidget(self.job_label)
         dock = QtWidgets.QDockWidget("Job output", self)
         self.job_output = QtWidgets.QPlainTextEdit()
@@ -306,8 +306,13 @@ class Viewport(QtWidgets.QMainWindow):
             group = QtWidgets.QTreeWidgetItem(root, [label, str(len(records))])
             group.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
             for record in records:
-                child = QtWidgets.QTreeWidgetItem(group, [record['name'], record[region]])
+                child = QtWidgets.QTreeWidgetItem(group, [record['name'], record.get(region) or record.get('conductivity','')])
                 child.setData(0, QtCore.Qt.ItemDataRole.UserRole, tab)
+        for tab,label,key in [(10,'Temperature boundaries','temperatures'),(11,'Heat inputs / convection','heatLoads')]:
+            records=self.definition['step'].get(key) or []
+            group=QtWidgets.QTreeWidgetItem(root,[label,str(len(records))]);group.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
+            for record in records:
+                child=QtWidgets.QTreeWidgetItem(group,[record['name'],record.get('nodeSet') or record.get('region','')]);child.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
         mechanical=[m for m in self.definition['materials'] if m.get('density') or m.get('plasticCurve')]
         for tab,label,records in [(6,'Density / plasticity',mechanical),(7,'Pressure',(self.definition['step'].get('pressures') or [])),
                                   (8,'Gravity',(self.definition['step'].get('gravityLoads') or []))]:
@@ -317,7 +322,7 @@ class Viewport(QtWidgets.QMainWindow):
                     else record.get('nodeSet') or record.get('elementSet',''))
                 child=QtWidgets.QTreeWidgetItem(group,[record['name'],description]);child.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
         kind=self.definition['step'].get('kind','static')
-        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], f"{kind.title()} · {self.definition['step'].get('modes',10)} modes" if kind!='static' else 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
+        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], ('Steady heat transfer' if self.definition['step'].get('thermal',{}).get('steadyState',True) else 'Transient heat transfer') if kind=='heat-transfer' else f"{kind.title()} · {self.definition['step'].get('modes',10)} modes" if kind!='static' else 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
         step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 9 if kind!='static' else 5)
         if self.cad_document is not None:
             self.populate_cad_tree(self.cad_document.scene["cad"])
@@ -534,7 +539,11 @@ class Viewport(QtWidgets.QMainWindow):
                 'Plastic tension — yield and hardening':('plastic-tension.inp','plastic-tension.json'),
                 'Geometric nonlinear tension':('finite-tension.inp','finite-tension.json'),
                 'Frequency — axial rod modes':('axial-frequency.inp','axial-frequency.json'),
-                'Buckling — cantilever column':('column-buckling.inp','column-buckling.json')}
+                'Buckling — cantilever column':('column-buckling.inp','column-buckling.json'),
+                **{label:(name+'.inp',name+'.json') for label,name in [
+                    ('Heat transfer — steady conduction','steady-conduction'),('Heat transfer — transient heating','transient-heating'),
+                    ('Heat transfer — surface heat flux','surface-heating'),('Heat transfer — body heat generation','body-heating'),
+                    ('Heat transfer — convection cooling','film-cooling'),('Heat transfer — nodal heat input','nodal-heating')]}}
             name,accepted=QtWidgets.QInputDialog.getItem(self,'Solve analytical example','Example',list(choices),0,False)
             if not accepted:return
             mesh_name,definition_name=choices[name]
@@ -579,7 +588,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
         self.export_mesh_action.setEnabled(not active and self.model_scene is not None)
-        self.run_action.setToolTip("Run the configured mechanical analysis")
+        self.run_action.setToolTip("Run the configured solid analysis")
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.formulation_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None
                                           and bool(self.model_scene.get('elementBlocks')) and
@@ -1169,9 +1178,12 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--thermal-workflow-probe',type=Path,help='Exercise steady/transient conduction, heat inputs, convection and histories')
     parser.add_argument('--eigenmode-workflow-probe',type=Path,help='Exercise frequency, buckling, deformation, animation and original histories')
     parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.thermal_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe,args.nonlinear_workflow_probe,args.eigenmode_workflow_probe]):
+        parser.error('Use --thermal-workflow-probe separately from other inputs/probes')
     if args.eigenmode_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe,args.nonlinear_workflow_probe]):
         parser.error("Use --eigenmode-workflow-probe separately from other inputs/probes")
     if args.nonlinear_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,
@@ -1214,7 +1226,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1298,6 +1310,9 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
+    if args.thermal_workflow_probe:
+        from thermal_workflow_probe import begin
+        begin(app,window,args.thermal_workflow_probe)
     if args.eigenmode_workflow_probe:
         from eigenmode_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.eigenmode_workflow_probe.resolve()))

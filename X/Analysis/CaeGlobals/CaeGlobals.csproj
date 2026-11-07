@@ -56,5 +56,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/Comparers/CompareDoubleArray.cs" Link="Comparers/CompareDoubleArray.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMasterSlaveMultiRegion.cs" Link="IMasterSlaveMultiRegion.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAccelerationConverter.cs" Link="UnitSystem/StringToDouble/StringAccelerationConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringHeatTransferCoefficientConverter.cs" Link="UnitSystem/StringToDouble/StringHeatTransferCoefficientConverter.cs" />
   </ItemGroup>
 </Project>

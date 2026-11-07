@@ -81,7 +81,7 @@ internal static class Program
                 Console.WriteLine(JsonSerializer.Serialize(new{success=true,solverExecuted=false,
                     unitSystem=validationSpec.UnitSystem,nodes=validationMesh.Nodes.Count,elements=validationMesh.Elements.Count,
                     materials=validationSpec.Materials.Length,sections=validationSpec.Sections.Length,
-                    constraints=validationSpec.Step.Constraints.Length,loads=validationSpec.Step.Loads.Length+(validationSpec.Step.Pressures?.Length??0)+(validationSpec.Step.GravityLoads?.Length??0),
+                    constraints=validationSpec.Step.Constraints.Length+(validationSpec.Step.Temperatures?.Length??0),loads=validationSpec.Step.Loads.Length+(validationSpec.Step.Pressures?.Length??0)+(validationSpec.Step.GravityLoads?.Length??0)+(validationSpec.Step.HeatLoads?.Length??0),
                     nonlinearGeometry=validationSpec.Step.NonlinearGeometry,pressureLoads=validationSpec.Step.Pressures?.Length??0,gravityLoads=validationSpec.Step.GravityLoads?.Length??0,
                     deckSha256=Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(validationDeck)))}));return 0;
             }
@@ -129,7 +129,7 @@ internal static class Program
                 var spec=AnalysisFiles.Read(args[4]);
                 deck=AnalysisFiles.Build(mesh,spec);
                 hasHistory=spec.Step.NodalHistorySets.Length+spec.Step.ElementHistorySets.Length>0;
-                eigenmode=spec.Step.Kind!="static";
+                eigenmode=spec.Step.Kind is "frequency" or "buckling";
             }
             string directory=Path.GetFullPath(args[5]);
             if(Directory.Exists(directory)||File.Exists(directory))throw new IOException("Run directory must be new.");

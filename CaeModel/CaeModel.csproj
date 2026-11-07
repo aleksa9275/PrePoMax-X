@@ -47,6 +47,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Compile Include="Steps\HeatTransferStep.Legacy.cs" />
+    <Compile Include="Steps\BoundaryConditions\TemperatureBC.Legacy.cs" />
+    <Compile Include="InitialConditions\InitialTemperature.Legacy.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\BC\CalTemperatureBC.Legacy.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\InitialConditions\CalInitialTemperature.Legacy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Steps\Loads\VariablePressure.Legacy.cs" />

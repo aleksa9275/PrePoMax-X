@@ -137,3 +137,11 @@ baseline branch; original algorithms are exercised as pinned. Both earlier
 element correctness failures and the quadratic-tetrahedron measurement gate
 remain. Native solve/results, persistence/UI/CAD and actual native installers remain
 subsequent accepted work. See .project/RELEASE.md.
+
+Tasks 0095–0097 add original HeatTransferStep, temperature/initial-temperature
+objects and keyword writers, CFlux/BodyFlux/DFlux/FilmHeatTransfer, conductivity,
+specific heat and thermal outputs. `ThermalAnalysisDeckWriter` validates the
+portable integration; original thermal physics/formatting remains in its original
+classes. `thermal_layout.py` guards mechanical extraction of legacy preview/model
+methods, including the unchanged net48 entry points and serialized ownership.
+See the [thermal workflow report](../../.project/reports/thermal-analysis-workflow.md).

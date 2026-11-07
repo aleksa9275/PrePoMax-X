@@ -7,7 +7,7 @@ import analysis_layout as layout
 
 class SourceContracts(unittest.TestCase):
     def test_current_closure(self):
-        self.assertEqual(len(layout.source_rows()), 170)
+        self.assertEqual(len(layout.source_rows()), 191)
 
     def test_vol_permutation_edit_rejected(self):
         read = Path.read_text

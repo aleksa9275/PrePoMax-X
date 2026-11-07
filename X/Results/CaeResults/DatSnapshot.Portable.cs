@@ -44,6 +44,7 @@ namespace CaeResults
         private const int PortableDatMaxBytes = 8 * 1024 * 1024;
         private static readonly Dictionary<string, string> PortableDatHeaders = new Dictionary<string, string>
         {
+            {"temperatures", ""}, {"heat generation", ""}, {"heat flux", "(elem, integ.pnt.,qx,qy,qz)"},
             {"displacements", "(vx,vy,vz)"}, {"forces", "(fx,fy,fz)"},
             {"stresses", "(elem, integ.pnt.,sxx,syy,szz,sxy,sxz,syz)"},
             {"strains", "(elem, integ.pnt.,exx,eyy,ezz,exy,exz,eyz)"}
@@ -91,10 +92,14 @@ namespace CaeResults
                     if (++count > 256 || !seenBlocks.Add((step, increment, data.SetName, data.FieldName)))
                         throw new InvalidDataException("Too many or duplicate DAT datasets.");
                     bool tensor = data.FieldName == HOFieldNames.Stresses || data.FieldName == HOFieldNames.Strains;
+                    bool integrationPoint=tensor || data.FieldName==HOFieldNames.HeatFlux;
                     string[] expected = tensor ? (data.FieldName == HOFieldNames.Stresses ?
                         new[] {"Id", "Int.Pnt.", "S11", "S22", "S33", "S12", "S13", "S23"} :
                         new[] {"Id", "Int.Pnt.", "E11", "E22", "E33", "E12", "E13", "E23"}) :
                         (data.FieldName == HOFieldNames.Displacements ? new[] {"Id", "U1", "U2", "U3"} : new[] {"Id", "RF1", "RF2", "RF3"});
+                    if(data.FieldName==HOFieldNames.Temperatures)expected=new[]{"Id","T"};
+                    else if(data.FieldName==HOFieldNames.HeatGeneration)expected=new[]{"Id","RFL"};
+                    else if(data.FieldName==HOFieldNames.HeatFlux)expected=new[]{"Id","Int.Pnt.","Q1","Q2","Q3"};
                     if (!data.ComponentNames.SequenceEqual(expected) || data.Values.Length > 100000)
                         throw new InvalidDataException("Unsupported DAT component layout or size.");
                     var identities = new HashSet<(int id, int? point)>();
@@ -102,9 +107,9 @@ namespace CaeResults
                     {
                         double[] values = data.Values[row];
                         if (values.Length != expected.Length || values.Any(v => !double.IsFinite(v))) throw new InvalidDataException("Malformed DAT row.");
-                        int id = PortableDatId(values[0]); int? point = tensor ? PortableDatId(values[1]) : (int?)null;
+                        int id = PortableDatId(values[0]); int? point = integrationPoint ? PortableDatId(values[1]) : (int?)null;
                         if (!identities.Add((id, point))) throw new InvalidDataException("Duplicate DAT row identity.");
-                        for (int component = tensor ? 2 : 1; component < values.Length; component++)
+                        for (int component = integrationPoint ? 2 : 1; component < values.Length; component++)
                         {
                             if (++scalarCount > 250000) throw new InvalidDataException("DAT sample limit exceeded.");
                             var key = (step, data.SetName, data.FieldName, expected[component], id, point);
@@ -158,9 +163,10 @@ namespace CaeResults
                 var header = PortableDatHeaders.FirstOrDefault(pair => line.StartsWith(pair.Key + " ", StringComparison.Ordinal));
                 if (header.Key != null)
                 {
-                    string prefix = header.Key + " " + header.Value + " for set ";
+                    string prefix = header.Key + (header.Value.Length==0 ? "" : " " + header.Value) + " for set ";
+                    if(header.Key=="heat flux")prefix=prefix.TrimEnd();
                     if (field || step < 1 || increment < 1 || !line.StartsWith(prefix, StringComparison.Ordinal) ||
-                        !Regex.IsMatch(line.Substring(prefix.Length), @"^[A-Za-z0-9_-]{1,79} and time\s+[+\-0-9.Ee]+$", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
+                        !Regex.IsMatch(line.Substring(prefix.Length).TrimStart(), @"^[A-Za-z0-9_-]{1,79} and time\s+[+\-0-9.Ee]+$", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
                         throw new InvalidDataException("Unsupported DAT header; use explicit step/increment and plain set names.");
                     if (line.Contains("_Ref_", StringComparison.OrdinalIgnoreCase) || line.Contains("_Rot_", StringComparison.OrdinalIgnoreCase))
                         throw new NotSupportedException("Reference-point histories require full result preprocessing.");

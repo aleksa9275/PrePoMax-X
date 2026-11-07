@@ -1,5 +1,20 @@
 # Project status
 
+## Current — tasks 0095–0097: thermal analysis
+
+Original steady and transient heat transfer now connect thermal materials,
+temperature/initial-temperature controls, nodal/body/surface heat inputs and
+convection through desktop configuration, native solving and original FRD/DAT
+fields/histories/frame animation/CSV. Six examples complete on Mac/Linux ARM64;
+identical example decks, mesh identities and decoded fields match exactly across
+these native hosts. Pinned original Windows solver comparisons agree (largest
+decoded field difference about 3.72e-13). [Actual scope/evidence](reports/thermal-analysis-workflow.md).
+Original algorithms/tolerances and stored RFL semantics remain unchanged. All
+remaining original functions, D029/B006/B007 and D057/D058/D059/D060/D061,
+four-target/PMX/distribution/release obligations remain open. The implementation
+checkpoint and final copied Mac candidate are being prepared; task 0094 remains
+the retained candidate until the new copy passes verification.
+
 ## Current — tasks 0092–0094: eigenmodes and result tools
 
 Original frequency/buckling solid calculations now connect to Configure…,

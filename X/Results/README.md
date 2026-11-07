@@ -110,3 +110,11 @@ HashSet GetNextNumberedKey helper; no naming or numerical algorithm is rewritten
 The current combined suite runs **78 checks (39 FRD + 39 DAT)** and **nine CLI
 rejection controls** per source pin. Both public Windows FRD/DAT fixture hashes
 are recorded. Platform/publication evidence is tracked in .project/reports.
+
+Thermal integration now admits original FRD NDTEMP/T, FLUX/F1–F3 and RFL/RFL,
+and original DAT temperature, heat generation and integration-point heat-flux
+histories. IDs, stored nodal ordering, times, values and original parser repair
+stay authoritative. The boundary accepts CalculiX's heat-flux `for setSOLID`
+spelling that the original reader already handles. Raw RFL is not converted into
+an inferred total reaction; see the body-source convention in the
+[thermal workflow report](../../.project/reports/thermal-analysis-workflow.md).

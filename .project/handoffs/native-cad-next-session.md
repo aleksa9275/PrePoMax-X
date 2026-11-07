@@ -1,5 +1,14 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0095–0097 add original steady/transient solid heat transfer and thermal
+inputs/convection through desktop configuration/native solve/original results.
+Read [the thermal report](../reports/thermal-analysis-workflow.md) and receipt for
+actual checks, publication and the latest candidate. Six examples complete on
+native Mac/Linux ARM64 with identical decks/mesh/decoded fields and agree with
+the pinned original Windows solver. Original thermal algorithms/raw RFL remain;
+all remaining thermal/mechanical/model/mesher/results/PMX functions and
+D029/B006/B007/D057/D058/D059/D060/D061/four-target/release gates remain open.
+
 Latest implementation, tasks 0092–0094: original ordinary frequency/buckling
 solid workflows and deformation/outline/animation/original DAT history plots,
 tables and CSV are delivered. Read [the report](../reports/eigenmodes-results-tools.md)

@@ -4,6 +4,7 @@ These functions verify checked-in source. They do not generate code at build tim
 Coupled members remain in the original net48 projects, with their bodies intact.
 """
 import subprocess
+import thermal_layout
 
 BASELINE = 'de8f73032a72746e3d6d9afd53d9fbd289eb310a'
 REMOVED = {
@@ -169,4 +170,5 @@ def render(root,revision=BASELINE):
             if text.count(line)!=1:raise ValueError('Unused import anchor changed: '+path)
             text=text.replace(line,'')
         result[path]=text
+    result.update({p:v.decode("utf-8") for p,v in thermal_layout.render(root,revision).items()})
     return {path:text.encode('utf-8') for path,text in result.items()}

@@ -52,7 +52,7 @@ internal static class DatChecks
   check("DAT negative or non-increasing times rejected",Reject("negative-time",simple.Replace("0.5000000E+00","-1"))&&Reject("same-time",simple+"\nINCREMENT 2\n\n"+header+row));
   check("DAT mixed local/global histories rejected",Reject("mixed-local",simple+"\nINCREMENT 2\n\n"+header.Replace("0.5000000E+00","1")+row.TrimEnd()+" L\n"));
   check("DAT reference point remapping remains gated",Reject("reference-point",simple.Replace("SET-1","RP_Rot_1")));
-  check("DAT unsupported contact/modal/thermal records gated",Reject("contact",meta+"contact stress (a,b) for all contact elements and time 1\n\n1 2\n")&&Reject("modal",meta+"E I G E N V A L U E   O U T P U T\n")&&Reject("thermal",meta+"temperatures for set NALL and time 1\n\n1 2\n"));
+  check("DAT unsupported contact/modal records gated; original thermal rows supported",Reject("contact",meta+"contact stress (a,b) for all contact elements and time 1\n\n1 2\n")&&Reject("modal",meta+"E I G E N V A L U E   O U T P U T\n")&&Read("thermal",meta+"temperatures for set NALL and time 1\n\n1 2\n").Histories.Single().Entries.Values.Single()==2);
   check("DAT excessive size rejected before decoding",Reject("size",new string(' ',8*1024*1024+1)));
   check("DAT oversized line rejected",Reject("long-line",simple+new string('1',4097)));
   check("DAT no full history graph or persistence selection",typeof(DatFileReader).Assembly.GetType("CaeResults.HistoryResults")==null);
