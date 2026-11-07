@@ -17,7 +17,7 @@ BASELINE = core_verify.BASELINE
 EXTENSIONS = 'CaeGlobals/Extensions.cs'
 FORMATTING = 'CaeGlobals/Extensions.Calculix.cs'
 BOUNDARY = 'CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs'
-BOUNDARIES = {BOUNDARY, 'CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs', 'CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs', 'CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs'}
+BOUNDARIES = {BOUNDARY, 'CaeModel/FileInOut/Output/Calculix/AnalysisModelExtensions.cs', 'CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs', 'CaeModel/FileInOut/Output/Calculix/CalNodeFormatting.cs', 'CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs'}
 REMOVED = {
     'CaeGlobals/Equation/EquationContainer.cs': 'using System.Runtime.Remoting.Contexts;\n',
     'CaeGlobals/Equation/EquationString.cs': 'using System.Runtime.Remoting.Contexts;\n',
@@ -117,7 +117,7 @@ def source_rows(revision=BASELINE):
                 if (ROOT / p).exists():
                     raise ValueError('Upstream-only type must not silently enter the baseline build')
                 continue
-            if p in native_mesh_layout.PORTABLE_ONLY or p=='CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs':
+            if p in native_mesh_layout.PORTABLE_ONLY or p in {'CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs'}:
                 if p[len(owner) + 1:] in included:
                     raise ValueError('Portable-only VOL boundary entered Windows build')
                 continue

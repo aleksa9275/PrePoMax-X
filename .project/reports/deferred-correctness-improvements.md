@@ -45,3 +45,15 @@ emission/stress rows (B001), exported block identity loss (B003), field-only job
 output classification (B004), solver node-format overflow (B005), and original
 FRD/VTK display-order integration. This decision does not revert those repairs.
 No numerical/application/build/test change is made by this record.
+
+7 November 2026 thermal-control diagnostic, tasks 0098–0100: for k(T)=1+.01T
+on a unit rod with 0/100 °C ends, original one-increment nonlinear heat-transfer
+controls produce a maximum stored nodal temperature error .07975413 °C against
+T=100(sqrt(1+3z)-1), failing the .002 °C analytical check. Explicit original
+increments .05/.025 reduce it to .00264386/.00134386 °C; the example selects
+forty increments explicitly. The pinned original Windows solver reproduces the
+coarse result. Keep that accuracy diagnostic false; no default, tolerance or
+solver change is made. Post-parity investigation: isolate nonlinear convergence
+and spatial/time-control effects before proposing any change. This observation
+does not establish a general solver defect or defer thermal functionality.
+[Native/original evidence](radiation-amplitudes-thermal-stress.md).

@@ -155,6 +155,8 @@ def package_preview(build, solver_build=None, package_format="app", pmx_preview=
         "resultsToolsSha256": sha(ROOT / "X/Desktop/results_tools.py"),
         "thermalWorkflowProbeSha256": sha(ROOT / "X/Desktop/thermal_workflow_probe.py"),
         "thermalWorkflowFixturesSha256": sha(ROOT / "X/Desktop/thermal_workflow_fixtures.py"),
+        "thermomechanicalWorkflowProbeSha256": sha(ROOT / "X/Desktop/thermomechanical_workflow_probe.py"),
+        "thermomechanicalWorkflowFixturesSha256": sha(ROOT / "X/Desktop/thermomechanical_workflow_fixtures.py"),
         "eigenmodeWorkflowProbeSha256": sha(ROOT / "X/Desktop/eigenmode_workflow_probe.py"),
         "nonlinearWorkflowProbeSha256": sha(ROOT / "X/Desktop/nonlinear_workflow_probe.py"),
         "editorProbeSha256": sha(ROOT / "X/Desktop/editor_probe.py"),

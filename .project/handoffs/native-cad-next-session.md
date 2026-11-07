@@ -1,5 +1,13 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0098–0100 add original radiation/thermal tables, amplitudes and prescribed-
+temperature expansion/stress. Read [the report](../reports/radiation-amplitudes-thermal-stress.md)
+and receipt for actual native/reference/candidate/publication checks and remaining
+scope. Original linear-static final-state behavior and nonlinear thermal control
+sensitivity remain; the coarse conductivity accuracy check stays false, with
+numerical investigation deferred under D061. All other original functions,
+D029/B006/B007/D057–D061 and full-parity/four-target/release gates remain open.
+
 Tasks 0095–0097 add original steady/transient solid heat transfer and thermal
 inputs/convection through desktop configuration/native solve/original results.
 Read [the thermal report](../reports/thermal-analysis-workflow.md) and receipt for

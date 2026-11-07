@@ -36,12 +36,13 @@ namespace CaeModel
 
         public static string Write(InpMeshData mesh, IEnumerable<Material> materials,
                                    IEnumerable<SolidSection> sections, Step step,
-                                   ConvertPyramidsToEnum? pyramidConversion = null)
+                                   ConvertPyramidsToEnum? pyramidConversion = null, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null, string initialTemperature = null)
         {
             if (mesh == null || materials == null || sections == null || step == null)
                 throw new ArgumentNullException("Static deck components cannot be null.");
             if (mesh.OmittedKeywords == null || mesh.OmittedKeywords.Length != 0)
                 throw new CaeException("Static deck input must contain mesh data only; existing model keywords cannot be discarded.");
+            var amplitudes=AnalysisModelExtensions.Amplitudes(amplitudeDefinitions);
             string meshText = MeshDeckWriter.WriteMesh(mesh, pyramidConversion);
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
@@ -89,7 +90,7 @@ namespace CaeModel
                 throw new CaeException("Every element requires exactly one section and every supplied material must be used.");
             bool isStatic=step.GetType()==typeof(StaticStep),isFrequency=step.GetType()==typeof(FrequencyStep),isBuckling=step.GetType()==typeof(BuckleStep);
             if(!isStatic && !isFrequency && !isBuckling)throw new NotSupportedException("An exact original static, frequency or buckle step is required.");
-            if(!isStatic && (step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
+            if(!isStatic && (amplitudes.Count>0 || initialTemperature!=null || step.DefinedFields.Count>0 || step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
             if(isFrequency && (step.Loads.Count!=0 || sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
                 throw new CaeException("Frequency analysis requires density for every section and no applied loads.");
             if(isBuckling && step.Loads.Count==0)throw new CaeException("Buckling analysis requires a nonzero reference load.");
@@ -107,9 +108,12 @@ namespace CaeModel
                 if(buckle.NumOfBucklingFactors<1 || buckle.NumOfBucklingFactors>1000 || !Finite(buckle.Accuracy) || buckle.Accuracy<=0)
                     throw new CaeException("Valid buckling mode count and accuracy are required.");
             }
+            var temperatureFields=AnalysisModelExtensions.Temperatures(checkedMesh,step,initialTemperature,amplitudes);
+            if(materialList.Any(m=>m.Properties.Any(p=>p is ThermalExpansion)) && (temperatureFields.Count==0 || initialTemperature==null))
+                throw new CaeException("Thermal expansion requires an explicit initial temperature and prescribed temperature fields.");
             Active(step); Name(step.Name);
             if (!step.RunAnalysis || step.Perturbation || step.SolverType != SolverTypeEnum.Default ||
-                step.DefinedFields.Count != 0 || step.GetNumberOfStepControls() != 0 ||
+                step.GetNumberOfStepControls() != 0 ||
                 !Enum.IsDefined(typeof(IncrementationTypeEnum), step.IncrementationType) ||
                 (step.OutputFrequency != int.MinValue && step.OutputFrequency <= 0))
                 throw new NotSupportedException("A running mechanical step with default solver and ordinary global output is required.");
@@ -131,8 +135,8 @@ namespace CaeModel
             {
                 var bc = entry.Value as DisplacementRotation;
                 if (bc == null || bc.GetType()!=typeof(DisplacementRotation) || entry.Key != bc.Name) throw new NotSupportedException("Only named displacement constraints are supported.");
-                Active(bc); Name(bc.Name);
-                if (bc.TwoD || bc.Complex || bc.PhaseDeg.Value != 0 || bc.AmplitudeName != Amplitude.DefaultAmplitudeName ||
+                Active(bc); Name(bc.Name);AnalysisModelExtensions.Reference(bc.AmplitudeName,amplitudes);
+                if (bc.TwoD || bc.Complex || bc.PhaseDeg.Value != 0 ||
                     bc.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName ||
                     bc.DistributionName != Distribution.DefaultDistributionName || bc.CreationData != null ||
                     (bc.CreationIds != null && bc.CreationIds.Length != 0) || bc.RegionType != RegionTypeEnum.NodeSetName)
@@ -161,8 +165,8 @@ namespace CaeModel
             {
                 var source=entry.Value;
                 if(source==null || entry.Key!=source.Name)throw new CaeException("A named mechanical load is required.");
-                Active(source);Name(source.Name);
-                if(source.TwoD || source.Complex || source.PhaseDeg.Value!=0 || source.AmplitudeName!=Amplitude.DefaultAmplitudeName ||
+                Active(source);Name(source.Name);AnalysisModelExtensions.Reference(source.AmplitudeName,amplitudes);
+                if(source.TwoD || source.Complex || source.PhaseDeg.Value!=0 ||
                    source.CreationData!=null || (source.CreationIds!=null && source.CreationIds.Length!=0))
                     throw new NotSupportedException("Ordinary constant global mechanical loads on named regions are required.");
                 if(source.GetType()==typeof(CLoad)) {
@@ -173,7 +177,7 @@ namespace CaeModel
                     if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Forces must be finite and nonzero.");
                     foreach(int id in Set(checkedMesh.NodeSets,load.RegionName))for(int d=0;d<3;d++)
                         if(values[d]!=0 && !loaded.Add(Tuple.Create(id,d)))throw new CaeException("Overlapping concentrated loads for one node/DOF are unsupported.");
-                    loads.Add(new CalCLoad(new CLoad(load.Name,load.RegionName,RegionTypeEnum.NodeSetName,values[0],values[1],values[2],false,false,0),null,ComplexLoadTypeEnum.None));
+                    loads.Add(new CalCLoad(new CLoad(load.Name,load.RegionName,RegionTypeEnum.NodeSetName,values[0],values[1],values[2],false,false,0){AmplitudeName=load.AmplitudeName},null,ComplexLoadTypeEnum.None));
                 }
                 else if(source.GetType()==typeof(GravityLoad)) {
                     var load=(GravityLoad)source;
@@ -181,7 +185,7 @@ namespace CaeModel
                     var values=new[]{load.F1.Value,load.F2.Value,load.F3.Value};
                     if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Gravity acceleration must be finite and nonzero.");
                     if(Set(checkedMesh.ElementSets,load.RegionName).Any(id=>!densityElements.Contains(id)))throw new CaeException("Every gravity-loaded element requires a material density.");
-                    loads.Add(new CalGravityLoad(new GravityLoad(load.Name,load.RegionName,RegionTypeEnum.ElementSetName,values[0],values[1],values[2],false,false,0),ComplexLoadTypeEnum.None));
+                    loads.Add(new CalGravityLoad(new GravityLoad(load.Name,load.RegionName,RegionTypeEnum.ElementSetName,values[0],values[1],values[2],false,false,0){AmplitudeName=load.AmplitudeName},ComplexLoadTypeEnum.None));
                 }
                 else if(source.GetType()==typeof(DLoad)) {
                     var load=(DLoad)source;double magnitude=load.Magnitude.Value;
@@ -217,7 +221,7 @@ namespace CaeModel
                         do{name="_XPressure_"+(++pressureIndex);}while(checkedMesh.ElementSets.Keys.Any(n=>string.Equals(n,name,StringComparison.OrdinalIgnoreCase)));
                         checkedMesh.ElementSets.Add(name,group.Value.OrderBy(id=>id).ToArray());surface.AddElementFace(group.Key,name);
                     }
-                    var snapshot=new DLoad(load.Name,load.RegionName,load.RegionType,magnitude,false,false,0);
+                    var snapshot=new DLoad(load.Name,load.RegionName,load.RegionType,magnitude,false,false,0){AmplitudeName=load.AmplitudeName};
                     loads.Add(new CalDLoad(snapshot,surface,ComplexLoadTypeEnum.None));
                 } else throw new NotSupportedException("Unsupported mechanical load type.");
             }
@@ -238,6 +242,8 @@ namespace CaeModel
                 text.Append(meshText.Substring(elementsAt));
                 foreach (string value in materialText) text.Append(value);
                 foreach (var section in sectionList) Append(text, new CalSolidSection(section));
+                AnalysisModelExtensions.WriteAmplitudes(text,amplitudes);
+                AnalysisModelExtensions.WriteMechanicalInitial(text,checkedMesh,initialTemperature);
                 Append(text, new CalStepHeader(step));
                 if(isStatic)Append(text,new CalStaticStep((StaticStep)step));
                 else if(isFrequency)Append(text,new CalFrequencyStep((FrequencyStep)step));
@@ -246,10 +252,11 @@ namespace CaeModel
                 {
                     var source = item.Item1; var v = item.Item2;
                     var snapshot = new DisplacementRotation(source.Name, source.RegionName, RegionTypeEnum.NodeSetName, false, false, 0);
+                    snapshot.AmplitudeName=source.AmplitudeName;
                     snapshot.U1.SetEquationFromValue(v[0]); snapshot.U2.SetEquationFromValue(v[1]); snapshot.U3.SetEquationFromValue(v[2]);
                     Append(text, new CalDisplacementRotation(snapshot, null, null, ComplexLoadTypeEnum.None));
                 }
-                foreach (var keyword in loads) Append(text,keyword);
+                foreach (var keyword in loads.Concat(temperatureFields)) Append(text,keyword);
                 Append(text, new CalOutputFrequency(step.OutputFrequency));
                 foreach (var entry in step.HistoryOutputs)
                 {

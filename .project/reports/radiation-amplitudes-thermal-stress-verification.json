@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "tasks": [
+    "0098",
+    "0099",
+    "0100"
+  ],
+  "success": true,
+  "implementationComplete": true,
+  "fullParityAccepted": false,
+  "fullNumericalAccepted": false,
+  "hostedCiRun": false,
+  "evidenceRoot": "/tmp/prepomaxx-task0098-0100-evidence",
+  "checks": {
+    "macDesktop": {
+      "success": true,
+      "checks": 84,
+      "report": "/tmp/prepomaxx-task0098-0100-evidence/source-gui-final/workflow.json",
+      "cases": {
+        "radiation-cooling": {
+          "temperatureMaximumError": 4.329045118822705e-05,
+          "temperatureBound": 5e-05
+        },
+        "temperature-conductivity": {
+          "temperatureMaximumError": 0.0013438599973056853,
+          "temperatureBound": 0.002
+        },
+        "amplitude-heating": {
+          "temperatureMaximumError": 0.05000000000000071,
+          "temperatureBound": 0.0501,
+          "timeDiscreteMaximumError": 1.7763568394002505e-15
+        },
+        "amplitude-force": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 0.0020000000000024443,
+          "integrationPointStressMaximumError": 1.162013e-14
+        },
+        "free-expansion": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 1.94311e-15,
+          "integrationPointStressMaximumError": 8.340017e-16
+        },
+        "restrained-expansion": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 4.0000000000040004e-05,
+          "integrationPointStressMaximumError": 1.286703e-15
+        }
+      }
+    },
+    "linuxArm64Desktop": {
+      "success": true,
+      "checks": 84,
+      "report": "/tmp/prepomaxx-task0098-0100-evidence/linux/workflow/workflow.json",
+      "cases": {
+        "radiation-cooling": {
+          "temperatureMaximumError": 4.329045118822705e-05,
+          "temperatureBound": 5e-05
+        },
+        "temperature-conductivity": {
+          "temperatureMaximumError": 0.0013438599973056853,
+          "temperatureBound": 0.002
+        },
+        "amplitude-heating": {
+          "temperatureMaximumError": 0.05000000000000071,
+          "temperatureBound": 0.0501,
+          "timeDiscreteMaximumError": 1.7763568394002505e-15
+        },
+        "amplitude-force": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 0.0020000000000024443,
+          "integrationPointStressMaximumError": 1.162013e-14
+        },
+        "free-expansion": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 1.94311e-15,
+          "integrationPointStressMaximumError": 8.340017e-16
+        },
+        "restrained-expansion": {
+          "displacementMaximumError": 0,
+          "nodalStressMaximumError": 4.0000000000040004e-05,
+          "integrationPointStressMaximumError": 1.286703e-15
+        }
+      }
+    },
+    "originalWindowsSolver": {
+      "success": true,
+      "solverFiles": {
+        "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+        "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+        "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+        "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+        "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+        "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+      },
+      "runs": {
+        "amplitude-heating": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "9ab1b36df6342a4dbdded65b51db6ce957ec9c47a3b99257916aad5b8da2b535",
+          "maximumDifference": {
+            "frd": 2.490081e-13,
+            "dat": 9.263921e-15
+          }
+        },
+        "amplitude-force": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "3be6827d359cfb39003f195892fbc08ec5fedbf53aa98c91a6dce67fc9d4baa5",
+          "maximumDifference": {
+            "frd": 2.02771082236432e-07,
+            "dat": 4.66567127e-13
+          }
+        },
+        "restrained-expansion": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "160ba0d619d0d5ee57544f8c932c2ec3aa78c087a45bf7ab581cf67b12373fdc",
+          "maximumDifference": {
+            "frd": 4.0554318657341996e-09,
+            "dat": 1.10386392e-14
+          }
+        },
+        "radiation-cooling": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "65fe39bd2167571f199f70863761ceb4e367e19a7a5ad1888da11c48066a048f",
+          "maximumDifference": {
+            "frd": 3.26491e-15,
+            "dat": 1.8253299e-15
+          }
+        },
+        "temperature-conductivity": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "87394d5abe3b70fcca658b45d7886f889c56dda54da7b5830bf36e32b2b3650e",
+          "maximumDifference": {
+            "frd": 9.999999999886402e-10,
+            "dat": 1.1399999999994398e-12
+          }
+        },
+        "free-expansion": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "771ea3a84283d1f628918f074777fdddd58aa1f7b1ca6e95b398087afa9302be",
+          "maximumDifference": {
+            "frd": 5.48779247e-14,
+            "dat": 2.64378517e-14
+          }
+        },
+        "temperature-conductivity-coarse": {
+          "success": true,
+          "exactMeshEqual": true,
+          "inputSha256": "0f17a292dd1f1ba18fc0c7182508754fc2ce7a782f4970713a118d1ea545d06c",
+          "maximumDifference": {
+            "frd": 2.000000000002268e-12,
+            "dat": 1.6999999999992807e-12
+          }
+        }
+      },
+      "bounds": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "nativeWindowsAcceptance": false,
+      "scope": "Pinned original Windows CalculiX 2.22 via CrossOver; identical decks, original readers, no numerical algorithm changes"
+    },
+    "nativeComparison": {
+      "success": true,
+      "cases": {
+        "radiation-cooling": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "temperature-conductivity": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "amplitude-heating": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0.0
+        },
+        "amplitude-force": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "free-expansion": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        },
+        "restrained-expansion": {
+          "exactDeckEqual": true,
+          "exactMeshEqual": true,
+          "fieldsExactlyEqual": true,
+          "maximumFieldDifference": 0
+        }
+      }
+    },
+    "analysisEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0098-0100-analysis-final/analysis-current.json"
+    },
+    "resultsEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0098-0100-engineering-final/results-current.json"
+    },
+    "executionEngineering": {
+      "success": true,
+      "report": "/tmp/prepomaxx-task0098-0100-engineering-final/execution-current.json"
+    },
+    "desktopRegressions": {
+      "success": true,
+      "checks": 65,
+      "log": "/tmp/prepomaxx-task0098-0100-evidence/desktop-tests.log"
+    },
+    "newBehavior": {
+      "success": true,
+      "checks": 7,
+      "log": "/tmp/prepomaxx-task0098-0100-evidence/new-tests-final2.log"
+    },
+    "analysisOwnership": {
+      "success": true,
+      "checks": 12,
+      "log": "/tmp/prepomaxx-task0098-0100-evidence/ownership-final.log"
+    },
+    "buildGuards": {
+      "success": true,
+      "checks": 9,
+      "log": "/tmp/prepomaxx-task0098-0100-evidence/build-tests.log"
+    }
+  },
+  "retainedDiagnostics": {
+    "conductivityCoarseAccuracy": {
+      "passed": false,
+      "temperatureMaximumError": 0.07975413019195088,
+      "bound": 0.002,
+      "nativeReport": "/tmp/prepomaxx-task0098-0100-evidence/native/temperature-conductivity/frd.json",
+      "originalWindowsReport": "/tmp/prepomaxx-task0098-0100-evidence/windows-reference/temperature-conductivity-coarse/frd.json",
+      "fiftyMillisecondIncrementError": 0.0026438599973062082,
+      "twentyFiveMillisecondIncrementError": 0.0013438599973056853,
+      "scope": "Explicit original time-control refinement; no default/tolerance/solver changes. Further numerical investigation is deferred under D061."
+    },
+    "linearStaticFinalState": "Original linear static analysis evaluates final amplitude/temperature state; it is not a transient solve.",
+    "failedBuildAndAssertionLogsRetained": true
+  },
+  "retainedFailures": {
+    "D029QuadraticMeasurement": false,
+    "D029PyramidClassification": false,
+    "B006WedgePyramidPressure": false,
+    "B007BucklingSearchShift": false,
+    "numericalFixesDeferred": "D061"
+  },
+  "linuxEnvironment": {
+    "image": "localhost/prepomaxx-task0067-gui:arm64",
+    "id": "2dab3f990038f5b7168054ddd27dfd540301d3c15871aba916edbb39bccdf135",
+    "network": "none",
+    "architecture": "aarch64",
+    "display": "Xvfb/Mesa and existing Qt fallback",
+    "logs": "/tmp/prepomaxx-task0098-0100-evidence/linux",
+    "linuxX64Accepted": false,
+    "nativeWindowsApplicationAccepted": false
+  },
+  "publication": {
+    "status": "reviewed implementation ready for checkpoint",
+    "branch": "research/native-feasibility",
+    "hostedCi": "held/skipped under D058"
+  },
+  "candidate": {
+    "status": "pending final copied integration and publication"
+  },
+  "sourceReview": {
+    "sharedHelperIncludedInNet48": true,
+    "frameworkCompatibleDictionaryAdmission": true,
+    "nativeWindowsBuildExecuted": false
+  }
+}

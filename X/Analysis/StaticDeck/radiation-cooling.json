@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "THERMAL",
+      "conductivity": "0.01"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid",
+      "material": "THERMAL",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "radiation-cooling",
+    "kind": "heat-transfer",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [],
+    "loads": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": [
+      "SOLID"
+    ],
+    "thermal": {
+      "steadyState": true,
+      "absoluteZero": -273.15,
+      "stefanBoltzmann": 5.670374419e-11,
+      "initialTemperature": "100"
+    },
+    "temperatures": [
+      {
+        "name": "Hot",
+        "nodeSet": "BOTTOM",
+        "temperature": "100"
+      }
+    ],
+    "heatLoads": [
+      {
+        "name": "Radiation",
+        "kind": "radiation",
+        "region": "TOP",
+        "magnitude": "0.8",
+        "sinkTemperature": "20"
+      }
+    ]
+  }
+}

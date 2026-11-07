@@ -52,6 +52,9 @@
     <Compile Include="InitialConditions\InitialTemperature.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\BC\CalTemperatureBC.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\InitialConditions\CalInitialTemperature.Legacy.cs" />
+    <Compile Include="Steps\DefinedFields\DefinedTemperature.Legacy.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\DefinedField\CalDefinedTemperature.Legacy.cs" />
+    <Compile Include="ModelProperties.Legacy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Steps\Loads\VariablePressure.Legacy.cs" />
@@ -233,6 +236,7 @@
     <Compile Include="FileInOut\Output\Calculix\MeshDeckWriter.cs" />
     <Compile Include="FileInOut\Output\Calculix\MaterialDeckWriter.cs" />
     <Compile Include="FileInOut\Output\Calculix\StaticAnalysisDeckWriter.cs" />
+    <Compile Include="FileInOut\Output\Calculix\AnalysisModelExtensions.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.GeometryData.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.cs" />

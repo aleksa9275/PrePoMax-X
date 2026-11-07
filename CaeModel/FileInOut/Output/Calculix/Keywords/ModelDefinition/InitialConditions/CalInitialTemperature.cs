@@ -34,10 +34,11 @@ namespace FileInOut.Output.Calculix
         // Constructor                                                                                                              
         public CalInitialTemperature(InitialTemperature initialTemperature)
         {
-            if (initialTemperature.RegionType != RegionTypeEnum.NodeSetName ||
+            if ((initialTemperature.RegionType != RegionTypeEnum.NodeSetName && initialTemperature.RegionType != RegionTypeEnum.NodeId) ||
                 initialTemperature.DistributionName != Distribution.DefaultDistributionName) throw new NotSupportedException();
             _initialTemperature = initialTemperature;
             _regionName = initialTemperature.RegionName;
+            _initialTemperatures = initialTemperature.RegionType == RegionTypeEnum.NodeId ? new[] { initialTemperature } : null;
         }
 
         // Methods                                                                                                                  

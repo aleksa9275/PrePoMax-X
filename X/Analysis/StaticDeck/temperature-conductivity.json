@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "THERMAL",
+      "conductivityTable": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "2",
+          "100"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid",
+      "material": "THERMAL",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "temperature-conductivity",
+    "kind": "heat-transfer",
+    "timePeriod": 1,
+    "initialTimeIncrement": 0.025,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 0.025,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [],
+    "loads": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": [
+      "SOLID"
+    ],
+    "thermal": {
+      "steadyState": true
+    },
+    "temperatures": [
+      {
+        "name": "Cold",
+        "nodeSet": "BOTTOM",
+        "temperature": "0 \u00b0C"
+      },
+      {
+        "name": "Hot",
+        "nodeSet": "TOP",
+        "temperature": "100 \u00b0C"
+      }
+    ],
+    "heatLoads": []
+  }
+}

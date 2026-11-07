@@ -210,7 +210,7 @@
     },
     {
       "path": "CaeModel/FileInOut/Output/Calculix/MaterialDeckWriter.cs",
-      "sha256": "effdb54c18ec400c9cdfb7a48aa96eb1e9d4f945bd747499fcfb6227072ba8ce",
+      "sha256": "a4300ce3dd5696602b956577b11ae2450a81972c1ecdea3f571bfaf6171d7952",
       "kind": "new boundary"
     },
     {
@@ -490,7 +490,7 @@
     },
     {
       "path": "CaeModel/FileInOut/Output/Calculix/StaticAnalysisDeckWriter.cs",
-      "sha256": "83d88f8199fd35c88cf9a4880cb4db11256baed8895baae1bd04ac3063a67879",
+      "sha256": "489963677b18675e57fcd8617f91ca3865a79b9c6d315aeba887c4f2796109c3",
       "kind": "new boundary"
     },
     {
@@ -616,7 +616,7 @@
     {
       "path": "CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs",
       "kind": "thermal partial or original thermal source",
-      "sha256": "6ea05e58fc6149ec5021312686e3d93d32d6ce8cf1ac1425b34911605e10f3bc"
+      "sha256": "66b2aacdc4462855fd23aff02810ac59a5174969baeac15d67a3100c384a0a10"
     },
     {
       "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalHeatTransferStep.cs",
@@ -666,12 +666,72 @@
     {
       "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs",
       "kind": "thermal partial or original thermal source",
-      "sha256": "c5f7e4a5fec60551a9ac9990422062e9c38a3b30ae3283fbd28d1d92611d6dbf"
+      "sha256": "1ed651c0c98cd477457dc59358b7dd11cf638c88dcfd2a6da16ca5c1a0748318"
     },
     {
       "path": "CaeModel/IDistribution.cs",
       "kind": "thermal partial or original thermal source",
       "sha256": "f83ab191fba4ae2198c9a73841243bb7b54812ea51762d2e23ee7cb0d47c01ff"
+    },
+    {
+      "path": "CaeGlobals/UnitSystem/StringToInteger/StringIntegerConverter.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "508e3916afc07be7bab175e366a4af7a989e429068378aa603db9adafa79c93a"
+    },
+    {
+      "path": "CaeModel/ModelProperties.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "f473241a642ce18e97f303a484c2620d64df26f253bd8fe3b8d954bab0dbfc46"
+    },
+    {
+      "path": "CaeModel/Amplitudes/AmplitudeTabular.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "c71c9c045caf33cc48ce0ede369a8c92d56b2b800931a367ce31ee5ab0ac579d"
+    },
+    {
+      "path": "CaeModel/Steps/Loads/RadiationHeatTransfer.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "598daca3fad66ccf690777336857ec4bfffbfede42b0fe95d7f4bad3b240d1c6"
+    },
+    {
+      "path": "CaeModel/Steps/DefinedFields/DefinedTemperature.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "808bb7f64e44f3b65b22b57c49928b86420e6f345990b0d2196d542340142c98"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalRadiationHeatTransfer.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "34eac6c2966f0466c2d291a6ca68ea8b4d624f1162823aa4660911e178def9e7"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalPhysicalConstants.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "63e8a43adc2dba92858816c00e18b4346565e38e781185e8d39297a445144406"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAmplitude.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "2c01a71a52cf5effe999dd510e50bc16083c81853d121327a840f8ebb7175f24"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "4734be6296daa4478be10536f87b5c39922288354afb18539a2910b1dacce591"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/Keywords/Step/DefinedField/CalDefinedTemperature.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "ff796c81eca2812dce18ba759b04112ace34625af8535d7af08ed79f12017565"
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/AnalysisModelExtensions.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "2d630466f089bad8ea86e957835864b94475508622f1d1aa2af0f963dc65df4f"
+    },
+    {
+      "path": "CaeResults/Enums/SlipWearResultsEnum.cs",
+      "kind": "original thermal/amplitude integration or guarded portable orchestration",
+      "sha256": "aead0539e38f5732bfc13fc4209bf693e7a4f84bfed1b1f5b3c30a6c41a4908c"
     }
   ],
   "reviewedVariants": {

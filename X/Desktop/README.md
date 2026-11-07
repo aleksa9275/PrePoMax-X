@@ -231,3 +231,8 @@ for original temperature/heat-flow/integration-point-flux plots, tables and CSV.
 Power is mW in mm–N–s and W in m–N–s. See the
 [thermal workflow report](../../.project/reports/thermal-analysis-workflow.md)
 for actual scope, analytical/reference checks, candidate and remaining functions.
+
+Tasks 0098–0100 add Radiation and thermal material tables, Amplitudes and
+Thermal expansion / stress controls, with six new Solve example… cases. The
+model tree exposes these definitions. See the [milestone report](../../.project/reports/radiation-amplitudes-thermal-stress.md) for original
+semantics, analytical/refinement/reference evidence and remaining work.

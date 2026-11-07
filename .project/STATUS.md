@@ -1,6 +1,20 @@
 # Project status
 
-## Current — tasks 0095–0097: thermal analysis
+## Current — tasks 0098–0100: radiation, amplitudes and thermal stress
+
+Original non-cavity radiation/thermal material tables, tabular amplitudes and
+prescribed-temperature solid expansion/stress now connect through desktop
+configuration, native jobs and original fields/histories. Mac/Linux ARM64 and
+identical-deck original Windows solver comparisons complete the six-case
+workflow. The original coarse conductivity accuracy diagnostic remains false;
+forty explicit original increments meet the example's unchanged analytical bound.
+[Scope/evidence](reports/radiation-amplitudes-thermal-stress.md). Existing
+algorithms/tolerances, D029/B006/B007 and all D057–D061/full-parity/four-target/
+release obligations remain. Implementation publication and the copied candidate
+are being prepared; task 0097 remains the retained candidate until the new copy
+passes its integration checks.
+
+## Prior — tasks 0095–0097: thermal analysis
 
 Original steady and transient heat transfer now connect thermal materials,
 temperature/initial-temperature controls, nodal/body/surface heat inputs and

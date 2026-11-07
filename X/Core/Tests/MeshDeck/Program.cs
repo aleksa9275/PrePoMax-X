@@ -164,8 +164,8 @@ internal static class Program
             Require(new[] { typeof(InpFileReader).Assembly,typeof(FeNode).Assembly,typeof(StandardValueAttribute).Assembly }.All(a =>
                 a.GetReferencedAssemblies().All(r => r.Name == "CaeGlobals" || r.Name == "CaeMesh" || r.Name == "System" || r.Name.StartsWith("System.")
 #if ANALYSIS_SLICE
-                    // The expanded original equation/material build retains these exact upstream dependencies.
-                    || r.Name == "NCalc" || r.Name == "UnitsNet"
+                    // Expanded original equations/materials and ModelProperties retain their upstream owners.
+                    || r.Name == "NCalc" || r.Name == "UnitsNet" || r.Name == "CaeResults"
 #endif
                     )));
         });

@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalDefinedTemperature : CalculixKeyword
+    internal partial class CalDefinedTemperature : CalculixKeyword
     {
         // Variables                                                                                                                
         private string _regionName;
@@ -36,24 +36,16 @@ namespace FileInOut.Output.Calculix
 
 
         // Constructor                                                                                                              
-        public CalDefinedTemperature(FeModel model, DefinedTemperature definedTemperature)
+        public CalDefinedTemperature(DefinedTemperature temperature)
         {
-            _definedTemperature = definedTemperature;
-            _definedTemperatures = model.GetNodalTemperaturesFromVariableDefinedTemperature(_definedTemperature);
-            //
-            _regionName = "";
-            if (_definedTemperature.RegionType == RegionTypeEnum.NodeSetName)
-                _regionName += _definedTemperature.RegionName;
-            else if (_definedTemperature.RegionType == RegionTypeEnum.SurfaceName)
-                _regionName += model.Mesh.Surfaces[_definedTemperature.RegionName].NodeSetName;
-            else if (_definedTemperature.Type == DefinedTemperatureTypeEnum.FromFile &&
-                     _definedTemperature.RegionType == RegionTypeEnum.Selection)
-            { }
-            else throw new NotSupportedException();
-            //
+            if (temperature.Type != DefinedTemperatureTypeEnum.ByValue || temperature.RegionType != RegionTypeEnum.NodeSetName ||
+                temperature.DistributionName != Distribution.DefaultDistributionName) throw new NotSupportedException();
+            _definedTemperature = temperature;
+            _regionName = temperature.RegionName;
             _opType = OpTypeEnum.None;
         }
 
+        partial void ResolveFileData(ref string data);
 
         // Methods                                                                                                                  
         public override string GetKeywordString()
@@ -63,9 +55,10 @@ namespace FileInOut.Output.Calculix
             string amplitude = "";
             if (_definedTemperature.Type == DefinedTemperatureTypeEnum.FromFile)
             {
-                string stepData = ", Step=" + _definedTemperature.StepNumber;
-                int maxLength = CalculixLineLength - "*Temperature, File=".Length - stepData.Length - OpTypeString().Length;
-                fileData = ", File=" + Tools.GetPathForSolverLine(_definedTemperature.FileName, maxLength, false) + stepData;
+                string resolved = null;
+                ResolveFileData(ref resolved);
+                if (resolved == null) throw new NotSupportedException("File temperatures require the full model context.");
+                fileData = resolved;
             }
             else
             {

@@ -29,13 +29,26 @@ namespace CaeModel
         public static string WriteMechanical(Material material)
         {
             if (material==null || material.GetType()!=typeof(Material) || material.TemperatureDependent || !material.Active || !material.Valid ||
-                material.Properties.Any(p=>p==null || (p.GetType()!=typeof(Elastic) && p.GetType()!=typeof(Density) && p.GetType()!=typeof(Plastic))) ||
-                material.Properties.OfType<Elastic>().Count()!=1 || material.Properties.OfType<Density>().Count()>1 || material.Properties.OfType<Plastic>().Count()>1)
+                material.Properties.Any(p=>p==null || (p.GetType()!=typeof(Elastic) && p.GetType()!=typeof(Density) && p.GetType()!=typeof(Plastic) && p.GetType()!=typeof(ThermalExpansion))) ||
+                material.Properties.OfType<Elastic>().Count()!=1 || material.Properties.OfType<Density>().Count()>1 || material.Properties.OfType<Plastic>().Count()>1 || material.Properties.OfType<ThermalExpansion>().Count()>1)
                 throw new NotSupportedException("Provide isotropic elasticity with optional density and plasticity.");
             var elasticOnly=new Material(material.Name);elasticOnly.AddProperty(material.Properties.OfType<Elastic>().Single());
             string text=WriteIsotropic(elasticOnly);
             var density=material.Properties.OfType<Density>().SingleOrDefault();
             if (density!=null) text+=WriteDensity(density);
+            var expansion=material.Properties.OfType<ThermalExpansion>().SingleOrDefault();
+            if(expansion!=null) {
+                var er=expansion.ThermalExpansionTemp;
+                if(er==null || er.Length!=1 || er[0]==null || er[0].Length!=2 || er[0].Any(v=>v==null || !Finite(v.Value)) || !Finite(expansion.ZeroTemperature.Value))
+                    throw new CaeException("One finite constant thermal expansion row and reference temperature required.");
+                double coefficient=er[0][0].Value,temperature=er[0][1].Value,reference=expansion.ZeroTemperature.Value;
+                var culture=CultureInfo.CurrentCulture;
+                try {
+                    CultureInfo.CurrentCulture=CultureInfo.InvariantCulture;
+                    var snapshot=new ThermalExpansion(new[]{new[]{coefficient,temperature}});snapshot.ZeroTemperature.SetEquationFromValue(reference);
+                    var keyword=new CalThermalExpansion(snapshot,false);text+=keyword.GetKeywordString()+keyword.GetDataString();
+                } finally {CultureInfo.CurrentCulture=culture;}
+            }
             var plastic=material.Properties.OfType<Plastic>().SingleOrDefault();
             if (plastic==null) return text;
             var rows=plastic.StressStrainTemp;

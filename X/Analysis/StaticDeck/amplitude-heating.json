@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "THERMAL",
+      "conductivity": "1 mW/(mm\u00b7\u00b0C)",
+      "density": "0.001",
+      "specificHeat": "1000"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid",
+      "material": "THERMAL",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "amplitude-heating",
+    "kind": "heat-transfer",
+    "timePeriod": 1,
+    "initialTimeIncrement": 0.05,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 0.05,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [],
+    "loads": [],
+    "nodalHistorySets": [
+      "TOP"
+    ],
+    "elementHistorySets": [],
+    "thermal": {
+      "steadyState": false,
+      "initialTemperature": "10 \u00b0C",
+      "direct": true
+    },
+    "temperatures": [],
+    "heatLoads": [
+      {
+        "name": "Heater",
+        "kind": "body",
+        "region": "SOLID",
+        "magnitude": "1",
+        "amplitude": "Pulse"
+      }
+    ]
+  },
+  "amplitudes": [
+    {
+      "name": "Pulse",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0.5,
+          2
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    }
+  ]
+}

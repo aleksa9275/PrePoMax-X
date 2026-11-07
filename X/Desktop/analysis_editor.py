@@ -118,6 +118,8 @@ class AnalysisDialog(QtWidgets.QDialog):
         note.setWordWrap(True)
         layout.addWidget(note)
         self.tabs = QtWidgets.QTabWidget()
+        self.tabs.setUsesScrollButtons(True)
+        self.tabs.setElideMode(QtCore.Qt.TextElideMode.ElideNone)
         layout.addWidget(self.tabs)
         model = QtWidgets.QWidget()
         form = QtWidgets.QFormLayout(model)
@@ -255,20 +257,61 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.temperatures=Rows([('name','Name'),('nodeSet','Node set'),('temperature','Temperature')],
             {'name':'','nodeSet':'','temperature':'0'},definition['step'].get('temperatures') or [],{'nodeSet':nodes})
         thermal_layout.addWidget(QtWidgets.QLabel('Prescribed temperatures'));thermal_layout.addWidget(self.temperatures)
-        self.tabs.addTab(thermal_page,'Heat transfer')
+        self.absolute_zero=QtWidgets.QLineEdit('' if controls.get('absoluteZero') is None else str(controls['absoluteZero']))
+        self.stefan_boltzmann=QtWidgets.QLineEdit('' if controls.get('stefanBoltzmann') is None else str(controls['stefanBoltzmann']))
+        thermal_form.addRow('Absolute zero [°C] (required for radiation)',self.absolute_zero)
+        thermal_form.addRow('Stefan–Boltzmann [model power / area / K⁴]',self.stefan_boltzmann)
+        thermal_scroll=QtWidgets.QScrollArea();thermal_scroll.setWidgetResizable(True);thermal_scroll.setWidget(thermal_page)
+        self.tabs.addTab(thermal_scroll,'Heat transfer')
         heat_page=QtWidgets.QWidget();heat_layout=QtWidgets.QVBoxLayout(heat_page)
-        heat_note=QtWidgets.QLabel('Nodal: power per node. Body: power / volume on an element set. Surface: power / area on complete exterior faces of a node set. Film: coefficient in power / (area · °C), with sink temperature. Constant loads use original step semantics.')
+        heat_note=QtWidgets.QLabel('Nodal: power per node. Body: power / volume on an element set. Surface: power / area on complete exterior faces of a node set. Film: coefficient in power / (area · °C), with sink temperature. Radiation: emissivity [0,1] and sink temperature; enter physical constants on Heat transfer. Constant loads use original step semantics.')
         heat_note.setWordWrap(True);heat_layout.addWidget(heat_note)
         self.heat_loads=Rows([('name','Name'),('kind','Kind'),('region','Named region'),('magnitude','Power / flux / film coefficient'),('sinkTemperature','Film sink temperature')],
             {'name':'','kind':'nodal','region':'','magnitude':'0','sinkTemperature':''},definition['step'].get('heatLoads') or [],
-            {'kind':['nodal','body','surface','film'],'region':list(dict.fromkeys(nodes+[v['name'] for v in scene.get('elementSets',[])]))})
+            {'kind':['nodal','body','surface','film','radiation'],'region':list(dict.fromkeys(nodes+[v['name'] for v in scene.get('elementSets',[])]))})
         heat_layout.addWidget(self.heat_loads);self.tabs.addTab(heat_page,'Heat inputs / convection')
         for rows in (self.thermal_properties,self.temperatures,self.heat_loads):rows.changed.connect(self.mark_changed)
         for field in (self.thermal_initial,self.thermal_deltmx):field.textChanged.connect(self.mark_changed)
         for field in (self.thermal_steady,self.thermal_direct):field.toggled.connect(self.mark_changed)
+        table_page=QtWidgets.QWidget();table_layout=QtWidgets.QVBoxLayout(table_page)
+        table_layout.addWidget(QtWidgets.QLabel('Optional original thermal tables: positive values and strictly increasing temperatures for each material/property. Remove its scalar property before adding a table.'))
+        table_rows=[{'material':m['name'],'property':key,'value':row[0],'temperature':row[1]} for m in definition['materials'] for key in ('conductivity','specificHeat','density') for row in (m.get(key+'Table') or [])]
+        self.thermal_tables=Rows([('material','Material'),('property','Property'),('value','Property value'),('temperature','Temperature')],
+            {'material':'','property':'conductivity','value':'','temperature':''},table_rows,{'material':material_names,'property':['conductivity','specificHeat','density']})
+        table_layout.addWidget(self.thermal_tables);self.tabs.addTab(table_page,'Thermal property tables')
+        amp_page=QtWidgets.QWidget();amp_layout=QtWidgets.QVBoxLayout(amp_page)
+        amp_note=QtWidgets.QLabel('Original tabular amplitude values multiply the assigned quantities. Temperature amplitudes scale absolute entered temperature values, not temperature changes. Times are seconds; shifts and Step/Total time retain original keyword semantics. Original linear static analysis evaluates the final state; transient heat transfer follows its increments.')
+        amp_note.setWordWrap(True);amp_layout.addWidget(amp_note)
+        self.amplitude_definitions=Rows([('name','Name'),('timeSpan','Time span'),('shiftX','Time shift'),('shiftY','Value shift')],
+            {'name':'','timeSpan':'StepTime','shiftX':'0','shiftY':'0'},[{'name':a['name'],'timeSpan':a.get('timeSpan','StepTime'),'shiftX':a.get('shiftX',0),'shiftY':a.get('shiftY',0)} for a in definition.get('amplitudes') or []],{'timeSpan':['StepTime','TotalTime']})
+        amp_layout.addWidget(self.amplitude_definitions)
+        points=[{'amplitude':a['name'],'time':str(row[0]),'value':str(row[1])} for a in definition.get('amplitudes') or [] for row in a['points']]
+        self.amplitude_points=Rows([('amplitude','Amplitude name'),('time','Time [s]'),('value','Multiplier')],{'amplitude':'','time':'0','value':'0'},points)
+        amp_layout.addWidget(self.amplitude_points)
+        self.binding_sources=[('Support','constraints'),('Nodal force','loads'),('Pressure','pressures'),('Gravity','gravityLoads'),('Temperature BC','temperatures'),('Heat input','heatLoads'),('Temperature field','temperatureFields')]
+        bindings=[{'kind':kind,'name':v['name'],'amplitude':v['amplitude']} for kind,key in self.binding_sources for v in definition['step'].get(key) or [] if v.get('amplitude')]
+        bindings += [{'kind':'Coefficient / emissivity','name':v['name'],'amplitude':v['coefficientAmplitude']} for v in definition['step'].get('heatLoads') or [] if v.get('coefficientAmplitude')]
+        self.amplitude_bindings=Rows([('kind','Target kind'),('name','Target name'),('amplitude','Amplitude name')],{'kind':'Heat input','name':'','amplitude':''},bindings,{'kind':[v[0] for v in self.binding_sources]+['Coefficient / emissivity']})
+        amp_layout.addWidget(self.amplitude_bindings);self.tabs.addTab(amp_page,'Amplitudes')
+        expansion_page=QtWidgets.QWidget();expansion_layout=QtWidgets.QVBoxLayout(expansion_page)
+        expansion_note=QtWidgets.QLabel('Static mechanical thermal expansion uses an explicit uniform initial temperature and full nonoverlapping nodal temperature-field coverage. Supports and mechanical loads retain their original meaning. This is a prescribed temperature calculation; no thermal solution is inferred.')
+        expansion_note.setWordWrap(True);expansion_layout.addWidget(expansion_note)
+        expansion_form=QtWidgets.QFormLayout();expansion_layout.addLayout(expansion_form)
+        self.mechanical_initial=QtWidgets.QLineEdit(definition['step'].get('initialTemperature') or '')
+        expansion_form.addRow('Uniform initial temperature',self.mechanical_initial)
+        erows=[{'material':m['name'],'coefficient':m['expansion'],'reference':m.get('expansionZeroTemperature','')} for m in definition['materials'] if m.get('expansion') is not None]
+        self.expansion_properties=Rows([('material','Material'),('coefficient','Expansion coefficient [1/°C]'),('reference','Reference temperature')],{'material':'','coefficient':'','reference':''},erows,{'material':material_names})
+        expansion_layout.addWidget(self.expansion_properties)
+        self.temperature_fields=Rows([('name','Name'),('nodeSet','Node set'),('temperature','Prescribed temperature')],{'name':'','nodeSet':'','temperature':'0'},definition['step'].get('temperatureFields') or [],{'nodeSet':nodes})
+        expansion_layout.addWidget(self.temperature_fields);self.tabs.addTab(expansion_page,'Thermal expansion / stress')
+        for rows in (self.thermal_tables,self.amplitude_definitions,self.amplitude_points,self.amplitude_bindings,self.expansion_properties,self.temperature_fields):rows.changed.connect(self.mark_changed)
+        for field in (self.absolute_zero,self.stefan_boltzmann,self.mechanical_initial):field.textChanged.connect(self.mark_changed)
         def update_kind():
             kind=self.analysis_kind.currentData();static=kind=='static';thermal=kind=='heat-transfer';eigen=kind in ('frequency','buckling')
             for key,field in self.step_fields.items():field.setEnabled(static or thermal or key in ('name','outputFrequency'))
+            self.thermal_tables.setEnabled(thermal or self.thermal_tables.table.rowCount()>0)
+            for widget in (self.mechanical_initial,self.expansion_properties,self.temperature_fields):widget.setEnabled(static or (hasattr(widget,'table') and widget.table.rowCount()>0))
+            for widget in (self.absolute_zero,self.stefan_boltzmann):widget.setEnabled(thermal)
             self.nonlinear.setEnabled(static);self.mode_count.setEnabled(eigen)
             self.frequency_lower.setEnabled(kind=='frequency');self.frequency_upper.setEnabled(kind=='frequency');self.buckling_accuracy.setEnabled(kind=='buckling')
             for widget in (self.thermal_properties,self.thermal_steady,self.thermal_direct,self.thermal_initial,self.thermal_deltmx,self.temperatures,self.heat_loads):widget.setEnabled(thermal)
@@ -281,6 +324,7 @@ class AnalysisDialog(QtWidgets.QDialog):
             self.mark_changed()
         self.analysis_kind.currentIndexChanged.connect(update_kind)
         self.mode_count.valueChanged.connect(self.mark_changed);self.frequency_lower.textChanged.connect(self.mark_changed);self.frequency_upper.textChanged.connect(self.mark_changed);self.buckling_accuracy.valueChanged.connect(self.mark_changed)
+        for index in range(self.tabs.count()):self.tabs.setTabToolTip(index,self.tabs.tabText(index))
         self.tabs.setCurrentIndex(tab)
         self.message = QtWidgets.QLabel('Project saving is not available in this preview. Run inputs are retained with the job.')
         self.message.setWordWrap(True)
@@ -308,7 +352,7 @@ class AnalysisDialog(QtWidgets.QDialog):
 
     def refresh_material_options(self):
         names=[r['name'] for r in self.materials.values() if r['name']]
-        for rows in (self.mechanical_properties,self.plastic_curve,self.thermal_properties):
+        for rows in (self.mechanical_properties,self.plastic_curve,self.thermal_properties,self.thermal_tables,self.expansion_properties):
             rows.choices['material']=names
             for i in range(rows.table.rowCount()):
                 combo=rows.table.cellWidget(i,0);current=combo.currentData()
@@ -398,6 +442,8 @@ class AnalysisDialog(QtWidgets.QDialog):
             controls={'steadyState':self.thermal_steady.isChecked(),'direct':self.thermal_direct.isChecked()}
             if self.thermal_initial.text().strip():controls['initialTemperature']=self.thermal_initial.text().strip()
             if self.thermal_deltmx.text().strip():controls['maximumTemperatureChange']=float(self.thermal_deltmx.text())
+            for key,field in [('absoluteZero',self.absolute_zero),('stefanBoltzmann',self.stefan_boltzmann)]:
+                if field.text().strip():controls[key]=float(field.text())
             value['step']['thermal']=controls
             value['step']['temperatures']=self.temperatures.values()
             value['step']['heatLoads']=[{key:v for key,v in row.items() if key!='sinkTemperature' or v} for row in self.heat_loads.values()]
@@ -405,6 +451,34 @@ class AnalysisDialog(QtWidgets.QDialog):
             if field.text().strip():value['step'][key]=float(field.text())
             else:value['step'].pop(key,None)
         if kind=='buckling' or 'bucklingAccuracy' in value['step']:value['step']['bucklingAccuracy']=self.buckling_accuracy.value()
+        for row in self.thermal_tables.values():
+            if row['material'] not in by_name:raise ValueError('Thermal table refers to a missing material: '+row['material'])
+            by_name[row['material']].setdefault(row['property']+'Table',[]).append([row['value'],row['temperature']])
+        seen=set()
+        for row in self.expansion_properties.values():
+            name=row['material']
+            if name not in by_name or name in seen:raise ValueError('Use one expansion row per existing material.')
+            seen.add(name);by_name[name]['expansion']=row['coefficient'];by_name[name]['expansionZeroTemperature']=row['reference']
+        if self.mechanical_initial.text().strip():value['step']['initialTemperature']=self.mechanical_initial.text().strip()
+        else:value['step'].pop('initialTemperature',None)
+        fields=self.temperature_fields.values()
+        if fields or 'temperatureFields' in value['step']:value['step']['temperatureFields']=fields
+        amplitudes={}
+        for row in self.amplitude_definitions.values():
+            name=row['name']
+            if name in amplitudes:raise ValueError('Duplicate amplitude name.')
+            amplitudes[name]={'name':name,'timeSpan':row['timeSpan'],'shiftX':float(row['shiftX'] or 0),'shiftY':float(row['shiftY'] or 0),'points':[]}
+        for row in self.amplitude_points.values():
+            if row['amplitude'] not in amplitudes:raise ValueError('Amplitude table refers to a missing amplitude.')
+            amplitudes[row['amplitude']]['points'].append([float(row['time']),float(row['value'])])
+        if amplitudes or 'amplitudes' in value:value['amplitudes']=list(amplitudes.values())
+        seen=set()
+        for row in self.amplitude_bindings.values():
+            key=dict(self.binding_sources).get(row['kind'],'heatLoads');property_key='coefficientAmplitude' if row['kind']=='Coefficient / emissivity' else 'amplitude'
+            targets=[v for v in value['step'].get(key) or [] if v['name']==row['name']]
+            identity=(key,row['name'],property_key)
+            if len(targets)!=1 or identity in seen:raise ValueError('Amplitude target must name one existing definition without duplicate bindings.')
+            seen.add(identity);targets[0][property_key]=row['amplitude']
         for key, widget in [('nodalHistorySets', self.nodal_history), ('elementHistorySets', self.element_history)]:
             value['step'][key] = [widget.item(i).text() for i in range(widget.count())
                                   if widget.item(i).checkState() == QtCore.Qt.CheckState.Checked]

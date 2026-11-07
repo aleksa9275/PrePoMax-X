@@ -15,11 +15,13 @@ namespace CaeModel
     public static class ThermalAnalysisDeckWriter
     {
         public static string Write(InpMeshData source, Material[] materials, SolidSection[] sections,
-                                   HeatTransferStep step, string initialTemperature)
+                                   HeatTransferStep step, string initialTemperature, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null,
+                                   double? absoluteZero = null, double? stefanBoltzmann = null)
         {
             if(source==null || materials==null || sections==null || step==null)throw new ArgumentNullException();
             if(source.OmittedKeywords.Length!=0 || source.Warnings.Length!=0)
                 throw new CaeException("Thermal analysis requires a standalone mesh without omitted model keywords or reader warnings.");
+            var amplitudes=AnalysisModelExtensions.Amplitudes(amplitudeDefinitions);
             var mesh=InpFileReader.ReadMeshData(MeshDeckWriter.WriteMesh(source).Replace("\r", "").Split('\n'));
             if(mesh.ElementBlocks.Any(b=>b.InpElementTypeNames.Any(t=>StaticAnalysisDeckWriter.CompatibleSolidFormulations(t).Length==0)) ||
                 mesh.Elements.Values.Any(e=>e is LinearPyramidElement || e is ParabolicPyramidElement))
@@ -35,17 +37,19 @@ namespace CaeModel
             var names=new HashSet<string>(StringComparer.OrdinalIgnoreCase);var materialKeywords=new List<CalculixKeyword>();
             foreach(var m in materials) {
                 Active(m);Name(m.Name);
-                if(m.GetType()!=typeof(Material) || !names.Add(m.Name) || m.TemperatureDependent ||
+                if(m.GetType()!=typeof(Material) || !names.Add(m.Name) ||
                     m.Properties.Any(p=>p==null || (p.GetType()!=typeof(ThermalConductivity) && p.GetType()!=typeof(SpecificHeat) && p.GetType()!=typeof(Density))) ||
                     m.Properties.OfType<ThermalConductivity>().Count()!=1 || m.Properties.OfType<SpecificHeat>().Count()>1 || m.Properties.OfType<Density>().Count()>1)
                     throw new CaeException("One constant isotropic conductivity, optional density and specific heat required per thermal material.");
+                if(!m.TemperatureDependent && m.Properties.Any(p=>(p is ThermalConductivity tc?tc.ThermalConductivityTemp:p is SpecificHeat sh?sh.SpecificHeatTemp:((Density)p).DensityTemp).Length!=1))
+                    throw new CaeException("Multiple thermal data rows require temperature-dependent materials.");
                 materialKeywords.Add(new CalMaterial(m));
-                double k=Property(m.Properties.OfType<ThermalConductivity>().Single().ThermalConductivityTemp);
-                materialKeywords.Add(new CalThermalConductivity(new ThermalConductivity(new[]{new[]{k,0d}}),false));
+                double[][] k=Property(m.Properties.OfType<ThermalConductivity>().Single().ThermalConductivityTemp);
+                materialKeywords.Add(new CalThermalConductivity(new ThermalConductivity(k),m.TemperatureDependent));
                 var density=m.Properties.OfType<Density>().SingleOrDefault();var heat=m.Properties.OfType<SpecificHeat>().SingleOrDefault();
                 if(!step.SteadyState && (density==null || heat==null))throw new CaeException("Transient heat transfer requires density and specific heat in every material.");
-                if(density!=null)materialKeywords.Add(new CalDensity(new Density(new[]{new[]{Property(density.DensityTemp),0d}}),false));
-                if(heat!=null)materialKeywords.Add(new CalSpecificHeat(new SpecificHeat(new[]{new[]{Property(heat.SpecificHeatTemp),0d}}),false));
+                if(density!=null)materialKeywords.Add(new CalDensity(new Density(Property(density.DensityTemp)),m.TemperatureDependent));
+                if(heat!=null)materialKeywords.Add(new CalSpecificHeat(new SpecificHeat(Property(heat.SpecificHeatTemp)),m.TemperatureDependent));
             }
             var coverage=new HashSet<int>();var used=new HashSet<string>(StringComparer.OrdinalIgnoreCase);var sectionNames=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach(var s in sections) {
@@ -70,10 +74,10 @@ namespace CaeModel
             foreach(var entry in step.BoundaryConditions) {
                 var bc=entry.Value as TemperatureBC;Active(bc);
                 if(bc.GetType()!=typeof(TemperatureBC) || entry.Key!=bc.Name || bc.TwoD || bc.Complex || bc.PhaseDeg.Value!=0 ||
-                    bc.AmplitudeName!=Amplitude.DefaultAmplitudeName || bc.RegionType!=RegionTypeEnum.NodeSetName ||
+                    bc.RegionType!=RegionTypeEnum.NodeSetName ||
                     bc.DistributionName!=Distribution.DefaultDistributionName || bc.CreationData!=null || bc.CreationIds?.Length>0 || !Finite(bc.Temperature.Value))
                     throw new CaeException("Constant finite temperatures on named node sets required.");
-                Name(bc.Name);
+                Name(bc.Name);AnalysisModelExtensions.Reference(bc.AmplitudeName,amplitudes);
                 foreach(int id in Set(mesh.NodeSets,bc.RegionName))if(!constrained.Add(id))throw new CaeException("Overlapping temperature boundary conditions.");
                 boundaries.Add(new CalTemperatureBC(bc,null));
             }
@@ -82,8 +86,8 @@ namespace CaeModel
             string DerivedName() {string n;do{n="_XThermal_"+(++serial);}while(mesh.NodeSets.Keys.Concat(mesh.ElementSets.Keys).Any(v=>string.Equals(v,n,StringComparison.OrdinalIgnoreCase)));return n;}
             var incidence=mesh.Elements.Values.SelectMany(e=>Faces((FeElement3D)e)).GroupBy(f=>Key(f.Item2)).ToDictionary(g=>g.Key,g=>g.Count());
             foreach(var entry in step.Loads) {
-                var load=entry.Value;Active(load);Name(load.Name);
-                if(entry.Key!=load.Name || load.TwoD || load.Complex || load.PhaseDeg.Value!=0 || load.AmplitudeName!=Amplitude.DefaultAmplitudeName ||
+                var load=entry.Value;Active(load);Name(load.Name);AnalysisModelExtensions.Reference(load.AmplitudeName,amplitudes);
+                if(entry.Key!=load.Name || load.TwoD || load.Complex || load.PhaseDeg.Value!=0 ||
                     load.CreationData!=null || load.CreationIds?.Length>0)throw new CaeException("Ordinary constant thermal loads required.");
                 if(load.GetType()==typeof(CFlux)) {
                     var f=(CFlux)load;
@@ -98,7 +102,7 @@ namespace CaeModel
                     if(f.RegionType!=RegionTypeEnum.ElementSetName || !Finite(f.Magnitude.Value))throw new CaeException("Finite heat generation on named element sets required.");
                     foreach(int id in Set(mesh.ElementSets,f.RegionName))if(!bodyLoads.Add(id))throw new CaeException("Overlapping body heat loads.");
                     loads.Add(new CalBodyFlux(f));
-                } else if(load.GetType()==typeof(DFlux) || load.GetType()==typeof(FilmHeatTransfer)) {
+                } else if(load.GetType()==typeof(DFlux) || load.GetType()==typeof(FilmHeatTransfer) || load.GetType()==typeof(RadiationHeatTransfer)) {
                     if(load.RegionType!=RegionTypeEnum.NodeSetName)throw new CaeException("Choose a boundary node set containing complete exterior faces.");
                     var nodes=new HashSet<int>(Set(mesh.NodeSets,load.RegionName));
                     var targets=mesh.Elements.Values.SelectMany(e=>Faces((FeElement3D)e).Where(f=>incidence[Key(f.Item2)]==1 && f.Item2.All(nodes.Contains)).Select(f=>Tuple.Create(e.Id,f.Item1,f.Item2))).ToArray();
@@ -111,12 +115,19 @@ namespace CaeModel
                     if(load is DFlux flux) {
                         if(!Finite(flux.Magnitude.Value))throw new CaeException("Finite surface heat flux required.");
                         surfaces.Add(new CalSurface(surface,false));
-                        loads.Add(new CalDFlux(new DFlux(flux.Name,surface.Name,RegionTypeEnum.SurfaceName,flux.Magnitude.Value,false)));
-                    } else {
-                        var f=(FilmHeatTransfer)load;
-                        if(!Finite(f.SinkTemperature.Value) || !Finite(f.FilmCoefficient.Value) || f.FilmCoefficient.Value<=0 || f.CoefficientAmplitudeName!=Amplitude.DefaultAmplitudeName)
+                        loads.Add(new CalDFlux(new DFlux(flux.Name,surface.Name,RegionTypeEnum.SurfaceName,flux.Magnitude.Value,false){AmplitudeName=flux.AmplitudeName}));
+                    } else if(load is FilmHeatTransfer f) {
+                        if(!Finite(f.SinkTemperature.Value) || !Finite(f.FilmCoefficient.Value) || f.FilmCoefficient.Value<=0)
                             throw new CaeException("Finite sink temperature and positive film coefficient required.");
+                        AnalysisModelExtensions.Reference(f.CoefficientAmplitudeName,amplitudes);
                         film=true;loads.Add(new CalFilmHeatTransfer(f,surface));
+                    } else {
+                        var radiation=(RadiationHeatTransfer)load;
+                        if(radiation.CavityRadiation || !Finite(radiation.Emissivity.Value) || radiation.Emissivity.Value<0 || radiation.Emissivity.Value>1 ||
+                            !Finite(radiation.SinkTemperature.Value) || !absoluteZero.HasValue || !stefanBoltzmann.HasValue || radiation.SinkTemperature.Value<absoluteZero.Value)
+                            throw new CaeException("Non-cavity radiation requires emissivity [0,1], valid absolute temperature and explicit absolute-zero/Stefan-Boltzmann constants.");
+                        AnalysisModelExtensions.Reference(radiation.EmissivityAmplitudeName,amplitudes);
+                        film|=radiation.Emissivity.Value>0;loads.Add(new CalRadiationHeatTransfer(radiation,surface));
                     }
                 } else throw new NotSupportedException("Unsupported thermal load type.");
             }
@@ -128,12 +139,22 @@ namespace CaeModel
                 initial.Temperature.SetEquation(initialTemperature);
                 if(!Finite(initial.Temperature.Value))throw new CaeException("Finite initial temperature required.");
             } else if(!step.SteadyState)throw new CaeException("Explicit uniform initial temperature required for transient heat transfer.");
+            ModelProperties constants=null;
+            if(absoluteZero.HasValue || stefanBoltzmann.HasValue) {
+                if(!absoluteZero.HasValue || !stefanBoltzmann.HasValue || !Finite(absoluteZero.Value) || !Finite(stefanBoltzmann.Value) || stefanBoltzmann.Value<=0)
+                    throw new CaeException("Finite absolute zero and positive Stefan-Boltzmann constant must be supplied together in model units.");
+                if(step.BoundaryConditions.Values.Cast<TemperatureBC>().Any(t=>t.Temperature.Value<absoluteZero.Value) || initial!=null && initial.Temperature.Value<absoluteZero.Value)
+                    throw new CaeException("Temperatures cannot be below the supplied absolute zero.");
+                constants=new ModelProperties(){AbsoluteZero=absoluteZero.Value,StefanBoltzmann=stefanBoltzmann.Value};
+            }
             StaticAnalysisDeckWriter.ValidateOutputs(mesh,step);
             var previous=CultureInfo.CurrentCulture;
             try {
                 CultureInfo.CurrentCulture=CultureInfo.InvariantCulture;
                 string meshText=MeshDeckWriter.WriteMesh(mesh);var text=new StringBuilder("** PrePoMax-X original solid heat-transfer analysis\n");
                 text.Append(CalNodeFormatting.Write3D(mesh.Nodes)).Append(meshText.Substring(meshText.IndexOf("*Element",StringComparison.Ordinal)));
+                if(constants!=null)Append(text,new CalPhysicalConstants(constants));
+                AnalysisModelExtensions.WriteAmplitudes(text,amplitudes);
                 foreach(var k in materialKeywords)Append(text,k);
                 foreach(var s in sections)Append(text,new CalSolidSection(s));
                 foreach(var k in surfaces)Append(text,k);
@@ -152,10 +173,10 @@ namespace CaeModel
                 Append(text,new CalEndStep());return text.ToString();
             } finally {CultureInfo.CurrentCulture=previous;}
         }
-        private static double Property(EquationContainer[][] rows) {
-            if(rows==null || rows.Length!=1 || rows[0]==null || rows[0].Length!=2 || rows[0].Any(v=>v==null) ||
-                rows[0].Any(v=>!Finite(v.Value)) || rows[0][0].Value<=0)throw new CaeException("One finite positive temperature-independent thermal property row required.");
-            return rows[0][0].Value;
+        private static double[][] Property(EquationContainer[][] rows) {
+            if(rows==null || rows.Length<1 || rows.Length>1000 || rows.Any(r=>r==null || r.Length!=2 || r.Any(v=>v==null || !Finite(v.Value)) || r[0].Value<=0) ||
+                rows.Skip(1).Where((r,i)=>r[1].Value<=rows[i][1].Value).Any())throw new CaeException("Finite positive thermal values and strictly increasing table temperatures required.");
+            return rows.Select(r=>r.Select(v=>v.Value).ToArray()).ToArray();
         }
         private static IEnumerable<Tuple<FeFaceName,int[]>> Faces(FeElement3D e) {
             for(int i=1;i<=6;i++){int[] ids;try{ids=e.GetNodeIdsFromFaceName((FeFaceName)i);}catch(NotSupportedException){continue;}if(ids.Distinct().Count()>=3)yield return Tuple.Create((FeFaceName)i,ids);}

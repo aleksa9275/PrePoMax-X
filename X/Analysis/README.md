@@ -145,3 +145,8 @@ portable integration; original thermal physics/formatting remains in its origina
 classes. `thermal_layout.py` guards mechanical extraction of legacy preview/model
 methods, including the unchanged net48 entry points and serialized ownership.
 See the [thermal workflow report](../../.project/reports/thermal-analysis-workflow.md).
+
+Tasks 0098–0100 share original ModelProperties/physical constants, radiation,
+thermal tables, tabular amplitudes and prescribed-temperature expansion.
+Original preview/file/model methods remain in guarded net48 legacy files.
+See the [milestone report](../../.project/reports/radiation-amplitudes-thermal-stress.md).

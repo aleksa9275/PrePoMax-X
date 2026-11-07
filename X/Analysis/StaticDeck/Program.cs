@@ -9,22 +9,24 @@ using PrePoMaxX.MeshDeck;
 namespace PrePoMaxX.StaticDeck;
 
 public sealed record MaterialSpec(string Name,string? YoungsModulus=null,string? PoissonsRatio=null,
-    string? Density=null,string[][]? PlasticCurve=null,string Hardening="Isotropic",string? Conductivity=null,string? SpecificHeat=null);
+    string? Density=null,string[][]? PlasticCurve=null,string Hardening="Isotropic",string? Conductivity=null,string? SpecificHeat=null,string[][]? ConductivityTable=null,string[][]? SpecificHeatTable=null,string[][]? DensityTable=null,
+    string? Expansion=null,string? ExpansionZeroTemperature=null);
 public sealed record SectionSpec(string Name,string Material,string ElementSet);
-public sealed record ConstraintSpec(string Name,string NodeSet,string[] Displacements);
-public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode);
-public sealed record PressureSpec(string Name,string Magnitude,string? NodeSet=null,string? ElementSet=null,int? Face=null);
-public sealed record GravitySpec(string Name,string ElementSet,string[] Acceleration);
-public sealed record TemperatureSpec(string Name,string NodeSet,string Temperature);
-public sealed record HeatLoadSpec(string Name,string Kind,string Region,string Magnitude,string? SinkTemperature=null);
-public sealed record ThermalSpec(bool SteadyState=true,string? InitialTemperature=null,double? MaximumTemperatureChange=null,bool Direct=false);
+public sealed record ConstraintSpec(string Name,string NodeSet,string[] Displacements,string? Amplitude=null);
+public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode,string? Amplitude=null);
+public sealed record PressureSpec(string Name,string Magnitude,string? NodeSet=null,string? ElementSet=null,int? Face=null,string? Amplitude=null);
+public sealed record GravitySpec(string Name,string ElementSet,string[] Acceleration,string? Amplitude=null);
+public sealed record TemperatureSpec(string Name,string NodeSet,string Temperature,string? Amplitude=null);
+public sealed record HeatLoadSpec(string Name,string Kind,string Region,string Magnitude,string? SinkTemperature=null,string? Amplitude=null,string? CoefficientAmplitude=null);
+public sealed record ThermalSpec(bool SteadyState=true,string? InitialTemperature=null,double? MaximumTemperatureChange=null,bool Direct=false,double? AbsoluteZero=null,double? StefanBoltzmann=null);
+public sealed record AmplitudeSpec(string Name,double[][] Points,string TimeSpan="StepTime",double ShiftX=0,double ShiftY=0);
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
     string[] NodalHistorySets,string[] ElementHistorySets,bool NonlinearGeometry=false,
     PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null,
-    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null);
+    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
-    string? PyramidConversion = null);
+    string? PyramidConversion = null,AmplitudeSpec[]? Amplitudes=null);
 
 public static class AnalysisFiles
 {
@@ -79,19 +81,41 @@ public static class AnalysisFiles
         StringPowerPerAreaConverter.SetPowerUnit=power;StringPowerPerAreaConverter.SetAreaUnit=spec.UnitSystem=="mm-N-s-C"?"mm²":"m²";
         StringPowerPerVolumeConverter.SetPowerUnit=power;StringPowerPerVolumeConverter.SetVolumeUnit=spec.UnitSystem=="mm-N-s-C"?"mm³":"m³";
         StringHeatTransferCoefficientConverter.SetPowerUnit=power;StringHeatTransferCoefficientConverter.SetAreaUnit=spec.UnitSystem=="mm-N-s-C"?"mm²":"m²";StringHeatTransferCoefficientConverter.SetTemperatureDeltaUnit="∆°C";
+        StringThermalExpansionConverter.SetUnit="1/°C";
+        void Table(string[][]? input,EquationContainer[][] target) {
+            if(input==null)return;
+            if(input.Length<1 || input.Length>1000 || input.Any(r=>r==null || r.Length!=2))throw new InvalidDataException("Thermal table rows require value and temperature.");
+            for(int i=0;i<input.Length;i++)for(int j=0;j<2;j++)target[i][j].SetEquation(Equation(input[i][j]));
+        }
         var materials=spec.Materials.Select(value=>
         {
             if(value==null)throw new InvalidDataException("Null material.");
             var material=new Material(value.Name);
+            bool tables=value.ConductivityTable!=null || value.SpecificHeatTable!=null || value.DensityTable!=null;
+            if(tables && !thermal)throw new InvalidDataException("Thermal property tables require heat-transfer analysis.");
+            material.TemperatureDependent=tables;
             if(thermal) {
-                if(value.YoungsModulus!=null || value.PoissonsRatio!=null || value.PlasticCurve!=null)throw new InvalidDataException("Thermal analysis uses thermal materials; remove mechanical properties.");
-                var conductivity=new ThermalConductivity(new[]{new[]{1d,0d}});conductivity.ThermalConductivityTemp[0][0].SetEquation(Equation(value.Conductivity));material.AddProperty(conductivity);
-                if(value.SpecificHeat!=null){var heat=new SpecificHeat(new[]{new[]{1d,0d}});heat.SpecificHeatTemp[0][0].SetEquation(Equation(value.SpecificHeat));material.AddProperty(heat);}
+                if(value.YoungsModulus!=null || value.PoissonsRatio!=null || value.PlasticCurve!=null || value.Expansion!=null || value.ExpansionZeroTemperature!=null)throw new InvalidDataException("Thermal analysis uses thermal materials; remove mechanical properties.");
+                if(value.ConductivityTable!=null && value.Conductivity!=null)throw new InvalidDataException("Choose scalar conductivity or a conductivity table.");
+                var conductivity=new ThermalConductivity((value.ConductivityTable??new[]{new[]{"1","0"}}).Select(_=>new[]{1d,0d}).ToArray());
+                if(value.ConductivityTable!=null)Table(value.ConductivityTable,conductivity.ThermalConductivityTemp);
+                else conductivity.ThermalConductivityTemp[0][0].SetEquation(Equation(value.Conductivity));material.AddProperty(conductivity);
+                if(value.SpecificHeatTable!=null && value.SpecificHeat!=null)throw new InvalidDataException("Choose scalar specific heat or a table.");
+                if(value.SpecificHeat!=null || value.SpecificHeatTable!=null){var heat=new SpecificHeat((value.SpecificHeatTable??new[]{new[]{"1","0"}}).Select(_=>new[]{1d,0d}).ToArray());
+                    if(value.SpecificHeatTable!=null)Table(value.SpecificHeatTable,heat.SpecificHeatTemp);else heat.SpecificHeatTemp[0][0].SetEquation(Equation(value.SpecificHeat));material.AddProperty(heat);}
             } else {
             if(value.Conductivity!=null || value.SpecificHeat!=null)throw new InvalidDataException("Thermal properties require heat-transfer analysis.");
             var elastic=new Elastic(new[]{new[]{1d,.3,0}});
             elastic.YoungsPoissonsTemp[0][0].SetEquation(Equation(value.YoungsModulus));
             elastic.YoungsPoissonsTemp[0][1].SetEquation(Equation(value.PoissonsRatio));material.AddProperty(elastic);
+            }
+            if(value.Expansion!=null) {
+                if(value.ExpansionZeroTemperature==null)throw new InvalidDataException("Explicit thermal expansion reference temperature required.");
+                var expansion=new ThermalExpansion(new[]{new[]{0d,0d}});expansion.ThermalExpansionTemp[0][0].SetEquation(Equation(value.Expansion));expansion.ZeroTemperature.SetEquation(Equation(value.ExpansionZeroTemperature));material.AddProperty(expansion);
+            } else if(value.ExpansionZeroTemperature!=null)throw new InvalidDataException("Expansion reference temperature requires an expansion coefficient.");
+            if(value.DensityTable!=null) {
+                if(value.Density!=null)throw new InvalidDataException("Choose scalar density or a table.");
+                var density=new Density(value.DensityTable.Select(_=>new[]{1d,0d}).ToArray());Table(value.DensityTable,density.DensityTemp);material.AddProperty(density);
             }
             if(value.Density!=null){var density=new Density(new[]{new[]{1d,0d}});density.DensityTemp[0][0].SetEquation(Equation(value.Density));material.AddProperty(density);}
             if(value.PlasticCurve!=null){
@@ -129,7 +153,7 @@ public static class AnalysisFiles
                 MaxTimeIncrement=definition.MaximumTimeIncrement,MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency};
             foreach(var t in definition.Temperatures??Array.Empty<TemperatureSpec>()) {
                 if(t==null)throw new InvalidDataException("Null temperature boundary condition.");
-                var bc=new TemperatureBC(t.Name,t.NodeSet,RegionTypeEnum.NodeSetName,0,false);bc.Temperature.SetEquation(Equation(t.Temperature));step.BoundaryConditions.Add(bc.Name,bc);
+                var bc=new TemperatureBC(t.Name,t.NodeSet,RegionTypeEnum.NodeSetName,0,false);bc.Temperature.SetEquation(Equation(t.Temperature));bc.AmplitudeName=t.Amplitude??Amplitude.DefaultAmplitudeName;step.BoundaryConditions.Add(bc.Name,bc);
             }
             foreach(var h in definition.HeatLoads??Array.Empty<HeatLoadSpec>()) {
                 if(h==null)throw new InvalidDataException("Null heat load.");
@@ -138,8 +162,17 @@ public static class AnalysisFiles
                 else if(h.Kind=="body") {var v=new BodyFlux(h.Name,h.Region,RegionTypeEnum.ElementSetName,0,false);v.Magnitude.SetEquation(Equation(h.Magnitude));load=v;}
                 else if(h.Kind=="surface") {var v=new DFlux(h.Name,h.Region,RegionTypeEnum.NodeSetName,0,false);v.Magnitude.SetEquation(Equation(h.Magnitude));load=v;}
                 else if(h.Kind=="film") {var v=new FilmHeatTransfer(h.Name,h.Region,RegionTypeEnum.NodeSetName,0,1,false);v.FilmCoefficient.SetEquation(Equation(h.Magnitude));v.SinkTemperature.SetEquation(Equation(h.SinkTemperature));load=v;}
-                else throw new InvalidDataException("Choose nodal, body, surface or film heat load.");
-                if(h.Kind!="film" && h.SinkTemperature!=null)throw new InvalidDataException("Sink temperature applies only to film convection.");
+                else if(h.Kind=="radiation") {var v=new RadiationHeatTransfer(h.Name,h.Region,RegionTypeEnum.NodeSetName,0,0,false);
+                    // Original emissivity setter clamps. Tool input is checked before that setter, preserving its original behavior.
+                    var rawEmissivity=new EquationContainer(typeof(StringDoubleConverter),0);rawEmissivity.SetEquation(Equation(h.Magnitude));double emissivity=rawEmissivity.Value;
+                    if(!double.IsFinite(emissivity) || emissivity<0 || emissivity>1)throw new InvalidDataException("Radiation emissivity must be in [0,1].");
+                    v.Emissivity.SetEquation(Equation(h.Magnitude));v.SinkTemperature.SetEquation(Equation(h.SinkTemperature));load=v;}
+                else throw new InvalidDataException("Choose nodal, body, surface, film or radiation heat load.");
+                if(h.Kind is not ("film" or "radiation") && h.SinkTemperature!=null)throw new InvalidDataException("Sink temperature applies only to film convection.");
+                load.AmplitudeName=h.Amplitude??Amplitude.DefaultAmplitudeName;
+                if(load is FilmHeatTransfer film)film.CoefficientAmplitudeName=h.CoefficientAmplitude??Amplitude.DefaultAmplitudeName;
+                else if(load is RadiationHeatTransfer radiation)radiation.EmissivityAmplitudeName=h.CoefficientAmplitude??Amplitude.DefaultAmplitudeName;
+                else if(h.CoefficientAmplitude!=null)throw new InvalidDataException("Coefficient amplitude applies to film/radiation only.");
                 step.Loads.Add(load.Name,load);
             }
         }
@@ -167,6 +200,7 @@ public static class AnalysisFiles
             var components=new[]{bc.U1,bc.U2,bc.U3};
             for(int i=0;i<3;i++)if(value.Displacements[i]!=null)components[i].SetEquation(Equation(value.Displacements[i]));
             if(step.BoundaryConditions.ContainsKey(bc.Name))throw new InvalidDataException("Duplicate boundary condition name.");
+            bc.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;
             step.BoundaryConditions.Add(bc.Name,bc);
         }
         foreach(var value in definition.Loads)
@@ -175,7 +209,7 @@ public static class AnalysisFiles
             var load=new CLoad(value.Name,value.NodeSet,RegionTypeEnum.NodeSetName,0,0,0,false,false,0);
             load.F1.SetEquation(Equation(value.ForcePerNode[0]),true);load.F2.SetEquation(Equation(value.ForcePerNode[1]),true);load.F3.SetEquation(Equation(value.ForcePerNode[2]),true);
             if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate load name.");
-            step.Loads.Add(load.Name,load);
+            load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
         }
         int index=0;
         foreach(var value in definition.Pressures??Array.Empty<PressureSpec>()) {
@@ -185,14 +219,23 @@ public static class AnalysisFiles
             var load=new DLoad(value.Name,value.NodeSet??value.ElementSet,value.NodeSet!=null?RegionTypeEnum.NodeSetName:RegionTypeEnum.ElementSetName,0,false,false,0);
             load.ElementFaceName=value.Face.HasValue?(CaeMesh.FeFaceName)value.Face.Value:CaeMesh.FeFaceName.Empty;
             load.Magnitude.SetEquation(Equation(value.Magnitude));
-            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");step.Loads.Add(load.Name,load);
+            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
         }
         foreach(var value in definition.GravityLoads??Array.Empty<GravitySpec>()) {
             if(value==null || value.Acceleration==null || value.Acceleration.Length!=3)throw new InvalidDataException("Gravity requires three acceleration components.");
             var load=new GravityLoad(value.Name,value.ElementSet,RegionTypeEnum.ElementSetName,false,false,0);
             load.F1.SetEquation(Equation(value.Acceleration[0]),true);load.F2.SetEquation(Equation(value.Acceleration[1]),true);load.F3.SetEquation(Equation(value.Acceleration[2]),true);
-            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");step.Loads.Add(load.Name,load);
+            if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
         }
+        if(definition.TemperatureFields?.Length>0) {
+            if(thermal || definition.Kind!="static" || definition.TemperatureFields.Length>1000)throw new InvalidDataException("Temperature-driven fields require static mechanical analysis.");
+            foreach(var t in definition.TemperatureFields) {
+                if(t==null)throw new InvalidDataException("Null temperature field.");
+                var field=new DefinedTemperature(t.Name,t.NodeSet,RegionTypeEnum.NodeSetName,0){AmplitudeName=t.Amplitude??Amplitude.DefaultAmplitudeName};
+                field.Temperature.SetEquation(Equation(t.Temperature));step.DefinedFields.Add(field.Name,field);
+            }
+        }
+        if(definition.InitialTemperature!=null && (thermal || definition.Kind!="static" || definition.InitialTemperature.Length>4096))throw new InvalidDataException("Mechanical initial temperature requires a static step.");
         if(materials.Any(m=>m.Properties.Any(p=>p is Plastic)))
             foreach(var field in step.FieldOutputs.Values.OfType<ElementFieldOutput>())field.Variables|=ElementFieldVariable.PEEQ;
         foreach(string set in definition.NodalHistorySets)step.AddHistoryOutput(new NodalHistoryOutput("NodeHistory-"+(++index),thermal?NodalHistoryVariable.NT|NodalHistoryVariable.RFL:NodalHistoryVariable.U|NodalHistoryVariable.RF,set,RegionTypeEnum.NodeSetName));
@@ -205,11 +248,16 @@ public static class AnalysisFiles
         // Deck admission is owned by StaticAnalysisDeckWriter. The optional
         // PrePoMax measurement command is not the CalculiX element formulation.
         var values=Create(spec);
+        if(spec.Amplitudes?.Length>100)throw new InvalidDataException("At most 100 amplitudes supported.");
+        var amplitudes=(spec.Amplitudes??Array.Empty<AmplitudeSpec>()).Select(a=> {
+            if(a==null || !Enum.TryParse<AmplitudeTimeSpanEnum>(a.TimeSpan,out var span) || !Enum.IsDefined(span))throw new InvalidDataException("Known original amplitude time span required.");
+            return new AmplitudeTabular(a.Name,a.Points){TimeSpan=span,ShiftX=a.ShiftX,ShiftY=a.ShiftY};
+        }).ToArray();
         if(values.Step is HeatTransferStep heat) {
             if(spec.PyramidConversion!=null)throw new InvalidDataException("Thermal pyramid conversions remain pending.");
-            return ThermalAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,heat,spec.Step.Thermal.InitialTemperature);
+            return ThermalAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,heat,spec.Step.Thermal.InitialTemperature,amplitudes,spec.Step.Thermal.AbsoluteZero,spec.Step.Thermal.StefanBoltzmann);
         }
-        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec));
+        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec),amplitudes,spec.Step.InitialTemperature);
     }
     public static void WriteNew(string path,string text)
     {

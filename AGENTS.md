@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0098–0100 connect original non-cavity radiation/thermal material tables,
+tabular amplitudes and prescribed-temperature solid expansion/stress through
+configuration, native jobs and original results/histories. Read
+.project/reports/radiation-amplitudes-thermal-stress.md and its receipt for actual
+checks, candidate and publication. Original linear static final-state behavior,
+nonlinear thermal control sensitivity and numerical algorithms/tolerances remain.
+The coarse conductivity diagnostic is retained false; improvements remain under
+D061. Coupled/other thermal/mechanical/model/mesher/results/PMX functionality,
+D029/B006/B007/D057/D058/D059/D060/D061 and all four-target/release gates remain.
+
 Tasks 0095–0097 connect original steady/transient heat-transfer solid analysis,
 conductivity/capacity/temperature controls, nodal/body/surface heat inputs and
 convection, with original FRD/DAT fields, histories and frame animation. Read

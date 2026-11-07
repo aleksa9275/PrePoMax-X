@@ -99,5 +99,15 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalSurface.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalSurface.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/InitialConditions/CalInitialTemperature.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/IDistribution.cs" Link="IDistribution.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/ModelProperties.cs" Link="ModelProperties.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Amplitudes/AmplitudeTabular.cs" Link="Amplitudes/AmplitudeTabular.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/RadiationHeatTransfer.cs" Link="Steps/Loads/RadiationHeatTransfer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/DefinedFields/DefinedTemperature.cs" Link="Steps/DefinedFields/DefinedTemperature.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalRadiationHeatTransfer.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalRadiationHeatTransfer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalPhysicalConstants.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalPhysicalConstants.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAmplitude.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAmplitude.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/DefinedField/CalDefinedTemperature.cs" Link="FileInOut/Output/Calculix/Keywords/Step/DefinedField/CalDefinedTemperature.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/AnalysisModelExtensions.cs" Link="FileInOut/Output/Calculix/AnalysisModelExtensions.cs" />
   </ItemGroup>
 </Project>
