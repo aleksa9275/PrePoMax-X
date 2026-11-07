@@ -113,6 +113,8 @@ namespace CaeResults
         static partial void ValidatePortableComponents(int count);
         static partial void ValidatePortableAllocation(long count);
         static partial void ValidatePortableTail(string[] lines);
+        static partial void PortableElementNodeCount(int descriptor, ref int count);
+        static partial void PortableElement(int id, int descriptor, int[] nodes, ref FeElement element);
         static bool IsConstantWidth(string[] lines)
         {
             // sample frd lines
@@ -402,6 +404,8 @@ namespace CaeResults
         }
         static private int GetNumberOfElementNodes(FrdFeDescriptorId feDescriptorId)
         {
+            int portableCount=0; PortableElementNodeCount((int)feDescriptorId, ref portableCount);
+            if(portableCount!=0)return portableCount;
             switch (feDescriptorId)
             {
                 case FrdFeDescriptorId.SolidLinearHexahedron: return 8;
@@ -1149,6 +1153,8 @@ namespace CaeResults
         }
         static private FeElement GetElement(int id, FrdFeDescriptorId feDescriptorId, int[] frdNodeIds)
         {
+            FeElement portableElement=null; PortableElement(id,(int)feDescriptorId,frdNodeIds,ref portableElement);
+            if(portableElement!=null)return portableElement;
             int[] nodes;
             switch (feDescriptorId)
             {

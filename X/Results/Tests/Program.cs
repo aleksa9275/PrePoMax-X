@@ -12,7 +12,7 @@ string raw=File.ReadAllText(fixture).Replace("\r","");string[] lines=raw.Split('
 string directory=Path.Combine(Path.GetTempPath(),"PrePoMax-X results 空 "+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
 FrdStaticSnapshot ReadText(string name,string value){string p=Path.Combine(directory,name+".frd");File.WriteAllText(p,value);return FrdFileReader.ReadStaticSnapshot(p);}
 bool Reject(string name,string value){try{ReadText(name,value);return false;}catch(Exception e)when(e is IOException or InvalidDataException or ArgumentException or NotSupportedException or FormatException or OverflowException or IndexOutOfRangeException or AggregateException){return true;}}
-void WriteBinary(string file,int format)
+void WriteBinary(string file,int format,bool quadraticLine=false)
 {
  using var stream=File.Create(file);using var writer=new BinaryWriter(stream,Encoding.UTF8);
  void Line(string value)=>writer.Write(Encoding.ASCII.GetBytes(value+"\n"));
@@ -29,7 +29,7 @@ void WriteBinary(string file,int format)
   {
    Line(line[..36]+format.ToString().PadLeft(38));
    // Independent fixture definition: one eight-node hexahedron, material 1.
-   writer.Write(1);writer.Write(1);writer.Write(0);writer.Write(1);for(int n=1;n<=8;n++)writer.Write(n);
+   writer.Write(1);writer.Write(quadraticLine?12:1);writer.Write(0);writer.Write(1);for(int n=1;n<=(quadraticLine?3:8);n++)writer.Write(n);
    while(lines[++i]!=" -3"){}
   }
   else if(line.StartsWith("  100C"))
@@ -74,6 +74,11 @@ try
   Check("binary format "+format+" preserves mesh",binary.Nodes.Count==8&&binary.Elements[1].NodeIds.SequenceEqual(snapshot.Elements[1].NodeIds)&&binary.Nodes[7].Z==1);
   Check("binary format "+format+" matches all original raw and derived components",binary.Fields.Count==snapshot.Fields.Count&&binary.Fields.Zip(snapshot.Fields).All(pair=>pair.First.Data.Name==pair.Second.Data.Name&&pair.First.Field.GetComponentNames().All(n=>pair.First.Field.GetComponentValues(n).Zip(pair.Second.Field.GetComponentValues(n)).All(v=>Near(v.First,v.Second,1e-5)))));
  }
+ int blockStart=raw.IndexOf("    3C",StringComparison.Ordinal),blockEnd=raw.IndexOf(" -3",blockStart,StringComparison.Ordinal)+3;
+ string lineBlock="    3C"+1.ToString().PadLeft(30)+1.ToString().PadLeft(38)+"\n -1"+1.ToString().PadLeft(10)+12.ToString().PadLeft(5)+0.ToString().PadLeft(5)+1.ToString().PadLeft(5)+"\n -2"+string.Concat(new[]{1,2,3}.Select(n=>n.ToString().PadLeft(10)))+"\n -3";
+ var quadraticSnapshots=new List<FrdStaticSnapshot>{ReadText("quadratic-line-ascii",raw.Remove(blockStart,blockEnd-blockStart).Insert(blockStart,lineBlock))};
+ foreach(int format in new[]{2,3}) { string path=Path.Combine(directory,"quadratic-line-"+format+".frd");WriteBinary(path,format,true);quadraticSnapshots.Add(FrdFileReader.ReadStaticSnapshot(path)); }
+ Check("quadratic line ASCII/binary preserve endpoints and midpoint through original class",quadraticSnapshots.All(s=>s.Elements[1] is ParabolicBeamElement && s.Elements[1].NodeIds.SequenceEqual(new[]{1,2,3}) && s.Elements[1].GetVtkNodeIds().SequenceEqual(new[]{1,2,3}) && s.Fields.Count==snapshot.Fields.Count));
  Check("unicode and space paths",ReadText("space Čaša",raw).Nodes.Count==8);
  Check("missing terminal marker rejected",Reject("incomplete",raw.Replace(" 9999","")));
  int lastEnd=raw.LastIndexOf(" -3",StringComparison.Ordinal);

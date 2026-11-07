@@ -52,6 +52,21 @@ namespace CaeResults
         private const long PortableMaximumBytes = 64 * 1024 * 1024;
         private static readonly object PortableReadLock = new object();
 
+        static partial void PortableElementNodeCount(int descriptor, ref int count)
+        {
+            if(descriptor==12)count=3;
+            else if(descriptor<1 || descriptor>12)throw new NotSupportedException("Unsupported FRD element descriptor: "+descriptor);
+        }
+        static partial void PortableElement(int id,int descriptor,int[] nodes,ref FeElement element)
+        {
+            // CalculiX frd.c writes descriptor 12 as end, end, midpoint in
+            // both ASCII and binary. The original class uses that same order.
+            if(descriptor==12) {
+                if(nodes.Length!=3)throw new InvalidDataException("Quadratic line requires three nodes.");
+                element=new ParabolicBeamElement(id,nodes);
+            }
+        }
+
         static partial void ValidatePortableHeader(string line)
         {
             if (line.StartsWith("    2C", StringComparison.Ordinal) || line.StartsWith("    3C", StringComparison.Ordinal))

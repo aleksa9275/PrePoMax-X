@@ -26,12 +26,13 @@ def verify_fields(case,scene,history,check):
         metrics['stressPatchPassed']=metrics['stress']<1e-4
         if case!='membrane-quadratic':check(case+' independent stress patch',metrics['stressPatchPassed'])
         else:metrics['originalAccuracyDiagnostic']='Original quadratic membrane stress mismatch retained; see original-solver comparison and free-case evidence.'
-    elif case in ('shell-bending','beam-bending','beam-circular','shell-pressure'):
-        expected=-.075 if case=='shell-bending' else -.25 if case=='beam-bending' else -(.001*100/(2*1000*(math.pi*.2**4/64))) if case=='beam-circular' else -.01875
+    elif case in ('shell-bending','beam-bending','beam-centerline','beam-circular','shell-pressure'):
+        expected=-.075 if case=='shell-bending' else -.25 if case in ('beam-bending','beam-centerline') else -(.001*100/(2*1000*(math.pi*.2**4/64))) if case=='beam-circular' else -.01875
         tip=[d['U3'][j] for j,n in enumerate(nodes) if abs(n['x']-10)<1e-6];observed=sum(tip)/len(tip)
         metrics={'tipDisplacement':observed,'continuumTipDisplacement':expected,'continuumError':abs(observed-expected),'continuumPassed':abs(observed-expected)<(1e-5 if case=='shell-pressure' else 1e-6)}
         if case!='beam-circular':check(case+' independent bending displacement',metrics['continuumPassed'])
-        check(case+' full expanded cross section',any(n['z']>0 for n in nodes) and any(n['z']<0 for n in nodes))
+        if case=='beam-centerline':check(case+' original quadratic centerline topology',len(nodes)==21 and all(e['type']=='ParabolicBeamElement' for e in scene['elements']))
+        else:check(case+' full expanded cross section',any(n['z']>0 for n in nodes) and any(n['z']<0 for n in nodes))
         if case in ('shell-bending','beam-bending'):
             slope=1.5 if case=='shell-bending' else 5.
             error=max(abs(stress['S11'][j]-slope*n['z']) for j,n in enumerate(nodes) if n['x']>1)
@@ -60,7 +61,7 @@ def verify_fields(case,scene,history,check):
     if case=='shell-pressure':
         root=sum(h['values'][-1] for h in force if h['ComponentName']=='RF3' and h['BaseSetName']=='ROOT')
         metrics['rootReaction']=root;metrics['continuumRootReaction']=.0001;metrics['rootReactionPassed']=abs(root-.0001)<1e-8
-    elif case not in ('shell-bending','beam-bending','beam-circular','membrane-quadratic','line-tension'):
+    elif case not in ('shell-bending','beam-bending','beam-centerline','beam-circular','membrane-quadratic','line-tension'):
         component='RF1' if case in ('line-tension','composite-tension') else 'RF2'
         check(case+' loaded-direction equilibrium on complete supports',abs(residual[component])<1e-5)
     if case=='line-tension':metrics['printedForceEquilibriumPassed']=abs(residual['RF1'])<1e-5

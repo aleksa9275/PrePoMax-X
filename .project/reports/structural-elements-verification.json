@@ -13,8 +13,8 @@
   "evidenceRoot": "/tmp/prepomaxx-task0105-0106-evidence",
   "macDesktop": {
     "success": true,
-    "checks": 143,
-    "report": "/tmp/prepomaxx-task0105-0106-evidence/source-complete/workflow.json"
+    "checks": 158,
+    "report": "/tmp/prepomaxx-task0105-0106-evidence/source-centerline/workflow.json"
   },
   "linuxArm64Desktop": {
     "success": true,
@@ -156,6 +156,17 @@
         "RF2": 4.48517763e-15,
         "RF3": 9.666667269999999e-05
       }
+    },
+    "beam-centerline": {
+      "tipDisplacement": -0.25,
+      "continuumTipDisplacement": -0.25,
+      "continuumError": 0.0,
+      "continuumPassed": true,
+      "printedForceResidual": {
+        "RF1": 0.0008310566999985317,
+        "RF2": -6.324721399999999e-14,
+        "RF3": 1.38888107e-12
+      }
     }
   },
   "nativeComparison": {
@@ -202,6 +213,11 @@
         "exactFieldsEqual": true
       },
       "shell-pressure": {
+        "exactDeckEqual": true,
+        "exactMeshEqual": true,
+        "exactFieldsEqual": true
+      },
+      "beam-centerline": {
         "exactDeckEqual": true,
         "exactMeshEqual": true,
         "exactFieldsEqual": true
@@ -340,7 +356,7 @@
     "resultsCurrent": true,
     "sourceClosure": 219,
     "analysisStaticChecks": 74,
-    "resultsChecks": 83,
+    "resultsChecks": 84,
     "desktopTests": 88,
     "newStructuralBehaviorTests": 8,
     "logs": [
@@ -348,14 +364,56 @@
       "/tmp/prepomaxx-task0105-0106-evidence/results-final/manifest.json",
       "/tmp/prepomaxx-task0105-0106-evidence/analysis-snapshot-final/manifest.json",
       "/tmp/prepomaxx-task0105-0106-evidence/desktop-tests.log"
-    ]
+    ],
+    "quadraticLineResults": "/tmp/prepomaxx-task0105-0106-evidence/quadratic-line-final/manifest.json",
+    "structuralEditorFinal": "/tmp/prepomaxx-task0105-0106-evidence/structural-tests-final.log"
   },
   "candidate": {
-    "status": "combined candidate being prepared",
-    "priorCandidate": "/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app"
+    "status": "Refreshing after quadratic-line FRD transport repair",
+    "priorCandidate": "/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app",
+    "initialCandidate": "/tmp/prepomaxx-task0106-delivery/PrePoMax-X Preview.app",
+    "initialCopiedRegressionsPassed": true
   },
   "publication": {
-    "status": "prepared for reviewed research publication with CI skipped"
+    "status": "pushed and remote-verified",
+    "branch": "origin/research/native-feasibility",
+    "implementationSha": "88e0c9253449ad1b1ce24b37031cf4739b7ef24c",
+    "hostedCiRun": false,
+    "pushOption": "ci.skip"
   },
-  "remaining": "All unimplemented original family/material/orientation/mesher/model/results/full PMX/four-target/release requirements remain. B008 structural findings, T2D3 refusal and all D029/B006/B007/D057\u2013D061 and coarse conductivity/axisymmetric findings remain explicit; none is waived or silently corrected."
+  "remaining": "All unimplemented original family/material/orientation/mesher/model/results/full PMX/four-target/release requirements remain. B008 structural findings, T2D3 refusal and all D029/B006/B007/D057\u2013D061 and coarse conductivity/axisymmetric findings remain explicit; none is waived or silently corrected.",
+  "originalWindowsCenterline": {
+    "success": true,
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "beam-centerline": {
+        "success": true,
+        "exactMeshEqual": true,
+        "inputSha256": "4acbd54828166df47a7c8a65f0dd0c6542aef3d98b5bb8bad589199aa743cc4a",
+        "maximumDifference": {
+          "coordinates": 0,
+          "frd": 4.31681e-11,
+          "dat": 4.31681e-11
+        }
+      }
+    },
+    "bounds": {
+      "absolute": 1e-06,
+      "relative": 1e-06
+    },
+    "nativeWindowsAcceptance": false,
+    "scope": "Pinned original Windows CalculiX 2.22 via CrossOver; identical decks, original readers, no numerical algorithm changes"
+  },
+  "linuxArm64Centerline": {
+    "success": true,
+    "checks": 15,
+    "report": "/tmp/prepomaxx-task0105-0106-evidence/linux/workflow-centerline/workflow.json"
+  }
 }

@@ -3,7 +3,7 @@ import copy
 import json
 from plane_workflow_fixtures import build_fixture
 
-CASES=('shell-tension','membrane-tension','membrane-quadratic','shell-bending','composite-tension','line-tension','beam-bending','beam-circular','shell-pressure')
+CASES=('shell-tension','membrane-tension','membrane-quadratic','shell-bending','composite-tension','line-tension','beam-bending','beam-circular','shell-pressure','beam-centerline')
 
 
 def grid(nx,ny,length=1.,width=1.,form='S8R'):
@@ -58,6 +58,8 @@ def fixture(case):
                 name='PRESCRIBED_'+str(n);load_sets[name]=[n];origin=2*int((x+1e-9)/2)
                 spec['step']['constraints'].append({'name':name,'nodeSet':name,'displacements':[str(-.00025*(x-origin)),str(.001*y),'0']})
         sets(rows,load_sets);return ('\n'.join(rows)+'\n').encode(),spec
+    if case=='beam-centerline':
+        mesh,spec=fixture('beam-bending');spec['step']['elementOutput']='TwoD';return mesh,spec
     if case=='shell-pressure':
         mesh,spec=fixture('shell-bending');spec['step'].pop('moments',None);spec['step']['pressures']=[{'name':'Normal-pressure','elementSet':'PATCH','face':2,'magnitude':'.00001'}];return mesh,spec
     if case in ('shell-bending','composite-tension'):

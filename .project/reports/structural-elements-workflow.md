@@ -42,9 +42,9 @@ decks carry an explicit original/expanded count pair; the reader checks both,
 retains actual layer elements and reports OriginalElementCount separately.
 Unmarked mismatches, incomplete blocks and wrong declared expansion are refused.
 
-Nine bundled examples cover shell/membrane tension, a quadratic-membrane
+Ten bundled examples cover shell/membrane tension, a quadratic-membrane
 reference diagnostic, shell pure bending, symmetric three-layer extension,
-mixed line tension, rectangular/circular beam bending and shell normal pressure.
+mixed line tension, rectangular/circular beam bending, quadratic centerline output and shell normal pressure.
 Configuration, immutable native jobs, original fields/histories/CSV, deformation/
 outline and original-source mesh export/reopen are connected. Broader analysis
 combinations remain step 6, mesh authoring step 7 and full PMX step 8.
@@ -77,7 +77,7 @@ Full numerical acceptance remains false, including these observations and all
 prior D029/B006/B007/thermal/axisymmetric findings. T2D3 refusal stays open too.
 
 Current Core/Analysis/Execution/Results suites pass, with 219 source identities,
-74 static-deck checks, 83 results/history checks and all existing numerical gates.
+74 static-deck checks, 84 results/history checks and all existing numerical gates.
 All 88 desktop tests pass, including eight new structural behaviors. A new
 French-culture regression exposed lazy moment/section quantity evaluation across
 formatting cultures. The boundary now evaluates original quantities in caller
@@ -85,7 +85,14 @@ culture and freezes numeric keyword snapshots in invariant culture; the old
 French-material regression still passes. Original converters/math are unchanged.
 Initial build/closure/helper/culture failures and their raw logs remain in evidence.
 The disposable Linux Xvfb-as-PID1 launch stall is retained; the established shell
-wrapper completes the checks. Full copied-package acceptance follows below.
+wrapper completes the checks. The first copied candidate passes both viewports and existing plane/dynamics/
+thermal/thermomechanical/eigenmode/nonlinear/PMX regressions. An additional 2D
+quadratic-line check exposed missing FRD descriptor 12 in the original reader.
+Portable erased hooks now map its ASCII/binary end/end/midpoint records to the
+unchanged original ParabolicBeamElement, following unchanged CalculiX frd.c.
+Original net48 behavior/math remain unchanged. The dedicated ASCII/float/double
+regression passes, and the centerline example returns tip -.25. A refreshed
+candidate follows this transport repair.
 
 All original material/orientation, interaction/contact, mixed-family calculation,
 mesher/editing/results/PMX and four-target/distribution/release requirements stay

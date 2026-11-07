@@ -545,7 +545,7 @@ class Viewport(QtWidgets.QMainWindow):
         name,mesh_name,definition_name='Cube','cube-mesh.inp','cube-analysis.json'
         if select:
             choices={'Cube':('cube-mesh.inp','cube-analysis.json'),
-                **{label:(case+'.inp',case+'.json') for label,case in [('Shells — all formulations','shell-tension'),('Membranes — linear formulations','membrane-tension'),('Membranes — quadratic prescribed strain','membrane-quadratic'),('Shell — pure bending','shell-bending'),('Layered shell — symmetric tension','composite-tension'),('Beams and trusses — axial tension','line-tension'),('Beam — rectangular bending','beam-bending'),('Beam — circular bending','beam-circular'),('Shell — normal pressure','shell-pressure')]},
+                **{label:(case+'.inp',case+'.json') for label,case in [('Shells — all formulations','shell-tension'),('Membranes — linear formulations','membrane-tension'),('Membranes — quadratic prescribed strain','membrane-quadratic'),('Shell — pure bending','shell-bending'),('Layered shell — symmetric tension','composite-tension'),('Beams and trusses — axial tension','line-tension'),('Beam — rectangular bending','beam-bending'),('Beam — quadratic centerline output','beam-centerline'),('Beam — circular bending','beam-circular'),('Shell — normal pressure','shell-pressure')]},
                 'Plane stress — all triangle / quad formulations':('plane-stress.inp','plane-stress.json'),
                 'Plane strain — all triangle / quad formulations':('plane-strain.inp','plane-strain.json'),
                 'Axisymmetric — all triangle / quad formulations':('axisymmetric.inp','axisymmetric.json'),
