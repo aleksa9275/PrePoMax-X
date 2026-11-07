@@ -60,6 +60,9 @@ internal static class DatChecks
   check("DAT mixed local/global histories rejected",Reject("mixed-local",simple+"\nINCREMENT 2\n\n"+header.Replace("0.5000000E+00","1")+row.TrimEnd()+" L\n"));
   check("DAT reference point remapping remains gated",Reject("reference-point",simple.Replace("SET-1","RP_Rot_1")));
   check("DAT unsupported contact/modal records gated; original thermal rows supported",Reject("contact",meta+"contact stress (a,b) for all contact elements and time 1\n\n1 2\n")&&Reject("modal",meta+"E I G E N V A L U E   O U T P U T\n")&&Read("thermal",meta+"temperatures for set NALL and time 1\n\n1 2\n").Histories.Single().Entries.Values.Single()==2);
+  string LongHistory(int count)=>"S T E P       1\n\n"+string.Join("\n",Enumerable.Range(1,count).Select(i=>"INCREMENT "+i+"\n\ndisplacements (vx,vy,vz) for set LONG and time "+i+"\n\n42 1 2 3\n"));
+  check("DAT transient histories exceed 256 blocks without losing samples",Read("long-transient",LongHistory(300)).Histories.All(h=>h.Entries.Values.Count==300));
+  check("DAT retains a bounded 4096 dataset limit",Reject("dataset-limit",LongHistory(4097)));
   check("DAT excessive size rejected before decoding",Reject("size",new string(' ',8*1024*1024+1)));
   check("DAT oversized line rejected",Reject("long-line",simple+new string('1',4097)));
   check("DAT no full history graph or persistence selection",typeof(DatFileReader).Assembly.GetType("CaeResults.HistoryResults")==null);

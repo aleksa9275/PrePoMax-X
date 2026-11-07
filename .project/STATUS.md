@@ -1,5 +1,18 @@
 # Project status
 
+## Current — tasks 0107–0110: remaining element-family work areas
+
+Discrete sections/jobs, cross-family frequency/implicit/static calculations,
+owned mesh transforms/renumbering/boundary extraction and checked original family
+PMX open/solve/exact-copy Save As are connected. Mac/Linux ARM64 pass 135 family
+and 58 PMX workflow checks. All 95 desktop tests and current shared suites pass;
+original Windows reference checks retain B009's modal-beam crash and one strict
+signed-principal-invariant mismatch. Full milestone-8/new-native-session PMX
+writing, general original mesher/calculation breadth, Windows/Linux x64 and all
+D057–D061/full-parity/numerical/distribution/release gates remain open.
+[Actual scope, receipt and candidate](reports/element-family-completion.md).
+
+
 ## Current — tasks 0105/0106: shells, membranes, beams and trusses
 
 The next two element-family milestones connect original sections, rotations/

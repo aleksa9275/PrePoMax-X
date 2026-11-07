@@ -79,6 +79,12 @@ try
  var quadraticSnapshots=new List<FrdStaticSnapshot>{ReadText("quadratic-line-ascii",raw.Remove(blockStart,blockEnd-blockStart).Insert(blockStart,lineBlock))};
  foreach(int format in new[]{2,3}) { string path=Path.Combine(directory,"quadratic-line-"+format+".frd");WriteBinary(path,format,true);quadraticSnapshots.Add(FrdFileReader.ReadStaticSnapshot(path)); }
  Check("quadratic line ASCII/binary preserve endpoints and midpoint through original class",quadraticSnapshots.All(s=>s.Elements[1] is ParabolicBeamElement && s.Elements[1].NodeIds.SequenceEqual(new[]{1,2,3}) && s.Elements[1].GetVtkNodeIds().SequenceEqual(new[]{1,2,3}) && s.Fields.Count==snapshot.Fields.Count));
+ string ground=File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"ground-spring.frd")).Replace("\r","");
+ var empty=ReadText("ground-spring",ground);
+ Check("omitted ground spring retains original count without invented FRD values",empty.OriginalElementCount==1 && empty.Nodes.Count==0 && empty.Elements.Count==0 && empty.Fields.Count==0);
+ Check("empty discrete fields cannot hide stored values",Reject("hidden-empty-value",ground.Replace(" -3\n    1PSTEP"," -1         1 1.00000E+00\n -3\n    1PSTEP")));
+ Check("omitted discrete count must match original count",Reject("bad-omission",ground.Replace("omitted discrete: 1","omitted discrete: 2")));
+ Check("unmarked empty FRD nodes remain refused",Reject("unmarked-empty",string.Join('\n',ground.Split('\n').Where(l=>!l.Contains("PrePoMax-X")))));
  Check("unicode and space paths",ReadText("space Čaša",raw).Nodes.Count==8);
  Check("missing terminal marker rejected",Reject("incomplete",raw.Replace(" 9999","")));
  int lastEnd=raw.LastIndexOf(" -3",StringComparison.Ordinal);

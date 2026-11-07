@@ -58,7 +58,7 @@ class DesktopJob(QtCore.QObject):
         return self.process is not None and self.process.state() != QtCore.QProcess.ProcessState.NotRunning
 
     def start(self, mesh, analysis, parent_directory, command=None, timeout=3600, *,
-              definition=None, mesh_bytes=None, pmx_sha256=None, cad_mesh=None, pmx_bytes=None):
+              definition=None, mesh_bytes=None, pmx_sha256=None, cad_mesh=None, pmx_bytes=None,family_pmx=False):
         if self.active:
             raise ValueError('A job is already running.')
         mesh = Path(mesh).resolve()
@@ -71,7 +71,7 @@ class DesktopJob(QtCore.QObject):
             mesh_bytes = mesh.read_bytes() if mesh_bytes is None else mesh_bytes
         if pmx_bytes is not None and (pmx_sha256 is None or hashlib.sha256(pmx_bytes).hexdigest() != pmx_sha256):
             raise ValueError('PMX snapshot differs from its validated source hash.')
-        command = list(command if command is not None else solver_command(pmx=pmx_sha256 is not None))
+        command = list(command if command is not None else solver_command(pmx=pmx_sha256 is not None and not family_pmx))
         parent_directory = Path(parent_directory).resolve()
         parent_directory.mkdir(parents=True, exist_ok=True)
         # The original host reserves/creates this new directory atomically.

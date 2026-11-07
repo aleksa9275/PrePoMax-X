@@ -175,7 +175,7 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.tabs.addTab(self.materials, 'Materials')
         self.sections = Rows([('name', 'Name'), ('material', 'Material'), ('elementSet', 'Element set'), ('thickness', 'Thickness'), ('kind', 'Section kind'), ('offset', 'Shell offset')],
             {'name': '', 'material': '', 'elementSet': '', 'thickness': '', 'kind': 'solid', 'offset': ''}, [{**r, 'kind': r.get('kind', 'solid')} for r in definition['sections']],
-            {'elementSet': [item['name'] for item in scene.get('elementSets', [])], 'kind': ['solid', 'shell', 'membrane', 'beam', 'truss', 'composite']})
+            {'elementSet': [item['name'] for item in scene.get('elementSets', [])], 'kind': ['solid', 'shell', 'membrane', 'beam', 'truss', 'composite', 'mass', 'spring', 'gap']})
         self.tabs.addTab(self.sections, 'Sections')
         nodes = [item['name'] for item in scene.get('nodeSets', [])]
         supports = [{**row, **{f'u{i}': value for i, value in enumerate(row['displacements'])}, **{f'r{i}': value for i, value in enumerate(row.get('rotations') or [None]*3)}}
@@ -350,6 +350,12 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.moments=Rows([('name','Name'),('nodeSet','Node set'),('m0','M1 per node'),('m1','M2 per node'),('m2','M3 per node')],
             {'name':'','nodeSet':'','m0':'0','m1':'0','m2':'0'},[{**r,**{f'm{i}':v for i,v in enumerate(r['momentPerNode'])}} for r in definition['step'].get('moments') or []],{'nodeSet':nodes})
         self.tabs.addTab(self.moments,'Nodal moments')
+        self.discrete_sections=Rows([('section','Section'),('mass','Mass per element'),('stiffness','Stiffness'),('dof','DOF'),('secondDof','Second DOF'),('clearance','Gap clearance'),('tensileForce','Gap tensile force'),('n0','Normal X'),('n1','Normal Y'),('n2','Normal Z')],
+            {'section':'','mass':'','stiffness':'','dof':'0','secondDof':'0','clearance':'','tensileForce':'','n0':'','n1':'','n2':''},
+            [{'section':r['name'],**r,**{f'n{i}':v for i,v in enumerate(r.get('direction') or ['']*3)}} for r in definition['sections'] if r.get('kind') in ('mass','spring','gap')])
+        self.discrete_sections.layout().insertWidget(0,QtWidgets.QLabel('Leave material blank for discrete sections. SPRING1: DOF 1–3. SPRING2: two DOFs. SPRINGA: both zero. Gap: clearance, stiffness and normal. Mass uses the selected mass units.'))
+        self.discrete_sections.changed.connect(self.mark_changed)
+        self.tabs.addTab(self.discrete_sections,'Mass / spring / gap')
         for rows in (self.line_sections,self.composite_layers,self.moments):rows.changed.connect(self.mark_changed)
         for widget in (self.dynamics_alpha,self.dynamics_mass,self.dynamics_stiffness,self.dynamics_ratio,self.dynamics_basis):widget.textChanged.connect(self.mark_changed)
         self.dynamics_modes.valueChanged.connect(self.mark_changed);self.dynamics_direct.toggled.connect(self.mark_changed);self.dynamics_damping.currentTextChanged.connect(self.mark_changed)
@@ -447,6 +453,16 @@ class AnalysisDialog(QtWidgets.QDialog):
             if section.get('kind') not in ('beam','truss'):raise ValueError('Line controls require beam/truss section kind.')
             section['dimensions']=[row['d0']] if section['kind']=='truss' else [row['d0'],row['d1']]
             if section['kind']=='beam':section['shape']=row['shape'];section['direction']=[float(row[f'n{i}']) for i in range(3)]
+        discrete_seen=set()
+        for row in self.discrete_sections.values():
+            name=row['section']
+            if name not in sections_by_name or name in discrete_seen or sections_by_name[name].get('kind') not in ('mass','spring','gap'):raise ValueError('Use one discrete row per existing mass/spring/gap section.')
+            discrete_seen.add(name);section=sections_by_name[name]
+            for key in ('mass','stiffness','clearance','tensileForce'):
+                if row[key]:section[key]=row[key]
+            for key in ('dof','secondDof'):
+                if row[key] and int(row[key]):section[key]=int(row[key])
+            if any(row[f'n{i}'] for i in range(3)):section['direction']=[float(row[f'n{i}']) for i in range(3)]
         for row in self.composite_layers.values():
             if row['section'] not in sections_by_name or sections_by_name[row['section']].get('kind')!='composite':raise ValueError('Layer must name a composite section.')
             sections_by_name[row['section']].setdefault('layers',[]).append({'material':row['material'],'thickness':row['thickness']})

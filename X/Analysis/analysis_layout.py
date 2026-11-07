@@ -7,6 +7,7 @@ import sys
 import xml.etree.ElementTree as ET
 import static_layout
 import native_mesh_layout
+import mesh_edit_layout
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -45,6 +46,7 @@ def adapt(path, data):
 
 
 def source_rows(revision=BASELINE):
+    mesh_edit_layout.verify()
     core_rows = core_verify.sources()
     manifest = json.loads((HERE / 'analysis-sources.json').read_text())
     if manifest['baseline'] != BASELINE:
@@ -83,7 +85,7 @@ def source_rows(revision=BASELINE):
         data = (ROOT / name).read_bytes()
         if hashlib.sha256(data).hexdigest() != row['sha256']:
             raise ValueError('Reviewed analysis source changed: ' + name)
-        if name not in mechanical and name not in BOUNDARIES:
+        if name not in mechanical and name not in BOUNDARIES and name not in mesh_edit_layout.render():
             upstream = adapt(name, original(revision, name))
             baseline = adapt(name, original(BASELINE, name))
             if data != baseline:

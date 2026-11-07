@@ -1,5 +1,13 @@
 # PrePoMax release parity tracking
 
+7 November 2026, tasks 0107–0110: [remaining element-family workflows](reports/element-family-completion.md)
+connect discrete sections, broader family calculations, imported-mesh editing/
+boundary creation and checked original PMX family read/solve/exact-copy Save As.
+Full milestone-8/new-session PMX serialization, general mesher/tool/calculation
+breadth and four-target acceptance remain open. B009 joins the retained original
+findings; all earlier obligations below remain unchanged.
+
+
 Maintainer direction, 3 November 2026 (D054): **3.0.0 is the initial parity
 target**. Continue tracking future upstream releases and maintaining open-source
 macOS/Linux distributions even if upstream does not accept the contribution.

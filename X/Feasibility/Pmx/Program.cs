@@ -9,7 +9,7 @@ internal static class Program
 {
     static int Main(string[] args)
     {
-        if(args.Length!=2 || args[0] is not ("--inventory" or "--static-graph" or "--command-history" or "--edit-strings" or "--static-edit-contract" or "--cad-static-graph" or "--cad-edit-contract" or "--cad-property-contract"))
+        if(args.Length!=2 || args[0] is not ("--inventory" or "--family-graph" or "--static-graph" or "--command-history" or "--edit-strings" or "--static-edit-contract" or "--cad-static-graph" or "--cad-edit-contract" or "--cad-property-contract"))
         { Console.WriteLine("{\"success\":false,\"error\":\"Expected a supported inspection command and a bounded NRBF file\"}"); return 2; }
         try
         {
@@ -25,6 +25,7 @@ internal static class Program
             {
                 object summary = args[0] switch
                 {
+                    "--family-graph" => StaticGraph.ReadFamilies(root),
                     "--static-graph" => StaticGraph.Read(root),
                     "--cad-static-graph" => new { definition = StaticGraph.Read(root), geometry = StaticGraph.ReadCadGeometry(root) },
                     "--cad-edit-contract" => StaticGraph.ValidateEditContract(root, records.Values, ReadGraphBytes(stream), true),

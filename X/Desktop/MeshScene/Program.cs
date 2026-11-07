@@ -10,16 +10,17 @@ using PrePoMaxX.MeshDeck;
 if (args.Length > 0 && args[0] is "netgen-parameters" or "from-vol" or "netgen-quadratic-parameters" or "from-vol-quadratic-preview" or "from-vol-quadratic")
     return NativeMeshCommands.Run(args);
 
+bool editMesh=args.Length==4 && args[0]=="edit-mesh";
 bool addSet = args.Length == 6 && args[0] is "add-set" or "add-region-set";
 bool setFormulations = args.Length == 4 && args[0] == "set-solid-formulations";
-if (args.Length != 1 && !addSet && !setFormulations)
+if (args.Length != 1 && !addSet && !setFormulations && !editMesh)
 {
     Console.Error.WriteLine("Usage: PrePoMaxX.MeshScene <mesh.inp> | add-set <mesh.inp> <new.inp> <node|element> <name> <ids> | add-region-set <mesh.inp> <new.inp> <node|element> <name> <source-set-names> | set-solid-formulations <mesh.inp> <new.inp> <choices.json>");
     return 2;
 }
 try
 {
-    var (mesh, source) = addSet ? AddSet(args) : setFormulations ? SetFormulations(args) : (MeshFiles.Read(args[0]), File.ReadAllBytes(args[0]));
+    var (mesh, source) = editMesh ? MeshEditCommands.Edit(args) : addSet ? AddSet(args) : setFormulations ? SetFormulations(args) : (MeshFiles.Read(args[0]), File.ReadAllBytes(args[0]));
     Console.WriteLine(JsonSerializer.Serialize(new {
         success = true, schemaVersion = 1, meshOnly = true,
         SourceSha256 = Convert.ToHexStringLower(SHA256.HashData(source)),

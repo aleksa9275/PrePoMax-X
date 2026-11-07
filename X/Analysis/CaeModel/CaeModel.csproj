@@ -123,5 +123,12 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/CalculixUserKeyword.cs" Link="FileInOut/Output/Calculix/Keywords/CalculixUserKeyword.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/MomentLoad.cs" Link="Steps/Loads/MomentLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/SectionData.cs" Link="Sections/SectionData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/MassSectionData.cs" Link="Sections/MassSectionData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/LinearSpringSectionData.cs" Link="Sections/LinearSpringSectionData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/GapSectionData.cs" Link="Sections/GapSectionData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalMassSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalMassSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalLinearSpringSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalLinearSpringSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalGapSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalGapSection.cs" />
   </ItemGroup>
 </Project>

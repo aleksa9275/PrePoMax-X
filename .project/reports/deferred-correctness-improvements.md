@@ -64,3 +64,12 @@ observations, plus the explicit original T2D3 refusal. Independent failures rema
 false and original-Windows comparison evidence is retained. Root causes/modeling/
 result-semantics interpretations remain open; no algorithms/tolerances/forces are
 changed. D061 sequencing and every functionality/correctness/release gate remain.
+
+7 November 2026, tasks 0107–0110: [B009](../bugs/B009-modal-beam-and-invariant-diagnostics.md)
+retains the original/native modal-beam crash after explicit zero-load basis DOF
+initialization and the strict signed-principal-stress tie discrepancy in implicit
+beam transient output. Original Windows reference evidence is through CrossOver;
+root causes remain unresolved. No numerical change, sign normalization or existing
+tolerance change. The separate zero-exit solver-error completion check is an
+integration repair and retains the failed calculation as failure. D061 and every
+original functionality/platform/release obligation remain.

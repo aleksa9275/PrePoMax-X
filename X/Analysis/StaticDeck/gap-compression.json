@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "m-N-s-C",
+  "materials": [],
+  "sections": [
+    {
+      "name": "Gap",
+      "material": "",
+      "elementSet": "SPRINGS",
+      "kind": "gap",
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "clearance": "0",
+      "stiffness": "1000",
+      "tensileForce": "0.000001"
+    }
+  ],
+  "step": {
+    "name": "Step-1",
+    "timePeriod": 1.0,
+    "initialTimeIncrement": 0.1,
+    "minimumTimeIncrement": 1e-07,
+    "maximumTimeIncrement": 0.1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "kind": "static",
+    "constraints": [
+      {
+        "name": "Guide",
+        "nodeSet": "ALL",
+        "displacements": [
+          null,
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "Fixed",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "Force",
+        "nodeSet": "TIP",
+        "forcePerNode": [
+          "-10",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "nodalHistorySets": [
+      "ROOT",
+      "TIP"
+    ],
+    "elementHistorySets": [],
+    "nonlinearGeometry": true
+  }
+}

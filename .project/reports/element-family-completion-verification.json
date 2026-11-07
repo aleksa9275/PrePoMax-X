@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-11-07",
+  "tasks": [
+    "0107",
+    "0108",
+    "0109",
+    "0110"
+  ],
+  "request": "Remaining four element-family milestones in this session",
+  "scopeReport": ".project/reports/element-family-completion.md",
+  "implementationBoundary": "Connected discrete/cross-family/imported-mesh-editing/original-PMX-exchange workflows; full milestone-8 acceptance remains open",
+  "fullNumericalAcceptance": false,
+  "fullFunctionalityParity": false,
+  "fullPmxCompatibility": false,
+  "newNativeSessionPmxSerialization": false,
+  "fourTargetAcceptance": false,
+  "releaseAcceptance": false,
+  "algorithmsOrExistingTolerancesChanged": false,
+  "newSolverException": false,
+  "hostedCiRun": false,
+  "hostedCiReason": "D058 forbids hosted runs; publication uses CI skip",
+  "deferredNativeX64": "D059 Windows/Podman near finishing",
+  "evidenceRoot": "/tmp/prepomaxx-task0107-0110-evidence",
+  "checks": {
+    "macFamily": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/source-workflow/workflow.json",
+      "sha256": "e1953b7b963424fe7a60ce6085705b66f93eec292aa00e633c493c4fea4e74e3",
+      "success": true,
+      "checks": 135
+    },
+    "macPmx": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/source-pmx/workflow.json",
+      "sha256": "4079be737da96282eb02b8cffe4f37e3f1921b670710de3b21da1a756522d3cf",
+      "success": true,
+      "checks": 58
+    },
+    "linuxFamily": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/linux/workflow/workflow.json",
+      "sha256": "0a22451426b723d1499da2996b8a3d101a8c80cb1b8cec2be7cd1bf3f9a8bf2a",
+      "success": true,
+      "checks": 135
+    },
+    "linuxPmx": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/linux/pmx-workflow/workflow.json",
+      "sha256": "e1373410ac582a3c99533fb29910c03656b57b1be709a463c5b7c5e8b8687dd4",
+      "success": true,
+      "checks": 58
+    },
+    "nativeComparison": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/native-comparison.json",
+      "sha256": "8aa58c995a66c0a4f37e2e137955d5072a597d57b51ad5823df6b1fdba36e908",
+      "success": true,
+      "checks": 0
+    },
+    "originalComparison": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/windows-reference/verification.json",
+      "sha256": "0aa9ffff76de585f6aff88a9beea8dd47a6764e5fe153f48fcf4d98e232bb99a",
+      "success": false,
+      "checks": 0
+    },
+    "originalAppPmxReadback": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/pmx-readback/verification.json",
+      "sha256": "4261a728682ec465078cfce852fae35daeb294a1438179dc25a29ef68c786a5a",
+      "success": true,
+      "checks": 0
+    },
+    "sharedCurrent": {
+      "initialManifest": "/tmp/prepomaxx-task0107-0110-evidence/current-checks/manifest.json",
+      "coreAnalysisExecutionPassed": true,
+      "initialResultsCompileFailed": "New test used List.Values.Length; corrected to Count",
+      "finalResultsManifest": "/tmp/prepomaxx-task0107-0110-evidence/results-checks/manifest.json",
+      "finalResultsPassed": 90
+    },
+    "desktop": {
+      "log": "/tmp/prepomaxx-task0107-0110-evidence/desktop-suite-final.log",
+      "passed": 95,
+      "failures": 0,
+      "initialFailuresRetained": [
+        "/tmp/prepomaxx-task0107-0110-evidence/desktop-tests.log",
+        "/tmp/prepomaxx-task0107-0110-evidence/desktop-tests-final.log"
+      ],
+      "setup": "Native Mac display and DESKTOP_TEST_SOLVE_HOST set to current source executable"
+    },
+    "buildTests": {
+      "log": "/tmp/prepomaxx-task0107-0110-evidence/build-tests.log",
+      "passed": 9
+    },
+    "pmxTransportTests": {
+      "log": "/tmp/prepomaxx-task0107-0110-evidence/pmx-family-tests.log",
+      "passed": 3
+    },
+    "finalPmxContracts": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/pmx-final-contracts.json",
+      "passed": 6
+    }
+  },
+  "diagnostics": {
+    "B009": {
+      "modalBeamNativeExit": 139,
+      "originalWindowsInitialExit": 5,
+      "originalWindowsFinalProbe": "120 s timeout in Wine crash debugger; partial outputs retained",
+      "symbol": "nonlinmpc_ + 4360, called by dyna + 44680",
+      "zeroLoadBasisRequirementEmitted": true,
+      "resolved": false,
+      "signedPrincipalComparisonPassed": false,
+      "signedPrincipalDifference": 3.0097802e-06,
+      "boundUnchanged": true
+    },
+    "priorFindingsPreserved": [
+      "D029",
+      "B006",
+      "B007",
+      "B008",
+      "T2D3 refusal",
+      "coarse conductivity",
+      "coarse CAX3/CAX4R and segment projection"
+    ],
+    "zeroExitArpackCompletionIntegrationRepaired": true
+  },
+  "setupFailuresRetained": [
+    "Initial one-DOF ARPACK model failed; four-mass chain is the usable frequency example, without deleting the original failure",
+    "Offscreen Mac VTK cannot create its native OpenGL context; native display tests pass",
+    "Historical cleaned desktop host path missing; current source host path supplied",
+    "Initial mesh extractor used the older surrounding FeMesh source; restored exact previous-checkpoint context including CAD numbering fixes and guarded extraction",
+    "Original INP importer drops/does not construct some membrane/2D section/load definitions; separate original API-authored PMX fixtures are used, raw failed captures retained",
+    "Linux gvproxy startup and /tmp mount failures retained; debug startup and VM-shared /private/tmp paths completed without VM reset/config changes",
+    "Original modal crash probes and final debugger timeout retained; no numerical workaround or false pass"
+  ],
+  "candidate": {
+    "state": "pending build and copied verification",
+    "plannedPath": "/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app",
+    "supersedesOnlyAfterVerification": "/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app"
+  },
+  "publication": {
+    "state": "pending reviewed checkpoint",
+    "branch": "research/native-feasibility",
+    "ciSkipped": true
+  }
+}

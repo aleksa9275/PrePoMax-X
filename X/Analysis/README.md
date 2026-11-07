@@ -150,3 +150,13 @@ Tasks 0098–0100 share original ModelProperties/physical constants, radiation,
 thermal tables, tabular amplitudes and prescribed-temperature expansion.
 Original preview/file/model methods remain in guarded net48 legacy files.
 See the [milestone report](../../.project/reports/radiation-amplitudes-thermal-stress.md).
+
+
+Tasks 0107–0110 add section kinds `mass`, `spring`, `gap` with blank material and
+original mass/stiffness/DOF/clearance/normal controls. Exact MASS, SPRING1/2/A and
+GAPUNI mesh records are preserved. Thirteen new examples connect discrete,
+shared-node solid/spring, beam/shell/plane/axisymmetric frequency and implicit
+transient workflows. The modal-beam example is a retained failure diagnostic.
+Optional original `step.fieldOutputs` / `historyOutputs` descriptors preserve
+explicit output names/flags; shorthand history sets remain compatible.
+[Actual scope, original findings and open acceptance](../../.project/reports/element-family-completion.md).

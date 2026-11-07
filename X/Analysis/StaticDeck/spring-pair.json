@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "m-N-s-C",
+  "materials": [],
+  "sections": [
+    {
+      "name": "Spring",
+      "material": "",
+      "elementSet": "SPRINGS",
+      "kind": "spring",
+      "dof": 1,
+      "secondDof": 1,
+      "stiffness": "1000"
+    }
+  ],
+  "step": {
+    "name": "Step-1",
+    "timePeriod": 1.0,
+    "initialTimeIncrement": 1.0,
+    "minimumTimeIncrement": 1e-07,
+    "maximumTimeIncrement": 1.0,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "kind": "static",
+    "constraints": [
+      {
+        "name": "Guide",
+        "nodeSet": "ALL",
+        "displacements": [
+          null,
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "Fixed",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "Force",
+        "nodeSet": "TIP",
+        "forcePerNode": [
+          "10",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "nodalHistorySets": [
+      "ROOT",
+      "TIP"
+    ],
+    "elementHistorySets": []
+  }
+}

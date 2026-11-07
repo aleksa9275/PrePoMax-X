@@ -40,5 +40,6 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Globals.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/CalculixNameShortener.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/FeSurface.cs" Link="FeSurface.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/FeMesh.Transformations.cs" Link="FeMesh.Transformations.cs" />
   </ItemGroup>
 </Project>

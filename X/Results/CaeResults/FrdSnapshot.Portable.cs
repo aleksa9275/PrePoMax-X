@@ -71,12 +71,12 @@ namespace CaeResults
         {
             if (line.StartsWith("    2C", StringComparison.Ordinal) || line.StartsWith("    3C", StringComparison.Ordinal))
             {
-                if (line.Length < 36 || !int.TryParse(line.Substring(6, 30), out int count) || count < 1 || count > 100000)
-                    throw new InvalidDataException("Portable FRD mesh blocks require 1–100000 records.");
+                if (line.Length < 36 || !int.TryParse(line.Substring(6, 30), out int count) || count < 0 || count > 100000)
+                    throw new InvalidDataException("Portable FRD nodes require 1–100000 records; element blocks allow 0–100000.");
             }
             if (line.StartsWith("  100C", StringComparison.Ordinal))
             {
-                if (line.Length < 36 || !int.TryParse(line.Substring(24, 12), out int count) || count < 1 || count > 100000)
+                if (line.Length < 36 || !int.TryParse(line.Substring(24, 12), out int count) || count < 0 || count > 100000)
                     throw new InvalidDataException("Portable FRD result blocks require 1–100000 records.");
             }
         }
@@ -117,7 +117,8 @@ namespace CaeResults
                     Dictionary<int, FeNode> nodes = null; Dictionary<int, int> lookup = null;
                     Dictionary<int, FeElement> elements = null;
                     var fields = new List<FrdStaticField>(); FieldData previous = null;
-                    bool constantWidth = true; string unitHeader = null; string modelSpace = "ThreeD"; int declaredOriginalCount=0, declaredExpandedCount=0;
+                    int emptyFieldBlocks=0;bool declaredCounts=false;
+                    bool constantWidth = true; string unitHeader = null; string modelSpace = "ThreeD"; int declaredOriginalCount=0, declaredExpandedCount=0, omittedDiscrete=0;
                     _bemaNodeIds = null;
                     foreach (var set in sets)
                     {
@@ -130,9 +131,17 @@ namespace CaeResults
                             modelSpace = space == null || space == "3D" ? "ThreeD" : space;
                             var countHeaders=set.Lines.Where(l=>l.Contains("PrePoMax-X element counts:",StringComparison.Ordinal)).ToArray();
                             if(countHeaders.Length>1)throw new InvalidDataException("Duplicate expanded element count declaration.");
+                            var omissionHeaders=set.Lines.Where(l=>l.Contains("PrePoMax-X omitted discrete:",StringComparison.Ordinal)).ToArray();
+                            if(omissionHeaders.Length>1)throw new InvalidDataException("Duplicate discrete omission declaration.");
+                            if(omissionHeaders.Length==1) {
+                                string line=omissionHeaders[0];
+                                if(!int.TryParse(line.Substring(line.IndexOf("PrePoMax-X omitted discrete:",StringComparison.Ordinal)+"PrePoMax-X omitted discrete:".Length).Trim(),NumberStyles.None,CultureInfo.InvariantCulture,out omittedDiscrete) || omittedDiscrete<1 || omittedDiscrete>100000)throw new InvalidDataException("Invalid omitted discrete count.");
+                            }
+                            if(omissionHeaders.Length>0 && countHeaders.Length==0)throw new InvalidDataException("Discrete omission requires original/output counts.");
                             if(countHeaders.Length==1) {
+                                declaredCounts=true;
                                 var line=countHeaders[0];var counts=line.Substring(line.IndexOf("PrePoMax-X element counts:",StringComparison.Ordinal)+"PrePoMax-X element counts:".Length).Trim().Split(',');
-                                if(counts.Length!=2 || !int.TryParse(counts[0],NumberStyles.None,CultureInfo.InvariantCulture,out declaredOriginalCount) || !int.TryParse(counts[1],NumberStyles.None,CultureInfo.InvariantCulture,out declaredExpandedCount) || declaredOriginalCount<1 || declaredExpandedCount<declaredOriginalCount || declaredExpandedCount>100000)
+                                if(counts.Length!=2 || !int.TryParse(counts[0],NumberStyles.None,CultureInfo.InvariantCulture,out declaredOriginalCount) || !int.TryParse(counts[1],NumberStyles.None,CultureInfo.InvariantCulture,out declaredExpandedCount) || declaredOriginalCount<0 || declaredOriginalCount<omittedDiscrete || declaredExpandedCount<declaredOriginalCount-omittedDiscrete || declaredExpandedCount>100000)
                                     throw new InvalidDataException("Invalid original/expanded element count declaration.");
                             }
                             unitHeader = set.Lines.FirstOrDefault(l => l.IndexOf("Unit system:", StringComparison.OrdinalIgnoreCase) >= 0);
@@ -140,7 +149,11 @@ namespace CaeResults
                         else if (id.StartsWith("    2C", StringComparison.Ordinal))
                         {
                             if (nodes != null || elements != null || fields.Count > 0) throw new InvalidDataException("One ordered node block is required.");
-                            if (set.IsBinary) nodes = GetNodesBinary(set, out lookup);
+                            if(int.Parse(id.Substring(6,30))==0) {
+                                if(!declaredCounts || declaredOriginalCount!=omittedDiscrete || declaredExpandedCount!=0 || set.IsBinary || set.Lines.Length!=1)throw new InvalidDataException("Empty discrete mesh must declare and contain zero records.");
+                                nodes=new Dictionary<int,FeNode>();lookup=new Dictionary<int,int>();
+                            }
+                            else if (set.IsBinary) nodes = GetNodesBinary(set, out lookup);
                             else { constantWidth = IsConstantWidth(set.Lines); nodes = GetNodes(set.Lines, constantWidth, out lookup); }
                             if (nodes.Count != int.Parse(id.Substring(6, 30)) || nodes.Any(n => n.Key <= 0 || !double.IsFinite(n.Value.X) || !double.IsFinite(n.Value.Y) || !double.IsFinite(n.Value.Z)))
                                 throw new InvalidDataException("Incomplete or invalid FRD node block.");
@@ -149,10 +162,11 @@ namespace CaeResults
                         {
                             if (nodes == null || elements != null || fields.Count > 0) throw new InvalidDataException("One element block after nodes is required.");
                             var empty = new HashSet<int>();
-                            elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
+                            elements = int.Parse(id.Substring(6,30))==0 ? new Dictionary<int,FeElement>() : set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
                             int headerCount=int.Parse(id.Substring(6,30));
                             bool countsMatch=elements.Count==headerCount;
-                            if(declaredOriginalCount!=0)countsMatch=headerCount==declaredOriginalCount && elements.Count==declaredExpandedCount;
+                            if(headerCount==0 && (set.IsBinary || set.Lines.Length!=1))throw new InvalidDataException("Empty element block contains records.");
+                            if(declaredCounts)countsMatch=headerCount==declaredOriginalCount-omittedDiscrete && elements.Count==declaredExpandedCount;
                             if (!countsMatch || elements.Any(e => e.Key <= 0 ||
                                 (e.Value is not FeElement3D && e.Value is not FeElement2D && e.Value is not LinearBeamElement && e.Value is not ParabolicBeamElement) ||
                                 e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
@@ -164,6 +178,10 @@ namespace CaeResults
                             int line = 0; GetFieldHeaderData(set.Lines, ref line, previous, out var metadata, out int count);
                             if (metadata.StepType is not (StepTypeEnum.Static or StepTypeEnum.Frequency or StepTypeEnum.Buckling) || count != nodes.Count || !float.IsFinite(metadata.Time))
                                 throw new NotSupportedException("Complete nodal static, frequency or buckling fields are required.");
+                            if(nodes.Count==0) {
+                                if(count!=0 || set.IsBinary || set.Lines.Skip(line).Any(l=>!l.StartsWith(" -4",StringComparison.Ordinal) && !l.StartsWith(" -5",StringComparison.Ordinal) && l.Trim()!="-3"))throw new InvalidDataException("Empty discrete fields must have no stored values.");
+                                emptyFieldBlocks++;previous=metadata;continue;
+                            }
                             ValidateOrder(set, line, count, lookup);
                             GetField(set, constantWidth, previous, lookup, out var data, out var field);
                             string[] required = field.Name switch
@@ -195,7 +213,8 @@ namespace CaeResults
                         }
                         else throw new NotSupportedException("Unsupported FRD data block.");
                     }
-                    if (nodes == null || elements == null || fields.Count == 0) throw new InvalidDataException("Complete mesh and at least one field are required.");
+                    if(nodes!=null && nodes.Count==0 && (elements==null || elements.Count!=0 || declaredOriginalCount!=omittedDiscrete || declaredExpandedCount!=0))throw new InvalidDataException("Empty result nodes require an empty discrete result topology.");
+                    if (nodes == null || elements == null || fields.Count == 0 && emptyFieldBlocks==0) throw new InvalidDataException("Complete mesh and at least one field are required.");
                     if (hash != Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(fileName)))) throw new IOException("FRD changed during inspection.");
                     bool scaled = false;
                     if (modelSpace == "Axisymmetric")

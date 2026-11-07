@@ -18,6 +18,12 @@ namespace CaeModel
     // Numerical section/element behavior remains in the unchanged solver.
     public sealed class StructuralSectionData
     {
+        public double? Mass {get;set;}
+        public double? Stiffness {get;set;}
+        public int Dof {get;set;}
+        public int SecondDof {get;set;}
+        public double? Clearance {get;set;}
+        public double? TensileForce {get;set;}
         public string Kind { get; set; }
         public string Shape { get; set; }
         public double[] Dimensions { get; set; }
@@ -43,6 +49,7 @@ namespace CaeModel
                 new[]{"M3D3"},new[]{"M3D6"},new[]{"M3D4","M3D4R"},new[]{"M3D8","M3D8R"},
                 new[]{"B31","B31R","B21"},new[]{"B32","B32R"},new[]{"T3D2","T2D2"},new[]{"T3D3","T2D3"}})
                 if(group.Contains(formulation))return group;
+            if(new[]{"MASS","SPRING1","SPRING2","SPRINGA","GAPUNI"}.Contains(formulation))return new[]{formulation};
             switch (formulation)
             {
                 case "C3D4": return new[] { "C3D4" };
@@ -68,7 +75,7 @@ namespace CaeModel
             string prefix = modelSpace == "PlaneStress" ? "CPS" : modelSpace == "PlaneStrain" ? "CPE" : modelSpace == "Axisymmetric" ? "CAX" : null;
             bool twoD = prefix != null;
             if (!twoD && modelSpace != "ThreeD") throw new CaeException("Unknown model space.");
-            if (twoD && (step.GetType() != typeof(StaticStep) || pyramidConversion.HasValue ||
+            if (twoD && (pyramidConversion.HasValue ||
                 mesh.Nodes.Values.Any(n => n.Z != 0 || (modelSpace == "Axisymmetric" && n.X < 0))))
                 throw new CaeException("Plane/axisymmetric static models require XY coordinates (X is nonnegative radius), without pyramid conversion.");
             var amplitudes=AnalysisModelExtensions.Amplitudes(amplitudeDefinitions);
@@ -76,11 +83,11 @@ namespace CaeModel
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
             if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => CompatibleSolidFormulations(t).Length == 0 ||
-                (twoD ? !t.StartsWith(prefix, StringComparison.Ordinal) : !t.StartsWith("C3D", StringComparison.Ordinal) && !t.StartsWith("S", StringComparison.Ordinal) && !t.StartsWith("M3D", StringComparison.Ordinal) && !t.StartsWith("B", StringComparison.Ordinal) && !t.StartsWith("T", StringComparison.Ordinal)))))
+                (twoD ? !t.StartsWith(prefix, StringComparison.Ordinal) : !t.StartsWith("C3D", StringComparison.Ordinal) && !t.StartsWith("S", StringComparison.Ordinal) && !t.StartsWith("M3D", StringComparison.Ordinal) && !t.StartsWith("B", StringComparison.Ordinal) && !t.StartsWith("T", StringComparison.Ordinal) && !new[]{"MASS","SPRING1","SPRING2","SPRINGA","GAPUNI"}.Contains(t)))))
                 throw new NotSupportedException("Every formulation must match the explicitly selected model space.");
             bool structural = checkedMesh.Elements.Values.Any(e=>e is FeElement1D || (!twoD && e is FeElement2D));
             if(!structural && step.FieldOutputs.Values.OfType<ElementFieldOutput>().Any(o=>o.Output!=ElementFieldOutputOutputEnum.Default))throw new NotSupportedException("Explicit expanded/surface output is connected for structural shell/line models only.");
-            if(structural && step.GetType()!=typeof(StaticStep))throw new NotSupportedException("The connected shell/line workflow currently requires a static step.");
+
             var formulations=checkedMesh.ElementBlocks.SelectMany(b=>b.ElementLabels.Select(id=>new {id,type=b.InpElementTypeNames.Single()})).ToDictionary(x=>x.id,x=>x.type);
             foreach (var element in checkedMesh.Elements.Values)
             {
@@ -88,6 +95,7 @@ namespace CaeModel
                 // CalculiX evaluates C3D10 shape functions/Jacobians itself. The
                 // unresolved original PrePoMax Integrate/GetVolume path must not
                 // authorize, alter or prohibit that independent formulation.
+                if(element is MassElement || element is LinearSpringElement || element is LinearGapElement)continue;
                 double measure;
                 if(element is FeElement1D)element.GetCG(checkedMesh.Nodes,out measure);
                 else measure = element is ParabolicTetraElement
@@ -98,7 +106,7 @@ namespace CaeModel
             }
             foreach (string name in checkedMesh.NodeSets.Keys.Concat(checkedMesh.ElementSets.Keys)) Name(name);
             var materialList = materials.ToArray(); var sectionList = sections.ToArray();
-            if (materialList.Length == 0 || sectionList.Length == 0 || materialList.Length > 10000 || sectionList.Length > 10000)
+            if (sectionList.Length == 0 || materialList.Length > 10000 || sectionList.Length > 10000)
                 throw new CaeException("A bounded nonempty material/section definition is required.");
             var materialNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var materialText = new List<string>();
@@ -116,20 +124,22 @@ namespace CaeModel
             foreach (var section in sectionList)
             {
                 if (section == null || (section.GetType()!=typeof(SolidSection) && section.GetType()!=typeof(ShellSection) && section.GetType()!=typeof(MembraneSection) && section.GetType()!=typeof(Section))) throw new CaeException("Unknown or null section.");
-                Active(section); Name(section.Name); Name(section.MaterialName);
+                Active(section); Name(section.Name);
+                StructuralSectionData data=null;
+                if(structuralSections!=null)structuralSections.TryGetValue(section.Name,out data);
+                bool discrete=data?.Kind is "mass" or "spring" or "gap";
+                if(!discrete)Name(section.MaterialName);
                 if (!sectionNames.Add(section.Name) || section.TwoD != twoD || section.RegionType != RegionTypeEnum.ElementSetName ||
                     section.CreationData != null || (section.CreationIds != null && section.CreationIds.Length != 0))
                     throw new NotSupportedException("Unique solid sections matching model dimensionality on named element sets are required.");
                 if (twoD && (!Finite(section.Thickness.Value) || section.Thickness.Value <= 0)) throw new CaeException("Finite positive section thickness required.");
-                if (!materialNames.Contains(section.MaterialName)) throw new CaeException("Section refers to a missing material.");
-                usedMaterials.Add(section.MaterialName);
+                if (!discrete && !materialNames.Contains(section.MaterialName)) throw new CaeException("Section refers to a missing material.");
+                if(!discrete)usedMaterials.Add(section.MaterialName);
                 var ids=Set(checkedMesh.ElementSets,section.RegionName);
-                StructuralSectionData data=null;
-                if(structuralSections!=null)structuralSections.TryGetValue(section.Name,out data);
                 bool shell=section is ShellSection || data?.Kind=="composite", membrane=section is MembraneSection;
                 foreach(int id in ids) {
                     string type=formulations[id];
-                    bool matching=data?.Kind=="beam" ? type.StartsWith("B",StringComparison.Ordinal) : data?.Kind=="truss" ? type.StartsWith("T",StringComparison.Ordinal) :
+                    bool matching=data?.Kind=="mass" ? type=="MASS" : data?.Kind=="spring" ? new[]{"SPRING1","SPRING2","SPRINGA"}.Contains(type) : data?.Kind=="gap" ? type=="GAPUNI" : data?.Kind=="beam" ? type.StartsWith("B",StringComparison.Ordinal) : data?.Kind=="truss" ? type.StartsWith("T",StringComparison.Ordinal) :
                         shell ? type.StartsWith("S",StringComparison.Ordinal) : membrane ? type.StartsWith("M3D",StringComparison.Ordinal) :
                         section is SolidSection && (twoD ? type.StartsWith(prefix,StringComparison.Ordinal) : type.StartsWith("C3D",StringComparison.Ordinal));
                     if(!matching)throw new CaeException("Section kind does not match every assigned element formulation.");
@@ -138,7 +148,7 @@ namespace CaeModel
                 }
                 if(data!=null) {
                     usedStructuralSections.Add(section.Name);
-                    sectionKeywords.Add(StructuralKeyword(section,data,ids,checkedMesh,materialNames));
+                    sectionKeywords.Add(discrete ? DiscreteKeyword(section,data,ids,checkedMesh,formulations) : StructuralKeyword(section,data,ids,checkedMesh,materialNames));
                     if(data.Kind=="composite")usedMaterials.UnionWith(data.LayerMaterials);
                 }
                 else if(section is ShellSection sh) { if(!Finite(sh.Thickness.Value)||sh.Thickness.Value<=0||!Finite(sh.Offset.Value))throw new CaeException("Finite shell thickness and offset required.");sectionKeywords.Add(SectionKeyword(sh)); }
@@ -154,7 +164,7 @@ namespace CaeModel
             if(!timeDomain && !isFrequency && !isBuckling)throw new NotSupportedException("An exact original static, frequency or buckle step is required.");
             if(!timeDomain && (amplitudes.Count>0 || initialTemperature!=null || step.DefinedFields.Count>0 || step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
             if((isDynamic || isModal) && (materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion)) || step.Nlgeom ||
-                sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
+                sectionList.Where(section=>usedMaterials.Contains(section.MaterialName)).Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
                 throw new CaeException("Linear solid dynamics requires density and elasticity for every section; nonlinear/plastic dynamics remain pending.");
             if(isDynamic) {
                 var d=(DynamicStep)step;
@@ -175,7 +185,7 @@ namespace CaeModel
                 if(string.Equals(modalBasis.Name,step.Name,StringComparison.OrdinalIgnoreCase))throw new CaeException("Distinct basis and modal step names required.");
                 ValidateOutputs(checkedMesh,modalBasis);
             } else if(modalBasis!=null)throw new CaeException("A frequency basis applies only to modal dynamics.");
-            if(isFrequency && (step.Loads.Count!=0 || sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
+            if(isFrequency && (step.Loads.Count!=0 || sectionList.Where(section=>usedMaterials.Contains(section.MaterialName)).Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
                 throw new CaeException("Frequency analysis requires density for every section and no applied loads.");
             if(isBuckling && step.Loads.Count==0)throw new CaeException("Buckling analysis requires a nonzero reference load.");
             if(isFrequency) {
@@ -240,7 +250,7 @@ namespace CaeModel
             var loads = new List<CalculixKeyword>(); var loaded = new HashSet<Tuple<int,int>>();
             var densityElements = new HashSet<int>();
             foreach(var section in sectionList)
-                if(materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))
+                if(usedMaterials.Contains(section.MaterialName) && materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))
                     densityElements.UnionWith(Set(checkedMesh.ElementSets,section.RegionName));
             Dictionary<string,int> incidence=null;
             if(step.Loads.Values.OfType<DLoad>().Any(l=>l.RegionType==RegionTypeEnum.NodeSetName))
@@ -336,9 +346,11 @@ namespace CaeModel
                 // 20-character numeric input field (e.g. 6.8000000000000001E-15).
                 int elementsAt = meshText.IndexOf("*Element", StringComparison.Ordinal);
                 if(structural) {
-                    int expandedCount=sectionList.Sum(section=>Set(checkedMesh.ElementSets,section.RegionName).Length *
+                    int omittedDiscrete=checkedMesh.Elements.Values.Count(e=>e is MassElement || e is LinearSpringElement && e.NodeIds.Length==1);
+                    int expandedCount=sectionList.Sum(section=>Set(checkedMesh.ElementSets,section.RegionName).Count(id=>!(checkedMesh.Elements[id] is MassElement) && !(checkedMesh.Elements[id] is LinearSpringElement && checkedMesh.Elements[id].NodeIds.Length==1)) *
                         (structuralSections!=null && structuralSections.TryGetValue(section.Name,out var layered) && layered.Kind=="composite" ? layered.LayerMaterials.Length : 1));
                     text.Append("*Heading\nModel space: ThreeD\nPrePoMax-X element counts: ").Append(checkedMesh.Elements.Count).Append(",").Append(expandedCount).Append('\n');
+                    if(omittedDiscrete>0)text.Append("PrePoMax-X omitted discrete: ").Append(omittedDiscrete).Append('\n');
                 }
                 if(twoD) { text.Clear(); text.Append("** PrePoMax-X ").Append(modelSpace).Append(" static analysis deck\n*Heading\nModel space: ").Append(modelSpace).Append('\n'); }
                 text.Append(twoD ? CalNodeFormatting.Write2D(checkedMesh.Nodes) : CalNodeFormatting.Write3D(checkedMesh.Nodes));
@@ -350,6 +362,15 @@ namespace CaeModel
                 if(isModal) {
                     Append(text,new CalStepHeader(modalBasis));Append(text,new CalFrequencyStep(modalBasis));
                     foreach(var item in constraints)Append(text,new CalDisplacementRotation(item.Item1,null,null,ComplexLoadTypeEnum.None));
+                    // Original CalculiX ccx_2.22step.c requires the same point-load
+                    // DOFs to be present at zero magnitude in the stored basis
+                    // for expanded 1D/2D nodes. CalCLoad intentionally omits zero
+                    // components, so retain them through its original user-keyword route.
+                    if(checkedMesh.Elements.Values.Any(e=>e is FeElement1D || e is FeElement2D) && loaded.Count>0) {
+                        var zero=new StringBuilder("*Cload\n");
+                        foreach(var dof in loaded.OrderBy(v=>v.Item1).ThenBy(v=>v.Item2))zero.Append(dof.Item1).Append(", ").Append(dof.Item2+1).Append(", 0\n");
+                        Append(text,new CalculixUserKeyword(zero.ToString()));
+                    }
                     foreach(var output in modalBasis.FieldOutputs.Values) {
                         if(output is NodalFieldOutput nf)Append(text,new CalNodeFile(nf,modalBasis.OutputFrequency));
                         else Append(text,new CalElFile((ElementFieldOutput)output,modalBasis.OutputFrequency));
@@ -393,7 +414,7 @@ namespace CaeModel
         private static string FaceKey(IEnumerable<int> ids) { return string.Join(",",ids.Distinct().OrderBy(id=>id)); }
         private static IEnumerable<Tuple<FeFaceName,int[]>> Faces(FeElement element, bool normalFaces=false)
         {
-            if(element is FeElement1D)yield break;
+            if(element is FeElement1D || element is FeElement0D)yield break;
             for(int i=element is FeElement2D ? (normalFaces ? 1 : 3) : 1;i<=(element is FeElement2D && normalFaces ? 2 : 6);i++) {
                 int[] ids;
                 try { ids=element.GetNodeIdsFromFaceName((FeFaceName)i); }
@@ -402,6 +423,29 @@ namespace CaeModel
             }
         }
 
+        private static CalculixKeyword DiscreteKeyword(Section section,StructuralSectionData data,int[] ids,InpMeshData mesh,Dictionary<int,string> types)
+        {
+            if(data.Kind=="mass") {
+                if(!data.Mass.HasValue || !Finite(data.Mass.Value) || data.Mass<=0 || data.Stiffness.HasValue || data.Clearance.HasValue || data.TensileForce.HasValue || data.Dof!=0 || data.SecondDof!=0 || data.Direction!=null)throw new CaeException("Positive mass and no spring/gap controls required.");
+                return new CalMassSection(new MassSectionData(section.Name,section.RegionName,data.Mass.Value));
+            }
+            if(data.Mass.HasValue || !data.Stiffness.HasValue || !Finite(data.Stiffness.Value) || data.Stiffness<=0)throw new CaeException("Positive finite spring/gap stiffness required.");
+            if(data.Kind=="spring") {
+                if(data.Clearance.HasValue || data.TensileForce.HasValue || data.Direction!=null)throw new CaeException("Spring section has no gap controls.");
+                foreach(int id in ids) {
+                    string type=types[id];
+                    if(type=="SPRINGA" ? data.Dof!=0 || data.SecondDof!=0 : data.Dof<1 || data.Dof>3 || (type=="SPRING2" ? data.SecondDof<1 || data.SecondDof>3 : data.SecondDof!=0))throw new CaeException("SPRING1 requires DOF 1–3; SPRING2 requires two DOFs 1–3; SPRINGA uses its nodal axis.");
+                    if(type=="SPRINGA" && mesh.Elements[id].NodeIds.Select(n=>mesh.Nodes[n]).Select(n=>new[]{n.X,n.Y,n.Z}).Distinct(new CoordinateComparer()).Count()<2)throw new CaeException("Axial spring nodes must be separated.");
+                }
+                return new CalLinearSpringSection(new LinearSpringSectionData(section.Name,section.RegionName,data.Dof,data.SecondDof,data.Stiffness.Value));
+            }
+            if(!data.Clearance.HasValue || !Finite(data.Clearance.Value) || data.Direction==null || data.Direction.Length!=3 || data.Direction.Any(v=>!Finite(v)) || (!Finite(data.Direction.Sum(v=>v*v)) || data.Direction.Sum(v=>v*v)<1e-30) || data.Dof!=0 || data.SecondDof!=0 || data.TensileForce.HasValue && (!Finite(data.TensileForce.Value) || data.TensileForce<0))throw new CaeException("Gap requires finite clearance, nonzero direction and nonnegative optional tensile force.");
+            return new CalGapSection(new GapSectionData(section.Name,section.RegionName,data.Clearance.Value,(double[])data.Direction.Clone(),data.Stiffness.Value,data.TensileForce??double.NaN));
+        }
+        private sealed class CoordinateComparer : IEqualityComparer<double[]> {
+            public bool Equals(double[] a,double[] b)=>a.SequenceEqual(b);
+            public int GetHashCode(double[] a)=>0;
+        }
         private static T Invariant<T>(Func<T> create)
         {
             var previous=CultureInfo.CurrentCulture;

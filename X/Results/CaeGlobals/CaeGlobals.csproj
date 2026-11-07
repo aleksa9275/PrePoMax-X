@@ -60,5 +60,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToInteger/StringIntegerConverter.cs" Link="UnitSystem/StringToInteger/StringIntegerConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/OrderedDisplayNameAttribute.cs" Link="OrderedDisplayNameAttribute.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringMomentConverter.cs" Link="UnitSystem/StringToDouble/StringMomentConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringForcePerLengthConverter.cs" Link="UnitSystem/StringToDouble/StringForcePerLengthConverter.cs" />
   </ItemGroup>
 </Project>

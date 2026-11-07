@@ -1,0 +1,9 @@
+*Node, Nset=ALL
+1,0,0,0
+2,1,0,0
+*Element, Type=SPRING2, Elset=SPRINGS
+1,1,2
+*Nset,Nset=ROOT
+1
+*Nset,Nset=TIP
+2

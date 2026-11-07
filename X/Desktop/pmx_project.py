@@ -311,3 +311,48 @@ def run_probe(app, window, source, output):
         check('Run analysis launched the PMX job', window.job.active)
     except Exception as error:
         finish(error)
+
+
+class FamilyPmxSession:
+    """Read/solve and exact-byte Save As; no graph mutation or history replay."""
+    family_projection=True
+    cad_model=False
+    def __init__(self,path):
+        self.path=Path(path).resolve();tools,hosts=tool_paths()
+        with self.path.open('rb') as stream:self.contents=stream.read(MAX_PROJECT_BYTES+1)
+        if len(self.contents)>MAX_PROJECT_BYTES:raise ValueError('PMX exceeds the 32 MiB desktop limit.')
+        inspector=run_path(str(tools/'inspect-family-project.py'))
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-family-open-') as name:
+            source=Path(name)/'original.pmx';source.write_bytes(self.contents)
+            self.project=inspector['inspect'](source,hosts[0],hosts[1])
+        self.mesh_bytes=self.project['meshText'].encode('utf-8')
+        self.definition=self.project['analysis']
+        from analysis_editor import validate_definition
+        self.validation=validate_definition(self.mesh_bytes,self.definition)
+    def save_copy(self,path):
+        destination=Path(path)
+        if destination.suffix.lower()!='.pmx':raise ValueError('Choose a .pmx filename.')
+        # Validate the frozen source again before a new-file publication.
+        if hashlib.sha256(self.contents).hexdigest()!=self.project['inputSha256']:raise ValueError('Original PMX snapshot changed.')
+        import os
+        with tempfile.TemporaryDirectory(prefix='.prepomaxx-pmx-',dir=destination.parent) as name:
+            staged=Path(name)/'verified.pmx'
+            with staged.open('xb') as stream:stream.write(self.contents)
+            if hashlib.sha256(staged.read_bytes()).hexdigest()!=self.project['inputSha256']:raise ValueError('PMX copy verification failed.')
+            os.link(staged,destination)
+        return {'success':True,'originalBytesPreserved':True,'sha256':self.project['inputSha256']}
+
+class FamilyPmxDialog(QtWidgets.QDialog):
+    def __init__(self,parent,session):
+        super().__init__(parent);self.setWindowTitle('Original PMX family project');form=QtWidgets.QFormLayout(self)
+        note=QtWidgets.QLabel('Original model, assignments and command history are preserved. This project can be solved and saved as an identical PMX copy. Native editing of this graph remains pending.');note.setWordWrap(True);form.addRow(note)
+        for label,text in [('Project',session.path.name),('Model space',session.definition.get('modelSpace','ThreeD')),('Elements',str(len(session.project['mesh']['elements']))),('Sections',', '.join(s['kind'] for s in session.definition['sections']))]:form.addRow(label,QtWidgets.QLabel(text))
+        self.message=QtWidgets.QLabel();form.addRow(self.message)
+        save=QtWidgets.QPushButton('Save original PMX as…');save.clicked.connect(self.save);form.addRow(save)
+        close=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Close);close.rejected.connect(self.reject);form.addRow(close)
+        self.session=session
+    def save(self):
+        name,_=QtWidgets.QFileDialog.getSaveFileName(self,'Save original PMX copy','', 'PrePoMax project (*.pmx)')
+        if not name:return
+        try:self.session.save_copy(name);self.message.setText('Saved and verified identical original PMX bytes.')
+        except (OSError,ValueError) as error:self.message.setText(str(error))

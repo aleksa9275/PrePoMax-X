@@ -93,7 +93,7 @@ namespace CaeResults
                     if (data.FieldName == HOFieldNames.Error || data.Values == null || data.Values.Length == 0 ||
                         !double.IsFinite(data.Time) || data.Time < 0 || string.IsNullOrEmpty(data.SetName))
                         throw new InvalidDataException("Invalid DAT dataset.");
-                    if (++count > 256 || !seenBlocks.Add((step, increment, data.SetName, data.FieldName)))
+                    if (++count > 4096 || !seenBlocks.Add((step, increment, data.SetName, data.FieldName)))
                         throw new InvalidDataException("Too many or duplicate DAT datasets.");
                     bool tensor = data.FieldName == HOFieldNames.Stresses || data.FieldName == HOFieldNames.Strains;
                     bool integrationPoint=tensor || data.FieldName==HOFieldNames.HeatFlux;

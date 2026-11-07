@@ -12,7 +12,7 @@ public sealed record MaterialSpec(string Name,string? YoungsModulus=null,string?
     string? Density=null,string[][]? PlasticCurve=null,string Hardening="Isotropic",string? Conductivity=null,string? SpecificHeat=null,string[][]? ConductivityTable=null,string[][]? SpecificHeatTable=null,string[][]? DensityTable=null,
     string? Expansion=null,string? ExpansionZeroTemperature=null);
 public sealed record LayerSpec(string Material,string Thickness);
-public sealed record SectionSpec(string Name,string Material,string ElementSet,string? Thickness=null,string Kind="solid",string? Offset=null,string Shape="RECT",string[]? Dimensions=null,double[]? Direction=null,LayerSpec[]? Layers=null);
+public sealed record SectionSpec(string Name,string Material,string ElementSet,string? Thickness=null,string Kind="solid",string? Offset=null,string Shape="RECT",string[]? Dimensions=null,double[]? Direction=null,LayerSpec[]? Layers=null,string? Mass=null,string? Stiffness=null,int Dof=0,int SecondDof=0,string? Clearance=null,string? TensileForce=null);
 public sealed record ConstraintSpec(string Name,string NodeSet,string[] Displacements,string? Amplitude=null,string[]? Rotations=null);
 public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode,string? Amplitude=null);
 public sealed record MomentSpec(string Name,string NodeSet,string[] MomentPerNode,string? Amplitude=null);
@@ -23,11 +23,13 @@ public sealed record HeatLoadSpec(string Name,string Kind,string Region,string M
 public sealed record ThermalSpec(bool SteadyState=true,string? InitialTemperature=null,double? MaximumTemperatureChange=null,bool Direct=false,double? AbsoluteZero=null,double? StefanBoltzmann=null);
 public sealed record AmplitudeSpec(string Name,double[][] Points,string TimeSpan="StepTime",double ShiftX=0,double ShiftY=0);
 public sealed record DynamicsSpec(double Alpha=-0.05,bool Direct=false,string Damping="Off",double MassDamping=0,double StiffnessDamping=0,int BasisModes=1,double ModalDampingRatio=0,string BasisName="Frequency-basis");
+public sealed record FieldOutputSpec(string Name,string Kind,int Variables);
+public sealed record HistoryOutputSpec(string Name,string Kind,string Region,int Variables);
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
     string[] NodalHistorySets,string[] ElementHistorySets,bool NonlinearGeometry=false,
     PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null,
-    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null,DynamicsSpec? Dynamics=null,MomentSpec[]? Moments=null,string ElementOutput="Default");
+    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null,DynamicsSpec? Dynamics=null,MomentSpec[]? Moments=null,string ElementOutput="Default",FieldOutputSpec[]? FieldOutputs=null,HistoryOutputSpec[]? HistoryOutputs=null);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
     string? PyramidConversion = null,AmplitudeSpec[]? Amplitudes=null,string ModelSpace="ThreeD");
 
@@ -68,16 +70,17 @@ public static class AnalysisFiles
         if(spec.UnitSystem is not ("mm-N-s-C" or "m-N-s-C"))throw new InvalidDataException("Explicit mm-N-s-C or m-N-s-C units required.");
         if(spec.ModelSpace is not ("ThreeD" or "PlaneStress" or "PlaneStrain" or "Axisymmetric"))throw new InvalidDataException("Choose ThreeD, PlaneStress, PlaneStrain or Axisymmetric model space.");
         bool twoD=spec.ModelSpace!="ThreeD";
-        if(twoD && spec.Step.Kind!="static")throw new InvalidDataException("The connected plane/axisymmetric workflow currently requires a static step.");
+
         string length=spec.UnitSystem=="mm-N-s-C"?"mm":"m";
         StringPressureConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"MPa":"Pa";
         StringAreaConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"mm²":"m²";
         StringLengthConverter.SetUnit=length;StringLengthDOFConverter.SetUnit=length;StringForceConverter.SetUnit="N";
+        StringMassConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"t":"kg";StringForcePerLengthConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"N/mm":"N/m";
         StringMomentConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"N·mm":"N·m";
         StringTemperatureConverter.SetUnit="°C";StringAngleDOFConverter.SetUnit="rad";
         StringDensityConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"t/mm³":"kg/m³";
         StringAccelerationConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"mm/s²":"m/s²";
-        if(spec.Materials.Length==0 || spec.Materials.Length>1000 || spec.Sections.Length==0 || spec.Sections.Length>1000)
+        if(spec.Materials.Length>1000 || spec.Sections.Length==0 || spec.Sections.Length>1000)
             throw new InvalidDataException("Bounded nonempty material/section arrays required.");
         string Equation(string text)
         { if(text==null || text.Length==0 || text.Length>4096)throw new InvalidDataException("Missing or oversized equation.");return text; }
@@ -146,14 +149,17 @@ public static class AnalysisFiles
             if(value==null)throw new InvalidDataException("Null section.");
             if(!twoD && value.Kind=="solid" && value.Thickness!=null)throw new InvalidDataException("Thickness applies to a 2D solid section.");
             if(twoD && spec.ModelSpace!="Axisymmetric" && value.Thickness==null)throw new InvalidDataException("Explicit plane section thickness required.");
-            if(value.Kind is not ("solid" or "shell" or "membrane" or "beam" or "truss" or "composite"))throw new InvalidDataException("Unknown section kind.");
+            if(value.Kind is not ("solid" or "shell" or "membrane" or "beam" or "truss" or "composite" or "mass" or "spring" or "gap"))throw new InvalidDataException("Unknown section kind.");
             if(twoD && value.Kind!="solid")throw new InvalidDataException("Plane and axisymmetric elements require solid sections.");
             if(value.Kind is "shell" or "membrane" && value.Thickness==null)throw new InvalidDataException("Explicit shell/membrane thickness required.");
             if(value.Kind is "beam" or "truss" or "composite" && value.Thickness!=null)throw new InvalidDataException("Line/composite sections use dimensions/area/layers, not scalar thickness.");
             if(value.Kind=="truss" && value.Shape!="RECT")throw new InvalidDataException("Truss sections use area, without a beam shape selection.");
             if(value.Kind is not ("shell" or "membrane" or "composite") && value.Offset!=null)throw new InvalidDataException("Offset applies to shell/membrane sections.");
-            if(value.Kind is not ("beam" or "truss") && (value.Dimensions!=null || value.Direction!=null || value.Shape!="RECT"))throw new InvalidDataException("Line section controls require a beam/truss section.");
+            if(value.Kind is not ("beam" or "truss" or "gap") && (value.Dimensions!=null || value.Direction!=null || value.Shape!="RECT"))throw new InvalidDataException("Line section controls require a beam/truss section.");
             if(value.Kind!="composite" && value.Layers!=null)throw new InvalidDataException("Layers require a composite section.");
+            bool discrete=value.Kind is "mass" or "spring" or "gap";
+            if(discrete && (value.Material!="" || value.Thickness!=null || value.Offset!=null || value.Dimensions!=null || value.Layers!=null))throw new InvalidDataException("Discrete sections have no material, thickness, offset or layer assignment.");
+            if(!discrete && (value.Mass!=null || value.Stiffness!=null || value.Clearance!=null || value.TensileForce!=null || value.Dof!=0 || value.SecondDof!=0))throw new InvalidDataException("Discrete controls require a discrete section.");
             Section section=value.Kind=="solid" ? new SolidSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,twoD) :
                 value.Kind is "shell" or "composite" ? new ShellSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,false) :
                 value.Kind=="membrane" ? new MembraneSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,false) :
@@ -252,6 +258,15 @@ public static class AnalysisFiles
                 : new BuckleStep(definition.Name){NumOfBucklingFactors=definition.Modes,Accuracy=definition.BucklingAccuracy};
             step.OutputFrequency=definition.OutputFrequency;
         } else throw new InvalidDataException("Choose static, frequency or buckling analysis.");
+        if(definition.FieldOutputs!=null) {
+            if(definition.FieldOutputs.Length<1 || definition.FieldOutputs.Length>100)throw new InvalidDataException("Bounded nonempty original field outputs required.");
+            step.FieldOutputs.Clear();
+            foreach(var output in definition.FieldOutputs) {
+                if(output==null || output.Kind is not ("node" or "element"))throw new InvalidDataException("Choose node or element field output.");
+                FieldOutput field=output.Kind=="node" ? new NodalFieldOutput(output.Name,(NodalFieldVariable)output.Variables) : new ElementFieldOutput(output.Name,(ElementFieldVariable)output.Variables);
+                step.AddFieldOutput(field);
+            }
+        }
         if(!Enum.TryParse<ElementFieldOutputOutputEnum>(definition.ElementOutput,out var elementOutput) || !Enum.IsDefined(elementOutput))throw new InvalidDataException("Known original element field output dimension required.");
         foreach(var output in step.FieldOutputs.Values.OfType<ElementFieldOutput>())output.Output=elementOutput;
         foreach(var value in definition.Constraints)
@@ -315,6 +330,15 @@ public static class AnalysisFiles
             foreach(var field in step.FieldOutputs.Values.OfType<ElementFieldOutput>())field.Variables|=ElementFieldVariable.PEEQ;
         foreach(string set in definition.NodalHistorySets)step.AddHistoryOutput(new NodalHistoryOutput("NodeHistory-"+(++index),thermal?NodalHistoryVariable.NT|NodalHistoryVariable.RFL:definition.Kind is "dynamic" or "modal-dynamics"?NodalHistoryVariable.U|NodalHistoryVariable.RF|NodalHistoryVariable.V:NodalHistoryVariable.U|NodalHistoryVariable.RF,set,RegionTypeEnum.NodeSetName));
         foreach(string set in definition.ElementHistorySets)step.AddHistoryOutput(new ElementHistoryOutput("ElementHistory-"+(++index),thermal?ElementHistoryVariable.HFL:ElementHistoryVariable.S,set,RegionTypeEnum.ElementSetName));
+        if(definition.HistoryOutputs!=null) {
+            if(definition.HistoryOutputs.Length>100 || definition.NodalHistorySets.Length!=0 || definition.ElementHistorySets.Length!=0)throw new InvalidDataException("Choose explicit original histories or shorthand history sets.");
+            step.HistoryOutputs.Clear();
+            foreach(var output in definition.HistoryOutputs) {
+                if(output==null || output.Kind is not ("node" or "element"))throw new InvalidDataException("Choose node or element history output.");
+                HistoryOutput history=output.Kind=="node" ? new NodalHistoryOutput(output.Name,(NodalHistoryVariable)output.Variables,output.Region,RegionTypeEnum.NodeSetName) : new ElementHistoryOutput(output.Name,(ElementHistoryVariable)output.Variables,output.Region,RegionTypeEnum.ElementSetName);
+                step.AddHistoryOutput(history);
+            }
+        }
         return(materials,sections,step);
     }
 
@@ -336,7 +360,7 @@ public static class AnalysisFiles
         if(values.Step is ModalDynamicsStep) {
             var d=spec.Step.Dynamics;
             var bs=spec with {Amplitudes=null,Step=spec.Step with {Kind="frequency",Name=d.BasisName,Dynamics=null,Modes=d.BasisModes,
-                Loads=Array.Empty<ForceSpec>(),Pressures=null,GravityLoads=null,NodalHistorySets=Array.Empty<string>(),ElementHistorySets=Array.Empty<string>()}};
+                Loads=Array.Empty<ForceSpec>(),Moments=null,Pressures=null,GravityLoads=null,HistoryOutputs=null,NodalHistorySets=Array.Empty<string>(),ElementHistorySets=Array.Empty<string>()}};
             basis=(FrequencyStep)Create(bs).Step;basis.Storage=true;
             if(basis.Name==values.Step.Name)throw new InvalidDataException("Frequency basis and modal step names must differ.");
         }
@@ -346,10 +370,14 @@ public static class AnalysisFiles
     {
         var result=new Dictionary<string,StructuralSectionData>();
         double Quantity(string text,Type converter) { if(string.IsNullOrEmpty(text)||text.Length>4096)throw new InvalidDataException("Bounded section quantity required.");var v=new EquationContainer(converter,0);v.SetEquation(text);return v.Value; }
-        foreach(var section in spec.Sections.Where(s=>s.Kind is "beam" or "truss" or "composite")) {
+        foreach(var section in spec.Sections.Where(s=>s.Kind is "beam" or "truss" or "composite" or "mass" or "spring" or "gap")) {
             if(section.Layers!=null && section.Layers.Any(l=>l==null))throw new InvalidDataException("Null composite layer.");
             var data=new StructuralSectionData {Kind=section.Kind,Shape=section.Shape,Direction=section.Direction,
                 Dimensions=section.Dimensions?.Select(v=>Quantity(v,section.Kind=="truss"?typeof(StringAreaConverter):typeof(StringLengthConverter))).ToArray(),
+                Mass=section.Mass==null?null:Quantity(section.Mass,typeof(StringMassConverter)),
+                Stiffness=section.Stiffness==null?null:Quantity(section.Stiffness,typeof(StringForcePerLengthConverter)),Dof=section.Dof,SecondDof=section.SecondDof,
+                Clearance=section.Clearance==null?null:Quantity(section.Clearance,typeof(StringLengthConverter)),
+                TensileForce=section.TensileForce==null?null:Quantity(section.TensileForce,typeof(StringForceConverter)),
                 Offset=section.Offset==null?0:Quantity(section.Offset,typeof(StringDoubleConverter)),
                 LayerMaterials=section.Layers?.Select(l=>l.Material).ToArray(),LayerThicknesses=section.Layers?.Select(l=>Quantity(l.Thickness,typeof(StringLengthConverter))).ToArray()};
             if(!result.TryAdd(section.Name,data))throw new InvalidDataException("Duplicate section name.");

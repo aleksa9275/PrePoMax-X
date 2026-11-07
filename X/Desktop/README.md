@@ -236,3 +236,13 @@ Tasks 0098–0100 add Radiation and thermal material tables, Amplitudes and
 Thermal expansion / stress controls, with six new Solve example… cases. The
 model tree exposes these definitions. See the [milestone report](../../.project/reports/radiation-amplitudes-thermal-stress.md) for original
 semantics, analytical/refinement/reference evidence and remaining work.
+
+
+Tasks 0107–0110 add **Configure → Mass / spring / gap**, thirteen family examples
+and **Edit mesh… / Undo mesh / Redo mesh**. Imported meshes support original point
+transforms, complete renumbering and complete exterior surface/edge extraction.
+Export/reopen a CAD-owned mesh before these edits. Extraction clears incompatible
+analysis assignments; undo restores exact bytes. The beam modal-transient entry
+is explicitly a failure diagnostic. Original family PMX projects can be opened,
+solved and saved as identical original copies; broader graph editing/new-session
+PMX serialization remains pending. [Scope and actual candidate](../../.project/reports/element-family-completion.md).

@@ -72,6 +72,19 @@ class DesktopJobBoundary(unittest.TestCase):
             self.assertTrue((job.directory / 'desktop.stderr').read_bytes())
             self.assertFalse((job.directory / 'solver.pid').exists())
 
+    def test_zero_exit_solver_error_cannot_pass_with_nonempty_output_headers(self):
+        with tempfile.TemporaryDirectory(prefix='desktop reported error ') as directory:
+            root = Path(directory)
+            command = self.command(root, '#!/bin/sh\necho "CalculiX Version 2.22"\necho " *ERROR in arpack: too many eigenvalues requested"\nfor file in analysis.frd analysis.dat analysis.sta; do echo header > "$file"; done\nexit 0\n')
+            job = DesktopJob()
+            job.start(ROOT / 'X/Analysis/StaticDeck/cube-mesh.inp', ROOT / 'X/Analysis/StaticDeck/cube-analysis.json', root / 'jobs', command)
+            self.wait(lambda: job.result is not None)
+            self.assertEqual(job.state, 'Failed')
+            self.assertTrue(job.result['outcome']['solverReportedErrors'])
+            self.assertEqual(job.result['outcome']['exitCode'], 0)
+            self.assertTrue(job.result['outcome']['outputsPresent'])
+            self.assertFalse(job.result['success'])
+
     def test_changed_native_solver_is_rejected_before_execution(self):
         with tempfile.TemporaryDirectory(prefix='desktop changed ') as directory:
             root = Path(directory)

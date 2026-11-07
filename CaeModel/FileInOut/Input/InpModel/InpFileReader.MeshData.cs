@@ -79,7 +79,23 @@ namespace FileInOut.Input
                                 parsed=(string[])dataSet.Clone();
                                 parsed[0]=System.Text.RegularExpressions.Regex.Replace(parsed[0],@"(?i)(\bTYPE\s*=\s*)[^,]+",m=>m.Groups[1].Value+alias);
                             }
-                            AddElements(parsed, ref elements, ref block);
+                            if(new[]{"MASS","SPRING1","SPRING2","SPRINGA","GAPUNI"}.Contains(lineType)) {
+                                int count=lineType is "MASS" or "SPRING1" ? 1 : 2;
+                                string setName=dataSet[0].Split(',').Skip(1).Select(t=>t.Split('='))
+                                    .Where(t=>t.Length==2 && t[0].Trim().Equals("ELSET",StringComparison.OrdinalIgnoreCase)).Select(t=>t[1].Trim()).SingleOrDefault();
+                                var labels=new HashSet<int>();
+                                foreach(string line in dataSet.Skip(1)) {
+                                    var tokens=line.Split(',').Select(v=>v.Trim()).ToArray();
+                                    if(tokens.Length!=count+1 || tokens.Any(v=>!int.TryParse(v,NumberStyles.None,CultureInfo.InvariantCulture,out int n) || n<=0))
+                                        throw new CaeException("Exact positive discrete element ID/connectivity required.");
+                                    var values=tokens.Select(int.Parse).ToArray();int id=values[0];var ids=values.Skip(1).ToArray();
+                                    if(elements.ContainsKey(id) || ids.Distinct().Count()!=count)throw new CaeException("Duplicate discrete element or repeated node.");
+                                    FeElement element=lineType=="MASS" ? (FeElement)new MassElement(id,ids) : lineType=="GAPUNI" ? new LinearGapElement(id,ids) : new LinearSpringElement(id,ids);
+                                    elements.Add(id,element);labels.Add(id);
+                                }
+                                block.Add(new InpElementSet(setName,new HashSet<string>{lineType},labels));
+                            }
+                            else AddElements(parsed, ref elements, ref block);
                             if(alias!=null && block.Count==1)block[0].InpElementTypeNames=new HashSet<string>{lineType};
                             if (block.Count != 1 || block[0].ElementLabels.Count == 0)
                                 throw new CaeException("Element block is missing a valid type or connectivity.");

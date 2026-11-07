@@ -3,6 +3,7 @@ using System.Text.Json;
 
 try
 {
+    if(args.Length==2 && args[0]=="--family-mesh") {Console.WriteLine(JsonSerializer.Serialize(FamilyMesh.Read(args[1])));return 0;}
     if (args.Length == 2 && args[0] == "--model-kind")
     {
         using var input = File.OpenRead(args[1]);

@@ -126,6 +126,7 @@
     <Compile Include="Elements\FeElementType.cs" />
     <Compile Include="FeGroup.cs" />
     <Compile Include="FeMesh.cs" />
+    <Compile Include="FeMesh.Transformations.cs" />
     <Compile Include="FeReferencePoint.cs" />
     <Compile Include="FeReferencePointMotion.cs" />
     <Compile Include="CalculixNameShortener.cs" />

@@ -1,5 +1,16 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0107–0110 connect discrete MASS/SPRING1/SPRING2/SPRINGA/GAPUNI, cross-family
+frequency/implicit/static workflows, owned imported-mesh transforms/renumbering/
+boundary extraction and original family PMX read/solve/exact-copy Save As. Read
+.project/reports/element-family-completion.md and its receipt for actual checks,
+publication/candidate and retained failures. Full milestone-8/new-native-session
+PMX writing, general original mesher/tool/calculation breadth and all four-target/
+release acceptance remain open. Preserve B009 modal-beam crash and signed-principal
+tie comparison, B008/T2D3 and all prior D029/B006/B007/thermal/axisymmetric findings.
+No numerical fix, existing tolerance change or solver exception. D057–D061 remain.
+
+
 Tasks 0105/0106 connect original shell/membrane and beam/truss imported-mesh static
 workflows, thickness/offset, rotation/moments, explicit shell-side pressure,
 RECT/CIRC/truss section controls and layered-shell expanded results through the

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0",
+      "density": "1"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_0",
+      "material": "ELASTIC",
+      "elementSet": "LINE_0",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Clamp",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          "0",
+          "0"
+        ],
+        "rotations": [
+          "0",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "loads": [],
+    "pressures": [],
+    "nodalHistorySets": [],
+    "elementHistorySets": [],
+    "moments": [],
+    "elementOutput": "TwoD",
+    "kind": "frequency",
+    "modes": 3
+  }
+}

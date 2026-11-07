@@ -21,7 +21,7 @@ from cad_document import CadDocument
 from mesh_export import publish_mesh
 from cad_regions import CadRegions
 from cad_scene import read_cad_parts
-from pmx_project import PmxDialog, PmxSession, available as pmx_available
+from pmx_project import PmxDialog, PmxSession, FamilyPmxSession, FamilyPmxDialog, available as pmx_available
 from vtkmodules.util.numpy_support import vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkDoubleArray, vtkIdTypeArray, vtkPoints, vtkVersion
 from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
@@ -229,6 +229,10 @@ class Viewport(QtWidgets.QMainWindow):
         self.add_set_action.setEnabled(False)
         self.formulation_action = jobbar.addAction("Element formulations…", self.formulations_dialog)
         self.formulation_action.setEnabled(False)
+        self.mesh_edit_action=jobbar.addAction('Edit mesh…',self.edit_mesh_dialog)
+        self.mesh_undo_action=jobbar.addAction('Undo mesh',self.undo_mesh_edit)
+        self.mesh_redo_action=jobbar.addAction('Redo mesh',self.redo_mesh_edit)
+        self.mesh_undo=[];self.mesh_redo=[]
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
         self.run_action = jobbar.addAction("Run analysis", self.run_model)
         self.example_action = jobbar.addAction("Solve example…", lambda:self.run_example(select=True))
@@ -284,7 +288,7 @@ class Viewport(QtWidgets.QMainWindow):
         if self.model_scene is None:
             QtWidgets.QTreeWidgetItem(self.model_tree, ['Open an INP or VIS file', 'or Solve example'])
             return
-        units = self.pmx_session.project['graph']['unitSystem'] if self.pmx_session else self.definition['unitSystem']
+        units = self.pmx_session.project['graph'].get('unitSystem',self.definition['unitSystem']) if self.pmx_session else self.definition['unitSystem']
         root = QtWidgets.QTreeWidgetItem(self.model_tree, [self.model_path.name, units or 'Choose units'])
         root.setData(0, QtCore.Qt.ItemDataRole.UserRole, 0)
         QtWidgets.QTreeWidgetItem(root, ['Mesh', f"{len(self.model_scene['nodes'])} nodes · {len(self.model_scene['elements'])} elements"])
@@ -468,6 +472,54 @@ class Viewport(QtWidgets.QMainWindow):
     def quadratic_mesh(self):
         return self.model_scene is not None and any(e.get('vtkCellType')==24 or e.get('type')=='ParabolicTetraElement' for e in self.model_scene['elements'])
 
+    def edit_mesh_dialog(self):
+        if self.busy or self.model_scene is None or self.pmx_session is not None:return
+        from mesh_editor import MeshEditDialog
+        dialog=MeshEditDialog(self,self.model_scene)
+        if dialog.exec()!=QtWidgets.QDialog.DialogCode.Accepted:return
+        try:self.apply_mesh_edit(dialog.recipe)
+        except (OSError,ValueError,subprocess.SubprocessError) as error:QtWidgets.QMessageBox.critical(self,'Cannot edit mesh',str(error))
+
+    def mesh_snapshot(self):
+        import copy
+        return (self.mesh_bytes,copy.deepcopy(self.definition),self.cad_mesh,self.cad_document,self.analysis_valid,self.editor_dirty)
+
+    def restore_mesh_snapshot(self,snapshot):
+        data,definition,cad_mesh,cad_document,valid,dirty=snapshot
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-mesh-history-') as directory:
+            path=Path(directory)/'mesh.inp';path.write_bytes(data);scene=decode(path)
+        self._restoring_mesh=True
+        try:self.set_model(self.model_path,scene,data,definition,cad_mesh=cad_mesh,cad_document=cad_document)
+        finally:self._restoring_mesh=False
+        self.analysis_valid=valid;self.editor_dirty=dirty;self.show_scene(scene,self.model_path)
+
+    def undo_mesh_edit(self):
+        if self.busy or not self.mesh_undo:return
+        current=self.mesh_snapshot();self.restore_mesh_snapshot(self.mesh_undo[-1])
+        self.mesh_undo.pop();self.mesh_redo.append(current);self.job_state(self.job.state)
+
+    def redo_mesh_edit(self):
+        if self.busy or not self.mesh_redo:return
+        current=self.mesh_snapshot();self.restore_mesh_snapshot(self.mesh_redo[-1])
+        self.mesh_redo.pop();self.mesh_undo.append(current);self.job_state(self.job.state)
+
+    def apply_mesh_edit(self,recipe):
+        if self.busy or self.model_scene is None or self.pmx_session is not None:raise ValueError('Finish the active job and open an editable INP mesh.')
+        if self.cad_document is not None or self.cad_mesh is not None:raise ValueError('Export and reopen an INP mesh before editing a CAD-generated mesh.')
+        with tempfile.TemporaryDirectory(prefix='prepomaxx-mesh-edit-') as directory:
+            p=Path(directory);(p/'input.inp').write_bytes(self.mesh_bytes);(p/'recipe.json').write_text(json.dumps(recipe,allow_nan=False))
+            scene=run_reader(mesh_command()+['edit-mesh',str(p/'input.inp'),str(p/'recipe.json'),str(p/'output.inp')]);data=(p/'output.inp').read_bytes()
+            if hashlib.sha256(data).hexdigest()!=scene['SourceSha256']:raise ValueError('Edited mesh changed during readback.')
+        before=self.mesh_snapshot();definition=self.definition
+        if recipe['operation'] in ('surface','edge'):
+            from analysis_editor import new_definition
+            definition=new_definition();definition['unitSystem']=self.definition['unitSystem']
+        self._restoring_mesh=True
+        try:self.set_model(self.model_path,scene,data,definition)
+        finally:self._restoring_mesh=False
+        self.mesh_undo.append(before);self.mesh_undo=self.mesh_undo[-20:];self.mesh_redo.clear()
+        self.analysis_valid=False;self.editor_dirty=True;self.show_scene(scene,self.model_path);self.job_state(self.job.state)
+
     def formulations_dialog(self):
         if self.busy or self.model_scene is None or self.pmx_session is not None:return
         dialog=SolidFormulationDialog(self,self.model_scene)
@@ -533,7 +585,7 @@ class Viewport(QtWidgets.QMainWindow):
             if self.pmx_session is not None:
                 pmx = self.pmx_session
                 self.start_job(self.model_path, None, definition=pmx.definition, mesh_bytes=pmx.mesh_bytes,
-                               pmx_sha256=pmx.project['inputSha256'])
+                               pmx_sha256=pmx.project['inputSha256'],family_pmx=getattr(pmx,'family_projection',False))
             else:
                 self.start_job(self.model_path, None, definition=self.definition, mesh_bytes=self.mesh_bytes)
 
@@ -546,6 +598,7 @@ class Viewport(QtWidgets.QMainWindow):
         if select:
             choices={'Cube':('cube-mesh.inp','cube-analysis.json'),
                 **{label:(case+'.inp',case+'.json') for label,case in [('Shells — all formulations','shell-tension'),('Membranes — linear formulations','membrane-tension'),('Membranes — quadratic prescribed strain','membrane-quadratic'),('Shell — pure bending','shell-bending'),('Layered shell — symmetric tension','composite-tension'),('Beams and trusses — axial tension','line-tension'),('Beam — rectangular bending','beam-bending'),('Beam — quadratic centerline output','beam-centerline'),('Beam — circular bending','beam-circular'),('Shell — normal pressure','shell-pressure')]},
+                **{label:(case+'.inp',case+'.json') for label,case in [('Spring — two DOFs', 'spring-pair'), ('Spring — axial', 'spring-axial'), ('Spring — to ground', 'spring-ground'), ('Gap — compression', 'gap-compression'), ('Mass / spring — frequencies', 'mass-spring-frequency'), ('Mass / spring — transient', 'mass-spring-transient'), ('Beam — frequencies', 'beam-frequency'), ('Shell — frequencies', 'shell-frequency'), ('Plane stress — frequencies', 'plane-frequency'), ('Axisymmetric — frequencies', 'axisymmetric-frequency'), ('Mixed solid / springs — tension', 'mixed-solid-springs'), ('Beam — implicit transient', 'beam-transient'), ('Beam modal transient — failure diagnostic', 'beam-modal-transient')]},
                 'Plane stress — all triangle / quad formulations':('plane-stress.inp','plane-stress.json'),
                 'Plane strain — all triangle / quad formulations':('plane-strain.inp','plane-strain.json'),
                 'Axisymmetric — all triangle / quad formulations':('axisymmetric.inp','axisymmetric.json'),
@@ -571,7 +624,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.analysis_valid = True
         self.run_model()
 
-    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None, pmx_sha256=None):
+    def start_job(self, mesh, analysis, *, definition=None, mesh_bytes=None, pmx_sha256=None,family_pmx=False):
         if self.busy:
             raise ValueError("Finish the active operation before starting an analysis.")
         try:
@@ -581,7 +634,7 @@ class Viewport(QtWidgets.QMainWindow):
                 self.show_scene(self.model_scene, self.model_path)
             self.job.start(mesh, analysis, self.jobs_root, definition=definition,
                            mesh_bytes=mesh_bytes, pmx_sha256=pmx_sha256, cad_mesh=self.cad_mesh,
-                           pmx_bytes=self.pmx_session.contents if pmx_sha256 is not None else None)
+                           pmx_bytes=self.pmx_session.contents if pmx_sha256 is not None else None,family_pmx=family_pmx)
             self.job_output.setPlainText(f"Job: {self.job.directory}\nSource: {mesh}\nInputs: {self.job.input_directory or analysis}\n")
         except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
             self.job_label.setText("Cannot start")
@@ -613,6 +666,9 @@ class Viewport(QtWidgets.QMainWindow):
                                           all(b['compatibleFormulations'] for b in self.model_scene.get('elementBlocks',[])))
         self.open_action.setEnabled(not active)
         self.pmx_action.setEnabled(not active)
+        self.mesh_edit_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None and self.cad_document is None and self.cad_mesh is None)
+        self.mesh_undo_action.setEnabled(not active and bool(self.mesh_undo))
+        self.mesh_redo_action.setEnabled(not active and bool(self.mesh_redo))
         self.example_action.setEnabled(not active)
         self.cancel_action.setEnabled(active and state not in ('Cancelling', 'Cancelling CAD', 'Cancelling mesh','Cancelling CAD edit'))
         self.job_label.setText(state)
@@ -636,7 +692,13 @@ class Viewport(QtWidgets.QMainWindow):
             str(outcome.get('error') or outcome.get('failureReason') or ''))
         if result['success']:
             try:
-                self.load(self.job.directory / 'analysis.frd')
+                result_path=self.job.directory/'analysis.frd'
+                result_scene=decode(result_path)
+                if result_scene.get('emptyResultMesh'):
+                    self.job_label.setText('Solved · no FRD geometry for ground springs · open Histories for nodal results')
+                    self.show_scene(self.model_scene,self.model_path)
+                    self.result_tools.toolbar.setVisible(True)
+                else:self.show_scene(result_scene,result_path)
                 if self.fields.count() > 1:
                     self.fields.setCurrentIndex(1)
             except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
@@ -681,7 +743,8 @@ class Viewport(QtWidgets.QMainWindow):
             raise ValueError('Finish the active job before opening a static PMX.')
         if not self.confirm_discard():
             return
-        pmx = PmxSession(path)
+        try:pmx=PmxSession(path)
+        except (OSError,ValueError,subprocess.SubprocessError):pmx=FamilyPmxSession(path)
         with tempfile.TemporaryDirectory(prefix='prepomaxx-pmx-mesh-') as directory:
             mesh = Path(directory) / 'mesh.inp'
             mesh.write_bytes(pmx.mesh_bytes)
@@ -697,7 +760,7 @@ class Viewport(QtWidgets.QMainWindow):
             document.source = pmx.path
             document.scene['cad']['parts'][0]['name'] = pmx.project['cadGeometry'][0]['Name']
         try:
-            self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition['analysis'], pmx=pmx, cad_document=document)
+            self.set_model(pmx.path, scene, pmx.mesh_bytes, pmx.definition if getattr(pmx,'family_projection',False) else pmx.definition['analysis'], pmx=pmx, cad_document=document)
         except BaseException:
             if document is not None:
                 document.close()
@@ -705,7 +768,7 @@ class Viewport(QtWidgets.QMainWindow):
 
     def edit_pmx(self):
         if not self.busy and self.pmx_session is not None:
-            PmxDialog(self, self.pmx_session).exec()
+            (FamilyPmxDialog if getattr(self.pmx_session,'family_projection',False) else PmxDialog)(self,self.pmx_session).exec()
 
     def load(self, path, *, as_model=False, definition=None):
         if self.busy:
@@ -877,6 +940,7 @@ class Viewport(QtWidgets.QMainWindow):
             QtCore.QTimer.singleShot(0, self.close)
 
     def set_model(self, path, scene, mesh_bytes, definition, *, pmx=None, cad_mesh=None, cad_document=None):
+        if not getattr(self,'_restoring_mesh',False):self.mesh_undo=[];self.mesh_redo=[]
         self.regions.reset()
         self.show_scene(scene, path)
         if cad_mesh is None:
@@ -914,6 +978,9 @@ class Viewport(QtWidgets.QMainWindow):
         cell_ids.SetName("OriginalElementId")
         for element in scene["elements"]:
             cell_type = element.get("vtkCellType")
+            # Original discrete classes deliberately have no rendered VTK cell.
+            # Presentation uses a vertex/line while source topology stays intact.
+            if cell_type == 0: cell_type = 1 if len(element['nodeIds']) == 1 else 3
             if cell_type is None:
                 if element["type"] != "LinearHexaElement":
                     raise ValueError("An explicit VTK cell type is required for this result element")
@@ -949,7 +1016,11 @@ class Viewport(QtWidgets.QMainWindow):
         else:
             self.cad_edge_mapper.RemoveAllInputs()
         self.cad_edge_actor.SetVisibility(cad is not None)
-        line_only = bool(scene['elements']) and all(e['vtkCellType'] in (3,21) for e in scene['elements'])
+        if not scene['elements']:
+            for i in range(len(nodes)):
+                grid.InsertNextCell(1,1,[i]);cell_ids.InsertNextValue(0)
+        line_only = all(e['vtkCellType'] in (0,3,21) for e in scene['elements'])
+        self.actor.GetProperty().SetPointSize(9)
         self.actor.GetProperty().SetEdgeVisibility(cad is None and not line_only)
         self.actor.GetProperty().SetLineWidth(4 if line_only else 1)
         self.actor.GetProperty().SetLighting(not line_only)
@@ -1063,6 +1134,9 @@ class Viewport(QtWidgets.QMainWindow):
             "nearestVertexNodeId": int(self.grid.GetPointData().GetGlobalIds().GetValue(point)),
             "nodeCoordinates": self.grid.GetPoint(point),
         }
+        # Zero denotes a presentation vertex for a nodal-only FRD, never an
+        # invented source element identity.
+        if self.selection['elementId']==0:self.selection.pop('elementId')
         name = self.fields.currentData()
         if name is not None:
             self.selection["nodalValue"] = self.grid.GetPointData().GetArray(name).GetValue(point)
@@ -1204,6 +1278,8 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--family-pmx-probe',type=Path,nargs=2,metavar=('ORIGINAL_FIXTURES','OUTPUT'),help='Verify original PMX family open, exact Save As, reopen and solve')
+    parser.add_argument('--element-family-probe',type=Path,help='Verify discrete elements, cross-family jobs and owned mesh editing')
     parser.add_argument('--structural-workflow-probe',type=Path,help='Exercise shell/membrane and beam/truss workflows')
     parser.add_argument('--plane-workflow-probe',type=Path,help='Exercise plane stress, plane strain and axisymmetric element workflows')
     parser.add_argument('--dynamics-workflow-probe',type=Path,help='Exercise original implicit and stored-basis modal transient dynamics')
@@ -1212,6 +1288,10 @@ def main():
     parser.add_argument('--eigenmode-workflow-probe',type=Path,help='Exercise frequency, buckling, deformation, animation and original histories')
     parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.family_pmx_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='family_pmx_probe') or k in ('input','self_test','run_example')):
+        parser.error('Use --family-pmx-probe separately from other inputs/probes')
+    if args.element_family_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='element_family_probe') or k in ('input','self_test','run_example')):
+        parser.error('Use --element-family-probe separately from other inputs/probes')
     if args.structural_workflow_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='structural_workflow_probe') or k in ('input','self_test','run_example')):
         parser.error('Use --structural-workflow-probe separately from other inputs/probes')
     if args.plane_workflow_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='plane_workflow_probe') or k in ('input','self_test','run_example')):
@@ -1264,7 +1344,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.structural_workflow_probe or args.plane_workflow_probe or args.dynamics_workflow_probe or args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.family_pmx_probe or args.element_family_probe or args.structural_workflow_probe or args.plane_workflow_probe or args.dynamics_workflow_probe or args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1348,6 +1428,13 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
+    if args.family_pmx_probe:
+        from family_pmx_probe import begin
+        source,output=(p.resolve() for p in args.family_pmx_probe)
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,source,output))
+    if args.element_family_probe:
+        from element_family_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.element_family_probe.resolve()))
     if args.structural_workflow_probe:
         from structural_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.structural_workflow_probe.resolve()))

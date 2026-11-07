@@ -155,8 +155,11 @@ internal static class Program
                 string[] requiredOutputs=modal?new[]{".dat",".frd",".sta",".eig"}:eigenmode?new[]{".dat",".frd"}:hasHistory
                     ?new[]{".dat",".frd",".sta"}:new[]{".frd",".sta"};
                 bool outputsPresent=requiredOutputs.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});
-                bool success=job.JobStatus==JobStatus.OK&&versionMatches&&outputsPresent;
-                var result=new{success,solverExecuted,buildId=args[1],registrySha256=SolverBuilds.Hash(registryPath),build,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,status=job.JobStatus.ToString(),exitCode=job.ExitCode,versionMatches,outputsPresent,requiredOutputs,stdout=job.CapturedStandardOutput,stderr=job.CapturedStandardError,failureReason=job.FailureReason,numericalAcceptance=false,outputs=Directory.EnumerateFiles(directory).ToDictionary(Path.GetFileName,p=>SolverBuilds.Hash(p))};
+                // CalculiX can print a fatal ARPACK error yet exit zero and leave
+                // nonempty headers. Preserve that explicit failure.
+                bool solverReportedErrors=System.Text.RegularExpressions.Regex.IsMatch(job.CapturedStandardOutput+"\n"+job.CapturedStandardError,@"(?im)^\s*\*ERROR\b");
+                bool success=job.JobStatus==JobStatus.OK&&versionMatches&&outputsPresent&&!solverReportedErrors;
+                var result=new{success,solverExecuted,buildId=args[1],registrySha256=SolverBuilds.Hash(registryPath),build,os=SolverBuilds.HostOs,architecture=SolverBuilds.HostArchitecture,status=job.JobStatus.ToString(),exitCode=job.ExitCode,versionMatches,outputsPresent,solverReportedErrors,requiredOutputs,stdout=job.CapturedStandardOutput,stderr=job.CapturedStandardError,failureReason=job.FailureReason,numericalAcceptance=false,outputs=Directory.EnumerateFiles(directory).ToDictionary(Path.GetFileName,p=>SolverBuilds.Hash(p))};
                 string json=JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true});AnalysisFiles.WriteNew(Path.Combine(directory,"run.json"),json+"\n");Console.WriteLine(json);return success?0:1;
             }
             finally{lease.Dispose();File.Delete(reservation);}
