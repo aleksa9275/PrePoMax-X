@@ -58,5 +58,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAccelerationConverter.cs" Link="UnitSystem/StringToDouble/StringAccelerationConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringHeatTransferCoefficientConverter.cs" Link="UnitSystem/StringToDouble/StringHeatTransferCoefficientConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToInteger/StringIntegerConverter.cs" Link="UnitSystem/StringToInteger/StringIntegerConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/OrderedDisplayNameAttribute.cs" Link="OrderedDisplayNameAttribute.cs" />
   </ItemGroup>
 </Project>

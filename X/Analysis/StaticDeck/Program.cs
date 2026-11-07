@@ -20,11 +20,12 @@ public sealed record TemperatureSpec(string Name,string NodeSet,string Temperatu
 public sealed record HeatLoadSpec(string Name,string Kind,string Region,string Magnitude,string? SinkTemperature=null,string? Amplitude=null,string? CoefficientAmplitude=null);
 public sealed record ThermalSpec(bool SteadyState=true,string? InitialTemperature=null,double? MaximumTemperatureChange=null,bool Direct=false,double? AbsoluteZero=null,double? StefanBoltzmann=null);
 public sealed record AmplitudeSpec(string Name,double[][] Points,string TimeSpan="StepTime",double ShiftX=0,double ShiftY=0);
+public sealed record DynamicsSpec(double Alpha=-0.05,bool Direct=false,string Damping="Off",double MassDamping=0,double StiffnessDamping=0,int BasisModes=1,double ModalDampingRatio=0,string BasisName="Frequency-basis");
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
     string[] NodalHistorySets,string[] ElementHistorySets,bool NonlinearGeometry=false,
     PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null,
-    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null);
+    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null,DynamicsSpec? Dynamics=null);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
     string? PyramidConversion = null,AmplitudeSpec[]? Amplitudes=null);
 
@@ -177,6 +178,29 @@ public static class AnalysisFiles
             }
         }
         else if(definition.Thermal!=null || definition.Temperatures?.Length>0 || definition.HeatLoads?.Length>0)throw new InvalidDataException("Thermal controls require heat-transfer analysis.");
+        else if(definition.Kind is "dynamic" or "modal-dynamics") {
+            var d=definition.Dynamics??throw new InvalidDataException("Explicit dynamics controls required.");
+            if(!double.IsFinite(d.Alpha) || d.Alpha>0 || d.Alpha< -1d/3 || !double.IsFinite(d.MassDamping) || d.MassDamping<0 ||
+                !double.IsFinite(d.StiffnessDamping) || d.StiffnessDamping<0 || !double.IsFinite(d.ModalDampingRatio) || d.ModalDampingRatio<0 || d.ModalDampingRatio>=1 ||
+                d.BasisModes<1 || d.BasisModes>1000 || definition.NonlinearGeometry || definition.InitialTemperature!=null || definition.TemperatureFields?.Length>0)
+                throw new InvalidDataException("Valid linear solid dynamics controls, nonnegative damping and no prescribed temperature fields required.");
+            if(definition.Kind=="dynamic") {
+                if(d.Damping is not ("Off" or "Rayleigh"))throw new InvalidDataException("Implicit dynamics supports original Off or Rayleigh damping.");
+                step=new DynamicStep(definition.Name){Alpha=d.Alpha,IncrementationType=d.Direct?IncrementationTypeEnum.Direct:IncrementationTypeEnum.Automatic,
+                    TimePeriod=definition.TimePeriod,InitialTimeIncrement=definition.InitialTimeIncrement,MinTimeIncrement=definition.MinimumTimeIncrement,
+                    MaxTimeIncrement=definition.MaximumTimeIncrement,MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency,
+                    Damping=new Damping(){DampingType=d.Damping=="Off"?DampingTypeEnum.Off:DampingTypeEnum.Rayleigh,Alpha=d.MassDamping,Beta=d.StiffnessDamping}};
+            } else {
+                if(d.Damping is not ("Off" or "Rayleigh" or "Constant"))throw new InvalidDataException("Modal dynamics supports original Off, Constant or Rayleigh damping.");
+                step=new ModalDynamicsStep(definition.Name){TimePeriod=definition.TimePeriod,InitialTimeIncrement=definition.InitialTimeIncrement,
+                    MinTimeIncrement=definition.MinimumTimeIncrement,MaxTimeIncrement=definition.MaximumTimeIncrement,
+                    MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency,
+                    ModalDamping=new ModalDamping(){DampingType=d.Damping=="Off"?ModalDampingTypeEnum.Off:d.Damping=="Constant"?ModalDampingTypeEnum.Constant:ModalDampingTypeEnum.Rayleigh,
+                        Alpha=d.MassDamping,Beta=d.StiffnessDamping,ViscousDampingRatio=d.ModalDampingRatio}};
+                foreach(var output in step.FieldOutputs.Values.OfType<NodalFieldOutput>())output.Variables|=NodalFieldVariable.V;
+            }
+        }
+        else if(definition.Dynamics!=null)throw new InvalidDataException("Dynamics controls require a dynamics analysis.");
         else if(definition.Kind=="static") step=new StaticStep(definition.Name){IncrementationType=IncrementationTypeEnum.Automatic,
             TimePeriod=definition.TimePeriod,InitialTimeIncrement=definition.InitialTimeIncrement,
             MinTimeIncrement=definition.MinimumTimeIncrement,MaxTimeIncrement=definition.MaximumTimeIncrement,
@@ -201,7 +225,7 @@ public static class AnalysisFiles
             for(int i=0;i<3;i++)if(value.Displacements[i]!=null)components[i].SetEquation(Equation(value.Displacements[i]));
             if(step.BoundaryConditions.ContainsKey(bc.Name))throw new InvalidDataException("Duplicate boundary condition name.");
             bc.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;
-            step.BoundaryConditions.Add(bc.Name,bc);
+            if(definition.Kind!="modal-dynamics")step.BoundaryConditions.Add(bc.Name,bc);
         }
         foreach(var value in definition.Loads)
         {
@@ -238,7 +262,7 @@ public static class AnalysisFiles
         if(definition.InitialTemperature!=null && (thermal || definition.Kind!="static" || definition.InitialTemperature.Length>4096))throw new InvalidDataException("Mechanical initial temperature requires a static step.");
         if(materials.Any(m=>m.Properties.Any(p=>p is Plastic)))
             foreach(var field in step.FieldOutputs.Values.OfType<ElementFieldOutput>())field.Variables|=ElementFieldVariable.PEEQ;
-        foreach(string set in definition.NodalHistorySets)step.AddHistoryOutput(new NodalHistoryOutput("NodeHistory-"+(++index),thermal?NodalHistoryVariable.NT|NodalHistoryVariable.RFL:NodalHistoryVariable.U|NodalHistoryVariable.RF,set,RegionTypeEnum.NodeSetName));
+        foreach(string set in definition.NodalHistorySets)step.AddHistoryOutput(new NodalHistoryOutput("NodeHistory-"+(++index),thermal?NodalHistoryVariable.NT|NodalHistoryVariable.RFL:definition.Kind is "dynamic" or "modal-dynamics"?NodalHistoryVariable.U|NodalHistoryVariable.RF|NodalHistoryVariable.V:NodalHistoryVariable.U|NodalHistoryVariable.RF,set,RegionTypeEnum.NodeSetName));
         foreach(string set in definition.ElementHistorySets)step.AddHistoryOutput(new ElementHistoryOutput("ElementHistory-"+(++index),thermal?ElementHistoryVariable.HFL:ElementHistoryVariable.S,set,RegionTypeEnum.ElementSetName));
         return(materials,sections,step);
     }
@@ -257,7 +281,15 @@ public static class AnalysisFiles
             if(spec.PyramidConversion!=null)throw new InvalidDataException("Thermal pyramid conversions remain pending.");
             return ThermalAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,heat,spec.Step.Thermal.InitialTemperature,amplitudes,spec.Step.Thermal.AbsoluteZero,spec.Step.Thermal.StefanBoltzmann);
         }
-        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec),amplitudes,spec.Step.InitialTemperature);
+        FrequencyStep? basis=null;
+        if(values.Step is ModalDynamicsStep) {
+            var d=spec.Step.Dynamics;
+            var bs=spec with {Amplitudes=null,Step=spec.Step with {Kind="frequency",Name=d.BasisName,Dynamics=null,Modes=d.BasisModes,
+                Loads=Array.Empty<ForceSpec>(),Pressures=null,GravityLoads=null,NodalHistorySets=Array.Empty<string>(),ElementHistorySets=Array.Empty<string>()}};
+            basis=(FrequencyStep)Create(bs).Step;basis.Storage=true;
+            if(basis.Name==values.Step.Name)throw new InvalidDataException("Frequency basis and modal step names must differ.");
+        }
+        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec),amplitudes,spec.Step.InitialTemperature,basis);
     }
     public static void WriteNew(string path,string text)
     {

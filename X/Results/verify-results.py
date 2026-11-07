@@ -36,7 +36,7 @@ def main():
     path=ROOT/'X/Analysis/artifacts/packages'/name.lower()/version/(name.lower()+'.'+version+'.nupkg');expected=next(r['packageSha256']for r in pins if r['id'].lower()==name.lower());assert sha(path)==expected;shutil.copyfile(path,feed/path.name);report['packageArchives'][name]=expected
    run(['dotnet','build',HERE/'PrePoMaxX.Results.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-p:RepositoryRoot='+str(source)+'/','-p:RestorePackagesPath='+str(work/'packages'),'--source',feed,'-v:minimal'])
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ResultsTests.dll']).stdout)
-   if not report['tests']['success']or report['tests']['passed']!=78 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native results checks failed/incomplete')
+   if not report['tests']['success']or report['tests']['passed']!=82 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native results checks failed/incomplete')
    cli=work/'build/bin/Inspect/release/PrePoMaxX.InspectResults.dll'
    report['inspection']=json.loads(run(['dotnet',cli,'inspect-frd',fixture]).stdout)
    value=report['inspection']

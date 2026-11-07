@@ -13,6 +13,8 @@ def render(root,revision=BASELINE):
         result[path]=s
         result[legacy]=header+'namespace '+namespace+'\n{\n    '+('internal' if cls.startswith('Cal') else 'public')+' partial class '+cls+'\n    {\n'+part+'    }\n}\n'
     extract('CaeModel/Steps/HeatTransferStep.cs','        public override bool IsBoundaryConditionSupported','        // ISerialization','HeatTransferStep','CaeModel')
+    for kind in ('DynamicStep','ModalDynamicsStep'):
+        extract('CaeModel/Steps/'+kind+'.cs','        public override bool IsBoundaryConditionSupported','        // ISerialization',kind,'CaeModel')
     for path,cls in [('CaeModel/Steps/BoundaryConditions/TemperatureBC.cs','TemperatureBC'),('CaeModel/InitialConditions/InitialTemperature.cs','InitialTemperature'),('CaeModel/Steps/DefinedFields/DefinedTemperature.cs','DefinedTemperature')]:
         extract(path,'        public FeResults GetPreview','        // ISerialization',cls,'CaeModel',('IDistribution, IPreviewable, ISerializable','IDistribution, ISerializable'))
         legacy=path[:-3]+'.Legacy.cs';result[legacy]=result[legacy].replace('partial class '+cls+'\n','partial class '+cls+' : IPreviewable\n')

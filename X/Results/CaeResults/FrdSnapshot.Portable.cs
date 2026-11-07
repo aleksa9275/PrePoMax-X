@@ -143,6 +143,8 @@ namespace CaeResults
                                 FOFieldNames.NdTemp => new[] { "T" },
                                 FOFieldNames.Rfl => new[] { "RFL" },
                                 FOFieldNames.Flux => new[] { "F1", "F2", "F3" },
+                                FOFieldNames.Velo => new[] { "V1", "V2", "V3" },
+                                FOFieldNames.Ener => new[] { "ENER" },
                                 FOFieldNames.Pe => new[] { "PE" },
                                 FOFieldNames.ToStrain => new[] { "E11", "E22", "E33", "E12", "E23", "E13" },
                                 FOFieldNames.Error => new[] { "STR" },

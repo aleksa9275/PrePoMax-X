@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0",
+      "density": "0.001"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Solid-1",
+      "material": "ELASTIC",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "implicit-damped",
+    "timePeriod": 0.0064,
+    "initialTimeIncrement": 0.0001,
+    "minimumTimeIncrement": 1e-09,
+    "maximumTimeIncrement": 0.0001,
+    "maximumIncrements": 1000,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Lateral",
+        "nodeSet": "NALL",
+        "displacements": [
+          null,
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "Clamp",
+        "nodeSet": "X0",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "Ramp-load",
+        "nodeSet": "X1",
+        "forcePerNode": [
+          "0.25",
+          "0",
+          "0"
+        ],
+        "amplitude": "Ramp"
+      }
+    ],
+    "nodalHistorySets": [
+      "NALL"
+    ],
+    "elementHistorySets": [
+      "SOLID"
+    ],
+    "kind": "dynamic",
+    "dynamics": {
+      "alpha": 0,
+      "direct": true,
+      "damping": "Rayleigh",
+      "basisModes": 1,
+      "massDamping": 173.20508075688772
+    }
+  },
+  "amplitudes": [
+    {
+      "name": "Ramp",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0.0064,
+          1
+        ]
+      ],
+      "timeSpan": "StepTime"
+    }
+  ]
+}

@@ -86,6 +86,8 @@ class HistoryDialog(QtWidgets.QDialog):
     def __init__(self,parent,path,snapshot):
         super().__init__(parent);self.path=Path(path);self.snapshot=snapshot;self.setWindowTitle('Original result histories — '+self.path.name);self.resize(1050,650)
         layout=QtWidgets.QVBoxLayout(self);layout.addWidget(QtWidgets.QLabel('Original DAT data · select a series to inspect its graph and values. Quantities and units remain as stored.'))
+
+        if snapshot.get('ExcludedBasisTables'):layout.addWidget(QtWidgets.QLabel('Stored frequency basis tables excluded from time histories; mode shapes remain available in the frame selector.'))
         self.series=QtWidgets.QComboBox();self.series.setObjectName('historySeries')
         for h in snapshot['histories']:
             point='' if h['IntegrationPoint'] is None else f" · integration point {h['IntegrationPoint']}"

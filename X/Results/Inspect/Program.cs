@@ -6,7 +6,7 @@ try
  if(args[0]=="inspect-dat")
  {
   var dat=DatFileReader.ReadStaticSnapshot(args[1]);
-  Console.WriteLine(JsonSerializer.Serialize(new{success=true,dat.SourceSha256,dat.DataSetCount,quantityUnits="as stored; no unit conversion or inference",completionEstablished=false,fullResultsPreprocessing=false,solverExecuted=false,
+  Console.WriteLine(JsonSerializer.Serialize(new{success=true,dat.SourceSha256,dat.DataSetCount,dat.ExcludedBasisTables,quantityUnits="as stored; no unit conversion or inference",completionEstablished=false,fullResultsPreprocessing=false,solverExecuted=false,
   histories=dat.Histories.Select(h=>new{h.SetName,h.BaseSetName,h.FieldName,h.ComponentName,h.StepId,h.Id,h.IntegrationPoint,h.IncrementIds,h.Entries.Local,h.Entries.Unit,time=h.Entries.Time,values=h.Entries.Values})}));return 0;
  }
  var snapshot=FrdFileReader.ReadStaticSnapshot(args[1]);

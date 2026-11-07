@@ -1,5 +1,12 @@
 # Native CAD continuation — 6 November 2026
 
+Tasks 0101/0102 add original implicit and stored-basis modal transient dynamics.
+Read [the report](../reports/transient-dynamics-workflow.md) and its receipt for
+actual verification/publication/candidate status. Source native Mac/Linux ARM64
+and identical-deck original Windows solver checks pass. Candidate packaging is
+pending at this source checkpoint. Keep D029/B006/B007/coarse-conductivity
+findings, D057–D061 and every full-parity/PMX/four-target/release obligation.
+
 Tasks 0098–0100 add original radiation/thermal tables, amplitudes and prescribed-
 temperature expansion/stress. Read [the report](../reports/radiation-amplitudes-thermal-stress.md)
 and receipt for actual native/reference/candidate/publication checks and remaining

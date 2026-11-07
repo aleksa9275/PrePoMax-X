@@ -1,5 +1,13 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0101/0102 connect original implicit transient and stored-frequency-basis
+modal transient solid dynamics, damping, velocity/energy fields and velocity
+histories through desktop/native jobs. Read .project/reports/transient-dynamics-workflow.md
+and its receipt for actual source/native/reference/candidate/publication checks.
+Original algorithms/tolerances and every remaining dynamics/full-functionality/
+PMX/four-target/release obligation remain. Preserve D029/B006/B007, the retained
+coarse conductivity accuracy diagnostic and D057/D058/D059/D060/D061.
+
 Tasks 0098–0100 connect original non-cavity radiation/thermal material tables,
 tabular amplitudes and prescribed-temperature solid expansion/stress through
 configuration, native jobs and original results/histories. Read

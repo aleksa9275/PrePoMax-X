@@ -36,7 +36,7 @@ namespace CaeModel
 
         public static string Write(InpMeshData mesh, IEnumerable<Material> materials,
                                    IEnumerable<SolidSection> sections, Step step,
-                                   ConvertPyramidsToEnum? pyramidConversion = null, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null, string initialTemperature = null)
+                                   ConvertPyramidsToEnum? pyramidConversion = null, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null, string initialTemperature = null, FrequencyStep modalBasis = null)
         {
             if (mesh == null || materials == null || sections == null || step == null)
                 throw new ArgumentNullException("Static deck components cannot be null.");
@@ -88,9 +88,32 @@ namespace CaeModel
             }
             if (!coverage.SetEquals(checkedMesh.Elements.Keys) || !usedMaterials.SetEquals(materialNames))
                 throw new CaeException("Every element requires exactly one section and every supplied material must be used.");
-            bool isStatic=step.GetType()==typeof(StaticStep),isFrequency=step.GetType()==typeof(FrequencyStep),isBuckling=step.GetType()==typeof(BuckleStep);
-            if(!isStatic && !isFrequency && !isBuckling)throw new NotSupportedException("An exact original static, frequency or buckle step is required.");
-            if(!isStatic && (amplitudes.Count>0 || initialTemperature!=null || step.DefinedFields.Count>0 || step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
+            bool isStatic=step.GetType()==typeof(StaticStep),isFrequency=step.GetType()==typeof(FrequencyStep),isBuckling=step.GetType()==typeof(BuckleStep),isDynamic=step.GetType()==typeof(DynamicStep),isModal=step.GetType()==typeof(ModalDynamicsStep);
+            bool timeDomain=isStatic || isDynamic || isModal;
+            if(!timeDomain && !isFrequency && !isBuckling)throw new NotSupportedException("An exact original static, frequency or buckle step is required.");
+            if(!timeDomain && (amplitudes.Count>0 || initialTemperature!=null || step.DefinedFields.Count>0 || step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
+            if((isDynamic || isModal) && (materialList.Any(m=>m.Properties.Any(p=>p is Plastic || p is ThermalExpansion)) || step.Nlgeom ||
+                sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
+                throw new CaeException("Linear solid dynamics requires density and elasticity for every section; nonlinear/plastic dynamics remain pending.");
+            if(isDynamic) {
+                var d=(DynamicStep)step;
+                if(!Finite(d.Alpha) || d.Alpha>0 || d.Alpha< -1d/3 || d.SolutionProcedure!=SolutionProcedureEnum.ImplicitImplicit || d.RelativeToAbsolute ||
+                    d.Damping==null || !Enum.IsDefined(typeof(DampingTypeEnum),d.Damping.DampingType) || !Finite(d.Damping.Alpha) || d.Damping.Alpha<0 || !Finite(d.Damping.Beta) || d.Damping.Beta<0)
+                    throw new CaeException("Valid original implicit dynamics and Rayleigh damping controls required.");
+            }
+            if(isModal) {
+                var m=(ModalDynamicsStep)step;var d=m.ModalDamping;
+                if(modalBasis==null || !modalBasis.Storage || modalBasis.NumOfFrequencies<1 || modalBasis.NumOfFrequencies>1000 || modalBasis.Loads.Count!=0 ||
+                    modalBasis.Nlgeom || !modalBasis.RunAnalysis || modalBasis.Perturbation || modalBasis.GetNumberOfStepControls()!=0 || modalBasis.DefinedFields.Count!=0 || modalBasis.HistoryOutputs.Count!=0 ||
+                    !double.IsNaN(modalBasis.LowerFrequency) || !double.IsNaN(modalBasis.UpperFrequency) || (modalBasis.OutputFrequency!=int.MinValue && modalBasis.OutputFrequency<=0) || modalBasis.SolverType!=SolverTypeEnum.Default || modalBasis.CyclicSymmetryModeMin!=int.MinValue || modalBasis.CyclicSymmetryModeMax!=int.MinValue ||
+                    m.BoundaryConditions.Count!=0 || m.DefinedFields.Count!=0 || m.SteadyState || m.Perturbation || d==null ||
+                    d.DampingType is not (ModalDampingTypeEnum.Off or ModalDampingTypeEnum.Constant or ModalDampingTypeEnum.Rayleigh) ||
+                    !Finite(d.Alpha) || d.Alpha<0 || !Finite(d.Beta) || d.Beta<0 || !Finite(d.ViscousDampingRatio) || d.ViscousDampingRatio<0 || d.ViscousDampingRatio>=1)
+                    throw new CaeException("A stored ordinary frequency basis and supported modal transient controls required; modal BC changes are not allowed.");
+                Active(modalBasis);Name(modalBasis.Name);
+                if(string.Equals(modalBasis.Name,step.Name,StringComparison.OrdinalIgnoreCase))throw new CaeException("Distinct basis and modal step names required.");
+                ValidateOutputs(checkedMesh,modalBasis);
+            } else if(modalBasis!=null)throw new CaeException("A frequency basis applies only to modal dynamics.");
             if(isFrequency && (step.Loads.Count!=0 || sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
                 throw new CaeException("Frequency analysis requires density for every section and no applied loads.");
             if(isBuckling && step.Loads.Count==0)throw new CaeException("Buckling analysis requires a nonzero reference load.");
@@ -117,7 +140,7 @@ namespace CaeModel
                 !Enum.IsDefined(typeof(IncrementationTypeEnum), step.IncrementationType) ||
                 (step.OutputFrequency != int.MinValue && step.OutputFrequency <= 0))
                 throw new NotSupportedException("A running mechanical step with default solver and ordinary global output is required.");
-            if(isStatic) {
+            if(timeDomain) {
                 var staticStep=(StaticStep)step;
             double[] times = { staticStep.TimePeriod, staticStep.InitialTimeIncrement, staticStep.MinTimeIncrement, staticStep.MaxTimeIncrement };
             if (times.Any(t => !Finite(t) || t <= 0) || staticStep.InitialTimeIncrement > staticStep.TimePeriod ||
@@ -127,11 +150,12 @@ namespace CaeModel
                  (staticStep.TimePeriod != 1 || staticStep.InitialTimeIncrement != 1 || staticStep.MinTimeIncrement != 1E-5 || staticStep.MaxTimeIncrement != 1E30)))
                 throw new CaeException("Invalid static incrementation or custom values hidden by default incrementation.");
             }
-            if (step.BoundaryConditions.Count == 0 || step.BoundaryConditions.Count > 10000 || step.Loads.Count > 10000)
+            var supportStep=isModal?(Step)modalBasis:step;
+            if (supportStep.BoundaryConditions.Count == 0 || supportStep.BoundaryConditions.Count > 10000 || step.Loads.Count > 10000)
                 throw new CaeException("A bounded nonempty displacement constraint definition is required.");
             var constraints = new List<Tuple<DisplacementRotation, double[]>>();
             var constrained = new HashSet<Tuple<int,int>>();
-            foreach (var entry in step.BoundaryConditions)
+            foreach (var entry in supportStep.BoundaryConditions)
             {
                 var bc = entry.Value as DisplacementRotation;
                 if (bc == null || bc.GetType()!=typeof(DisplacementRotation) || entry.Key != bc.Name) throw new NotSupportedException("Only named displacement constraints are supported.");
@@ -149,7 +173,7 @@ namespace CaeModel
                     for (int d = 0; d < 3; d++)
                         if (!double.IsNaN(values[d]) && !constrained.Add(Tuple.Create(id,d)))
                             throw new CaeException("Overlapping displacement definitions for one node/DOF are unsupported.");
-                if(!isStatic && values.Any(v=>!double.IsNaN(v) && v!=0))throw new CaeException("Eigenmode supports must be homogeneous zero displacement constraints.");
+                if(!isStatic && (bc.AmplitudeName!=Amplitude.DefaultAmplitudeName || values.Any(v=>!double.IsNaN(v) && v!=0)))throw new CaeException("Eigenmode and dynamic supports must be homogeneous zero displacement constraints.");
                 constraints.Add(Tuple.Create(bc,values));
             }
             var loads = new List<CalculixKeyword>(); var loaded = new HashSet<Tuple<int,int>>();
@@ -244,11 +268,24 @@ namespace CaeModel
                 foreach (var section in sectionList) Append(text, new CalSolidSection(section));
                 AnalysisModelExtensions.WriteAmplitudes(text,amplitudes);
                 AnalysisModelExtensions.WriteMechanicalInitial(text,checkedMesh,initialTemperature);
+                if(isModal) {
+                    Append(text,new CalStepHeader(modalBasis));Append(text,new CalFrequencyStep(modalBasis));
+                    foreach(var item in constraints)Append(text,new CalDisplacementRotation(item.Item1,null,null,ComplexLoadTypeEnum.None));
+                    foreach(var output in modalBasis.FieldOutputs.Values) {
+                        if(output is NodalFieldOutput nf)Append(text,new CalNodeFile(nf,modalBasis.OutputFrequency));
+                        else Append(text,new CalElFile((ElementFieldOutput)output,modalBasis.OutputFrequency));
+                    }
+                    Append(text,new CalEndStep());
+                }
                 Append(text, new CalStepHeader(step));
                 if(isStatic)Append(text,new CalStaticStep((StaticStep)step));
+                else if(isDynamic)Append(text,new CalDynamicStep((DynamicStep)step));
+                else if(isModal)Append(text,new CalModalDynamicsStep((ModalDynamicsStep)step,false));
                 else if(isFrequency)Append(text,new CalFrequencyStep((FrequencyStep)step));
                 else Append(text,new CalBuckleStep((BuckleStep)step));
-                foreach (var item in constraints)
+                if(isDynamic && ((DynamicStep)step).Damping.DampingType!=DampingTypeEnum.Off)Append(text,new CalDamping(((DynamicStep)step).Damping));
+                if(isModal && ((ModalDynamicsStep)step).ModalDamping.DampingType!=ModalDampingTypeEnum.Off)Append(text,new CalModalDamping(((ModalDynamicsStep)step).ModalDamping));
+                foreach (var item in isModal?new List<Tuple<DisplacementRotation,double[]>>():constraints)
                 {
                     var source = item.Item1; var v = item.Item2;
                     var snapshot = new DisplacementRotation(source.Name, source.RegionName, RegionTypeEnum.NodeSetName, false, false, 0);
@@ -288,7 +325,7 @@ namespace CaeModel
         {
             if (step.FieldOutputs.Count == 0 || step.FieldOutputs.Count > 100 || step.HistoryOutputs.Count > 100)
                 throw new CaeException("Bounded nonempty field outputs are required.");
-            bool thermal=step is HeatTransferStep;
+            bool thermal=step is HeatTransferStep;bool dynamics=step is DynamicStep || step is ModalDynamicsStep;
             foreach (var item in step.FieldOutputs)
             {
                 var value=item.Value; Active(value); Name(value.Name);
@@ -297,13 +334,13 @@ namespace CaeModel
                 if (value.GetType()==typeof(NodalFieldOutput))
                 {
                     var flags=((NodalFieldOutput)value).Variables;
-                    if (flags==0 || (flags & ~(thermal ? NodalFieldVariable.NT | NodalFieldVariable.RFL : NodalFieldVariable.U | NodalFieldVariable.RF))!=0) throw new NotSupportedException("Only U/RF nodal output is supported.");
+                    if (flags==0 || (flags & ~(thermal ? NodalFieldVariable.NT | NodalFieldVariable.RFL : NodalFieldVariable.U | NodalFieldVariable.RF | (dynamics?NodalFieldVariable.V:0)))!=0) throw new NotSupportedException("Only U/RF nodal output is supported.");
                 }
                 else if (value.GetType()==typeof(ElementFieldOutput))
                 {
                     var output=(ElementFieldOutput)value;
                     if (output.Output!=ElementFieldOutputOutputEnum.Default || output.Variables==0 ||
-                        (output.Variables & ~(thermal ? ElementFieldVariable.HFL : ElementFieldVariable.E | ElementFieldVariable.S | ElementFieldVariable.PEEQ))!=0) throw new NotSupportedException("Only ordinary E/S/PEEQ solid output is supported.");
+                        (output.Variables & ~(thermal ? ElementFieldVariable.HFL : ElementFieldVariable.E | ElementFieldVariable.S | ElementFieldVariable.PEEQ | (dynamics?ElementFieldVariable.ENER:0)))!=0) throw new NotSupportedException("Only ordinary E/S/PEEQ solid output is supported.");
                 }
                 else throw new NotSupportedException("Unsupported field output type.");
             }
@@ -315,7 +352,7 @@ namespace CaeModel
                 if (value.GetType()==typeof(NodalHistoryOutput))
                 {
                     var flags=((NodalHistoryOutput)value).Variables;
-                    if (value.RegionType!=RegionTypeEnum.NodeSetName || flags==0 || (flags & ~(thermal ? NodalHistoryVariable.NT | NodalHistoryVariable.RFL : NodalHistoryVariable.U | NodalHistoryVariable.RF))!=0)
+                    if (value.RegionType!=RegionTypeEnum.NodeSetName || flags==0 || (flags & ~(thermal ? NodalHistoryVariable.NT | NodalHistoryVariable.RFL : NodalHistoryVariable.U | NodalHistoryVariable.RF | (dynamics?NodalHistoryVariable.V:0)))!=0)
                         throw new NotSupportedException("Unsupported nodal history output.");
                     Set(mesh.NodeSets,value.RegionName);
                 }

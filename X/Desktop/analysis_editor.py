@@ -228,7 +228,7 @@ class AnalysisDialog(QtWidgets.QDialog):
         step_form.insertRow(0,self.nonlinear)
         eigen=QtWidgets.QWidget();eigen_form=QtWidgets.QFormLayout(eigen)
         self.analysis_kind=QtWidgets.QComboBox();self.analysis_kind.setObjectName('analysisKind')
-        for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling'),('Heat transfer','heat-transfer')]:self.analysis_kind.addItem(label,key)
+        for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling'),('Heat transfer','heat-transfer'),('Implicit transient dynamics','dynamic'),('Modal transient dynamics','modal-dynamics')]:self.analysis_kind.addItem(label,key)
         self.analysis_kind.setCurrentIndex(max(0,self.analysis_kind.findData(definition['step'].get('kind','static'))))
         self.mode_count=QtWidgets.QSpinBox();self.mode_count.setRange(1,1000);self.mode_count.setValue(definition['step'].get('modes',10))
         self.frequency_lower=QtWidgets.QLineEdit('' if definition['step'].get('lowerFrequency') is None else str(definition['step']['lowerFrequency']))
@@ -306,9 +306,27 @@ class AnalysisDialog(QtWidgets.QDialog):
         expansion_layout.addWidget(self.temperature_fields);self.tabs.addTab(expansion_page,'Thermal expansion / stress')
         for rows in (self.thermal_tables,self.amplitude_definitions,self.amplitude_points,self.amplitude_bindings,self.expansion_properties,self.temperature_fields):rows.changed.connect(self.mark_changed)
         for field in (self.absolute_zero,self.stefan_boltzmann,self.mechanical_initial):field.textChanged.connect(self.mark_changed)
+        dynamics_page=QtWidgets.QWidget();dynamics_form=QtWidgets.QFormLayout(dynamics_page)
+        note=QtWidgets.QLabel('Linear transient dynamics requires density and zero prescribed supports. Modal dynamics regenerates a stored frequency basis using these supports; physical loads act in the following dynamic step. Time increments and tabular loads use the existing controls.')
+        note.setWordWrap(True);dynamics_form.addRow(note)
+        controls=definition['step'].get('dynamics') or {}
+        self.dynamics_alpha=QtWidgets.QLineEdit(str(controls.get('alpha',-.05)))
+        self.dynamics_direct=QtWidgets.QCheckBox('Fixed time increments (Direct)');self.dynamics_direct.setChecked(controls.get('direct',False))
+        self.dynamics_damping=QtWidgets.QComboBox();self.dynamics_damping.addItems(['Off','Rayleigh','Constant']);self.dynamics_damping.setCurrentText(controls.get('damping','Off'))
+        self.dynamics_mass=QtWidgets.QLineEdit(str(controls.get('massDamping',0)))
+        self.dynamics_stiffness=QtWidgets.QLineEdit(str(controls.get('stiffnessDamping',0)))
+        self.dynamics_ratio=QtWidgets.QLineEdit(str(controls.get('modalDampingRatio',0)))
+        self.dynamics_modes=QtWidgets.QSpinBox();self.dynamics_modes.setRange(1,1000);self.dynamics_modes.setValue(controls.get('basisModes',1))
+        self.dynamics_basis=QtWidgets.QLineEdit(controls.get('basisName','Frequency-basis'))
+        for label,widget in [('HHT alpha (implicit: −1/3 to 0)',self.dynamics_alpha),('',self.dynamics_direct),('Damping (Constant is modal only)',self.dynamics_damping),('Rayleigh mass coefficient',self.dynamics_mass),('Rayleigh stiffness coefficient',self.dynamics_stiffness),('Modal damping ratio',self.dynamics_ratio),('Stored basis modes',self.dynamics_modes),('Stored basis step name',self.dynamics_basis)]:dynamics_form.addRow(label,widget)
+        self.tabs.addTab(dynamics_page,'Dynamics')
+        for widget in (self.dynamics_alpha,self.dynamics_mass,self.dynamics_stiffness,self.dynamics_ratio,self.dynamics_basis):widget.textChanged.connect(self.mark_changed)
+        self.dynamics_modes.valueChanged.connect(self.mark_changed);self.dynamics_direct.toggled.connect(self.mark_changed);self.dynamics_damping.currentTextChanged.connect(self.mark_changed)
         def update_kind():
             kind=self.analysis_kind.currentData();static=kind=='static';thermal=kind=='heat-transfer';eigen=kind in ('frequency','buckling')
-            for key,field in self.step_fields.items():field.setEnabled(static or thermal or key in ('name','outputFrequency'))
+            for key,field in self.step_fields.items():field.setEnabled(static or thermal or kind in ('dynamic','modal-dynamics') or key in ('name','outputFrequency'))
+            for widget in (self.dynamics_modes,self.dynamics_ratio,self.dynamics_basis):widget.setEnabled(kind=='modal-dynamics')
+            self.dynamics_alpha.setEnabled(kind=='dynamic');self.dynamics_direct.setEnabled(kind=='dynamic')
             self.thermal_tables.setEnabled(thermal or self.thermal_tables.table.rowCount()>0)
             for widget in (self.mechanical_initial,self.expansion_properties,self.temperature_fields):widget.setEnabled(static or (hasattr(widget,'table') and widget.table.rowCount()>0))
             for widget in (self.absolute_zero,self.stefan_boltzmann):widget.setEnabled(thermal)
@@ -317,7 +335,7 @@ class AnalysisDialog(QtWidgets.QDialog):
             for widget in (self.thermal_properties,self.thermal_steady,self.thermal_direct,self.thermal_initial,self.thermal_deltmx,self.temperatures,self.heat_loads):widget.setEnabled(thermal)
             for widget in (self.supports,self.loads,self.pressures,self.gravity,self.plastic_curve):widget.setEnabled(not thermal or widget.table.rowCount()>0)
             for column in (1,2):self.materials.table.setColumnHidden(column,thermal)
-            self.nodal_history_label.setText('Temperature / heat flow histories' if thermal else 'U / RF histories')
+            self.nodal_history_label.setText('Temperature / heat flow histories' if thermal else 'U / RF / V histories' if kind in ('dynamic','modal-dynamics') else 'U / RF histories')
             self.element_history_label.setText('Heat flux histories' if thermal else 'Stress histories')
             self.nodal_history.setToolTip('Temperature / reaction heat flow' if thermal else 'Displacement / reaction force')
             self.element_history.setToolTip('Integration-point heat flux' if thermal else 'Stress')
@@ -425,6 +443,9 @@ class AnalysisDialog(QtWidgets.QDialog):
         kind=self.analysis_kind.currentData()
         if kind!='static' or 'kind' in value['step']:value['step']['kind']=kind
         if kind in ('frequency','buckling') or 'modes' in value['step']:value['step']['modes']=self.mode_count.value()
+        if kind in ('dynamic','modal-dynamics'):
+            value['step']['dynamics']={'alpha':float(self.dynamics_alpha.text()),'direct':self.dynamics_direct.isChecked(),'damping':self.dynamics_damping.currentText(),'massDamping':float(self.dynamics_mass.text()),'stiffnessDamping':float(self.dynamics_stiffness.text()),'modalDampingRatio':float(self.dynamics_ratio.text()),'basisModes':self.dynamics_modes.value(),'basisName':self.dynamics_basis.text().strip()}
+        elif 'dynamics' in value['step']:value['step'].pop('dynamics')
         if kind=='heat-transfer':
             for material in value['materials']:
                 for key in ('youngsModulus','poissonsRatio'):

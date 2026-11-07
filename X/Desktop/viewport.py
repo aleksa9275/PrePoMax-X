@@ -332,7 +332,11 @@ class Viewport(QtWidgets.QMainWindow):
                 child=QtWidgets.QTreeWidgetItem(group,[record['name'],description]);child.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
         kind=self.definition['step'].get('kind','static')
         step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], ('Steady heat transfer' if self.definition['step'].get('thermal',{}).get('steadyState',True) else 'Transient heat transfer') if kind=='heat-transfer' else f"{kind.title()} · {self.definition['step'].get('modes',10)} modes" if kind!='static' else 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
-        step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 9 if kind!='static' else 5)
+        if kind in ('dynamic','modal-dynamics'):
+            d=self.definition['step'].get('dynamics') or {};step.setText(1,('Implicit transient' if kind=='dynamic' else 'Modal transient')+' · damping '+d.get('damping','Off'));step.setData(0,QtCore.Qt.ItemDataRole.UserRole,15)
+            if kind=='modal-dynamics':
+                basis=QtWidgets.QTreeWidgetItem(step,[d.get('basisName','Frequency-basis'),str(d.get('basisModes',1))+' stored frequency modes']);basis.setData(0,QtCore.Qt.ItemDataRole.UserRole,15)
+        else:step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 9 if kind!='static' else 5)
         if self.cad_document is not None:
             self.populate_cad_tree(self.cad_document.scene["cad"])
         self.model_tree.expandToDepth(1)
@@ -552,7 +556,7 @@ class Viewport(QtWidgets.QMainWindow):
                 **{label:(name+'.inp',name+'.json') for label,name in [
                     ('Heat transfer — steady conduction','steady-conduction'),('Heat transfer — transient heating','transient-heating'),
                     ('Heat transfer — surface heat flux','surface-heating'),('Heat transfer — body heat generation','body-heating'),
-                    ('Heat transfer — convection cooling','film-cooling'),('Heat transfer — nodal heat input','nodal-heating'),('Radiation — surface cooling','radiation-cooling'),('Thermal material — variable conductivity','temperature-conductivity'),('Amplitude — pulsed heating','amplitude-heating'),('Amplitude — scaled static force','amplitude-force'),('Thermal expansion — free solid','free-expansion'),('Thermal stress — restrained solid','restrained-expansion')]}}
+                    ('Heat transfer — convection cooling','film-cooling'),('Heat transfer — nodal heat input','nodal-heating'),('Radiation — surface cooling','radiation-cooling'),('Thermal material — variable conductivity','temperature-conductivity'),('Amplitude — pulsed heating','amplitude-heating'),('Amplitude — scaled static force','amplitude-force'),('Thermal expansion — free solid','free-expansion'),('Thermal stress — restrained solid','restrained-expansion'),('Dynamics — implicit ramp','implicit-ramp'),('Dynamics — Rayleigh damping','implicit-damped'),('Modal dynamics — stored basis','modal-ramp'),('Modal dynamics — damped response','modal-damped')]}}
             name,accepted=QtWidgets.QInputDialog.getItem(self,'Solve analytical example','Example',list(choices),0,False)
             if not accepted:return
             mesh_name,definition_name=choices[name]
@@ -1187,11 +1191,14 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--dynamics-workflow-probe',type=Path,help='Exercise original implicit and stored-basis modal transient dynamics')
     parser.add_argument('--thermomechanical-workflow-probe',type=Path,help='Exercise radiation, thermal tables, amplitudes and thermal stress')
     parser.add_argument('--thermal-workflow-probe',type=Path,help='Exercise steady/transient conduction, heat inputs, convection and histories')
     parser.add_argument('--eigenmode-workflow-probe',type=Path,help='Exercise frequency, buckling, deformation, animation and original histories')
     parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.dynamics_workflow_probe and any([args.thermomechanical_workflow_probe,args.thermal_workflow_probe,args.eigenmode_workflow_probe,args.nonlinear_workflow_probe,args.solid_workflow_probe,args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe]):
+        parser.error("Use --dynamics-workflow-probe separately from other probes")
     if args.thermomechanical_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe,args.nonlinear_workflow_probe,args.eigenmode_workflow_probe,args.thermal_workflow_probe]):
         parser.error('Use --thermomechanical-workflow-probe separately from other inputs/probes')
     if args.thermal_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe,args.nonlinear_workflow_probe,args.eigenmode_workflow_probe]):
@@ -1238,7 +1245,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.dynamics_workflow_probe or args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1322,6 +1329,9 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
+    if args.dynamics_workflow_probe:
+        from dynamics_workflow_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.dynamics_workflow_probe.resolve()))
     if args.thermomechanical_workflow_probe:
         from thermomechanical_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.thermomechanical_workflow_probe.resolve()))

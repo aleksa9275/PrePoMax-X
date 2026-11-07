@@ -35,9 +35,10 @@ namespace CaeResults
     {
         public string SourceSha256 { get; }
         public int DataSetCount { get; }
+        public IReadOnlyList<string> ExcludedBasisTables { get; }
         public IReadOnlyList<DatStaticHistory> Histories { get; }
-        internal DatStaticSnapshot(string hash, int count, List<DatStaticHistory> histories)
-        { SourceSha256 = hash; DataSetCount = count; Histories = histories.AsReadOnly(); }
+        internal DatStaticSnapshot(string hash, int count, List<DatStaticHistory> histories, List<string> basisTables)
+        { SourceSha256 = hash; DataSetCount = count; Histories = histories.AsReadOnly(); ExcludedBasisTables = basisTables.AsReadOnly(); }
     }
     public static partial class DatFileReader
     {
@@ -45,7 +46,7 @@ namespace CaeResults
         private static readonly Dictionary<string, string> PortableDatHeaders = new Dictionary<string, string>
         {
             {"temperatures", ""}, {"heat generation", ""}, {"heat flux", "(elem, integ.pnt.,qx,qy,qz)"},
-            {"displacements", "(vx,vy,vz)"}, {"forces", "(fx,fy,fz)"},
+            {"velocities", "(vx,vy,vz)"}, {"displacements", "(vx,vy,vz)"}, {"forces", "(fx,fy,fz)"},
             {"stresses", "(elem, integ.pnt.,sxx,syy,szz,sxy,sxz,syz)"},
             {"strains", "(elem, integ.pnt.,exx,eyy,ezz,exy,exz,eyz)"}
         };
@@ -69,6 +70,9 @@ namespace CaeResults
                 string text = new UTF8Encoding(false, true).GetString(bytes);
                 if (text.Length > 0 && text[0] == '\uFEFF') text = text.Substring(1);
                 string[] lines = text.Replace("\r\n", "\n").Split('\n').Select(l => l.Trim()).ToArray();
+                if (lines.Any(l => l.Length > 4096 || l.Contains('\0'))) throw new InvalidDataException("Invalid DAT line.");
+                var basisTables = new List<string>();
+                lines = ExtractPortableModalBasis(lines, basisTables);
                 ValidatePortableDatLines(lines);
                 var repaired = new Dictionary<string, string>();
                 var blocks = SplitToDataSetLinesList(lines, repaired, out bool steady).ToArray();
@@ -97,7 +101,8 @@ namespace CaeResults
                         new[] {"Id", "Int.Pnt.", "S11", "S22", "S33", "S12", "S13", "S23"} :
                         new[] {"Id", "Int.Pnt.", "E11", "E22", "E33", "E12", "E13", "E23"}) :
                         (data.FieldName == HOFieldNames.Displacements ? new[] {"Id", "U1", "U2", "U3"} : new[] {"Id", "RF1", "RF2", "RF3"});
-                    if(data.FieldName==HOFieldNames.Temperatures)expected=new[]{"Id","T"};
+                    if(data.FieldName==HOFieldNames.Velocities)expected=new[]{"Id","V1","V2","V3"};
+                    else if(data.FieldName==HOFieldNames.Temperatures)expected=new[]{"Id","T"};
                     else if(data.FieldName==HOFieldNames.HeatGeneration)expected=new[]{"Id","RFL"};
                     else if(data.FieldName==HOFieldNames.HeatFlux)expected=new[]{"Id","Int.Pnt.","Q1","Q2","Q3"};
                     if (!data.ComponentNames.SequenceEqual(expected) || data.Values.Length > 100000)
@@ -129,9 +134,48 @@ namespace CaeResults
                 using (var file = File.OpenRead(fileName))
                     if (file.Length != bytes.Length || Convert.ToHexStringLower(SHA256.HashData(file)) != hash)
                         throw new InvalidDataException("DAT changed during inspection.");
-                return new DatStaticSnapshot(hash, count, histories.Values.ToList());
+                return new DatStaticSnapshot(hash, count, histories.Values.ToList(), basisTables);
             }
             finally { CultureInfo.CurrentCulture = culture; }
+        }
+        // Recognize only the complete original stored-frequency preamble. The
+        // ordinary history decoder still receives original step/increment records.
+        private static string[] ExtractPortableModalBasis(string[] lines, List<string> tables)
+        {
+            var nonempty = lines.Where(l => l.Length != 0).ToArray();
+            if (nonempty.Length < 2 || nonempty[0] != _stepKey + "       1" || nonempty[1] != _eigenvalueOutputKey) return lines;
+            int end = Array.FindIndex(lines, Array.FindIndex(lines, l => l.StartsWith(_stepKey, StringComparison.Ordinal)) + 1, l => l.StartsWith(_stepKey, StringComparison.Ordinal));
+            if (end < 0 || lines[end] != _stepKey + "       2") throw new InvalidDataException("A modal basis requires a following dynamic step 2.");
+            var preamble = lines.Take(end).Where(l => l.Length != 0).Skip(1).ToArray();
+            string[] headings = {_eigenvalueOutputKey, _participationFactorsKey, _effectiveModalMassKey, _totalEffectiveMassKey};
+            int position = 0, modes = 0;
+            for (int table = 0; table < headings.Length; table++)
+            {
+                if (position >= preamble.Length || preamble[position++] != headings[table]) throw new InvalidDataException("Incomplete modal basis tables.");
+                string[] labels = table == 0 ? new[] {"MODE NO    EIGENVALUE                       FREQUENCY", "REAL PART            IMAGINARY PART", "(RAD/TIME)      (CYCLES/TIME     (RAD/TIME)"} :
+                    new[] {"MODE NO.   X-COMPONENT     Y-COMPONENT     Z-COMPONENT     X-ROTATION      Y-ROTATION      Z-ROTATION"};
+                foreach (string label in labels)
+                    if (position >= preamble.Length || preamble[position++] != label) throw new InvalidDataException("Unsupported modal basis column layout.");
+                int rows = 0; bool total = false;
+                while (position < preamble.Length && !headings.Contains(preamble[position]))
+                {
+                    string[] values = preamble[position++].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    bool totalRow = values[0] == "TOTAL";
+                    int width = table == 0 ? 5 : table == 3 ? 6 : 7;
+                    if (values.Length != width || total || (totalRow && table != 2)) throw new InvalidDataException("Invalid modal basis row.");
+                    for (int col = totalRow ? 1 : 0; col < values.Length; col++)
+                        if (!double.TryParse(values[col], NumberStyles.Float, CultureInfo.InvariantCulture, out double value) || !double.IsFinite(value)) throw new InvalidDataException("Invalid modal basis number.");
+                    if (totalRow) total = true;
+                    else if (table != 3 && PortableDatId(double.Parse(values[0], CultureInfo.InvariantCulture)) != ++rows) throw new InvalidDataException("Invalid modal basis mode order.");
+                    else if (table == 3) rows++;
+                    if (rows > 1000) throw new InvalidDataException("Modal basis limit exceeded.");
+                }
+                if (table == 0) modes = rows;
+                if (rows < 1 || (table < 3 && rows != modes) || (table == 2 && !total) || (table == 3 && rows != 1)) throw new InvalidDataException("Inconsistent modal basis tables.");
+                tables.Add(headings[table]);
+            }
+            if (position != preamble.Length) throw new InvalidDataException("Unexpected modal basis record.");
+            return lines.Skip(end).ToArray();
         }
         private static int PortableDatId(double value)
         {

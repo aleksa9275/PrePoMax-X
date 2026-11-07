@@ -55,6 +55,8 @@
     <Compile Include="Steps\DefinedFields\DefinedTemperature.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\DefinedField\CalDefinedTemperature.Legacy.cs" />
     <Compile Include="ModelProperties.Legacy.cs" />
+    <Compile Include="Steps\DynamicStep.Legacy.cs" />
+    <Compile Include="Steps\ModalDynamicsStep.Legacy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Steps\Loads\VariablePressure.Legacy.cs" />

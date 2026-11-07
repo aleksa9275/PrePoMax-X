@@ -20,7 +20,7 @@ dotnet X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll inspec
 `CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed linear/quadratic tetrahedron, wedge and hexahedron 3D static/frequency/buckling
 results, with one complete node block, one element block and full single-record-
 per-node fields. It supports the original ASCII and float/double binary formats,
-displacement, force, stress, total strain, equivalent plastic strain and stress-error fields. Vector/tensor
+displacement, velocity, force, stress, strain energy, total strain, equivalent plastic strain and stress-error fields. Vector/tensor
 invariants use the original Field methods. NodeIdsInValueOrder explicitly maps
 component-array indices back to actual node IDs. File SHA256 and the raw unit
 header are retained; numeric quantities remain as stored, with no unit conversion
@@ -118,3 +118,9 @@ stay authoritative. The boundary accepts CalculiX's heat-flux `for setSOLID`
 spelling that the original reader already handles. Raw RFL is not converted into
 an inferred total reaction; see the body-source convention in the
 [thermal workflow report](../../.project/reports/thermal-analysis-workflow.md).
+
+Tasks 0101/0102 add original transient velocity/strain-energy fields and velocity
+histories. A complete checked stored-frequency DAT preamble is explicitly listed
+in `ExcludedBasisTables`; only subsequent physical step-2 histories enter the
+graph/table/CSV API. Unknown/incomplete/nonfinite basis records still fail, and
+existing 8-MiB/256-dataset/250000-sample history limits remain unchanged.

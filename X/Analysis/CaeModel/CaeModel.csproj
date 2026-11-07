@@ -109,5 +109,14 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/DefinedField/CalDefinedTemperature.cs" Link="FileInOut/Output/Calculix/Keywords/Step/DefinedField/CalDefinedTemperature.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/AnalysisModelExtensions.cs" Link="FileInOut/Output/Calculix/AnalysisModelExtensions.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/DynamicStep.cs" Link="Steps/DynamicStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/ModalDynamicsStep.cs" Link="Steps/ModalDynamicsStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Damping/Damping.cs" Link="Steps/Damping/Damping.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Damping/ModalDamping.cs" Link="Steps/Damping/ModalDamping.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Damping/DampingRatioFromTo.cs" Link="Steps/Damping/DampingRatioFromTo.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalDynamicStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalDynamicStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalModalDynamicsStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalModalDynamicsStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Damping/CalDamping.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Damping/CalDamping.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Damping/CalModalDamping.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Damping/CalModalDamping.cs" />
   </ItemGroup>
 </Project>

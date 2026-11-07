@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
 namespace CaeModel
 {
     [Serializable]
-    public class ModalDynamicsStep : StaticStep, ISerializable
+    public partial class ModalDynamicsStep : StaticStep, ISerializable
     {
         // Variables                                                                                                                
         private bool _steadyState;          //ISerializable
@@ -77,47 +77,6 @@ namespace CaeModel
         public override bool IsPerturbationSupported()
         {
             return true;
-        }
-        public override bool IsBoundaryConditionSupported(BoundaryCondition boundaryCondition)
-        {
-            if (boundaryCondition is FixedBC || 
-                boundaryCondition is DisplacementRotation)
-                return false;
-            else if (boundaryCondition is SubmodelBC ||
-                     boundaryCondition is TemperatureBC)
-                return false;
-            else throw new NotSupportedException();
-        }
-        public override bool IsLoadTypeSupported(Type loadType)
-        {
-            if (loadType == typeof(CLoad) ||
-                loadType == typeof(MomentLoad) ||
-                loadType == typeof(DLoad) ||
-                loadType == typeof(HydrostaticPressure) ||
-                loadType == typeof(ImportedPressure) ||
-                loadType == typeof(STLoad) ||
-                loadType == typeof(ImportedSTLoad) ||
-                loadType == typeof(ShellEdgeLoad) ||
-                loadType == typeof(GravityLoad) ||
-                loadType == typeof(CentrifLoad) ||
-                loadType == typeof(PreTensionLoad))
-            {
-                return true;
-            }
-            else if (loadType == typeof(CFlux) ||
-                     loadType == typeof(DFlux) ||
-                     loadType == typeof(BodyFlux) ||
-                     loadType == typeof(FilmHeatTransfer) ||
-                     loadType == typeof(RadiationHeatTransfer))
-            {
-                return false;
-            }
-            else throw new NotSupportedException();
-        }
-        public override bool IsDefinedFieldSupported(DefinedField definedField)
-        {
-            if (definedField is DefinedTemperature) return false;
-            else throw new NotSupportedException();
         }
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)

@@ -121,7 +121,7 @@ internal static class Program
             if(!double.IsFinite(timeout)||timeout<=0||timeout>86400)throw new InvalidDataException("Timeout must be finite and in (0,86400] seconds.");
             var mesh=MeshFiles.Read(args[3]);
             string deck;
-            bool hasHistory=false,eigenmode=false;
+            bool hasHistory=false,eigenmode=false,modal=false;
             if(args[0]=="run-static-pmx")
                 deck=PmxStaticDeck.Build(mesh,args[4]).Text;
             else
@@ -129,7 +129,7 @@ internal static class Program
                 var spec=AnalysisFiles.Read(args[4]);
                 deck=AnalysisFiles.Build(mesh,spec);
                 hasHistory=spec.Step.NodalHistorySets.Length+spec.Step.ElementHistorySets.Length>0;
-                eigenmode=spec.Step.Kind is "frequency" or "buckling";
+                eigenmode=spec.Step.Kind is "frequency" or "buckling";modal=spec.Step.Kind=="modal-dynamics";
             }
             string directory=Path.GetFullPath(args[5]);
             if(Directory.Exists(directory)||File.Exists(directory))throw new IOException("Run directory must be new.");
@@ -152,7 +152,7 @@ internal static class Program
                 // Empty/unrequested DAT must not turn a completed FRD/STA run
                 // into failure; requested histories still require nonempty DAT.
                 // Eigenvalue jobs emit FRD/DAT but need not produce a static STA.
-                string[] requiredOutputs=eigenmode?new[]{".dat",".frd"}:hasHistory
+                string[] requiredOutputs=modal?new[]{".dat",".frd",".sta",".eig"}:eigenmode?new[]{".dat",".frd"}:hasHistory
                     ?new[]{".dat",".frd",".sta"}:new[]{".frd",".sta"};
                 bool outputsPresent=requiredOutputs.All(s=>new FileInfo(Path.Combine(directory,"analysis"+s))is{Exists:true,Length:>0});
                 bool success=job.JobStatus==JobStatus.OK&&versionMatches&&outputsPresent;

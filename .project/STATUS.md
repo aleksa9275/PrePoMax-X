@@ -1,6 +1,17 @@
 # Project status
 
-## Current — tasks 0098–0100: radiation, amplitudes and thermal stress
+## Current — tasks 0101/0102: transient solid dynamics
+
+Original implicit transient and stored-frequency-basis modal transient dynamics
+now connect desktop controls/damping, frozen native jobs, original velocity/
+energy fields and velocity history graph/table/CSV. Four independent oscillator
+examples pass on native Mac/Linux ARM64 and with the pinned original Windows
+solver via CrossOver. [Scope and actual delivery checks](reports/transient-dynamics-workflow.md).
+Candidate packaging/publication checks are pending at this source checkpoint.
+Every remaining original function, D029/B006/B007/D057–D061, coarse conductivity
+finding, full PMX and all four-target/distribution/release gates stay open.
+
+## Prior — tasks 0098–0100: radiation, amplitudes and thermal stress
 
 Original non-cavity radiation/thermal material tables, tabular amplitudes and
 prescribed-temperature solid expansion/stress now connect through desktop
