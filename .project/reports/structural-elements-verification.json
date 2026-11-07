@@ -372,20 +372,86 @@
       "passed": 10,
       "historicalCubeOnlyProbeFailedOnLine": true
     },
-    "desktopFinalTests": "/tmp/prepomaxx-task0105-0106-evidence/desktop-final-tests.log"
+    "desktopFinalTests": "/tmp/prepomaxx-task0105-0106-evidence/desktop-final-tests.log",
+    "desktopFinalLog": "/tmp/prepomaxx-task0105-0106-evidence/desktop-final-tests.log"
   },
   "candidate": {
-    "status": "Refreshing after quadratic-line FRD transport repair",
-    "priorCandidate": "/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app",
-    "initialCandidate": "/tmp/prepomaxx-task0106-delivery/PrePoMax-X Preview.app",
-    "initialCopiedRegressionsPassed": true
+    "status": "verified retained copied candidate",
+    "path": "/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app",
+    "cadLauncher": "/tmp/prepomaxx-task0106-current-delivery/Native CAD Preview.command",
+    "sourceSha": "4c8b9a47c8bd61b4e4e036013799d008994f4a88",
+    "packageReport": "/tmp/prepomaxx-task0106-current-package/build.json",
+    "fileHashesVerified": 2494,
+    "symlinksVerified": 2276,
+    "emptySourcePatch": true,
+    "signatureVerified": true,
+    "copiedWorkflows": {
+      "bridge": {
+        "success": true,
+        "checks": 164,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/bridge/workflow.json"
+      },
+      "cocoa": {
+        "success": true,
+        "checks": 164,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/cocoa/workflow.json"
+      },
+      "plane-regression": {
+        "success": true,
+        "checks": 87,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/plane-regression/workflow.json"
+      },
+      "dynamics-regression": {
+        "success": true,
+        "checks": 86,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/dynamics-regression/workflow.json"
+      },
+      "thermomechanical-regression": {
+        "success": true,
+        "checks": 84,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/thermomechanical-regression/workflow.json"
+      },
+      "thermal-regression": {
+        "success": true,
+        "checks": 132,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/thermal-regression/workflow.json"
+      },
+      "eigenmode-regression": {
+        "success": true,
+        "checks": 64,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/eigenmode-regression/workflow.json"
+      },
+      "nonlinear-regression": {
+        "success": true,
+        "checks": 70,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/nonlinear-regression/workflow.json"
+      },
+      "pmx": {
+        "success": true,
+        "checks": 17,
+        "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/pmx/verification.json"
+      }
+    },
+    "nativeCocoaActualScreen": {
+      "success": true,
+      "checks": 10,
+      "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/cocoa-visible/verification.json"
+    },
+    "visualInspection": [
+      "current Cocoa centerline screen",
+      "layered shell contours",
+      "configuration screenshots"
+    ]
   },
   "publication": {
-    "status": "pushed and remote-verified",
+    "status": "pushed and remote-verified; closing documentation follows",
     "branch": "origin/research/native-feasibility",
     "implementationSha": "88e0c9253449ad1b1ce24b37031cf4739b7ef24c",
+    "quadraticLineRepairSha": "8f9b58ce90e882eef1fb447c4131dadb6ede731c",
+    "finalCodeSha": "4c8b9a47c8bd61b4e4e036013799d008994f4a88",
     "hostedCiRun": false,
-    "pushOption": "ci.skip"
+    "pushOption": "ci.skip",
+    "commitMarker": "[skip ci]"
   },
   "remaining": "All unimplemented original family/material/orientation/mesher/model/results/full PMX/four-target/release requirements remain. B008 structural findings, T2D3 refusal and all D029/B006/B007/D057\u2013D061 and coarse conductivity/axisymmetric findings remain explicit; none is waived or silently corrected.",
   "originalWindowsCenterline": {
@@ -419,7 +485,88 @@
   },
   "linuxArm64Centerline": {
     "success": true,
-    "checks": 15,
-    "report": "/tmp/prepomaxx-task0105-0106-evidence/linux/workflow-centerline/workflow.json"
+    "checks": 21,
+    "report": "/tmp/prepomaxx-task0105-0106-evidence/linux/workflow-picking/workflow.json"
+  },
+  "deliveryComplete": true,
+  "cleanup": {
+    "success": true,
+    "removed": [
+      {
+        "path": "/private/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1157113350
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1157405116
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-final-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1157409219
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-package/dist",
+        "logicalBytes": 2287820977
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-package/build",
+        "logicalBytes": 21303896
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-package/hosts",
+        "logicalBytes": 622179101
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-final-package/dist",
+        "logicalBytes": 2287828657
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-final-package/build",
+        "logicalBytes": 21342517
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-final-package/hosts",
+        "logicalBytes": 622180393
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-final-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-current-package/dist",
+        "logicalBytes": 2287833065
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-current-package/build",
+        "logicalBytes": 21359931
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-current-package/hosts",
+        "logicalBytes": 622180485
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0106-current-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      }
+    ],
+    "logicalBytes": 15118929428,
+    "freeSpaceBefore": 176553533440,
+    "freeSpaceAfter": 189883117568,
+    "candidateFileHashesVerified": 2494,
+    "preserved": "Current copied candidate/CAD launcher; source, models, job/reference outputs, screenshots, manifests/logs, installed user app/state and shared native/Python/.NET/PMX/Podman caches."
+  },
+  "linuxEnvironment": {
+    "image": "localhost/prepomaxx-task0067-gui:arm64",
+    "network": "none",
+    "architecture": "aarch64",
+    "display": "Xvfb/Mesa with existing Qt fallback",
+    "initialState": "stopped",
+    "restoredState": "stopped",
+    "linuxX64Accepted": false,
+    "nativeWindowsApplicationAccepted": false
   }
 }

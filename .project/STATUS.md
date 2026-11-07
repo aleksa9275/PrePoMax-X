@@ -7,7 +7,13 @@ moments, shell normal pressure, line sections and layered expanded results.
 Nine Mac/Linux ARM64 workflows pass with exact native decks/meshes/fields and
 pinned original Windows solver comparisons. [Scope and actual checks](reports/structural-elements-workflow.md).
 B008 and original T2D3 refusal remain explicit; all prior numerical, full PMX,
-four-target and release gates remain. Combined candidate preparation follows.
+four-target and release gates remain. Final source 4c8b9a47 is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app`, with sibling
+native CAD launcher. Both copied viewports pass all ten structural cases, earlier
+workflows pass, and actual Cocoa screen/picking and payload/source/signature
+checks pass. Superseded generated payloads are pruned; evidence/models/jobs remain.
+Next element-family milestone is discrete masses/springs/gaps, then mixed-family
+calculation breadth, meshing and full persistence/platform acceptance.
 
 ## Current — tasks 0103/0104: plane and axisymmetric elements
 

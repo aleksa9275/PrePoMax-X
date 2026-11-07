@@ -268,7 +268,14 @@
     "newPlaneBehaviors": 7
   },
   "candidate": {
-    "status": "Existing task0102 package retained; new combined candidate follows requested shell/beam milestones. Source desktop verified here."
+    "status": "verified combined copied candidate",
+    "path": "/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app",
+    "sourceSha": "4c8b9a47c8bd61b4e4e036013799d008994f4a88",
+    "planeRegression": {
+      "success": true,
+      "checks": 87,
+      "report": "/tmp/prepomaxx-task0105-0106-evidence/current-copied/plane-regression/workflow.json"
+    }
   },
   "publication": {
     "status": "pushed and remote-verified",

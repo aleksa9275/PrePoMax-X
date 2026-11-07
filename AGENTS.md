@@ -4,7 +4,10 @@ Tasks 0105/0106 connect original shell/membrane and beam/truss imported-mesh sta
 workflows, thickness/offset, rotation/moments, explicit shell-side pressure,
 RECT/CIRC/truss section controls and layered-shell expanded results through the
 original keyword route. Read .project/reports/structural-elements-workflow.md and
-its receipt. Preserve B008 structural diagnostics and original T2D3 refusal,
+its receipt. Final source 4c8b9a47 is published with CI skipped; current candidate
+is /tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app. Both copied
+viewports and prior regressions pass; original quadratic centerline ASCII/binary
+transport, actual Cocoa picking and one-candidate retention are verified. Preserve B008 structural diagnostics and original T2D3 refusal,
 D029/B006/B007 and all earlier thermal/axisymmetric findings. No numerical fix,
 existing tolerance change or new solver exception. Other material/orientation/
 calculation/mesher/full PMX and D057–D061/four-target/release obligations remain.

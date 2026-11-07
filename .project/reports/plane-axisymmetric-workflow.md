@@ -74,3 +74,8 @@ candidate remains available meanwhile. No hosted CI was run under D058.
 All existing D029/B006/B007, coarse conductivity diagnostics, D057–D061, original
 algorithms/tolerances, full PMX, four-target and distribution/release requirements
 remain open. Native x64 remains deferred under D059.
+
+Combined delivery: the current app is `/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app` at source 4c8b9a47. Its copied
+plane/axisymmetric regression passes all 87 checks; both viewports and the other
+structural workflows are verified in the [combined delivery](structural-elements-workflow.md).
+The old task0102 payload is superseded and pruned; all inputs/evidence remain.

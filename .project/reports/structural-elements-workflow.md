@@ -107,3 +107,28 @@ use unlit, wider scalar-colored strokes, restoring visible centerline contours.
 Actual native Cocoa screen/ID/value/resize checks pass on the quadratic line;
 solid/CAD presentation is restored when switching scenes. The centerline workflow
 also exercises the family-aware picking regression. No engineering data change.
+
+## Final delivery and retention
+
+Implementation 88e0c925, quadratic-line repair 8f9b58ce and final display/picking
+code **4c8b9a47c8bd61b4e4e036013799d008994f4a88** are pushed and remote-verified on
+origin/research/native-feasibility, with CI skipped under D058. The retained app
+is `/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app`; sibling `Native CAD Preview.command` enables the existing native CAD
+runtime. Use Solve example… for the new families. The package has an empty source
+patch and no changed code; four pre-existing Finder files explain its dirty flag.
+
+Both copied viewports complete all ten structural cases (164 checks each). The
+copied plane (87), dynamics, thermal/thermomechanical, eigenmode, nonlinear and
+PMX regressions pass. Actual Cocoa screen, original IDs, scalar picking and resize
+pass ten checks on the quadratic centerline. All **2494 file hashes**, **2276
+symlinks**, exact source identity and ad-hoc signature verify. The final candidate
+and native Linux ARM64 examples have exact decks, decoded meshes and fields.
+These checks close no Windows/Linux x64, physical Linux desktop, full PMX, exact
+general-native, numerical or release gate.
+
+Superseded task0102 and intermediate task0106 apps and duplicate package payloads
+are pruned after verification. Source/models/jobs/reference outputs/screenshots/
+metadata and shared tools remain, as do installed user app/state. About 15.12 GB
+logical data is removed, with about 13.33 GB measured free-space gain; details are
+in the receipt. Old generated CAD launchers forward to the current candidate.
+The Linux VM is restored to its initial stopped state.
