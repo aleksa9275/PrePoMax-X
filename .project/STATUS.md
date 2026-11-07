@@ -19,7 +19,7 @@ actual-screen contour/picking checks, copied payload/source/signature and empty
 source-patch checks pass. The superseded task 0094 app and duplicate new build
 payloads are pruned, preserving models/jobs/evidence/source/shared tools.
 
-## Current — tasks 0092–0094: eigenmodes and result tools
+## Prior — tasks 0092–0094: eigenmodes and result tools
 
 Original frequency/buckling solid calculations now connect to Configure…,
 native solving and mode/factor results. Deformation, undeformed outlines,
