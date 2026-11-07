@@ -98,3 +98,12 @@ All original material/orientation, interaction/contact, mixed-family calculation
 mesher/editing/results/PMX and four-target/distribution/release requirements stay
 open. D057/D058/D059/D060/D061 remain; hosted CI is skipped and native x64 stays
 deferred. Unavailable Intel/PARDISO remains the sole solver exception.
+
+The actual-screen follow-up initially used the historical cube-only self-test,
+which assumed eight nodes/one cell and a fixed cube pick location; its failures
+are retained as a probe applicability error. The probe now verifies exact input
+ID arrays and projects actual family-specific cell locations. Pure line scenes
+use unlit, wider scalar-colored strokes, restoring visible centerline contours.
+Actual native Cocoa screen/ID/value/resize checks pass on the quadratic line;
+solid/CAD presentation is restored when switching scenes. The centerline workflow
+also exercises the family-aware picking regression. No engineering data change.

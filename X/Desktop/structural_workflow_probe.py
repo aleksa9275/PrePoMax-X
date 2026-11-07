@@ -122,6 +122,10 @@ def begin(app, w, output):
         check(case+' result displayed', w.scene['SourceSha256'] == scene['SourceSha256'])
         check(case+' immutable input', hashlib.sha256(w.mesh_bytes).hexdigest() == state['meshHash'] and json.loads((Path(result['inputDirectory'])/'analysis.json').read_text()) == w.definition)
         metrics = verify_fields(case, scene, history, check)
+        if case=='beam-centerline':
+            from viewport import verify_mesh_view
+            w.result_tools.deformed.setChecked(False)
+            verify_mesh_view(w,check)
         dialog = SolidFormulationDialog(w, w.model_scene)
         check(case+' formulation identity retained', dialog.values() == [b['formulation'] for b in w.model_scene['elementBlocks']])
         export_histories(output/(case+'-histories.csv'), history['histories'])

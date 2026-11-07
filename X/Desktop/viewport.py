@@ -949,7 +949,10 @@ class Viewport(QtWidgets.QMainWindow):
         else:
             self.cad_edge_mapper.RemoveAllInputs()
         self.cad_edge_actor.SetVisibility(cad is not None)
-        self.actor.GetProperty().SetEdgeVisibility(cad is None)
+        line_only = bool(scene['elements']) and all(e['vtkCellType'] in (3,21) for e in scene['elements'])
+        self.actor.GetProperty().SetEdgeVisibility(cad is None and not line_only)
+        self.actor.GetProperty().SetLineWidth(4 if line_only else 1)
+        self.actor.GetProperty().SetLighting(not line_only)
         self.fields.blockSignals(True)
         self.fields.clear()
         self.fields.addItem("CAD geometry" if cad else "Mesh (undeformed)", None)
@@ -1149,16 +1152,21 @@ def verify_cad_view(window, check):
 
 
 def verify_mesh_view(window, check):
-    check("original IDs retained", window.grid.GetNumberOfPoints() == 8 and window.grid.GetNumberOfCells() == 1)
+    check("original IDs retained", [window.grid.GetPointData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfPoints())]==[n['id'] for n in window.scene['nodes']] and
+          [window.grid.GetCellData().GetGlobalIds().GetValue(i) for i in range(window.grid.GetNumberOfCells())]==[e['id'] for e in window.scene['elements']])
     if window.fields.count() > 1:
         window.fields.setCurrentIndex(1)
         check("field scalar mapping", window.mapper.GetScalarVisibility() == 1 and window.legend.GetVisibility() == 1)
-    window.renderer.SetWorldPoint(0.5, 0.5, 1, 1)
-    window.renderer.WorldToDisplay()
-    x, y, _ = window.renderer.GetDisplayPoint()
-    selection = window.pick(x, y)
-    check("VTK hit resolves original element ID", selection and selection["elementId"] == window.scene["elements"][0]["id"])
-    check("nearest vertex resolves original node ID", selection and selection["nearestVertexNodeId"] in {n["id"] for n in window.scene["nodes"]})
+    selection = None
+    for i in range(min(window.grid.GetNumberOfCells(),256)):
+        cell=window.grid.GetCell(i);points=cell.GetPoints();count=points.GetNumberOfPoints()
+        if cell.GetCellDimension()==1 and count==3:point=points.GetPoint(2)
+        else:point=[sum(points.GetPoint(j)[axis] for j in range(count))/count for axis in range(3)]
+        window.renderer.SetWorldPoint(*point,1);window.renderer.WorldToDisplay()
+        x,y,_=window.renderer.GetDisplayPoint();selection=window.pick(x,y)
+        if selection:break
+    check("VTK hit resolves original element ID", selection and selection['elementId'] in {e['id'] for e in window.scene['elements']})
+    check("nearest vertex resolves original node ID", selection and selection['nearestVertexNodeId'] in {n['id'] for n in window.scene['nodes']})
     if selection:
         node = next(n for n in window.scene["nodes"] if n["id"] == selection["nearestVertexNodeId"])
         check("selected coordinates preserved", list(selection["nodeCoordinates"]) == [node["x"], node["y"], node["z"]])

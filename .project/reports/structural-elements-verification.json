@@ -366,7 +366,13 @@
       "/tmp/prepomaxx-task0105-0106-evidence/desktop-tests.log"
     ],
     "quadraticLineResults": "/tmp/prepomaxx-task0105-0106-evidence/quadratic-line-final/manifest.json",
-    "structuralEditorFinal": "/tmp/prepomaxx-task0105-0106-evidence/structural-tests-final.log"
+    "structuralEditorFinal": "/tmp/prepomaxx-task0105-0106-evidence/structural-tests-final.log",
+    "lineDisplayAndPicking": {
+      "report": "/tmp/prepomaxx-task0105-0106-evidence/source-line-visible/verification.json",
+      "passed": 10,
+      "historicalCubeOnlyProbeFailedOnLine": true
+    },
+    "desktopFinalTests": "/tmp/prepomaxx-task0105-0106-evidence/desktop-final-tests.log"
   },
   "candidate": {
     "status": "Refreshing after quadratic-line FRD transport repair",
