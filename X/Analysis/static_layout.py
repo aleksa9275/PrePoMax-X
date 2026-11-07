@@ -65,6 +65,9 @@ def render(root,revision=BASELINE):
           '        public abstract bool IsBoundaryConditionSupported(', '        public int GetNumberOfStepControls()')
     split('CaeModel/Steps/StaticStep.cs','public class StaticStep : Step, ISerializable',
           '        public override bool IsBoundaryConditionSupported(', '        // ISerialization')
+    for kind in ('FrequencyStep','BuckleStep'):
+        split('CaeModel/Steps/'+kind+'.cs','public class '+kind+' : Step, ISerializable',
+              '        public override bool IsBoundaryConditionSupported(', '        // ISerialization')
     path='CaeModel/Steps/BoundaryConditions/DisplacementRotation.cs';text=read(path)
     body,core=span(text,'        public bool IsDistributionTypeSupported(', '        // IContainsEquations')
     full='public class DisplacementRotation : BoundaryCondition, IDistribution, IPreviewable, ISerializable'

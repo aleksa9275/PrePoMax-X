@@ -14,7 +14,7 @@ try
  nodes=snapshot.NodeIdsInValueOrder.Select(id=>new{id,x=snapshot.Nodes[id].X,y=snapshot.Nodes[id].Y,z=snapshot.Nodes[id].Z}),
  elements=snapshot.Elements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,vtkCellType=e.GetVtkCellType(),nodeIds=e.NodeIds,vtkNodeIds=e.GetVtkNodeIds()}),nodeIdsInValueOrder=snapshot.NodeIdsInValueOrder,
  solverElements=snapshot.SolverElements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,nodeIds=e.NodeIds}),
- fields=snapshot.Fields.Select(f=>new{name=f.Data.Name,stepId=f.Data.StepId,incrementId=f.Data.StepIncrementId,time=f.Data.Time,stepType=f.Data.StepType.ToString(),components=f.Field.GetComponentNames().ToDictionary(n=>n,n=>f.Field.GetComponentValues(n))})};
+ fields=snapshot.Fields.Select(f=>new{name=f.Data.Name,stepId=f.Data.StepId,incrementId=f.Data.StepIncrementId,time=f.Data.Time,stepType=f.Data.StepType.ToString(),mode=f.Data.ModeNumber,components=f.Field.GetComponentNames().ToDictionary(n=>n,n=>f.Field.GetComponentValues(n))})};
  Console.WriteLine(JsonSerializer.Serialize(result));return 0;
 }
 catch(Exception e)when(e is IOException or InvalidDataException or ArgumentException or NotSupportedException or FormatException or OverflowException or IndexOutOfRangeException or AggregateException or CaeGlobals.CaeException)

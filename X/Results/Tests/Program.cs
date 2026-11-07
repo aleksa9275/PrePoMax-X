@@ -81,7 +81,7 @@ try
  Check("duplicate terminal records rejected",Reject("duplicate-terminal",raw+" 9999\n"));
  Check("nonfinite/malformed stored values rejected",Reject("bad-value",raw.Replace("4.76190E-04","XXXXXXXXXXX")));
  Check("axisymmetric scaling is gated",Reject("axisymmetric",raw.Replace("    1C\n","    1C\n    1UModel space: Axisymmetric\n")));
- Check("modal analysis remains gated",Reject("modal",raw.Replace("                     0    1","                     2    1MODAL")));
+ Check("original modal header classifies frequency fields",ReadText("modal",raw.Replace("                     0    1","                     2    1MODAL")).Fields.All(f=>f.Data.StepType==StepTypeEnum.Frequency));
  Check("declared excessive mesh size rejected before allocation",Reject("oversize",raw.Replace("    2C                             8","    2C                       9999999")));
  int value=Array.FindIndex(lines,25,l=>l.StartsWith(" -1"));var swapped=(string[])lines.Clone();(swapped[value],swapped[value+1])=(swapped[value+1],swapped[value]);
  Check("ambiguous reordered full field IDs rejected",Reject("reordered",string.Join('\n',swapped)));

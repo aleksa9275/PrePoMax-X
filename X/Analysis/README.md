@@ -1,5 +1,15 @@
 # PrePoMax-X portable static analysis increment
 
+Tasks 0092/0093 add `step.kind` = `frequency` or `buckling` (default `static`),
+`modes`, optional `lowerFrequency`/`upperFrequency` in Hz, and `bucklingAccuracy`.
+Original FrequencyStep/BuckleStep and keyword writers are shared unchanged
+through mechanically verified partial extraction. Ordinary homogeneous supports,
+linear elasticity and density for frequency/nonzero reference load for buckling
+are required. The axial-frequency and column-buckling INP/JSON pairs are runnable
+examples. [Actual scope, comparisons and inherited search behavior](../../.project/reports/eigenmodes-results-tools.md).
+All other original functionality remains required; D061 keeps numerical fixes
+deferred. Existing static input/commands remain compatible.
+
 Task 0090 extends this workflow with optional material `density`,
 `plasticCurve` stress/plastic-strain pairs and original `hardening` choices;
 step `nonlinearGeometry`, `pressures` and `gravityLoads`. Pressure chooses either

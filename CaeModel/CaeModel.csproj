@@ -327,6 +327,8 @@
     <Compile Include="Steps\FrequencyStep.cs" />
     <Compile Include="Steps\HeatTransferStep.cs" />
     <Compile Include="Steps\StaticStep.Legacy.cs" />
+    <Compile Include="Steps\FrequencyStep.Legacy.cs" />
+    <Compile Include="Steps\BuckleStep.Legacy.cs" />
     <Compile Include="Steps\StaticStep.cs" />
     <Compile Include="Steps\Step.Legacy.cs" />
     <Compile Include="Steps\Step.cs">

@@ -131,8 +131,8 @@ namespace CaeResults
                         {
                             if (elements == null || fields.Count >= 4096) throw new InvalidDataException("Fields require a complete mesh; at most 4096 fields are supported.");
                             int line = 0; GetFieldHeaderData(set.Lines, ref line, previous, out var metadata, out int count);
-                            if (metadata.StepType != StepTypeEnum.Static || count != nodes.Count || !float.IsFinite(metadata.Time))
-                                throw new NotSupportedException("Only complete nodal fields in static steps are supported.");
+                            if (metadata.StepType is not (StepTypeEnum.Static or StepTypeEnum.Frequency or StepTypeEnum.Buckling) || count != nodes.Count || !float.IsFinite(metadata.Time))
+                                throw new NotSupportedException("Complete nodal static, frequency or buckling fields are required.");
                             ValidateOrder(set, line, count, lookup);
                             GetField(set, constantWidth, previous, lookup, out var data, out var field);
                             string[] required = field.Name switch

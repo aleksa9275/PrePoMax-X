@@ -106,14 +106,14 @@ class Rows(QtWidgets.QWidget):
 class AnalysisDialog(QtWidgets.QDialog):
     def __init__(self, parent, scene, mesh_bytes, definition, tab=0):
         super().__init__(parent)
-        self.setWindowTitle('Configure static solid analysis')
+        self.setWindowTitle('Configure solid analysis')
         self.resize(980, 680)
         self.scene, self.mesh_bytes = scene, mesh_bytes
         self.original = copy.deepcopy(definition)
         self.definition = None
         self.validation = None
         layout = QtWidgets.QVBoxLayout(self)
-        note = QtWidgets.QLabel('Static solid preview · regions use named sets from the imported mesh. '
+        note = QtWidgets.QLabel('Mechanical solid analysis · regions use named sets from the imported mesh. '
             'Equations and quantities are evaluated by the original model services.')
         note.setWordWrap(True)
         layout.addWidget(note)
@@ -222,6 +222,27 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.nonlinear=QtWidgets.QCheckBox('Geometric nonlinearity (NLGEOM)')
         self.nonlinear.setChecked(definition['step'].get('nonlinearGeometry',False))
         step_form.insertRow(0,self.nonlinear)
+        eigen=QtWidgets.QWidget();eigen_form=QtWidgets.QFormLayout(eigen)
+        self.analysis_kind=QtWidgets.QComboBox();self.analysis_kind.setObjectName('analysisKind')
+        for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling')]:self.analysis_kind.addItem(label,key)
+        self.analysis_kind.setCurrentIndex(max(0,self.analysis_kind.findData(definition['step'].get('kind','static'))))
+        self.mode_count=QtWidgets.QSpinBox();self.mode_count.setRange(1,1000);self.mode_count.setValue(definition['step'].get('modes',10))
+        self.frequency_lower=QtWidgets.QLineEdit('' if definition['step'].get('lowerFrequency') is None else str(definition['step']['lowerFrequency']))
+        self.frequency_upper=QtWidgets.QLineEdit('' if definition['step'].get('upperFrequency') is None else str(definition['step']['upperFrequency']))
+        self.buckling_accuracy=QtWidgets.QDoubleSpinBox();self.buckling_accuracy.setDecimals(10);self.buckling_accuracy.setRange(1e-10,1);self.buckling_accuracy.setValue(definition['step'].get('bucklingAccuracy',.0001))
+        eigen_form.addRow('Analysis type',self.analysis_kind);eigen_form.addRow('Requested modes / load factors',self.mode_count)
+        eigen_form.addRow('Lower frequency [Hz], blank = unspecified',self.frequency_lower);eigen_form.addRow('Upper frequency [Hz], blank = unspecified',self.frequency_upper)
+        eigen_form.addRow('Buckling accuracy',self.buckling_accuracy)
+        eigen_note=QtWidgets.QLabel('Frequency requires density and homogeneous supports; remove applied loads. Buckling uses homogeneous supports and a nonzero reference load. Mode amplitudes have arbitrary normalization. The original buckling search can omit factors below 1; reference-load scaling should be checked. Static time controls apply only to static analysis.')
+        eigen_note.setWordWrap(True);eigen_form.addRow(eigen_note);self.tabs.addTab(eigen,'Analysis type / modes')
+        def update_kind():
+            kind=self.analysis_kind.currentData();static=kind=='static'
+            for key,field in self.step_fields.items():field.setEnabled(static or key in ('name','outputFrequency'))
+            self.nonlinear.setEnabled(static);self.mode_count.setEnabled(not static)
+            self.frequency_lower.setEnabled(kind=='frequency');self.frequency_upper.setEnabled(kind=='frequency');self.buckling_accuracy.setEnabled(kind=='buckling')
+            self.mark_changed()
+        self.analysis_kind.currentIndexChanged.connect(update_kind)
+        self.mode_count.valueChanged.connect(self.mark_changed);self.frequency_lower.textChanged.connect(self.mark_changed);self.frequency_upper.textChanged.connect(self.mark_changed);self.buckling_accuracy.valueChanged.connect(self.mark_changed)
         self.tabs.setCurrentIndex(tab)
         self.message = QtWidgets.QLabel('Project saving is not available in this preview. Run inputs are retained with the job.')
         self.message.setWordWrap(True)
@@ -245,6 +266,7 @@ class AnalysisDialog(QtWidgets.QDialog):
             field.textChanged.connect(self.mark_changed)
         self.nodal_history.itemChanged.connect(self.mark_changed)
         self.element_history.itemChanged.connect(self.mark_changed)
+        update_kind()
 
     def refresh_material_options(self):
         names=[r['name'] for r in self.materials.values() if r['name']]
@@ -318,6 +340,13 @@ class AnalysisDialog(QtWidgets.QDialog):
                 value['step'][key] = text if key == 'name' else int(text) if key in ('maximumIncrements', 'outputFrequency') else float(text)
             except ValueError:
                 raise ValueError('Enter a valid number for ' + key)
+        kind=self.analysis_kind.currentData()
+        if kind!='static' or 'kind' in value['step']:value['step']['kind']=kind
+        if kind!='static' or 'modes' in value['step']:value['step']['modes']=self.mode_count.value()
+        for key,field in [('lowerFrequency',self.frequency_lower),('upperFrequency',self.frequency_upper)]:
+            if field.text().strip():value['step'][key]=float(field.text())
+            else:value['step'].pop(key,None)
+        if kind=='buckling' or 'bucklingAccuracy' in value['step']:value['step']['bucklingAccuracy']=self.buckling_accuracy.value()
         for key, widget in [('nodalHistorySets', self.nodal_history), ('elementHistorySets', self.element_history)]:
             value['step'][key] = [widget.item(i).text() for i in range(widget.count())
                                   if widget.item(i).checkState() == QtCore.Qt.CheckState.Checked]
@@ -328,7 +357,7 @@ class AnalysisDialog(QtWidgets.QDialog):
             value = self.collect()
             outcome = validate_definition(self.mesh_bytes, value)
             self.definition, self.validation = value, outcome
-            self.message.setText('Valid static definition. Original model/deck checks passed; no solver was started.')
+            self.message.setText('Valid mechanical definition. Original model/deck checks passed; no solver was started.')
             return True
         except (OSError, ValueError, subprocess.SubprocessError) as error:
             self.definition = self.validation = None

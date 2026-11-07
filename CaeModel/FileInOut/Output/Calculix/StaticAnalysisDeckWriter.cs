@@ -35,7 +35,7 @@ namespace CaeModel
         }
 
         public static string Write(InpMeshData mesh, IEnumerable<Material> materials,
-                                   IEnumerable<SolidSection> sections, StaticStep step,
+                                   IEnumerable<SolidSection> sections, Step step,
                                    ConvertPyramidsToEnum? pyramidConversion = null)
         {
             if (mesh == null || materials == null || sections == null || step == null)
@@ -87,20 +87,42 @@ namespace CaeModel
             }
             if (!coverage.SetEquals(checkedMesh.Elements.Keys) || !usedMaterials.SetEquals(materialNames))
                 throw new CaeException("Every element requires exactly one section and every supplied material must be used.");
-            if (step.GetType()!=typeof(StaticStep)) throw new NotSupportedException("Exact original StaticStep type required.");
+            bool isStatic=step.GetType()==typeof(StaticStep),isFrequency=step.GetType()==typeof(FrequencyStep),isBuckling=step.GetType()==typeof(BuckleStep);
+            if(!isStatic && !isFrequency && !isBuckling)throw new NotSupportedException("An exact original static, frequency or buckle step is required.");
+            if(!isStatic && (step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic))))throw new NotSupportedException("This eigenmode workflow requires linear elastic materials and linear geometry.");
+            if(isFrequency && (step.Loads.Count!=0 || sectionList.Any(section=>!materialList.Single(m=>string.Equals(m.Name,section.MaterialName,StringComparison.OrdinalIgnoreCase)).Properties.Any(p=>p is Density))))
+                throw new CaeException("Frequency analysis requires density for every section and no applied loads.");
+            if(isBuckling && step.Loads.Count==0)throw new CaeException("Buckling analysis requires a nonzero reference load.");
+            if(isFrequency) {
+                var frequency=(FrequencyStep)step;
+                if(frequency.NumOfFrequencies<1 || frequency.NumOfFrequencies>1000 || frequency.Storage ||
+                    frequency.CyclicSymmetryModeMin!=int.MinValue || frequency.CyclicSymmetryModeMax!=int.MinValue ||
+                    (!double.IsNaN(frequency.LowerFrequency) && (!Finite(frequency.LowerFrequency) || frequency.LowerFrequency<0)) ||
+                    (!double.IsNaN(frequency.UpperFrequency) && (!Finite(frequency.UpperFrequency) || frequency.UpperFrequency<=0)) ||
+                    (!double.IsNaN(frequency.LowerFrequency) && !double.IsNaN(frequency.UpperFrequency) && frequency.LowerFrequency>=frequency.UpperFrequency))
+                    throw new CaeException("Valid ordinary frequency controls are required; cyclic/storage workflows remain pending.");
+            }
+            if(isBuckling) {
+                var buckle=(BuckleStep)step;
+                if(buckle.NumOfBucklingFactors<1 || buckle.NumOfBucklingFactors>1000 || !Finite(buckle.Accuracy) || buckle.Accuracy<=0)
+                    throw new CaeException("Valid buckling mode count and accuracy are required.");
+            }
             Active(step); Name(step.Name);
             if (!step.RunAnalysis || step.Perturbation || step.SolverType != SolverTypeEnum.Default ||
                 step.DefinedFields.Count != 0 || step.GetNumberOfStepControls() != 0 ||
                 !Enum.IsDefined(typeof(IncrementationTypeEnum), step.IncrementationType) ||
                 (step.OutputFrequency != int.MinValue && step.OutputFrequency <= 0))
-                throw new NotSupportedException("A running static step with default solver and ordinary global output is required.");
-            double[] times = { step.TimePeriod, step.InitialTimeIncrement, step.MinTimeIncrement, step.MaxTimeIncrement };
-            if (times.Any(t => !Finite(t) || t <= 0) || step.InitialTimeIncrement > step.TimePeriod ||
-                step.InitialTimeIncrement > step.MaxTimeIncrement || step.MinTimeIncrement > step.InitialTimeIncrement ||
-                step.MinTimeIncrement > step.MaxTimeIncrement ||
-                (step.IncrementationType == IncrementationTypeEnum.Default &&
-                 (step.TimePeriod != 1 || step.InitialTimeIncrement != 1 || step.MinTimeIncrement != 1E-5 || step.MaxTimeIncrement != 1E30)))
+                throw new NotSupportedException("A running mechanical step with default solver and ordinary global output is required.");
+            if(isStatic) {
+                var staticStep=(StaticStep)step;
+            double[] times = { staticStep.TimePeriod, staticStep.InitialTimeIncrement, staticStep.MinTimeIncrement, staticStep.MaxTimeIncrement };
+            if (times.Any(t => !Finite(t) || t <= 0) || staticStep.InitialTimeIncrement > staticStep.TimePeriod ||
+                staticStep.InitialTimeIncrement > staticStep.MaxTimeIncrement || staticStep.MinTimeIncrement > staticStep.InitialTimeIncrement ||
+                staticStep.MinTimeIncrement > staticStep.MaxTimeIncrement ||
+                (staticStep.IncrementationType == IncrementationTypeEnum.Default &&
+                 (staticStep.TimePeriod != 1 || staticStep.InitialTimeIncrement != 1 || staticStep.MinTimeIncrement != 1E-5 || staticStep.MaxTimeIncrement != 1E30)))
                 throw new CaeException("Invalid static incrementation or custom values hidden by default incrementation.");
+            }
             if (step.BoundaryConditions.Count == 0 || step.BoundaryConditions.Count > 10000 || step.Loads.Count > 10000)
                 throw new CaeException("A bounded nonempty displacement constraint definition is required.");
             var constraints = new List<Tuple<DisplacementRotation, double[]>>();
@@ -123,6 +145,7 @@ namespace CaeModel
                     for (int d = 0; d < 3; d++)
                         if (!double.IsNaN(values[d]) && !constrained.Add(Tuple.Create(id,d)))
                             throw new CaeException("Overlapping displacement definitions for one node/DOF are unsupported.");
+                if(!isStatic && values.Any(v=>!double.IsNaN(v) && v!=0))throw new CaeException("Eigenmode supports must be homogeneous zero displacement constraints.");
                 constraints.Add(Tuple.Create(bc,values));
             }
             var loads = new List<CalculixKeyword>(); var loaded = new HashSet<Tuple<int,int>>();
@@ -206,7 +229,7 @@ namespace CaeModel
             {
                 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
                 var text = new StringBuilder(step.Nlgeom || materialList.Any(m=>m.Properties.Any(p=>p is Plastic))
-                    ? "** PrePoMax-X 3D nonlinear-static analysis deck\n" : "** PrePoMax-X bounded 3D linear-static analysis deck\n");
+                    ? "** PrePoMax-X 3D nonlinear-static analysis deck\n" : isStatic ? "** PrePoMax-X bounded 3D linear-static analysis deck\n" : "** PrePoMax-X 3D eigenmode analysis deck\n");
                 // Solver decks use the original CalNode formatter. G17 remains
                 // correct for lossless mesh exchange, but can exceed CalculiX's
                 // 20-character numeric input field (e.g. 6.8000000000000001E-15).
@@ -215,7 +238,10 @@ namespace CaeModel
                 text.Append(meshText.Substring(elementsAt));
                 foreach (string value in materialText) text.Append(value);
                 foreach (var section in sectionList) Append(text, new CalSolidSection(section));
-                Append(text, new CalStepHeader(step)); Append(text, new CalStaticStep(step));
+                Append(text, new CalStepHeader(step));
+                if(isStatic)Append(text,new CalStaticStep((StaticStep)step));
+                else if(isFrequency)Append(text,new CalFrequencyStep((FrequencyStep)step));
+                else Append(text,new CalBuckleStep((BuckleStep)step));
                 foreach (var item in constraints)
                 {
                     var source = item.Item1; var v = item.Item2;
@@ -251,7 +277,7 @@ namespace CaeModel
             }
         }
 
-        private static void ValidateOutputs(InpMeshData mesh, StaticStep step)
+        private static void ValidateOutputs(InpMeshData mesh, Step step)
         {
             if (step.FieldOutputs.Count == 0 || step.FieldOutputs.Count > 100 || step.HistoryOutputs.Count > 100)
                 throw new CaeException("Bounded nonempty field outputs are required.");

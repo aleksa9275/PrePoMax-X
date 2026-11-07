@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0",
+      "density": "0.001"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section",
+      "material": "ELASTIC",
+      "elementSet": "SOLID"
+    }
+  ],
+  "step": {
+    "name": "Frequency-1",
+    "kind": "frequency",
+    "modes": 3,
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Lateral",
+        "nodeSet": "ALL",
+        "displacements": [
+          "0",
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      }
+    ],
+    "loads": [],
+    "nodalHistorySets": [],
+    "elementHistorySets": []
+  }
+}

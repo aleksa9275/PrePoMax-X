@@ -1,5 +1,16 @@
 # Native viewport candidate
 
+Tasks 0092–0094 add Configure… → Analysis type / modes for original frequency
+and buckling analyses, with two new Solve example… entries. Results identify Hz,
+buckling factors and the reference-load state; Deformed/Scale/Undeformed outline
+and Play provide display deformation and frame/shape animation. Histories… opens
+ordinary original DAT series with graphs/tables and new-file selected/all CSV
+export. Mode amplitudes are arbitrary; stored results/model coordinates remain
+unchanged. [Current scope/evidence](../../.project/reports/eigenmodes-results-tools.md).
+Prestress/cyclic/complex/modal-storage and all remaining original result/model/
+analysis functionality remain required. B007 numerical fixes are deferred under
+D061 with D029/B006.
+
 Task 0090 adds Configure… controls for density/plastic curves, pressure, gravity
 and geometric nonlinearity. Solve example… offers pressure-loaded solids, a
 gravity column, plastic tension and geometric nonlinear tension. The Results

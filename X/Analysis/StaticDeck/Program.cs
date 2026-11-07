@@ -18,7 +18,8 @@ public sealed record GravitySpec(string Name,string ElementSet,string[] Accelera
 public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIncrement,double MinimumTimeIncrement,
     double MaximumTimeIncrement,int MaximumIncrements,int OutputFrequency,ConstraintSpec[] Constraints,ForceSpec[] Loads,
     string[] NodalHistorySets,string[] ElementHistorySets,bool NonlinearGeometry=false,
-    PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null);
+    PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null,
+    string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
     string? PyramidConversion = null);
 
@@ -52,7 +53,7 @@ public static class AnalysisFiles
 
     // This is tool configuration that constructs original engineering objects,
     // not a replacement FeModel or a selected application persistence format.
-    public static (Material[] Materials,SolidSection[] Sections,StaticStep Step) Create(AnalysisSpec spec)
+    public static (Material[] Materials,SolidSection[] Sections,Step Step) Create(AnalysisSpec spec)
     {
         if(spec==null || spec.SchemaVersion!=1 || spec.Step==null || spec.Materials==null || spec.Sections==null)
             throw new InvalidDataException("Complete schema version 1 analysis tool definition required.");
@@ -95,10 +96,23 @@ public static class AnalysisFiles
             definition.Constraints.Length==0 || definition.Constraints.Length>1000 || definition.Loads.Length>1000 ||
             definition.NodalHistorySets.Length>100 || definition.ElementHistorySets.Length>100)
             throw new InvalidDataException("Complete bounded step arrays required.");
-        var step=new StaticStep(definition.Name){IncrementationType=IncrementationTypeEnum.Automatic,
+        Step step;
+        if(definition.Kind=="static") step=new StaticStep(definition.Name){IncrementationType=IncrementationTypeEnum.Automatic,
             TimePeriod=definition.TimePeriod,InitialTimeIncrement=definition.InitialTimeIncrement,
             MinTimeIncrement=definition.MinimumTimeIncrement,MaxTimeIncrement=definition.MaximumTimeIncrement,
             MaxIncrements=definition.MaximumIncrements,OutputFrequency=definition.OutputFrequency,Nlgeom=definition.NonlinearGeometry};
+        else if(definition.Kind is "frequency" or "buckling") {
+            if(definition.NonlinearGeometry || definition.Modes<1 || definition.Modes>1000 ||
+                definition.LowerFrequency.HasValue && (!double.IsFinite(definition.LowerFrequency.Value) || definition.LowerFrequency<0) ||
+                definition.UpperFrequency.HasValue && (!double.IsFinite(definition.UpperFrequency.Value) || definition.UpperFrequency<=0) ||
+                definition.LowerFrequency.HasValue && definition.UpperFrequency.HasValue && definition.LowerFrequency>=definition.UpperFrequency ||
+                !double.IsFinite(definition.BucklingAccuracy) || definition.BucklingAccuracy<=0)
+                throw new InvalidDataException("Valid original eigenmode controls and linear geometry are required.");
+            step=definition.Kind=="frequency"
+                ? new FrequencyStep(definition.Name){NumOfFrequencies=definition.Modes,LowerFrequency=definition.LowerFrequency??double.NaN,UpperFrequency=definition.UpperFrequency??double.NaN}
+                : new BuckleStep(definition.Name){NumOfBucklingFactors=definition.Modes,Accuracy=definition.BucklingAccuracy};
+            step.OutputFrequency=definition.OutputFrequency;
+        } else throw new InvalidDataException("Choose static, frequency or buckling analysis.");
         foreach(var value in definition.Constraints)
         {
             if(value==null || value.Displacements==null || value.Displacements.Length!=3)throw new InvalidDataException("Three displacement components required; null means free.");

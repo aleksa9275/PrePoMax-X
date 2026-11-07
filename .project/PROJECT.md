@@ -1,5 +1,11 @@
 # PrePoMax-X project charter
 
+2026-11-07 tasks 0092–0094 add original frequency/buckling solid workflows and
+result deformation/animation/history plots/table/CSV. [Evidence and scope](reports/eigenmodes-results-tools.md).
+This is three functional implementation milestones. Original algorithms and
+all remaining 3.0.0 functionality stay required; B007 search-shift behavior joins
+the documented post-parity backlog under D061.
+
 2026-11-06 sequencing decision D061: continue toward full original 3.0.0
 functionality first, then implement correctness fixes and improvements. The
 [deferred backlog](reports/deferred-correctness-improvements.md) records observed

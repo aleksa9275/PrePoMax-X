@@ -26,6 +26,14 @@ unrelated functional implementation.
 | Small identical-deck solver field differences | Latest native/original Windows comparisons: displacement values identical, maximum stress differences approximately 1e-12 to 1.41e-6 MPa. Earlier curved case has displacement differences about 2e-16. No engineering error established from these differences alone; precise cause unproved. | Investigate build/compiler/backend/arithmetic-order effects. Make a numerical change only if the cause and need are demonstrated; retain exact comparisons and existing accuracy bounds. |
 | Cross-platform CAD meshing differences | One six-body fixture: Mac 402 nodes/898 C3D4 elements, Linux ARM64 402/900. Both meet its analytical checks. Other curved CAD meshes also differ. Exact native mesh/deck/field parity remains open; positional result arrays from different meshes are not comparable. | Audit native dependencies, build options, ordering and supported reproducibility controls. Compare geometry and fields at common locations while diagnosing exact-mesh differences; no claim that these measures guarantee identical topology. |
 
+Additional finding, 7 November 2026: [B007](../bugs/B007-buckling-search-shift.md)
+records original buckling mode selection near its unit search shift. A tenfold
+reference-load increase omits the lower factor expected near 0.25661845; both
+native and original Windows solvers report 1.0216758 first. Post-parity proposal:
+review shift management and mode-selection/refinement with reference-load
+scaling and competing modes. No solver change or automatic load rescaling is
+made; D061's sequencing applies.
+
 Sources: [original element findings](shared-element-kernel.md),
 [B006](../bugs/B006-quadratic-pyramid-wedge-pressure.md),
 [latest native/original comparisons](nonlinear-loaded-solids.md),

@@ -49,6 +49,12 @@ An empty release API and lack of tags do not establish that stable 3.0.0 does no
 exist. Exact release/source correspondence remains a pending acceptance item.
 The existing replay pins and engineering reference remain explicit meanwhile.
 
+Tasks 0092–0094 connect ordinary solid frequency/buckling and deformation,
+frame/shape animation and original DAT history plot/table/CSV inspection.
+[Actual bounded coverage and remaining work](reports/eigenmodes-results-tools.md).
+B007's original search behavior is recorded and deferred under D061; full
+analysis/results functionality and every acceptance gate remain required.
+
 ## Current workflow coverage
 
 These are coverage boundaries, not a percentage estimate or an exhaustive list

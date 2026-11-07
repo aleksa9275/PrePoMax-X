@@ -19,7 +19,7 @@ InpMeshData Mesh()=>MeshFiles.Read(Path.Combine(AppContext.BaseDirectory,"cube-m
 AnalysisSpec Spec()=>AnalysisFiles.Read(Path.Combine(AppContext.BaseDirectory,"cube-analysis.json"));
 var baseline=AnalysisFiles.Create(Spec());
 string deck=StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,baseline.Sections,baseline.Step).Replace("\r\n","\n");
-void Invalid(string name,Action<Material[],SolidSection[],StaticStep> mutate)=>Check(name,()=>{var data=AnalysisFiles.Create(Spec());mutate(data.Materials,data.Sections,data.Step);Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),data.Materials,data.Sections,data.Step));});
+void Invalid(string name,Action<Material[],SolidSection[],StaticStep> mutate)=>Check(name,()=>{var data=AnalysisFiles.Create(Spec());mutate(data.Materials,data.Sections,(StaticStep)data.Step);Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),data.Materials,data.Sections,data.Step));});
 Check("complete deck has original analysis keywords in order",()=>{
     string[] names={"*Node\n","*Element,","*Material,","*Elastic\n","*Solid section,","*Step,","*Static\n","*Boundary\n","*Cload\n","*Output,","*Node print,","*El print,","*Node file\n","*El file\n","*End step\n"};
     int previous=-1;foreach(string keyword in names){int at=deck.IndexOf(keyword,StringComparison.Ordinal);Require(at>previous);previous=at;}

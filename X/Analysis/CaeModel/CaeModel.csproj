@@ -75,5 +75,9 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalGravityLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalGravityLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalPlastic.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalPlastic.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/FrequencyStep.cs" Link="Steps/FrequencyStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/BuckleStep.cs" Link="Steps/BuckleStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalFrequencyStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalFrequencyStep.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalBuckleStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalBuckleStep.cs" />
   </ItemGroup>
 </Project>

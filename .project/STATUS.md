@@ -1,5 +1,17 @@
 # Project status
 
+## Current — tasks 0092–0094: eigenmodes and result tools
+
+Original frequency/buckling solid calculations now connect to Configure…,
+native solving and mode/factor results. Deformation, undeformed outlines,
+frame/shape animation and original DAT history plots/tables/CSV are implemented.
+Mac/Linux ARM64 complete the combined workflow; original Windows solver
+comparisons agree. [Scope and evidence](reports/eigenmodes-results-tools.md).
+B007 records inherited buckling search-shift behavior; numerical fixes remain
+deferred with D029/B006 under D061. Source publication and copied Mac candidate
+verification are being recorded. Full remaining original functionality, PMX and
+four-target/release obligations remain open.
+
 Latest maintainer direction, D061: full PrePoMax 3.0.0 parity first, numerical
 fixes/improvements afterward. Continue original-functionality implementation;
 the proposed combined correctness increment is deferred. Findings and proposed
@@ -9,7 +21,7 @@ behavior, existing safeguards, explicit failures and all parity/release gates
 remain intact. This is a documentation-only sequencing update; task 0090's
 candidate and implementation remain current.
 
-## Current — task 0090: nonlinear and distributed-load solids
+## Prior — task 0090: nonlinear and distributed-load solids
 
 Original density/plastic hardening, pressure/gravity, geometric nonlinear static
 controls and increment/plastic-strain results now connect to native desktop

@@ -1,5 +1,14 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0092–0094 connect original frequency and linear buckling analysis,
+mode/factor results, deformation/outline/animation and original DAT history
+plot/table/CSV inspection. Read .project/reports/eigenmodes-results-tools.md and
+its receipt for actual checks/candidate/publication. B007 records inherited
+buckling search-shift mode omission; D061 defers this and D029/B006 fixes until
+full parity. Other eigen/modal/results/model/mesher functionality remains
+required. Preserve original algorithms/tolerances, D057/D058/D059/D060/D061 and
+all four-target/release obligations.
+
 2026-11-06 maintainer sequencing, D061: achieve full PrePoMax 3.0.0 parity
 first; implement numerical fixes and improvements afterward. Read
 .project/reports/deferred-correctness-improvements.md for recorded issues and

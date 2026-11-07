@@ -17,10 +17,10 @@ dotnet build X/Results/PrePoMaxX.Results.slnx -c Release --disable-build-servers
 dotnet X/Results/Inspect/bin/Release/net10.0/PrePoMaxX.InspectResults.dll inspect-frd .project/reports/windows-reference/solver/uniaxial.frd
 ```
 
-`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed linear/quadratic tetrahedron, wedge and hexahedron 3D static
+`CaeResults.FrdFileReader.ReadStaticSnapshot` reads completed linear/quadratic tetrahedron, wedge and hexahedron 3D static/frequency/buckling
 results, with one complete node block, one element block and full single-record-
 per-node fields. It supports the original ASCII and float/double binary formats,
-displacement, force, stress, total strain and stress-error fields. Vector/tensor
+displacement, force, stress, total strain, equivalent plastic strain and stress-error fields. Vector/tensor
 invariants use the original Field methods. NodeIdsInValueOrder explicitly maps
 component-array indices back to actual node IDs. File SHA256 and the raw unit
 header are retained; numeric quantities remain as stored, with no unit conversion
@@ -39,7 +39,7 @@ reordered full field records. The original complete-field decoder uses row order
 when node counts match, so the boundary checks node order before decoding rather
 than silently changing the original algorithm. Full FeResults preprocessing,
 part/material graph, full DAT history graph, partial nodal fields, continuation records,
-modal/complex/axisymmetric results and large-model capacity remain future work.
+complex/cyclic/axisymmetric results and large-model capacity remain future work.
 
 The new API serializes its own calls because the original parser has static
 state, restores caller culture after invariant parsing and detects changed input

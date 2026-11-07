@@ -223,7 +223,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.vtk.clicked.connect(self.pick)
         self.statusBar().showMessage("Original C# readers · native VTK · research candidate")
         self.addToolBarBreak()
-        jobbar = self.addToolBar("Static analysis")
+        jobbar = self.addToolBar("Mechanical analysis")
         self.export_mesh_action = jobbar.addAction("Export mesh…", self.export_mesh_dialog)
         self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
         self.add_set_action.setEnabled(False)
@@ -235,7 +235,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.cancel_action = jobbar.addAction("Cancel", self.cancel_operation)
         self.cancel_action.setEnabled(False)
         jobbar.addAction("Job files", self.open_job_directory)
-        self.job_label = QtWidgets.QLabel("Ready · static solid preview")
+        self.job_label = QtWidgets.QLabel("Ready · mechanical solid preview")
         jobbar.addWidget(self.job_label)
         dock = QtWidgets.QDockWidget("Job output", self)
         self.job_output = QtWidgets.QPlainTextEdit()
@@ -259,6 +259,8 @@ class Viewport(QtWidgets.QMainWindow):
         self.regions = CadRegions(self, toolbar, jobbar)
         from cad_operations import CadOperations
         self.operations = CadOperations(self, toolbar)
+        from results_tools import ResultsTools
+        self.result_tools=ResultsTools(self)
         self.update_model_tree()
 
     @property
@@ -314,8 +316,9 @@ class Viewport(QtWidgets.QMainWindow):
                 description=(f"Density {record.get('density','—')} · {len(record.get('plasticCurve') or [])} plastic rows" if tab==6
                     else record.get('nodeSet') or record.get('elementSet',''))
                 child=QtWidgets.QTreeWidgetItem(group,[record['name'],description]);child.setData(0,QtCore.Qt.ItemDataRole.UserRole,tab)
-        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
-        step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 5)
+        kind=self.definition['step'].get('kind','static')
+        step = QtWidgets.QTreeWidgetItem(root, [self.definition['step']['name'], f"{kind.title()} · {self.definition['step'].get('modes',10)} modes" if kind!='static' else 'Static · NLGEOM' if self.definition['step'].get('nonlinearGeometry') else 'Static step / output'])
+        step.setData(0, QtCore.Qt.ItemDataRole.UserRole, 9 if kind!='static' else 5)
         if self.cad_document is not None:
             self.populate_cad_tree(self.cad_document.scene["cad"])
         self.model_tree.expandToDepth(1)
@@ -529,7 +532,9 @@ class Viewport(QtWidgets.QMainWindow):
                 'Pressure-loaded solids':('pressure-solids.inp','pressure-solids.json'),
                 'Gravity-loaded column':('gravity-column.inp','gravity-column.json'),
                 'Plastic tension — yield and hardening':('plastic-tension.inp','plastic-tension.json'),
-                'Geometric nonlinear tension':('finite-tension.inp','finite-tension.json')}
+                'Geometric nonlinear tension':('finite-tension.inp','finite-tension.json'),
+                'Frequency — axial rod modes':('axial-frequency.inp','axial-frequency.json'),
+                'Buckling — cantilever column':('column-buckling.inp','column-buckling.json')}
             name,accepted=QtWidgets.QInputDialog.getItem(self,'Solve analytical example','Example',list(choices),0,False)
             if not accepted:return
             mesh_name,definition_name=choices[name]
@@ -556,7 +561,7 @@ class Viewport(QtWidgets.QMainWindow):
             self.job_output.setPlainText(str(error))
             if getattr(self, 'automated_workflow', False):
                 raise
-            QtWidgets.QMessageBox.critical(self, "Cannot start static analysis", str(error))
+            QtWidgets.QMessageBox.critical(self, "Cannot start analysis", str(error))
 
     def job_state(self, state):
         importing = self.cad_job is not None
@@ -574,7 +579,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.configure_action.setEnabled(not active and not cad and self.pmx_session is None)
         self.edit_pmx_action.setEnabled(not active and self.pmx_session is not None)
         self.export_mesh_action.setEnabled(not active and self.model_scene is not None)
-        self.run_action.setToolTip("Run the configured static analysis")
+        self.run_action.setToolTip("Run the configured mechanical analysis")
         self.add_set_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None)
         self.formulation_action.setEnabled(not active and self.model_scene is not None and self.pmx_session is None
                                           and bool(self.model_scene.get('elementBlocks')) and
@@ -924,7 +929,11 @@ class Viewport(QtWidgets.QMainWindow):
         self.frames.blockSignals(True);self.frames.clear()
         frame_ids=list(dict.fromkeys((f['stepId'],f['incrementId'],f['time']) for f in scene.get('fields',[])))
         for step,increment,time in frame_ids:
-            self.frames.addItem(f'Step {step} · increment {increment} · t={time:.9g}',(step,increment,time))
+            field=next(f for f in scene['fields'] if (f['stepId'],f['incrementId'],f['time'])==(step,increment,time))
+            kind=field.get('stepType','Static')
+            buckling_base=any(f['stepId']==step and f['stepType']=='Buckling' and f['time']==0 for f in scene['fields'])
+            label=f'Step {step} · mode {field.get("mode",increment)} · {time:.9g} Hz' if kind=='Frequency' else (f'Step {step} · reference load state' if time==0 else f'Step {step} · buckling mode {increment-int(buckling_base)} · factor {time:.9g}') if kind=='Buckling' else f'Step {step} · increment {increment} · t={time:.9g}'
+            self.frames.addItem(label,(step,increment,time))
         self.frames.setCurrentIndex(len(frame_ids)-1);self.frames.blockSignals(False)
         self.fields.blockSignals(False)
         self.scene, self.grid = scene, grid
@@ -938,6 +947,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.frame_action.setVisible(bool(frame_ids))
         self.results_toolbar.setVisible(bool(frame_ids))
         self.set_frame(self.frames.currentIndex())
+        self.result_tools.on_scene()
         self.regions.on_scene()
         self.fit()
         if cad:
@@ -945,6 +955,7 @@ class Viewport(QtWidgets.QMainWindow):
                                          f'{len(cad["edgeSegments"])} CAD edge segments · read-only')
         else:
             self.statusBar().showMessage(f'{len(nodes)} nodes · {len(scene["elements"])} elements · values as stored · undeformed')
+        self.result_tools.apply()
 
     def set_frame(self, index):
         if self.scene is None or not hasattr(self,'grid'):return
@@ -967,6 +978,7 @@ class Viewport(QtWidgets.QMainWindow):
         selected=next((i for i in range(1,self.fields.count()) if self.fields.itemText(i).split(' · ')[0]==previous),1 if self.fields.count()>1 else 0)
         self.fields.setCurrentIndex(selected);self.fields.blockSignals(False)
         self.grid.Modified();self.set_field(selected)
+        if hasattr(self,"result_tools"):self.result_tools.apply()
 
     def set_field(self, index):
         if self.scene is None:
@@ -1157,8 +1169,11 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--eigenmode-workflow-probe',type=Path,help='Exercise frequency, buckling, deformation, animation and original histories')
     parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.eigenmode_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe,args.nonlinear_workflow_probe]):
+        parser.error("Use --eigenmode-workflow-probe separately from other inputs/probes")
     if args.nonlinear_workflow_probe and any([args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,
             args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe,args.solid_workflow_probe]):
         parser.error('Use --nonlinear-workflow-probe separately from other inputs/probes')
@@ -1199,7 +1214,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1283,7 +1298,10 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
-    if args.nonlinear_workflow_probe:
+    if args.eigenmode_workflow_probe:
+        from eigenmode_workflow_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.eigenmode_workflow_probe.resolve()))
+    elif args.nonlinear_workflow_probe:
         from nonlinear_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.nonlinear_workflow_probe.resolve()))
     elif args.solid_workflow_probe:

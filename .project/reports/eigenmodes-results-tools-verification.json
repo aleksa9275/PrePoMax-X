@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "tasks": [
+    "0092",
+    "0093",
+    "0094"
+  ],
+  "scope": "Original ordinary solid frequency and buckling; deformation/animation/original histories presentation",
+  "verification": {
+    "sourceMac": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/source-gui/workflow.json",
+      "sha256": "2b6bbcb0c82192b041d59ece4a1c603921c62b381f3d1fb13a131d3edc55e709",
+      "success": true,
+      "checks": 63
+    },
+    "nativeLinux": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/linux/workflow-final/workflow.json",
+      "sha256": "e83364ee5ad72e5835fb89b86bda043d1682d3fabb3aeb759c4902b7ffacb05e",
+      "success": true,
+      "checks": 64
+    },
+    "linuxPmx": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/linux/pmx-regression/verification.json",
+      "sha256": "5bb637c2d1e782d5ec8f27959393221d99a82668fb29f60fb753b9957dfa56b1",
+      "success": true,
+      "checks": 17
+    }
+  },
+  "originalWindowsReference": {
+    "success": true,
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "frequency": {
+        "success": true,
+        "exitCode": 0,
+        "exactMeshEqual": true,
+        "inputSha256": "4e0957ac0e82844e29a39241f0fefc0f69ec1e53174695f1b031cfb89f9b52fc",
+        "modes": [
+          {
+            "increment": 1,
+            "nativeValue": 250.00005,
+            "referenceValue": 250.00005,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 0.0,
+              "STRESS": 3.637152324058702e-14,
+              "TOSTRAIN": 3.637152343908331e-14
+            }
+          },
+          {
+            "increment": 2,
+            "nativeValue": 463.1218,
+            "referenceValue": 463.1218,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 5.608660140513627e-15,
+              "STRESS": 1.914051364078406e-14,
+              "TOSTRAIN": 1.913905224162092e-14
+            }
+          },
+          {
+            "increment": 3,
+            "nativeValue": 750.01227,
+            "referenceValue": 750.01227,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 1.8136384018017564e-14,
+              "STRESS": 9.484650418965216e-14,
+              "TOSTRAIN": 9.492353078517045e-14
+            }
+          }
+        ]
+      },
+      "buckling": {
+        "success": true,
+        "exitCode": 0,
+        "exactMeshEqual": true,
+        "inputSha256": "348692b8cf9dd70a02b74183266828c4404908c159c51833c4b972b5dbfd076a",
+        "modes": [
+          {
+            "increment": 1,
+            "nativeValue": 0,
+            "referenceValue": 0,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 0.9999999999999999,
+            "referenceToNativeScale": 1.0000000000000027,
+            "rawFieldRelativeL2": {
+              "DISP": 1.6626695571250964e-10,
+              "STRESS": 7.475243554619396e-13,
+              "TOSTRAIN": 7.475245478424656e-13,
+              "FORC": 8.238456178042681e-13
+            }
+          },
+          {
+            "increment": 2,
+            "nativeValue": 2.5661845,
+            "referenceValue": 2.5661845,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 6.680606245892682e-13,
+              "STRESS": 1.0335924765181732e-11,
+              "TOSTRAIN": 1.0328680959280586e-11,
+              "FORC": 1.2915704091359844e-10
+            }
+          },
+          {
+            "increment": 3,
+            "nativeValue": 10.216758,
+            "referenceValue": 10.216758,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 4.702962126264511e-12,
+              "STRESS": 1.3685821963240848e-11,
+              "TOSTRAIN": 3.1727552818557144e-11,
+              "FORC": 6.0017356202361215e-09
+            }
+          },
+          {
+            "increment": 4,
+            "nativeValue": 22.811197,
+            "referenceValue": 22.811197,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 2.935710168706232e-11,
+              "STRESS": 2.8783558225128675e-09,
+              "TOSTRAIN": 1.0626831350817276e-10,
+              "FORC": 1.7489702893193036e-09
+            }
+          }
+        ]
+      },
+      "buckling-reference-load-1": {
+        "success": true,
+        "exitCode": 0,
+        "exactMeshEqual": true,
+        "inputSha256": "38ed06e5cd40869e358a90c63e712f3ec531098d79ec2fe9bbb95494d80455eb",
+        "modes": [
+          {
+            "increment": 1,
+            "nativeValue": 0,
+            "referenceValue": 0,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0000000000000027,
+            "rawFieldRelativeL2": {
+              "DISP": 1.3964353415415954e-10,
+              "STRESS": 6.61444712967581e-13,
+              "TOSTRAIN": 6.614422750787077e-13,
+              "FORC": 6.232155504167745e-13
+            }
+          },
+          {
+            "increment": 2,
+            "nativeValue": 1.0216758,
+            "referenceValue": 1.0216758,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 6.750535309215613e-12,
+              "STRESS": 7.737253934727247e-13,
+              "TOSTRAIN": 4.091319221181315e-12,
+              "FORC": 4.433387034449004e-12
+            }
+          },
+          {
+            "increment": 3,
+            "nativeValue": 2.2811198,
+            "referenceValue": 2.2811198,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 1.4626161013012303e-12,
+              "STRESS": 2.6291041261456978e-12,
+              "TOSTRAIN": 2.5989816131036904e-12,
+              "FORC": 3.7477461059458793e-11
+            }
+          },
+          {
+            "increment": 4,
+            "nativeValue": 6.18587,
+            "referenceValue": 6.18587,
+            "eigenvalueRelativeDifference": 0.0,
+            "shapeMAC": 1.0,
+            "referenceToNativeScale": 1.0,
+            "rawFieldRelativeL2": {
+              "DISP": 1.4756974686685214e-11,
+              "STRESS": 2.061304648914764e-12,
+              "TOSTRAIN": 2.0612664728298878e-12,
+              "FORC": 6.4011402259636025e-12
+            }
+          }
+        ]
+      }
+    },
+    "bounds": {
+      "eigenvalueRelative": 1e-05,
+      "displacementShapeMAC": 0.99999,
+      "rawFieldRelativeL2": 0.001
+    },
+    "normalization": "Original eigenvectors can differ by arbitrary nonzero amplitude/sign; compare MAC and raw component tensors after displacement-derived scalar alignment"
+  },
+  "engineering": {
+    "analysis": "/tmp/prepomaxx-task0092-0094-engineering-final/analysis-current.json",
+    "results": "/tmp/prepomaxx-task0092-0094-engineering-followup/results-current.json",
+    "execution": "/tmp/prepomaxx-task0092-0094-engineering-followup/execution-current.json",
+    "desktop": {
+      "passed": 52,
+      "log": "/tmp/prepomaxx-task0092-0094-evidence/desktop-tests-restored.log"
+    },
+    "ownership": {
+      "passed": 12,
+      "log": "/tmp/prepomaxx-task0092-0094-evidence/ownership.log"
+    },
+    "build": {
+      "passed": 9,
+      "log": "/tmp/prepomaxx-task0092-0094-evidence/build-tests.log"
+    }
+  },
+  "runtimeRestoration": {
+    "success": true,
+    "recovered": {
+      "cce212b911d13fb0ca36d339f658c9db1ff27a5a730cdddd5d0c6b2ec24c15b1": {
+        "name": "vtk",
+        "version": "9.5.2",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/5/1/b/c/b/51bcbf88c278872e3179cb0b2f42ed2285adbe6da8f6d00b56616944.body"
+      },
+      "a5e246f79eb80475e691bf93862cead98decd8a498cf53ba0516fcdc0f50dc1c": {
+        "name": "python-dateutil",
+        "version": "4.0.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/2/b/1/d/2/2b1d293c3d18b4323770d2cd4fd26b0d9830fd0996d25d67d5bf7d2c.body"
+      },
+      "1798e83840c3f627246104c4d8a9639c60fa068adf9ce92b61791781fa8a68c1": {
+        "name": "kiwisolver",
+        "version": "1.5.1",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/2/8/4/c/2/284c29dcab21d28ad4a3cfbad4d048a8bfdecfcf375a351875c0194b.body"
+      },
+      "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c": {
+        "name": "packaging",
+        "version": "26.3",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/b/1/1/9/0/b11909f451f61fb29636217082b1c638b177c59eac335e0200a136e6.body"
+      },
+      "ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4": {
+        "name": "pyparsing",
+        "version": "3.3.3",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/e/b/1/9/1/eb191316105c4d39809788cbc595af2313b33a8242498096126657d4.body"
+      },
+      "612a95a17655e213502f60cfb9bf9408efdc9eb1d5f50535cc6eb365d11b42b5": {
+        "name": "numpy",
+        "version": "2.3.5",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/e/f/b/e/e/efbeedf9185bb3769138c825366bd06bb7589b20daca8c7db6ad0f2d.body"
+      },
+      "ef31985c4dedb5f1424e1aec6849a47dd37689cb7fa3c20b1b82187f26806261": {
+        "name": "matplotlib",
+        "version": "3.11.2",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/3/8/7/3/b/3873b84e39e7d20b95f9132f69936b73cfa8253598a6948e85f9bf42.body"
+      },
+      "f265c85432c398d86f26add143423924a4747879b2dce001a3ffe0a5fed30638": {
+        "name": "fonttools",
+        "version": "4.68.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/3/9/0/8/1/390812e541526ff617f5e250eb2dafd6b79c559ae0b0326af2dabdf7.body"
+      },
+      "da1a8e350b927c281d4f155fb3b84859e6e8c04ea36fe159cf9b939ee957d151": {
+        "name": "pyqt6-sip",
+        "version": "13.13.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/d/7/d/9/c/d7d9c74507ea1e6e3eb2bb0987daa2f0480bbfcd6870bfc8ebce999c.body"
+      },
+      "6dda853a8db1b8d1a2ddbbe76cc6c3aa86614cad14056bd3c0435d8feea73b2d": {
+        "name": "pyqt6-qt6",
+        "version": "6.10.2",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/c/c/f/a/4/ccfa46d91c1da4fa81750d2ae8afe4e5f7a389c2a836b326ae6a9550.body"
+      },
+      "f3a22400bce1b0c701683820ac4f3b159cd301acab067c51c653e06961600597": {
+        "name": "altgraph",
+        "version": "0.17.5",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/f/4/6/e/d/f46ed0168bcb2441988d7fb52b24fec3186622495909717364141477.body"
+      },
+      "0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec": {
+        "name": "tzdata",
+        "version": "2026.6",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/6/e/9/5/e/6e95e98189bddf937993f3feb9469906abbc5e11ade1df01509091e4.body"
+      },
+      "85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30": {
+        "name": "cycler",
+        "version": "0.12.1",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/6/c/6/e/e/6c6eeaf6757edbde690577822daacaba826c2b12ce67b57b33e8021d.body"
+      },
+      "c76f3a5318164db7d9401132fc1b5364b784c613c93fa506e3b5e6d1bf353ec8": {
+        "name": "contourpy",
+        "version": "1.4.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/6/c/6/7/9/6c679b1748deb2e0a7d9b6c7138ad1b9a8106a6f4d3c6f1d087663e8.body"
+      },
+      "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2": {
+        "name": "setuptools",
+        "version": "84.2.1",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/6/f/5/8/3/6f58315105f89fee1362c31502969537488db877c79a9478a63bd668.body"
+      },
+      "da1a3fa8266e30f0ce7e97c6a54eefaae8edd1e5f86f3eb8b95457cae90265ea": {
+        "name": "macholib",
+        "version": "1.16.4",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/6/9/a/8/a/69a8a89ee1c946352b301e8201abc6c4f83979eaa6451e88e9153caa.body"
+      },
+      "fb3e67dd64122561724c48ad0366ac9e8c16e638b63bf7d85de03bf3fdbf06c3": {
+        "name": "pyinstaller-hooks-contrib",
+        "version": "2026.9",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/7/b/9/4/b/7b94b42fe7b6eb92e1bdae6f5850bf9451a99006d42e424adae08950.body"
+      },
+      "7fd1c785219a87ca747c21fa92f561b0d2926a7edc06d0a0fe37f3736e00bd7a": {
+        "name": "pyinstaller",
+        "version": "6.16.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/0/d/a/7/3/0da73fac3e072567ca7346178139f1194e39d10218d956862fce5d4f.body"
+      },
+      "71db6b4c1653045dacc1585c1b0d184004f0d7e694c7b34ac165ca70c0838082": {
+        "name": "pillow",
+        "version": "12.0.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/0/d/1/f/3/0d1f32c864dc418b9b10ab67c8640af0c7e11af4db98b42279d53ad8.body"
+      },
+      "0eb82f152a83a8ae39f7d3ba580829ff7c0e8179d19d70f396853c10c8ddc5ac": {
+        "name": "pyqt6",
+        "version": "6.10.0",
+        "cache": "/Users/aleksa/Library/Caches/pip/http-v2/9/1/a/7/0/91a708ce0ac48d36f3de21561b702be1f54917692550afd14f259bc9.body"
+      }
+    },
+    "missing": []
+  },
+  "openCorrectness": [
+    "D029 quadratic integration",
+    "D029 pyramid classification",
+    "B006 quadratic pyramid wedge pressure",
+    "B007 original buckling search-shift mode omission"
+  ],
+  "fullyNumericallyAccepted": false,
+  "candidate": {
+    "status": "pending"
+  },
+  "publication": {
+    "status": "pending",
+    "hostedCi": "Held under D058; skip CI on publication"
+  }
+}
