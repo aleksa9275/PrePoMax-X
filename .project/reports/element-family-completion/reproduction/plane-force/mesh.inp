@@ -1,0 +1,13 @@
+*Node,Nset=ALL
+1,0,0,0
+2,1,0,0
+3,1,1,0
+4,0,1,0
+*Element,Type=CPS4,Elset=BODY
+1,1,2,3,4
+*Nset,Nset=ROOT
+1,2
+*Nset,Nset=TIP
+3,4
+*Nset,Nset=SIDE
+1,4

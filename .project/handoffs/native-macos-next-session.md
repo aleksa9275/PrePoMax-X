@@ -1,5 +1,11 @@
 # Native macOS continuation — 3 November 2026
 
+**Current entry point — 8 November 2026:** read
+[current-next-session.md](current-next-session.md) first. The older checkpoint,
+"next task", stop/publication instructions and artifact paths below are retained
+as history; current AGENTS/decisions/handoff supersede them. Do not rebuild a
+removed historical preview or restart already delivered work from this file.
+
 ## Current retention update — task 0046 / D056
 
 Maintainer reports task 0044 seems to work and requests reclaiming unnecessary

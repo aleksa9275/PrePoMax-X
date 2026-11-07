@@ -1,5 +1,12 @@
 # PrePoMax-X contributor and agent instructions
 
+8 November 2026 continuation: start with .project/handoffs/current-next-session.md
+and .project/reports/full-completion-status.md. They consolidate the actual
+checkpoint, local artifact availability, remaining full-parity work and next
+recommended implementation boundary. Older handoffs/"current app" paths below
+are historical, not instructions to restart finished work or recreate pruned apps.
+The current handoff request is documentation only; no new feature is in progress.
+
 Tasks 0107–0110 connect discrete MASS/SPRING1/SPRING2/SPRINGA/GAPUNI, cross-family
 frequency/implicit/static workflows, owned imported-mesh transforms/renumbering/
 boundary extraction and original family PMX read/solve/exact-copy Save As. Read

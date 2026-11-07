@@ -1,5 +1,11 @@
 # Next session — native Windows reference validation
 
+**Current entry point — 8 November 2026:** read
+[current-next-session.md](current-next-session.md) first. The older checkpoint,
+"next task", stop/publication instructions and artifact paths below are retained
+as history; current AGENTS/decisions/handoff supersede them. Do not rebuild a
+removed historical preview or restart already delivered work from this file.
+
 2026-10-18 transfer checkpoint: original FRD/DAT implementation **62c7de1b**
 is verified on origin research; exact-commit pipeline #2960686368 passes five
 native x64 jobs. [Publication and preview-evidence method](../reports/results-publication.md)

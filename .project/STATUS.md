@@ -1,5 +1,11 @@
 # Project status
 
+8 November 2026: [current continuation handoff](handoffs/current-next-session.md) ·
+[full-completion assessment](reports/full-completion-status.md). The application
+is a usable preview with major parity/persistence/mesher/application/platform
+work still open. Historical sections record then-current artifact paths and next
+steps; use the current handoff for availability and continuation.
+
 ## Current — tasks 0107–0110: remaining element-family work areas
 
 Discrete sections/jobs, cross-family frequency/implicit/static calculations,
@@ -19,7 +25,7 @@ payloads are pruned after verification; about 4.99 GB measured space is reclaime
 
 
 
-## Current — tasks 0105/0106: shells, membranes, beams and trusses
+## Prior — tasks 0105/0106: shells, membranes, beams and trusses
 
 The next two element-family milestones connect original sections, rotations/
 moments, shell normal pressure, line sections and layered expanded results.
@@ -34,7 +40,7 @@ checks pass. Superseded generated payloads are pruned; evidence/models/jobs rema
 Next element-family milestone is discrete masses/springs/gaps, then mixed-family
 calculation breadth, meshing and full persistence/platform acceptance.
 
-## Current — tasks 0103/0104: plane and axisymmetric elements
+## Prior — tasks 0103/0104: plane and axisymmetric elements
 
 All 18 original CPS/CPE/CAX formulations connect configuration, thickness, edge
 pressure, native static solve, original fields/histories and export/reopen.
@@ -44,7 +50,7 @@ segment projection remain explicit diagnostics. [Scope and receipt](reports/plan
 Existing candidate retained pending the requested shells/membranes and beams/
 trusses milestones. All full-parity/PMX/four-target/release gates remain.
 
-## Current — tasks 0101/0102: transient solid dynamics
+## Prior — tasks 0101/0102: transient solid dynamics
 
 Original implicit transient and stored-frequency-basis modal transient dynamics
 now connect desktop controls/damping, frozen native jobs, original velocity/

@@ -1,5 +1,11 @@
 # Native CAD continuation — 7 November 2026
 
+**Current entry point — 8 November 2026:** read
+[current-next-session.md](current-next-session.md) first. The older checkpoint,
+"next task", stop/publication instructions and artifact paths below are retained
+as history; current AGENTS/decisions/handoff supersede them. Do not rebuild a
+removed historical preview or restart already delivered work from this file.
+
 Tasks 0101/0102 add original implicit and stored-basis modal transient dynamics.
 Read [the report](../reports/transient-dynamics-workflow.md) and its receipt for
 actual verification/publication/candidate status. Source native Mac/Linux ARM64

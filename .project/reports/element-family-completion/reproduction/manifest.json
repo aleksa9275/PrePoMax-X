@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-11-08",
+  "files": [
+    {
+      "path": "shell-tension/capture.py",
+      "sha256": "8f0c2097113f91fb7b7960f248fe6447f1a899a2ff6daac77a1e794f19c16122",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "shell-tension/source.inp",
+      "sha256": "7a941983aace866c9891fb9ff462d47019241bb474ec940fcf97cdadaf860ef7",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "mixed-solids/capture.py",
+      "sha256": "8f0c2097113f91fb7b7960f248fe6447f1a899a2ff6daac77a1e794f19c16122",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "mixed-solids/source.inp",
+      "sha256": "447289162cc1f317018a89e67285d446e7f3f768dddf4d340dbbad8f0c3c4bc7",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "plane-force/capture.py",
+      "sha256": "55f63dd01d21e87775e4ebb41992a5e846fda6cd8ed9b3a2684c51f1f1512273",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "plane-force/mesh.inp",
+      "sha256": "ca9fc1125cd039d01cb72a6ea36cff25b5e24d81c61cd6aa3bd578c2db990eec",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "strain-force/capture.py",
+      "sha256": "90f760e2f5453b5d134525edda40cb41385e655ccdcec5ef7bf2f7ffc7c1d7bb",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "strain-force/mesh.inp",
+      "sha256": "dd1f92a6a6c1ac3230d66b3d40cfdd1a46025d75b82287162e2d4489f5eb0658",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "axis-prescribed/capture.py",
+      "sha256": "fd7014f7357c32e76c798fa473d804635be3394149e25f1fcf01b1e25a5d190d",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "axis-prescribed/mesh.inp",
+      "sha256": "7755cb7208118f3e571761b973a30bd3b57e3b2c5ad731db2bfa4a11ed51125b",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "membrane-api/capture.py",
+      "sha256": "46439d12310c2d027a5f1e451e01ce9cc4ed790d173ab2a494860136ba9f265d",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    },
+    {
+      "path": "membrane-api/mesh.inp",
+      "sha256": "a8b501bce005f4a6a68344026c6be92be399cb52d686268ea0695f23a987ae2f",
+      "origin": "Public synthetic task0107\u20130110 original-app capture input; no user model"
+    }
+  ],
+  "originalArchiveRecord": "../../pmx-3.0.0-reference/official-archive.json",
+  "originalPmxBinariesIncluded": false,
+  "userModelsIncluded": false
+}

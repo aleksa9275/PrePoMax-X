@@ -71,26 +71,31 @@ into the shared application; preserve intentional upstream behavior and units.
 
 | Area | Verified bounded coverage | Remaining parity work |
 |---|---|---|
-| Mesh input/decks | Original INP reader, IDs, bounded mesh export and all original mechanical 3D solid formulation choices for static decks, with the recorded nonlinear/distributed-load increment, including mixed meshes and explicit pyramid conversions; solver nodes use original CalNode formatting, exchange retains G17 | Full import/export/model graph and supported element/analysis combinations |
-| Materials/analysis editing | Model tree/Qt editor for original static-solid units/materials/sections/supports/nodal loads/step controls, plus density/plastic hardening, pressure/gravity, geometric nonlinearity and increment/plastic-strain results; original C# validation and real edited solve, plus session set creation from IDs or a picked ID and CAD face/part region multi-selection | Arbitrary mesh multi-pick, set replacement/deletion, broader assignments/materials/loads/steps and full original model operations |
-| Native solve | Mac ARM64/Linux x64 analytical static cube; Mac/Linux ARM64 mixed original mechanical 3D solid static workflows; desktop start/cancel/status | Analysis/backend breadth, capacity/performance and native other-target acceptance |
-| Visualization | INP/C3D8/C3D4 FRD, contours, original IDs/values; opt-in direct Mac child-view proof | Full vtkControl pipeline, clipping/highlighting, deformation, input/DPI/performance and other native desktops |
-| Results/history | Original bounded 3D solid static FRD fields/invariants and original collapsed-pyramid restoration and static-shaped DAT histories | Full original results orchestration, shell/dynamic outputs and interactive histories |
-| Persistence | Mac/Linux ARM64 checked C3D8 and one-part CAD/C3D4 PMX open/edit/save/reopen/solve, with original-app readback and immutable PMX jobs. Tasks 0071–0073 add Poisson's ratio/density, signed vector forces and compatible existing named-region reassignment, with exact original-export/native decoded fields | New native-session serialization and the full project/results/history corpus under D057 |
-| CAD/meshing | Original custom Netgen/OCCT import, linear meshing, CAD regions and static results on Mac/Linux ARM64. Tasks 0074–0077 add selected-part translation, plane split, controlled ShapeFix repair and STEP export/reopen, with three-body edited remesh/analytical solve and frozen recipes. Tasks 0078–0080 add bounded owned CAD undo/redo, axis-angle rotation and all-body STEP export with native solid correspondence. Tasks 0081–0083 add mirror, positive uniform/non-uniform scale and translated/rotated copies with six-solid analytical workflow and frozen outputs. Tasks 0084–0086 add native C3D10 mesh transport; tasks 0087/0088 connect original configuration, native static calculations, ten-node results and export/reopen with full midside topology | Native x64 deferred to Windows/Podman (D059), strict visualization and edited-deck/field byte differences, new native-session PMX persistence, broad CAD/defective repair, remaining meshers and Windows behavior |
-| Automation | Existing upstream API/gateway/journal investigated | Portable scripting, command history/replay and MCP workflow parity |
-| Engineering correctness | Strict accepted-scope checks retained; tasks 0087/0088 verify native C3D10 force-driven/curved static calculations independently of PrePoMax measurement | Both known element failures and quadratic-tetrahedron measurement gate remain; general curved quality and full calculation parity are open |
-| Distribution | Internal ad-hoc Mac DMG, native Linux archive and Ubuntu 24.04 installer proof; shared four-RID hosts | Native Windows installer, Linux distro coverage and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
+| Mesh input/decks | Original bounded INP parsing/export, original mechanical solid formulations/conversions, imported CPS/CPE/CAX, shell/membrane, beam/truss and discrete MASS/SPRING/GAP workflows with preserved IDs/connectivity | Full original import/export/model graph, every alias/combination and original mesh-operation semantics |
+| Materials/analysis editing | Original C# validation through model tree/Qt controls for reported static/nonlinear, mechanical/thermal/dynamic controls, sections/layers, supports/forces/moments/pressure/gravity, amplitudes, regions and outputs | Full original materials/orientations, constraints/contact/interactions, fields/loads/controls, assignments and supported calculation combinations |
+| Native solve | Real Mac/Linux ARM64 solid/plane/axisymmetric/shell/line/discrete representative workflows, frozen jobs, cancellation/status; historical native x64 subset evidence | Complete calculation/backend/capacity/performance coverage and current native Windows/Linux x64 application acceptance; B009 remains explicit |
+| Visualization | Both copied Mac viewport transports, original IDs/scalars, CAD regions, reported deformation/outline/frame/mode animation and actual Cocoa screen/picking/resize | Complete original rendering/selection/clipping/highlighting/editing tools and full native desktop/DPI/performance acceptance |
+| Results/history | Original bounded FRD mesh/fields/invariants including shell/layer/line transport, thermal/velocity/energy fields and original DAT time histories with plots/tables/CSV in the reported workflows | Full original results graph/tools/output families, mode-history tables and persistence/orchestration, all supported original result combinations |
+| Persistence | Restricted editable original C3D8 and CAD/C3D4 PMX contracts; broader static-family PMX read/solve/exact-byte Save As, native reopen and original-app readback | New native-session original-compatible serialization, broader graph editing, result/history/command persistence and the full accepted-version corpus under D057 |
+| CAD/meshing | Original custom Netgen/OCCT import; reported selected CAD transforms/copies/split/repair/history/STEP exchange; native C3D4/C3D10 tetrahedral meshing and regions; imported-mesh transforms/renumbering/exterior boundary extraction and undo/redo | Remaining original meshers/backends/setup/controls and surface/line/structured/extruded/revolved/refinement tools, general CAD/repair, full native persistence, exact mesher reproducibility and Windows/x64 behavior |
+| Automation | Original API/gateway/journal inspected; internal native workflow probes exercise delivered boundaries | Portable original scripting/API/MCP, command history/replay and full automation/application parity |
+| Engineering correctness | Original algorithms/tolerances and strict recorded checks; independent/reference comparisons within declared workflows; zero-exit explicit solver-error handling repaired | D029/B006/B007/B008/B009 and thermal/axisymmetric findings, original T2D3 refusal, general quality/numerical/combination acceptance; improvements follow functional parity under D061 |
+| Distribution | Shared four-RID hosts, current internal ad-hoc Mac ARM64 app, earlier Linux archive/Ubuntu installer proofs | Full native four-target/physical desktop/clean-machine install-upgrade-uninstall acceptance, Windows/Linux package breadth, Homebrew, Mac signing/notarization, corresponding sources/notices and stable release/source identity |
 
 Tasks 0103/0104 add the connected plane stress/strain and axisymmetric static
 workflows for all original triangle/quad formulations. [Scope, diagnostics and
-actual checks](reports/plane-axisymmetric-workflow.md). Shells, beams, other
-family/calculation combinations, mesh authoring and full PMX remain required.
+actual checks](reports/plane-axisymmetric-workflow.md). Subsequent increments
+connect shells/beams and discrete elements; broader family/calculation
+combinations, mesh authoring and full PMX remain required.
 
 Tasks 0105/0106 add imported shell/membrane/beam/truss static workflows,
 rotations/moments and original layered/expanded results. [Actual scope and B008
 diagnostics](reports/structural-elements-workflow.md). Full element-family,
 material/orientation/calculation/mesher/PMX and platform acceptance remains open.
+
+For the consolidated remaining requirements and a candid completion assessment,
+read [full-completion-status.md](reports/full-completion-status.md). No percentage
+is inferred from the number of tasks or workflow checks.
 
 ## Future release cadence
 

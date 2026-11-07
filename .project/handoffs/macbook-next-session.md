@@ -1,5 +1,11 @@
 # MacBook continuation — start here
 
+**Current entry point — 8 November 2026:** read
+[current-next-session.md](current-next-session.md) first. The older checkpoint,
+"next task", stop/publication instructions and artifact paths below are retained
+as history; current AGENTS/decisions/handoff supersede them. Do not rebuild a
+removed historical preview or restart already delivered work from this file.
+
 2026-10-18 published results checkpoint: **62c7de1b**, exact-commit pipeline
 **#2960686368 passes all five native x64 jobs**. Three FRD/DAT result previews
 verify clean SHA and matching ten source/tool/dependency/engineering groups with

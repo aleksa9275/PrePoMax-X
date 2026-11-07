@@ -1,5 +1,14 @@
 # Dependency-aware roadmap
 
+8 November 2026: use the [current handoff](handoffs/current-next-session.md) and
+[full-completion assessment](reports/full-completion-status.md) for the present
+checkpoint and remaining work. The earlier next-step paragraphs below are a
+historical sequence. Native solver/desktop/CAD and multiple element/calculation
+workflows are now delivered; do not restart those feasibility tasks. Prioritize
+new-native-session original PMX ownership/save/reopen, remaining original
+mesher/model/calculation/application breadth and the final acceptance matrix.
+D057–D061 remain; this handoff records a recommendation, not feature work started.
+
 2026-11-06 D060: finish **identical 3.0.0 functionality, all mesh types and all
 calculations, except unavailable solvers**. Keep intermediate preview limits
 out of the final acceptance definition. Tasks 0087/0088 close the blanket C3D10
