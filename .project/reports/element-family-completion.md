@@ -149,5 +149,32 @@ tests and three PMX topology/enum transport tests pass. Initial build/test setup
 failures and raw logs remain in the receipt; missing historical binaries and
 headless Mac OpenGL were corrected as test setup, not passed over.
 
-Candidate packaging, copied-app checks, publication and one-candidate cleanup
-are recorded below and in the receipt once actually completed.
+Implementation **1580fa9c2405c4652374eeb664df963a22acd078** is committed, pushed
+and exact-remote verified on origin/research/native-feasibility with CI skipped.
+The retained internal preview is
+`/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app`; its sibling
+`Native CAD Preview.command` uses the existing native CAD runtime. Use Solve
+example… for the new families, Configure → Mass / spring / gap for their section
+controls and Edit mesh… for imported-mesh authoring.
+
+Both copied viewports complete all 135 new-family checks and 58 family-PMX checks.
+Copied prior regressions pass: structural 164, plane 87, dynamics 86, thermal 132,
+thermomechanical 84, eigenmode 64, nonlinear 70 and existing PMX 17. Actual Cocoa
+screen rendering, original-ID/scalar picking and resize pass ten checks on the
+mass/spring mode result. Representative actual screenshots are visually inspected.
+All **2521 payload file hashes**, **2276 symlinks**, exact code identity, empty
+source patch and ad-hoc signature verify. The package's dirty flag comes only
+from the four pre-existing Finder files; no changed code is bundled.
+
+The task0106 app, duplicate new dist/build/host/cache payloads and this session's
+extracted original Windows reference app are pruned after verification. Source,
+models, jobs, raw reference outputs, screenshots, metadata and shared solver/
+Python/.NET/PMX/Podman caches remain. Installed user app/state are untouched. The
+retained candidate is rehashed and signature-verified after cleanup. About 5.58 GB
+logical data is removed, with about 4.99 GB measured free-space gain. Generated
+older CAD launchers forward to the current candidate. The reusable original ZIP
+remains; historical extracted payloads need not be rebuilt merely because their
+paths occur in retained evidence.
+
+These delivered boundaries do not close the open work listed above or any
+D057–D061/full numerical/PMX/four-target/distribution/release gate.

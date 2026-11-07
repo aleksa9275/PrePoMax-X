@@ -11,6 +11,12 @@ signed-principal-invariant mismatch. Full milestone-8/new-native-session PMX
 writing, general original mesher/calculation breadth, Windows/Linux x64 and all
 D057–D061/full-parity/numerical/distribution/release gates remain open.
 [Actual scope, receipt and candidate](reports/element-family-completion.md).
+Code 1580fa9c is pushed and exact-remote verified with CI skipped. Current retained
+app: `/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app`, with sibling
+native CAD launcher. Both copied viewports, original-app PMX readback, prior
+regressions and actual Cocoa/source/payload/signature checks pass. Superseded
+payloads are pruned after verification; about 4.99 GB measured space is reclaimed.
+
 
 
 ## Current — tasks 0105/0106: shells, membranes, beams and trusses

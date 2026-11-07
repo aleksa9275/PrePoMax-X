@@ -9,6 +9,11 @@ PMX writing, general original mesher/tool/calculation breadth and all four-targe
 release acceptance remain open. Preserve B009 modal-beam crash and signed-principal
 tie comparison, B008/T2D3 and all prior D029/B006/B007/thermal/axisymmetric findings.
 No numerical fix, existing tolerance change or solver exception. D057–D061 remain.
+Code 1580fa9c is published/remote-verified with CI skipped. Current candidate:
+/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app. Both copied
+viewports, original family PMX readback, prior regressions, actual Cocoa picking
+and source/payload/signature checks pass within the recorded boundaries. Older
+generated payloads are pruned; evidence/models/jobs/shared caches remain.
 
 
 Tasks 0105/0106 connect original shell/membrane and beam/truss imported-mesh static

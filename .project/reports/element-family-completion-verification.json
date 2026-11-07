@@ -92,7 +92,109 @@
     },
     "finalPmxContracts": {
       "path": "/tmp/prepomaxx-task0107-0110-evidence/pmx-final-contracts.json",
-      "passed": 6
+      "passed": 6,
+      "source": "Tightened check-only/incrementation/distribution/phase guards compiled and verified on both available native hosts"
+    },
+    "linuxFinalFamily": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/linux/workflow-final/workflow.json",
+      "sha256": "c98aadadafe9dcee043746918d6beac1f60b2c116ca5d4d936ec6f7d94fcc86b",
+      "success": true,
+      "checks": 135
+    },
+    "linuxFinalPmx": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/linux/pmx-workflow-final/workflow.json",
+      "sha256": "05333a8174ee3dd489bb4826bed3ac816adce50311e077fe7f2e8f91bcda8de8",
+      "success": true,
+      "checks": 58
+    },
+    "actualCocoaScreenPickingResize": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/cocoa-visible/verification.json",
+      "sha256": "c5789e3c7a0141bb15bdf33cdbc2514a60971d674bf2b5776ed2e220852248ef",
+      "success": true,
+      "checks": 10
+    },
+    "oldPmxRegression": {
+      "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/pmx-regression/verification.json",
+      "sha256": "f1ef75b8391104cb0dc606eaee3a0af38e072456ad3e4c484ff6fe2b8eab9b65",
+      "success": true,
+      "checks": 17
+    },
+    "copiedCandidateWorkflows": {
+      "bridge": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/bridge/workflow.json",
+        "sha256": "a891c5dec09aeefab6141abea9a80bb50ccff174afc50001d37864d4631d2faf",
+        "success": true,
+        "checks": 135
+      },
+      "cocoa": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/cocoa/workflow.json",
+        "sha256": "a8b1c87316d0bf09ebfbdfa38209b88203b80d5d048249a259ec2f62bc7942df",
+        "success": true,
+        "checks": 135
+      },
+      "cocoa-pmx-family": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/cocoa-pmx-family/workflow.json",
+        "sha256": "1ec2f1082bdb8e693107f59ad49c230cc660d32f21683f564aa8528c195b51a6",
+        "success": true,
+        "checks": 58
+      },
+      "dynamics-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/dynamics-regression/workflow.json",
+        "sha256": "61720cd702d83ebf20c5ef86a78b6df13698c50f3bc0009a07382946848864e6",
+        "success": true,
+        "checks": 86
+      },
+      "eigenmode-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/eigenmode-regression/workflow.json",
+        "sha256": "99a5bc2435ae57e6f6f86e357df6701776487a34f281c5373546e637c43b7526",
+        "success": true,
+        "checks": 64
+      },
+      "nonlinear-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/nonlinear-regression/workflow.json",
+        "sha256": "a2993cd4dec683c3b6bd4353abd1dfd0aeb063467db970a524b3acc9cbae8018",
+        "success": true,
+        "checks": 70
+      },
+      "plane-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/plane-regression/workflow.json",
+        "sha256": "ecde6077ff0b26bacc53fe40c92854070edfd13e3a1702e001b75df5f625f816",
+        "success": true,
+        "checks": 87
+      },
+      "pmx-family": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/pmx-family/workflow.json",
+        "sha256": "5cb0f4f72f572ec934ce5e7475de53851cc3057fd0f2c65ab4025a46900fccb8",
+        "success": true,
+        "checks": 58
+      },
+      "structural-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/structural-regression/workflow.json",
+        "sha256": "65d6c1250893f32a348625d855894bb71472d3d1618a74c0aac89e2fac6f764c",
+        "success": true,
+        "checks": 164
+      },
+      "thermal-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/thermal-regression/workflow.json",
+        "sha256": "f73e229e93961d816d1b69a90f7896909d13fe4f86280e7e77d0a7611251c0da",
+        "success": true,
+        "checks": 132
+      },
+      "thermomechanical-regression": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/copied/thermomechanical-regression/workflow.json",
+        "sha256": "6b85aba2f9350d4633c5db006278758033f2caa3df82034830ec316a0127d720",
+        "success": true,
+        "checks": 84
+      }
+    },
+    "finalLayout": {
+      "log": "/tmp/prepomaxx-task0107-0110-evidence/layout-final.log",
+      "passed": 12,
+      "reviewedSourceIdentities": 228
+    },
+    "pmxTransportTestsFinal": {
+      "log": "/tmp/prepomaxx-task0107-0110-evidence/pmx-family-tests-final.log",
+      "passed": 3
     }
   },
   "diagnostics": {
@@ -105,7 +207,12 @@
       "resolved": false,
       "signedPrincipalComparisonPassed": false,
       "signedPrincipalDifference": 3.0097802e-06,
-      "boundUnchanged": true
+      "boundUnchanged": true,
+      "userCrashReport": {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/B009-user-crash.txt",
+        "sha256": "ddead86b28eb0d13eb33bd3b66af298f4f8bc57e22df1c9299cffcd8c1612c18",
+        "symbolLookup": "/tmp/prepomaxx-task0107-0110-evidence/windows-modal/symbols.log"
+      }
     },
     "priorFindingsPreserved": [
       "D029",
@@ -128,13 +235,137 @@
     "Original modal crash probes and final debugger timeout retained; no numerical workaround or false pass"
   ],
   "candidate": {
-    "state": "pending build and copied verification",
-    "plannedPath": "/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app",
-    "supersedesOnlyAfterVerification": "/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app"
+    "success": true,
+    "files": 2521,
+    "symlinks": 2276,
+    "sourceIdentity": {
+      "viewportSha256": "7af1fc6d1c6e722a7ad73a172c6a663cd74353d606498a6c813dce7df07a207b",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "2e12c2012831557ac7f5ff42164884706d607d5c2c00722b81be9c5a2eb977bf",
+      "solidFormulationsSha256": "5e00d8fa0596761413681893a5e20a07789d19fd269c81427287945f42f7abe1",
+      "solidWorkflowProbeSha256": "582d4c44706ea2a9625852f144891e8f53bb4db717c5cf394e42196c50c33bca",
+      "resultsToolsSha256": "6828393597b9ef04f5fdf737a1c5bafa6a8a03722be93775d107cafa87e089e3",
+      "thermalWorkflowProbeSha256": "d12a2e1cfdc21ee7c014773ef899d09c762285327ba67448d886df4979e4d803",
+      "thermalWorkflowFixturesSha256": "4abdbb28f2511dfb286f936ca6836ffc635e966e4ffceb424f99d521196e9311",
+      "thermomechanicalWorkflowProbeSha256": "3786412ec3ce93715d91680f698fa1f0d81a9474969093bd3d8704a70a6038cb",
+      "thermomechanicalWorkflowFixturesSha256": "c9cd69de29f6012f75dae7271baf2a257a84e7e8013cea1149cd79fc6032586b",
+      "structuralWorkflowProbeSha256": "ccabb77e0cc560fe3320c15bc4c3148213e6581cbe54156d3d56e816646bba0c",
+      "structuralWorkflowFixturesSha256": "894108eba601f8240983530c7734dc29d9a8c5b0b8d33eac2676678f784205a4",
+      "planeWorkflowProbeSha256": "aa6c00019c9ca3a2584e4393389deb0760415a3b900543ba6eefd7e3e89d7f78",
+      "planeWorkflowFixturesSha256": "08b9f67cee2c7068343c49fb07bd96cb97949f3a24b5bfa1ec7f8fc06c325fd0",
+      "dynamicsWorkflowProbeSha256": "8c61dd259491043cd785a56995992adbdd9975e23d5c55648da1ba2a4380f65b",
+      "dynamicsWorkflowFixturesSha256": "ae4aac4f4d0b83d18333a20ea0798f9bcca8fec7a3af603b521a039c1c1b503d",
+      "eigenmodeWorkflowProbeSha256": "1c71fe1c865961baeb72cb47b79b983b3455d697e9ba125759cfd6c0962a92bb",
+      "nonlinearWorkflowProbeSha256": "6a49d60700ab3381154188a0175fd9f4b69fc0d4655bbaea294b89b1e6d5fc4c",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+      "cadJobSha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2",
+      "cadDocumentSha256": "42f34c050938f756e02f3eb1ad88422092766591fed9b0383201086ded826e1d",
+      "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+      "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+      "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+      "quadraticProbeSha256": "67e59829cd17a386b2d0854c554e5508241bc5e0d3550f45daace0e7875487c0",
+      "quadraticAnalysisSha256": "d292c0193842b8490e4efd9723884b873344e1b30228e3142d22985e3cd1f8ed",
+      "meshExportSha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953",
+      "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+      "cadRegionsSha256": "b2b82ee7dd9d097843cb6964eac7ea4da7c0eb283cd68891ad6fcd2574954420",
+      "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+      "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+      "desktopJobsSha256": "a31ca720dcbdaba1f0c8a62eeca9448bb478f2c8b64abd499ed0909963493e22",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "1580fa9c2405c4652374eeb664df963a22acd078",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "e6f251bbb9d8879db28d4a4e643a24433b2ada4224d0f822c42049511c7b1f81",
+      "pmxToolHashes": {
+        "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+        "inspect-family-project.py": "6c9310a8741e078708ccdb55c42c59e190d68a47edb42f8902b9cf28966d255d",
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+        "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+        "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    },
+    "emptySourcePatch": true,
+    "changedCode": [],
+    "signatureVerified": true,
+    "candidate": "/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app",
+    "state": "built, copied, verified and retained",
+    "packageMetadata": "/tmp/prepomaxx-task0110-package",
+    "transportDefaultUnchanged": "frame-bridge; native-cocoa remains opt-in",
+    "internalAdhocPreviewOnly": true
   },
   "publication": {
-    "state": "pending reviewed checkpoint",
+    "state": "code committed, pushed and exact remote SHA verified",
     "branch": "research/native-feasibility",
-    "ciSkipped": true
-  }
+    "remote": "origin",
+    "codeCommit": "1580fa9c2405c4652374eeb664df963a22acd078",
+    "ciSkipped": true,
+    "masterMainReleaseUnchanged": true,
+    "closingEvidence": "Following documentation-only checkpoint; actual final remote verification retained in evidence root"
+  },
+  "cleanup": {
+    "success": true,
+    "removed": [
+      {
+        "path": "/tmp/prepomaxx-task0106-current-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1157411423,
+        "files": 2494
+      },
+      {
+        "path": "/tmp/prepomaxx-task0110-package/dist",
+        "logicalBytes": 2288271997,
+        "files": 5020
+      },
+      {
+        "path": "/tmp/prepomaxx-task0110-package/build",
+        "logicalBytes": 21404917,
+        "files": 16
+      },
+      {
+        "path": "/tmp/prepomaxx-task0110-package/hosts",
+        "logicalBytes": 622323041,
+        "files": 1433
+      },
+      {
+        "path": "/tmp/prepomaxx-task0110-package/pyinstaller-cache",
+        "logicalBytes": 950990907,
+        "files": 790
+      },
+      {
+        "path": "/tmp/prepomaxx-task0107-0110-evidence/pmx-original/app",
+        "logicalBytes": 541414376,
+        "files": 1588
+      }
+    ],
+    "logicalBytesRemoved": 5581816661,
+    "measuredFreeSpaceGainBytes": 4991311872,
+    "forwardedLaunchers": [
+      "/tmp/prepomaxx-task0106-delivery/Native CAD Preview.command",
+      "/tmp/prepomaxx-task0106-current-delivery/Native CAD Preview.command",
+      "/tmp/prepomaxx-task0102-delivery/Native CAD Preview.command",
+      "/tmp/prepomaxx-task0106-final-delivery/Native CAD Preview.command"
+    ],
+    "retainedCandidate": "/tmp/prepomaxx-task0110-current-delivery/PrePoMax-X Preview.app",
+    "retainedCandidateFilesVerified": 2521,
+    "retainedCandidateSymlinksVerified": 2276,
+    "sourceAndEvidenceAndJobsAndSharedCachesPreserved": true,
+    "installedUserAppAndStateUntouched": true,
+    "sourceIdentity": "1580fa9c2405c4652374eeb664df963a22acd078",
+    "signatureReverified": true
+  },
+  "linuxInitialState": "stopped",
+  "linuxFinalState": "stopped",
+  "linuxStateEvidence": "/tmp/prepomaxx-task0107-0110-evidence/linux/stop-after.log",
+  "remainingMilestoneWork": [
+    "General original mesh authoring/backends/tools, beyond imported transforms and complete boundary extraction",
+    "Other original calculation/material/orientation/interaction/result combinations and existing accuracy issues",
+    "New native-session PMX serialization and editing of the broader family graphs, result-bearing/general PMX corpus",
+    "Native Windows x64 and Linux x64 acceptance, physical Linux displays and remaining four-target packaging/release gates"
+  ],
+  "successScope": "Delivered workflow and transport checks pass. This is not full milestone-8, numerical, original-functionality, PMX, platform or release acceptance."
 }
