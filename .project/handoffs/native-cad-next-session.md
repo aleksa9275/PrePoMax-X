@@ -1,10 +1,17 @@
-# Native CAD continuation — 6 November 2026
+# Native CAD continuation — 7 November 2026
 
 Tasks 0101/0102 add original implicit and stored-basis modal transient dynamics.
 Read [the report](../reports/transient-dynamics-workflow.md) and its receipt for
 actual verification/publication/candidate status. Source native Mac/Linux ARM64
-and identical-deck original Windows solver checks pass. Candidate packaging is
-pending at this source checkpoint. Keep D029/B006/B007/coarse-conductivity
+and identical-deck original Windows solver checks pass. Source `60471505` and playback repair `57e19d2c` are pushed/remote-verified with
+CI skipped. Retained app: `/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app`,
+with sibling native CAD launcher. Both copied viewports and thermal/
+thermomechanical/eigenmode/nonlinear/PMX regressions pass. Actual Cocoa screen/
+picking, exact source/payload/empty-patch/signature checks pass. Old task 0100
+and initial task 0102 copies and duplicate payloads are pruned; shared tools,
+models/jobs/evidence and installed user state remain. The Linux VM is restored
+to its initial stopped state. Modal animation stays within its selected original
+step; initial visual failure and repair evidence are retained. Keep D029/B006/B007/coarse-conductivity
 findings, D057–D061 and every full-parity/PMX/four-target/release obligation.
 
 Tasks 0098–0100 add original radiation/thermal tables, amplitudes and prescribed-

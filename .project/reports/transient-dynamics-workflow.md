@@ -75,8 +75,28 @@ frequencies and eigenvector MAC are checked separately from physical fields.
 This is not native Windows application acceptance. Linux x64 remains deferred
 under D059, hosted CI is skipped under D058. Affected engineering and desktop
 checks and candidate publication/verification are recorded in the
-[receipt](transient-dynamics-verification.json). Candidate packaging and copied
-viewport regressions are pending at this source checkpoint.
+[receipt](transient-dynamics-verification.json). Implementation `60471505` and final playback repair `57e19d2c` are pushed and
+remote-verified on origin/research/native-feasibility with CI explicitly skipped.
+Current Analysis/Results/Execution suites, 73 desktop regressions (including eight
+dynamics behaviors), 12 ownership guards and nine build guards pass. Initial
+closure/build and verifier-count failures remain in the evidence logs. Original
+engineering source closure is 213 entries; existing numerical gates stay open.
+
+The retained candidate is `/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app`;
+its sibling `Native CAD Preview.command` enables the retained native CAD runtime.
+Both copied viewports pass all four dynamics cases (86 checks each); copied
+thermal, thermomechanical, eigenmode, nonlinear-solid and PMX regressions pass.
+Actual native Cocoa screen/ID/scalar/resize checks pass. All 2466 payload file
+hashes, 2276 symlinks, exact source identity `57e19d2c`, empty source patch and
+ad-hoc signature verify. Configuration, graph/table and physical contour images
+were visually inspected, including the corrected final step-2 animation.
+
+The old task 0100 app, initial superseded task 0102 copy and duplicate package
+payloads are pruned after verification. Logical bytes removed total about 10.08 GB;
+measured free space increases about 8.88 GB. Current candidate, jobs/models, raw
+reference outputs, screenshots, logs/source manifests, installed user state and
+shared tools/caches remain. The old launcher forwards to the current candidate.
+The local Linux VM is restored to its initial stopped state.
 
 All other original calculations/elements/material/contact/model/CAD/mesher/
 results/automation and general native-session PMX functions remain required.

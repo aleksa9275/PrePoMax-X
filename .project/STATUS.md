@@ -7,7 +7,14 @@ now connect desktop controls/damping, frozen native jobs, original velocity/
 energy fields and velocity history graph/table/CSV. Four independent oscillator
 examples pass on native Mac/Linux ARM64 and with the pinned original Windows
 solver via CrossOver. [Scope and actual delivery checks](reports/transient-dynamics-workflow.md).
-Candidate packaging/publication checks are pending at this source checkpoint.
+Implementation `60471505` and playback repair `57e19d2c` are pushed/remote-verified
+with CI skipped. Current app: `/tmp/prepomaxx-task0102-delivery/PrePoMax-X Preview.app`,
+with sibling native CAD launcher. Both copied viewports and existing thermal/
+thermomechanical/eigenmode/nonlinear/PMX regressions pass. Actual Cocoa screen/
+picking, source/payload/empty-patch/signature checks pass. Superseded task 0100
+and first task 0102 apps and duplicate package payloads are pruned, preserving
+source/models/jobs/evidence/shared tools. Modal animation stays in its physical
+step; the visual-inspection finding and repair regression are retained.
 Every remaining original function, D029/B006/B007/D057–D061, coarse conductivity
 finding, full PMX and all four-target/distribution/release gates stay open.
 
