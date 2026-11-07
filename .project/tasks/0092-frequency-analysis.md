@@ -8,3 +8,11 @@ original Windows solver comparisons and one retained copied Mac candidate after
 the combined implementation. Publish research checkpoints with CI skipped.
 Known numerical fixes remain deferred; D029/B006 and D057/D058/D059, all other
 original functions and four-target/release obligations remain open.
+
+Completed: ordinary frequency analysis, original mode numbers/frequencies and shape results. Source `442c66c0` is
+published/remote-verified with CI skipped. Native Mac/Linux ARM64, original
+Windows comparisons and both copied Mac viewports pass the combined functional
+workflow; affected engineering/desktop checks and representative nonlinear/PMX
+regressions pass. Numerical fixes remain deferred under D061, including B007.
+Current candidate, actual verification/publication/cleanup and all remaining
+requirements are in [the report](../reports/eigenmodes-results-tools.md) and receipt.

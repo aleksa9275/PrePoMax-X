@@ -8,9 +8,14 @@ frame/shape animation and original DAT history plots/tables/CSV are implemented.
 Mac/Linux ARM64 complete the combined workflow; original Windows solver
 comparisons agree. [Scope and evidence](reports/eigenmodes-results-tools.md).
 B007 records inherited buckling search-shift behavior; numerical fixes remain
-deferred with D029/B006 under D061. Source publication and copied Mac candidate
-verification are being recorded. Full remaining original functionality, PMX and
-four-target/release obligations remain open.
+deferred with D029/B006 under D061. Implementation `442c66c0` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0094-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Both copied Mac viewports complete the
+combined workflow, and existing nonlinear/PMX regressions pass. Source/payload/
+empty-patch/signature checks pass. Superseded task 0090 app and duplicate package
+payloads are pruned, preserving source/models/jobs/evidence/shared tools. Full
+remaining original functionality, PMX and four-target/release obligations remain
+open.
 
 Latest maintainer direction, D061: full PrePoMax 3.0.0 parity first, numerical
 fixes/improvements afterward. Continue original-functionality implementation;

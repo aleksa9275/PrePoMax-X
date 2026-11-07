@@ -120,6 +120,27 @@ D029 integration/classification failures, B006 pressure accuracy and B007 search
 behavior remain explicit and deferred, alongside exact native/four-target/
 distribution/release acceptance. D057/D058/D059/D060/D061 remain in force.
 
-Implementation is ready for research publication and one copied Mac candidate.
-Final candidate checks, cleanup and actual publication will be recorded here
-and in the receipt before these three tasks are closed.
+Implementation **442c66c062b4457f247c4a4ac1d7ffd9b2ab7ba9** is pushed and
+remote-verified on origin/research/native-feasibility with CI explicitly skipped.
+The copied Mac candidate completes the three-case workflow in both viewport
+modes, including the final analytical mode-shape check and history plot layout,
+and the existing nonlinear and PMX regressions. Source identity records the exact
+implementation, no changed code and an empty source patch. The dirty flag is
+from four pre-existing Finder files.
+
+Current app: `/tmp/prepomaxx-task0094-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables the retained native CAD runtime.
+Use Solve example… → Frequency — axial rod modes or Buckling — cantilever
+column. Configure… → Analysis type / modes edits the definition. After solving,
+choose a mode/frame, Deformed/Scale/Undeformed outline and Play; use Plastic
+tension — yield and hardening for the demonstrated Histories… graph/table/CSV.
+
+All **2,434 copied file hashes**, **2,276 symlink targets** and the ad-hoc signature
+verify. The superseded task 0090 app and duplicate new package build/payload/cache
+directories are pruned; its launcher forwards to the new candidate. Source,
+models, exports, frozen jobs, screenshots, raw native/original reference results,
+small package/source/manifest/log receipts, installed user app/state and shared
+tool caches remain. Actual removed paths/free-space figures are in the receipt.
+Evidence root: `/tmp/prepomaxx-task0092-0094-evidence`; retained package metadata:
+`/tmp/prepomaxx-task0094-package`. This is an internal parity-development preview;
+all remaining original functionality and acceptance obligations above stay open.

@@ -1,5 +1,21 @@
 # Native CAD continuation — 6 November 2026
 
+Latest implementation, tasks 0092–0094: original ordinary frequency/buckling
+solid workflows and deformation/outline/animation/original DAT history plots,
+tables and CSV are delivered. Read [the report](../reports/eigenmodes-results-tools.md)
+and receipt for source `442c66c0`, actual native/original/candidate checks and
+cleanup. Source is remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0094-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Superseded task 0090 app and duplicate
+package payloads are pruned; models/jobs/evidence/source/tool caches remain.
+
+B007 retains original buckling search-shift mode omission under reference-load
+scaling, confirmed against the original Windows binary. D061 defers fixes with
+D029/B006 until full parity. Preserve original algorithms/tolerances and explicit
+failed checks; continue substantial implementation of remaining original
+functions, including other eigen/modal/results/model/mesher/analysis/PMX
+workflows. D057/D058/D059/D060/D061 and four-target/release obligations remain.
+
 Latest maintainer direction, 6 November 2026 (D061): achieve full original
 PrePoMax 3.0.0 parity first; implement recorded correctness fixes/improvements
 afterward. Continue larger usable original-functionality milestones now, not the

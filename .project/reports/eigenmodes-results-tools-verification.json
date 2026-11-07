@@ -24,6 +24,44 @@
       "sha256": "5bb637c2d1e782d5ec8f27959393221d99a82668fb29f60fb753b9957dfa56b1",
       "success": true,
       "checks": 17
+    },
+    "copiedMacBridge": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/bridge/workflow.json",
+      "sha256": "b3cf3d25a9ab28122c2b3c31a59fe7cf4479c4117455f3fadfc9edfd322221bb",
+      "success": true,
+      "checks": 64,
+      "openCorrectnessChecks": null
+    },
+    "copiedMacCocoa": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/cocoa/workflow.json",
+      "sha256": "02e81ec1ce2e0a8277955bbf2d1224d4a1e9eb234ea48e3eca0aaee100825c37",
+      "success": true,
+      "checks": 64,
+      "openCorrectnessChecks": null
+    },
+    "copiedMacNonlinear": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/nonlinear-regression/workflow.json",
+      "sha256": "8c6bdc22c6e184a0a50b1731327a3ec212cb7ef4afb14510d0258cb24a03c8a1",
+      "success": true,
+      "checks": 70,
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic pyramid converted to wedge under pressure",
+          "passed": false,
+          "errors": {
+            "displacement": 3.7943000000000026e-05,
+            "stress": 0.04699999999999993
+          },
+          "scope": "Inherited original solver behavior; hexahedron route passes analytical pressure case"
+        }
+      ]
+    },
+    "copiedMacPmx": {
+      "path": "/tmp/prepomaxx-task0092-0094-evidence/pmx/verification.json",
+      "sha256": "57fc1e1a8ae01cd1c171accb4da5195945b79709a18369cca01cf0f8125b212a",
+      "success": true,
+      "checks": 17,
+      "openCorrectnessChecks": null
     }
   },
   "originalWindowsReference": {
@@ -221,9 +259,21 @@
     "normalization": "Original eigenvectors can differ by arbitrary nonzero amplitude/sign; compare MAC and raw component tensors after displacement-derived scalar alignment"
   },
   "engineering": {
-    "analysis": "/tmp/prepomaxx-task0092-0094-engineering-final/analysis-current.json",
-    "results": "/tmp/prepomaxx-task0092-0094-engineering-followup/results-current.json",
-    "execution": "/tmp/prepomaxx-task0092-0094-engineering-followup/execution-current.json",
+    "analysis": {
+      "path": "/tmp/prepomaxx-task0092-0094-engineering-final/analysis-current.json",
+      "sha256": "5f219b487bb5a22cc18c8bd53858f99263fbe1eed8de86e12467910c02bf7041",
+      "success": true
+    },
+    "results": {
+      "path": "/tmp/prepomaxx-task0092-0094-engineering-followup/results-current.json",
+      "sha256": "0fc9d0c21f02729b9f5a0ed6949811b8334b93c9f0ff5b7bc01c68144ea6ba6b",
+      "success": true
+    },
+    "execution": {
+      "path": "/tmp/prepomaxx-task0092-0094-engineering-followup/execution-current.json",
+      "sha256": "6c840b802bc97884e05c078211b0f72f79e1838d17a5edd2be3ac1555ef2272c",
+      "success": true
+    },
     "desktop": {
       "passed": 52,
       "log": "/tmp/prepomaxx-task0092-0094-evidence/desktop-tests-restored.log"
@@ -351,10 +401,110 @@
   ],
   "fullyNumericallyAccepted": false,
   "candidate": {
-    "status": "pending"
+    "app": "/tmp/prepomaxx-task0094-delivery/PrePoMax-X Preview.app",
+    "nativeCadLauncher": "/tmp/prepomaxx-task0094-delivery/Native CAD Preview.command",
+    "packageMetadata": "/tmp/prepomaxx-task0094-package",
+    "manifestSha256": "870c8fbf6936a8d5152fe9f61dadb7fb4b66e60b44f972b6256a1be4257c7c38",
+    "fileHashesVerified": 2434,
+    "symlinksVerified": 2276,
+    "emptySourcePatch": true,
+    "signatureVerified": true,
+    "sourceIdentity": {
+      "viewportSha256": "3795699471beb18da79eb4fbe677d93dcc98159a36d4e5105c02afb6ac568159",
+      "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+      "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+      "analysisEditorSha256": "620bea578c8df15f271e4760166eff9ec64591fcf07713e866ebe4f2a0ab5659",
+      "solidFormulationsSha256": "3d07e6cdb4f3da4343f68be5c6237205262ade1d5e1635add42c3172018f1bba",
+      "solidWorkflowProbeSha256": "582d4c44706ea2a9625852f144891e8f53bb4db717c5cf394e42196c50c33bca",
+      "resultsToolsSha256": "4bfa206406ebf4189052865eae5f28e4d6ba042d84162c5e490e672dd0d233be",
+      "eigenmodeWorkflowProbeSha256": "1c71fe1c865961baeb72cb47b79b983b3455d697e9ba125759cfd6c0962a92bb",
+      "nonlinearWorkflowProbeSha256": "6a49d60700ab3381154188a0175fd9f4b69fc0d4655bbaea294b89b1e6d5fc4c",
+      "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+      "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+      "cadJobSha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2",
+      "cadDocumentSha256": "42f34c050938f756e02f3eb1ad88422092766591fed9b0383201086ded826e1d",
+      "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+      "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+      "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+      "quadraticProbeSha256": "67e59829cd17a386b2d0854c554e5508241bc5e0d3550f45daace0e7875487c0",
+      "quadraticAnalysisSha256": "d292c0193842b8490e4efd9723884b873344e1b30228e3142d22985e3cd1f8ed",
+      "meshExportSha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953",
+      "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+      "cadRegionsSha256": "b2b82ee7dd9d097843cb6964eac7ea4da7c0eb283cd68891ad6fcd2574954420",
+      "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+      "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+      "desktopJobsSha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4",
+      "target": "osx-arm64",
+      "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+      "gitHead": "442c66c062b4457f247c4a4ac1d7ffd9b2ab7ba9",
+      "dirty": true,
+      "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+      "pmxDesktopSha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e",
+      "pmxToolHashes": {
+        "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+        "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+        "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+        "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+        "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+        "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+        "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+      }
+    }
   },
   "publication": {
-    "status": "pending",
-    "hostedCi": "Held under D058; skip CI on publication"
-  }
+    "implementationCommit": "442c66c062b4457f247c4a4ac1d7ffd9b2ab7ba9",
+    "branch": "research/native-feasibility",
+    "remote": "origin",
+    "remoteVerified": true,
+    "hostedCi": "Explicit [skip ci] and ci.skip push; held under D058",
+    "nativeLinuxX64": "Deferred under D059"
+  },
+  "cleanup": {
+    "success": true,
+    "removed": [
+      {
+        "path": "/private/tmp/prepomaxx-task0094-package/dist",
+        "logicalBytes": 2286312855
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0094-package/build",
+        "logicalBytes": 20938600
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0094-package/hosts",
+        "logicalBytes": 621694649
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0094-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0090-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1156590230
+      }
+    ],
+    "logicalBytes": 5036527241,
+    "freeSpaceBefore": 186080088064,
+    "freeSpaceAfter": 190517698560,
+    "measuredFreeSpaceGain": 4437610496,
+    "candidateFileHashesVerified": 2434,
+    "preserved": "Current candidate, projects, CAD/INP/PMX files, jobs, screenshots, reference results, source/manifest/log evidence, installed user app/state and shared native/Python/.NET/Podman/source caches"
+  },
+  "knownOriginalKernelChecks": [
+    {
+      "name": "quadratic tetrahedron affine integral",
+      "passed": false,
+      "expected": 28,
+      "actual": 26.794910717854155,
+      "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+    },
+    {
+      "name": "quadratic pyramid classification",
+      "passed": false,
+      "expected": true,
+      "actual": false,
+      "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+    }
+  ],
+  "functionalIntegrationPassed": true
 }
