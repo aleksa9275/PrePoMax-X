@@ -311,7 +311,7 @@ remain uncommitted; native Windows/new-commit x64 follow-up is pending.
 [Current evidence and next steps](reports/shared-core-data-slice.md).
 Earlier publication/pending paragraphs below retain historical checkpoints.
 
-Current entry point: [MacBook continuation](handoffs/macbook-next-session.md),
+Current entry point: [MacBook continuation](history/handoffs/macbook-next-session.md),
 [task 0014](tasks/0014-windows-publication-mac-handoff.md). The maintainer now
 authorizes committing/pushing the reviewed Windows/shared-core work and its
 handoff. Native Windows C++ tests also pass both measured compiler modes.
@@ -366,8 +366,8 @@ attribution remain authoritative; notices/source obligations travel with compone
 
 | Record | Responsibility |
 |---|---|
-| [MacBook continuation](handoffs/macbook-next-session.md), [task 0014](tasks/0014-windows-publication-mac-handoff.md) | Start here: shared-library native Mac/Linux runs, publication state and next bounded implementation |
-| [Next Windows session](handoffs/windows-next-session.md), [task 0011](tasks/0011-windows-reference-validation.md) | Resume here when Windows becomes available; prepared, execution pending |
+| [MacBook continuation](history/handoffs/macbook-next-session.md), [task 0014](tasks/0014-windows-publication-mac-handoff.md) | Start here: shared-library native Mac/Linux runs, publication state and next bounded implementation |
+| [Next Windows session](history/handoffs/windows-next-session.md), [task 0011](tasks/0011-windows-reference-validation.md) | Resume here when Windows becomes available; prepared, execution pending |
 | [Task 0012](tasks/0012-local-preparation-completion.md), [local completion](reports/local-preparation-completion.md) | Scalar PMX comparisons, compiler sensitivity, VTK provenance/lifecycle, analytical solver and research publication |
 | [Research Linux x64 acceptance](reports/research-linux-x64.md) | Passed native hosted suite on 24c790ac; implementation/artifact identities checked |
 | [STATUS](STATUS.md), [task 0001](tasks/0001-initial-repository-audit.md), [completed task 0002](tasks/0002-core-feasibility.md), [task 0003](tasks/0003-core-data-feasibility.md) | Current state, verification, handoff and first runnable milestone |

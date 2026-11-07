@@ -22,7 +22,7 @@ upstream Tests ignore rule was corrected locally so all new regression sources
 will be published. Artifacts are excluded from verifier tool fingerprints.
 Portable LLVM-MinGW stays in the disposable workspace, not the repository.
 
-Next entry point: [MacBook handoff](../handoffs/macbook-next-session.md).
+Next entry point: [MacBook handoff](../history/handoffs/macbook-next-session.md).
 It contains retrieval/fallback-bundle commands, native ARM64 SDK verification,
 cached Podman image/VM identities and exact offline Linux ARM64 commands,
 expected counts/evidence paths, private-transfer manifest identity and a bounded

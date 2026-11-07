@@ -1,5 +1,10 @@
 # Functional equivalence and platform acceptance
 
+**Current cadence (D062, 2026-11-08):** focused checks for the changed area while
+developing; at each phase milestone run the representative workflows and the
+original-app comparisons; full four-platform/package sweeps only for release
+candidates. Earlier dated sections below are historical context.
+
 Maintainer reaffirmation, 6 November 2026: work in larger functional milestones
 that deliver usable original feature families through the shared application.
 Group related implementation into one substantial step; do not split each

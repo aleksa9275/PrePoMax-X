@@ -1,5 +1,22 @@
 # Decision register
 
+D062 — Whole-code reuse strategy and simplified process, 2026-11-08: the
+maintainer accepts the assessment that slice-porting plus a reimplemented Python
+application layer fragmented progress. Direction: **maximum reuse of existing
+original code and practices.** Phase A builds the whole original domain
+assemblies (CaeGlobals, CaeMesh, CaeModel, CaeResults, CaeJob) for .NET 10 on all
+targets while keeping the net48 build working. Phase B runs the original
+Controller/Commands without WinForms (main-form dependency behind an interface)
+and reuses the original PMX serialization with a strict type allowlist. Phase C
+builds the cross-platform UI reusing the original forms/property-view classes
+and the existing native VTK viewport work; the UI framework is chosen at the
+start of Phase C with reuse as the criterion. The existing Python/Qt desktop is
+retained as the working preview until superseded. Process: short AGENTS.md,
+replace-not-append STATUS.md, one report per milestone, progress measured
+against `PARITY_INVENTORY.md`; pre-2026-11-08 logs moved to `.project/history/`.
+After parity, all recorded bugs and compiler warnings are reviewed and fixed
+(D061). D057–D061 remain in force.
+
 D061 — Parity first, correctness improvements afterward, 2026-11-06: the
 maintainer explicitly directs recording discovered discrepancies and proposed
 fixes, continuing as is toward full PrePoMax 3.0.0 parity, then implementing fixes

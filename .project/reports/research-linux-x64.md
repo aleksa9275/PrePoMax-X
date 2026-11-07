@@ -52,7 +52,7 @@ also remains a Windows reference question.
 
 All feasible bounded local preparation and initial hosted verification are now
 recorded. Resume [task 0011](../tasks/0011-windows-reference-validation.md) via the
-[Windows handoff](../handoffs/windows-next-session.md), using the published research
+[Windows handoff](../history/handoffs/windows-next-session.md), using the published research
 branch. Matching modified native sources and real UI/required-platform workflows
 remain open. The closing evidence commit changes documentation/artifacts only;
 research implementation stays at the tested source above.

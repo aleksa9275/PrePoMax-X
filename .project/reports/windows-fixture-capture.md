@@ -1,6 +1,6 @@
 # Windows PMX/history reference capture
 
-Next session entry point (2026-10-15): [Windows handoff](../handoffs/windows-next-session.md)
+Next session entry point (2026-10-15): [Windows handoff](../history/handoffs/windows-next-session.md)
 and [task 0011](../tasks/0011-windows-reference-validation.md). Windows will be
 available; native capture remains pending. Use research/native-feasibility
 containing task 0012's publication when changing machines, not the default

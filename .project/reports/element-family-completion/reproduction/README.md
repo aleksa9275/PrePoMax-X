@@ -38,4 +38,4 @@ python3 X/Feasibility/Pmx/inspect-family-project.py <original.pmx> <PmxMesh.dll>
 A successful capture/projection does not establish new native-session PMX
 serialization, unrestricted graph editing, native Windows acceptance, numerical
 acceptance or full compatibility. See [the workflow report](../../element-family-completion.md)
-and [the current handoff](../../../handoffs/current-next-session.md).
+and [the current handoff](../../../history/handoffs/current-next-session.md).

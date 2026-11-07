@@ -46,7 +46,7 @@ model/job policy, CAD meshing and interactive rendering remain open.
 Research changes/evidence are uncommitted. Production source/projects are
 unchanged. No push, merge, frontend/schema choice or F001 implementation.
 
-Read [the next-session handoff](../handoffs/windows-next-session.md) first.
+Read [the next-session handoff](../history/handoffs/windows-next-session.md) first.
 Establish checkout identity (research branch containing task 0012's publication), exact application
 identity and native Windows x64 environment. Start with disposable cube PMX/
 deck capture and explicitly specified engineering definitions, then save/reopen,

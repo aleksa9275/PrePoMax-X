@@ -1,6 +1,6 @@
 # Dependency-aware roadmap
 
-8 November 2026: use the [current handoff](handoffs/current-next-session.md) and
+8 November 2026: use the [current handoff](history/handoffs/current-next-session.md) and
 [full-completion assessment](reports/full-completion-status.md) for the present
 checkpoint and remaining work. The earlier next-step paragraphs below are a
 historical sequence. Native solver/desktop/CAD and multiple element/calculation
@@ -90,7 +90,7 @@ sensitivity become explicit remaining gates; Windows task 0011 remains pending.
 
 2026-10-15 target correction: Windows x64, Linux x64, Linux ARM64 and Apple
 M-series macOS ARM64 are required; Intel Macs are excluded. Native Windows is
-expected next session: use [the handoff](handoffs/windows-next-session.md) and
+expected next session: use [the handoff](history/handoffs/windows-next-session.md) and
 prepared [task 0011](tasks/0011-windows-reference-validation.md).
 
 2026-10-15: [task 0010](tasks/0010-pmx-linux-verification.md) repeats the PMX

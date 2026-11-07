@@ -7,7 +7,7 @@ and review the remaining risks before beginning shared-core/frontend extraction.
 
 Required targets, corrected by the maintainer on 2026-10-15: Windows x64,
 Linux x64, Linux ARM64 and Apple M-series macOS ARM64. Intel Macs are excluded.
-Resume using the [Windows-session handoff](../handoffs/windows-next-session.md).
+Resume using the [Windows-session handoff](../history/handoffs/windows-next-session.md).
 
 Task 0012 [local follow-up](local-preparation-completion.md) adds shallow PMX
 value comparisons with explicit job-settings drift, a successful synthetic

@@ -88,4 +88,4 @@ and Apple Developer ID/notarization involvement remain at their agreed stages.
 All original requirements remain; no new solver exception or scope reduction is
 introduced.
 
-[Continuation instructions, source map and reproducible commands](../handoffs/current-next-session.md).
+[Continuation instructions, source map and reproducible commands](../history/handoffs/current-next-session.md).

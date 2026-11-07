@@ -152,7 +152,7 @@ python3 X/Core/package.py --output-dir X/Core/artifacts/mesh-workflow/developmen
 python3 X/Core/check-package.py --archive X/Core/artifacts/mesh-workflow/development-build/PrePoMaxX-Core-development.zip --report X/Core/artifacts/mesh-workflow/development-build/verification.json --expect-os Darwin --expect-architecture Arm64
 ```
 
-See [Windows continuation](../handoffs/windows-next-session.md) for commands.
+See [Windows continuation](../history/handoffs/windows-next-session.md) for commands.
 Native Windows x64 expanded-library execution and a full original net48 build/
 RC2 application oracle remain pending, as does an exact new-commit hosted Linux
 x64 run. The current Mac edits are uncommitted and will not appear through Git
