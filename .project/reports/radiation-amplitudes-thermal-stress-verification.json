@@ -51,7 +51,7 @@
     "linuxArm64Desktop": {
       "success": true,
       "checks": 84,
-      "report": "/tmp/prepomaxx-task0098-0100-evidence/linux/workflow/workflow.json",
+      "report": "/tmp/prepomaxx-task0098-0100-evidence/linux/workflow-final/workflow.json",
       "cases": {
         "radiation-cooling": {
           "temperatureMaximumError": 4.329045118822705e-05,
@@ -268,19 +268,156 @@
     "display": "Xvfb/Mesa and existing Qt fallback",
     "logs": "/tmp/prepomaxx-task0098-0100-evidence/linux",
     "linuxX64Accepted": false,
-    "nativeWindowsApplicationAccepted": false
+    "nativeWindowsApplicationAccepted": false,
+    "vmRestoredToStopped": true
   },
   "publication": {
-    "status": "reviewed implementation ready for checkpoint",
+    "status": "implementation published and remote verified",
     "branch": "research/native-feasibility",
-    "hostedCi": "held/skipped under D058"
+    "implementation": "6ec9ae1fc93027d548723bee500f4e0d6085abe0",
+    "hostedCi": "explicitly skipped under D058",
+    "remoteVerified": "6ec9ae1fc93027d548723bee500f4e0d6085abe0"
   },
   "candidate": {
-    "status": "pending final copied integration and publication"
+    "success": true,
+    "path": "/tmp/prepomaxx-task0100-delivery/PrePoMax-X Preview.app",
+    "launcher": "/tmp/prepomaxx-task0100-delivery/Native CAD Preview.command",
+    "packageMetadata": "/tmp/prepomaxx-task0100-package",
+    "source": "6ec9ae1fc93027d548723bee500f4e0d6085abe0",
+    "workflows": {
+      "bridge": {
+        "success": true,
+        "checks": 84,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/bridge/workflow.json"
+      },
+      "cocoa": {
+        "success": true,
+        "checks": 84,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/cocoa/workflow.json"
+      },
+      "thermal-regression": {
+        "success": true,
+        "checks": 132,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/thermal-regression/workflow.json"
+      },
+      "eigenmode-regression": {
+        "success": true,
+        "checks": 64,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/eigenmode-regression/workflow.json"
+      },
+      "nonlinear-regression": {
+        "success": true,
+        "checks": 70,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/nonlinear-regression/workflow.json"
+      },
+      "pmx": {
+        "success": true,
+        "checks": 17,
+        "report": "/tmp/prepomaxx-task0098-0100-evidence/pmx/verification.json"
+      }
+    },
+    "actualCocoaScreen": {
+      "success": true,
+      "checks": 10,
+      "report": "/tmp/prepomaxx-task0098-0100-evidence/cocoa-visible/verification.json",
+      "image": "/tmp/prepomaxx-task0098-0100-evidence/cocoa-visible/window.png",
+      "note": "Existing actual-screen capture verifies native-child contours and original node ID/value; QWidget grabs omit native-child pixels."
+    },
+    "payload": {
+      "success": true,
+      "files": 2458,
+      "symlinks": 2276,
+      "sourceIdentity": {
+        "viewportSha256": "81fd593901a93a2d6451e5feaf6e4f5b0be0fce50810f4f49560c32b93648c3f",
+        "nativeCocoaSha256": "58c7cf7ac5f3ea99318287b9ac723038f39b970cec0120bee683f0ec12a32ae7",
+        "viewportProbeSha256": "37fecf2bbc2449b754661b9cbaa343decd5596e165dc959ada961886bc1a9e7d",
+        "analysisEditorSha256": "1a11af94786a417f8f791c855d07e5d6ff181230c96ace3fc82220838750cea1",
+        "solidFormulationsSha256": "3d07e6cdb4f3da4343f68be5c6237205262ade1d5e1635add42c3172018f1bba",
+        "solidWorkflowProbeSha256": "582d4c44706ea2a9625852f144891e8f53bb4db717c5cf394e42196c50c33bca",
+        "resultsToolsSha256": "4bfa206406ebf4189052865eae5f28e4d6ba042d84162c5e490e672dd0d233be",
+        "thermalWorkflowProbeSha256": "d12a2e1cfdc21ee7c014773ef899d09c762285327ba67448d886df4979e4d803",
+        "thermalWorkflowFixturesSha256": "4abdbb28f2511dfb286f936ca6836ffc635e966e4ffceb424f99d521196e9311",
+        "thermomechanicalWorkflowProbeSha256": "3786412ec3ce93715d91680f698fa1f0d81a9474969093bd3d8704a70a6038cb",
+        "thermomechanicalWorkflowFixturesSha256": "c9cd69de29f6012f75dae7271baf2a257a84e7e8013cea1149cd79fc6032586b",
+        "eigenmodeWorkflowProbeSha256": "1c71fe1c865961baeb72cb47b79b983b3455d697e9ba125759cfd6c0962a92bb",
+        "nonlinearWorkflowProbeSha256": "6a49d60700ab3381154188a0175fd9f4b69fc0d4655bbaea294b89b1e6d5fc4c",
+        "editorProbeSha256": "cb4b4ae58fbd7a1bf9e2375995d74b37c905ef3698339e225f1ddfca46acf432",
+        "cadImportSha256": "aed0af4b57ad19d4c268a76d85bb310f5bc20a34b53f39e4597626720e0fb514",
+        "cadJobSha256": "732979de35d609e800797e1156ccfaddd7ee9ec48c72ba83e6886194ef2c9cf2",
+        "cadDocumentSha256": "42f34c050938f756e02f3eb1ad88422092766591fed9b0383201086ded826e1d",
+        "cadEditSha256": "7bd25a38ed5df423740a409c69debef3fefa700b49c06f2772481c275276ed23",
+        "cadOperationsSha256": "321311a257a18d8330b9367ccd99ead1a1efb85e4e5c3329de967226e7380520",
+        "cadHistorySha256": "91f8c0116d9033121cabeac98e5207e5c5a41adb66e2bf262b74350b07eb1d1a",
+        "quadraticProbeSha256": "67e59829cd17a386b2d0854c554e5508241bc5e0d3550f45daace0e7875487c0",
+        "quadraticAnalysisSha256": "d292c0193842b8490e4efd9723884b873344e1b30228e3142d22985e3cd1f8ed",
+        "meshExportSha256": "15eecd467fc89dfa483934c6c789d87ed21331740cdda77c5638505855378953",
+        "cadEditProbeSha256": "f724fbbe8103031b16145489205fce694e9d24d636b695de1d151a9076064d88",
+        "cadRegionsSha256": "b2b82ee7dd9d097843cb6964eac7ea4da7c0eb283cd68891ad6fcd2574954420",
+        "cadWorkflowProbeSha256": "91f9625641ca927e9df9d1407090728c9250bfba4e904b9f90e90483c5b58d84",
+        "cadSceneSha256": "378ce836931e7b16701f0a5e7cb329abb4fb8310411cad5ee90c5147c29a977a",
+        "desktopJobsSha256": "ae07b6d8354a0c9d141deb1051e5f811157081cd6a3f4fbc577a85c6492268e4",
+        "target": "osx-arm64",
+        "targetCatalogSha256": "4c490db5044b0591013022a2dcacf805f07a636fefe2afb10b2a490acd7d7c8b",
+        "gitHead": "6ec9ae1fc93027d548723bee500f4e0d6085abe0",
+        "dirty": true,
+        "cadReferenceReceiptSha256": "a26939eda7bcc2ef7c3a9062662878cf05fa11e64e676a08c91c5bbb8d164613",
+        "pmxDesktopSha256": "f85f773f6dd6ed43094ed32f06ee724dede18f8942e8ef77392808677352ec1e",
+        "pmxToolHashes": {
+          "inspect-cad-project.py": "00030ffb807f7c08f77ee983f849c40ad14bf3dca6ce56d81b5691cf964ebea2",
+          "inspect-pmx.py": "9ffe651651f89a51cb68d1f7f6e665f7b41586936992eef6d55040e895ce606f",
+          "inspect-static-project.py": "5f0973fc598a40298e02c9ffea31a1563b0fe75812fe01841bf2781eb5a2ec9c",
+          "reconstruct-static-deck.py": "8a6b769a5b26c9b5b6a1121b9a8179299698183fdb464f48a09775b10dba503b",
+          "write-cad-edit.py": "7c86a4daa27912b204090774e965a64452bf3d27eb2fa116bc564b1f2ba33bbd",
+          "write-cad-properties.py": "cdb5acbda041a3c0aeac66009d57370706d25b6c6afa389a5b00f191ae1af61d",
+          "write-controlled-edit.py": "696a4b27bfff352cd7c29751d46e402df051e1e1b869c822a2e2a6a4c1162672"
+        }
+      },
+      "repository": {
+        "head": "6ec9ae1fc93027d548723bee500f4e0d6085abe0",
+        "dirty": true,
+        "patch": "source.patch",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "changedCode": [],
+        "scope": "changed build/test/shared source only; no user models or private files"
+      },
+      "emptySourcePatch": true,
+      "signatureVerified": true
+    }
   },
   "sourceReview": {
     "sharedHelperIncludedInNet48": true,
     "frameworkCompatibleDictionaryAdmission": true,
     "nativeWindowsBuildExecuted": false
+  },
+  "cleanup": {
+    "success": true,
+    "removed": [
+      {
+        "path": "/private/tmp/prepomaxx-task0100-package/dist",
+        "logicalBytes": 2287055649
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0100-package/build",
+        "logicalBytes": 21109588
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0100-package/hosts",
+        "logicalBytes": 621975981
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0100-package/pyinstaller-cache",
+        "logicalBytes": 950990907
+      },
+      {
+        "path": "/private/tmp/prepomaxx-task0097-delivery/PrePoMax-X Preview.app",
+        "logicalBytes": 1156852817
+      }
+    ],
+    "logicalBytes": 5037984942,
+    "freeSpaceBefore": 185639940096,
+    "freeSpaceAfter": 190078787584,
+    "measuredFreeSpaceGain": 4438847488,
+    "candidateFileHashesVerified": 2458,
+    "preserved": "Current candidate, CAD/INP/PMX files, jobs, screenshots, original reference results, source/manifest/log evidence, installed user app/state and shared native/Python/.NET/Podman/source caches"
   }
 }

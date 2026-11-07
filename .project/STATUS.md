@@ -10,9 +10,14 @@ workflow. The original coarse conductivity accuracy diagnostic remains false;
 forty explicit original increments meet the example's unchanged analytical bound.
 [Scope/evidence](reports/radiation-amplitudes-thermal-stress.md). Existing
 algorithms/tolerances, D029/B006/B007 and all D057–D061/full-parity/four-target/
-release obligations remain. Implementation publication and the copied candidate
-are being prepared; task 0097 remains the retained candidate until the new copy
-passes its integration checks.
+release obligations remain. Implementation `6ec9ae1f` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0100-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Both copied viewports pass all six new
+cases and original thermal/eigenmode/nonlinear/PMX regressions pass. Actual
+Cocoa screen/picking, source identity, empty patch, payload and signature verify.
+The old task 0097 app and duplicate new package payloads are pruned; source,
+models/jobs/evidence/shared tools remain. Native example decks/meshes/decoded
+fields match exactly across Mac/Linux ARM64. All remaining gates stay open.
 
 ## Prior — tasks 0095–0097: thermal analysis
 

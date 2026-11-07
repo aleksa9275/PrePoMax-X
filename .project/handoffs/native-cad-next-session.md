@@ -3,7 +3,12 @@
 Tasks 0098–0100 add original radiation/thermal tables, amplitudes and prescribed-
 temperature expansion/stress. Read [the report](../reports/radiation-amplitudes-thermal-stress.md)
 and receipt for actual native/reference/candidate/publication checks and remaining
-scope. Original linear-static final-state behavior and nonlinear thermal control
+scope. Source `6ec9ae1f` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0100-delivery/PrePoMax-X Preview.app`, with sibling native CAD
+launcher. Both copied viewports pass the new workflow; thermal/eigenmode/nonlinear/
+PMX regressions and actual Cocoa screen/ID/value checks pass. Payload/source/empty
+patch/signature verify. Superseded task 0097 app and duplicate new package payloads
+are pruned, preserving source/models/jobs/evidence/shared tools. Original linear-static final-state behavior and nonlinear thermal control
 sensitivity remain; the coarse conductivity accuracy check stays false, with
 numerical investigation deferred under D061. All other original functions,
 D029/B006/B007/D057–D061 and full-parity/four-target/release gates remain open.

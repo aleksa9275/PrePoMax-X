@@ -104,8 +104,8 @@ guards pass. The guard/test updates account for newly supported original
 functionality and its original assembly dependency; existing numerical checks
 and D029/B006/B007 failures remain unchanged. Initial build/assertion failures
 and native diagnostics remain retained. Configuration/history/contour captures
-were visually inspected. Publication and the copied candidate are pending the
-final delivery checkpoint in the receipt.
+were visually inspected. Implementation `6ec9ae1f` is pushed/remote-verified on
+origin/research/native-feasibility with hosted CI explicitly skipped.
 
 Required remaining work includes coupled/sequential temperature-displacement,
 nonuniform initial fields, file/result-derived temperatures, mechanical thermal
@@ -115,3 +115,34 @@ general/native-session PMX, automation, large-model limits, exact native parity
 and every original four-target/installer/release obligation. D057/D058/D059/
 D060/D061 remain in force; unavailable Intel/PARDISO remains the sole solver
 exception. These scoped increments remove no final-functionality requirement.
+
+## Retained candidate and cleanup
+
+Current app: `/tmp/prepomaxx-task0100-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables the retained native CAD runtime.
+Solve example… offers Radiation — surface cooling, Thermal material — variable
+conductivity, Amplitude — pulsed heating/scaled static force, and Thermal
+expansion/stress — free/restrained solids. Configure… exposes Heat transfer,
+Thermal property tables, Amplitudes and Thermal expansion / stress; the model
+tree links their definitions. Tabs retain readable titles and scroll arrows.
+This remains an internal parity-development preview, not final acceptance.
+
+Both copied Mac viewports complete all six new cases. Original thermal,
+eigenmode, nonlinear-solid and PMX save/reopen/solve regressions pass in the
+copy. The separate original-ID/value/resize/actual-screen proof displays native
+Cocoa thermal-expansion contours; QWidget grabs alone omit that child view.
+Configuration controls, the pulse history graph and the displayed contours were
+visually inspected. All **2,458 copied file hashes**, **2,276 symlink targets**,
+exact implementation source identity, empty source patch and ad-hoc signature
+verify. The source dirty flag is from the four pre-existing Finder files.
+
+The superseded task 0097 app and duplicate new package build/dist/host/cache
+payloads are pruned. Its launcher forwards to the new candidate. Models, mesh
+exports, frozen jobs, native/original reference results, screenshots, source/
+reproduction/build evidence, installed user app/state and useful shared tools/
+runtimes remain. Actual removed paths and storage measurements are in the
+receipt; the initially stopped Linux VM is stopped again, with its disk and
+caches retained. Evidence root: `/tmp/prepomaxx-task0098-0100-evidence`;
+retained package metadata: `/tmp/prepomaxx-task0100-package`. Every remaining
+original functionality, numerical, exact-parity, PMX, four-target and release
+obligation above stays open.
