@@ -100,8 +100,8 @@ Affected current Analysis, Results and Execution engineering suites pass, as do
 58 desktop regressions (including six thermal behavior tests), 12 analysis
 ownership guards and nine build guards. Initial infrastructure/assertion logs
 remain retained. Affected source packages stay pinned. Hosted CI is held under
-D058; Linux x64 remains deferred under D059. Candidate packaging/publication is
-pending the final integration checkpoint recorded in the receipt.
+D058; Linux x64 remains deferred under D059. Implementation `020807a5` is pushed/remote-verified on
+origin/research/native-feasibility with CI explicitly skipped.
 
 Single-step isotropic constant-property solid heat transfer and constant thermal
 inputs are implemented here. Coupled/sequential thermoelasticity, nonuniform
@@ -111,3 +111,32 @@ all other original analysis/element/material/contact/model/mesher/result tools,
 general/native-session PMX and large-model acceptance remain required work.
 Original D029, B006 and B007 failures are unchanged and deferred. D057/D058/D059/
 D060/D061, exact parity, four-target/installers and full release gates remain open.
+
+## Retained candidate and cleanup
+
+Current app: `/tmp/prepomaxx-task0097-delivery/PrePoMax-X Preview.app`.
+Sibling `Native CAD Preview.command` enables the existing retained native CAD
+runtime. Solve example… → Heat transfer offers all six cases. Configure… →
+Analysis type / modes, Heat transfer and Heat inputs / convection edit the
+original controls. Results offer temperature/flux/heat-flow fields, time frames,
+Play and Histories… graph/table/CSV. This remains an internal parity-development
+preview, with all remaining original functionality and release gates above open.
+
+Both copied Mac viewport routes complete the six-case thermal workflow. The
+copied candidate also passes the frequency/buckling/history, nonlinear-solid and
+original PMX save/reopen/solve regressions. A separate one-cell thermal cube
+passes original ID/value picking, resize, actual native Cocoa screen-pixel and
+capture checks. QWidget grabs omit native child pixels; that limitation is
+explicitly distinguished from the actual-screen proof. The captured source
+thermal configuration and history graph were visually inspected as well.
+
+All **2,446 copied file hashes**, **2,276 symlink targets**, the exact implementation
+source identity, empty source patch and ad-hoc signature verify. The source dirty
+flag is from the four pre-existing Finder files. The old task 0094 app and duplicate
+new package payload/build/cache/host directories are pruned; its launcher forwards
+to the new candidate. Projects, meshes, exports, frozen jobs, screenshots, raw
+native/original reference results, source/reproduction/build receipts, installed
+user app/state and shared tool/runtime caches remain. Actual removed paths and
+measured storage figures are in the receipt. Evidence root:
+`/tmp/prepomaxx-task0095-0097-evidence`; package metadata:
+`/tmp/prepomaxx-task0097-package`.

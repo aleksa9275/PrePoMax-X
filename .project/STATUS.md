@@ -11,9 +11,13 @@ these native hosts. Pinned original Windows solver comparisons agree (largest
 decoded field difference about 3.72e-13). [Actual scope/evidence](reports/thermal-analysis-workflow.md).
 Original algorithms/tolerances and stored RFL semantics remain unchanged. All
 remaining original functions, D029/B006/B007 and D057/D058/D059/D060/D061,
-four-target/PMX/distribution/release obligations remain open. The implementation
-checkpoint and final copied Mac candidate are being prepared; task 0094 remains
-the retained candidate until the new copy passes verification.
+four-target/PMX/distribution/release obligations remain open. Source `020807a5` is pushed/remote-verified with CI skipped. Current app:
+`/tmp/prepomaxx-task0097-delivery/PrePoMax-X Preview.app`; sibling native CAD
+launcher enables the retained runtime. Both copied viewports complete the
+thermal workflow, and eigenmode/nonlinear/PMX regressions pass. Native Cocoa
+actual-screen contour/picking checks, copied payload/source/signature and empty
+source-patch checks pass. The superseded task 0094 app and duplicate new build
+payloads are pruned, preserving models/jobs/evidence/source/shared tools.
 
 ## Current — tasks 0092–0094: eigenmodes and result tools
 

@@ -3,7 +3,13 @@
 Tasks 0095–0097 add original steady/transient solid heat transfer and thermal
 inputs/convection through desktop configuration/native solve/original results.
 Read [the thermal report](../reports/thermal-analysis-workflow.md) and receipt for
-actual checks, publication and the latest candidate. Six examples complete on
+actual checks, publication and the latest candidate. Source `020807a5` is
+published/remote-verified with CI skipped. Current app is
+`/tmp/prepomaxx-task0097-delivery/PrePoMax-X Preview.app`, with sibling native CAD
+launcher. Both copied viewports and representative eigenmode/nonlinear/PMX
+regressions pass; actual native Cocoa screen pixels/picks, payload/source/empty
+patch/signature verify. Superseded task 0094 app and duplicate package payloads
+are pruned, preserving source/models/jobs/evidence/shared tools. Six examples complete on
 native Mac/Linux ARM64 with identical decks/mesh/decoded fields and agree with
 the pinned original Windows solver. Original thermal algorithms/raw RFL remain;
 all remaining thermal/mechanical/model/mesher/results/PMX functions and

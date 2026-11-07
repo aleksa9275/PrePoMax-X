@@ -7,6 +7,12 @@ jobs, solving, original FRD/DAT results and history inspection. Preserve origina
 algorithms and tolerances, D029/B006/B007 and D057/D058/D059/D060/D061; all other
 original functionality and four-target/release requirements remain required.
 
-Implementation and candidate verification are in progress. See the combined
-[thermal workflow report](../reports/thermal-analysis-workflow.md) for actual
-completed scope, checks, publication and remaining requirements. Hosted CI is off.
+Completed: original steady/transient heat-transfer and thermal-load desktop
+integration. Source `020807a5` is published/remote-verified with CI skipped.
+Mac/Linux ARM64 and both copied Mac viewport routes complete all six thermal
+cases; original Windows solver comparisons, analytical heat-equation/energy
+checks, affected engineering/desktop checks and representative eigenmode,
+nonlinear and PMX regressions pass. Current candidate, actual verification,
+publication, cleanup and remaining requirements are in the combined
+[thermal report](../reports/thermal-analysis-workflow.md) and receipt. All prior
+correctness/full-parity/four-target/PMX/release obligations remain open.
