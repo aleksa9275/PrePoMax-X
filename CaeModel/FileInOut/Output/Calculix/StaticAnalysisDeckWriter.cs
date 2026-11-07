@@ -20,6 +20,13 @@ namespace CaeModel
         // A topology-compatible choice changes solver behavior, never node ordering.
         public static string[] CompatibleSolidFormulations(string formulation)
         {
+            foreach (string prefix in new[] { "CPS", "CPE", "CAX" })
+            {
+                string suffix = formulation.StartsWith(prefix, StringComparison.Ordinal) ? formulation.Substring(3) : null;
+                if (suffix == "3" || suffix == "6") return new[] { "CPS" + suffix, "CPE" + suffix, "CAX" + suffix };
+                if (suffix == "4" || suffix == "4R") return new[] { "CPS4", "CPS4R", "CPE4", "CPE4R", "CAX4", "CAX4R" };
+                if (suffix == "8" || suffix == "8R") return new[] { "CPS8", "CPS8R", "CPE8", "CPE8R", "CAX8", "CAX8R" };
+            }
             switch (formulation)
             {
                 case "C3D4": return new[] { "C3D4" };
@@ -36,18 +43,25 @@ namespace CaeModel
 
         public static string Write(InpMeshData mesh, IEnumerable<Material> materials,
                                    IEnumerable<SolidSection> sections, Step step,
-                                   ConvertPyramidsToEnum? pyramidConversion = null, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null, string initialTemperature = null, FrequencyStep modalBasis = null)
+                                   ConvertPyramidsToEnum? pyramidConversion = null, IEnumerable<AmplitudeTabular> amplitudeDefinitions = null, string initialTemperature = null, FrequencyStep modalBasis = null, string modelSpace = "ThreeD")
         {
             if (mesh == null || materials == null || sections == null || step == null)
                 throw new ArgumentNullException("Static deck components cannot be null.");
             if (mesh.OmittedKeywords == null || mesh.OmittedKeywords.Length != 0)
                 throw new CaeException("Static deck input must contain mesh data only; existing model keywords cannot be discarded.");
+            string prefix = modelSpace == "PlaneStress" ? "CPS" : modelSpace == "PlaneStrain" ? "CPE" : modelSpace == "Axisymmetric" ? "CAX" : null;
+            bool twoD = prefix != null;
+            if (!twoD && modelSpace != "ThreeD") throw new CaeException("Unknown model space.");
+            if (twoD && (step.GetType() != typeof(StaticStep) || pyramidConversion.HasValue ||
+                mesh.Nodes.Values.Any(n => n.Z != 0 || (modelSpace == "Axisymmetric" && n.X < 0))))
+                throw new CaeException("Plane/axisymmetric static models require XY coordinates (X is nonnegative radius), without pyramid conversion.");
             var amplitudes=AnalysisModelExtensions.Amplitudes(amplitudeDefinitions);
             string meshText = MeshDeckWriter.WriteMesh(mesh, pyramidConversion);
             // Revalidate mutable mesh dictionaries through the original guarded reader.
             var checkedMesh = InpFileReader.ReadMeshData(meshText.Replace("\r", "").Split('\n'));
-            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => CompatibleSolidFormulations(t).Length == 0)))
-                throw new NotSupportedException("Mechanical 3D solid formulations are required for this static analysis.");
+            if (checkedMesh.ElementBlocks.Any(b => b.InpElementTypeNames.Any(t => CompatibleSolidFormulations(t).Length == 0 ||
+                (twoD ? !t.StartsWith(prefix, StringComparison.Ordinal) : !t.StartsWith("C3D", StringComparison.Ordinal)))))
+                throw new NotSupportedException("Every formulation must match the explicitly selected model space.");
             foreach (var element in checkedMesh.Elements.Values)
             {
                 // This is an input orientation check, not quadratic measurement.
@@ -56,7 +70,7 @@ namespace CaeModel
                 // authorize, alter or prohibit that independent formulation.
                 double measure = element is ParabolicTetraElement
                     ? new LinearTetraElement(element.Id, element.NodeIds.Take(4).ToArray()).GetVolume(checkedMesh.Nodes)
-                    : ((FeElement3D)element).GetVolume(checkedMesh.Nodes);
+                    : twoD ? element.GetArea(FeFaceName.S2, checkedMesh.Nodes) : ((FeElement3D)element).GetVolume(checkedMesh.Nodes);
                 if (!Finite(measure) || measure==0 || ((element is LinearTetraElement || element is ParabolicTetraElement) && measure<0))
                     throw new CaeException("Original element measure is zero, nonfinite or an inverted tetrahedron.");
             }
@@ -78,9 +92,10 @@ namespace CaeModel
             {
                 if (section == null || section.GetType()!=typeof(SolidSection)) throw new CaeException("Null solid section.");
                 Active(section); Name(section.Name); Name(section.MaterialName);
-                if (!sectionNames.Add(section.Name) || section.TwoD || section.RegionType != RegionTypeEnum.ElementSetName ||
+                if (!sectionNames.Add(section.Name) || section.TwoD != twoD || section.RegionType != RegionTypeEnum.ElementSetName ||
                     section.CreationData != null || (section.CreationIds != null && section.CreationIds.Length != 0))
-                    throw new NotSupportedException("Unique 3D solid sections on named element sets are required.");
+                    throw new NotSupportedException("Unique solid sections matching model dimensionality on named element sets are required.");
+                if (twoD && (!Finite(section.Thickness.Value) || section.Thickness.Value <= 0)) throw new CaeException("Finite positive section thickness required.");
                 if (!materialNames.Contains(section.MaterialName)) throw new CaeException("Section refers to a missing material.");
                 usedMaterials.Add(section.MaterialName);
                 foreach (int id in Set(checkedMesh.ElementSets, section.RegionName))
@@ -160,13 +175,13 @@ namespace CaeModel
                 var bc = entry.Value as DisplacementRotation;
                 if (bc == null || bc.GetType()!=typeof(DisplacementRotation) || entry.Key != bc.Name) throw new NotSupportedException("Only named displacement constraints are supported.");
                 Active(bc); Name(bc.Name);AnalysisModelExtensions.Reference(bc.AmplitudeName,amplitudes);
-                if (bc.TwoD || bc.Complex || bc.PhaseDeg.Value != 0 ||
+                if (bc.TwoD != twoD || bc.Complex || bc.PhaseDeg.Value != 0 ||
                     bc.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName ||
                     bc.DistributionName != Distribution.DefaultDistributionName || bc.CreationData != null ||
                     (bc.CreationIds != null && bc.CreationIds.Length != 0) || bc.RegionType != RegionTypeEnum.NodeSetName)
                     throw new NotSupportedException("Only constant global translational constraints on named node sets are supported.");
                 var values = new[] { bc.U1.Value, bc.U2.Value, bc.U3.Value };
-                if (values.All(double.IsNaN) || values.Any(double.IsInfinity) ||
+                if (values.All(double.IsNaN) || values.Any(double.IsInfinity) || (twoD && !double.IsNaN(values[2])) ||
                     !double.IsNaN(bc.UR1.Value) || !double.IsNaN(bc.UR2.Value) || !double.IsNaN(bc.UR3.Value))
                     throw new NotSupportedException("Provide finite translational constraints; free components use NaN. Rotations/fixed sentinels are unsupported.");
                 foreach (int id in Set(checkedMesh.NodeSets, bc.RegionName))
@@ -183,14 +198,14 @@ namespace CaeModel
                     densityElements.UnionWith(Set(checkedMesh.ElementSets,section.RegionName));
             Dictionary<string,int> incidence=null;
             if(step.Loads.Values.OfType<DLoad>().Any(l=>l.RegionType==RegionTypeEnum.NodeSetName))
-                incidence=mesh.Elements.Values.SelectMany(e=>Faces((FeElement3D)e)).GroupBy(f=>FaceKey(f.Item2)).ToDictionary(g=>g.Key,g=>g.Count());
+                incidence=mesh.Elements.Values.SelectMany(e=>Faces(e)).GroupBy(f=>FaceKey(f.Item2)).ToDictionary(g=>g.Key,g=>g.Count());
             int pressureIndex=0;
             foreach (var entry in step.Loads)
             {
                 var source=entry.Value;
                 if(source==null || entry.Key!=source.Name)throw new CaeException("A named mechanical load is required.");
                 Active(source);Name(source.Name);AnalysisModelExtensions.Reference(source.AmplitudeName,amplitudes);
-                if(source.TwoD || source.Complex || source.PhaseDeg.Value!=0 ||
+                if(source.TwoD != twoD || source.Complex || source.PhaseDeg.Value!=0 ||
                    source.CreationData!=null || (source.CreationIds!=null && source.CreationIds.Length!=0))
                     throw new NotSupportedException("Ordinary constant global mechanical loads on named regions are required.");
                 if(source.GetType()==typeof(CLoad)) {
@@ -199,17 +214,19 @@ namespace CaeModel
                         throw new NotSupportedException("Global concentrated forces require named node sets.");
                     var values=new[]{load.F1.Value,load.F2.Value,load.F3.Value};
                     if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Forces must be finite and nonzero.");
+                    if(twoD && values[2]!=0)throw new CaeException("2D forces use F1/F2 only.");
                     foreach(int id in Set(checkedMesh.NodeSets,load.RegionName))for(int d=0;d<3;d++)
                         if(values[d]!=0 && !loaded.Add(Tuple.Create(id,d)))throw new CaeException("Overlapping concentrated loads for one node/DOF are unsupported.");
-                    loads.Add(new CalCLoad(new CLoad(load.Name,load.RegionName,RegionTypeEnum.NodeSetName,values[0],values[1],values[2],false,false,0){AmplitudeName=load.AmplitudeName},null,ComplexLoadTypeEnum.None));
+                    loads.Add(new CalCLoad(new CLoad(load.Name,load.RegionName,RegionTypeEnum.NodeSetName,values[0],values[1],values[2],twoD,false,0){AmplitudeName=load.AmplitudeName},null,ComplexLoadTypeEnum.None));
                 }
                 else if(source.GetType()==typeof(GravityLoad)) {
                     var load=(GravityLoad)source;
                     if(load.RegionType!=RegionTypeEnum.ElementSetName)throw new NotSupportedException("Gravity requires a named element set.");
                     var values=new[]{load.F1.Value,load.F2.Value,load.F3.Value};
                     if(values.Any(v=>!Finite(v)) || values.All(v=>v==0))throw new CaeException("Gravity acceleration must be finite and nonzero.");
+                    if(twoD && values[2]!=0)throw new CaeException("2D gravity uses in-plane acceleration only.");
                     if(Set(checkedMesh.ElementSets,load.RegionName).Any(id=>!densityElements.Contains(id)))throw new CaeException("Every gravity-loaded element requires a material density.");
-                    loads.Add(new CalGravityLoad(new GravityLoad(load.Name,load.RegionName,RegionTypeEnum.ElementSetName,values[0],values[1],values[2],false,false,0){AmplitudeName=load.AmplitudeName},ComplexLoadTypeEnum.None));
+                    loads.Add(new CalGravityLoad(new GravityLoad(load.Name,load.RegionName,RegionTypeEnum.ElementSetName,values[0],values[1],values[2],twoD,false,0){AmplitudeName=load.AmplitudeName},ComplexLoadTypeEnum.None));
                 }
                 else if(source.GetType()==typeof(DLoad)) {
                     var load=(DLoad)source;double magnitude=load.Magnitude.Value;
@@ -218,12 +235,12 @@ namespace CaeModel
                     var targets=new List<Tuple<int,FeFaceName,int[]>>();
                     if(load.RegionType==RegionTypeEnum.NodeSetName) {
                         var nodes=new HashSet<int>(Set(mesh.NodeSets,load.RegionName));
-                        foreach(var e in mesh.Elements.Values)foreach(var face in Faces((FeElement3D)e))
+                        foreach(var e in mesh.Elements.Values)foreach(var face in Faces(e))
                             if(incidence[FaceKey(face.Item2)]==1 && face.Item2.All(nodes.Contains))targets.Add(Tuple.Create(e.Id,face.Item1,face.Item2));
                     } else if(load.RegionType==RegionTypeEnum.ElementSetName) {
                         if((int)load.ElementFaceName<1 || (int)load.ElementFaceName>6)throw new CaeException("An original element face S1–S6 is required.");
                         foreach(int id in Set(mesh.ElementSets,load.RegionName)) {
-                            var faces=Faces((FeElement3D)mesh.Elements[id]).Where(f=>f.Item1==load.ElementFaceName).ToArray();
+                            var faces=Faces(mesh.Elements[id]).Where(f=>f.Item1==load.ElementFaceName).ToArray();
                             if(faces.Length!=1)throw new CaeException("Selected face does not exist on every pressure-loaded element.");
                             targets.Add(Tuple.Create(id,load.ElementFaceName,faces[0].Item2));
                         }
@@ -233,7 +250,7 @@ namespace CaeModel
                     foreach(var target in targets) {
                         // Original face node identities determine correspondence even
                         // when original CalElement collapses a pyramid for the solver.
-                        var matches=Faces((FeElement3D)checkedMesh.Elements[target.Item1]).Where(f=>FaceKey(f.Item2)==FaceKey(target.Item3)).ToArray();
+                        var matches=Faces(checkedMesh.Elements[target.Item1]).Where(f=>FaceKey(f.Item2)==FaceKey(target.Item3)).ToArray();
                         if(matches.Length!=1)throw new CaeException("Original pressure face correspondence was lost during solver export.");
                         var face=matches[0].Item1;
                         if(!groups.ContainsKey(face))groups.Add(face,new HashSet<int>());
@@ -245,7 +262,7 @@ namespace CaeModel
                         do{name="_XPressure_"+(++pressureIndex);}while(checkedMesh.ElementSets.Keys.Any(n=>string.Equals(n,name,StringComparison.OrdinalIgnoreCase)));
                         checkedMesh.ElementSets.Add(name,group.Value.OrderBy(id=>id).ToArray());surface.AddElementFace(group.Key,name);
                     }
-                    var snapshot=new DLoad(load.Name,load.RegionName,load.RegionType,magnitude,false,false,0){AmplitudeName=load.AmplitudeName};
+                    var snapshot=new DLoad(load.Name,load.RegionName,load.RegionType,magnitude,twoD,false,0){AmplitudeName=load.AmplitudeName};
                     loads.Add(new CalDLoad(snapshot,surface,ComplexLoadTypeEnum.None));
                 } else throw new NotSupportedException("Unsupported mechanical load type.");
             }
@@ -262,7 +279,8 @@ namespace CaeModel
                 // correct for lossless mesh exchange, but can exceed CalculiX's
                 // 20-character numeric input field (e.g. 6.8000000000000001E-15).
                 int elementsAt = meshText.IndexOf("*Element", StringComparison.Ordinal);
-                text.Append(CalNodeFormatting.Write3D(checkedMesh.Nodes));
+                if(twoD) { text.Clear(); text.Append("** PrePoMax-X ").Append(modelSpace).Append(" static analysis deck\n*Heading\nModel space: ").Append(modelSpace).Append('\n'); }
+                text.Append(twoD ? CalNodeFormatting.Write2D(checkedMesh.Nodes) : CalNodeFormatting.Write3D(checkedMesh.Nodes));
                 text.Append(meshText.Substring(elementsAt));
                 foreach (string value in materialText) text.Append(value);
                 foreach (var section in sectionList) Append(text, new CalSolidSection(section));
@@ -288,7 +306,7 @@ namespace CaeModel
                 foreach (var item in isModal?new List<Tuple<DisplacementRotation,double[]>>():constraints)
                 {
                     var source = item.Item1; var v = item.Item2;
-                    var snapshot = new DisplacementRotation(source.Name, source.RegionName, RegionTypeEnum.NodeSetName, false, false, 0);
+                    var snapshot = new DisplacementRotation(source.Name, source.RegionName, RegionTypeEnum.NodeSetName, twoD, false, 0);
                     snapshot.AmplitudeName=source.AmplitudeName;
                     snapshot.U1.SetEquationFromValue(v[0]); snapshot.U2.SetEquationFromValue(v[1]); snapshot.U3.SetEquationFromValue(v[2]);
                     Append(text, new CalDisplacementRotation(snapshot, null, null, ComplexLoadTypeEnum.None));
@@ -311,13 +329,13 @@ namespace CaeModel
         }
 
         private static string FaceKey(IEnumerable<int> ids) { return string.Join(",",ids.Distinct().OrderBy(id=>id)); }
-        private static IEnumerable<Tuple<FeFaceName,int[]>> Faces(FeElement3D element)
+        private static IEnumerable<Tuple<FeFaceName,int[]>> Faces(FeElement element)
         {
-            for(int i=1;i<=6;i++) {
+            for(int i=element is FeElement2D ? 3 : 1;i<=6;i++) {
                 int[] ids;
                 try { ids=element.GetNodeIdsFromFaceName((FeFaceName)i); }
                 catch(NotSupportedException) { continue; }
-                if(ids.Distinct().Count()>=3)yield return Tuple.Create((FeFaceName)i,ids);
+                if(ids.Distinct().Count()>=(element is FeElement2D ? 2 : 3))yield return Tuple.Create((FeFaceName)i,ids);
             }
         }
 

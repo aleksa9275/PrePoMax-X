@@ -1,5 +1,16 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0103/0104 connect original plane stress/strain and axisymmetric triangle/quad
+formulations through explicit model space/thickness, native static jobs, original
+edge pressure/results/history and export/reopen. Read
+.project/reports/plane-axisymmetric-workflow.md and its receipt. Coarse CAX3/CAX4R
+and original segment-projection diagnostics remain explicit; no algorithm or
+existing tolerance changes. Source Mac/Linux ARM64 workflows and original solver
+comparisons pass; combined package follows requested shells/beams. Other family/
+calculation/mesher/full PMX and D029/B006/B007/D057–D061/four-target/release gates
+remain. Maintainer requests proceeding with shells/membranes then beams/trusses.
+
+
 Tasks 0101/0102 connect original implicit transient and stored-frequency-basis
 modal transient solid dynamics, damping, velocity/energy fields and velocity
 histories through desktop/native jobs. Read .project/reports/transient-dynamics-workflow.md

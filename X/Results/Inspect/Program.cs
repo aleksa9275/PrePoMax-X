@@ -10,7 +10,7 @@ try
   histories=dat.Histories.Select(h=>new{h.SetName,h.BaseSetName,h.FieldName,h.ComponentName,h.StepId,h.Id,h.IntegrationPoint,h.IncrementIds,h.Entries.Local,h.Entries.Unit,time=h.Entries.Time,values=h.Entries.Values})}));return 0;
  }
  var snapshot=FrdFileReader.ReadStaticSnapshot(args[1]);
- var result=new{success=true,snapshot.SourceSha256,snapshot.UnitSystemHeader,quantityUnits="as stored; no unit conversion or inference",fullResultsPreprocessing=false,solverExecuted=false,
+ var result=new{success=true,snapshot.SourceSha256,snapshot.UnitSystemHeader,snapshot.ModelSpace,snapshot.AxisymmetricScalingApplied,quantityUnits="stored units; original axisymmetric field scaling where indicated",fullResultsPreprocessing=false,solverExecuted=false,
  nodes=snapshot.NodeIdsInValueOrder.Select(id=>new{id,x=snapshot.Nodes[id].X,y=snapshot.Nodes[id].Y,z=snapshot.Nodes[id].Z}),
  elements=snapshot.Elements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,vtkCellType=e.GetVtkCellType(),nodeIds=e.NodeIds,vtkNodeIds=e.GetVtkNodeIds()}),nodeIdsInValueOrder=snapshot.NodeIdsInValueOrder,
  solverElements=snapshot.SolverElements.Values.Select(e=>new{id=e.Id,type=e.GetType().Name,nodeIds=e.NodeIds}),

@@ -11,7 +11,7 @@ namespace PrePoMaxX.StaticDeck;
 public sealed record MaterialSpec(string Name,string? YoungsModulus=null,string? PoissonsRatio=null,
     string? Density=null,string[][]? PlasticCurve=null,string Hardening="Isotropic",string? Conductivity=null,string? SpecificHeat=null,string[][]? ConductivityTable=null,string[][]? SpecificHeatTable=null,string[][]? DensityTable=null,
     string? Expansion=null,string? ExpansionZeroTemperature=null);
-public sealed record SectionSpec(string Name,string Material,string ElementSet);
+public sealed record SectionSpec(string Name,string Material,string ElementSet,string? Thickness=null);
 public sealed record ConstraintSpec(string Name,string NodeSet,string[] Displacements,string? Amplitude=null);
 public sealed record ForceSpec(string Name,string NodeSet,string[] ForcePerNode,string? Amplitude=null);
 public sealed record PressureSpec(string Name,string Magnitude,string? NodeSet=null,string? ElementSet=null,int? Face=null,string? Amplitude=null);
@@ -27,7 +27,7 @@ public sealed record StepSpec(string Name,double TimePeriod,double InitialTimeIn
     PressureSpec[]? Pressures=null,GravitySpec[]? GravityLoads=null,
     string Kind="static",int Modes=10,double? LowerFrequency=null,double? UpperFrequency=null,double BucklingAccuracy=0.0001, ThermalSpec? Thermal=null,TemperatureSpec[]? Temperatures=null,HeatLoadSpec[]? HeatLoads=null,TemperatureSpec[]? TemperatureFields=null,string? InitialTemperature=null,DynamicsSpec? Dynamics=null);
 public sealed record AnalysisSpec(int SchemaVersion,string UnitSystem,MaterialSpec[] Materials,SectionSpec[] Sections,StepSpec Step,
-    string? PyramidConversion = null,AmplitudeSpec[]? Amplitudes=null);
+    string? PyramidConversion = null,AmplitudeSpec[]? Amplitudes=null,string ModelSpace="ThreeD");
 
 public static class AnalysisFiles
 {
@@ -64,6 +64,9 @@ public static class AnalysisFiles
         if(spec==null || spec.SchemaVersion!=1 || spec.Step==null || spec.Materials==null || spec.Sections==null)
             throw new InvalidDataException("Complete schema version 1 analysis tool definition required.");
         if(spec.UnitSystem is not ("mm-N-s-C" or "m-N-s-C"))throw new InvalidDataException("Explicit mm-N-s-C or m-N-s-C units required.");
+        if(spec.ModelSpace is not ("ThreeD" or "PlaneStress" or "PlaneStrain" or "Axisymmetric"))throw new InvalidDataException("Choose ThreeD, PlaneStress, PlaneStrain or Axisymmetric model space.");
+        bool twoD=spec.ModelSpace!="ThreeD";
+        if(twoD && spec.Step.Kind!="static")throw new InvalidDataException("The connected plane/axisymmetric workflow currently requires a static step.");
         string length=spec.UnitSystem=="mm-N-s-C"?"mm":"m";
         StringPressureConverter.SetUnit=spec.UnitSystem=="mm-N-s-C"?"MPa":"Pa";
         StringLengthConverter.SetUnit=length;StringLengthDOFConverter.SetUnit=length;StringForceConverter.SetUnit="N";
@@ -74,6 +77,12 @@ public static class AnalysisFiles
             throw new InvalidDataException("Bounded nonempty material/section arrays required.");
         string Equation(string text)
         { if(text==null || text.Length==0 || text.Length>4096)throw new InvalidDataException("Missing or oversized equation.");return text; }
+        void InPlane(string text, Type converter)
+        {
+            if(!twoD)return;
+            var component=new EquationContainer(converter,0);component.SetEquation(Equation(text));
+            if(component.Value!=0)throw new InvalidDataException("2D force/gravity third component must be zero; components are never silently discarded.");
+        }
         bool thermal=spec.Step.Kind=="heat-transfer";
         string power=spec.UnitSystem=="mm-N-s-C"?"mW":"W";
         StringThermalConductivityConverter.SetPowerUnit=power;StringThermalConductivityConverter.SetLengthUnit=length;StringThermalConductivityConverter.SetTemperatureDeltaUnit="∆°C";
@@ -128,8 +137,14 @@ public static class AnalysisFiles
             }
             return material;
         }).ToArray();
-        var sections=spec.Sections.Select(value=>value==null?throw new InvalidDataException("Null section."):
-            new SolidSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,false)).ToArray();
+        var sections=spec.Sections.Select(value=> {
+            if(value==null)throw new InvalidDataException("Null section.");
+            if(!twoD && value.Thickness!=null)throw new InvalidDataException("Thickness applies to a 2D solid section.");
+            if(twoD && spec.ModelSpace!="Axisymmetric" && value.Thickness==null)throw new InvalidDataException("Explicit plane section thickness required.");
+            var section=new SolidSection(value.Name,value.Material,value.ElementSet,RegionTypeEnum.ElementSetName,1,twoD);
+            if(value.Thickness!=null)section.Thickness.SetEquation(Equation(value.Thickness));
+            return section;
+        }).ToArray();
         var definition=spec.Step;
         double[] times={definition.TimePeriod,definition.InitialTimeIncrement,definition.MinimumTimeIncrement,definition.MaximumTimeIncrement};
         if(times.Any(t=>!double.IsFinite(t)||t<=0) || definition.InitialTimeIncrement>definition.TimePeriod ||
@@ -220,7 +235,8 @@ public static class AnalysisFiles
         foreach(var value in definition.Constraints)
         {
             if(value==null || value.Displacements==null || value.Displacements.Length!=3)throw new InvalidDataException("Three displacement components required; null means free.");
-            var bc=new DisplacementRotation(value.Name,value.NodeSet,RegionTypeEnum.NodeSetName,false,false,0);
+            if(twoD && value.Displacements[2]!=null)throw new InvalidDataException("2D supports use U1/U2; leave U3 free.");
+            var bc=new DisplacementRotation(value.Name,value.NodeSet,RegionTypeEnum.NodeSetName,twoD,false,0);
             var components=new[]{bc.U1,bc.U2,bc.U3};
             for(int i=0;i<3;i++)if(value.Displacements[i]!=null)components[i].SetEquation(Equation(value.Displacements[i]));
             if(step.BoundaryConditions.ContainsKey(bc.Name))throw new InvalidDataException("Duplicate boundary condition name.");
@@ -230,7 +246,8 @@ public static class AnalysisFiles
         foreach(var value in definition.Loads)
         {
             if(value==null || value.ForcePerNode==null || value.ForcePerNode.Length!=3)throw new InvalidDataException("Three force-per-node components required.");
-            var load=new CLoad(value.Name,value.NodeSet,RegionTypeEnum.NodeSetName,0,0,0,false,false,0);
+            InPlane(value.ForcePerNode[2],typeof(StringForceConverter));
+            var load=new CLoad(value.Name,value.NodeSet,RegionTypeEnum.NodeSetName,0,0,0,twoD,false,0);
             load.F1.SetEquation(Equation(value.ForcePerNode[0]),true);load.F2.SetEquation(Equation(value.ForcePerNode[1]),true);load.F3.SetEquation(Equation(value.ForcePerNode[2]),true);
             if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate load name.");
             load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
@@ -240,14 +257,15 @@ public static class AnalysisFiles
             if(value==null || (string.IsNullOrEmpty(value.NodeSet)==string.IsNullOrEmpty(value.ElementSet)) ||
                 (value.NodeSet!=null && value.Face!=null) || (value.ElementSet!=null && (value.Face is <1 or >6 || value.Face==null)))
                 throw new InvalidDataException("Pressure requires a boundary node set or an element set with an explicit face 1–6.");
-            var load=new DLoad(value.Name,value.NodeSet??value.ElementSet,value.NodeSet!=null?RegionTypeEnum.NodeSetName:RegionTypeEnum.ElementSetName,0,false,false,0);
+            var load=new DLoad(value.Name,value.NodeSet??value.ElementSet,value.NodeSet!=null?RegionTypeEnum.NodeSetName:RegionTypeEnum.ElementSetName,0,twoD,false,0);
             load.ElementFaceName=value.Face.HasValue?(CaeMesh.FeFaceName)value.Face.Value:CaeMesh.FeFaceName.Empty;
             load.Magnitude.SetEquation(Equation(value.Magnitude));
             if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
         }
         foreach(var value in definition.GravityLoads??Array.Empty<GravitySpec>()) {
             if(value==null || value.Acceleration==null || value.Acceleration.Length!=3)throw new InvalidDataException("Gravity requires three acceleration components.");
-            var load=new GravityLoad(value.Name,value.ElementSet,RegionTypeEnum.ElementSetName,false,false,0);
+            InPlane(value.Acceleration[2],typeof(StringAccelerationConverter));
+            var load=new GravityLoad(value.Name,value.ElementSet,RegionTypeEnum.ElementSetName,twoD,false,0);
             load.F1.SetEquation(Equation(value.Acceleration[0]),true);load.F2.SetEquation(Equation(value.Acceleration[1]),true);load.F3.SetEquation(Equation(value.Acceleration[2]),true);
             if(step.Loads.ContainsKey(load.Name))throw new InvalidDataException("Duplicate mechanical load name.");load.AmplitudeName=value.Amplitude??Amplitude.DefaultAmplitudeName;step.Loads.Add(load.Name,load);
         }
@@ -289,7 +307,7 @@ public static class AnalysisFiles
             basis=(FrequencyStep)Create(bs).Step;basis.Storage=true;
             if(basis.Name==values.Step.Name)throw new InvalidDataException("Frequency basis and modal step names must differ.");
         }
-        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec),amplitudes,spec.Step.InitialTemperature,basis);
+        return StaticAnalysisDeckWriter.Write(mesh,values.Materials,values.Sections,values.Step,PyramidConversion(spec),amplitudes,spec.Step.InitialTemperature,basis,spec.ModelSpace);
     }
     public static void WriteNew(string path,string text)
     {

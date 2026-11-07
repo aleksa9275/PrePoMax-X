@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "modelSpace": "Axisymmetric",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0.25"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Cylinder",
+      "material": "ELASTIC",
+      "elementSet": "CYLINDER"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      }
+    ],
+    "loads": [],
+    "pressures": [
+      {
+        "name": "Internal-pressure",
+        "nodeSet": "INNER",
+        "magnitude": "1"
+      }
+    ],
+    "nodalHistorySets": [
+      "INNER"
+    ],
+    "elementHistorySets": []
+  }
+}

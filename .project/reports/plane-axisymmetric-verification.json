@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "tasks": [
+    "0103",
+    "0104"
+  ],
+  "success": true,
+  "sourceWorkflowComplete": true,
+  "fullParityAccepted": false,
+  "fullNumericalAccepted": false,
+  "hostedCiRun": false,
+  "evidenceRoot": "/tmp/prepomaxx-task0103-0104-evidence",
+  "macDesktop": {
+    "success": true,
+    "checks": 87,
+    "report": "/tmp/prepomaxx-task0103-0104-evidence/source-gui-final/workflow.json"
+  },
+  "linuxArm64Desktop": {
+    "success": true,
+    "checks": 87,
+    "report": "/tmp/prepomaxx-task0103-0104-evidence/linux/workflow/workflow.json"
+  },
+  "analytical": {
+    "plane-stress": {
+      "3": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 5.64652e-16,
+        "exactPatchPassed": true
+      },
+      "6": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 9.99999999995449e-06,
+        "exactPatchPassed": true
+      },
+      "4": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": true
+      },
+      "4R": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 3.36536e-16,
+        "exactPatchPassed": true
+      },
+      "8": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 5.0000000000105516e-05,
+        "exactPatchPassed": true
+      },
+      "8R": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": true
+      },
+      "fullRevolutionReaction": 12.0000003
+    },
+    "plane-strain": {
+      "3": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 2.06085e-15,
+        "exactPatchPassed": true
+      },
+      "6": {
+        "displacement": 5.000000000620827e-10,
+        "axialDisplacement": 5.000000000620827e-10,
+        "radialDisplacement": 0.0,
+        "stress": 9.99999999995449e-06,
+        "exactPatchPassed": true
+      },
+      "4": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": true
+      },
+      "4R": {
+        "displacement": 0.0,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 0.0,
+        "stress": 3.88578e-16,
+        "exactPatchPassed": true
+      },
+      "8": {
+        "displacement": 5.000000000620827e-10,
+        "axialDisplacement": 5.000000000620827e-10,
+        "radialDisplacement": 0.0,
+        "stress": 5.0000000000105516e-05,
+        "exactPatchPassed": true
+      },
+      "8R": {
+        "displacement": 5.000000000620827e-10,
+        "axialDisplacement": 5.000000000620827e-10,
+        "radialDisplacement": 0.0,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": true
+      },
+      "fullRevolutionReaction": 12.0000003
+    },
+    "axisymmetric": {
+      "3": {
+        "displacement": 5.728000000000005e-05,
+        "axialDisplacement": 5.728000000000005e-05,
+        "radialDisplacement": 3.603300000000001e-05,
+        "stress": 0.07023000000000001,
+        "exactPatchPassed": false
+      },
+      "6": {
+        "displacement": 1.5200000000000803e-07,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 1.5200000000000803e-07,
+        "stress": 9.99999999995449e-06,
+        "exactPatchPassed": false
+      },
+      "4": {
+        "displacement": 2.2999999999993512e-07,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 2.2999999999993512e-07,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": false
+      },
+      "4R": {
+        "displacement": 2.2660000000000085e-05,
+        "axialDisplacement": 2.2660000000000085e-05,
+        "radialDisplacement": 1.455000000000011e-05,
+        "stress": 0.011400000000000077,
+        "exactPatchPassed": false
+      },
+      "8": {
+        "displacement": 3.7999999999991166e-07,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 3.7999999999991166e-07,
+        "stress": 5.0000000000105516e-05,
+        "exactPatchPassed": false
+      },
+      "8R": {
+        "displacement": 4.5999999999987023e-07,
+        "axialDisplacement": 0.0,
+        "radialDisplacement": 4.5999999999987023e-07,
+        "stress": 4.0000000000040004e-05,
+        "exactPatchPassed": false
+      },
+      "fullRevolutionReaction": 1.361254026,
+      "continuumReaction": 245.04422698000386
+    },
+    "axisymmetric-cylinder": {
+      "radialDisplacement": 2.9871996087794603e-07,
+      "radialStress": 0.0009310000000000151,
+      "hoopStress": 0.0009566666666664947,
+      "axialStress": 5.12428e-09
+    }
+  },
+  "nativeComparison": {
+    "success": true,
+    "runs": {
+      "plane-stress": {
+        "deckEqual": true,
+        "analyticalMetricsEqual": true,
+        "exactDecodedFieldsEqual": true,
+        "exactMeshEqual": true
+      },
+      "plane-strain": {
+        "deckEqual": true,
+        "analyticalMetricsEqual": true,
+        "exactDecodedFieldsEqual": true,
+        "exactMeshEqual": true
+      },
+      "axisymmetric": {
+        "deckEqual": true,
+        "analyticalMetricsEqual": true,
+        "exactDecodedFieldsEqual": true,
+        "exactMeshEqual": true
+      },
+      "axisymmetric-cylinder": {
+        "deckEqual": true,
+        "analyticalMetricsEqual": true,
+        "exactDecodedFieldsEqual": true,
+        "exactMeshEqual": true
+      }
+    }
+  },
+  "originalWindowsSolver": {
+    "success": true,
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "plane-stress": {
+        "success": true,
+        "exactMeshEqual": true,
+        "inputSha256": "437c01c073e30cbfb3b9882740ef8afc3835961b900f5935c29d80668e88f5d0",
+        "maximumDifference": {
+          "coordinates": 0,
+          "frd": 4.9673069428903e-09,
+          "dat": 1.7185880000000005e-15
+        }
+      },
+      "axisymmetric": {
+        "success": true,
+        "exactMeshEqual": false,
+        "inputSha256": "4aba4f091eec20c4d0df2e3e7d32ba31dc35e609692faae26802179aca6d2278",
+        "maximumDifference": {
+          "coordinates": 2.4000000000017745e-20,
+          "frd": 4.9674193310299994e-09,
+          "dat": 2.5475438e-15
+        }
+      },
+      "plane-strain": {
+        "success": true,
+        "exactMeshEqual": true,
+        "inputSha256": "fda94e9bcfda7bfdabdecb5790a063c2c1faf8b8a06e7ad8f95e0b097b0ac129",
+        "maximumDifference": {
+          "coordinates": 0,
+          "frd": 1.964428662e-12,
+          "dat": 3.169518878e-13
+        }
+      },
+      "axisymmetric-cylinder": {
+        "success": true,
+        "exactMeshEqual": false,
+        "inputSha256": "513c6e1ebdca25a844fb264106fcd90d48976a08468ad01446ee72f85fe9ba8f",
+        "maximumDifference": {
+          "coordinates": 4.000000000019392e-21,
+          "frd": 1.1541799999999998e-12,
+          "dat": 4.1200000000034196e-16
+        }
+      }
+    },
+    "bounds": {
+      "absolute": 1e-06,
+      "relative": 1e-06
+    },
+    "nativeWindowsAcceptance": false,
+    "scope": "Pinned original Windows CalculiX 2.22 via CrossOver; identical decks, original readers, no numerical algorithm changes"
+  },
+  "checks": {
+    "currentEngineering": true,
+    "sourceClosure": 213,
+    "desktopRegressions": {
+      "passed": 76,
+      "log": "/tmp/prepomaxx-task0103-0104-evidence/desktop-native-tests.log",
+      "initialRunMissingJobHost": true
+    },
+    "jobBoundaryRegressions": {
+      "passed": 4,
+      "log": "/tmp/prepomaxx-task0103-0104-evidence/desktop-jobs-tests.log"
+    },
+    "newPlaneBehaviors": 7
+  },
+  "candidate": {
+    "status": "Existing task0102 package retained; new combined candidate follows requested shell/beam milestones. Source desktop verified here."
+  },
+  "publication": {
+    "status": "prepared for normal research-branch publication with CI skipped"
+  },
+  "remaining": "Shells/membranes and beams/trusses next; mixed-family/calculation breadth, mesh authoring, full PMX and all D029/B006/B007/D057\u2013D061/four-target/release obligations remain. Original coarse CAX3/CAX4R and segment projection diagnostics are retained without numerical changes."
+}

@@ -5,7 +5,7 @@ from PyQt6 import QtCore, QtWidgets
 class SolidFormulationDialog(QtWidgets.QDialog):
     def __init__(self, parent, scene):
         super().__init__(parent)
-        self.setWindowTitle('Solid element formulations')
+        self.setWindowTitle('Solid / plane element formulations')
         self.resize(650, 380)
         layout=QtWidgets.QVBoxLayout(self)
         note=QtWidgets.QLabel('Choose the solver formulation for each imported element block. '

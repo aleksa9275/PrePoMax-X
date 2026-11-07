@@ -84,7 +84,7 @@ def package(build, root, solver_build=None):
     example_dir.mkdir()
     for name in ('cube-mesh.inp', 'cube-analysis.json', 'mixed-solids.inp', 'mixed-solids.json', 'mixed-pyramids.inp', 'mixed-pyramids.json', 'pressure-solids.inp', 'pressure-solids.json', 'gravity-column.inp', 'gravity-column.json', 'plastic-tension.inp', 'plastic-tension.json', 'finite-tension.inp', 'finite-tension.json', 'axial-frequency.inp', 'axial-frequency.json', 'column-buckling.inp', 'column-buckling.json'):
         shutil.copy2(root / 'X/Analysis/StaticDeck' / name, example_dir / name)
-    for case in ('steady-conduction','transient-heating','surface-heating','body-heating','film-cooling','nodal-heating','radiation-cooling','temperature-conductivity','amplitude-heating','amplitude-force','free-expansion','restrained-expansion','implicit-ramp','implicit-damped','modal-ramp','modal-damped'):
+    for case in ('plane-stress','plane-strain','axisymmetric','axisymmetric-cylinder','steady-conduction','transient-heating','surface-heating','body-heating','film-cooling','nodal-heating','radiation-cooling','temperature-conductivity','amplitude-heating','amplitude-force','free-expansion','restrained-expansion','implicit-ramp','implicit-damped','modal-ramp','modal-damped'):
         for suffix in ('.inp','.json'):
             shutil.copy2(root / 'X/Analysis/StaticDeck' / (case+suffix), example_dir / (case+suffix))
     pmx = (['--add-data', f"{output / 'pmx-tools'}:pmx-tools", '--hidden-import', 'decimal']

@@ -22,6 +22,8 @@ namespace CaeResults
     {
         public string SourceSha256 { get; }
         public string UnitSystemHeader { get; }
+        public string ModelSpace { get; }
+        public bool AxisymmetricScalingApplied { get; }
         public IReadOnlyDictionary<int, FeNode> Nodes { get; }
         public IReadOnlyDictionary<int, FeElement> Elements { get; }
         public IReadOnlyDictionary<int, FeElement> SolverElements { get; }
@@ -29,9 +31,10 @@ namespace CaeResults
         public IReadOnlyList<int> NodeIdsInValueOrder { get; }
         public IReadOnlyList<FrdStaticField> Fields { get; }
         internal FrdStaticSnapshot(string hash, string units, Dictionary<int, FeNode> nodes,
-            Dictionary<int, FeElement> elements, int[] order, List<FrdStaticField> fields)
+            Dictionary<int, FeElement> elements, int[] order, List<FrdStaticField> fields, string modelSpace = "ThreeD", bool axisymmetricScalingApplied = false)
         {
             SourceSha256 = hash; UnitSystemHeader = units;
+            ModelSpace = modelSpace; AxisymmetricScalingApplied = axisymmetricScalingApplied;
             Nodes = new ReadOnlyDictionary<int, FeNode>(nodes);
             SolverElements = new ReadOnlyDictionary<int, FeElement>(elements);
             // Same original restoration used by FeMesh for solver-exported pyramids.
@@ -97,7 +100,7 @@ namespace CaeResults
                     Dictionary<int, FeNode> nodes = null; Dictionary<int, int> lookup = null;
                     Dictionary<int, FeElement> elements = null;
                     var fields = new List<FrdStaticField>(); FieldData previous = null;
-                    bool constantWidth = true; string unitHeader = null;
+                    bool constantWidth = true; string unitHeader = null; string modelSpace = "ThreeD";
                     _bemaNodeIds = null;
                     foreach (var set in sets)
                     {
@@ -106,7 +109,8 @@ namespace CaeResults
                         {
                             if (nodes != null) throw new InvalidDataException("FRD heading must precede mesh.");
                             string space = GetModelSpace(set.Lines);
-                            if (space != null && space != "3D" && space != "ThreeD") throw new NotSupportedException("Only raw 3D static fields are supported; no axisymmetric scaling is applied.");
+                            if (space != null && space is not ("3D" or "ThreeD" or "PlaneStress" or "PlaneStrain" or "Axisymmetric")) throw new NotSupportedException("Unsupported FRD model space.");
+                            modelSpace = space == null || space == "3D" ? "ThreeD" : space;
                             unitHeader = set.Lines.FirstOrDefault(l => l.IndexOf("Unit system:", StringComparison.OrdinalIgnoreCase) >= 0);
                         }
                         else if (id.StartsWith("    2C", StringComparison.Ordinal))
@@ -123,9 +127,9 @@ namespace CaeResults
                             var empty = new HashSet<int>();
                             elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
                             if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 ||
-                                (e.Value is not FeElement3D) ||
+                                (e.Value is not FeElement3D && !(modelSpace != "ThreeD" && e.Value is FeElement2D)) ||
                                 e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
-                                throw new NotSupportedException("Complete 3D solid result meshes with valid node references are required.");
+                                throw new NotSupportedException("Complete solid or declared plane/axisymmetric result meshes with valid node references are required.");
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {
@@ -166,7 +170,25 @@ namespace CaeResults
                     }
                     if (nodes == null || elements == null || fields.Count == 0) throw new InvalidDataException("Complete mesh and at least one field are required.");
                     if (hash != Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(fileName)))) throw new IOException("FRD changed during inspection.");
-                    return new FrdStaticSnapshot(hash, unitHeader, nodes, elements, lookup.OrderBy(p => p.Value).Select(p => p.Key).ToArray(), fields);
+                    bool scaled = false;
+                    if (modelSpace == "Axisymmetric")
+                    {
+                        // Same decisions, field lists and factors as the original
+                        // Controller.ScaleAxisymmetricSegmentFields and FRD helpers.
+                        bool threeD = elements.Values.Any(e => e is FeElement3D) || nodes.Values.Any(n =>
+                            Math.Abs(n.Z) > 1E-6 * Math.Max(1, Math.Max(Math.Abs(n.X), Math.Abs(n.Y))));
+                        foreach (var value in fields)
+                        {
+                            float factor = 1;
+                            if (!threeD && _axisymmetricSegmentFieldNames.Contains(value.Field.Name)) factor *= _axisymmetricSegmentsPerRevolution;
+                            bool mode = value.Data.StepType == StepTypeEnum.Buckling ? value.Data.Time != 0 : _massNormalizedModeStepTypes.Contains(value.Data.StepType);
+                            float modeFactor = (float)(1 / Math.Sqrt(_axisymmetricSegmentsPerRevolution));
+                            if (mode && _axisymmetricModeFieldNames.Contains(value.Field.Name)) factor *= modeFactor;
+                            if (mode && _axisymmetricModeEnergyFieldNames.Contains(value.Field.Name)) factor *= modeFactor * modeFactor;
+                            if (factor != 1) { value.Field.ScaleComponentValues(factor); scaled = true; }
+                        }
+                    }
+                    return new FrdStaticSnapshot(hash, unitHeader, nodes, elements, lookup.OrderBy(p => p.Value).Select(p => p.Key).ToArray(), fields, modelSpace, scaled);
                 }
                 finally { CultureInfo.CurrentCulture = culture; _bemaNodeIds = null; }
             }

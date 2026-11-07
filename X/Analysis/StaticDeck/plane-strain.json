@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "modelSpace": "PlaneStrain",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0.25"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_PATCH_1",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_1",
+      "thickness": "2"
+    },
+    {
+      "name": "Section_PATCH_2",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_2",
+      "thickness": "2"
+    },
+    {
+      "name": "Section_PATCH_3",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_3",
+      "thickness": "2"
+    },
+    {
+      "name": "Section_PATCH_4",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_4",
+      "thickness": "2"
+    },
+    {
+      "name": "Section_PATCH_5",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_5",
+      "thickness": "2"
+    },
+    {
+      "name": "Section_PATCH_6",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_6",
+      "thickness": "2"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Left",
+        "nodeSet": "LEFT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      }
+    ],
+    "loads": [],
+    "pressures": [
+      {
+        "name": "Tension",
+        "nodeSet": "TOP",
+        "magnitude": "-1"
+      }
+    ],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": []
+  }
+}

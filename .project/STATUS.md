@@ -1,5 +1,15 @@
 # Project status
 
+## Current — tasks 0103/0104: plane and axisymmetric elements
+
+All 18 original CPS/CPE/CAX formulations connect configuration, thickness, edge
+pressure, native static solve, original fields/histories and export/reopen.
+Mac/Linux ARM64 pass four workflows with exact native decks/meshes/fields;
+pinned original Windows solver comparisons agree. Coarse CAX3/CAX4R and original
+segment projection remain explicit diagnostics. [Scope and receipt](reports/plane-axisymmetric-workflow.md).
+Existing candidate retained pending the requested shells/membranes and beams/
+trusses milestones. All full-parity/PMX/four-target/release gates remain.
+
 ## Current — tasks 0101/0102: transient solid dynamics
 
 Original implicit transient and stored-frequency-basis modal transient dynamics

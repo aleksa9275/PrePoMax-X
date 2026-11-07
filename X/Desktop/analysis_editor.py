@@ -129,6 +129,20 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.units.addItem('m · N · s · °C (stress: Pa)', 'm-N-s-C')
         self.units.setCurrentIndex(max(0, self.units.findData(definition['unitSystem'])))
         form.addRow('Mesh unit system', self.units)
+        self.model_space = QtWidgets.QComboBox()
+        self.model_space.setObjectName('modelSpace')
+        for label, key in [('3D solid', 'ThreeD'), ('Plane stress (XY)', 'PlaneStress'),
+                           ('Plane strain (XY)', 'PlaneStrain'), ('Axisymmetric (X = radius, Y = axis)', 'Axisymmetric')]:
+            self.model_space.addItem(label, key)
+        self.model_space.setCurrentIndex(max(0, self.model_space.findData(definition.get('modelSpace', 'ThreeD'))))
+        self.model_space.currentIndexChanged.connect(self.mark_changed)
+        form.addRow('Model space', self.model_space)
+        space_note = QtWidgets.QLabel('Plane/axisymmetric models use U1/U2 and F1/F2. Leave U3 blank and F3 zero. '
+            'Plane sections require positive thickness in the chosen length units. '
+            'Axisymmetric nodal forces and reactions refer to the full revolution; pressure is force per area. '
+            'Pressure faces S3–S6 select the original element edges (solver P1–P4).')
+        space_note.setWordWrap(True)
+        form.addRow(space_note)
         self.pyramid_conversion = None
         if any(e.get('vtkCellType') in (14,27) for e in scene['elements']) or definition.get('pyramidConversion'):
             self.pyramid_conversion = QtWidgets.QComboBox()
@@ -159,8 +173,8 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.materials = Rows([('name', 'Name'), ('youngsModulus', "Young’s modulus"),
             ('poissonsRatio', 'Poisson ratio')], {'name': '', 'youngsModulus': '', 'poissonsRatio': ''}, definition['materials'])
         self.tabs.addTab(self.materials, 'Materials')
-        self.sections = Rows([('name', 'Name'), ('material', 'Material'), ('elementSet', 'Element set')],
-            {'name': '', 'material': '', 'elementSet': ''}, definition['sections'],
+        self.sections = Rows([('name', 'Name'), ('material', 'Material'), ('elementSet', 'Element set'), ('thickness', '2D thickness')],
+            {'name': '', 'material': '', 'elementSet': '', 'thickness': ''}, definition['sections'],
             {'elementSet': [item['name'] for item in scene.get('elementSets', [])]})
         self.tabs.addTab(self.sections, 'Solid sections')
         nodes = [item['name'] for item in scene.get('nodeSets', [])]
@@ -397,11 +411,16 @@ class AnalysisDialog(QtWidgets.QDialog):
     def collect(self):
         value = copy.deepcopy(self.original)
         value['unitSystem'] = self.units.currentData()
+        if self.model_space.currentData() != 'ThreeD' or 'modelSpace' in value:
+            value['modelSpace'] = self.model_space.currentData()
         if self.pyramid_conversion is not None:
             choice=self.pyramid_conversion.currentData()
             if choice is None: value.pop('pyramidConversion',None)
             else: value['pyramidConversion']=choice
         value['materials'], value['sections'] = self.materials.values(), self.sections.values()
+        for section in value['sections']:
+            if not section.get('thickness'):
+                section.pop('thickness', None)
         by_name={m['name']:m for m in value['materials']}
         properties={}
         for row in self.mechanical_properties.values():

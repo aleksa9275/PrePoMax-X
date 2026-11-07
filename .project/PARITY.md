@@ -74,6 +74,11 @@ into the shared application; preserve intentional upstream behavior and units.
 | Engineering correctness | Strict accepted-scope checks retained; tasks 0087/0088 verify native C3D10 force-driven/curved static calculations independently of PrePoMax measurement | Both known element failures and quadratic-tetrahedron measurement gate remain; general curved quality and full calculation parity are open |
 | Distribution | Internal ad-hoc Mac DMG, native Linux archive and Ubuntu 24.04 installer proof; shared four-RID hosts | Native Windows installer, Linux distro coverage and physical desktop acceptance, signing/clean OS/Homebrew and complete corresponding sources/notices |
 
+Tasks 0103/0104 add the connected plane stress/strain and axisymmetric static
+workflows for all original triangle/quad formulations. [Scope, diagnostics and
+actual checks](reports/plane-axisymmetric-workflow.md). Shells, beams, other
+family/calculation combinations, mesh authoring and full PMX remain required.
+
 ## Future release cadence
 
 For every upstream release, record its exact source/artifact identity, compare

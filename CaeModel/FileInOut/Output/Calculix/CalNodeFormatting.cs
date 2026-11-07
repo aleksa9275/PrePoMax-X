@@ -18,5 +18,16 @@ namespace FileInOut.Output.Calculix
             foreach (int id in nodes.Keys.OrderBy(i => i)) Append3D(text, nodes[id]);
             return text.ToString();
         }
+        public static string Write2D(IDictionary<int, FeNode> nodes)
+        {
+            var text = new StringBuilder("*Node\n");
+            foreach (int id in nodes.Keys.OrderBy(i => i))
+            {
+                var node = nodes[id];
+                // Original CalNode.WriteNodes two-dimensional branch.
+                text.AppendFormat("{0}, {1:E8}, {2:E8}", node.Id, node.X, node.Y).AppendLine();
+            }
+            return text.ToString();
+        }
     }
 }
