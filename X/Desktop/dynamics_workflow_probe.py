@@ -99,6 +99,8 @@ def begin(app,w,output):
         w.frames.setCurrentIndex(w.frames.count()-1);w.result_tools.deformed.setChecked(True);w.result_tools.outline.setChecked(True);w.result_tools.scale.setValue(10)
         check(case+' deformed physical frame',w.result_tools.selected_displacement() is not None)
         before=w.frames.currentIndex();w.result_tools.animation.setCurrentIndex(0);w.result_tools.tick();check(case+' physical animation advances',w.frames.currentIndex()!=before)
+        check(case+' animation stays in physical step',w.result_tools.selected_displacement()['stepId']==(2 if case.startswith('modal') else 1) and w.result_tools.selected_displacement()['mode']<=0)
+        w.frames.setCurrentIndex(w.frames.count()-1)
         d=HistoryDialog(w,directory/'analysis.dat',history);d.show();app.processEvents();d.series.setCurrentIndex(next(i for i,h in enumerate(history['histories']) if h['ComponentName']=='V1' and h['Id']==2))
         check(case+' velocity history graph and table',d.table.model().rowCount()==64 and d.grab().save(str(output/(case+'-history.png'))));export_histories(output/(case+'-histories.csv'),history['histories']);d.close()
         w.fit();app.processEvents();check(case+' viewport captured',w.grab().save(str(output/(case+'.png'))));report['runs'][case]={'job':result,**metrics};state['index']+=1

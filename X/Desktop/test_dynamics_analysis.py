@@ -22,6 +22,12 @@ class DynamicsAnalysis(unittest.TestCase):
                     self.assertTrue(d.validate_current(),d.message.text());self.assertFalse(d.validation['solverExecuted'])
                     for k,v in spec['step']['dynamics'].items():self.assertEqual(d.definition['step']['dynamics'][k],v)
                     d.close()
+    def test_animation_keeps_frequency_basis_and_physical_increments_separate(self):
+        from results_tools import next_increment_frame
+        frames=[(1,1,275.6),(2,1,.0001),(2,2,.0002)]
+        self.assertEqual(next_increment_frame(frames,2),1)
+        self.assertEqual(next_increment_frame(frames,0),0)
+        self.assertEqual(next_increment_frame(frames,1),2)
     def test_density_required_for_every_dynamic_section(self):
         for case in ('implicit-ramp','modal-ramp'):self.reject(case,lambda s:s['materials'][0].pop('density'))
     def test_alpha_checked_before_original_clamping(self):

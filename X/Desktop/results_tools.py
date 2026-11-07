@@ -15,6 +15,13 @@ from vtkmodules.vtkCommonDataModel import vtkUnstructuredGrid
 from vtkmodules.vtkRenderingCore import vtkActor,vtkDataSetMapper
 
 
+def next_increment_frame(frames,current):
+    """Cycle increments within the selected original step, keeping basis modes separate."""
+    if not frames:return -1
+    current=max(0,current);indices=[i for i,frame in enumerate(frames) if frame[0]==frames[current][0]]
+    return indices[(indices.index(current)+1)%len(indices)]
+
+
 def result_command():
     import sys
     from jobs import ROOT,resources
@@ -157,7 +164,7 @@ class ResultsTools:
         w=self.window
         if not w.isVisible():self.toggle(False);return
         if self.animation.currentIndex()==0:
-            w.frames.setCurrentIndex((w.frames.currentIndex()+1)%max(1,w.frames.count()))
+            w.frames.setCurrentIndex(next_increment_frame([w.frames.itemData(i) for i in range(w.frames.count())],w.frames.currentIndex()))
         else:
             self.tick_index+=1;self.phase=math.sin(2*math.pi*self.tick_index/32);self.apply()
     def open_histories(self):

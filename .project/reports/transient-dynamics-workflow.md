@@ -39,7 +39,11 @@ before the original step-2 history parser runs. The API explicitly returns
 partial, nonfinite or inconsistent preambles fail. Existing 8-MiB, 256-dataset,
 250000-sample limits, original value semantics and unknown-record rejection
 remain unchanged. Histories offer graph/table/CSV; physical frames support
-selection, deformed shape, undeformed outline and increment animation.
+selection, deformed shape, undeformed outline and increment animation. Playback
+cycles within the selected original step, preventing physical transient frames
+from wrapping into the arbitrary-amplitude frequency basis. Visual inspection
+exposed this integration defect after initial checks; a focused regression and
+stronger end-to-end assertion now enforce the separation.
 
 ## Independent verification examples
 
