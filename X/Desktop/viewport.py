@@ -227,7 +227,7 @@ class Viewport(QtWidgets.QMainWindow):
         self.export_mesh_action = jobbar.addAction("Export mesh…", self.export_mesh_dialog)
         self.add_set_action = jobbar.addAction("Add set…", self.add_set_dialog)
         self.add_set_action.setEnabled(False)
-        self.formulation_action = jobbar.addAction("Solid formulations…", self.formulations_dialog)
+        self.formulation_action = jobbar.addAction("Element formulations…", self.formulations_dialog)
         self.formulation_action.setEnabled(False)
         self.configure_action = jobbar.addAction("Configure…", self.configure_model)
         self.run_action = jobbar.addAction("Run analysis", self.run_model)
@@ -295,13 +295,13 @@ class Viewport(QtWidgets.QMainWindow):
                 QtWidgets.QTreeWidgetItem(group, [item['name'], str(item['count'])])
         blocks = self.model_scene.get('elementBlocks', [])
         if blocks:
-            group = QtWidgets.QTreeWidgetItem(root, ['Solid formulations', str(len(blocks))])
+            group = QtWidgets.QTreeWidgetItem(root, ['Element formulations', str(len(blocks))])
             for block in blocks:
                 QtWidgets.QTreeWidgetItem(group, [block.get('name') or 'Unnamed block', block['formulation']])
         if self.quadratic_mesh:
             QtWidgets.QTreeWidgetItem(root,['C3D10','Quadratic static solid'])
         for tab, label, records, region in [(1, 'Materials', self.definition['materials'], 'youngsModulus'),
-                (2, 'Solid sections', self.definition['sections'], 'elementSet'),
+                (2, 'Sections', self.definition['sections'], 'elementSet'),
                 (3, 'Supports', self.definition['step']['constraints'], 'nodeSet'),
                 (4, 'Nodal loads', self.definition['step']['loads'], 'nodeSet')]:
             group = QtWidgets.QTreeWidgetItem(root, [label, str(len(records))])
@@ -545,6 +545,7 @@ class Viewport(QtWidgets.QMainWindow):
         name,mesh_name,definition_name='Cube','cube-mesh.inp','cube-analysis.json'
         if select:
             choices={'Cube':('cube-mesh.inp','cube-analysis.json'),
+                **{label:(case+'.inp',case+'.json') for label,case in [('Shells — all formulations','shell-tension'),('Membranes — linear formulations','membrane-tension'),('Membranes — quadratic prescribed strain','membrane-quadratic'),('Shell — pure bending','shell-bending'),('Layered shell — symmetric tension','composite-tension'),('Beams and trusses — axial tension','line-tension'),('Beam — rectangular bending','beam-bending'),('Beam — circular bending','beam-circular'),('Shell — normal pressure','shell-pressure')]},
                 'Plane stress — all triangle / quad formulations':('plane-stress.inp','plane-stress.json'),
                 'Plane strain — all triangle / quad formulations':('plane-strain.inp','plane-strain.json'),
                 'Axisymmetric — all triangle / quad formulations':('axisymmetric.inp','axisymmetric.json'),
@@ -1195,6 +1196,7 @@ def main():
                         help='Verify native CAD dialogs, STEP export, remeshing and solve')
     parser.add_argument('--cad-quadratic-probe',type=Path,nargs=2,metavar=('CAD','OUTPUT'),help='Verify quadratic CAD meshing, static calculation and mesh export')
     parser.add_argument('--solid-workflow-probe',type=Path,help='Exercise mixed solid formulations and both original pyramid conversions')
+    parser.add_argument('--structural-workflow-probe',type=Path,help='Exercise shell/membrane and beam/truss workflows')
     parser.add_argument('--plane-workflow-probe',type=Path,help='Exercise plane stress, plane strain and axisymmetric element workflows')
     parser.add_argument('--dynamics-workflow-probe',type=Path,help='Exercise original implicit and stored-basis modal transient dynamics')
     parser.add_argument('--thermomechanical-workflow-probe',type=Path,help='Exercise radiation, thermal tables, amplitudes and thermal stress')
@@ -1202,6 +1204,8 @@ def main():
     parser.add_argument('--eigenmode-workflow-probe',type=Path,help='Exercise frequency, buckling, deformation, animation and original histories')
     parser.add_argument('--nonlinear-workflow-probe',type=Path,help='Exercise original pressure, gravity, plasticity, NLGEOM and increment results')
     args = parser.parse_args()
+    if args.structural_workflow_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='structural_workflow_probe') or k in ('input','self_test','run_example')):
+        parser.error('Use --structural-workflow-probe separately from other inputs/probes')
     if args.plane_workflow_probe and any(v for k,v in vars(args).items() if (k.endswith('_probe') and k!='plane_workflow_probe') or k in ('input','self_test','run_example')):
         parser.error('Use --plane-workflow-probe separately from other inputs/probes')
     if args.dynamics_workflow_probe and any([args.thermomechanical_workflow_probe,args.thermal_workflow_probe,args.eigenmode_workflow_probe,args.nonlinear_workflow_probe,args.solid_workflow_probe,args.input,args.self_test,args.run_example,args.viewport_probe,args.editor_probe,args.pmx_probe,args.cad_workflow_probe,args.cad_pmx_probe,args.cad_edit_probe,args.cad_quadratic_probe]):
@@ -1252,7 +1256,7 @@ def main():
     window = Viewport(args.viewport, cad_tool=cad_tool)
     if args.jobs_root:
         window.jobs_root = args.jobs_root.resolve()
-    window.automated_workflow = bool(args.plane_workflow_probe or args.dynamics_workflow_probe or args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
+    window.automated_workflow = bool(args.structural_workflow_probe or args.plane_workflow_probe or args.dynamics_workflow_probe or args.thermomechanical_workflow_probe or args.thermal_workflow_probe or args.eigenmode_workflow_probe or args.nonlinear_workflow_probe or args.solid_workflow_probe or args.self_test or args.editor_probe or args.pmx_probe or args.cad_workflow_probe or args.cad_pmx_probe or args.cad_edit_probe or args.cad_quadratic_probe)
     if args.input:
         if args.input.suffix.lower() == '.pmx':
             window.open_pmx(args.input)
@@ -1336,6 +1340,9 @@ def main():
         window.close()
         app.exit(0 if result["success"] else 1)
 
+    if args.structural_workflow_probe:
+        from structural_workflow_probe import begin
+        QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.structural_workflow_probe.resolve()))
     if args.plane_workflow_probe:
         from plane_workflow_probe import begin
         QtCore.QTimer.singleShot(500,lambda:begin(app,window,args.plane_workflow_probe.resolve()))

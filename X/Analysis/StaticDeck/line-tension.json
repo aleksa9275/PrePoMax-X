@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_0",
+      "material": "ELASTIC",
+      "elementSet": "LINE_0",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Section_1",
+      "material": "ELASTIC",
+      "elementSet": "LINE_1",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Section_2",
+      "material": "ELASTIC",
+      "elementSet": "LINE_2",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Section_3",
+      "material": "ELASTIC",
+      "elementSet": "LINE_3",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Section_4",
+      "material": "ELASTIC",
+      "elementSet": "LINE_4",
+      "kind": "beam",
+      "dimensions": [
+        ".2",
+        ".3"
+      ],
+      "shape": "RECT",
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Section_5",
+      "material": "ELASTIC",
+      "elementSet": "LINE_5",
+      "kind": "truss",
+      "dimensions": [
+        ".06"
+      ]
+    },
+    {
+      "name": "Section_6",
+      "material": "ELASTIC",
+      "elementSet": "LINE_6",
+      "kind": "truss",
+      "dimensions": [
+        ".06"
+      ]
+    },
+    {
+      "name": "Section_7",
+      "material": "ELASTIC",
+      "elementSet": "LINE_7",
+      "kind": "truss",
+      "dimensions": [
+        ".06"
+      ]
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Axial-root",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Lateral",
+        "nodeSet": "ALL",
+        "displacements": [
+          null,
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "Rotation",
+        "nodeSet": "BEAMS",
+        "displacements": [
+          null,
+          null,
+          null
+        ],
+        "rotations": [
+          "0",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "Tension",
+        "nodeSet": "TIP",
+        "forcePerNode": [
+          ".06",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "pressures": [],
+    "nodalHistorySets": [
+      "ROOT",
+      "TIP"
+    ],
+    "elementHistorySets": []
+  }
+}

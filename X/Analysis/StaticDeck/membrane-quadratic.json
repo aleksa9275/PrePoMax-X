@@ -1,0 +1,1126 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0.25"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_PATCH_1",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_1",
+      "thickness": ".1",
+      "kind": "membrane",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_2",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_2",
+      "thickness": ".1",
+      "kind": "membrane",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_3",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_3",
+      "thickness": ".1",
+      "kind": "membrane",
+      "offset": "0"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "PRESCRIBED_11",
+        "nodeSet": "PRESCRIBED_11",
+        "displacements": [
+          "-0.0",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_14",
+        "nodeSet": "PRESCRIBED_14",
+        "displacements": [
+          "-0.000125",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_17",
+        "nodeSet": "PRESCRIBED_17",
+        "displacements": [
+          "-0.000125",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_20",
+        "nodeSet": "PRESCRIBED_20",
+        "displacements": [
+          "-6.25e-05",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_23",
+        "nodeSet": "PRESCRIBED_23",
+        "displacements": [
+          "-0.000125",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_26",
+        "nodeSet": "PRESCRIBED_26",
+        "displacements": [
+          "-6.25e-05",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_29",
+        "nodeSet": "PRESCRIBED_29",
+        "displacements": [
+          "-0.0",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_32",
+        "nodeSet": "PRESCRIBED_32",
+        "displacements": [
+          "-6.25e-05",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_35",
+        "nodeSet": "PRESCRIBED_35",
+        "displacements": [
+          "-0.0",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_38",
+        "nodeSet": "PRESCRIBED_38",
+        "displacements": [
+          "-0.00025",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_41",
+        "nodeSet": "PRESCRIBED_41",
+        "displacements": [
+          "-0.00025",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_44",
+        "nodeSet": "PRESCRIBED_44",
+        "displacements": [
+          "-0.0001875",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_47",
+        "nodeSet": "PRESCRIBED_47",
+        "displacements": [
+          "-0.00025",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_50",
+        "nodeSet": "PRESCRIBED_50",
+        "displacements": [
+          "-0.0001875",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_53",
+        "nodeSet": "PRESCRIBED_53",
+        "displacements": [
+          "-0.0001875",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_56",
+        "nodeSet": "PRESCRIBED_56",
+        "displacements": [
+          "-0.000125",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_59",
+        "nodeSet": "PRESCRIBED_59",
+        "displacements": [
+          "-0.000125",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_62",
+        "nodeSet": "PRESCRIBED_62",
+        "displacements": [
+          "-6.25e-05",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_65",
+        "nodeSet": "PRESCRIBED_65",
+        "displacements": [
+          "-0.0",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_68",
+        "nodeSet": "PRESCRIBED_68",
+        "displacements": [
+          "-6.25e-05",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_71",
+        "nodeSet": "PRESCRIBED_71",
+        "displacements": [
+          "-0.0",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_74",
+        "nodeSet": "PRESCRIBED_74",
+        "displacements": [
+          "-0.00025",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_77",
+        "nodeSet": "PRESCRIBED_77",
+        "displacements": [
+          "-0.00025",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_80",
+        "nodeSet": "PRESCRIBED_80",
+        "displacements": [
+          "-0.0001875",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_83",
+        "nodeSet": "PRESCRIBED_83",
+        "displacements": [
+          "-0.0001875",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_86",
+        "nodeSet": "PRESCRIBED_86",
+        "displacements": [
+          "-0.000125",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_89",
+        "nodeSet": "PRESCRIBED_89",
+        "displacements": [
+          "-0.000125",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_92",
+        "nodeSet": "PRESCRIBED_92",
+        "displacements": [
+          "-6.25e-05",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_95",
+        "nodeSet": "PRESCRIBED_95",
+        "displacements": [
+          "-0.0",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_98",
+        "nodeSet": "PRESCRIBED_98",
+        "displacements": [
+          "-6.25e-05",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_101",
+        "nodeSet": "PRESCRIBED_101",
+        "displacements": [
+          "-0.0",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_104",
+        "nodeSet": "PRESCRIBED_104",
+        "displacements": [
+          "-0.00025",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_107",
+        "nodeSet": "PRESCRIBED_107",
+        "displacements": [
+          "-0.00025",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_110",
+        "nodeSet": "PRESCRIBED_110",
+        "displacements": [
+          "-0.0001875",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_113",
+        "nodeSet": "PRESCRIBED_113",
+        "displacements": [
+          "-0.0001875",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_116",
+        "nodeSet": "PRESCRIBED_116",
+        "displacements": [
+          "-0.000125",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_119",
+        "nodeSet": "PRESCRIBED_119",
+        "displacements": [
+          "-0.000125",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_122",
+        "nodeSet": "PRESCRIBED_122",
+        "displacements": [
+          "-6.25e-05",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_125",
+        "nodeSet": "PRESCRIBED_125",
+        "displacements": [
+          "-0.0",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_128",
+        "nodeSet": "PRESCRIBED_128",
+        "displacements": [
+          "-6.25e-05",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_131",
+        "nodeSet": "PRESCRIBED_131",
+        "displacements": [
+          "-0.0",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_134",
+        "nodeSet": "PRESCRIBED_134",
+        "displacements": [
+          "-0.00025",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_137",
+        "nodeSet": "PRESCRIBED_137",
+        "displacements": [
+          "-0.00025",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_140",
+        "nodeSet": "PRESCRIBED_140",
+        "displacements": [
+          "-0.0001875",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_143",
+        "nodeSet": "PRESCRIBED_143",
+        "displacements": [
+          "-0.0001875",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_146",
+        "nodeSet": "PRESCRIBED_146",
+        "displacements": [
+          "-0.0",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_149",
+        "nodeSet": "PRESCRIBED_149",
+        "displacements": [
+          "-0.000125",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_152",
+        "nodeSet": "PRESCRIBED_152",
+        "displacements": [
+          "-0.000125",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_155",
+        "nodeSet": "PRESCRIBED_155",
+        "displacements": [
+          "-0.0",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_158",
+        "nodeSet": "PRESCRIBED_158",
+        "displacements": [
+          "-6.25e-05",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_161",
+        "nodeSet": "PRESCRIBED_161",
+        "displacements": [
+          "-0.000125",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_164",
+        "nodeSet": "PRESCRIBED_164",
+        "displacements": [
+          "-6.25e-05",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_167",
+        "nodeSet": "PRESCRIBED_167",
+        "displacements": [
+          "-0.0",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_170",
+        "nodeSet": "PRESCRIBED_170",
+        "displacements": [
+          "-0.00025",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_173",
+        "nodeSet": "PRESCRIBED_173",
+        "displacements": [
+          "-0.00025",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_176",
+        "nodeSet": "PRESCRIBED_176",
+        "displacements": [
+          "-0.0001875",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_179",
+        "nodeSet": "PRESCRIBED_179",
+        "displacements": [
+          "-0.00025",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_182",
+        "nodeSet": "PRESCRIBED_182",
+        "displacements": [
+          "-0.0001875",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_185",
+        "nodeSet": "PRESCRIBED_185",
+        "displacements": [
+          "-0.000125",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_188",
+        "nodeSet": "PRESCRIBED_188",
+        "displacements": [
+          "-0.0",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_191",
+        "nodeSet": "PRESCRIBED_191",
+        "displacements": [
+          "-0.000125",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_194",
+        "nodeSet": "PRESCRIBED_194",
+        "displacements": [
+          "-6.25e-05",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_197",
+        "nodeSet": "PRESCRIBED_197",
+        "displacements": [
+          "-0.0",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_200",
+        "nodeSet": "PRESCRIBED_200",
+        "displacements": [
+          "-0.00025",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_203",
+        "nodeSet": "PRESCRIBED_203",
+        "displacements": [
+          "-0.00025",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_206",
+        "nodeSet": "PRESCRIBED_206",
+        "displacements": [
+          "-0.0001875",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_209",
+        "nodeSet": "PRESCRIBED_209",
+        "displacements": [
+          "-0.000125",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_212",
+        "nodeSet": "PRESCRIBED_212",
+        "displacements": [
+          "-0.0",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_215",
+        "nodeSet": "PRESCRIBED_215",
+        "displacements": [
+          "-0.000125",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_218",
+        "nodeSet": "PRESCRIBED_218",
+        "displacements": [
+          "-6.25e-05",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_221",
+        "nodeSet": "PRESCRIBED_221",
+        "displacements": [
+          "-0.0",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_224",
+        "nodeSet": "PRESCRIBED_224",
+        "displacements": [
+          "-0.00025",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_227",
+        "nodeSet": "PRESCRIBED_227",
+        "displacements": [
+          "-0.00025",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_230",
+        "nodeSet": "PRESCRIBED_230",
+        "displacements": [
+          "-0.0001875",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_233",
+        "nodeSet": "PRESCRIBED_233",
+        "displacements": [
+          "-0.000125",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_236",
+        "nodeSet": "PRESCRIBED_236",
+        "displacements": [
+          "-0.0",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_239",
+        "nodeSet": "PRESCRIBED_239",
+        "displacements": [
+          "-0.000125",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_242",
+        "nodeSet": "PRESCRIBED_242",
+        "displacements": [
+          "-6.25e-05",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_245",
+        "nodeSet": "PRESCRIBED_245",
+        "displacements": [
+          "-0.0",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_248",
+        "nodeSet": "PRESCRIBED_248",
+        "displacements": [
+          "-0.00025",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_251",
+        "nodeSet": "PRESCRIBED_251",
+        "displacements": [
+          "-0.00025",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_254",
+        "nodeSet": "PRESCRIBED_254",
+        "displacements": [
+          "-0.0001875",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_257",
+        "nodeSet": "PRESCRIBED_257",
+        "displacements": [
+          "-0.0",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_260",
+        "nodeSet": "PRESCRIBED_260",
+        "displacements": [
+          "-0.000125",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_263",
+        "nodeSet": "PRESCRIBED_263",
+        "displacements": [
+          "-0.000125",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_266",
+        "nodeSet": "PRESCRIBED_266",
+        "displacements": [
+          "-0.0",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_269",
+        "nodeSet": "PRESCRIBED_269",
+        "displacements": [
+          "-6.25e-05",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_272",
+        "nodeSet": "PRESCRIBED_272",
+        "displacements": [
+          "-0.000125",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_275",
+        "nodeSet": "PRESCRIBED_275",
+        "displacements": [
+          "-6.25e-05",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_278",
+        "nodeSet": "PRESCRIBED_278",
+        "displacements": [
+          "-0.0",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_281",
+        "nodeSet": "PRESCRIBED_281",
+        "displacements": [
+          "-0.00025",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_284",
+        "nodeSet": "PRESCRIBED_284",
+        "displacements": [
+          "-0.00025",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_287",
+        "nodeSet": "PRESCRIBED_287",
+        "displacements": [
+          "-0.0001875",
+          "0.0",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_290",
+        "nodeSet": "PRESCRIBED_290",
+        "displacements": [
+          "-0.00025",
+          "0.000125",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_293",
+        "nodeSet": "PRESCRIBED_293",
+        "displacements": [
+          "-0.0001875",
+          "0.00025",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_296",
+        "nodeSet": "PRESCRIBED_296",
+        "displacements": [
+          "-0.000125",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_299",
+        "nodeSet": "PRESCRIBED_299",
+        "displacements": [
+          "-0.0",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_302",
+        "nodeSet": "PRESCRIBED_302",
+        "displacements": [
+          "-0.000125",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_305",
+        "nodeSet": "PRESCRIBED_305",
+        "displacements": [
+          "-6.25e-05",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_308",
+        "nodeSet": "PRESCRIBED_308",
+        "displacements": [
+          "-0.0",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_311",
+        "nodeSet": "PRESCRIBED_311",
+        "displacements": [
+          "-0.00025",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_314",
+        "nodeSet": "PRESCRIBED_314",
+        "displacements": [
+          "-0.00025",
+          "0.000375",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_317",
+        "nodeSet": "PRESCRIBED_317",
+        "displacements": [
+          "-0.0001875",
+          "0.0005",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_320",
+        "nodeSet": "PRESCRIBED_320",
+        "displacements": [
+          "-0.000125",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_323",
+        "nodeSet": "PRESCRIBED_323",
+        "displacements": [
+          "-0.0",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_326",
+        "nodeSet": "PRESCRIBED_326",
+        "displacements": [
+          "-0.000125",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_329",
+        "nodeSet": "PRESCRIBED_329",
+        "displacements": [
+          "-6.25e-05",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_332",
+        "nodeSet": "PRESCRIBED_332",
+        "displacements": [
+          "-0.0",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_335",
+        "nodeSet": "PRESCRIBED_335",
+        "displacements": [
+          "-0.00025",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_338",
+        "nodeSet": "PRESCRIBED_338",
+        "displacements": [
+          "-0.00025",
+          "0.000625",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_341",
+        "nodeSet": "PRESCRIBED_341",
+        "displacements": [
+          "-0.0001875",
+          "0.00075",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_344",
+        "nodeSet": "PRESCRIBED_344",
+        "displacements": [
+          "-0.000125",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_347",
+        "nodeSet": "PRESCRIBED_347",
+        "displacements": [
+          "-0.0",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_350",
+        "nodeSet": "PRESCRIBED_350",
+        "displacements": [
+          "-0.000125",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_353",
+        "nodeSet": "PRESCRIBED_353",
+        "displacements": [
+          "-6.25e-05",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_356",
+        "nodeSet": "PRESCRIBED_356",
+        "displacements": [
+          "-0.0",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_359",
+        "nodeSet": "PRESCRIBED_359",
+        "displacements": [
+          "-0.00025",
+          "0.001",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_362",
+        "nodeSet": "PRESCRIBED_362",
+        "displacements": [
+          "-0.00025",
+          "0.000875",
+          "0"
+        ]
+      },
+      {
+        "name": "PRESCRIBED_365",
+        "nodeSet": "PRESCRIBED_365",
+        "displacements": [
+          "-0.0001875",
+          "0.001",
+          "0"
+        ]
+      }
+    ],
+    "loads": [],
+    "pressures": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": []
+  }
+}

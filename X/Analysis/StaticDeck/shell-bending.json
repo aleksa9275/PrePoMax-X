@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section",
+      "material": "ELASTIC",
+      "elementSet": "PATCH",
+      "kind": "shell",
+      "thickness": ".2",
+      "offset": "0"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Clamp",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          "0",
+          "0"
+        ],
+        "rotations": [
+          "0",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "loads": [],
+    "pressures": [],
+    "nodalHistorySets": [
+      "ROOT",
+      "TIP"
+    ],
+    "elementHistorySets": [],
+    "moments": [
+      {
+        "name": "END_0",
+        "nodeSet": "END_0",
+        "momentPerNode": [
+          "0",
+          "8.333333333333333e-05",
+          "0"
+        ]
+      },
+      {
+        "name": "END_1",
+        "nodeSet": "END_1",
+        "momentPerNode": [
+          "0",
+          "0.0003333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "END_2",
+        "nodeSet": "END_2",
+        "momentPerNode": [
+          "0",
+          "0.00016666666666666666",
+          "0"
+        ]
+      },
+      {
+        "name": "END_3",
+        "nodeSet": "END_3",
+        "momentPerNode": [
+          "0",
+          "0.0003333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "END_4",
+        "nodeSet": "END_4",
+        "momentPerNode": [
+          "0",
+          "8.333333333333333e-05",
+          "0"
+        ]
+      }
+    ],
+    "elementOutput": "ThreeD"
+  }
+}

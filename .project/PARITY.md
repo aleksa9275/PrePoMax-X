@@ -79,6 +79,11 @@ workflows for all original triangle/quad formulations. [Scope, diagnostics and
 actual checks](reports/plane-axisymmetric-workflow.md). Shells, beams, other
 family/calculation combinations, mesh authoring and full PMX remain required.
 
+Tasks 0105/0106 add imported shell/membrane/beam/truss static workflows,
+rotations/moments and original layered/expanded results. [Actual scope and B008
+diagnostics](reports/structural-elements-workflow.md). Full element-family,
+material/orientation/calculation/mesher/PMX and platform acceptance remains open.
+
 ## Future release cadence
 
 For every upstream release, record its exact source/artifact identity, compare

@@ -22,6 +22,7 @@ namespace CaeResults
     {
         public string SourceSha256 { get; }
         public string UnitSystemHeader { get; }
+        public int OriginalElementCount { get; }
         public string ModelSpace { get; }
         public bool AxisymmetricScalingApplied { get; }
         public IReadOnlyDictionary<int, FeNode> Nodes { get; }
@@ -31,9 +32,10 @@ namespace CaeResults
         public IReadOnlyList<int> NodeIdsInValueOrder { get; }
         public IReadOnlyList<FrdStaticField> Fields { get; }
         internal FrdStaticSnapshot(string hash, string units, Dictionary<int, FeNode> nodes,
-            Dictionary<int, FeElement> elements, int[] order, List<FrdStaticField> fields, string modelSpace = "ThreeD", bool axisymmetricScalingApplied = false)
+            Dictionary<int, FeElement> elements, int[] order, List<FrdStaticField> fields, string modelSpace = "ThreeD", bool axisymmetricScalingApplied = false, int originalElementCount = 0)
         {
             SourceSha256 = hash; UnitSystemHeader = units;
+            OriginalElementCount = originalElementCount == 0 ? elements.Count : originalElementCount;
             ModelSpace = modelSpace; AxisymmetricScalingApplied = axisymmetricScalingApplied;
             Nodes = new ReadOnlyDictionary<int, FeNode>(nodes);
             SolverElements = new ReadOnlyDictionary<int, FeElement>(elements);
@@ -100,7 +102,7 @@ namespace CaeResults
                     Dictionary<int, FeNode> nodes = null; Dictionary<int, int> lookup = null;
                     Dictionary<int, FeElement> elements = null;
                     var fields = new List<FrdStaticField>(); FieldData previous = null;
-                    bool constantWidth = true; string unitHeader = null; string modelSpace = "ThreeD";
+                    bool constantWidth = true; string unitHeader = null; string modelSpace = "ThreeD"; int declaredOriginalCount=0, declaredExpandedCount=0;
                     _bemaNodeIds = null;
                     foreach (var set in sets)
                     {
@@ -111,6 +113,13 @@ namespace CaeResults
                             string space = GetModelSpace(set.Lines);
                             if (space != null && space is not ("3D" or "ThreeD" or "PlaneStress" or "PlaneStrain" or "Axisymmetric")) throw new NotSupportedException("Unsupported FRD model space.");
                             modelSpace = space == null || space == "3D" ? "ThreeD" : space;
+                            var countHeaders=set.Lines.Where(l=>l.Contains("PrePoMax-X element counts:",StringComparison.Ordinal)).ToArray();
+                            if(countHeaders.Length>1)throw new InvalidDataException("Duplicate expanded element count declaration.");
+                            if(countHeaders.Length==1) {
+                                var line=countHeaders[0];var counts=line.Substring(line.IndexOf("PrePoMax-X element counts:",StringComparison.Ordinal)+"PrePoMax-X element counts:".Length).Trim().Split(',');
+                                if(counts.Length!=2 || !int.TryParse(counts[0],NumberStyles.None,CultureInfo.InvariantCulture,out declaredOriginalCount) || !int.TryParse(counts[1],NumberStyles.None,CultureInfo.InvariantCulture,out declaredExpandedCount) || declaredOriginalCount<1 || declaredExpandedCount<declaredOriginalCount || declaredExpandedCount>100000)
+                                    throw new InvalidDataException("Invalid original/expanded element count declaration.");
+                            }
                             unitHeader = set.Lines.FirstOrDefault(l => l.IndexOf("Unit system:", StringComparison.OrdinalIgnoreCase) >= 0);
                         }
                         else if (id.StartsWith("    2C", StringComparison.Ordinal))
@@ -126,10 +135,13 @@ namespace CaeResults
                             if (nodes == null || elements != null || fields.Count > 0) throw new InvalidDataException("One element block after nodes is required.");
                             var empty = new HashSet<int>();
                             elements = set.IsBinary ? GetElementsBinary(set, empty, empty, empty, out _) : GetElements(set.Lines, empty, empty, empty, out _);
-                            if (elements.Count != int.Parse(id.Substring(6, 30)) || elements.Any(e => e.Key <= 0 ||
-                                (e.Value is not FeElement3D && !(modelSpace != "ThreeD" && e.Value is FeElement2D)) ||
+                            int headerCount=int.Parse(id.Substring(6,30));
+                            bool countsMatch=elements.Count==headerCount;
+                            if(declaredOriginalCount!=0)countsMatch=headerCount==declaredOriginalCount && elements.Count==declaredExpandedCount;
+                            if (!countsMatch || elements.Any(e => e.Key <= 0 ||
+                                (e.Value is not FeElement3D && e.Value is not FeElement2D && e.Value is not LinearBeamElement && e.Value is not ParabolicBeamElement) ||
                                 e.Value.NodeIds.Any(n => !nodes.ContainsKey(n))))
-                                throw new NotSupportedException("Complete solid or declared plane/axisymmetric result meshes with valid node references are required.");
+                                throw new NotSupportedException("Complete solid or surface result meshes with valid node references are required.");
                         }
                         else if (id.StartsWith("    1PSTEP", StringComparison.Ordinal))
                         {
@@ -188,7 +200,7 @@ namespace CaeResults
                             if (factor != 1) { value.Field.ScaleComponentValues(factor); scaled = true; }
                         }
                     }
-                    return new FrdStaticSnapshot(hash, unitHeader, nodes, elements, lookup.OrderBy(p => p.Value).Select(p => p.Key).ToArray(), fields, modelSpace, scaled);
+                    return new FrdStaticSnapshot(hash, unitHeader, nodes, elements, lookup.OrderBy(p => p.Value).Select(p => p.Key).ToArray(), fields, modelSpace, scaled, declaredOriginalCount);
                 }
                 finally { CultureInfo.CurrentCulture = culture; _bemaNodeIds = null; }
             }

@@ -85,6 +85,7 @@ try
  var axisMode=ReadText("axisymmetric-mode",axisRaw.Replace("                     0    1","                     2    1MODAL"));
  Check("original axisymmetric mode scaling excludes static responses and preserves force semantics",axisStatic.ModelSpace=="Axisymmetric"&&!axisStatic.AxisymmetricScalingApplied&&axisStatic.Fields[0].Field.GetComponentValues("U1").SequenceEqual(disp.Field.GetComponentValues("U1"))&&axisMode.AxisymmetricScalingApplied&&Near(axisMode.Fields[0].Field.GetComponentValues("U1")[1],disp.Field.GetComponentValues("U1")[1]/Math.Sqrt(180),1e-10));
  Check("original modal header classifies frequency fields",ReadText("modal",raw.Replace("                     0    1","                     2    1MODAL")).Fields.All(f=>f.Data.StepType==StepTypeEnum.Frequency));
+ Check("declared expanded element mismatch rejected",Reject("bad-expansion",raw.Replace("    1C\n","    1C\n    1UPrePoMax-X element counts: 1,2\n")));
  Check("declared excessive mesh size rejected before allocation",Reject("oversize",raw.Replace("    2C                             8","    2C                       9999999")));
  int value=Array.FindIndex(lines,25,l=>l.StartsWith(" -1"));var swapped=(string[])lines.Clone();(swapped[value],swapped[value+1])=(swapped[value+1],swapped[value]);
  Check("ambiguous reordered full field IDs rejected",Reject("reordered",string.Join('\n',swapped)));

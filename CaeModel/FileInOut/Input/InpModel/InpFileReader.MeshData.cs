@@ -66,7 +66,21 @@ namespace FileInOut.Input
                         else if (keyword == "*ELEMENT")
                         {
                             var block = new List<InpElementSet>();
-                            AddElements(dataSet, ref elements, ref block);
+                            // Original MeshPart solver aliases share the original line
+                            // factories. Restore the exact keyword after topology decoding;
+                            // do not broaden fallback-prefix matching or change node order.
+                            string lineType = dataSet[0].Split(',').Skip(1).Select(t=>t.Split('='))
+                                .Where(t=>t.Length==2 && t[0].Trim().Equals("TYPE",StringComparison.OrdinalIgnoreCase))
+                                .Select(t=>t[1].Trim().ToUpperInvariant()).SingleOrDefault();
+                            string alias = new[]{"B31","B31R","B21","T2D2"}.Contains(lineType) ? "T3D2" :
+                                new[]{"B32","B32R","T2D3"}.Contains(lineType) ? "T3D3" : null;
+                            string[] parsed = dataSet;
+                            if(alias!=null) {
+                                parsed=(string[])dataSet.Clone();
+                                parsed[0]=System.Text.RegularExpressions.Regex.Replace(parsed[0],@"(?i)(\bTYPE\s*=\s*)[^,]+",m=>m.Groups[1].Value+alias);
+                            }
+                            AddElements(parsed, ref elements, ref block);
+                            if(alias!=null && block.Count==1)block[0].InpElementTypeNames=new HashSet<string>{lineType};
                             if (block.Count != 1 || block[0].ElementLabels.Count == 0)
                                 throw new CaeException("Element block is missing a valid type or connectivity.");
                             blocks.Add(block[0]);

@@ -118,5 +118,10 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/CalModalDynamicsStep.cs" Link="FileInOut/Output/Calculix/Keywords/Step/CalModalDynamicsStep.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Damping/CalDamping.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Damping/CalDamping.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Damping/CalModalDamping.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Damping/CalModalDamping.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalShellSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalShellSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalMembraneSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalMembraneSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/CalculixUserKeyword.cs" Link="FileInOut/Output/Calculix/Keywords/CalculixUserKeyword.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Steps/Loads/MomentLoad.cs" Link="Steps/Loads/MomentLoad.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" />
   </ItemGroup>
 </Project>

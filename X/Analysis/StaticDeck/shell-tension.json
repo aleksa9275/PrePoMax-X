@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0.25"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section_PATCH_1",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_1",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_2",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_2",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_3",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_3",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_4",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_4",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_5",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_5",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    },
+    {
+      "name": "Section_PATCH_6",
+      "material": "ELASTIC",
+      "elementSet": "PATCH_6",
+      "thickness": ".1",
+      "kind": "shell",
+      "offset": "0"
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Bottom",
+        "nodeSet": "BOTTOM",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Left",
+        "nodeSet": "LEFT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Planar",
+        "nodeSet": "ALL",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "LOAD_1",
+        "nodeSet": "LOAD_1",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_2",
+        "nodeSet": "LOAD_2",
+        "forcePerNode": [
+          "0",
+          "0.05",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_3",
+        "nodeSet": "LOAD_3",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_4",
+        "nodeSet": "LOAD_4",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_5",
+        "nodeSet": "LOAD_5",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_6",
+        "nodeSet": "LOAD_6",
+        "forcePerNode": [
+          "0",
+          "0.016666666666666666",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_7",
+        "nodeSet": "LOAD_7",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_8",
+        "nodeSet": "LOAD_8",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_9",
+        "nodeSet": "LOAD_9",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_10",
+        "nodeSet": "LOAD_10",
+        "forcePerNode": [
+          "0",
+          "0.05",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_11",
+        "nodeSet": "LOAD_11",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_12",
+        "nodeSet": "LOAD_12",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_13",
+        "nodeSet": "LOAD_13",
+        "forcePerNode": [
+          "0",
+          "0.05",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_14",
+        "nodeSet": "LOAD_14",
+        "forcePerNode": [
+          "0",
+          "0.025",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_15",
+        "nodeSet": "LOAD_15",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_16",
+        "nodeSet": "LOAD_16",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_17",
+        "nodeSet": "LOAD_17",
+        "forcePerNode": [
+          "0",
+          "0.016666666666666666",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_18",
+        "nodeSet": "LOAD_18",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_19",
+        "nodeSet": "LOAD_19",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_20",
+        "nodeSet": "LOAD_20",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_21",
+        "nodeSet": "LOAD_21",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_22",
+        "nodeSet": "LOAD_22",
+        "forcePerNode": [
+          "0",
+          "0.016666666666666666",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_23",
+        "nodeSet": "LOAD_23",
+        "forcePerNode": [
+          "0",
+          "0.03333333333333333",
+          "0"
+        ]
+      },
+      {
+        "name": "LOAD_24",
+        "nodeSet": "LOAD_24",
+        "forcePerNode": [
+          "0",
+          "0.008333333333333333",
+          "0"
+        ]
+      }
+    ],
+    "pressures": [],
+    "nodalHistorySets": [
+      "BOTTOM",
+      "TOP"
+    ],
+    "elementHistorySets": []
+  }
+}

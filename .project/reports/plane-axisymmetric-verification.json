@@ -271,7 +271,11 @@
     "status": "Existing task0102 package retained; new combined candidate follows requested shell/beam milestones. Source desktop verified here."
   },
   "publication": {
-    "status": "prepared for normal research-branch publication with CI skipped"
+    "status": "pushed and remote-verified",
+    "branch": "origin/research/native-feasibility",
+    "implementationSha": "a3a18ae83094fcdd37310fb165c63e9e14b35f2e",
+    "hostedCiRun": false,
+    "pushOption": "ci.skip"
   },
   "remaining": "Shells/membranes and beams/trusses next; mixed-family/calculation breadth, mesh authoring, full PMX and all D029/B006/B007/D057\u2013D061/four-target/release obligations remain. Original coarse CAX3/CAX4R and segment projection diagnostics are retained without numerical changes."
 }

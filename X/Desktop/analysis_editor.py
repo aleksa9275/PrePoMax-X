@@ -106,14 +106,14 @@ class Rows(QtWidgets.QWidget):
 class AnalysisDialog(QtWidgets.QDialog):
     def __init__(self, parent, scene, mesh_bytes, definition, tab=0):
         super().__init__(parent)
-        self.setWindowTitle('Configure solid analysis')
+        self.setWindowTitle('Configure analysis')
         self.resize(980, 680)
         self.scene, self.mesh_bytes = scene, mesh_bytes
         self.original = copy.deepcopy(definition)
         self.definition = None
         self.validation = None
         layout = QtWidgets.QVBoxLayout(self)
-        note = QtWidgets.QLabel('Solid analysis · regions use named sets from the imported mesh. '
+        note = QtWidgets.QLabel('Solid / structural analysis · regions use named sets from the imported mesh. '
             'Equations and quantities are evaluated by the original model services.')
         note.setWordWrap(True)
         layout.addWidget(note)
@@ -173,15 +173,15 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.materials = Rows([('name', 'Name'), ('youngsModulus', "Young’s modulus"),
             ('poissonsRatio', 'Poisson ratio')], {'name': '', 'youngsModulus': '', 'poissonsRatio': ''}, definition['materials'])
         self.tabs.addTab(self.materials, 'Materials')
-        self.sections = Rows([('name', 'Name'), ('material', 'Material'), ('elementSet', 'Element set'), ('thickness', '2D thickness')],
-            {'name': '', 'material': '', 'elementSet': '', 'thickness': ''}, definition['sections'],
-            {'elementSet': [item['name'] for item in scene.get('elementSets', [])]})
-        self.tabs.addTab(self.sections, 'Solid sections')
+        self.sections = Rows([('name', 'Name'), ('material', 'Material'), ('elementSet', 'Element set'), ('thickness', 'Thickness'), ('kind', 'Section kind'), ('offset', 'Shell offset')],
+            {'name': '', 'material': '', 'elementSet': '', 'thickness': '', 'kind': 'solid', 'offset': ''}, [{**r, 'kind': r.get('kind', 'solid')} for r in definition['sections']],
+            {'elementSet': [item['name'] for item in scene.get('elementSets', [])], 'kind': ['solid', 'shell', 'membrane', 'beam', 'truss', 'composite']})
+        self.tabs.addTab(self.sections, 'Sections')
         nodes = [item['name'] for item in scene.get('nodeSets', [])]
-        supports = [{**row, **{f'u{i}': value for i, value in enumerate(row['displacements'])}}
+        supports = [{**row, **{f'u{i}': value for i, value in enumerate(row['displacements'])}, **{f'r{i}': value for i, value in enumerate(row.get('rotations') or [None]*3)}}
                     for row in definition['step']['constraints']]
-        self.supports = Rows([('name', 'Name'), ('nodeSet', 'Node set'), ('u0', 'U1'), ('u1', 'U2'), ('u2', 'U3')],
-            {'name': '', 'nodeSet': '', 'u0': '', 'u1': '', 'u2': ''}, supports, {'nodeSet': nodes})
+        self.supports = Rows([('name', 'Name'), ('nodeSet', 'Node set'), ('u0', 'U1'), ('u1', 'U2'), ('u2', 'U3'), ('r0', 'UR1'), ('r1', 'UR2'), ('r2', 'UR3')],
+            {'name': '', 'nodeSet': '', 'u0': '', 'u1': '', 'u2': '', 'r0': '', 'r1': '', 'r2': ''}, supports, {'nodeSet': nodes})
         self.supports.layout().insertWidget(0, QtWidgets.QLabel('Blank displacement = free. Zero = fixed. Quantities use the chosen length unit.'))
         self.tabs.addTab(self.supports, 'Supports')
         loads = [{**row, **{f'f{i}': value for i, value in enumerate(row['forcePerNode'])}}
@@ -240,6 +240,10 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.nonlinear=QtWidgets.QCheckBox('Geometric nonlinearity (NLGEOM)')
         self.nonlinear.setChecked(definition['step'].get('nonlinearGeometry',False))
         step_form.insertRow(0,self.nonlinear)
+        self.element_output=QtWidgets.QComboBox();self.element_output.addItems(['Default','TwoD','ThreeD'])
+        self.element_output.setCurrentText(definition['step'].get('elementOutput','Default'))
+        self.element_output.currentTextChanged.connect(self.mark_changed)
+        step_form.addRow('Element result mesh (3D preserves expanded thickness)',self.element_output)
         eigen=QtWidgets.QWidget();eigen_form=QtWidgets.QFormLayout(eigen)
         self.analysis_kind=QtWidgets.QComboBox();self.analysis_kind.setObjectName('analysisKind')
         for label,key in [('Static','static'),('Frequency / mode shapes','frequency'),('Linear buckling','buckling'),('Heat transfer','heat-transfer'),('Implicit transient dynamics','dynamic'),('Modal transient dynamics','modal-dynamics')]:self.analysis_kind.addItem(label,key)
@@ -302,7 +306,7 @@ class AnalysisDialog(QtWidgets.QDialog):
         points=[{'amplitude':a['name'],'time':str(row[0]),'value':str(row[1])} for a in definition.get('amplitudes') or [] for row in a['points']]
         self.amplitude_points=Rows([('amplitude','Amplitude name'),('time','Time [s]'),('value','Multiplier')],{'amplitude':'','time':'0','value':'0'},points)
         amp_layout.addWidget(self.amplitude_points)
-        self.binding_sources=[('Support','constraints'),('Nodal force','loads'),('Pressure','pressures'),('Gravity','gravityLoads'),('Temperature BC','temperatures'),('Heat input','heatLoads'),('Temperature field','temperatureFields')]
+        self.binding_sources=[('Support','constraints'),('Nodal force','loads'),('Nodal moment','moments'),('Pressure','pressures'),('Gravity','gravityLoads'),('Temperature BC','temperatures'),('Heat input','heatLoads'),('Temperature field','temperatureFields')]
         bindings=[{'kind':kind,'name':v['name'],'amplitude':v['amplitude']} for kind,key in self.binding_sources for v in definition['step'].get(key) or [] if v.get('amplitude')]
         bindings += [{'kind':'Coefficient / emissivity','name':v['name'],'amplitude':v['coefficientAmplitude']} for v in definition['step'].get('heatLoads') or [] if v.get('coefficientAmplitude')]
         self.amplitude_bindings=Rows([('kind','Target kind'),('name','Target name'),('amplitude','Amplitude name')],{'kind':'Heat input','name':'','amplitude':''},bindings,{'kind':[v[0] for v in self.binding_sources]+['Coefficient / emissivity']})
@@ -334,6 +338,19 @@ class AnalysisDialog(QtWidgets.QDialog):
         self.dynamics_basis=QtWidgets.QLineEdit(controls.get('basisName','Frequency-basis'))
         for label,widget in [('HHT alpha (implicit: −1/3 to 0)',self.dynamics_alpha),('',self.dynamics_direct),('Damping (Constant is modal only)',self.dynamics_damping),('Rayleigh mass coefficient',self.dynamics_mass),('Rayleigh stiffness coefficient',self.dynamics_stiffness),('Modal damping ratio',self.dynamics_ratio),('Stored basis modes',self.dynamics_modes),('Stored basis step name',self.dynamics_basis)]:dynamics_form.addRow(label,widget)
         self.tabs.addTab(dynamics_page,'Dynamics')
+        line_page=QtWidgets.QWidget();line_layout=QtWidgets.QVBoxLayout(line_page)
+        line_note=QtWidgets.QLabel('Beam: RECT/CIRC dimensions in length units and a nonparallel direction 1. Truss: dimension 1 is area. Composite S8R: one row per layer, in physical stacking order. Element connectivity defines shell normals.');line_note.setWordWrap(True);line_layout.addWidget(line_note)
+        self.line_sections=Rows([('section','Section'),('shape','Shape'),('d0','Dimension 1 / area'),('d1','Dimension 2'),('n0','Direction X'),('n1','Direction Y'),('n2','Direction Z')],
+            {'section':'','shape':'RECT','d0':'','d1':'','n0':'','n1':'','n2':''},
+            [{'section':r['name'],'shape':r.get('shape','RECT'),'d0':(r.get('dimensions') or [''])[0],'d1':(r.get('dimensions') or ['',''])[1] if len(r.get('dimensions') or [])>1 else '',**{f'n{i}':v for i,v in enumerate(r.get('direction') or ['']*3)}} for r in definition['sections'] if r.get('kind') in ('beam','truss')], {'shape':['RECT','CIRC']})
+        line_layout.addWidget(self.line_sections)
+        self.composite_layers=Rows([('section','Section'),('material','Layer material'),('thickness','Layer thickness')],{'section':'','material':'','thickness':''},
+            [{'section':r['name'],**layer} for r in definition['sections'] for layer in r.get('layers') or []])
+        line_layout.addWidget(self.composite_layers);self.tabs.addTab(line_page,'Line / layer sections')
+        self.moments=Rows([('name','Name'),('nodeSet','Node set'),('m0','M1 per node'),('m1','M2 per node'),('m2','M3 per node')],
+            {'name':'','nodeSet':'','m0':'0','m1':'0','m2':'0'},[{**r,**{f'm{i}':v for i,v in enumerate(r['momentPerNode'])}} for r in definition['step'].get('moments') or []],{'nodeSet':nodes})
+        self.tabs.addTab(self.moments,'Nodal moments')
+        for rows in (self.line_sections,self.composite_layers,self.moments):rows.changed.connect(self.mark_changed)
         for widget in (self.dynamics_alpha,self.dynamics_mass,self.dynamics_stiffness,self.dynamics_ratio,self.dynamics_basis):widget.textChanged.connect(self.mark_changed)
         self.dynamics_modes.valueChanged.connect(self.mark_changed);self.dynamics_direct.toggled.connect(self.mark_changed);self.dynamics_damping.currentTextChanged.connect(self.mark_changed)
         def update_kind():
@@ -419,8 +436,20 @@ class AnalysisDialog(QtWidgets.QDialog):
             else: value['pyramidConversion']=choice
         value['materials'], value['sections'] = self.materials.values(), self.sections.values()
         for section in value['sections']:
-            if not section.get('thickness'):
-                section.pop('thickness', None)
+            if not section.get('thickness'):section.pop('thickness', None)
+            if not section.get('offset'):section.pop('offset', None)
+            if section.get('kind')=='solid' and 'kind' not in next((r for r in self.original['sections'] if r['name']==section['name']),{}):section.pop('kind',None)
+        sections_by_name={r['name']:r for r in value['sections']}
+        seen=set()
+        for row in self.line_sections.values():
+            if row['section'] not in sections_by_name or row['section'] in seen:raise ValueError('Use one line section row per existing section.')
+            seen.add(row['section']);section=sections_by_name[row['section']]
+            if section.get('kind') not in ('beam','truss'):raise ValueError('Line controls require beam/truss section kind.')
+            section['dimensions']=[row['d0']] if section['kind']=='truss' else [row['d0'],row['d1']]
+            if section['kind']=='beam':section['shape']=row['shape'];section['direction']=[float(row[f'n{i}']) for i in range(3)]
+        for row in self.composite_layers.values():
+            if row['section'] not in sections_by_name or sections_by_name[row['section']].get('kind')!='composite':raise ValueError('Layer must name a composite section.')
+            sections_by_name[row['section']].setdefault('layers',[]).append({'material':row['material'],'thickness':row['thickness']})
         by_name={m['name']:m for m in value['materials']}
         properties={}
         for row in self.mechanical_properties.values():
@@ -450,15 +479,18 @@ class AnalysisDialog(QtWidgets.QDialog):
         if gravity or 'gravityLoads' in value['step']:value['step']['gravityLoads']=gravity
         if self.nonlinear.isChecked() or 'nonlinearGeometry' in value['step']:value['step']['nonlinearGeometry']=self.nonlinear.isChecked()
         value['step']['constraints'] = [{'name': row['name'], 'nodeSet': row['nodeSet'],
-            'displacements': [row[f'u{i}'] or None for i in range(3)]} for row in self.supports.values()]
+            'displacements': [row[f'u{i}'] or None for i in range(3)], **({'rotations':[row[f'r{i}'] or None for i in range(3)]} if any(row[f'r{i}'] for i in range(3)) else {})} for row in self.supports.values()]
         value['step']['loads'] = [{'name': row['name'], 'nodeSet': row['nodeSet'],
             'forcePerNode': [row[f'f{i}'] for i in range(3)]} for row in self.loads.values()]
+        moments=[{'name':r['name'],'nodeSet':r['nodeSet'],'momentPerNode':[r[f'm{i}'] for i in range(3)]} for r in self.moments.values()]
+        if moments or 'moments' in value['step']:value['step']['moments']=moments
         for key, field in self.step_fields.items():
             text = field.text().strip()
             try:
                 value['step'][key] = text if key == 'name' else int(text) if key in ('maximumIncrements', 'outputFrequency') else float(text)
             except ValueError:
                 raise ValueError('Enter a valid number for ' + key)
+        if self.element_output.currentText()!='Default' or 'elementOutput' in value['step']:value['step']['elementOutput']=self.element_output.currentText()
         kind=self.analysis_kind.currentData()
         if kind!='static' or 'kind' in value['step']:value['step']['kind']=kind
         if kind in ('frequency','buckling') or 'modes' in value['step']:value['step']['modes']=self.mode_count.value()

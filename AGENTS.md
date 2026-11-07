@@ -1,5 +1,15 @@
 # PrePoMax-X contributor and agent instructions
 
+Tasks 0105/0106 connect original shell/membrane and beam/truss imported-mesh static
+workflows, thickness/offset, rotation/moments, explicit shell-side pressure,
+RECT/CIRC/truss section controls and layered-shell expanded results through the
+original keyword route. Read .project/reports/structural-elements-workflow.md and
+its receipt. Preserve B008 structural diagnostics and original T2D3 refusal,
+D029/B006/B007 and all earlier thermal/axisymmetric findings. No numerical fix,
+existing tolerance change or new solver exception. Other material/orientation/
+calculation/mesher/full PMX and D057–D061/four-target/release obligations remain.
+
+
 Tasks 0103/0104 connect original plane stress/strain and axisymmetric triangle/quad
 formulations through explicit model space/thickness, native static jobs, original
 edge pressure/results/history and export/reopen. Read

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "unitSystem": "mm-N-s-C",
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": "1000",
+      "poissonsRatio": "0"
+    },
+    {
+      "name": "STIFF",
+      "youngsModulus": "2000",
+      "poissonsRatio": "0"
+    }
+  ],
+  "sections": [
+    {
+      "name": "Section",
+      "material": "ELASTIC",
+      "elementSet": "PATCH",
+      "kind": "composite",
+      "layers": [
+        {
+          "material": "ELASTIC",
+          "thickness": ".05"
+        },
+        {
+          "material": "STIFF",
+          "thickness": ".1"
+        },
+        {
+          "material": "ELASTIC",
+          "thickness": ".05"
+        }
+      ]
+    }
+  ],
+  "step": {
+    "name": "Static-1",
+    "timePeriod": 1,
+    "initialTimeIncrement": 1,
+    "minimumTimeIncrement": 1e-05,
+    "maximumTimeIncrement": 1,
+    "maximumIncrements": 100,
+    "outputFrequency": 1,
+    "constraints": [
+      {
+        "name": "Root",
+        "nodeSet": "ROOT",
+        "displacements": [
+          "0",
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Lateral",
+        "nodeSet": "Y0",
+        "displacements": [
+          null,
+          "0",
+          null
+        ]
+      },
+      {
+        "name": "Planar",
+        "nodeSet": "ALL",
+        "displacements": [
+          null,
+          null,
+          "0"
+        ]
+      }
+    ],
+    "loads": [
+      {
+        "name": "END_0",
+        "nodeSet": "END_0",
+        "forcePerNode": [
+          "0.024999999999999998",
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "END_1",
+        "nodeSet": "END_1",
+        "forcePerNode": [
+          "0.09999999999999999",
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "END_2",
+        "nodeSet": "END_2",
+        "forcePerNode": [
+          "0.049999999999999996",
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "END_3",
+        "nodeSet": "END_3",
+        "forcePerNode": [
+          "0.09999999999999999",
+          "0",
+          "0"
+        ]
+      },
+      {
+        "name": "END_4",
+        "nodeSet": "END_4",
+        "forcePerNode": [
+          "0.024999999999999998",
+          "0",
+          "0"
+        ]
+      }
+    ],
+    "pressures": [],
+    "nodalHistorySets": [
+      "ROOT",
+      "TIP"
+    ],
+    "elementHistorySets": [],
+    "elementOutput": "ThreeD"
+  }
+}

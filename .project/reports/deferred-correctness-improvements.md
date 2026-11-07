@@ -57,3 +57,10 @@ solver change is made. Post-parity investigation: isolate nonlinear convergence
 and spatial/time-control effects before proposing any change. This observation
 does not establish a general solver defect or defer thermal functionality.
 [Native/original evidence](radiation-amplitudes-thermal-stress.md).
+
+7 November 2026 structural increment: [B008](../bugs/B008-original-structural-diagnostics.md)
+records original quadratic-membrane, T3D3, CIRC-beam and stored shell/beam force
+observations, plus the explicit original T2D3 refusal. Independent failures remain
+false and original-Windows comparison evidence is retained. Root causes/modeling/
+result-semantics interpretations remain open; no algorithms/tolerances/forces are
+changed. D061 sequencing and every functionality/correctness/release gate remain.

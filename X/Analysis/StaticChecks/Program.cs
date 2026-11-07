@@ -19,7 +19,7 @@ InpMeshData Mesh()=>MeshFiles.Read(Path.Combine(AppContext.BaseDirectory,"cube-m
 AnalysisSpec Spec()=>AnalysisFiles.Read(Path.Combine(AppContext.BaseDirectory,"cube-analysis.json"));
 var baseline=AnalysisFiles.Create(Spec());
 string deck=StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,baseline.Sections,baseline.Step).Replace("\r\n","\n");
-void Invalid(string name,Action<Material[],SolidSection[],StaticStep> mutate)=>Check(name,()=>{var data=AnalysisFiles.Create(Spec());mutate(data.Materials,data.Sections,(StaticStep)data.Step);Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),data.Materials,data.Sections,data.Step));});
+void Invalid(string name,Action<Material[],Section[],StaticStep> mutate)=>Check(name,()=>{var data=AnalysisFiles.Create(Spec());mutate(data.Materials,data.Sections,(StaticStep)data.Step);Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),data.Materials,data.Sections,data.Step));});
 Check("complete deck has original analysis keywords in order",()=>{
     string[] names={"*Node\n","*Element,","*Material,","*Elastic\n","*Solid section,","*Step,","*Static\n","*Boundary\n","*Cload\n","*Output,","*Node print,","*El print,","*Node file\n","*El file\n","*End step\n"};
     int previous=-1;foreach(string keyword in names){int at=deck.IndexOf(keyword,StringComparison.Ordinal);Require(at>previous);previous=at;}
@@ -34,6 +34,16 @@ Check("original concentrated-load virtual dispatch writes data and rejects missi
     catch(System.Reflection.TargetInvocationException e){Require(e.InnerException is NotSupportedException);}
 });
 Check("unported derived step cannot lose its extra behavior",()=>Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,baseline.Sections,new ExtraStaticStep())));
+Check("structural user-keyword quantities are invariant and restore caller culture",()=>{
+    var spec=AnalysisFiles.Read(Path.Combine(AppContext.BaseDirectory,"beam-bending.json"));var data=AnalysisFiles.Create(spec);
+    var settings=new Dictionary<string,StructuralSectionData>{{"Section_0",new StructuralSectionData{Kind="beam",Shape="RECT",Dimensions=new[]{.2,.3},Direction=new[]{0d,0d,1d}}}};
+    var prior=CultureInfo.CurrentCulture;
+    try { CultureInfo.CurrentCulture=new CultureInfo("fr-FR");
+        ((MomentLoad)data.Step.Loads["Bending"]).M2.SetEquationFromValue(.001);
+        var text=StaticAnalysisDeckWriter.Write(MeshFiles.Read(Path.Combine(AppContext.BaseDirectory,"beam-bending.inp")),data.Materials,data.Sections,data.Step,structuralSections:settings);
+        Require(text.Replace("\r\n","\n").Contains("0.2, 0.3\n0, 0, 1\n") && CultureInfo.CurrentCulture.Name=="fr-FR");
+    } finally { CultureInfo.CurrentCulture=prior; }
+});
 Check("cube material original property values",()=>Require(deck.Contains("210000, 0.3\n")));
 Check("cube original section named references",()=>Require(deck.Contains("*Solid section, Elset=SOLID, Material=ELASTIC\n")));
 Check("B001 native cube set membership emitted once",()=>Require(deck.Contains("*Element, Type=C3D8, Elset=SOLID\n")&&!deck.Contains("*Elset, Elset=SOLID\n")));

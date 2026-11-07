@@ -1,5 +1,14 @@
 # Project status
 
+## Current — tasks 0105/0106: shells, membranes, beams and trusses
+
+The next two element-family milestones connect original sections, rotations/
+moments, shell normal pressure, line sections and layered expanded results.
+Nine Mac/Linux ARM64 workflows pass with exact native decks/meshes/fields and
+pinned original Windows solver comparisons. [Scope and actual checks](reports/structural-elements-workflow.md).
+B008 and original T2D3 refusal remain explicit; all prior numerical, full PMX,
+four-target and release gates remain. Combined candidate preparation follows.
+
 ## Current — tasks 0103/0104: plane and axisymmetric elements
 
 All 18 original CPS/CPE/CAX formulations connect configuration, thickness, edge

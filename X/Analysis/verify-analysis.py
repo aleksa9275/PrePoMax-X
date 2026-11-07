@@ -128,7 +128,7 @@ def main():
             if data['checks'] != reference['tests']['checks'] or data['observations'] != reference['tests']['observations']:
                 raise ValueError('Expanded-assembly data differs from recorded native Windows observations')
             report['staticTests']=json.loads(run(['dotnet',work/'build/bin/StaticChecks/release/PrePoMaxX.StaticChecks.dll']).stdout)
-            if not report['staticTests']['success'] or report['staticTests']['passed']!=73 or report['staticTests']['failed']:
+            if not report['staticTests']['success'] or report['staticTests']['passed']!=74 or report['staticTests']['failed']:
                 raise ValueError('Static-deck tests incomplete or failed')
             report['staticWorkflow']=static_deck_checks.verify(run,work,HERE,ROOT)
             cli=work/'build/bin/MaterialDeck/release/PrePoMaxX.MaterialDeck.dll'
