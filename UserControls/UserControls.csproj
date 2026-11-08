@@ -136,6 +136,7 @@
     <Compile Include="SidePanel\XYPlot\XYPlotSettingsTools.cs" />
     <Compile Include="SidePanel\XYPlot\XYPlotCurveSettings.cs" />
     <Compile Include="SidePanel\XYPlot\XYPlotSettings.cs" />
+    <Compile Include="SidePanel\XYPlot\XYPlotSettings.ZedGraph.cs" />
     <Compile Include="SidePanel\XYPlot\XYPlot.cs">
       <SubType>UserControl</SubType>
     </Compile>

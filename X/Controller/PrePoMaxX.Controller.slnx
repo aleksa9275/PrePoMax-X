@@ -1,0 +1,8 @@
+<Solution>
+ <Project Path="../Domain/PrePoMax/PrePoMax.csproj" />
+ <Project Path="../Domain/GmshCaller/GmshCaller.csproj" />
+ <Project Path="../Persistence/Persistence.csproj" />
+ <Project Path="Headless/Headless.csproj" />
+ <Project Path="Runner/Runner.csproj" />
+ <Project Path="SourceGen/SourceGen.csproj" />
+</Solution>

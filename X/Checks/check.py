@@ -17,12 +17,13 @@ ROOT = HERE.parents[1]
 # replays and source-layout guards were retired with the slice projects.
 AREAS = {
     "domain": "X/Domain/verify-domain.py",
+    "controller": "X/Controller/verify-controller.py",
     "core": "X/Core/verify.py",
     "analysis": "X/Analysis/verify-analysis.py",
     "execution": "X/Execution/verify-execution.py",
     "results": "X/Results/verify-results.py",
 }
-SOURCE_ROOTS = ("X/", "CaeGlobals/", "CaeMesh/", "CaeModel/", "CaeResults/", "CaeJob/", "vtkControl/")
+SOURCE_ROOTS = ("X/", "CaeGlobals/", "CaeMesh/", "CaeModel/", "CaeResults/", "CaeJob/", "vtkControl/", "PrePoMax/", "APIs/", "UserControls/", "GmshCaller/")
 SOURCE_SUFFIXES = {".cs", ".cpp", ".h", ".py", ".csproj", ".props", ".targets", ".slnx", ".yml", ".yaml", ".Config"}
 
 
@@ -51,7 +52,7 @@ def safe_code_path(name, tracked):
     if name == ".gitlab-ci.yml":
         return tracked
     # JSON/config files are copied only when already tracked; never collect arbitrary untracked data.
-    return name.startswith(SOURCE_ROOTS) and (path.suffix in SOURCE_SUFFIXES or (tracked and path.suffix in {".json", ".config"}))
+    return name.startswith(SOURCE_ROOTS) and (path.suffix in SOURCE_SUFFIXES or name == "X/Persistence/allowed-types.txt" or (tracked and path.suffix in {".json", ".config"}))
 
 
 def retain_source(output):

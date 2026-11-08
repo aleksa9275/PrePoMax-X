@@ -103,6 +103,8 @@
     <Compile Include="vtkInteractorStyleControl.cs" />
     <Compile Include="Enums\vtkRendererLayer.cs" />
     <Compile Include="vtkMax\Actor\vtkMaxActor.cs" />
+    <Compile Include="vtkSelectionGeometry.cs" />
+    <Compile Include="vtkMax\Actor\vtkMaxActor.PolyTopology.cs" />
     <Compile Include="vtkMax\Actor\vtkMaxCaptionActor.cs" />
     <Compile Include="vtkMax\Animation\vtkMaxAnimationFrameData.cs" />
     <Compile Include="vtkMax\Actor\vtkMaxExtreemeNode.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="vtkMax\CoorSys\vtkMaxCoorSysSymbols.cs" />
     <Compile Include="vtkMax\ColorSpectrum\vtkMaxColorSpectrum.cs" />
     <Compile Include="vtkMax\LookupTable\vtkMaxLookupTable.cs" />
+    <Compile Include="vtkMax\LookupTable\vtkMaxLookupTable.Windows.cs" />
     <Compile Include="vtkMax\LookupTable\vtkMaxLookupTable.Vtk.cs" />
     <Compile Include="vtkMax\Widget\00_vtkMaxWidgetHighlight.cs" />
     <Compile Include="vtkMax\Widget\02_vtkMaxCoorSysWidget.cs" />

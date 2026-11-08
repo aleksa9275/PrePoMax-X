@@ -121,9 +121,10 @@ namespace PrePoMax
             string path = Tools.GetGlobalPath(value);
             if (!File.Exists(path))
                 throw new Exception("The selected " + solverName + " executable does not exist.");
-            string extension = Path.GetExtension(path);
-            if (extension != ".exe" && extension != ".bat" && extension != ".cmd")
-                throw new Exception("The selected executable's file extension is not .exe, .bat or .cmd.");
+            if (!RuntimePaths.IsExecutable(path))
+                throw new Exception(RuntimePaths.ExecutableValidator == null
+                                    ? "The selected executable's file extension is not .exe, .bat or .cmd."
+                                    : "The selected file is not executable on this platform.");
             return Tools.GetLocalPath(path);
         }
     }

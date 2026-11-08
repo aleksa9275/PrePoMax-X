@@ -54,6 +54,12 @@ namespace CaeGlobals
                 { "CaeMesh.ExtrudeMesh", "CaeMesh.SweepMesh, CaeMesh" }
             };
         }
+        // Pure name mapping for restricted readers; this never loads a payload type.
+        public static string GetRenamedTypeName(string typeName)
+        {
+            string renamed;
+            return _renamedTypeNames.TryGetValue(typeName, out renamed) ? renamed : null;
+        }
         public override Type BindToType(string assemblyName, string typeName)
         {
             if (_renamedTypeNames.Count == 0 || typeName == null) return null;

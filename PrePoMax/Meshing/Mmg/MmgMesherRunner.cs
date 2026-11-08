@@ -52,18 +52,18 @@ namespace PrePoMax
             throw new NotSupportedException("MesherTypeException");
         }
         public bool PreviewEdgeMeshFromBrep(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                            OrderedDictionary<string, MeshSetupItem> meshSetupItems,
+                                            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems,
                                             bool previewSweepSourceMesh)
         {
             throw new NotSupportedException("MesherTypeException");
         }
         public bool PreviewEdgeMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             return false;
         }
         public FeMesh CreateFirstOrderShellMeshForQuadWild(GeometryPart part, string workDirectory,
-                                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             if (part == null) throw new ArgumentNullException(nameof(part));
             if (part.PartType != PartType.Shell)
@@ -71,7 +71,7 @@ namespace PrePoMax
             if (String.IsNullOrWhiteSpace(workDirectory) || !Directory.Exists(workDirectory))
                 throw new CaeException("The QuadWild work directory does not exist.");
             //
-            string executable = Application.StartupPath + Globals.MmgsMesher;
+            string executable = RuntimePaths.Tool(Globals.MmgsMesher);
             string mmgInFileName = Path.Combine(workDirectory, Globals.MmgMeshFileName);
             string mmgOutFileName = Path.Combine(workDirectory, Path.GetFileNameWithoutExtension(Globals.MmgMeshFileName) +
                                                  ".o" + Path.GetExtension(Globals.MmgMeshFileName));
@@ -98,11 +98,11 @@ namespace PrePoMax
                 _controller.ResumeExplodedViews(false);
             }
             //
-            PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
             double hausdorff = shellMmg.Hausdorff;
             if (shellMmg.RelativeSize) hausdorff = part.BoundingBox.GetDiagonal() * shellMmg.RelativeHausdorff;
-            _controller.Form.WriteDataToOutput("MMG QuadWild pre-pass: reconstructing the STL surface...");
-            string argument = "-m " + ramCounter.NextValue() * 0.9 + " " +
+            _controller.Host.WriteDataToOutput("MMG QuadWild pre-pass: reconstructing the STL surface...");
+            string argument = "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                               "-ar 0.01 " +
                               "-hmax " + meshingParameters.MaxH + " " +
                               "-hmin " + meshingParameters.MinH + " " +
@@ -110,7 +110,7 @@ namespace PrePoMax
                               "-in \"" + mmgInFileName + "\" " +
                               "-out \"" + mmgOutFileName + "\" ";
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                             _controller.Form.WriteDataToOutput);
+                                                             _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
                 throw new CaeException("MMG could not reconstruct the STL surface for the QuadWild pre-pass.");
             // Match the normal MMG STL workflow: its first pass reconstructs the surface description, while
@@ -136,10 +136,10 @@ namespace PrePoMax
                                             intermediateNodeIdMeshSize);
             }
             //
-            _controller.Form.WriteDataToOutput("MMG QuadWild pre-pass: remeshing the reconstructed surface...");
+            _controller.Host.WriteDataToOutput("MMG QuadWild pre-pass: remeshing the reconstructed surface...");
             string solutionArgument = File.Exists(mmgSolFileName) ? "-sol \"" + mmgSolFileName + "\" " : "";
             argument = "-nr " +
-                       "-m " + ramCounter.NextValue() * 0.9 + " " +
+                       "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                        "-hmax " + meshingParameters.MaxH + " " +
                        "-hmin " + meshingParameters.MinH + " " +
                        "-hausd " + hausdorff + " " +
@@ -147,7 +147,7 @@ namespace PrePoMax
                        "-in \"" + mmgInFileName + "\" " +
                        "-out \"" + mmgOutFileName + "\" ";
             jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                   _controller.Form.WriteDataToOutput);
+                                                   _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
                 throw new CaeException("MMG could not remesh the triangular QuadWild input surface.");
             //
@@ -210,7 +210,7 @@ namespace PrePoMax
             return targetNodeIdMeshSize;
         }
         private Dictionary<int, double> GetQuadWildNodeMeshSizes(GeometryPart part, MeshingParameters meshingParameters,
-                                                                 OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                                                 CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             if (meshSetupItems == null) meshSetupItems = _controller.Model.Geometry.MeshSetupItems;
             HashSet<int> targetPartIds = new HashSet<int>();
@@ -286,7 +286,7 @@ namespace PrePoMax
         }
         public GeneratedMeshData CreateMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems, string workDirectory)
         {
-            string executable = Application.StartupPath + Globals.MmgsMesher;
+            string executable = RuntimePaths.Tool(Globals.MmgsMesher);
             string mmgInFileName = Path.Combine(workDirectory, Globals.MmgMeshFileName);
             string mmgOutFileName = Path.Combine(workDirectory, Path.GetFileNameWithoutExtension(Globals.MmgMeshFileName) +
                                                  ".o" + Path.GetExtension(Globals.MmgMeshFileName));
@@ -310,13 +310,12 @@ namespace PrePoMax
                 _controller.ResumeExplodedViews(false);
             }
             //
-            System.Diagnostics.PerformanceCounter ramCounter;
-            ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+
             double hausdorff = shellMmg.Hausdorff;
             if (shellMmg.RelativeSize) hausdorff = part.BoundingBox.GetDiagonal() * shellMmg.RelativeHausdorff;
             //
             string argument = //"-nr " + 
-                              "-m " + ramCounter.NextValue() * 0.9 + " " +
+                              "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                               "-ar 0.01 " + // this removes curving of the faces
                                             //"-hsiz 0.08 " +  
                               "-hmax " + meshingParameters.MaxH + " " +
@@ -326,7 +325,7 @@ namespace PrePoMax
                               "-out \"" + mmgOutFileName + "\" ";
             //
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                 _controller.Form.WriteDataToOutput);
+                                                 _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {
@@ -343,7 +342,7 @@ namespace PrePoMax
                 MmgFileWriter.Write(mmgInFileName, partOut, mesh, shellMmg.KeepModelEdges, true);
                 //
                 argument = "-nr " +
-                           "-m " + ramCounter.NextValue() * 0.9 + " " +
+                           "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                            //"-ar 0 " +
                            //"-hsiz 0.08 " +  
                            "-hmax " + meshingParameters.MaxH + " " +
@@ -353,7 +352,7 @@ namespace PrePoMax
                            "-out \"" + mmgOutFileName + "\" ";
                 //
                 jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                      _controller.Form.WriteDataToOutput);
+                                                      _controller.Host.WriteDataToOutput);
                 //
                 if (jobStatus == JobStatus.OK)
                 {
@@ -393,7 +392,7 @@ namespace PrePoMax
                 return false;
             }
             //
-            string executable = Application.StartupPath + Globals.MmgsMesher;
+            string executable = RuntimePaths.Tool(Globals.MmgsMesher);
             string mmgInFileName = Path.Combine(workDirectory, Globals.MmgMeshFileName);
             string mmgOutFileName = Path.Combine(workDirectory, Path.GetFileNameWithoutExtension(Globals.MmgMeshFileName) +
                                                  ".o" + Path.GetExtension(Globals.MmgMeshFileName));
@@ -409,13 +408,12 @@ namespace PrePoMax
             MmgFileWriter.WriteShellElements(mmgInFileName, elementIds, part, _controller.Model.Mesh,
                                              remeshingParameters.KeepModelEdges, out midNodes);
             //
-            PerformanceCounter ramCounter;
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
             //
             string argument = "-nr " +
                               "-optim " +
                               //"-ar 30 " +
-                              "-m " + ramCounter.NextValue() * 0.9 + " " +
+                              "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                               "-hgrad " + 1 + " " +
                               "-hgradreq " + 1 + " " +
                               "-hmax " + remeshingParameters.MaxH + " " +
@@ -426,7 +424,7 @@ namespace PrePoMax
                               "-v 5 ";
             //
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                            _controller.Form.WriteDataToOutput);
+                                                            _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {
@@ -450,7 +448,7 @@ namespace PrePoMax
                 return false;
             }
             //
-            string executable = Application.StartupPath + Globals.Mmg3DMesher;
+            string executable = RuntimePaths.Tool(Globals.Mmg3DMesher);
             string mmgInFileName = Path.Combine(workDirectory, Globals.MmgMeshFileName);
             string mmgOutFileName = Path.Combine(workDirectory, Path.GetFileNameWithoutExtension(Globals.MmgMeshFileName) +
                                                  ".o" + Path.GetExtension(Globals.MmgMeshFileName));
@@ -483,13 +481,12 @@ namespace PrePoMax
             // Mat file
             MmgFileWriter.WriteMaterial(mmgMatFileName, baseParts);
             //
-            PerformanceCounter ramCounter;
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
             //
             string argument = "-ls " + //splitPartMeshData.Offset + " " +  // offset is applied in the signed distance field
                               "-rmc " +
                               //"-optim " + // tends to create elements of the same size
-                              "-m " + ramCounter.NextValue() * 0.9 + " " +
+                              "-m " + MesherMemory.AvailableMegabytes * 0.9 + " " +
                               "-hmax " + splitPartMeshData.MaxH + " " +
                               "-hmin " + splitPartMeshData.MinH + " " +
                               "-hausd " + splitPartMeshData.Hausdorff + " " +
@@ -501,7 +498,7 @@ namespace PrePoMax
                               "-v 5 ";  // this solves the problem of mmg not stopping
             //
             JobStatus jobStatus = _controller.JobRunner.Run("SplitMeshPart", executable, argument, workDirectory,
-                                                 _controller.Form.WriteDataToOutput);
+                                                 _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {

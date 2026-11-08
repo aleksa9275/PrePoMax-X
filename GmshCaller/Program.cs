@@ -20,10 +20,12 @@ using System.Threading.Tasks;
 
 namespace GmshCaller
 {
-    internal class Program
+    internal partial class Program
     {
+        static partial void ConfigurePlatform();
         static int Main(string[] args)
         {
+            ConfigurePlatform();
             string error = null;
             if (args.Length == 2)
             {

@@ -20,6 +20,10 @@ namespace CaeGlobals
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern uint GetShortPathName(string longPath, StringBuilder shortPath, uint bufferLength);
+        private static string GetApplicationRelativePath(string path)
+        {
+            return System.IO.Path.Combine(StartupPath, path.TrimStart('\\'));
+        }
         private static string StartupPath
         {
             get { return System.Windows.Forms.Application.StartupPath; }

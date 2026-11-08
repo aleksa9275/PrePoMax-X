@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,16 +68,7 @@ namespace vtkControl
             if (width < 1) throw new ArgumentOutOfRangeException(nameof(width));
             if (height < 1) throw new ArgumentOutOfRangeException(nameof(height));
             //
-            using (Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb))
-            {
-                Color[] colors = _colors.Length == 0 ? new Color[] { Color.White } : _colors;
-                for (int y = 0; y < height; y++)
-                {
-                    int colorIndex = (int)((long)(height - y - 1) * colors.Length / height);
-                    for (int x = 0; x < width; x++) bmp.SetPixel(x, y, colors[colorIndex]);
-                }
-                bmp.Save(filePath, ImageFormat.Png);
-            }
+            WriteTexture(width, height, filePath);
         }
     }
 }

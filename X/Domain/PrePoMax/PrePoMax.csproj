@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><AssemblyName>PrePoMax</AssemblyName><RootNamespace>PrePoMax</RootNamespace></PropertyGroup>
+ <Import Project="Sources.g.props" />
+ <ItemGroup>
+ <ProjectReference Include="../CaeModel/CaeModel.csproj" />
+ <ProjectReference Include="../APIs/APIs.csproj" />
+ <ProjectReference Include="../../Persistence/Persistence.csproj" />
+ <EmbeddedResource Include="../../Controller/Host/spatial.py" LogicalName="PrePoMaxX.SpatialPython" />
+ <EmbeddedResource Include="../../Persistence/allowed-types.txt" LogicalName="PrePoMaxX.AllowedTypes" />
+ <PackageReference Include="CommandLineParser" Version="[2.9.1]" />
+ <ProjectReference Include="../CaeJob/CaeJob.csproj" />
+ <Compile Include="../../Controller/Host/*.cs" Exclude="../../Controller/Host/ViewType.cs" />
+ <ProjectReference Include="../UserControls/UserControls.csproj" />
+
+
+ </ItemGroup>
+</Project>

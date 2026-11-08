@@ -28,6 +28,7 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs" Link="DynamicTypeDescriptor/StandardValueAttribute.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/ExceptionTools.cs" Link="ExceptionTools.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Extensions.cs" Link="Extensions.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/BinarySerialization.cs" Link="BinarySerialization.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Extensions.Calculix.cs" Link="Extensions.Calculix.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IContainsEquations.cs" Link="IContainsEquations.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMasterSlaveMultiRegion.cs" Link="IMasterSlaveMultiRegion.cs" />

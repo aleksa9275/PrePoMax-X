@@ -80,7 +80,7 @@ namespace FileInOut.Input
                                 parsed[0]=System.Text.RegularExpressions.Regex.Replace(parsed[0],@"(?i)(\bTYPE\s*=\s*)[^,]+",m=>m.Groups[1].Value+alias);
                             }
                             if(new[]{"MASS","SPRING1","SPRING2","SPRINGA","GAPUNI"}.Contains(lineType)) {
-                                int count=lineType is "MASS" or "SPRING1" ? 1 : 2;
+                                int count=(lineType == "MASS" || lineType == "SPRING1") ? 1 : 2;
                                 string setName=dataSet[0].Split(',').Skip(1).Select(t=>t.Split('='))
                                     .Where(t=>t.Length==2 && t[0].Trim().Equals("ELSET",StringComparison.OrdinalIgnoreCase)).Select(t=>t[1].Trim()).SingleOrDefault();
                                 var labels=new HashSet<int>();
@@ -90,7 +90,7 @@ namespace FileInOut.Input
                                         throw new CaeException("Exact positive discrete element ID/connectivity required.");
                                     var values=tokens.Select(int.Parse).ToArray();int id=values[0];var ids=values.Skip(1).ToArray();
                                     if(elements.ContainsKey(id) || ids.Distinct().Count()!=count)throw new CaeException("Duplicate discrete element or repeated node.");
-                                    FeElement element=lineType=="MASS" ? (FeElement)new MassElement(id,ids) : lineType=="GAPUNI" ? new LinearGapElement(id,ids) : new LinearSpringElement(id,ids);
+                                    FeElement element=lineType=="MASS" ? (FeElement)new MassElement(id,ids) : lineType=="GAPUNI" ? (FeElement)new LinearGapElement(id,ids) : new LinearSpringElement(id,ids);
                                     elements.Add(id,element);labels.Add(id);
                                 }
                                 block.Add(new InpElementSet(setName,new HashSet<string>{lineType},labels));

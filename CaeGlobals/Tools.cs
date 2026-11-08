@@ -41,8 +41,7 @@ namespace CaeGlobals
                 stream.Write(bytes, 0, (int)fs.Length);
                 fs.Close();
                 stream.Position = 0;
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Binder = RenamedTypeSerializationBinder.Instance;
+                IBinaryObjectSerializer formatter = BinarySerialization.Create();
                 return (T)formatter.Deserialize(stream);
             }
         }
@@ -54,8 +53,7 @@ namespace CaeGlobals
                 byte[] bytes = br.ReadBytes((int)length);
                 stream.Write(bytes, 0, (int)length);
                 stream.Position = 0;
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Binder = RenamedTypeSerializationBinder.Instance;
+                IBinaryObjectSerializer formatter = BinarySerialization.Create();
                 return (T)formatter.Deserialize(stream);
             }
         }
@@ -148,8 +146,7 @@ namespace CaeGlobals
         {
             if (path != null && path.StartsWith("#"))
             {
-                string startUpPath = StartupPath;
-                return Path.Combine(startUpPath, path.Substring(1).TrimStart('\\'));
+                return GetApplicationRelativePath(path.Substring(1));
             }
             return path;
         }

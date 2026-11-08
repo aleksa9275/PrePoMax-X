@@ -88,7 +88,7 @@ namespace PrePoMax.Python
         // refused after the open. Where a user can, the user is asked, as the Results action asks
         public void OpenResults(string jobName)
         {
-            bool runsPostprocessing = _controller.Form != null && !_controller.IsCommandRecordingSuppressed &&
+            bool runsPostprocessing = _controller.Host != null && !_controller.IsCommandRecordingSuppressed &&
                                       !_controller.IsReplayingHistory;
             bool canAskUser = MessageBoxes.Mode == MessageBoxModeEnum.Interactive &&
                               !MessageBoxes.IsNonInteractiveThread;
@@ -96,8 +96,8 @@ namespace PrePoMax.Python
             //
             _controller.OpenResultsCommand(jobName);
             //
-            if (runsPostprocessing && _controller.Form.LastOpenResultsAccepted)
-                _controller.Form.RunHistoryPostprocessing(answerToAsk);
+            if (runsPostprocessing && _controller.Host.LastOpenResultsAccepted)
+                _controller.Host.RunHistoryPostprocessing(answerToAsk);
         }
     }
 }

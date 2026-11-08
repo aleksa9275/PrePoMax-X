@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
+
 using System.Xml.Linq;
 using UserControls;
 using vtkControl;
@@ -47,9 +47,9 @@ namespace PrePoMax
         private const int _selectionDistanceInPixels = 7;   // the setting does not work as expected
         private const double _smallFeatureSizeFraction = 1E-3;
         //
-        [NonSerialized] protected FrmMain _form;
+        [NonSerialized] protected IControllerHost _form;
         [NonSerialized] protected SettingsContainer _settings;
-        [NonSerialized] protected OrderedDictionary<string, AnalysisJob> _jobs;
+        [NonSerialized] protected CaeGlobals.OrderedDictionary<string, AnalysisJob> _jobs;
         // States
         [NonSerialized] protected bool _modelChanged;
         [NonSerialized] protected bool _savingFile;
@@ -125,7 +125,8 @@ namespace PrePoMax
 
 
         // Properties                                                                                                               
-        public FrmMain Form { get { return _form; } }
+        public FrmMain Form { get { return _form as FrmMain; } }
+        public IControllerHost Host { get { return _form; } }
         internal ExecutableJobRunner JobRunner { get { return _jobRunner; } }
         public SettingsContainer Settings
         {
@@ -155,7 +156,7 @@ namespace PrePoMax
         // automation server reads on every call. This is the live object, so a caller sees the
         // choice the user made last; only the server reads it
         public AutomationSettings AutomationSettings { get { return _settings.Automation; } }
-        public OrderedDictionary<string, AnalysisJob> Jobs { get { return _jobs; } }
+        public CaeGlobals.OrderedDictionary<string, AnalysisJob> Jobs { get { return _jobs; } }
         // States
         public bool ModelInitialized
         {
@@ -585,7 +586,7 @@ namespace PrePoMax
         }
 
         // Constructors                                                                                                             
-        public Controller(FrmMain form)
+        public Controller(IControllerHost form)
         {
             // Form
             _form = form;
@@ -597,7 +598,7 @@ namespace PrePoMax
             _gmshRunner = new GmshMesherRunner(this);
             _quadWildRunner = new QuadWildMesherRunner(this, _netgenRunner, _mmgRunner, _gmshRunner);
             _mesherRegistry = new MesherRegistry(_netgenRunner, _mmgRunner, _gmshRunner, _quadWildRunner);
-            _jobs = new OrderedDictionary<string, AnalysisJob>("Analysis Jobs", StringComparer.OrdinalIgnoreCase);
+            _jobs = new CaeGlobals.OrderedDictionary<string, AnalysisJob>("Analysis Jobs", StringComparer.OrdinalIgnoreCase);
             // Edges visibilities
             _edgesVisibilities = new EdgesVisibilitiesCollection(this);
             // Section view
@@ -833,7 +834,7 @@ namespace PrePoMax
             // Rotation centers
             _viewNameRotationCenter.Clear();
             // New
-            OrderedDictionary<string, EquationParameter> overriddenParameters = null;
+            CaeGlobals.OrderedDictionary<string, EquationParameter> overriddenParameters = null;
             if (_model != null) overriddenParameters = _model.Parameters.OverriddenParameters;
             _model = new FeModel("Model-1", null, true, overriddenParameters);
             //
@@ -1049,7 +1050,7 @@ namespace PrePoMax
             // Annotations
             _annotations = new AnnotationContainer(tmp._annotations, this);
             // Jobs
-            if (data[1] is OrderedDictionary<string, AnalysisJob> od)
+            if (data[1] is CaeGlobals.OrderedDictionary<string, AnalysisJob> od)
             {
                 _jobs = od;
                 ResetUnfinishedJobStatuses();
@@ -1606,7 +1607,7 @@ namespace PrePoMax
                 return false;
             }
             // Get the base script file
-            string scriptFileName = Application.StartupPath + Globals.OdbToFrd;
+            string scriptFileName = RuntimePaths.Tool(Globals.OdbToFrd);
             if (scriptFileName == null || !File.Exists(scriptFileName))
             {
                 MessageBoxes.ShowError("The file " + scriptFileName + " does not exist!");
@@ -2388,7 +2389,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string outFileName = Tools.GetNonExistentRandomFileName(workDirectory, ".brep");
             //
             string argumentSplit = "";
@@ -2489,7 +2490,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inFileName = Tools.GetNonExistentRandomFileName(workDirectory);
             string[] inFileNames = new string[partNames.Length];
             for (int i = 0; i < partNames.Length; i++)
@@ -2639,7 +2640,7 @@ namespace PrePoMax
             string workDirectory = _settings.GetWorkDirectory();
             if (workDirectory == null || !Directory.Exists(workDirectory)) return brepFileName;
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string dividedBrepFileName = Tools.GetNonExistentRandomFileName(workDirectory, ".brep");
             //
             string argument = "BREP_SPLIT_CLOSED_FACES " +
@@ -2663,7 +2664,7 @@ namespace PrePoMax
             //    return null;
             //}
             ////
-            //string executable = Application.StartupPath + Globals.NetGenMesher;
+            //string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             //string visFileName = Path.Combine(workDirectory, Globals.VisFileName);
             ////
             //if (File.Exists(visFileName)) File.Delete(visFileName);
@@ -2726,7 +2727,7 @@ namespace PrePoMax
             FeMesh[] visualizationMeshes = new FeMesh[brepFileNames.Length];
             Exception[] readExceptions = new Exception[brepFileNames.Length];
             string workDirectory = _settings.GetWorkDirectory();
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string[] visFileNames = new string[brepFileNames.Length];
             string[] arguments = new string[brepFileNames.Length];
             for (int i = 0; i < brepFileNames.Length; i++)
@@ -2776,7 +2777,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string visFileName = Path.Combine(workDirectory, Globals.VisFileName);
             //
             if (File.Exists(visFileName)) File.Delete(visFileName);
@@ -3096,7 +3097,7 @@ namespace PrePoMax
                 return;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inFileName = Tools.GetNonExistentRandomFileName(workDirectory);
             string[] inFileNames = new string[partNames.Length];
             for (int i = 0; i < partNames.Length; i++)
@@ -3147,7 +3148,7 @@ namespace PrePoMax
                 return;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             //
             if (File.Exists(brepFileName)) File.Delete(brepFileName);
@@ -3306,8 +3307,8 @@ namespace PrePoMax
                 newModel.Properties.ModelSpace = ModelSpaceEnum.ThreeD;
                 newModel.Mesh.AddPartsFromMesh(result.Mesh, partNames, null, null, false, false);
                 // Change result parts to mesh parts
-                OrderedDictionary<string, BasePart> meshParts =
-                    new OrderedDictionary<string, BasePart>("Base Parts", StringComparer.OrdinalIgnoreCase);
+                CaeGlobals.OrderedDictionary<string, BasePart> meshParts =
+                    new CaeGlobals.OrderedDictionary<string, BasePart>("Base Parts", StringComparer.OrdinalIgnoreCase);
                 MeshPart meshPart;
                 foreach (var entry in newModel.Mesh.Parts)
                 {
@@ -3537,14 +3538,14 @@ namespace PrePoMax
 
         #region Edit menu   ########################################################################################################
         // COMMANDS ********************************************************************************
-        public void SetCalculixUserKeywordsCommand(OrderedDictionary<int[],
+        public void SetCalculixUserKeywordsCommand(CaeGlobals.OrderedDictionary<int[],
                                                    FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords)
         {
             Commands.CSetCalculixUserKeywords comm = new Commands.CSetCalculixUserKeywords(userKeywords);
             _commands.AddAndExecute(comm);
         }
         public void SetCalculixKeywordEditorStateCommand(
-            OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords,
+            CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords,
             List<FileInOut.Output.Calculix.CalculixKeywordOverride> keywordOverrides)
         {
             Commands.CSetCalculixKeywordEditorState comm =
@@ -3621,7 +3622,7 @@ namespace PrePoMax
             }
             else return CalculixFileWriter.GetModelKeywords(_model, _settings.Solver.ConvertPyramidsTo, null, true);
         }
-        public OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> GetCalculixUserKeywords()
+        public CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> GetCalculixUserKeywords()
         {
             if (_model == null)
             {
@@ -3639,13 +3640,13 @@ namespace PrePoMax
             }
             else return _model.CalculixKeywordOverrides;
         }
-        public void SetCalculixUserKeywords(OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords)
+        public void SetCalculixUserKeywords(CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords)
         {
             _model.CalculixUserKeywords = userKeywords;
             _form.SetNumberOfModelUserKeywords(userKeywords.Count);
         }
         public void SetCalculixKeywordEditorState(
-            OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords,
+            CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> userKeywords,
             List<FileInOut.Output.Calculix.CalculixKeywordOverride> keywordOverrides)
         {
             SetCalculixUserKeywords(userKeywords);
@@ -6014,7 +6015,7 @@ namespace PrePoMax
                 return false;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             //
             if (File.Exists(brepFileName)) File.Delete(brepFileName);
@@ -6049,7 +6050,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string originsFileName = GetSplitGeometryOriginsFileName(brepFileName);
             //
@@ -6558,7 +6559,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             //
@@ -6657,7 +6658,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string faceIdsArgument = "";
@@ -6993,7 +6994,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = inputBrepFileName;
             string faceIdsArgument = solidNumbers.Length.ToString();
@@ -7192,7 +7193,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = inputBrepFileName;
             //
@@ -8688,7 +8689,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             // A preview writes the edges the split made in place of the result
             string outputFileName = preview ? GetSplitGeometryPreviewFileName(inputBrepFileName) :
@@ -10021,7 +10022,7 @@ namespace PrePoMax
                 return;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             if (File.Exists(brepFileName)) File.Delete(brepFileName);
             File.WriteAllText(brepFileName, compoundPart.CADFileData);
@@ -10903,7 +10904,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = inputBrepFileName;
             // One face group per solid, the faces numbered inside it
@@ -10948,7 +10949,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string inputBrepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string outputBrepFileName = inputBrepFileName;
             // One face group, numbered in the shape itself
@@ -11169,7 +11170,7 @@ namespace PrePoMax
         }
         //******************************************************************************************
         public MeshingParameters GetPartMeshingParameters(string partName,
-                                                          OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                          CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             HashSet<int> selectedPartIds;
             string[] meshAblePartNames = GetMeshablePartNames(new string[] { partName });
@@ -11318,7 +11319,7 @@ namespace PrePoMax
         /// allow: an element size below the minimum or above the maximum element size, or so many elements on an edge
         /// that they are shorter than the minimum element size. Neither value is changed to fit, as both are the user's.
         /// </summary>
-        private void CheckLocalMeshSizes(string partName, OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+        private void CheckLocalMeshSizes(string partName, CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             string[] meshablePartNames = GetMeshablePartNames(new string[] { partName });
             HashSet<int> meshablePartIds = new HashSet<int>(_model.Geometry.GetPartIdsFomPartNames(meshablePartNames));
@@ -11379,7 +11380,7 @@ namespace PrePoMax
         }
         //
         public void GetMeshItemSizes(string partName, ref GmshData gmshData,
-                                     OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                     CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             HashSet<int> selectedPartIds;
             string[] meshAblePartNames = GetMeshablePartNames(new string[] { partName });
@@ -11489,7 +11490,7 @@ namespace PrePoMax
         {
             GeometryPart part = (GeometryPart)_model.Geometry.Parts[partName];
             //
-            OrderedDictionary<string, MeshSetupItem> meshSetupItemsDict = _model.Geometry.MeshSetupItems.DeepClone();
+            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItemsDict = _model.Geometry.MeshSetupItems.DeepClone();
             // If the form to edit mesh setup item is open, overwrite the item
             if (meshSetupItem != null)
             {
@@ -11529,7 +11530,7 @@ namespace PrePoMax
             }
             return result;
         }
-        public bool PreviewEdgeMeshFromBrep(GeometryPart part, OrderedDictionary<string, MeshSetupItem> meshSetupItems,
+        public bool PreviewEdgeMeshFromBrep(GeometryPart part, CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems,
                                             bool previewSweepSourceMesh)
         {
             MeshSetupItem[] mesherSetupItems = GetActiveValidMesherSetupItems(part.Name, meshSetupItems);
@@ -12249,7 +12250,7 @@ namespace PrePoMax
                                   .CreateMeshFromBrep(part, mesherSetupItems, workDirectory);
         }
         internal void CreateLocalMeshSizeFile(GeometryPart part, string fileName,
-                                             OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                             CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             int geometryPartId;
             int[] geometryIds;
@@ -12499,7 +12500,7 @@ namespace PrePoMax
             else return null;
         }
         private MeshSetupItem[] GetActiveValidMesherSetupItems(string partName,
-                                                               OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                               CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             MeshSetupItem[] mesherSetupItems = GetUserMesherSetupItems(partName, meshSetupItems);
             if (mesherSetupItems.Length > 0) return mesherSetupItems;
@@ -12510,7 +12511,7 @@ namespace PrePoMax
             return new MeshSetupItem[] { defaultMesherSetupItem };
         }
         private MeshSetupItem[] GetUserMesherSetupItems(string partName,
-                                                       OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                       CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             HashSet<int> selectedPartIds;
             string[] meshablePartNames = GetMeshablePartNames(new string[] { partName });
@@ -12697,7 +12698,7 @@ namespace PrePoMax
             return meshType;
         }
         private MeshSetupItem[] GetActiveValidMeshSetupItems<T>(string partName,
-                                                                  OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                                  CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
                                                                   where T : MeshSetupItem
         {
             HashSet<int> selectedPartIds;
@@ -12795,7 +12796,7 @@ namespace PrePoMax
             FeMesh geometry = _model?.Geometry;
             if (geometry == null) return null;
             //
-            OrderedDictionary<string, MeshSetupItem> meshSetupItems = geometry.MeshSetupItems;
+            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = geometry.MeshSetupItems;
             HashSet<string> relatedNames = new HashSet<string>();
             //
             foreach (NamedClass item in items)
@@ -21382,7 +21383,7 @@ namespace PrePoMax
                  change.Action == OrderedDictionaryTreeLayoutAction.RenameGroup))
                 CheckPartGroupName(change.GroupId, change.GroupName);
             //
-            OrderedDictionary<string, object> preview = CreateOrderedDictionaryItemLayoutPreview(
+            CaeGlobals.OrderedDictionary<string, object> preview = CreateOrderedDictionaryItemLayoutPreview(
                 dictionary, oldLayout, "Ordered dictionary item layout preview");
             //
             string commandName;
@@ -21534,17 +21535,17 @@ namespace PrePoMax
         private static OrderedDictionaryItemLayout<string> CreateRenamedGroupLayout(
             IOrderedDictionaryItemLayout<string> dictionary, Guid groupId, string newName)
         {
-            OrderedDictionary<string, object> preview = CreateOrderedDictionaryItemLayoutPreview(
+            CaeGlobals.OrderedDictionary<string, object> preview = CreateOrderedDictionaryItemLayoutPreview(
                 dictionary, dictionary.GetItemLayoutSnapshot(), "Linked part group layout preview");
             preview.RenameGroup(groupId, newName);
             return preview.GetItemLayoutSnapshot();
         }
-        private static OrderedDictionary<string, object> CreateOrderedDictionaryItemLayoutPreview(
+        private static CaeGlobals.OrderedDictionary<string, object> CreateOrderedDictionaryItemLayoutPreview(
             IOrderedDictionaryItemLayout<string> dictionary, OrderedDictionaryItemLayout<string> layout,
             string name)
         {
-            OrderedDictionary<string, object> preview =
-                new OrderedDictionary<string, object>(name, dictionary.Comparer);
+            CaeGlobals.OrderedDictionary<string, object> preview =
+                new CaeGlobals.OrderedDictionary<string, object>(name, dictionary.Comparer);
             foreach (string key in dictionary.Keys) preview.Add(key, null);
             preview.SetItemLayout(layout);
             return preview;
@@ -29757,7 +29758,7 @@ namespace PrePoMax
         {
             int count = 0;
             FeElementSet elementSet;
-            OrderedDictionary<string, FeElementSet> elementSets = null;
+            CaeGlobals.OrderedDictionary<string, FeElementSet> elementSets = null;
             if (_currentView == ViewGeometryModelResults.Model)
                 elementSets = _model.Mesh.ElementSets;
             else if (_currentView == ViewGeometryModelResults.Results)

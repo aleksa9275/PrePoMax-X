@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="ExceptionTools.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="BinarySerialization.cs" />
     <Compile Include="Extensions.WinForms.cs" />
     <Compile Include="Extensions.Calculix.cs" />
     <Compile Include="Editors\FilteredFileNameEditor.cs" />

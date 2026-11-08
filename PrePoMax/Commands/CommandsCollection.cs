@@ -107,7 +107,7 @@ namespace PrePoMax.Commands
 
 
         // Events                                                                                                                   
-        public event Action<string, string> EnableDisableUndoRedo;
+        [field: NonSerialized] public event Action<string, string> EnableDisableUndoRedo;
 
 
         // Constructor                                                                                                              

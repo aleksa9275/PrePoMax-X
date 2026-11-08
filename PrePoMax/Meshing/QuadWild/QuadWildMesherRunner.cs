@@ -59,13 +59,13 @@ namespace PrePoMax
             return part != null && part.PartType == PartType.Shell;
         }
         public bool PreviewEdgeMeshFromBrep(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                            OrderedDictionary<string, MeshSetupItem> meshSetupItems,
+                                            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems,
                                             bool previewSweepSourceMesh)
         {
             return PreviewEdgeNodes(part, mesherSetupItems, meshSetupItems);
         }
         public bool PreviewEdgeMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             return PreviewEdgeNodes(part, mesherSetupItems, meshSetupItems);
         }
@@ -131,23 +131,23 @@ namespace PrePoMax
             QuadWildInputFileInfo inputInfo = QuadWildInputWriter.Write(objFileName, sharpFileName, nodesFileName,
                                                                         triangularMesh, part.Name,
                                                                         shellQuadWild.PinEdgeNodes);
-            _controller.Form.WriteDataToOutput("QuadWild input: " + inputInfo.NodeCount + " nodes, " +
+            _controller.Host.WriteDataToOutput("QuadWild input: " + inputInfo.NodeCount + " nodes, " +
                                                inputInfo.FaceCount + " triangles, " +
                                                inputInfo.SharpEdgeCount + " sharp-edge segments.");
             if (inputInfo.SeamEdgeCount > 0)
-                _controller.Form.WriteDataToOutput("QuadWild shell compound: " + inputInfo.SeamEdgeCount +
+                _controller.Host.WriteDataToOutput("QuadWild shell compound: " + inputInfo.SeamEdgeCount +
                                                    " model edge/s shared by more than two faces are meshed as seams " +
                                                    "between detached sheets (" +
                                                    inputInfo.SplitNodeCoordinates.Length + " split nodes).");
             if (inputInfo.SeamEdgeCount > 0 && shellQuadWild.TriangulationMesher != MesherTypeEnum.Gmsh)
-                _controller.Form.WriteDataToOutput("Warning: only the Gmsh triangulation gives every seam an even " +
+                _controller.Host.WriteDataToOutput("Warning: only the Gmsh triangulation gives every seam an even " +
                                                    "number of elements. With " +
                                                    GetMesherName(shellQuadWild.TriangulationMesher) +
                                                    " a sheet bounded only by seams can have an odd number of " +
                                                    "seam segments, which QuadWild cannot mesh with quads.");
             if (shellQuadWild.Preview && !shellQuadWild.DebugVisualization)
             {
-                _controller.Form.WriteDataToOutput("QuadWild preview is enabled: importing the " +
+                _controller.Host.WriteDataToOutput("QuadWild preview is enabled: importing the " +
                                                    GetMesherName(shellQuadWild.TriangulationMesher) +
                                                    " triangular pre-mesh and skipping QuadWild.");
                 return new GeneratedMeshData()
@@ -161,21 +161,21 @@ namespace PrePoMax
             }
             // The preview returned above does not require an installed QuadWild runtime. A preview with the debug
             // visualization runs the preparation and shows the traced triangle patches.
-            string executable = Application.StartupPath + Globals.QuadWildMesher;
-            string patchExecutable = Application.StartupPath + Globals.QuadWildPatchMesher;
+            string executable = RuntimePaths.Tool(Globals.QuadWildMesher);
+            string patchExecutable = RuntimePaths.Tool(Globals.QuadWildPatchMesher);
             string runtimeDirectory = Path.GetDirectoryName(executable);
             QuadWildRuntime.ValidateRuntime(executable, patchExecutable, runtimeDirectory);
             // The triangulation mesher controls the input; QuadWild's remesher would move the model vertices and
             // prescribed nodes
             QuadWildRuntime.WritePrepConfig(runtimeDirectory, prepConfigFileName, shellQuadWild.OldAlgorithm);
             if (shellQuadWild.PinEdgeNodes)
-                _controller.Form.WriteDataToOutput("QuadWild edge nodes: pinned, every node of the triangulation on " +
+                _controller.Host.WriteDataToOutput("QuadWild edge nodes: pinned, every node of the triangulation on " +
                                                    "the model edges is kept.");
             if (shellQuadWild.OldAlgorithm)
-                _controller.Form.WriteDataToOutput("QuadWild algorithm: old, without the patch layout and mesh " +
+                _controller.Host.WriteDataToOutput("QuadWild algorithm: old, without the patch layout and mesh " +
                                                    "quality improvements.");
             //
-            _controller.Form.WriteDataToOutput("Running QuadWild preparation and patch tracing...");
+            _controller.Host.WriteDataToOutput("Running QuadWild preparation and patch tracing...");
             string argument = QuadWildRuntime.Quote(objFileName) + " 2 " + QuadWildRuntime.Quote(prepConfigFileName) +
                               " " + QuadWildRuntime.Quote(sharpFileName);
             bool preparationFailed = RunStage(part, "preparation and patch tracing", executable, argument,
@@ -187,7 +187,7 @@ namespace PrePoMax
                                                   null);
             if (shellQuadWild.Preview)
             {
-                _controller.Form.WriteDataToOutput("QuadWild preview with debug visualization: importing the traced " +
+                _controller.Host.WriteDataToOutput("QuadWild preview with debug visualization: importing the traced " +
                                                    "triangle patches and skipping quad generation.");
                 return new GeneratedMeshData()
                 {
@@ -242,11 +242,11 @@ namespace PrePoMax
                 {
                     _controller.ResumeExplodedViews(false);
                 }
-                _controller.Form.WriteDataToOutput("QuadWild transfinite faces: " + numOfFaces + " structured faces " +
+                _controller.Host.WriteDataToOutput("QuadWild transfinite faces: " + numOfFaces + " structured faces " +
                                                    "of " + part.Name + " given.");
             }
             //
-            _controller.Form.WriteDataToOutput("Running QuadWild quad generation (" +
+            _controller.Host.WriteDataToOutput("Running QuadWild quad generation (" +
                                                GetFlowProfileName(shellQuadWild.FlowProfile) +
                                                ", alpha " +
                                                shellQuadWild.Alpha.ToString("R", CultureInfo.InvariantCulture) +
@@ -274,11 +274,11 @@ namespace PrePoMax
             if (hasSeams)
             {
                 int mergedCount = MergeSplitNodes(finalObjFileName, mergedObjFileName, inputInfo.SplitNodeCoordinates);
-                _controller.Form.WriteDataToOutput("QuadWild seams: " + mergedCount + " node copies merged.");
+                _controller.Host.WriteDataToOutput("QuadWild seams: " + mergedCount + " node copies merged.");
                 finalObjFileName = mergedObjFileName;
             }
             QuadWildOutputInfo outputInfo = ValidateOutput(finalObjFileName, hasSeams);
-            _controller.Form.WriteDataToOutput("QuadWild output: " + outputInfo.NodeCount + " nodes, " +
+            _controller.Host.WriteDataToOutput("QuadWild output: " + outputInfo.NodeCount + " nodes, " +
                                                outputInfo.QuadCount + " quadrilaterals, " +
                                                outputInfo.TriangleCount + " triangles.");
             WarnAboutDegenerateFaces(outputInfo);
@@ -295,10 +295,10 @@ namespace PrePoMax
             };
         }
         private bool PreviewEdgeNodes(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                      OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                      CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             ShellQuadWild shellQuadWild = GetShellQuadWild(mesherSetupItems);
-            _controller.Form.WriteDataToOutput("Creating the QuadWild " +
+            _controller.Host.WriteDataToOutput("Creating the QuadWild " +
                                                GetMesherName(shellQuadWild.TriangulationMesher) +
                                                " edge-node preview...");
             if (shellQuadWild.TriangulationMesher == MesherTypeEnum.Gmsh)
@@ -310,9 +310,9 @@ namespace PrePoMax
             else throw new CaeException("The selected QuadWild triangulation mesher is not supported.");
         }
         private FeMesh CreateTriangularMesh(GeometryPart part, ShellQuadWild shellQuadWild, string workDirectory,
-                                            OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
-            _controller.Form.WriteDataToOutput("Creating the triangular QuadWild input mesh using " +
+            _controller.Host.WriteDataToOutput("Creating the triangular QuadWild input mesh using " +
                                                GetMesherName(shellQuadWild.TriangulationMesher) + "...");
             FeMesh mesh;
             if (shellQuadWild.TriangulationMesher == MesherTypeEnum.Gmsh)
@@ -355,7 +355,7 @@ namespace PrePoMax
                                                                       out cells, out cellTypes);
             if (nodeCoor == null || nodeCoor.Length == 0)
             {
-                _controller.Form.WriteDataToOutput("The part has no model-edge nodes to preview.");
+                _controller.Host.WriteDataToOutput("The part has no model-edge nodes to preview.");
                 return false;
             }
             // Work on copies because the coordinates are owned by the geometry mesh.
@@ -371,7 +371,7 @@ namespace PrePoMax
                 }
             }
             _controller.HighlightNodes(displayCoor);
-            _controller.Form.WriteDataToOutput("QuadWild " + mesherName + " edge-node preview: " +
+            _controller.Host.WriteDataToOutput("QuadWild " + mesherName + " edge-node preview: " +
                                                displayCoor.Length + " source model-edge nodes.");
             return true;
         }
@@ -384,14 +384,14 @@ namespace PrePoMax
                               string workDirectory, params string[] expectedFileNames)
         {
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                             _controller.Form.WriteDataToOutput);
+                                                             _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
             {
                 if (jobStatus == JobStatus.Killed)
                     throw new CaeException("QuadWild " + stageName + " was canceled.");
                 else if ((jobStatus == JobStatus.Failed || jobStatus == JobStatus.FailedWithResults) &&
                          QuadWildRuntime.AreFilesWritten(expectedFileNames))
-                    _controller.Form.WriteDataToOutput("QuadWild " + stageName + " returned " + jobStatus +
+                    _controller.Host.WriteDataToOutput("QuadWild " + stageName + " returned " + jobStatus +
                                                        " after writing its output; validating the output...");
                 else
                 {
@@ -631,7 +631,7 @@ namespace PrePoMax
             // The QuadWild smoothing stage can pull all corners of a face onto one sharp feature line. The
             // rest of the mesh stays usable, so the collapsed faces are reported instead of rejecting it.
             if (outputInfo.DegenerateFaceCount == 0) return;
-            _controller.Form.WriteDataToOutput("Warning: " + outputInfo.DegenerateFaceCount + " QuadWild " +
+            _controller.Host.WriteDataToOutput("Warning: " + outputInfo.DegenerateFaceCount + " QuadWild " +
                                                "output faces collapsed onto a feature line and have no area.");
         }
         private static double GetFaceArea2(FeMesh mesh, int[] nodeIds)

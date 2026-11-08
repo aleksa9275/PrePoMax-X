@@ -14,6 +14,10 @@ namespace CaeGlobals
         {
             return 0;
         }
+        private static string GetApplicationRelativePath(string path)
+        {
+            return Path.Combine(StartupPath, path.Replace('\\', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar));
+        }
         private static string StartupPath
         {
             get { return Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory); }

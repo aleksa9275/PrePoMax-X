@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ExecutableJobRunner.cs" />
+    <Compile Include="Common\MesherMemory.Windows.cs" />
     <Compile Include="Meshing\Netgen\GeometryTransform.cs" />
     <Compile Include="Meshing\Netgen\NetgenMesherRunner.cs" />
     <Compile Include="Meshing\Mmg\MmgMesherRunner.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Python\Commands\ControllerPythonViewGateway.cs" />
     <Compile Include="Python\Engine\PythonConsoleResult.cs" />
     <Compile Include="Python\Engine\PythonEngineManager.cs" />
+    <Compile Include="Python\Engine\PythonEngineManager.Windows.cs" />
     <Compile Include="Python\Engine\PythonExecution.cs" />
     <Compile Include="Python\Engine\PythonStopWatchdog.cs" />
     <Compile Include="Python\Engine\PythonApiExceptionEncoder.cs" />
@@ -465,6 +467,10 @@
     <Compile Include="Commands\_Compatibility\v2.1.0\CShowReferencePoints.cs" />
     <Compile Include="Commands\_Compatibility\v2.2.0\CDeleteStlPartFacesCommand.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="RuntimePaths.cs" />
+    <Compile Include="RuntimeInitialization.cs" />
+    <Compile Include="IControllerHost.cs" />
+    <Compile Include="Forms\FrmMain.ControllerHost.cs" />
     <Compile Include="Controller.HistoryOutputTables.cs" />
     <Compile Include="Enums\ShowItemIdsEnum.cs" />
     <Compile Include="Enums\ViewGeometryModelResults.cs" />
@@ -1029,6 +1035,7 @@
     <Compile Include="Settings\MeshingSettings.cs" />
     <Compile Include="Settings\UnitSystemSettings.cs" />
     <Compile Include="Settings\GeneralSettings.cs" />
+    <Compile Include="Settings\GeneralSettings.WinForms.cs" />
     <Compile Include="Settings\GraphicsSettings.cs" />
     <Compile Include="Settings\NavigationSettings.cs" />
     <Compile Include="Forms\61_Settings\IReset.cs" />

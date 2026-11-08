@@ -1,0 +1,618 @@
+{
+  "schemaVersion": 1,
+  "milestone": "Phase B headless implementation",
+  "date": "2026-11-08",
+  "localEvidenceRoot": "/private/tmp/prepomaxx-phase-b",
+  "baseRevision": "f414b30b891665cc5aa298f7eb7972e5e9bb12e8",
+  "mac": {
+    "success": true,
+    "host": {
+      "os": "Darwin",
+      "architecture": "Arm64"
+    },
+    "commandSourceFiles": 276,
+    "steps": [
+      {
+        "name": "source-lists",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.031,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "build",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 14.733,
+        "stdoutSha256": "d408a8dfe0d6605c61a83065d22fa200e0d53a35fbcf34aa4d592fd8a552498d",
+        "stderrSha256": "ad62ba0ccba6a276f168ca77b1e8fd3d18340b1e7c2d0aa05718dc18db63307d"
+      },
+      {
+        "name": "host-contract",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.566,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "persistence",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.249,
+        "stdoutSha256": "ca2a4391027d92b3dfed23f98a7aa26987e92c95035cac41d5798cf4638cf7b6",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "solid-workflow",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.379,
+        "stdoutSha256": "d878fbd337f0c954a729029875af9062ef567e186e0f6d88d820568ce6f59802",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "fresh-process",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.267,
+        "stdoutSha256": "0922a2ffa753f2be45dbb67af7553676ce5e54343245a252ebd706c75552a70d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "embedded-python",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.762,
+        "stdoutSha256": "8645ef42c24dc6932ad52b2b5cb214d5000e8364465f641759a49e9a09d67017",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "spatial-replay",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 2.03,
+        "stdoutSha256": "0c386c49500122f8114c3894800b025a4d808338c4ee2ce795bb04cec44e7e59",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "script-host",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.852,
+        "stdoutSha256": "217c1666e7ecd59b809294f7814bf5262ada842af773d77aca199cc0c3cacb69",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "native-exports",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 1.897,
+        "stdoutSha256": "e213df4b047709bcfc01ea89e9941e8872bc2b0d99e5330e25fba86db8200e7d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "solver-results",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.459,
+        "stdoutSha256": "d3def69e1755e32347e216080c2e9acd66cfc175cd4790db444440fd00044cdb",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "cad-gmsh",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 1.142,
+        "stdoutSha256": "065f6f9cdb3727592d29870c6ea1e0632ae3b210b09fd165d302929618427a85",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "persistenceChecks": [
+      "cycle identity",
+      "shared object identity",
+      "ordered dictionary and comparer",
+      "dictionary shared values",
+      "rectangular array shape",
+      "IEEE values and signed zero",
+      "UTF-8 characters",
+      "UTC DateTime value",
+      "converter Type metadata",
+      "settings interface declarations",
+      "unknown framework type",
+      "unknown assembly",
+      "delegate payload",
+      "delegate serialization",
+      "trailing bytes",
+      "unknown Type metadata",
+      "unknown data member",
+      "spoofed comparer assembly",
+      "original renamed type mapping",
+      "unsafe formatter remains disabled"
+    ],
+    "pending": [],
+    "receiptSha256": "b51bc879390e64cbfc31e62021a40d0076e6686ad21c647c54a46f06369f5197"
+  },
+  "linuxArm64": {
+    "success": true,
+    "host": {
+      "os": "Linux",
+      "architecture": "Arm64"
+    },
+    "commandSourceFiles": 276,
+    "steps": [
+      {
+        "name": "source-lists",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.029,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "build",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 19.825,
+        "stdoutSha256": "f928ec4d7c701d59b0c471f7aad1650200024282c90927aeba6aff142b6bb322",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "host-contract",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.647,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "persistence",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.224,
+        "stdoutSha256": "ca2a4391027d92b3dfed23f98a7aa26987e92c95035cac41d5798cf4638cf7b6",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "solid-workflow",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.375,
+        "stdoutSha256": "d878fbd337f0c954a729029875af9062ef567e186e0f6d88d820568ce6f59802",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "fresh-process",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.261,
+        "stdoutSha256": "0922a2ffa753f2be45dbb67af7553676ce5e54343245a252ebd706c75552a70d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "embedded-python",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.753,
+        "stdoutSha256": "8645ef42c24dc6932ad52b2b5cb214d5000e8364465f641759a49e9a09d67017",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "spatial-replay",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 1.679,
+        "stdoutSha256": "0c386c49500122f8114c3894800b025a4d808338c4ee2ce795bb04cec44e7e59",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "script-host",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.852,
+        "stdoutSha256": "c6454bdf9a232eb5bccf9771dfec9e83fad3ba131742b9b5764ae607c988dbe1",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "native-exports",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 1.516,
+        "stdoutSha256": "e213df4b047709bcfc01ea89e9941e8872bc2b0d99e5330e25fba86db8200e7d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "solver-results",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.477,
+        "stdoutSha256": "32b783bc91a09b2b8208eaaa5708a18a4221ae50e95d45aaf585ca302d0e3fa7",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "cad-gmsh",
+        "passed": true,
+        "exitCode": 0,
+        "seconds": 0.716,
+        "stdoutSha256": "08b3898384a7c3ac5a644607d086db333c1f59e058f5b41b9867edd420a19cc1",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "persistenceChecks": [
+      "cycle identity",
+      "shared object identity",
+      "ordered dictionary and comparer",
+      "dictionary shared values",
+      "rectangular array shape",
+      "IEEE values and signed zero",
+      "UTF-8 characters",
+      "UTC DateTime value",
+      "converter Type metadata",
+      "settings interface declarations",
+      "unknown framework type",
+      "unknown assembly",
+      "delegate payload",
+      "delegate serialization",
+      "trailing bytes",
+      "unknown Type metadata",
+      "unknown data member",
+      "spoofed comparer assembly",
+      "original renamed type mapping",
+      "unsafe formatter remains disabled"
+    ],
+    "pending": [],
+    "receiptSha256": "7ee260e0aaaf7e78971f4410a62f30245e28e1b6141c3a702692935b60fb4bea"
+  },
+  "regressions": {
+    "mac": {
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "steps": [
+        {
+          "area": "core",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "analysis",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "execution",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "results",
+          "status": "passed",
+          "exitCode": 0
+        }
+      ],
+      "areas": [
+        {
+          "area": "core",
+          "success": true,
+          "suites": [
+            {
+              "suite": "core/mappingTests",
+              "passed": 25,
+              "failed": 0
+            },
+            {
+              "suite": "core/dataTests",
+              "passed": 30,
+              "failed": 0
+            },
+            {
+              "suite": "core/elementTests",
+              "passed": 95,
+              "failed": 0
+            },
+            {
+              "suite": "core/meshWorkflow/tests",
+              "passed": 69,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "b9c3688146340695e0417e83890d9de7c6cf086a0e4f367f46f2d27369055bb3"
+        },
+        {
+          "area": "analysis",
+          "success": true,
+          "suites": [
+            {
+              "suite": "analysis/tests",
+              "passed": 58,
+              "failed": 0
+            },
+            {
+              "suite": "analysis/staticTests",
+              "passed": 74,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "534153323dc2a836f8e8e3583b6048c072c72c773f0ba9f1a27b5d865c5d693d"
+        },
+        {
+          "area": "execution",
+          "success": true,
+          "suites": [
+            {
+              "suite": "execution/tests",
+              "passed": 49,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "0919db3743c0ec27eea75324dd88277dd2e02e29ea9c3b92382f4371b679dd2f"
+        },
+        {
+          "area": "results",
+          "success": true,
+          "suites": [
+            {
+              "suite": "results/tests",
+              "passed": 90,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "29c5dc5f4fb8fc807baa8de4eb7418ed6c69f337d9e4f24b56733fd504c8fdf0"
+        }
+      ],
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "manifestSha256": "5fe9a2d08eeba9c84009b0616e7ad8bdfc0cc5d05b04a1a472833c3f335d15b6"
+    },
+    "linuxArm64": {
+      "host": {
+        "os": "Linux",
+        "architecture": "Arm64"
+      },
+      "steps": [
+        {
+          "area": "core",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "analysis",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "execution",
+          "status": "passed",
+          "exitCode": 0
+        },
+        {
+          "area": "results",
+          "status": "passed",
+          "exitCode": 0
+        }
+      ],
+      "areas": [
+        {
+          "area": "core",
+          "success": true,
+          "suites": [
+            {
+              "suite": "core/mappingTests",
+              "passed": 25,
+              "failed": 0
+            },
+            {
+              "suite": "core/dataTests",
+              "passed": 30,
+              "failed": 0
+            },
+            {
+              "suite": "core/elementTests",
+              "passed": 95,
+              "failed": 0
+            },
+            {
+              "suite": "core/meshWorkflow/tests",
+              "passed": 69,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "5622bc1998bf6e0110d829842b9dac39ee005a91727cb3cf8c50f7c2d4620161"
+        },
+        {
+          "area": "analysis",
+          "success": true,
+          "suites": [
+            {
+              "suite": "analysis/tests",
+              "passed": 58,
+              "failed": 0
+            },
+            {
+              "suite": "analysis/staticTests",
+              "passed": 74,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "1020c28bb20edcd66211dcf2c0c6033c409eaeb64abfa71e3ce4032d7e53b890"
+        },
+        {
+          "area": "execution",
+          "success": true,
+          "suites": [
+            {
+              "suite": "execution/tests",
+              "passed": 49,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "cc55e2791fcfd378a901c73cf4423bd82844d9b1f84517a6e9a60bb5bc8025c9"
+        },
+        {
+          "area": "results",
+          "success": true,
+          "suites": [
+            {
+              "suite": "results/tests",
+              "passed": 90,
+              "failed": 0
+            }
+          ],
+          "receiptSha256": "eff124c3036d4608bdb5205c29596c91c8987642bfd959c26eb82430a7ffd795"
+        }
+      ],
+      "openCorrectnessChecks": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "manifestSha256": "6a220f83d3d65cbda72527252d96c42beb83111f702d7b5b10f1c0675dbd24eb"
+    }
+  },
+  "net48CompileOnly": [
+    {
+      "assembly": "CaeGlobals",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "ThreeMF",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "vtkControl",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "CaeMesh",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "CaeResults",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "CaeModel",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "CaeJob",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "UserControls",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "APIs",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "PrePoMax",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "assembly": "GmshCaller",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "originalAppReference": {
+    "kind": "isolated original 3.0.0 Windows application through CrossOver; not native Windows acceptance",
+    "archiveSha256": "f4499f51e20536ad60d5e5bd87f67e4986a0dfdaf9e020bfc92b1dd1c85e30d9",
+    "executableSha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+    "solid": {
+      "success": true,
+      "nodes": 8,
+      "elements": 1,
+      "materials": 1,
+      "steps": 1
+    },
+    "solidDecksIdenticalAfterCrLfNormalization": true,
+    "solidDecksRawByteIdentical": false,
+    "nativeDeckSha256": "8ff29a0ec6ff73191e881b0a75d84ccfe21e2db4596601eb234bad8d01f33547",
+    "originalDeckSha256": "d9147125030163908e3e44e96960327fe0ab5ccda1e6caac72e3a92c49e75492",
+    "normalizedDeckSha256": "8ff29a0ec6ff73191e881b0a75d84ccfe21e2db4596601eb234bad8d01f33547",
+    "results": {
+      "success": true,
+      "results": 1,
+      "nodes": 8,
+      "elements": 1,
+      "displacement": 0.00047619000542908907
+    },
+    "resultsReopenedNativelyWithIdenticalValue": true,
+    "nativeResultReadLogSha256": "3c0b7638f9ebb48c588169391a60decd1a26445e05c50b749f684b8f2cb9f720",
+    "originalResaveReadLogSha256": "765b3a2b4537f6109f9fdb17f1bc13b5550bf7c116d796e2bacdcd53513e943d",
+    "sourceStableBinaryCorrespondence": "unverified"
+  },
+  "nativeProfiles": {
+    "Gmsh": "existing patched 4.13.0; no upgrade",
+    "CalculiX": "explicit 2.22 SPOOLES build profiles",
+    "Python.NET": "3.1.0",
+    "CPython": {
+      "mac": "3.12.14 verification profile",
+      "linuxArm64": "3.12.3 verification profile"
+    },
+    "VTK": "existing 9.5.2 host",
+    "lib3mf": "2.4.1 matching binding interface",
+    "lib3mfSourceArchiveSha256": "4e9e1776f4dd1b3dfce684ce9bb4ad1157dadf29908a1f3aabb6cd4358bf3248",
+    "lib3mfDarwinArchiveSha256": "d3db960146af09cbde98eaafe87ecdaf7d5d22ac6a22bed286d9eb952ccc9d89"
+  },
+  "pending": [
+    "Phase C UI/camera/rendering/property-editor and finished CLI/RPC/MCP application integration",
+    "Full feature/PMX/mesher/backend acceptance matrices",
+    "Native Windows x64 and deferred Linux x64 execution",
+    "Stable source/binary correspondence",
+    "Four-target installers/signing/distribution/release acceptance",
+    "Original numerical findings and ordinary warnings deferred under D061"
+  ],
+  "failedAttemptsRetained": [
+    "Initial PMX write/readbacks before value-type layout and culture repair",
+    "Initial Linux test setup missing libpython shared library"
+  ],
+  "approvalReview": {
+    "rejectedAction": "Direct diagnostic invocation of original generic deserializer",
+    "reason": "Could bypass required PMX type allowlist",
+    "executed": false,
+    "replacement": "Restricted-reader/source inspection and normal original application workflow"
+  },
+  "podmanRestoredStopped": true,
+  "installedOriginalApplicationModified": false,
+  "previewCandidateChanged": false
+}

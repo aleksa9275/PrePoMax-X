@@ -65,7 +65,7 @@ namespace PrePoMax
         }
         private static string GetQuadWildDirectory()
         {
-            return Path.GetDirectoryName(Application.StartupPath + Globals.QuadWildMesher);
+            return Path.GetDirectoryName(RuntimePaths.OptionalTool(Globals.QuadWildMesher));
         }
         public bool CanCreateMeshFromBrep(GeometryPart part)
         {
@@ -76,13 +76,13 @@ namespace PrePoMax
             return true;
         }
         public bool PreviewEdgeMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             throw new NotSupportedException("MesherTypeException");
         }
         public string Defeature(GeometryPart part, int[] surfaceIds)
         {
-            _controller.Form.WriteDataToOutput("");
+            _controller.Host.WriteDataToOutput("");
             //
             string workDirectory = _controller.Settings.GetWorkDirectory();
             //
@@ -92,7 +92,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string gmshDataFileName = Path.Combine(workDirectory, Globals.GmshDataFileName);
             //
@@ -114,14 +114,14 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 error = gmsh.Defeature();
                 jobCompleted = (error == null);
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                     _controller.Form.WriteDataToOutput);
+                                                     _controller.Host.WriteDataToOutput);
                 // Job completed
                 jobCompleted = jobStatus == JobStatus.OK;
             }
@@ -138,7 +138,7 @@ namespace PrePoMax
             }
         }
         public bool PreviewEdgeMeshFromBrep(GeometryPart part, MeshSetupItem[] gmshSetupItems,
-                                                OrderedDictionary<string, MeshSetupItem> meshSetupItems,
+                                                CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems,
                                                 bool previewSweepSourceMesh)
         {
             string workDirectory = _controller.Settings.GetWorkDirectory();
@@ -150,7 +150,7 @@ namespace PrePoMax
             }
             //
             previewSweepSourceMesh &= gmshSetupItems.Length == 1 && gmshSetupItems[0] is SweepMesh;
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string inpFileName = Path.Combine(workDirectory, Globals.InpMeshFileName);
             string gmshDataFileName = Path.Combine(workDirectory, Globals.GmshDataFileName);
@@ -182,14 +182,14 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                CaeMesh.GmshAPI gmsh = new CaeMesh.GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                CaeMesh.GmshAPI gmsh = new CaeMesh.GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 string error = gmsh.CreateMesh();
                 jobCompleted = error == null;
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                     _controller.Form.WriteDataToOutput);
+                                                     _controller.Host.WriteDataToOutput);
                 // Job completed
                 jobCompleted = jobStatus == JobStatus.OK;
             }
@@ -278,7 +278,7 @@ namespace PrePoMax
             if (edgeIds.Count > 0) _controller.HighlightItemsByGeometryEdgeIds(edgeIds.ToArray(), true);
         }
         public bool PreviewEdgeNodesForQuadWild(GeometryPart part,
-                                                OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                                CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             if (part == null) throw new ArgumentNullException(nameof(part));
             string workDirectory = _controller.Settings.GetWorkDirectory();
@@ -288,7 +288,7 @@ namespace PrePoMax
                 return false;
             }
             // A tetrahedral setup item makes the existing Gmsh preview path stop after its 1D edge mesh.
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string geometryFileName = Path.Combine(workDirectory,
                                                    part.IsCADPart ? Globals.BrepFileName : Globals.StlFileName);
             string inpFileName = Path.Combine(workDirectory, Globals.QuadWildGmshInpFileName);
@@ -331,13 +331,13 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 jobCompleted = gmsh.CreateMesh() == null;
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                                 _controller.Form.WriteDataToOutput);
+                                                                 _controller.Host.WriteDataToOutput);
                 jobCompleted = jobStatus == JobStatus.OK;
             }
             if (!jobCompleted) return false;
@@ -347,11 +347,11 @@ namespace PrePoMax
             _controller.ApplyExplodedViewToGeneratedMesh(part, mesh);
             double[][] nodeCoor = mesh.GetAllNodeCoor();
             _controller.HighlightNodes(nodeCoor);
-            _controller.Form.WriteDataToOutput("QuadWild Gmsh edge-node preview: " + nodeCoor.Length + " nodes.");
+            _controller.Host.WriteDataToOutput("QuadWild Gmsh edge-node preview: " + nodeCoor.Length + " nodes.");
             return true;
         }
         public FeMesh CreateFirstOrderShellMeshForQuadWild(GeometryPart part, string workDirectory,
-                                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             if (part == null) throw new ArgumentNullException(nameof(part));
             if (part.PartType != PartType.Shell)
@@ -359,7 +359,7 @@ namespace PrePoMax
             if (String.IsNullOrWhiteSpace(workDirectory) || !Directory.Exists(workDirectory))
                 throw new CaeException("The QuadWild work directory does not exist.");
             //
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string geometryFileName = Path.Combine(workDirectory,
                                                    part.IsCADPart ? Globals.BrepFileName : Globals.StlFileName);
             string inpFileName = Path.Combine(workDirectory, Globals.QuadWildGmshInpFileName);
@@ -405,14 +405,14 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 error = gmsh.CreateMesh();
                 jobCompleted = error == null;
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                     _controller.Form.WriteDataToOutput);
+                                                     _controller.Host.WriteDataToOutput);
                 jobCompleted = jobStatus == JobStatus.OK;
             }
             //
@@ -472,9 +472,9 @@ namespace PrePoMax
         public GeneratedMeshData CreateMeshFromStl(GeometryPart part, MeshSetupItem[] meshSetupItems,
                                                         string workDirectory)
         {
-            _controller.Form.WriteDataToOutput("");
+            _controller.Host.WriteDataToOutput("");
             //
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string stlFileName = Path.Combine(workDirectory, Globals.StlFileName);
             string inpFileName = Path.Combine(workDirectory, Globals.InpMeshFileName);
             string gmshDataFileName = Path.Combine(workDirectory, Globals.GmshDataFileName);
@@ -510,14 +510,14 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                CaeMesh.GmshAPI gmshAPI = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                CaeMesh.GmshAPI gmshAPI = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 string error = gmshAPI.CreateMesh();
                 jobCompleted = error == null;
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                     _controller.Form.WriteDataToOutput);
+                                                     _controller.Host.WriteDataToOutput);
                 // Job completed
                 jobCompleted = jobStatus == JobStatus.OK;
             }
@@ -536,9 +536,9 @@ namespace PrePoMax
         public GeneratedMeshData CreateMeshFromBrep(GeometryPart part, MeshSetupItem[] meshSetupItems,
                                                          string workDirectory)
         {
-            _controller.Form.WriteDataToOutput("");
+            _controller.Host.WriteDataToOutput("");
             //
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string inpFileName = Path.Combine(workDirectory, Globals.InpMeshFileName);
             string gmshDataFileName = Path.Combine(workDirectory, Globals.GmshDataFileName);
@@ -565,7 +565,7 @@ namespace PrePoMax
                     string meshParametersFileName = Path.Combine(workDirectory, Globals.MeshParametersFileName);
                     partMeshingParameters.WriteToFile(meshParametersFileName, part.BoundingBox.GetDiagonal(),
                                                       _controller.Settings.Meshing.ParallelMeshingThreads);
-                    gmshData.NetgenMesherFileName = Application.StartupPath + Globals.NetGenMesher;
+                    gmshData.NetgenMesherFileName = RuntimePaths.Tool(Globals.NetGenMesher);
                     gmshData.NetgenMeshParametersFileName = meshParametersFileName;
                 }
                 _controller.Model.Geometry.GetPartTopologyForGmsh(part.Name, ref gmshData);
@@ -583,14 +583,14 @@ namespace PrePoMax
             bool jobCompleted;
             if (Debugger.IsAttached)
             {
-                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+                GmshAPI gmsh = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
                 error = gmsh.CreateMesh();
                 jobCompleted = (error == null);
             }
             else
             {
                 JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                     _controller.Form.WriteDataToOutput);
+                                                     _controller.Host.WriteDataToOutput);
                 // Job completed
                 jobCompleted = jobStatus == JobStatus.OK;
                 // The mesher writes why it failed to its standard error, and the reason is kept with the part
@@ -629,7 +629,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.GmshCaller;
+            string executable = RuntimePaths.Tool(Globals.GmshCaller);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             //
             if (File.Exists(brepFileName)) File.Delete(brepFileName);
@@ -657,7 +657,7 @@ namespace PrePoMax
             //
             _controller.ResumeExplodedViews(false);
             //
-            GmshAPI gmsh = new GmshAPI(gmshData, _controller.Form.WriteDataToOutput);
+            GmshAPI gmsh = new GmshAPI(gmshData, _controller.Host.WriteDataToOutput);
             string error = gmsh.GetOccNormals();
             if (error != null)
                 throw new CaeException("The geometry normals of the part " + part.Name +

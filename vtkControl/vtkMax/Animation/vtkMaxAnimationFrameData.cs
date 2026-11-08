@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using Kitware.VTK;
+
 using CaeGlobals;
 
 namespace vtkControl

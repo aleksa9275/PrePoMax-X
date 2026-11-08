@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><AssemblyName>GmshCaller</AssemblyName></PropertyGroup><ItemGroup><Compile Include="../../../GmshCaller/Program.cs"/><Compile Include="../../../GmshCaller/Properties/AssemblyInfo.cs"/><Compile Include="Platform.cs"/><ProjectReference Include="../PrePoMax/PrePoMax.csproj"/></ItemGroup></Project>

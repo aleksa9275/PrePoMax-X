@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>APIs</AssemblyName></PropertyGroup><Import Project="Sources.g.props"/><ItemGroup><ProjectReference Include="../CaeModel/CaeModel.csproj"/><ProjectReference Include="../CaeJob/CaeJob.csproj"/><PackageReference Include="pythonnet" Version="[3.1.0]"/></ItemGroup></Project>

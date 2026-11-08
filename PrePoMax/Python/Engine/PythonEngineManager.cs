@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace PrePoMax.Python
 {
-    public static class PythonEngineManager
+    public static partial class PythonEngineManager
     {
         // Variables
         private static readonly object _initializationLock = new object();
@@ -210,19 +210,7 @@ namespace PrePoMax.Python
         {
             if (_engineStarted) return;
             //
-            string pythonDll = Application.StartupPath + Globals.PythonDll;
-            string pythonDir = Path.GetDirectoryName(pythonDll);
-            //
-            if (!File.Exists(pythonDll))
-                throw new FileNotFoundException("Python DLL was not found.", pythonDll);
-            //
-            Runtime.PythonDLL = pythonDll;
-            // Help Python find its standard library and extension modules.
-            PythonEngine.PythonHome = pythonDir;
-            _pythonHome = pythonDir;
-            PythonEngine.PythonPath = Path.Combine(pythonDir, "Lib") + Path.PathSeparator +
-                                      Path.Combine(pythonDir, "DLLs") + Path.PathSeparator +
-                                      Path.Combine(pythonDir, "Lib", "site-packages");
+            ConfigurePythonRuntime();
             PythonEngine.Initialize();
             // Important for WinForms/WPF apps so the UI thread is not locked forever by Python.
             PythonEngine.BeginAllowThreads();

@@ -290,7 +290,7 @@ namespace PrePoMax
                         else
                             annotation.GetAnnotationData(out text, out arrowCoor);
                         string[] animationActorNames = GetAnimationActorNames(annotation);
-                        AnnotationBase.Controller.Form.AddArrowWidget(entry.Value.Name, text, numberFormat, arrowCoor,
+                        AnnotationBase.Controller.Host.AddArrowWidget(entry.Value.Name, text, numberFormat, arrowCoor,
                                                                       drawBackground, drawBorder,
                                                                       annotation.IsAnnotationVisible(),
                                                                       animationActorNames);
@@ -308,7 +308,7 @@ namespace PrePoMax
                 if (invalidAnnotationNames.Count > 0)
                 {
                     RemoveCurrentArrowAnnotations(invalidAnnotationNames.ToArray());
-                    AnnotationBase.Controller.Form.RemoveArrowWidgets(invalidAnnotationNames.ToArray());
+                    AnnotationBase.Controller.Host.RemoveArrowWidgets(invalidAnnotationNames.ToArray());
                 }
             }
             // Min/Max annotations
@@ -317,12 +317,12 @@ namespace PrePoMax
                 bool showMin = AnnotationBase.Controller.Settings.Post.ShowMinValueLocation && !_suppressed;
                 bool showMax = AnnotationBase.Controller.Settings.Post.ShowMaxValueLocation && !_suppressed;
                 //
-                AnnotationBase.Controller.Form.AddArrowWidget(MinAnnotationName, "", numberFormat, new double[3],
+                AnnotationBase.Controller.Host.AddArrowWidget(MinAnnotationName, "", numberFormat, new double[3],
                                                                 drawBackground, drawBorder, showMin, null);
-                AnnotationBase.Controller.Form.AddArrowWidget(MaxAnnotationName, "", numberFormat, new double[3],
+                AnnotationBase.Controller.Host.AddArrowWidget(MaxAnnotationName, "", numberFormat, new double[3],
                                                                 drawBackground, drawBorder, showMax, null);
             }
-            if (arrangeVisible) AnnotationBase.Controller.Form.ArrangeVisibleArrowWidgets();
+            if (arrangeVisible) AnnotationBase.Controller.Host.ArrangeVisibleArrowWidgets();
         }
         public void UpdateAnimationAnnotations(bool updateAnchors)
         {
@@ -346,7 +346,7 @@ namespace PrePoMax
                     }
                     else
                         annotation.GetAnnotationData(out text, out anchorPoint);
-                    AnnotationBase.Controller.Form.UpdateArrowWidgetAnimationData(annotation.Name,
+                    AnnotationBase.Controller.Host.UpdateArrowWidgetAnimationData(annotation.Name,
                         updateText ? text : null, updateAnchor ? anchorPoint : null);
                 }
                 catch
@@ -372,7 +372,7 @@ namespace PrePoMax
         // Remove
         public void RemoveCurrentArrowAnnotation(string annotationName)
         {
-            AnnotationBase.Controller.Form.RemoveArrowWidgets(new string[] { annotationName });
+            AnnotationBase.Controller.Host.RemoveArrowWidgets(new string[] { annotationName });
             RemoveCurrentArrowAnnotations(new string[] { annotationName });
         }
         public void RemoveCurrentMeasureAnnotation()
@@ -385,7 +385,7 @@ namespace PrePoMax
             if (annotations != null)
             {
                 foreach (var annotationName in annotationNames) annotations.Remove(annotationName);
-                AnnotationBase.Controller.Form.RemoveMeasurementAnnotations(annotationNames);
+                AnnotationBase.Controller.Host.RemoveMeasurementAnnotations(annotationNames);
                 AnnotationBase.Controller.ModelChanged = true;
             }
         }
@@ -416,8 +416,8 @@ namespace PrePoMax
                 // Remove
                 foreach (var annotation in annotationsToRemove) annotations.Remove(annotation.Name);
                 string[] annotationNames = annotationsToRemove.Select(annotation => annotation.Name).Distinct().ToArray();
-                AnnotationBase.Controller.Form.RemoveArrowWidgets(annotationNames);
-                AnnotationBase.Controller.Form.RemoveMeasurementAnnotations(annotationNames);
+                AnnotationBase.Controller.Host.RemoveArrowWidgets(annotationNames);
+                AnnotationBase.Controller.Host.RemoveMeasurementAnnotations(annotationNames);
                 //
                 AnnotationBase.Controller.ModelChanged = true;
             }
@@ -442,8 +442,8 @@ namespace PrePoMax
         public void RemoveCurrentArrowAnnotations()
         {
             var annotations = GetCurrentAnnotations();
-            AnnotationBase.Controller.Form.RemoveArrowWidgets(annotations.Keys.ToArray());
-            AnnotationBase.Controller.Form.RemoveMeasurementAnnotations(annotations.Keys.ToArray());
+            AnnotationBase.Controller.Host.RemoveArrowWidgets(annotations.Keys.ToArray());
+            AnnotationBase.Controller.Host.RemoveMeasurementAnnotations(annotations.Keys.ToArray());
             annotations.Clear();
             //
             AnnotationBase.Controller.ModelChanged = true;
@@ -453,8 +453,8 @@ namespace PrePoMax
             Dictionary<string, AnnotationBase> resultAnnotations;
             if (_allResultsAnnotations.TryGetValue(CurrentResultName, out resultAnnotations))
             {
-                AnnotationBase.Controller.Form.RemoveArrowWidgets(resultAnnotations.Keys.ToArray());
-                AnnotationBase.Controller.Form.RemoveMeasurementAnnotations(resultAnnotations.Keys.ToArray());
+                AnnotationBase.Controller.Host.RemoveArrowWidgets(resultAnnotations.Keys.ToArray());
+                AnnotationBase.Controller.Host.RemoveMeasurementAnnotations(resultAnnotations.Keys.ToArray());
                 //
                 _allResultsAnnotations.Remove(CurrentResultName);
                 //
@@ -469,7 +469,7 @@ namespace PrePoMax
         }
         public void RemoveAllArrowAnnotations()
         {
-            AnnotationBase.Controller.Form.RemoveMeasurementAnnotations(GetCurrentAnnotationNames());
+            AnnotationBase.Controller.Host.RemoveMeasurementAnnotations(GetCurrentAnnotationNames());
             _geometryAnnotations.Clear();
             _modelAnnotations.Clear();
             _allResultsAnnotations.Clear();

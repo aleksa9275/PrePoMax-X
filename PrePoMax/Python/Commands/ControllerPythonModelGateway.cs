@@ -64,7 +64,7 @@ namespace PrePoMax.Python
         }
         public bool HasUnsavedChangesOfUser()
         {
-            return _controller.ModelChanged && _controller.Form != null && !_controller.Form.IsWindowHidden;
+            return _controller.ModelChanged && _controller.Host != null && !_controller.Host.IsWindowHidden;
         }
         public void RenameModelItem(NamedClass item, string newName, string stepName)
         {
@@ -94,12 +94,12 @@ namespace PrePoMax.Python
         // selects from
         public void OpenFile(string fileName)
         {
-            if (_controller.Form != null)
+            if (_controller.Host != null)
             {
-                _controller.Form.Open(fileName, _controller.OpenFileCommand, true, Globals.FromFileOpenMenu);
+                _controller.Host.Open(fileName, _controller.OpenFileCommand, true, Globals.FromFileOpenMenu);
                 // A result file without a unit system gets one as File - Open gives it, unit less where nobody can
                 // choose
-                if (_controller.ResultsInitialized) _controller.Form.SelectResultsUnitSystem(Globals.FromFileOpenMenu);
+                if (_controller.ResultsInitialized) _controller.Host.SelectResultsUnitSystem(Globals.FromFileOpenMenu);
             }
             else _controller.OpenFileCommand(fileName, Globals.FromFileOpenMenu);
         }
@@ -349,11 +349,11 @@ namespace PrePoMax.Python
         {
             return _controller.GetCalculixModelKeywords();
         }
-        public void SetCalculixUserKeywords(OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> keywords)
+        public void SetCalculixUserKeywords(CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> keywords)
         {
             _controller.SetCalculixUserKeywordsCommand(keywords);
         }
-        public void SetCalculixKeywordEditorState(OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> keywords,
+        public void SetCalculixKeywordEditorState(CaeGlobals.OrderedDictionary<int[], FileInOut.Output.Calculix.CalculixUserKeyword> keywords,
                                                   List<FileInOut.Output.Calculix.CalculixKeywordOverride> overrides)
         {
             _controller.SetCalculixKeywordEditorStateCommand(keywords, overrides);

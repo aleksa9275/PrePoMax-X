@@ -52,7 +52,7 @@ namespace PrePoMax
         }
         public string Defeature(GeometryPart part, int[] surfaceIds)
         {
-            _controller.Form.WriteDataToOutput("");
+            _controller.Host.WriteDataToOutput("");
             string workDirectory = _controller.Settings.GetWorkDirectory();
             if (workDirectory == null || !Directory.Exists(workDirectory))
             {
@@ -60,7 +60,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             _controller.SuppressExplodedView(new string[] { part.Name });
             try
@@ -79,7 +79,7 @@ namespace PrePoMax
                               "\"" + brepFileName.ToUTF8() + "\" " +
                               string.Join(" ", sortedSurfaceIds);
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                           _controller.Form.WriteDataToOutput);
+                                                           _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
                 throw new CaeException("Defeaturing failed for part '" + part.Name + "'.");
             return brepFileName;
@@ -158,10 +158,10 @@ namespace PrePoMax
         // The modelling kernel says why it refused in the output, so a refusal is answered as no file
         private string RunGeometryOperation(GeometryPart part, string argument, string outputFileName)
         {
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument,
                                                            Path.GetDirectoryName(outputFileName),
-                                                           _controller.Form.WriteDataToOutput);
+                                                           _controller.Host.WriteDataToOutput);
             return jobStatus == JobStatus.OK ? outputFileName : null;
         }
         // A move returns the one transformed file, and a pattern returns one file per copy, copy k transformed k times
@@ -174,7 +174,7 @@ namespace PrePoMax
                 return null;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string transformFileName = Path.Combine(workDirectory, Globals.TransformFileName);
             string[] outputFileNames = new string[Math.Max(transform.NumberOfCopies, 1)];
@@ -202,7 +202,7 @@ namespace PrePoMax
                               "\"" + brepFileName.ToUTF8() + "\" " +
                               "\"" + transformFileName.ToUTF8() + "\"";
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                           _controller.Form.WriteDataToOutput);
+                                                           _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
                 throw new CaeException("The " + transform.Type.ToString().ToLower() + " transform failed for part '" +
                                        part.Name + "'.");
@@ -215,7 +215,7 @@ namespace PrePoMax
             return outputFileNames;
         }
         public bool PreviewEdgeMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             string workDirectory = _controller.Settings.GetWorkDirectory();
             //
@@ -225,7 +225,7 @@ namespace PrePoMax
                 return false;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string stlFileName = Path.Combine(workDirectory, Globals.StlFileName);
             string volFileName = Path.Combine(workDirectory, Globals.VolFileName);
             string meshParametersFileName = Path.Combine(workDirectory, Globals.MeshParametersFileName);
@@ -255,7 +255,7 @@ namespace PrePoMax
                               "\"" + edgeNodesFileName + "\"";
 
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                 _controller.Form.WriteDataToOutput);
+                                                 _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {
@@ -267,7 +267,7 @@ namespace PrePoMax
             else throw new CaeException("Netgen could not create the STL edge mesh for part '" + part.Name + "'.");
         }
         public bool PreviewEdgeMeshFromBrep(GeometryPart part, MeshSetupItem[] mesherSetupItems,
-                                            OrderedDictionary<string, MeshSetupItem> meshSetupItems,
+                                            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems,
                                             bool previewSweepSourceMesh)
         {
             string workDirectory = _controller.Settings.GetWorkDirectory();
@@ -278,7 +278,7 @@ namespace PrePoMax
                 return false;
             }
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string volFileName = Path.Combine(workDirectory, Globals.VolFileName);
             string meshParametersFileName = Path.Combine(workDirectory, Globals.MeshParametersFileName);
@@ -305,7 +305,7 @@ namespace PrePoMax
                               "\"" + localMeshSizesFileName + "\"";
             //
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                 _controller.Form.WriteDataToOutput);
+                                                 _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {
@@ -320,7 +320,7 @@ namespace PrePoMax
         /// when Netgen lays no structured grid and no number is set.
         /// </summary>
         private string WriteTransfiniteFile(GeometryPart part, MeshingParameters meshingParameters, string workDirectory,
-                                            OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                            CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             string fileName = Path.Combine(workDirectory, Globals.TransfiniteFacesFileName);
             if (File.Exists(fileName)) File.Delete(fileName);
@@ -357,7 +357,7 @@ namespace PrePoMax
                     throw new CaeException("The edges of the compound part " + part.Name + " cannot be matched to the " +
                                            "solids Netgen meshes, so Netgen cannot keep the numbers of elements set on " +
                                            "them. Mesh the part by another mesher.");
-                _controller.Form.WriteDataToOutput("The surfaces of the compound part " + part.Name + " cannot be " +
+                _controller.Host.WriteDataToOutput("The surfaces of the compound part " + part.Name + " cannot be " +
                                                    "matched to the solids Netgen meshes, so Netgen meshes them " +
                                                    "without structured faces.");
                 return null;
@@ -365,14 +365,14 @@ namespace PrePoMax
             return fileName;
         }
         public bool PreviewEdgeNodesForQuadWild(GeometryPart part,
-                                                OrderedDictionary<string, MeshSetupItem> meshSetupItems)
+                                                CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems)
         {
             MeshSetupItem[] setupItems = new MeshSetupItem[0];
             if (part.IsCADPart) return PreviewEdgeMeshFromBrep(part, setupItems, meshSetupItems, false);
             else return PreviewEdgeMeshFromStl(part, setupItems, meshSetupItems);
         }
         public FeMesh CreateFirstOrderShellMeshForQuadWild(GeometryPart part, string workDirectory,
-                                                           OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
+                                                           CaeGlobals.OrderedDictionary<string, MeshSetupItem> meshSetupItems = null)
         {
             if (part == null) throw new ArgumentNullException(nameof(part));
             if (part.PartType != PartType.Shell)
@@ -380,7 +380,7 @@ namespace PrePoMax
             if (String.IsNullOrWhiteSpace(workDirectory) || !Directory.Exists(workDirectory))
                 throw new CaeException("The QuadWild work directory does not exist.");
             //
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string geometryFileName = Path.Combine(workDirectory,
                                                    part.IsCADPart ? Globals.BrepFileName : Globals.StlFileName);
             string volFileName = Path.Combine(workDirectory, Globals.VolFileName);
@@ -432,7 +432,7 @@ namespace PrePoMax
                            "\"" + edgeNodesFileName + "\"";
             }
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                             _controller.Form.WriteDataToOutput);
+                                                             _controller.Host.WriteDataToOutput);
             if (jobStatus != JobStatus.OK)
                 throw new CaeException("Netgen could not create the triangular QuadWild input mesh.");
             if (!File.Exists(volFileName))
@@ -446,7 +446,7 @@ namespace PrePoMax
         }
         public GeneratedMeshData CreateMeshFromStl(GeometryPart part, MeshSetupItem[] mesherSetupItems, string workDirectory)
         {
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string stlFileName = Path.Combine(workDirectory, Globals.StlFileName);
             string volFileName = Path.Combine(workDirectory, Globals.VolFileName);
             string meshParametersFileName = Path.Combine(workDirectory, Globals.MeshParametersFileName);
@@ -484,7 +484,7 @@ namespace PrePoMax
                               "\"" + edgeNodesFileName + "\"";
             //
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory,
-                                                 _controller.Form.WriteDataToOutput);
+                                                 _controller.Host.WriteDataToOutput);
             // Job completed
             if (jobStatus == JobStatus.OK)
             {
@@ -507,7 +507,7 @@ namespace PrePoMax
         }
         public GeneratedMeshData CreateMeshFromBrep(GeometryPart part, MeshSetupItem[] mesherSetupItems, string workDirectory)
         {
-            string executable = Application.StartupPath + Globals.NetGenMesher;
+            string executable = RuntimePaths.Tool(Globals.NetGenMesher);
             string brepFileName = Path.Combine(workDirectory, Globals.BrepFileName);
             string volFileName = Path.Combine(workDirectory, Globals.VolFileName);
             string meshParametersFileName = Path.Combine(workDirectory, Globals.MeshParametersFileName);
@@ -544,7 +544,7 @@ namespace PrePoMax
             JobStatus jobStatus = _controller.JobRunner.Run(part.Name, executable, argument, workDirectory, data =>
             {
                 lock (output) output.Append(data);
-                _controller.Form.WriteDataToOutput(data);
+                _controller.Host.WriteDataToOutput(data);
             });
             // Job completed
             if (jobStatus == JobStatus.OK)

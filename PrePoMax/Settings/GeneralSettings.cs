@@ -35,7 +35,7 @@ namespace PrePoMax
         Ask,
     }
     [Serializable]
-    public class GeneralSettings : ISettings
+    public partial class GeneralSettings : ISettings
     {
         // Variables                                                                                                                
         private bool _openLastFile;
@@ -182,52 +182,6 @@ namespace PrePoMax
             _formSize = new Size(1280, 720);
             _formRelativeXLocation = 0.5;
             _formRelativeYLocation = 0.5;
-        }
-        public void SaveFormSize(Form form)
-        {
-            Size size;
-            Point location;
-            Rectangle resolution = Screen.FromControl(form).Bounds;
-            //
-            if (form.WindowState == FormWindowState.Maximized)
-            {
-                size = form.RestoreBounds.Size;
-                location = form.RestoreBounds.Location;
-            }
-            else
-            {
-                size = form.Size;
-                location = form.Location;
-            }
-            //
-            Point center = new Point(location.X + size.Width / 2, location.Y + size.Height / 2);
-            // Set values
-            _formWindowState = form.WindowState;
-            _formSize = size;
-            _formRelativeXLocation = (double)center.X / resolution.Width;
-            _formRelativeYLocation = (double)center.Y / resolution.Height;
-        }
-        public void ApplyFormSize(Form form)
-        {
-            Rectangle resolution = Screen.FromControl(form).Bounds;
-            //
-            if (_formSize.Width <= form.MinimumSize.Width || _formSize.Height <= form.MinimumSize.Height)
-                ResetFormSize(); // also resets _formRelativeXLocation and _formRelativeYLocation
-            //
-            Point center = new Point((int)(resolution.Width * _formRelativeXLocation),
-                                     (int)(resolution.Height * _formRelativeYLocation));
-            //
-            Rectangle bounds = new Rectangle(new Point(center.X - _formSize.Width / 2, center.Y - _formSize.Height / 2), _formSize);
-            // Limit it to the screen
-            if (bounds.Right > resolution.Width) bounds.X = resolution.Width - bounds.Width;
-            if (bounds.Left <= 0) bounds.X = 0;
-            if (bounds.Bottom > resolution.Bottom) bounds.Y = resolution.Height - bounds.Height;
-            if (bounds.Top <= 0) bounds.Y = 0;
-            // Set form size
-            form.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);    // also sets the restore bounds
-            form.WindowState = _formWindowState;
-            // Prevent minimized window at startup
-            if (form.WindowState == FormWindowState.Minimized) form.WindowState = FormWindowState.Normal;
         }
     }
 }

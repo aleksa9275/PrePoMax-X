@@ -127,7 +127,7 @@ namespace CaeModel
                 Active(section); Name(section.Name);
                 StructuralSectionData data=null;
                 if(structuralSections!=null)structuralSections.TryGetValue(section.Name,out data);
-                bool discrete=data?.Kind is "mass" or "spring" or "gap";
+                bool discrete=(data?.Kind == "mass" || data?.Kind == "spring" || data?.Kind == "gap");
                 if(!discrete)Name(section.MaterialName);
                 if (!sectionNames.Add(section.Name) || section.TwoD != twoD || section.RegionType != RegionTypeEnum.ElementSetName ||
                     section.CreationData != null || (section.CreationIds != null && section.CreationIds.Length != 0))
@@ -178,7 +178,7 @@ namespace CaeModel
                     modalBasis.Nlgeom || !modalBasis.RunAnalysis || modalBasis.Perturbation || modalBasis.GetNumberOfStepControls()!=0 || modalBasis.DefinedFields.Count!=0 || modalBasis.HistoryOutputs.Count!=0 ||
                     !double.IsNaN(modalBasis.LowerFrequency) || !double.IsNaN(modalBasis.UpperFrequency) || (modalBasis.OutputFrequency!=int.MinValue && modalBasis.OutputFrequency<=0) || modalBasis.SolverType!=SolverTypeEnum.Default || modalBasis.CyclicSymmetryModeMin!=int.MinValue || modalBasis.CyclicSymmetryModeMax!=int.MinValue ||
                     m.BoundaryConditions.Count!=0 || m.DefinedFields.Count!=0 || m.SteadyState || m.Perturbation || d==null ||
-                    d.DampingType is not (ModalDampingTypeEnum.Off or ModalDampingTypeEnum.Constant or ModalDampingTypeEnum.Rayleigh) ||
+                    (d.DampingType != ModalDampingTypeEnum.Off && d.DampingType != ModalDampingTypeEnum.Constant && d.DampingType != ModalDampingTypeEnum.Rayleigh) ||
                     !Finite(d.Alpha) || d.Alpha<0 || !Finite(d.Beta) || d.Beta<0 || !Finite(d.ViscousDampingRatio) || d.ViscousDampingRatio<0 || d.ViscousDampingRatio>=1)
                     throw new CaeException("A stored ordinary frequency basis and supported modal transient controls required; modal BC changes are not allowed.");
                 Active(modalBasis);Name(modalBasis.Name);
@@ -483,7 +483,7 @@ namespace CaeModel
                     if(data.Dimensions.Length!=1 || data.Direction!=null || data.Offset!=0)throw new CaeException("Truss sections require only one positive area.");
                     text.AppendFormat(CultureInfo.InvariantCulture,"*Solid section, Elset={0}, Material={1}\n{2}\n",section.RegionName,section.MaterialName,data.Dimensions[0].ToCalculiX16String());
                 } else {
-                    if(data.Shape is not ("RECT" or "CIRC") || data.Dimensions.Length!=2 || data.Direction==null || data.Direction.Length!=3 || data.Direction.Any(v=>!Finite(v)) || data.Direction.All(v=>v==0) || data.Offset!=0)throw new CaeException("RECT/CIRC beam section requires two dimensions and a finite nonzero direction.");
+                    if((data.Shape != "RECT" && data.Shape != "CIRC") || data.Dimensions.Length!=2 || data.Direction==null || data.Direction.Length!=3 || data.Direction.Any(v=>!Finite(v)) || data.Direction.All(v=>v==0) || data.Offset!=0)throw new CaeException("RECT/CIRC beam section requires two dimensions and a finite nonzero direction.");
                     foreach(int id in ids) {
                         var element=mesh.Elements[id];var a=mesh.Nodes[element.NodeIds[0]];var b=mesh.Nodes[element.NodeIds[element.NodeIds.Length==3?2:1]];
                         var v=new[]{b.X-a.X,b.Y-a.Y,b.Z-a.Z};var n=data.Direction;
@@ -494,7 +494,7 @@ namespace CaeModel
                 }
             } else if(data.Kind=="composite") {
                 if(data.LayerMaterials==null || data.LayerThicknesses==null || data.LayerMaterials.Length<1 || data.LayerMaterials.Length>100 || !data.LayerMaterials.Contains(section.MaterialName,StringComparer.OrdinalIgnoreCase) || data.LayerMaterials.Length!=data.LayerThicknesses.Length || data.LayerThicknesses.Any(v=>!Finite(v)||v<=0) || !Finite(data.Offset) || data.Dimensions!=null || data.Direction!=null)throw new CaeException("Bounded finite positive composite layers required.");
-                if(ids.Any(id=>mesh.ElementBlocks.Single(b=>b.ElementLabels.Contains(id)).InpElementTypeNames.Single() is not ("S8R" or "S6")))throw new CaeException("Original CalculiX composite sections require S8R/S6 elements.");
+                if(ids.Any(id=> { string type=mesh.ElementBlocks.Single(b=>b.ElementLabels.Contains(id)).InpElementTypeNames.Single(); return type != "S8R" && type != "S6"; }))throw new CaeException("Original CalculiX composite sections require S8R/S6 elements.");
                 text.AppendFormat(CultureInfo.InvariantCulture,"*Shell section, Elset={0}, Composite, Offset={1}\n",section.RegionName,data.Offset.ToCalculiX16String());
                 for(int i=0;i<data.LayerMaterials.Length;i++) { Name(data.LayerMaterials[i]);if(!materials.Contains(data.LayerMaterials[i]))throw new CaeException("Missing layer material.");text.Append(data.LayerThicknesses[i].ToCalculiX16String()).Append(", , ").Append(data.LayerMaterials[i]).Append('\n'); }
             } else throw new CaeException("Unknown advanced section kind.");

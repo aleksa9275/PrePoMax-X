@@ -26,6 +26,24 @@ namespace System.Windows.Forms
     public static class Application
     {
         public static Action DoEventsHandler;
+        public static string StartupPath => AppContext.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);
+        public static string ProductVersion => System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "3.0.0.0";
+        public static bool MessageLoop => DoEventsHandler != null;
         public static void DoEvents() => DoEventsHandler?.Invoke();
+    }
+}
+namespace System.Windows.Forms
+{
+    public enum FormWindowState { Normal, Minimized, Maximized }
+    [Flags] public enum Keys { None=0, Shift=65536, Control=131072, Alt=262144 }
+    [Flags] public enum MouseButtons { None=0, Left=1048576, Right=2097152, Middle=4194304 }
+    public class MouseEventArgs : EventArgs
+    {
+        public MouseButtons Button {get;}
+        public int Clicks {get;}
+        public int X {get;}
+        public int Y {get;}
+        public int Delta {get;}
+        public MouseEventArgs(MouseButtons button,int clicks,int x,int y,int delta) {Button=button;Clicks=clicks;X=x;Y=y;Delta=delta;}
     }
 }

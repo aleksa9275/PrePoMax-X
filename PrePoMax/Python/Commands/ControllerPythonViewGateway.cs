@@ -275,7 +275,7 @@ namespace PrePoMax.Python
                                              componentName + "'. Its components are " +
                                              string.Join(", ", components) + ".");
             //
-            FrmMain form = ResolveForm();
+            IControllerHost form = ResolveForm();
             form.SelectFieldOutputComponent(fieldName, component);
             form.SetFieldData(fieldName, component);
         }
@@ -369,9 +369,9 @@ namespace PrePoMax.Python
             ResolveForm().InvokeIfRequired(() => { _controller.RemoveExplodedView(true); });
         }
         //
-        private FrmMain ResolveForm()
+        private IControllerHost ResolveForm()
         {
-            FrmMain form = _controller.Form;
+            IControllerHost form = _controller.Host;
             if (form == null) throw new PythonAPIException("The view is not available in this context.");
             //
             return form;

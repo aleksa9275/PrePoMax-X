@@ -5,5 +5,25 @@
     <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkRendererLayer.cs" Link="Enums/vtkRendererLayer.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Actor/vtkMaxActorData.cs" Link="vtkMax/Actor/vtkMaxActorData.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/LookupTable/vtkMaxLookupTable.cs" Link="vtkMax/LookupTable/vtkMaxLookupTable.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkEdgesVisibility.cs" Link="Enums/vtkEdgesVisibility.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkColorSpectrumMinMaxType.cs" Link="Enums/vtkColorSpectrumMinMaxType.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkAttributeType.cs" Link="Enums/vtkAttributeType.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkJointSymbolEnum.cs" Link="Enums/vtkJointSymbolEnum.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkColorSpectrum.cs" Link="Enums/vtkColorSpectrum.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkResultWidgetContextMenuTypeEnum.cs" Link="Enums/vtkResultWidgetContextMenuTypeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/vtkFieldAssociations.cs" Link="Enums/vtkFieldAssociations.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/Selection/vtkSelectionContent.cs" Link="Enums/Selection/vtkSelectionContent.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/Selection/vtkSelectionField.cs" Link="Enums/Selection/vtkSelectionField.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/ColorSpectrum/vtkMaxColorSpectrum.cs" Link="vtkMax/ColorSpectrum/vtkMaxColorSpectrum.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Widget/DataFieldType.cs" Link="vtkMax/Widget/DataFieldType.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Widget/AnimationType.cs" Link="vtkMax/Widget/AnimationType.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Animation/vtkMaxAnimationFrameData.cs" Link="vtkMax/Animation/vtkMaxAnimationFrameData.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkSelectionGeometry.cs" Link="vtkSelectionGeometry.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Actor/vtkMaxActor.PolyTopology.cs" Link="vtkMax/Actor/vtkMaxActor.PolyTopology.cs" />
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PresentationActor.cs" Link="X/PresentationActor.cs" /> <!-- Headless presentation geometry handle -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PresentationServices.cs" Link="X/PresentationServices.cs" /> <!-- Explicit native rendering/export services -->
+    <Compile Include="$(RepositoryRoot)vtkControl/Enums/VtkCellType.cs" Link="X/VtkCellType.cs" /> <!-- Existing data enum mirrors the native VTK enum; original WinForms build keeps its native binding -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PolyDataSink.cs" Link="X/PolyDataSink.cs" /> <!-- Nonrendering data sink for the unchanged original cell topology conversion -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/TexturePng.cs" Link="X/TexturePng.cs" /> <!-- Portable PNG encoding with original texture row/color mapping -->
   </ItemGroup>
 </Project>

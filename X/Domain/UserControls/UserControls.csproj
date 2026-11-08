@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>UserControls</AssemblyName></PropertyGroup><Import Project="Sources.g.props"/><ItemGroup><ProjectReference Include="../CaeGlobals/CaeGlobals.csproj"/></ItemGroup></Project>
