@@ -23,7 +23,7 @@ namespace GmshCommon
         {
             internal const string Lib = "gmsh";
 
-            // Gmsh ships as gmsh-4.13.dll / libgmsh.dylib / libgmsh.so; PREPOMAXX_GMSH_LIBRARY overrides.
+            // Load only a packaged, fingerprinted PrePoMax build; never an arbitrary system Gmsh.
             [System.Runtime.CompilerServices.ModuleInitializer]
             internal static void RegisterResolver()
             {
@@ -33,21 +33,7 @@ namespace GmshCommon
             private static IntPtr Resolve(string name, Assembly assembly, DllImportSearchPath? path)
             {
                 if (name != Lib) return IntPtr.Zero;
-                string env = Environment.GetEnvironmentVariable("PREPOMAXX_GMSH_LIBRARY");
-                var candidates = new List<string>();
-                if (!string.IsNullOrEmpty(env)) candidates.Add(env);
-                string dir = AppContext.BaseDirectory;
-                foreach (string file in new[] { "gmsh-4.13.dll", "gmsh.dll", "libgmsh.4.13.dylib", "libgmsh.dylib",
-                                                "libgmsh.so.4.13", "libgmsh.so" })
-                {
-                    candidates.Add(Path.Combine(dir, file));
-                    candidates.Add(file);
-                }
-                foreach (string candidate in candidates)
-                {
-                    if (NativeLibrary.TryLoad(candidate, assembly, path, out IntPtr handle)) return handle;
-                }
-                return IntPtr.Zero;
+                return NativeProfile.Load();
             }
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -270,6 +256,13 @@ namespace GmshCommon
         public static void Initialize()
         {
             Native.gmshInitialize(0, IntPtr.Zero, 1, 0, out int ierr); Check(ierr);
+            string version = Option.GetString("General.Version");
+            if (version != NativeProfile.Version)
+            {
+                Native.gmshFinalize(out ierr);
+                throw new InvalidOperationException("Expected PrePoMax Gmsh " + NativeProfile.Version +
+                                                    "; loaded " + version + ".");
+            }
         }
         public static int IsInitialized()
         {

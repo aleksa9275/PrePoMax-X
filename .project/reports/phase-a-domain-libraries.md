@@ -2,6 +2,10 @@
 
 Date: 8 November 2026. Strategy: D062. Branch: `research/native-feasibility`.
 
+This is the initial compilation report. The subsequent [Phase A closeout](phase-a-closeout.md)
+records fresh Mac/Linux checks, native Gmsh verification, the Q-Morph source
+blocker and the corrected inventory. Compilation is not full runtime parity.
+
 ## Result
 
 The whole original assemblies now build for .NET 10 from the original source
@@ -80,7 +84,7 @@ The desktop's .NET hosts (Solve, MeshScene, InspectVis, InspectResults) build
 against `X/Domain` with 0 errors. Not run in this phase: Linux ARM64 Podman,
 Windows net48 full build, desktop package/DMG regeneration (next milestone).
 
-## Findings (recorded, fix after parity — D061)
+## Findings (port repairs in Phase B; original correctness/warnings after parity)
 
 1. Original `CalCLoad` with a local coordinate system writes **global**
    directions when the CS cannot be resolved (no mesh). The slice had asserted
@@ -100,9 +104,12 @@ Windows net48 full build, desktop package/DMG regeneration (next milestone).
 5. Q-Morph quad mesher: the `QuadMesher` source is not in the repository
    (Windows `.lib` only). The port throws a clear "not available on this
    platform yet" error; a C shim (`pmx_qmorph`) is ready for when the source is
-   recovered. Blocks parity for that mesher.
-6. A native Gmsh 4.13 shared library is required on macOS/Linux
-   (`PREPOMAXX_GMSH_LIBRARY` overrides the lookup).
+   recovered. The closeout traced this to a dormant original path (private,
+   uncalled, "not offered yet"); no exposed original meshing option is shown
+   missing. Source/license closure is still unresolved.
+6. A native patched Gmsh 4.13.0 shared library is required on macOS/Linux.
+   The closeout supplies a source build and fingerprinted loader;
+   `PREPOMAXX_GMSH_LIBRARY` now requires an absolute path and adjacent build profile.
 7. Original GmshCommon quirks preserved: `OCC.Remove` passes `(0,0)` dim-tag
    pairs; `GetMaxNodeTag` truncates to `int`.
 8. The 83 compiler/analyzer warnings (including `CS1717` self-assignment in

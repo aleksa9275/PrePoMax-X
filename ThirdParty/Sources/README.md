@@ -17,9 +17,11 @@ the downloaded official bytes; they are not an upstream signature claim.
 
 This is an incremental source inventory. Existing upstream SDK/native folders
 elsewhere in ThirdParty are preserved. Their presence is not evidence that all
-corresponding implementation sources have been recovered. Patched Gmsh and
-QuadWild now have public upstream repositories pinned in the CAD report; their
-native builds, Q-Morph, ActiViz and transitive runtime/package sources still
-need the exact-source/license/build review recorded in `.project/DEPENDENCIES.md`.
+corresponding implementation sources have been recovered. Patched Gmsh now has
+a [pinned archive/build recipe](../../X/Build/Gmsh/README.md), with the verified
+sources extracted into a local build workspace (not vendored here). Its full
+original mesher/platform acceptance and source distribution remain open.
+QuadWild's native build, Q-Morph, ActiViz and transitive runtime/package sources
+still need the exact-source/license/build review in `.project/DEPENDENCIES.md`.
 The final repository must carry corresponding source for every shipped component;
 source gaps remain release blockers.

@@ -1,0 +1,450 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-11-08T10:40:30.818725+00:00",
+  "baseCommit": "fdbfa457f4c2e250af621f6bdc811332b82d070e",
+  "scope": "Phase A verification/native dependency closeout; not whole-application parity",
+  "managed": {
+    "macOSArm64": {
+      "success": true,
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "sdk": "10.0.403",
+      "manifest": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/mac-checks/manifest.json",
+        "sha256": "2e4b5b054583386afa395b90f4001f986305f69ba6b5462efdb90f1652f10823"
+      },
+      "checks": {
+        "mapping": 25,
+        "windowsReferenceData": 30,
+        "elements": 95,
+        "meshWorkflow": 69,
+        "analysis": 58,
+        "staticDeck": 74,
+        "execution": 49,
+        "results": 90
+      },
+      "knownOriginalFailures": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "fullyAccepted": false
+    },
+    "linuxArm64": {
+      "success": true,
+      "host": {
+        "os": "Linux",
+        "architecture": "Arm64"
+      },
+      "sdk": "10.0.402",
+      "manifest": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/linux/checks-with-git/manifest.json",
+        "sha256": "c95e9f0b61824628e608655b703af14df3235c91292689632f13b66e2feefc7c"
+      },
+      "checks": {
+        "mapping": 25,
+        "windowsReferenceData": 30,
+        "elements": 95,
+        "meshWorkflow": 69,
+        "analysis": 58,
+        "staticDeck": 74,
+        "execution": 49,
+        "results": 90
+      },
+      "knownOriginalFailures": [
+        {
+          "name": "quadratic tetrahedron affine integral",
+          "passed": false,
+          "expected": 28,
+          "actual": 26.794910717854155,
+          "disposition": "Unresolved original-source discrepancy; excluded from measurement host"
+        },
+        {
+          "name": "quadratic pyramid classification",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "disposition": "Original helper omits quadratic pyramid; host uses explicit type factories"
+        }
+      ],
+      "fullyAccepted": false
+    }
+  },
+  "desktop": {
+    "macOSArm64": {
+      "passed": 95,
+      "log": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/mac-desktop-display.log",
+        "sha256": "ca03088e6fdb4f1602711ef420045c42f00af196483862d8be586d932767e786"
+      }
+    },
+    "linuxArm64": {
+      "passed": 95,
+      "log": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/linux/desktop.log",
+        "sha256": "5e5377fddbaae60740e687c38139cd08ecc2670531b4be595b490e33c29d08a1"
+      }
+    }
+  },
+  "structuralWorkflows": {
+    "macOSArm64": {
+      "success": true,
+      "checks": 164,
+      "cases": [
+        "shell-tension",
+        "membrane-tension",
+        "membrane-quadratic",
+        "shell-bending",
+        "composite-tension",
+        "line-tension",
+        "beam-bending",
+        "beam-circular",
+        "shell-pressure",
+        "beam-centerline"
+      ],
+      "receipt": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/mac-workflow/workflow.json",
+        "sha256": "08d3dd173c27253c603237e60806f186c50bf14c204fce0a5d0f70dee598d86e"
+      }
+    },
+    "linuxArm64": {
+      "success": true,
+      "checks": 164,
+      "cases": [
+        "shell-tension",
+        "membrane-tension",
+        "membrane-quadratic",
+        "shell-bending",
+        "composite-tension",
+        "line-tension",
+        "beam-bending",
+        "beam-circular",
+        "shell-pressure",
+        "beam-centerline"
+      ],
+      "receipt": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/linux/structural/workflow.json",
+        "sha256": "4465dd58a7d193aa333043619ffa45abe15ecf601cb024a556bf31b1710d7328"
+      }
+    }
+  },
+  "nativeGmsh": {
+    "macOSArm64": {
+      "success": true,
+      "host": {
+        "os": "Darwin",
+        "architecture": "arm64"
+      },
+      "tests": {
+        "success": true,
+        "passed": 18,
+        "checks": [
+          "pinned runtime version",
+          "UTF-8 model name",
+          "C dim-tag array ownership",
+          "OCCT rectangle area",
+          "prescribed curve nodes 1",
+          "prescribed curve nodes 2",
+          "prescribed curve nodes 3",
+          "prescribed curve nodes 4",
+          "structured 16-quad surface / nested C arrays",
+          "physical group round trip",
+          "STEP export/import with Unicode path",
+          "OCCT extruded volume",
+          "native size callback lifetime",
+          "quadratic tetrahedra connectivity",
+          "positive tetrahedron scaled Jacobians",
+          "element property C outputs",
+          "MSH mesh reopen",
+          "native error becomes managed exception"
+        ],
+        "tetrahedra": 373,
+        "minimumScaledJacobian": 0.9999999999999662
+      },
+      "rejections": [
+        "missing manifest",
+        "wrong version",
+        "wrong source revision",
+        "wrong OCCT version",
+        "changed library fingerprint",
+        "relative runtime override",
+        "implicit system runtime lookup"
+      ],
+      "profile": {
+        "schemaVersion": 1,
+        "version": "4.13.0",
+        "revision": "4156db5d5647087b1575c3f4b8a65a891b81102b",
+        "occtVersion": "7.7.0",
+        "librarySha256": "b53f8a028ecbb961b0102335f7301ee0ee4753b0dcddb429833135ad664f4832"
+      },
+      "verification": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/mac-final-gmsh/verification.json",
+        "sha256": "d85c0a23960bfd909be34df2cf74e9164a7ace42b957c501dd701c4287512ad0"
+      },
+      "sourceBuildReceipt": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/build-receipt.json",
+        "sha256": "4aeeca2a6cd5b80319a35c3d3cb0b25b33e7e7bb0e19e41c7c62f3684518d1c3"
+      },
+      "recipeSha256": "e31b4980bdfe2be548d4af2668bd9e9b2783a4efcdfef04a2222d34f9ae4b686",
+      "configurationSha256": "88ba862b9f61630c5fd89fb59e005d4e9249442ca18d1e5346406fda9e15461a"
+    },
+    "linuxArm64": {
+      "success": true,
+      "host": {
+        "os": "Linux",
+        "architecture": "aarch64"
+      },
+      "tests": {
+        "success": true,
+        "passed": 18,
+        "checks": [
+          "pinned runtime version",
+          "UTF-8 model name",
+          "C dim-tag array ownership",
+          "OCCT rectangle area",
+          "prescribed curve nodes 1",
+          "prescribed curve nodes 2",
+          "prescribed curve nodes 3",
+          "prescribed curve nodes 4",
+          "structured 16-quad surface / nested C arrays",
+          "physical group round trip",
+          "STEP export/import with Unicode path",
+          "OCCT extruded volume",
+          "native size callback lifetime",
+          "quadratic tetrahedra connectivity",
+          "positive tetrahedron scaled Jacobians",
+          "element property C outputs",
+          "MSH mesh reopen",
+          "native error becomes managed exception"
+        ],
+        "tetrahedra": 373,
+        "minimumScaledJacobian": 0.9999999999999702
+      },
+      "rejections": [
+        "missing manifest",
+        "wrong version",
+        "wrong source revision",
+        "wrong OCCT version",
+        "changed library fingerprint",
+        "relative runtime override",
+        "implicit system runtime lookup"
+      ],
+      "profile": {
+        "schemaVersion": 1,
+        "version": "4.13.0",
+        "revision": "4156db5d5647087b1575c3f4b8a65a891b81102b",
+        "occtVersion": "7.7.0",
+        "librarySha256": "1b6532ef753132f9764c65b790beab8e118f4f44e0c1debc76170cd8bf0fdd2e"
+      },
+      "verification": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/linux/gmsh-verification/verification.json",
+        "sha256": "acc159388518049ca1ee94d7731239796087c95a3fbca1a1c437d5ef40ff1c77"
+      },
+      "sourceBuildReceipt": {
+        "path": "/private/tmp/prepomaxx-phase-a-closeout/linux/gmsh/build-receipt.json",
+        "sha256": "88db7d9317274ff522c4e759ca8f37ed6dd567c461bbbff5bec7764c90762f81"
+      },
+      "recipeSha256": "e31b4980bdfe2be548d4af2668bd9e9b2783a4efcdfef04a2222d34f9ae4b686",
+      "configurationSha256": "bad837573f06b3de604007577c641c6d68feb9eca22937dcf6ebd1d6bb79a2a8"
+    }
+  },
+  "originalSolverComparison": {
+    "success": true,
+    "comparisonExecutionCompleted": true,
+    "strictFieldComparisonPassed": true,
+    "numericalAcceptance": false,
+    "bounds": {
+      "absolute": 1e-06,
+      "relative": 1e-06
+    },
+    "solverFiles": {
+      "ccx_dynamic.exe": "1c1f4ad9392c0a9537e9ff1d7adaf86ea0a6193da5916abb2912ae541e530c10",
+      "libiomp5md.dll": "0d241ed916a83ee68cd126267e29fdec3b75edbb698c07caff846ef20649706d",
+      "mkl_core.2.dll": "83d174ac50acca47d55c8ef4eb020c0a0f07db913e8ac77bd6ae1ac6cddecad7",
+      "mkl_def.2.dll": "cb85b955147659d0f30579f54cf190294266fa5a283477cb659d0906f07795cf",
+      "mkl_intel_thread.2.dll": "8ab5865f5548223bb234c876cb39db9839d24c25c6c66be4d4fae6d85b8dfe1c",
+      "mkl_rt.2.dll": "80d0428fc93e8ecd4fc635bf4d443eef49dc82441726e7ae456ebcdf0b438ccb"
+    },
+    "runs": {
+      "shell-tension": {
+        "success": true,
+        "exactMeshEqual": true,
+        "maximumDifference": {
+          "frd": 5.735403218e-09,
+          "dat": 1.3300000000003588e-16
+        },
+        "modeMac": [],
+        "existingBoundViolations": [],
+        "inputSha256": "7a941983aace866c9891fb9ff462d47019241bb474ec940fcf97cdadaf860ef7"
+      },
+      "beam-centerline": {
+        "success": true,
+        "exactMeshEqual": true,
+        "maximumDifference": {
+          "frd": 4.31681e-11,
+          "dat": 4.31681e-11
+        },
+        "modeMac": [],
+        "existingBoundViolations": [],
+        "inputSha256": "4acbd54828166df47a7c8a65f0dd0c6542aef3d98b5bb8bad589199aa743cc4a"
+      }
+    },
+    "nativeWindowsAcceptance": false,
+    "scope": "Pinned original Windows CalculiX 2.22 under CrossOver, unchanged solver source and identical frozen decks."
+  },
+  "qMorph": {
+    "githubRepositoryQueries": [
+      "QuadMesher",
+      "qmorph",
+      "Q-Morph in:name (HTTP 504)"
+    ],
+    "gitlabRepositoryQueries": [
+      "QuadMesher",
+      "qmorph"
+    ],
+    "exactIndexedQueries": [
+      "qmorph_gmsh",
+      "quadMeshSurfaces",
+      "makeFaceNodeCountsEven",
+      "qm::qmorph"
+    ],
+    "githubOrganization": [
+      "PrePoMax/PrePoMax",
+      "PrePoMax/NetgenMesher",
+      "PrePoMax/Gmsh",
+      "PrePoMax/QuadWild"
+    ],
+    "gitlabMaintainerProjects": [
+      "MatejB/PrePoMax-Models",
+      "MatejB/OptiMax",
+      "MatejB/PrePoMax"
+    ],
+    "gitlabQuadMesherFiles": [
+      "ThirdParty/QuadMesher/THIRD_PARTY_NOTICES.md",
+      "ThirdParty/QuadMesher/include/qmorph/qmorph.h",
+      "ThirdParty/QuadMesher/include/qmorph/qmorph_gmsh.h",
+      "ThirdParty/QuadMesher/lib/md/qmorph_gmsh.lib",
+      "ThirdParty/QuadMesher/lib/md/qmorph_static.lib",
+      "ThirdParty/QuadMesher/lib/mdd/qmorph_gmsh.lib",
+      "ThirdParty/QuadMesher/lib/mdd/qmorph_static.lib"
+    ],
+    "inspectedAlternatives": {
+      "uhweili/Q-Morph": "OpenMesh FrontsManager, different API",
+      "HGL2533/quadMesher": "cross-field/libQEx, no qmg integration",
+      "GuDuJian-J-Zhang/QMorph_2D": "different QuadMesh API, no qmg integration"
+    },
+    "originalIntroduction": "3e5e398438904d893087e37b1ab085a6d85d264f",
+    "originalUserFacingPath": "private QMorphMesh has no callers; marked not offered yet",
+    "exactImplementationFound": false,
+    "limits": [
+      "public discovery cannot rule out private or unindexed source",
+      "some additional API queries returned HTTP 504"
+    ],
+    "nativeLinkExitCode": 1,
+    "nativeLinkMissingSymbols": [
+      "qmg::makeFaceNodeCountsEven",
+      "qmg::setBackgroundAlgorithms",
+      "qmg::quadMeshSurfaces"
+    ],
+    "evidenceHashes": {
+      "gitlab-matejb.json": "8e8fd25533fecb3b3e4cf019bb8e3bce453ac42f1f8d723df2df7cedb8be383b",
+      "gitlab-matejb-projects.json": "17210aa66a6a338d3a3ee8d27e93bb1d558a512c16dadc8791585acf816498af",
+      "candidate-gudujian.tar.gz": "bb5726bc1ff5a0cce508dcdd414f0bba1d9f59a62962e80218b8ec37b718557f",
+      "gitlab-upstream-qmorph.json": "1981cfa46693f31a44c294325c5673765c86e19041f620da4ac7e30f6421726c",
+      "qmorph-tree.json": "e5f0fb325f0d8dbf3b3e4e38b1157a576407b8e98ce7317bc3a8d33edc79c9e6",
+      "candidate-hgl.tar.gz": "57a256850b6abaf99bb71efc383501e5393f0a61a24e70a9be613435e98c0b11",
+      "gitlab-quadmesher.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "github-quadmesher.json": "d73e2bb213b74173ecb931abb9c95a43e3514ddb79028810cacb5295a2412a8b",
+      "github-qmorph.json": "775c047b124281230982d97156cb3c7c8d4444767e40ea2b4643531f6ebd7228",
+      "gitlab-qmorph.json": "a0089ca65a0a2bacb9d992ccf7910b0ace6d06c717cc127960a9c380606d9aaf",
+      "github-prepomax-org.json": "877bd3094885417ba429b7838e5d9041660781039b6dcbf578d4efc0fd937c7c"
+    }
+  },
+  "upgradeCandidate": {
+    "adopted": false,
+    "version": "4.15.2",
+    "allThreePrePoMaxPatchesApply": true,
+    "usedCFunctionDeclarations": {
+      "usedFunctions": 118,
+      "changedDeclarations": []
+    },
+    "patchDryRunLog": {
+      "path": "/private/tmp/prepomaxx-phase-a-closeout/latest-patch-check.log",
+      "sha256": "65826042bc13352a74085b9c7cd1740a363b2fe0e05c1eca564a32957fda9c9b"
+    }
+  },
+  "inventory": {
+    "modelMeshSourceEntries": 108,
+    "A": 108,
+    "B": 0,
+    "C": 0,
+    "V": 0,
+    "commandFiles": 237,
+    "forms": 72,
+    "wholeProductPercentage": null
+  },
+  "notAccepted": [
+    "Full original application runtime/UI/automation/PMX parity",
+    "Original numerical correctness findings D029, B006\u2013B009 and other diagnostics",
+    "Full Windows net48/native Windows acceptance",
+    "Linux x64 deferred D059",
+    "All original Gmsh meshers/patches/geometry equivalence",
+    "Q-Morph experimental source/license closure",
+    "4.15.2 adoption",
+    "Four-target packaging/source distribution/release"
+  ],
+  "hostedCiExecuted": false,
+  "previewApplicationChanged": false,
+  "infrastructureFailuresRetained": [
+    "Sandbox Mac desktop: no native display (exit 134); display-enabled retry passed",
+    "Podman gvproxy/socket failure; terminal-session retry passed without VM reconfiguration",
+    "Linux cached image lacked Git; separate test image added Git and build tools",
+    "Additional public GitHub API search/tree requests returned HTTP 504"
+  ],
+  "localEvidenceRoot": "/private/tmp/prepomaxx-phase-a-closeout",
+  "finalMacDomain": {
+    "success": true,
+    "build": {
+      "warnings": 83,
+      "warningCodes": {
+        "CA1416": 17,
+        "CA2022": 9,
+        "CA2200": 4,
+        "CA2255": 1,
+        "CS0108": 5,
+        "CS0162": 1,
+        "CS0168": 24,
+        "CS0169": 1,
+        "CS0219": 7,
+        "CS0414": 2,
+        "CS1717": 1,
+        "NU1701": 6,
+        "SYSLIB0003": 2,
+        "SYSLIB0006": 1,
+        "SYSLIB0018": 2
+      }
+    },
+    "net48": [
+      "CaeGlobals: ok",
+      "CaeJob: ok"
+    ],
+    "manifest": {
+      "path": "/private/tmp/prepomaxx-phase-a-closeout/mac-final-domain/manifest.json",
+      "sha256": "fb82ccf6aa0b6aab3b0b16cd80d3cbf9bd9ea36f8b6da380b305b96beb0473ae"
+    }
+  },
+  "linuxVmRestoredToStopped": true
+}

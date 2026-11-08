@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate .project/PARITY_INVENTORY.md from the original PrePoMax sources.
 
-The inventory lists every original user command, form and model/mesh feature
-class. Status per item is kept in .project/parity-status.json and merged on
+The inventory lists original command/form files and selected concrete model/mesh
+classes and mesher folders. Status per item is kept in .project/parity-status.json and merged on
 regeneration, so rerunning after an upstream sync adds new items without
 losing recorded progress.
 
@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,14 +24,24 @@ OUT = ROOT / ".project" / "PARITY_INVENTORY.md"
 STATUS = ROOT / ".project" / "parity-status.json"
 
 ABSTRACT_OR_HELPER = re.compile(r"(Enum|Data|Base|Collection|Interface|Legacy|Portable|Compatibility)$")
+COMPILED = {
+    (ROOT / assembly / item.get("Include").replace("\\", "/")).resolve()
+    for assembly in ("CaeModel", "CaeMesh")
+    for item in ET.parse(ROOT / assembly / (assembly + ".csproj")).getroot().iter()
+    if item.tag.endswith("}Compile") and item.get("Include")
+}
 
 
 def classes(folder: Path, pattern: str = "*.cs") -> list[str]:
     names = set()
     for f in folder.rglob(pattern):
-        if "_Compatibility" in f.parts or f.name.endswith(".Designer.cs"):
+        if "_Compatibility" in f.parts or f.name.endswith(".Designer.cs") or f.resolve() not in COMPILED:
             continue
-        stem = f.name.split(".")[0]
+        text = re.sub(r"//[^\n]*|/\*.*?\*/", "", f.read_text(), flags=re.S)
+        declaration = re.search(r"\b((?:(?:abstract|sealed|partial)\s+)*)class\s+(\w+)", text)
+        if not declaration or "abstract" in declaration[1].split():
+            continue
+        stem = declaration[2]
         if ABSTRACT_OR_HELPER.search(stem) or stem.startswith("I") and stem[1:2].isupper():
             continue
         names.add(stem)
@@ -86,11 +97,20 @@ def main() -> None:
         "are cumulative: **A** builds in the whole cross-platform domain libraries,",
         "**B** reachable through the original Controller/Commands without WinForms,",
         "**C** in the cross-platform UI, **V** verified against the original app.",
-        "`-` = not yet. This is the progress measure (D062).",
+        "`-` = not yet. A is compilation evidence only; it does not prove runtime portability.",
+        "",
+        "This is a selected source inventory, not a whole-product percentage. It lists",
+        "concrete classes compiled by the original model/mesh projects and mesher folders;",
+        "some entries are data/helper classes. Abstract bases and unused source files",
+        "are excluded. Results tools, shared utilities, serialization, automation, native",
+        "dependencies and installers still need their own acceptance coverage. Zero B/C/V",
+        "means no original Controller/UI/Windows parity gate is claimed by these A counts.",
+        "The dormant original Q-Morph wrapper lacks native sources; Gmsh has bounded adapter checks only.",
         "",
     ]
     summary = []
     body = []
+    active_status = {}
     for title, groups in sections():
         body += [f"## {title}", ""]
         total = 0
@@ -100,6 +120,7 @@ def main() -> None:
             for name in names:
                 key = f"{title}/{group}/{name}"
                 st = status.setdefault(key, "-")
+                active_status[key] = st
                 body.append(f"| {name} | {st} |")
                 total += 1
                 for k in counts:
@@ -108,7 +129,7 @@ def main() -> None:
         summary.append(f"| {title} | {total} | " + " | ".join(str(counts[k]) for k in "ABCV") + " |")
     lines += ["| Area | Items | A | B | C | V |", "|---|---|---|---|---|---|", *summary, "", *body]
     OUT.write_text("\n".join(lines))
-    STATUS.write_text(json.dumps(dict(sorted(status.items())), indent=1) + "\n")
+    STATUS.write_text(json.dumps(dict(sorted(active_status.items())), indent=1) + "\n")
 
 
 if __name__ == "__main__":

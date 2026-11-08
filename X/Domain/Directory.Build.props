@@ -14,6 +14,7 @@
     <Deterministic>true</Deterministic>
     <NuGetAudit>false</NuGetAudit>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
     <RepositoryRoot>$(MSBuildThisFileDirectory)../../</RepositoryRoot>
     <!-- Original code relies on APIs that are obsolete on modern .NET (e.g.
          BinaryFormatter, WebClient); these are reviewed in the post-parity

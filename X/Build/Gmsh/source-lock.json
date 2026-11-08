@@ -1,0 +1,24 @@
+{
+  "gmsh": {
+    "root": "Gmsh-4156db5d5647087b1575c3f4b8a65a891b81102b",
+    "version": "4.13.0",
+    "revision": "4156db5d5647087b1575c3f4b8a65a891b81102b",
+    "url": "https://codeload.github.com/PrePoMax/Gmsh/tar.gz/4156db5d5647087b1575c3f4b8a65a891b81102b",
+    "archive": "gmsh-prepomax-4156db5d.tar.gz",
+    "sha256": "86c70d2d0082892d75d007dadab90c31e622feed46759a1bf072ad37e87e3ec3"
+  },
+  "occt": {
+    "root": "OCCT-7_7_0",
+    "version": "7.7.0",
+    "url": "https://codeload.github.com/Open-Cascade-SAS/OCCT/tar.gz/refs/tags/V7_7_0",
+    "archive": "occt-7.7.0.tar.gz",
+    "sha256": "4cadb6d0a9e92dbb1a4eeb48d497b009d8138ffde64f2468d4a1c3f10a052722"
+  },
+  "upgradeCandidate": {
+    "version": "4.15.2",
+    "url": "https://gmsh.info/src/gmsh-4.15.2-source.tgz",
+    "archive": "gmsh-4.15.2-source.tgz",
+    "sha256": "be3f66f225d27ba9fa014f07e83169285da8a051b0e8ab7103d88066b39bdd3e",
+    "adopted": false
+  }
+}

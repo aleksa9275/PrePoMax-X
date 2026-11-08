@@ -5,11 +5,19 @@ edit status in `.project/parity-status.json`, then regenerate. Status letters
 are cumulative: **A** builds in the whole cross-platform domain libraries,
 **B** reachable through the original Controller/Commands without WinForms,
 **C** in the cross-platform UI, **V** verified against the original app.
-`-` = not yet. This is the progress measure (D062).
+`-` = not yet. A is compilation evidence only; it does not prove runtime portability.
+
+This is a selected source inventory, not a whole-product percentage. It lists
+concrete classes compiled by the original model/mesh projects and mesher folders;
+some entries are data/helper classes. Abstract bases and unused source files
+are excluded. Results tools, shared utilities, serialization, automation, native
+dependencies and installers still need their own acceptance coverage. Zero B/C/V
+means no original Controller/UI/Windows parity gate is claimed by these A counts.
+The dormant original Q-Morph wrapper lacks native sources; Gmsh has bounded adapter checks only.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 127 | 126 | 0 | 0 | 0 |
+| Model and mesh features | 108 | 108 | 0 | 0 | 0 |
 | Commands | 237 | 0 | 0 | 0 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
@@ -70,7 +78,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | KinematicCoupling | A |
 | PointSpring | A |
 | RigidBody | A |
-| SpringConstraint | A |
 | SurfaceSpring | A |
 | Tie | A |
 
@@ -83,30 +90,25 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | GapConductance | A |
 | SurfaceBehavior | A |
 | SurfaceInteraction | A |
-| SurfaceInteractionProperty | A |
 
 ### Amplitudes
 
 | Item | Status |
 |---|---|
-| Amplitude | A |
 | AmplitudeTabular | A |
 
 ### Distributions
 
 | Item | Status |
 |---|---|
-| Distribution | A |
 | DistributionFromEquation | A |
 | DistributionFromFile | A |
-| MappedDistribution | A |
 
 ### Initial conditions
 
 | Item | Status |
 |---|---|
 | InitialAngularVelocity | A |
-| InitialCondition | A |
 | InitialTemperature | A |
 | InitialTranslationalVelocity | A |
 
@@ -137,7 +139,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | RadiationHeatTransfer | A |
 | STLoad | A |
 | ShellEdgeLoad | A |
-| VariablePressure | A |
 
 ### Defined fields
 
@@ -152,7 +153,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 |---|---|
 | ContactFieldOutput | A |
 | ElementFieldOutput | A |
-| FieldOutput | A |
 | NodalFieldOutput | A |
 
 ### History outputs
@@ -161,7 +161,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 |---|---|
 | ContactHistoryOutput | A |
 | ElementHistoryOutput | A |
-| HistoryOutput | A |
 | NodalHistoryOutput | A |
 | SectionHistoryOutput | A |
 
@@ -172,11 +171,10 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | ContactStepControlParameter | A |
 | FieldStepControlParameter | A |
 | ResetStepControlParameter | A |
-| StepControlParameter | A |
 | StepControls | A |
-| TimeIncrementationStepControlParameter - Copy | A |
+| TimeIncrementationStepControlParameter | A |
 | Damping | A |
-| DampingRatioFromTo | A |
+| DampingRatioAndRange | A |
 | ModalDamping | A |
 
 ### Elements
@@ -184,13 +182,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | Item | Status |
 |---|---|
 | ElementTypeCount | A |
-| FeElement | A |
-| FeElement0D | A |
-| FeElement1D | A |
-| FeElement2D | A |
-| FeElement3D | A |
-| FeElementType | A |
-| IntegrationScale | A |
 | InvertedElements | A |
 | LinearBeamElement | A |
 | LinearGapElement | A |
@@ -209,8 +200,6 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 | ParabolicTetraElement | A |
 | ParabolicTriangleElement | A |
 | ParabolicWedgeElement | A |
-| VtkCellType | A |
-| WireElement | - |
 
 ### Meshers
 

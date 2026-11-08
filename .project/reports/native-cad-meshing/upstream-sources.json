@@ -14,7 +14,8 @@
     "repository": "https://github.com/PrePoMax/Gmsh",
     "branch": "prepomax-quadqs-transfinite",
     "revision": "4156db5d5647087b1575c3f4b8a65a891b81102b",
-    "nativeBuild": "pending"
+    "nativeBuild": "macOS ARM64 and Linux ARM64 source builds + bounded C# adapter checks verified, 2026-11-08; full original mesher/Windows/x64 acceptance pending",
+    "verification": "../phase-a-closeout-verification.json"
   },
   "quadwild": {
     "repository": "https://github.com/PrePoMax/QuadWild",

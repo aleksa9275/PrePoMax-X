@@ -1,0 +1,68 @@
+--- a/src/mesh/BackgroundMeshTools.cpp
++++ b/src/mesh/BackgroundMeshTools.cpp
+@@ -14,0 +15,27 @@
++// the curvature of a face in the direction of a curve on it: the normal curvature
++// along the tangent t of the curve, k1 (t.d1)^2 + k2 (t.d2)^2 with the principal
++// curvatures k1, k2 and directions d1, d2 of the face (Euler); the maximum
++// curvature of the face where it gives no principal directions
++static double surf_curvature_along(const GFace *gf, const SPoint2 &par,
++                                   const SVector3 &t)
++{
++  SVector3 dirMax, dirMin;
++  double curvMax = 0., curvMin = 0.;
++  if(t.norm() == 0. ||
++     gf->curvatures(par, dirMax, dirMin, curvMax, curvMin) < 0. ||
++     dirMax.norm() == 0. || dirMin.norm() == 0.)
++    return gf->curvatureMax(par);
++  dirMax.normalize();
++  dirMin.normalize();
++  SVector3 tn = t;
++  tn.normalize();
++  double cMax = dot(tn, dirMax), cMin = dot(tn, dirMin);
++  double inPlane = cMax * cMax + cMin * cMin;
++  if(inPlane <= 0.) return gf->curvatureMax(par);
++  return std::abs(curvMax * cMax * cMax + curvMin * cMin * cMin) / inPlane;
++}
++
++// the largest curvature of the faces of a curve in its direction: a face that
++// bends across the curve only, a fillet along a straight edge, leaves the curve
++// at the size of the curve itself, while its maximum curvature would make the
++// whole edge as fine as the fillet is round
+@@ -17,0 +45 @@
++  SVector3 t = ge->firstDer(u);
+@@ -22 +50 @@
+-    double cc = (*it)->curvatureMax(par);
++    double cc = surf_curvature_along(*it, par, t);
+--- a/src/mesh/meshGFaceOptimize.cpp
++++ b/src/mesh/meshGFaceOptimize.cpp
+@@ -1378,0 +1379 @@
++      double ori1 = dot(t11->getFace(0).normal(), t12->getFace(0).normal());
+@@ -1381,2 +1382,6 @@
+-      // t22) would revert the orientation (which can happen if q is not convex)
+-      if(qual1 > qual2 || ori2 < 0) {
++      // t22) would revert the orientation (which can happen if q is not convex),
++      // but not if choosing (t11, t12) would revert it while (t21, t22) does not:
++      // the quality measure ignores the orientation, so on a quadrangle that is
++      // not convex the split along the wrong diagonal can score better and leave
++      // a triangle folded over the other
++      if((qual1 > qual2 && (ori1 >= 0 || ori2 < 0)) || ori2 < 0) {
+--- a/src/mesh/meshGFaceTransfinite.cpp
++++ b/src/mesh/meshGFaceTransfinite.cpp
+@@ -1225,0 +1226,17 @@
++    /* Leave alone a chord the caller has already constrained. The number of points set on such
++       a curve may be one that another part of the caller's mesh depends on - a structured mesh
++       built around these faces, say - and overwriting it silently breaks that. This pass runs
++       once per meshing cycle, before it has set any constraint of its own, so a transfinite
++       curve seen here comes from the caller. */
++    bool constrainedByUser = false;
++    for(GEdge *ge : chord) {
++      if(ge->meshAttributes.method == MESH_TRANSFINITE) {
++        constrainedByUser = true;
++        break;
++      }
++    }
++    if(constrainedByUser) {
++      Msg::Debug("- chord with %li edges left alone, already transfinite", chord.size());
++      continue;
++    }
++

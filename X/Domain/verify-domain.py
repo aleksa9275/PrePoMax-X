@@ -41,6 +41,7 @@ def main():
         run([sys.executable, HERE / "domain_sources.py", "--check"])
         with tempfile.TemporaryDirectory(prefix="prepomaxx-domain-") as temp:
             build = run(["dotnet", "build", HERE / "PrePoMaxX.Domain.slnx", "-c", "Release", "--disable-build-servers",
+                         "-m:1", "-p:UseSharedCompilation=false",
                          "--artifacts-path", Path(temp) / "build", "-v:minimal", "-clp:Summary"])
             warnings = sorted({re.sub(r"\s*\[[^\]]*\]\s*$", "", line).replace(str(ROOT) + "/", "").strip()
                                for line in build.stdout.splitlines() if ": warning " in line})
