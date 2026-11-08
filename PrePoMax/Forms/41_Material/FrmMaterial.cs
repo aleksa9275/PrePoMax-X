@@ -410,32 +410,8 @@ namespace PrePoMax.Forms
             _materialToEditName = materialToEditName;
             this.btnOKAddNew.Visible = _materialToEditName == null; // must be here
             // Initialize material properties
-            TreeNode node;
-            node = tvProperties.Nodes.Find("Density", true)[0];
-            node.Tag = new Density(new double[][] { new double[] { 0, 0 } });
-            node = tvProperties.Nodes.Find("Slip Wear", true)[0];
-            node.Tag = new SlipWear(0, 0);
-            node = tvProperties.Nodes.Find("Elastic", true)[0];
-            node.Tag = new Elastic(new double[][] { new double[] { 0, 0, 0 } });
-            node = tvProperties.Nodes.Find("Engineering Constants", true)[0];
-            node.Tag = new ElasticEngineeringConstants(new double[][]
-            {
-                new double[ElasticEngineeringConstants.NumberOfValues]
-            });
-            node = tvProperties.Nodes.Find("Lamina", true)[0];
-            node.Tag = new ElasticLamina(new double[][]
-            {
-                new double[ElasticLamina.NumberOfValues]
-            });
-            node = tvProperties.Nodes.Find("Plastic", true)[0];
-            node.Tag = new Plastic(new double[][] { new double[] { 0, 0, 0 } });
-            node = tvProperties.Nodes.Find("Thermal Expansion", true)[0];
-            node.Tag = new ThermalExpansion(new double[][] { new double[] { 0, 0 } });
-            node = tvProperties.Nodes.Find("Thermal Conductivity", true)[0];
-            node.Tag = new ThermalConductivity(new double[][] { new double[] { 0, 0 } });
-            node = tvProperties.Nodes.Find("Specific Heat", true)[0];
-            node.Tag = new SpecificHeat(new double[][] { new double[] { 0, 0 } });
-            //
+            foreach (var template in MaterialEditor.PropertyTemplates())
+                tvProperties.Nodes.Find(template.Key, true)[0].Tag = template.Value;
             tvProperties.ExpandAll();
             //
             if (_materialToEditName == null)

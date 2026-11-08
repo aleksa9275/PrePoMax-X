@@ -16,6 +16,8 @@ namespace PrePoMax
     /// explicit host implementation rather than returning invented selection data.</summary>
     public partial class FrmMain : IControllerHost
     {
+        public vtkMaxActor[] SelectionActors => System.Linq.Enumerable.ToArray(selectionActors);
+        readonly List<vtkMaxActor> selectionActors=new();
         public string UndoText {get;private set;}
         public string RedoText {get;private set;}
         public vtkMaxActor[] SceneActors => System.Linq.Enumerable.ToArray(actors.Values);
@@ -99,9 +101,10 @@ namespace PrePoMax
                 case "SetPendingSidePanelsState":panels=(SidePanelsState)arguments[0];break;
                 case "SetQuerySelection":querySelection=(bool)arguments[0];break;
                 case "SetStateReady":workingState=null;break;
-                case "Clear3D":case "ClearControls":actors.Clear();break;
+                case "Clear3DSelection":selectionActors.Clear();break;
+                case "Clear3D":case "ClearControls":actors.Clear();selectionActors.Clear();break;
                 case "HideActors":case "ShowActors":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var hidden))hidden.Visible=name=="ShowActors";break;
-                case "AddActor":var actor=(vtkMaxActor)arguments[0];actors[actor.Data.Name]=actor;break;
+                case "AddActor":var actor=(vtkMaxActor)arguments[0];if(actor.Data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);else actors[actor.Data.Name]=actor;break;
                 case "Add3DCells":foreach(var data in (vtkMaxActorData[])arguments[0])actors[data.Name]=new vtkMaxActor(data);break;
                 case "CropPartWithCylinder":case "CropPartWithCube":case "SmoothPart":
                     if(nativeGeometry==null)throw new NotSupportedException("Enable the native geometry host for: "+name);
@@ -128,7 +131,7 @@ namespace PrePoMax
                 case "IsStateOpening":result=workingState==Globals.OpeningText;break;
                 case "SetStateWorking":workingState=(string)arguments[0];result=true;break;
                 case "Add3DNodes":case "Add3DCells":
-                    var data=(vtkMaxActorData)arguments[0];var actor=new vtkMaxActor(data,name=="Add3DNodes");if(data.Layer==vtkRendererLayer.Base)actors[data.Name??Guid.NewGuid().ToString()]=actor;result=actor;break;
+                    var data=(vtkMaxActorData)arguments[0];var actor=new vtkMaxActor(data,name=="Add3DNodes");if(data.Layer==vtkRendererLayer.Base)actors[data.Name??Guid.NewGuid().ToString()]=actor;else if(data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);result=actor;break;
                 case "ContainsActor":result=actors.ContainsKey((string)arguments[0]);break;
                 case "GetVtkMaxActorData":result=System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(actors.Values,a=>a.GetExportData(edgeVisibility)));break;
                 case "GetLookupTable":

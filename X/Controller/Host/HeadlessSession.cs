@@ -11,7 +11,7 @@ namespace PrePoMax
         static readonly Lazy<NrbfTypePolicy> policy=new(CreatePolicy);
         public FrmMain Presentation {get;}
         public Controller Controller {get;}
-        public static void InstallPersistence() {RuntimeInitialization.SetCultureAndLanguage();BinarySerialization.Factory=()=>new RestrictedNrbfSerializer(policy.Value);}
+        public static void InstallPersistence() {System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);RuntimeInitialization.SetCultureAndLanguage();BinarySerialization.Factory=()=>new RestrictedNrbfSerializer(policy.Value);}
         public HeadlessSession(string workDirectory,Action<string> output=null)
         {
             if(!Path.IsPathFullyQualified(workDirectory))throw new ArgumentException("Work directory must be absolute.");

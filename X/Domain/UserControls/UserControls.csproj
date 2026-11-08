@@ -1,1 +1,1 @@
-<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>UserControls</AssemblyName></PropertyGroup><Import Project="Sources.g.props"/><ItemGroup><ProjectReference Include="../CaeGlobals/CaeGlobals.csproj"/></ItemGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>UserControls</AssemblyName></PropertyGroup><Import Project="Sources.g.props"/><ItemGroup><ProjectReference Include="../CaeGlobals/CaeGlobals.csproj"/></ItemGroup><ItemGroup><Compile Include="EditorMetadata.cs" /></ItemGroup></Project>

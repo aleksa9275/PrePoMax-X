@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-11-08T21:37:30.355047+00:00",
+  "milestone": "C2 core model authoring",
+  "success": true,
+  "baseRevision": "4c99ad41641c3f7dbfc679da8c617925962ce593",
+  "evidenceRoot": "/private/tmp/prepomaxx-c2",
+  "scope": "Core authoring with original form/property/Controller reuse; not complete original form/control or four-target release acceptance",
+  "tests": {
+    "mac-final": {
+      "c1PropertiesPassed": 20,
+      "c1GuiPassed": 18,
+      "c2AuthoringPassed": 33,
+      "c2GuiFinalPassed": 18,
+      "stepFactoryFamilies": [
+        "BoundaryDisplacementStep",
+        "BuckleStep",
+        "ComplexFrequencyStep",
+        "CoupledTempDispStep",
+        "DynamicStep",
+        "FrequencyStep",
+        "HeatTransferStep",
+        "ModalDynamicsStep",
+        "SlipWearStep",
+        "StaticStep",
+        "SteadyStateDynamicsStep",
+        "UncoupledTempDispStep"
+      ],
+      "renderer": "vtkCocoaRenderWindow",
+      "guiReceiptNote": "Final standalone GUI receipt adds editor-close command restoration to the earlier embedded 17-check GUI receipt",
+      "pending": []
+    },
+    "linux/final": {
+      "c1PropertiesPassed": 20,
+      "c1GuiPassed": 18,
+      "c2AuthoringPassed": 33,
+      "c2GuiFinalPassed": 18,
+      "stepFactoryFamilies": [
+        "BoundaryDisplacementStep",
+        "BuckleStep",
+        "ComplexFrequencyStep",
+        "CoupledTempDispStep",
+        "DynamicStep",
+        "FrequencyStep",
+        "HeatTransferStep",
+        "ModalDynamicsStep",
+        "SlipWearStep",
+        "StaticStep",
+        "SteadyStateDynamicsStep",
+        "UncoupledTempDispStep"
+      ],
+      "renderer": "vtkXOpenGLRenderWindow",
+      "guiReceiptNote": "Final standalone GUI receipt adds editor-close command restoration to the earlier embedded 17-check GUI receipt",
+      "pending": []
+    },
+    "controller": {
+      "stagesPassed": 9,
+      "persistence": {
+        "success": true,
+        "checks": [
+          "cycle identity",
+          "shared object identity",
+          "ordered dictionary and comparer",
+          "dictionary shared values",
+          "rectangular array shape",
+          "IEEE values and signed zero",
+          "UTF-8 characters",
+          "UTC DateTime value",
+          "converter Type metadata",
+          "settings interface declarations",
+          "unknown framework type",
+          "unknown assembly",
+          "delegate payload",
+          "delegate serialization",
+          "trailing bytes",
+          "unknown Type metadata",
+          "unknown data member",
+          "spoofed comparer assembly",
+          "original renamed type mapping",
+          "unsafe formatter remains disabled"
+        ]
+      },
+      "pending": [
+        "Native 3MF/surface exports: explicit lib3mf/Python profiles not supplied",
+        "Original Controller native solve/results: no explicit solver profile supplied",
+        "Original Controller CAD/Gmsh: explicit native profile/fixture not supplied"
+      ]
+    },
+    "net48": {
+      "assembliesPassed": 11
+    },
+    "focusedUi": {
+      "passed": true,
+      "scope": "Build/source/syntax/generation checks; runtime explicitly pending in this no-profile invocation"
+    }
+  },
+  "receipts": [
+    {
+      "path": "mac-final.json",
+      "sha256": "c1a2ec97fcf9a55099ef8bbd67ad2f259cb00f0475444353e770f5a494b04a44"
+    },
+    {
+      "path": "mac-final/authoring/gui/authoring-gui.json",
+      "sha256": "2e8ede5773200145d2d1d5d5c530a485684d000fe164ad0277086daa819cce7a"
+    },
+    {
+      "path": "linux/final.json",
+      "sha256": "523bdd057816ae29d451edce50e320fb9977f38a136bf9c396f2c74054fb382d"
+    },
+    {
+      "path": "linux/final/authoring/gui/authoring-gui.json",
+      "sha256": "2e8ede5773200145d2d1d5d5c530a485684d000fe164ad0277086daa819cce7a"
+    },
+    {
+      "path": "controller.json",
+      "sha256": "d812cc32108629a7bee767b81bed961bc4cdcb3936efaf09cafa0114c911c67d"
+    },
+    {
+      "path": "net48/result.json",
+      "sha256": "396cabf05b5945bd4b8f335bda9a7d2e432c67f67a143686b2887b8e21aa5d06"
+    },
+    {
+      "path": "focused-ui/manifest.json",
+      "sha256": "257efb0108ebbc66938b57b0323aba646a97e0cf0942335a770d99ffde64fd95"
+    },
+    {
+      "path": "windows.log",
+      "sha256": "6beeb1023f704404d8887407cf858917ba336f4006da501d91978a43000277bd"
+    },
+    {
+      "path": "windows/readback.json",
+      "sha256": "58a848734889bec2163eb1e3e2bbd92cc4f41d464f2dca57cb63a1cf9b69080b"
+    },
+    {
+      "path": "reopen-original.json",
+      "sha256": "80d54927d11c3dba12369cea686b2e0fcd8c7fcb3810845b8b9aec9e5b5852ac"
+    },
+    {
+      "path": "gui-final.log",
+      "sha256": "c9b3dd93c5db471cd4cfce942ba20c4b683de9805c3ad5602f014f8708ec74e9"
+    },
+    {
+      "path": "linux/gui-final.log",
+      "sha256": "48f9a1f1239cb621e31e46dfd1d8572d7ea6ba9873a09a8c2bdae7edc7924c96"
+    },
+    {
+      "path": "mac-final/authoring/gui/tree.png",
+      "sha256": "d46f161eea81d539e4675545559521b29c8a8cd09a397fab0566385623dd65ba"
+    },
+    {
+      "path": "mac-final/authoring/gui/material.png",
+      "sha256": "73636d4456ee12b94d86bde33449a65a65246358028aa847e3821fe75ae6fc6d"
+    },
+    {
+      "path": "mac-final/authoring/gui/gui-authored.pmx",
+      "sha256": "c3c0525d858e396085f9eca848dd51c461d0b446c6388cba7b67e8a1e1a89990"
+    },
+    {
+      "path": "windows/original-resave.pmx",
+      "sha256": "59bcea6bcfa82e32d18b20dfc5264d28bdba5a4b8d7a3852eea995ba4b7ca614"
+    },
+    {
+      "path": "linux/final/authoring/gui/tree.png",
+      "sha256": "1984480af1ae86c141d2a20609e86d6eb153a31852f3f106d8f28bc326998cee"
+    }
+  ],
+  "sourceSha256": {
+    "PrePoMax/Forms/25_NodeSet/ViewNodeSet.Windows.cs": "8e51bdc36b1673de599d49982e05cb84a382f3bbe01d81dae0d436783a1d20ea",
+    "PrePoMax/Forms/25_NodeSet/ViewNodeSet.cs": "0e4d1ce302fd3b1fa2c450e5076b5d13f13701a0006eaf342861a313757d89e9",
+    "PrePoMax/Forms/41_Material/FrmMaterial.cs": "df426bfa30ec4a22ae5d8699a66cb1df530c4868bc46b37289df6c786b704228",
+    "PrePoMax/Forms/41_Material/MaterialEditor.cs": "25639b5be9fd196a9a6661d01382e70b4b432768f6e4741c0318c8ba452426a5",
+    "PrePoMax/Forms/44_SurfaceInteraction/FrmSurfaceInteraction.cs": "defa912cdc5975b65c3d2b3a29f9b7e870d934092e4a92393fa59393b4334bef",
+    "PrePoMax/Forms/44_SurfaceInteraction/SurfaceInteractionEditor.cs": "e29def941f40c3b5aabd62b687472010c6f6110cabc4369cbae980624e09eac2",
+    "X/Controller/Host/FilteredFileNameEditor.cs": "e7e64dc7af5244f8ade82ff907d2435a3224a38d489a971fd405f06e661a909d",
+    "X/Controller/Host/FrmMain.cs": "118d9f07315ea238d3acf879653eaa23dbc2cedb409b50098247fc8b26c4c0ee",
+    "X/Controller/Host/HeadlessSession.cs": "70bba8da79e92aec614283b409299bcd1512cb33cf2dcc2329e8879bb9a143c7",
+    "X/Domain/UserControls/EditorMetadata.cs": "8064e7b7b3fff01867816fdbbf53d79343c4360c3766c6433ad70422cefc152e",
+    "X/Domain/domain-sources.json": "406c44045619ad39aa96c3604cde1c5df7ad6fc3d2a40ddd951723df10d6d099",
+    "X/UI/Containerfile.checks": "00fbaa6f3bbfe055a3009987756ac02bbdf31dac6554e844b8fb207ae3d20c08",
+    "X/UI/FormSourceGen/FormSourceGen.csproj": "fc37ebaf1de1988fecb41493625fb8ae8ef490c64f4ee99781c57f9663fc6235",
+    "X/UI/FormSourceGen/Program.cs": "f52ece64d66f37524d98d2beb212f4f2e423b136ab891eab1897caccacb1c887",
+    "X/UI/README.md": "152812d24b1fe2c19bcebfe8ea626af38e68b48e961b9534c77e92a3a54104f7",
+    "X/UI/Workbench/AuthoringSession.cs": "2ffb7e21e827e50911ed8d63a7f84eeb5541ff7151c32d93426d16e5fa637be8",
+    "X/UI/Workbench/CollectionSheet.cs": "7ec50bcb6a82a5683a91773b80e5c820338345391b63e7dd4c5304defc070e69",
+    "X/UI/Workbench/FormRule.cs": "74a2998cbcb4c7cca1654655b3a0bf51925268e0abe2e15cc94f373c176be83c",
+    "X/UI/Workbench/InteractionEditSession.cs": "f22a0ac8c33c2779f0f8fa44e4a163bb8ed1b301c44b30195bfb14891bfd2959",
+    "X/UI/Workbench/MaterialEditSession.cs": "43fdd1e5ccedf4e2851da41c78ccdd7cfc24d2cdb8919572c3d8042ab34e73be",
+    "X/UI/Workbench/OriginalFormRules.g.cs": "ba4fe9fe7d9aab287eb8b04cf95a6c7f6b443e0072e0542a49bd4cb262b230f9",
+    "X/UI/Workbench/Program.cs": "63d0693a9b497045e0fde416c42795913011459e44ad3e5bcb57084efb0b77e8",
+    "X/UI/Workbench/PropertySheet.cs": "7e56e8d030baf564db47d7c70779882a45d2c020e1a341dc638d08bf5c4399d7",
+    "X/UI/Workbench/Workbench.csproj": "1deeccc741ce2cd055b65e6824bd61d23717c537f92b832a909f8287b4fe60f1",
+    "X/UI/Workbench/packages.lock.json": "bba5b1d991f7c7103be3df602836e963e2db917851f152948cc5d68ea4dac9fe",
+    "X/UI/authoring_gui_probe.py": "1667ae29e3c92188124730b7d8637a7681bd39164f53928ad93ec7e056d4a71e",
+    "X/UI/authoring_probe.py": "79bfaf35f0f8777e3855b72e538a30b855bf7ba8df487cbe3c181e24afca8b34",
+    "X/UI/authoring_widgets.py": "3dbcfdb9516697785cdb8a6ff39b988a0a0be7918d8f9dfa5dc7336007d4b74c",
+    "X/UI/generate-forms.py": "5dda22694b75f49a5fa5fb2d8665ae16097fb7a247f73e08e7a5d24987d55886",
+    "X/UI/gui_probe.py": "46a75062767fc4f12e586d5242437153f88db2137cfe67a82619e68fabccca91",
+    "X/UI/qt_viewport.py": "53d40f74d682ca2db640ad60d5eb6656f4263691d7fc16979f69bbb18b529471",
+    "X/UI/run.py": "be02f14a51d68785d0c0ad5716cca217f50723b6275c0776a341f2652703fb34",
+    "X/UI/scene.py": "e76ea848c74bbd4fad2cbc8e61889cf959e60f279861a5071329602b39bc0233",
+    "X/UI/service_probe.py": "a3930e69b3f6106458ff0dfb620238ef7e0767dd8e86d991889b60b13aea3cce",
+    "X/UI/verify-ui.py": "6b8072872684b18ec58ecf430e87c5c4cfe10ae5a938c25d0d25c6ed5e7ea8b8",
+    "X/UI/workbench.py": "e65fd5b3eaf8a832b854559a42d285f7549d71f4add17f4ce6b48673032ce0d3"
+  },
+  "originalWindowsReference": {
+    "application": "PrePoMax 3.0.0",
+    "environment": "Isolated CrossOver PhaseB-reference bottle",
+    "normalPmxOpenExportResave": true,
+    "identicalDeckApartFromLineEndings": true,
+    "nativeResaveReadback": {
+      "nodes": 8,
+      "elements": 1,
+      "modulus": 200000.0,
+      "force": 250.0,
+      "picked": [
+        2,
+        3,
+        6,
+        7
+      ],
+      "parameter": 200000.0,
+      "spring": 1000.0,
+      "initialTemperature": 20.0,
+      "controls": 1,
+      "folders": [
+        "Solids"
+      ],
+      "success": true
+    }
+  },
+  "pins": {
+    "VTK": "9.5.2",
+    "PyQt6": "6.10.0",
+    "Qt": "6.10.2",
+    "Python.NET": "3.1.0",
+    "Gmsh": "patched 4.13.0",
+    "CalculiX": "2.22"
+  },
+  "pending": [
+    "C3 geometry/meshing editors and tools",
+    "C4 jobs/results and complete viewport presentation",
+    "C5 remaining application/automation and complete form/control parity, libraries/plots/selection/keyboard/focus/preferences",
+    "Native Windows x64, deferred Linux x64, physical Linux/GPU/Wayland and human input",
+    "Exhaustive feature/PMX/backend matrices, source/stable-binary correspondence, four-target installers/signing/releases"
+  ],
+  "knownCorrectness": "D029 two original failures and D061 backlog unchanged; no numerical algorithm/tolerance changed; full backend matrices not repeated",
+  "hostedCiStarted": false,
+  "newPackageCandidateCreated": false
+}

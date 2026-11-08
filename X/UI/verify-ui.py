@@ -40,6 +40,10 @@ try:
     build=['dotnet','build',HERE/'Workbench/Workbench.csproj','-c','Release','--disable-build-servers','-m:1',
            '-p:UseSharedCompilation=false','--artifacts-path',folder/'build','-p:NativePreviewLockRoot='+str(folder/'locks'),'-v:q']
     if a.feed:build += ['-p:RestoreSources='+str(a.feed.resolve())]
+    extractor_build=build.copy()
+    extractor_build[2]=HERE/'FormSourceGen/FormSourceGen.csproj'
+    run('form-extractor-build',extractor_build)
+    run('original-forms',[sys.executable,HERE/'generate-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
@@ -48,11 +52,19 @@ try:
         result=json.loads((folder/'service/service.json').read_text())
         if not result.get('success'):raise ValueError('Service workflow failed')
         report['service']=result
+        run('authoring-service',base+['--authoring-service-probe',folder/'authoring/service'])
+        result=json.loads((folder/'authoring/service/authoring.json').read_text())
+        if not result.get('success'):raise ValueError('C2 authoring workflow failed')
+        report['authoringService']=result
         if a.gui:
             run('gui',base+['--probe',folder/'gui'])
             result=json.loads((folder/'gui/gui.json').read_text())
             if not result.get('success'):raise ValueError('GUI workflow failed: '+str(result))
             report['gui']=result
+            run('authoring-gui',base+['--authoring-probe',folder/'authoring/gui'])
+            result=json.loads((folder/'authoring/gui/authoring-gui.json').read_text())
+            if not result.get('success'):raise ValueError('C2 GUI workflow failed: '+str(result))
+            report['authoringGui']=result
         else:report['pending'].append('GUI workflow not executed: --gui not supplied')
     else:report['pending'].append('Property/native UI workflow not executed: no explicit CPython profile')
     report['success']=True

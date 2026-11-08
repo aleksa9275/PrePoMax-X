@@ -80,50 +80,28 @@ class Scene:
                 edge_actor.PickableOff()
                 self.renderer.AddActor(edge_actor)
 
-    def highlight(self, ids, nodal):
-        if self.highlight_actor is not None:
-            self.renderer.RemoveActor(self.highlight_actor)
-            self.highlight_actor = None
-        if not ids:
-            return
-        chosen = set(ids)
-        points = vtkPoints()
-        vertices = vtkCellArray()
-        cells = vtkCellArray()
-        for original in self.source:
-            data = original.Data.Geometry
-            if nodal:
-                for index, label in enumerate(data.Nodes.Ids):
-                    if label in chosen:
-                        point_id = points.InsertNextPoint(*data.Nodes.Coor[index])
-                        vertices.InsertNextCell(1)
-                        vertices.InsertCellPoint(point_id)
-            elif original.SurfaceTopology is not None:
-                topology = original.SurfaceTopology
-                for index, label in enumerate(topology.GlobalCellIds):
-                    if label in chosen and topology.Types[index] == 5:
-                        cells.InsertNextCell(len(topology.Cells[index]))
-                        for node in topology.Cells[index]:
-                            cells.InsertCellPoint(points.InsertNextPoint(*data.Nodes.Coor[node]))
-        result = vtkPolyData()
-        result.SetPoints(points)
-        result.SetVerts(vertices)
-        result.SetPolys(cells)
-        mapper = vtkDataSetMapper()
-        mapper.SetInputData(result)
-        # Offset coplanar selected faces slightly toward the camera.
-        mapper.SetResolveCoincidentTopologyToPolygonOffset()
-        mapper.SetRelativeCoincidentTopologyPolygonOffsetParameters(-1,-1)
-        mapper.SetRelativeCoincidentTopologyPointOffsetParameter(-2)
-        actor = vtkActor()
-        actor.SetMapper(mapper)
-        actor.GetProperty().SetColor(1,.38,.04)
-        actor.GetProperty().SetPointSize(12)
-        actor.GetProperty().SetRenderPointsAsSpheres(True)
-        actor.GetProperty().LightingOff()
-        actor.PickableOff()
-        self.renderer.AddActor(actor)
-        self.highlight_actor = actor
+    def show_selection(self, source):
+        for actor in getattr(self,'selection_actors',[]):
+            self.renderer.RemoveActor(actor)
+        self.selection_actors=[]
+        self.highlight_actor=None
+        for original in source:
+            mapper=vtkDataSetMapper()
+            mapper.SetInputData(grid(original.Data.Geometry,original.SurfaceTopology))
+            mapper.SetResolveCoincidentTopologyToPolygonOffset()
+            mapper.SetRelativeCoincidentTopologyPolygonOffsetParameters(-1,-1)
+            mapper.SetRelativeCoincidentTopologyPointOffsetParameter(-2)
+            actor=vtkActor()
+            actor.SetMapper(mapper)
+            color=original.Color
+            actor.GetProperty().SetColor(color.R/255,color.G/255,color.B/255)
+            actor.GetProperty().SetPointSize(max(10,original.Data.NodeSize))
+            actor.GetProperty().SetRenderPointsAsSpheres(True)
+            actor.GetProperty().LightingOff()
+            actor.PickableOff()
+            self.renderer.AddActor(actor)
+            self.selection_actors.append(actor)
+            self.highlight_actor=actor
 
     def pick(self, x, y):
         picker = vtkCellPicker()

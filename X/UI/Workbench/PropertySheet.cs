@@ -15,6 +15,9 @@ public sealed class PropertyField
     public bool ReadOnly {get;init;}
     public bool Exclusive {get;init;}
     public string[] Choices {get;init;}
+    public string Editor {get;init;}
+    public bool IsFlags {get;init;}
+    public bool CanConvertFromString {get;init;}
 }
 public sealed class PropertySheet
 {
@@ -38,9 +41,16 @@ public sealed class PropertySheet
             var choices=p.Converter.GetStandardValuesSupported(context)?p.Converter.GetStandardValues(context):null;
             return new PropertyField {Name=p.Name,Label=p.DisplayName,Category=p.Category,Description=p.Description,
                 Text=p.Converter.ConvertToString(context,CultureInfo.InvariantCulture,p.GetValue(instance)),
-                ReadOnly=p.IsReadOnly,Exclusive=p.Converter.GetStandardValuesExclusive(context),
+                ReadOnly=p.IsReadOnly,Editor=(p.Attributes[typeof(EditorAttribute)] as EditorAttribute)?.EditorTypeName,
+                IsFlags=p.PropertyType.IsEnum && p.PropertyType.IsDefined(typeof(FlagsAttribute),false),CanConvertFromString=p.Converter.CanConvertFrom(context,typeof(string)),Exclusive=p.Converter.GetStandardValuesExclusive(context),
                 Choices=choices?.Cast<object>().Select(v=>p.Converter.ConvertToString(context,CultureInfo.InvariantCulture,v)).ToArray()??[]};
         }).ToArray();
+    public CollectionSheet Collection(string name)
+    {
+        var property=TypeDescriptor.GetProperties(instance)[name];
+        return property?.GetValue(instance) is System.Collections.IList values?new CollectionSheet(values,changed):null;
+    }
+    public string[] CollectionNames=>TypeDescriptor.GetProperties(instance).Cast<PropertyDescriptor>().Where(p=>p.GetValue(instance) is System.Collections.IList).Select(p=>p.Name).ToArray();
     public void Set(string name,string text)
     {
         var p=TypeDescriptor.GetProperties(instance)[name]??throw new ArgumentException("Unknown property: "+name);

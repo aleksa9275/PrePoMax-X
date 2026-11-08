@@ -84,3 +84,12 @@ serialization; Windows-only APIs reachable on all platforms (registry/WMI in
 (`OCC.Remove` with (0,0) pairs, `GetMaxNodeTag` int truncation); 83 compiler/
 analyzer warnings including `CS1717` in `Tools.cs`. Platform API repairs are
 port work for Phase B; the rest waits for the post-parity fixes.
+
+C2 warning follow-up, 8 November 2026: generated nonvisual form adapters retain
+original selection-sentinel branches and some presentation-related fields. The
+portable draft keeps its selection graph directly, so CS0649/CS0169 report
+inactive fields in these generated classes. Review/remove those adapter fields
+in the post-parity warning pass; do not edit the generated file independently
+of its original-source generator. The C2 legacy encoding-provider startup gap
+and stale computed-property writeback were port/integration defects and are
+repaired now; no original numerical algorithm/tolerance changed.

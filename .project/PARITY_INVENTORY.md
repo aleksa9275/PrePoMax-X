@@ -17,12 +17,14 @@ The dormant Q-Morph wrapper is not exposed. B coverage is documented in the Phas
 bounded original-app interoperability does not mark whole feature families V.
 C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing
 and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).
-Partial form reuse does not mark the complete original form C.
+C2 adds core model authoring through original property views/factories/apply rules;
+C marks UI availability, not exhaustive execution of each item or complete form/control parity.
+See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse does not mark a complete form C.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 108 | 108 | 108 | 0 | 0 |
-| Commands | 237 | 237 | 236 | 3 | 0 |
+| Model and mesh features | 108 | 108 | 108 | 82 | 0 |
+| Commands | 237 | 237 | 236 | 83 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -31,155 +33,155 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| BoundaryDisplacementStep | AB |
-| BuckleStep | AB |
-| ComplexFrequencyStep | AB |
-| CoupledTempDispStep | AB |
-| DynamicStep | AB |
-| FrequencyStep | AB |
-| HeatTransferStep | AB |
-| ModalDynamicsStep | AB |
-| SlipWearStep | AB |
-| StaticStep | AB |
-| SteadyStateDynamicsStep | AB |
-| UncoupledTempDispStep | AB |
+| BoundaryDisplacementStep | ABC |
+| BuckleStep | ABC |
+| ComplexFrequencyStep | ABC |
+| CoupledTempDispStep | ABC |
+| DynamicStep | ABC |
+| FrequencyStep | ABC |
+| HeatTransferStep | ABC |
+| ModalDynamicsStep | ABC |
+| SlipWearStep | ABC |
+| StaticStep | ABC |
+| SteadyStateDynamicsStep | ABC |
+| UncoupledTempDispStep | ABC |
 
 ### Materials
 
 | Item | Status |
 |---|---|
-| Density | AB |
-| Elastic | AB |
-| ElasticEngineeringConstants | AB |
-| ElasticLamina | AB |
-| ElasticWithDensity | AB |
-| Plastic | AB |
-| SlipWear | AB |
-| SpecificHeat | AB |
-| ThermalConductivity | AB |
-| ThermalExpansion | AB |
+| Density | ABC |
+| Elastic | ABC |
+| ElasticEngineeringConstants | ABC |
+| ElasticLamina | ABC |
+| ElasticWithDensity | ABC |
+| Plastic | ABC |
+| SlipWear | ABC |
+| SpecificHeat | ABC |
+| ThermalConductivity | ABC |
+| ThermalExpansion | ABC |
 
 ### Sections
 
 | Item | Status |
 |---|---|
-| DistributedMassSection | AB |
+| DistributedMassSection | ABC |
 | MassSection | AB |
-| MembraneSection | AB |
-| PointMassSection | AB |
-| ShellSection | AB |
-| SolidSection | AB |
+| MembraneSection | ABC |
+| PointMassSection | ABC |
+| ShellSection | ABC |
+| SolidSection | ABC |
 
 ### Constraints
 
 | Item | Status |
 |---|---|
-| CompressionOnly | AB |
-| Coupling | AB |
-| CyclicSymmetry | AB |
-| DistributingCoupling | AB |
-| Joint | AB |
-| KinematicCoupling | AB |
-| PointSpring | AB |
-| RigidBody | AB |
-| SurfaceSpring | AB |
-| Tie | AB |
+| CompressionOnly | ABC |
+| Coupling | ABC |
+| CyclicSymmetry | ABC |
+| DistributingCoupling | ABC |
+| Joint | ABC |
+| KinematicCoupling | ABC |
+| PointSpring | ABC |
+| RigidBody | ABC |
+| SurfaceSpring | ABC |
+| Tie | ABC |
 
 ### Contact
 
 | Item | Status |
 |---|---|
-| ContactPair | AB |
-| Friction | AB |
-| GapConductance | AB |
-| SurfaceBehavior | AB |
-| SurfaceInteraction | AB |
+| ContactPair | ABC |
+| Friction | ABC |
+| GapConductance | ABC |
+| SurfaceBehavior | ABC |
+| SurfaceInteraction | ABC |
 
 ### Amplitudes
 
 | Item | Status |
 |---|---|
-| AmplitudeTabular | AB |
+| AmplitudeTabular | ABC |
 
 ### Distributions
 
 | Item | Status |
 |---|---|
-| DistributionFromEquation | AB |
-| DistributionFromFile | AB |
+| DistributionFromEquation | ABC |
+| DistributionFromFile | ABC |
 
 ### Initial conditions
 
 | Item | Status |
 |---|---|
-| InitialAngularVelocity | AB |
-| InitialTemperature | AB |
-| InitialTranslationalVelocity | AB |
+| InitialAngularVelocity | ABC |
+| InitialTemperature | ABC |
+| InitialTranslationalVelocity | ABC |
 
 ### Boundary conditions
 
 | Item | Status |
 |---|---|
-| DisplacementRotation | AB |
-| FixedBC | AB |
-| SubmodelBC | AB |
-| TemperatureBC | AB |
+| DisplacementRotation | ABC |
+| FixedBC | ABC |
+| SubmodelBC | ABC |
+| TemperatureBC | ABC |
 
 ### Loads
 
 | Item | Status |
 |---|---|
-| BodyFlux | AB |
-| CFlux | AB |
-| CLoad | AB |
-| CentrifLoad | AB |
-| DFlux | AB |
-| DLoad | AB |
-| FilmHeatTransfer | AB |
-| GravityLoad | AB |
-| HydrostaticPressure | AB |
-| MomentLoad | AB |
-| PreTensionLoad | AB |
-| RadiationHeatTransfer | AB |
-| STLoad | AB |
-| ShellEdgeLoad | AB |
+| BodyFlux | ABC |
+| CFlux | ABC |
+| CLoad | ABC |
+| CentrifLoad | ABC |
+| DFlux | ABC |
+| DLoad | ABC |
+| FilmHeatTransfer | ABC |
+| GravityLoad | ABC |
+| HydrostaticPressure | ABC |
+| MomentLoad | ABC |
+| PreTensionLoad | ABC |
+| RadiationHeatTransfer | ABC |
+| STLoad | ABC |
+| ShellEdgeLoad | ABC |
 
 ### Defined fields
 
 | Item | Status |
 |---|---|
-| DefinedField | AB |
-| DefinedTemperature | AB |
+| DefinedField | ABC |
+| DefinedTemperature | ABC |
 
 ### Field outputs
 
 | Item | Status |
 |---|---|
-| ContactFieldOutput | AB |
-| ElementFieldOutput | AB |
-| NodalFieldOutput | AB |
+| ContactFieldOutput | ABC |
+| ElementFieldOutput | ABC |
+| NodalFieldOutput | ABC |
 
 ### History outputs
 
 | Item | Status |
 |---|---|
-| ContactHistoryOutput | AB |
-| ElementHistoryOutput | AB |
-| NodalHistoryOutput | AB |
-| SectionHistoryOutput | AB |
+| ContactHistoryOutput | ABC |
+| ElementHistoryOutput | ABC |
+| NodalHistoryOutput | ABC |
+| SectionHistoryOutput | ABC |
 
 ### Step controls / damping
 
 | Item | Status |
 |---|---|
-| ContactStepControlParameter | AB |
-| FieldStepControlParameter | AB |
-| ResetStepControlParameter | AB |
-| StepControls | AB |
-| TimeIncrementationStepControlParameter | AB |
+| ContactStepControlParameter | ABC |
+| FieldStepControlParameter | ABC |
+| ResetStepControlParameter | ABC |
+| StepControls | ABC |
+| TimeIncrementationStepControlParameter | ABC |
 | Damping | AB |
-| DampingRatioAndRange | AB |
-| ModalDamping | AB |
+| DampingRatioAndRange | ABC |
+| ModalDamping | ABC |
 
 ### Elements
 
@@ -229,7 +231,7 @@ Partial form reuse does not mark the complete original form C.
 | CExportTo3mf | AB |
 | CExportToAbaqus | AB |
 | CExportToCalculix | AB |
-| CImportFile | AB |
+| CImportFile | ABC |
 | COpenFile | ABC |
 | CSaveToPmx | ABC |
 
@@ -237,13 +239,13 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CActivateDeactivateMultiple | AB |
+| CActivateDeactivateMultiple | ABC |
 | CClear | AB |
 | CRemoveResults | AB |
 | CRenamePost | AB |
 | CRenamePre | AB |
 | CRunPythonScript | AB |
-| CSetOrderedDictionaryItemLayout | AB |
+| CSetOrderedDictionaryItemLayout | ABC |
 | CommandsCollection | AB |
 
 ### Edit
@@ -304,19 +306,19 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddElementSet | AB |
-| CAddModelCoordinateSystem | AB |
-| CAddModelReferencePoint | AB |
-| CAddNodeSet | AB |
-| CAddSurface | AB |
+| CAddElementSet | ABC |
+| CAddModelCoordinateSystem | ABC |
+| CAddModelReferencePoint | ABC |
+| CAddNodeSet | ABC |
+| CAddSurface | ABC |
 | CConvertElementSetsToMeshParts | AB |
 | CCreateBoundaryLayer | AB |
 | CCreateElementSetFromElementQuality | AB |
-| CDuplicateElementSets | AB |
-| CDuplicateModelCoordinateSystems | AB |
-| CDuplicateModelReferencePoints | AB |
-| CDuplicateNodeSets | AB |
-| CDuplicateSurfaces | AB |
+| CDuplicateElementSets | ABC |
+| CDuplicateModelCoordinateSystems | ABC |
+| CDuplicateModelReferencePoints | ABC |
+| CDuplicateNodeSets | ABC |
+| CDuplicateSurfaces | ABC |
 | CFindEdgesByAngleForModelPartsCommand | AB |
 | CHideModelCoordinateSystems | AB |
 | CHideModelParts | AB |
@@ -325,27 +327,27 @@ Partial form reuse does not mark the complete original form C.
 | CMergeModelParts | AB |
 | CMirrorModelParts | AB |
 | CRemeshElements | AB |
-| CRemoveElementSets | AB |
-| CRemoveModelCoordinateSystems | AB |
+| CRemoveElementSets | ABC |
+| CRemoveModelCoordinateSystems | ABC |
 | CRemoveModelParts | AB |
-| CRemoveModelReferencePoints | AB |
-| CRemoveNodeSets | AB |
-| CRemoveSurfaces | AB |
+| CRemoveModelReferencePoints | ABC |
+| CRemoveNodeSets | ABC |
+| CRemoveSurfaces | ABC |
 | CRenumberElements | AB |
 | CRenumberNodes | AB |
-| CReplaceElementSet | AB |
-| CReplaceModelCoordinateSystem | AB |
+| CReplaceElementSet | ABC |
+| CReplaceModelCoordinateSystem | ABC |
 | CReplaceModelPartProperties | AB |
-| CReplaceModelProperties | AB |
-| CReplaceModelReferencePoint | AB |
-| CReplaceNodeSet | AB |
-| CReplaceSurface | AB |
+| CReplaceModelProperties | ABC |
+| CReplaceModelReferencePoint | ABC |
+| CReplaceNodeSet | ABC |
+| CReplaceSurface | ABC |
 | CResetColorForModelParts | AB |
 | CRotateModelParts | AB |
 | CScaleModelParts | AB |
 | CSetColorForModelParts | AB |
 | CSetModelUnitSystem | AB |
-| CSetNewModelProperties | AB |
+| CSetNewModelProperties | ABC |
 | CSetTransparencyForModelParts | AB |
 | CShowModelCoordinateSystems | AB |
 | CShowModelParts | AB |
@@ -359,31 +361,31 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddMaterial | AB |
+| CAddMaterial | ABC |
 | CDuplicateMaterial | AB |
-| CDuplicateMaterials | AB |
-| CRemoveMaterials | AB |
+| CDuplicateMaterials | ABC |
+| CRemoveMaterials | ABC |
 | CReplaceMaterial | ABC |
 
 ### Section
 
 | Item | Status |
 |---|---|
-| CAddSection | AB |
-| CDuplicateSections | AB |
-| CRemoveSections | AB |
-| CReplaceSection | AB |
+| CAddSection | ABC |
+| CDuplicateSections | ABC |
+| CRemoveSections | ABC |
+| CReplaceSection | ABC |
 
 ### Constraint
 
 | Item | Status |
 |---|---|
-| CAddConstraint | AB |
-| CDuplicateConstraints | AB |
+| CAddConstraint | ABC |
+| CDuplicateConstraints | ABC |
 | CHideConstraints | AB |
 | CMergeByMasterSlaveConstraints | AB |
-| CRemoveConstraints | AB |
-| CReplaceConstraint | AB |
+| CRemoveConstraints | ABC |
+| CReplaceConstraint | ABC |
 | CShowConstraints | AB |
 | CSwapMasterSlaveConstraints | AB |
 
@@ -391,21 +393,21 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddSurfaceInteraction | AB |
-| CDuplicateSurfaceInteractions | AB |
-| CRemoveSurfaceInteractions | AB |
-| CReplaceSurfaceInteraction | AB |
+| CAddSurfaceInteraction | ABC |
+| CDuplicateSurfaceInteractions | ABC |
+| CRemoveSurfaceInteractions | ABC |
+| CReplaceSurfaceInteraction | ABC |
 
 ### ContactPair
 
 | Item | Status |
 |---|---|
-| CAddContactPair | AB |
-| CDuplicateContactPairs | AB |
+| CAddContactPair | ABC |
+| CDuplicateContactPairs | ABC |
 | CHideContactPairs | AB |
 | CMergeByMasterSlaveContactPairs | AB |
-| CRemoveContactPairs | AB |
-| CReplaceContactPair | AB |
+| CRemoveContactPairs | ABC |
+| CReplaceContactPair | ABC |
 | CShowContactPairs | AB |
 | CSwapMasterSlaveContactPairs | AB |
 
@@ -413,61 +415,61 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddDistribution | AB |
-| CDuplicateDistributions | AB |
-| CRemoveDistributions | AB |
-| CReplaceDistribution | AB |
+| CAddDistribution | ABC |
+| CDuplicateDistributions | ABC |
+| CRemoveDistributions | ABC |
+| CReplaceDistribution | ABC |
 
 ### Amplitude
 
 | Item | Status |
 |---|---|
-| CAddAmplitude | AB |
-| CDuplicateAmplitudes | AB |
-| CRemoveAmplitudes | AB |
-| CReplaceAmplitude | AB |
+| CAddAmplitude | ABC |
+| CDuplicateAmplitudes | ABC |
+| CRemoveAmplitudes | ABC |
+| CReplaceAmplitude | ABC |
 
 ### InitialCondition
 
 | Item | Status |
 |---|---|
-| CAddInitialCondition | AB |
-| CDuplicateInitialConditions | AB |
+| CAddInitialCondition | ABC |
+| CDuplicateInitialConditions | ABC |
 | CHideInitialConditions | AB |
-| CRemoveInitialConditions | AB |
-| CReplaceInitialCondition | AB |
+| CRemoveInitialConditions | ABC |
+| CReplaceInitialCondition | ABC |
 | CShowInitialConditions | AB |
 
 ### Step
 
 | Item | Status |
 |---|---|
-| CAddStep | AB |
-| CDuplicateSteps | AB |
-| CMoveSteps | AB |
-| CRemoveSteps | AB |
-| CReplaceStep | AB |
-| CReplaceStepControls | AB |
+| CAddStep | ABC |
+| CDuplicateSteps | ABC |
+| CMoveSteps | ABC |
+| CRemoveSteps | ABC |
+| CReplaceStep | ABC |
+| CReplaceStepControls | ABC |
 
 ### HistoryOutput
 
 | Item | Status |
 |---|---|
-| CAddHistoryOutput | AB |
-| CDuplicateHistoryOutputs | AB |
+| CAddHistoryOutput | ABC |
+| CDuplicateHistoryOutputs | ABC |
 | CPropagateHistoryOutput | AB |
-| CRemoveHistoryOutputs | AB |
-| CReplaceHistoryOutput | AB |
+| CRemoveHistoryOutputs | ABC |
+| CReplaceHistoryOutput | ABC |
 
 ### FieldOutput
 
 | Item | Status |
 |---|---|
-| CAddFieldOutput | AB |
-| CDuplicateFieldOutputs | AB |
+| CAddFieldOutput | ABC |
+| CDuplicateFieldOutputs | ABC |
 | CPropagateFieldOutput | AB |
-| CRemoveFieldOutputs | AB |
-| CReplaceFieldOutput | AB |
+| CRemoveFieldOutputs | ABC |
+| CReplaceFieldOutput | ABC |
 
 ### BoundaryConditions
 
@@ -485,24 +487,24 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddLoad | AB |
-| CDuplicateLoads | AB |
+| CAddLoad | ABC |
+| CDuplicateLoads | ABC |
 | CHideLoads | AB |
 | CPropagateLoad | AB |
-| CRemoveLoads | AB |
-| CReplaceLoad | AB |
+| CRemoveLoads | ABC |
+| CReplaceLoad | ABC |
 | CShowLoads | AB |
 
 ### DefinedField
 
 | Item | Status |
 |---|---|
-| CAddDefinedField | AB |
-| CDuplicateDefinedFields | AB |
+| CAddDefinedField | ABC |
+| CDuplicateDefinedFields | ABC |
 | CHideDefinedFields | AB |
 | CPropagateDefinedField | AB |
-| CRemoveDefinedFields | AB |
-| CReplaceDefinedField | AB |
+| CRemoveDefinedFields | ABC |
+| CReplaceDefinedField | ABC |
 | CShowDefinedFields | AB |
 
 ### Tools
@@ -514,7 +516,7 @@ Partial form reuse does not mark the complete original form C.
 | CImportParameters | AB |
 | CRemoveParameters | AB |
 | CReplaceParameter | AB |
-| CSetParameters | AB |
+| CSetParameters | ABC |
 
 ### Base
 
@@ -526,7 +528,7 @@ Partial form reuse does not mark the complete original form C.
 
 | Item | Status |
 |---|---|
-| CAddDeafaultJob | AB |
+| CAddDeafaultJob | ABC |
 | CAddJob | AB |
 | CDuplicateJobs | AB |
 | CPrepareAndRunJob | AB |

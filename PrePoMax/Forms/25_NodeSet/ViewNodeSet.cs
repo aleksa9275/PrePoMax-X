@@ -19,13 +19,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
 
 namespace PrePoMax.Forms
 {
     [Serializable]
-    public class ViewNodeSet
+    public partial class ViewNodeSet
     {
         // Variables                                                                                                                
         private FeNodeSet _nodeSet;
@@ -131,7 +129,7 @@ namespace PrePoMax.Forms
 
 
         // Constructors                                                                                                             
-        public ViewNodeSet(Form parentForm, FeNodeSet nodeSet)
+        public ViewNodeSet(FeNodeSet nodeSet)
         {
             _nodeSet = nodeSet;
             _dctd = ProviderInstaller.Install(this);

@@ -10,6 +10,21 @@ namespace PrePoMax
 {
     public static class MaterialEditor
     {
+        public static KeyValuePair<string, MaterialProperty>[] PropertyTemplates()
+        {
+            return new[]
+            {
+                new KeyValuePair<string, MaterialProperty>("Density", new Density(new double[][] { new double[] { 0, 0 } })),
+                new KeyValuePair<string, MaterialProperty>("Slip Wear", new SlipWear(0, 0)),
+                new KeyValuePair<string, MaterialProperty>("Elastic", new Elastic(new double[][] { new double[] { 0, 0, 0 } })),
+                new KeyValuePair<string, MaterialProperty>("Engineering Constants", new ElasticEngineeringConstants(new double[][] { new double[ElasticEngineeringConstants.NumberOfValues] })),
+                new KeyValuePair<string, MaterialProperty>("Lamina", new ElasticLamina(new double[][] { new double[ElasticLamina.NumberOfValues] })),
+                new KeyValuePair<string, MaterialProperty>("Plastic", new Plastic(new double[][] { new double[] { 0, 0, 0 } })),
+                new KeyValuePair<string, MaterialProperty>("Thermal Expansion", new ThermalExpansion(new double[][] { new double[] { 0, 0 } })),
+                new KeyValuePair<string, MaterialProperty>("Thermal Conductivity", new ThermalConductivity(new double[][] { new double[] { 0, 0 } })),
+                new KeyValuePair<string, MaterialProperty>("Specific Heat", new SpecificHeat(new double[][] { new double[] { 0, 0 } }))
+            };
+        }
         public static IEnumerable<ViewMaterialProperty> CreateViews(Material material)
         {
             foreach (MaterialProperty property in material.Properties)

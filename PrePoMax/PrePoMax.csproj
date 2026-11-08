@@ -622,6 +622,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\25_NodeSet\ViewNodeSet.cs" />
+    <Compile Include="Forms\25_NodeSet\ViewNodeSet.Windows.cs" />
     <Compile Include="Forms\26_ElementSet\FrmElementSet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -831,6 +832,7 @@
     <Compile Include="Forms\84_Transformation\ViewTransformation.cs" />
     <Compile Include="Forms\84_Transformation\ViewSymetry.cs" />
     <Compile Include="Forms\44_SurfaceInteraction\ViewFriction.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\SurfaceInteractionEditor.cs" />
     <Compile Include="Forms\44_SurfaceInteraction\ViewSurfaceInteractionProperty.cs" />
     <Compile Include="Forms\44_SurfaceInteraction\ViewSurfaceBehavior.cs" />
     <Compile Include="Forms\51_Step\ViewBuckleStep.cs" />

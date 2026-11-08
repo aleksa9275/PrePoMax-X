@@ -109,7 +109,9 @@ def main() -> None:
         "bounded original-app interoperability does not mark whole feature families V.",
         "C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing",
         "and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).",
-        "Partial form reuse does not mark the complete original form C.",
+        "C2 adds core model authoring through original property views/factories/apply rules;",
+        "C marks UI availability, not exhaustive execution of each item or complete form/control parity.",
+        "See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse does not mark a complete form C.",
         "",
     ]
     summary = []

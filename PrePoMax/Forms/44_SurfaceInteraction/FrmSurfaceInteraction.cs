@@ -305,24 +305,8 @@ namespace PrePoMax.Forms
             UserControls.FrmProperties.CheckName(_surfaceInteractionToEditName, tbName.Text, _surfaceInteractionNames,
                                                  "surface interaction");
             //
-            Friction friction = null;
-            SurfaceBehavior surfaceBehavior = null;
-            _surfaceInteraction = new SurfaceInteraction(tbName.Text);
-            foreach (ListViewItem item in lvAddedProperties.Items)
-            {
-                _surfaceInteraction.AddProperty(((ViewSurfaceInteractionProperty)(item.Tag)).Base);
-                if (item.Tag is ViewSurfaceBehavior vsb) surfaceBehavior = (SurfaceBehavior)vsb.Base;
-                if (item.Tag is ViewFriction vf) friction = (Friction)vf.Base;
-            }
-            if (surfaceBehavior == null)
-                throw new CaeException("Surface interaction must define a surface behavior.");
-            // Tied contact requires friction definition
-            if (surfaceBehavior != null && surfaceBehavior.PressureOverclosureType == PressureOverclosureEnum.Tied
-                && friction == null)
-            {
-                throw new CaeException("A tied contact requires a stick slope definition using the friction interaction model. " + 
-                                       "The value of the friction coefficient is irrelevant for tied contact.");
-            }
+            _surfaceInteraction = SurfaceInteractionEditor.Build(tbName.Text,
+                lvAddedProperties.Items.Cast<ListViewItem>().Select(item => (ViewSurfaceInteractionProperty)item.Tag));
             //
             if (_surfaceInteractionToEditName == null)
             {
