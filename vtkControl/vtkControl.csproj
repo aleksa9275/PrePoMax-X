@@ -112,6 +112,7 @@
     <Compile Include="vtkMax\CoorSys\vtkMaxCoorSysSymbols.cs" />
     <Compile Include="vtkMax\ColorSpectrum\vtkMaxColorSpectrum.cs" />
     <Compile Include="vtkMax\LookupTable\vtkMaxLookupTable.cs" />
+    <Compile Include="vtkMax\LookupTable\vtkMaxLookupTable.Vtk.cs" />
     <Compile Include="vtkMax\Widget\00_vtkMaxWidgetHighlight.cs" />
     <Compile Include="vtkMax\Widget\02_vtkMaxCoorSysWidget.cs" />
     <Compile Include="vtkMax\Widget\02_vtkMaxScaleWidget.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="vtkMax\Widget\DataFieldType.cs" />
     <Compile Include="vtkMax\Widget\01_vtkMaxBorderWidget.cs" />
     <Compile Include="vtkMax\Actor\vtkMaxActorData.cs" />
+    <Compile Include="vtkMax\Actor\vtkMaxActorData.Vtk.cs" />
     <Compile Include="vtkMax\Widget\03_vtkMaxScalarBarWidget.cs" />
     <Compile Include="vtkMax\Widget\03_vtkMaxStatusBlock.cs" />
     <Compile Include="vtkMax\Widget\02_vtkMaxTextWidget.cs" />

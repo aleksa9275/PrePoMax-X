@@ -1,4 +1,9 @@
-# Partial shared engineering libraries
+# Core checks (mapping, data, elements, mesh deck)
+
+> **D062 (8 November 2026):** this area now builds against the whole original
+> assemblies in [`X/Domain`](../Domain). Paragraphs below about extracted slices,
+> layout guards, source pins and upstream replays describe retired tooling and
+> are kept as history. Run `python3 X/Checks/check.py --area <area>`.
 
 Task 0020 adds a portable `CaeModel` slice and a usable standalone INP mesh tool:
 
@@ -45,9 +50,6 @@ This proves the selected slice only; the full application and distributed RC2
 Windows ZIP have not been matched or validated by these checks.
 
 ```sh
-python3 -m unittest discover -s X/Core -p test_upstream_replay.py
-python3 X/Core/verify.py --upstream-revision 3.0.0-rc2 --output X/Core/artifacts/rc2.json
-python3 X/Core/verify.py --upstream-revision post-rc2-2026-10-17 --output X/Core/artifacts/post-rc2.json
 ```
 
 Reviewed names/full SHAs are in `upstream-replays.json`. No fetch, production

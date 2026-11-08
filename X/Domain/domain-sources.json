@@ -1,0 +1,81 @@
+{
+  "_comment": "Per-assembly deviations from the original .csproj Compile lists. Every entry needs a reason.",
+  "assemblies": {
+    "CaeGlobals": {
+      "project": "CaeGlobals/CaeGlobals.csproj",
+      "exclude": {
+        "CenterWinDialog.cs": "Win32 dialog centring; used only by MessageBoxes.WinForms.cs",
+        "Extensions.WinForms.cs": "PropertyGrid/Control helpers (UI layer)",
+        "MessageBoxes.WinForms.cs": "Native WinForms dialog; portable counterpart added",
+        "DynamicTypeDescriptor/DynamicTypeDescriptor.WinForms.cs": "WinForms drop-down editor; portable counterpart added",
+        "DynamicTypeDescriptor/StandardValueEditorUI.cs": "WinForms UserControl (UI layer)",
+        "DynamicTypeDescriptor/StandardValueEditorUI.designer.cs": "WinForms UserControl (UI layer)",
+        "Editors/FilteredFileNameEditor.cs": "WinForms file dialog editor; used only by PrePoMax forms (UI layer)",
+        "MouseHook.cs": "Win32 global mouse hook (UI layer)",
+        "KeyboardHook.cs": "Win32 global keyboard hook (UI layer)",
+        "Tools.WinForms.cs": "WinForms start-up path; portable counterpart added"
+      },
+      "add": {
+        "X/Domain/CaeGlobals/Portable/MessageBoxes.Portable.cs": "Host-supplied dialog presenter",
+        "X/Domain/CaeGlobals/Portable/StandardValueEditor.Portable.cs": "Editor metadata without WinForms",
+        "X/Domain/CaeGlobals/Portable/Tools.Portable.cs": "Start-up path without WinForms"
+      }
+    },
+    "CaeMesh": {
+      "project": "CaeMesh/CaeMesh.csproj",
+      "exclude": {},
+      "add": {}
+    },
+    "CaeResults": {
+      "project": "CaeResults/CaeResults.csproj",
+      "exclude": {},
+      "add": {
+        "X/Domain/CaeResults/Portable/FrdSnapshot.Portable.cs": "PrePoMax-X bounded FRD transport",
+        "X/Domain/CaeResults/Portable/DatSnapshot.Portable.cs": "PrePoMax-X bounded DAT transport",
+        "X/Domain/CaeResults/Portable/TestVisibility.cs": "Internal FRD reader visible to the shared data regression program"
+      }
+    },
+    "CaeModel": {
+      "project": "CaeModel/CaeModel.csproj",
+      "exclude": {},
+      "add": {
+        "CaeModel/FileInOut/Output/Calculix/ThermalAnalysisDeckWriter.cs": "PrePoMax-X thermal deck writer (existing X file in the original folder)",
+        "CaeModel/FileInOut/Input/Netgen/NetgenVolFileReader.MeshData.cs": "PrePoMax-X Netgen VOL mesh-data reader (existing X file in the original folder)"
+      }
+    },
+    "CaeJob": {
+      "project": "CaeJob/CaeJob.csproj",
+      "exclude": {
+        "ExecutableJob.Legacy.cs": "Windows-only process implementation; replaced by the portable partial",
+        "AnalysisJob.Windows.cs": "WMI process-tree termination (Windows only); portable counterpart added"
+      },
+      "add": {
+        "CaeJob/ExecutableJob.Portable.cs": "Cross-platform process boundary (existing PrePoMax-X file)",
+        "X/Domain/CaeJob/Portable/SolverThreadPlan.cs": "PrePoMax-X read-only solver thread planner",
+        "X/Domain/CaeJob/Portable/AnalysisJob.Portable.cs": "Process-tree termination without WMI (port repair)"
+      }
+    },
+    "STL": {
+      "project": "STL/STL.csproj",
+      "exclude": {},
+      "add": {}
+    },
+    "ThreeMF": {
+      "project": "3MF/ThreeMF.csproj",
+      "exclude": {},
+      "add": {}
+    },
+    "vtkControl": {
+      "project": "vtkControl/vtkControl.csproj",
+      "_comment": "Data subset only (D062): the classes the domain assemblies use. The rendering control itself depends on Windows ActiViz and is ported in Phase C.",
+      "include": [
+        "Properties/AssemblyInfo.cs",
+        "Enums/vtkRendererLayer.cs",
+        "vtkMax/Actor/vtkMaxActorData.cs",
+        "vtkMax/LookupTable/vtkMaxLookupTable.cs"
+      ],
+      "exclude": {},
+      "add": {}
+    }
+  }
+}

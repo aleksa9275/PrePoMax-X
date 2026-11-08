@@ -11,7 +11,8 @@ or redistribute incomplete dependencies.
 | Location | Purpose |
 | --- | --- |
 | Original CaeGlobals/CaeMesh/CaeModel/CaeResults/CaeJob and application folders | One engineering implementation, original paths/type/assembly ownership; portable build projects source-link these files |
-| X/Core | Earlier offline partial-build tools and regression baseline |
+| X/Domain | .NET 10 projects building the whole original domain assemblies from generated source lists, the GmshCommon P/Invoke port, WinForms API stand-ins (WinFormsCompat) and the domain/net48 checks |
+| X/Core | Mapping/data/element/mesh-deck checks against X/Domain |
 | X/Analysis | Expanded model/deck build, strict input tools, fixtures and checks |
 | X/Execution | Modern CaeJob platform boundary, native process tests, pinned solver preflight/run command |
 | X/Results | Original-owned bounded FRD static mesh/field inspection, invariant calculations and regression tools |

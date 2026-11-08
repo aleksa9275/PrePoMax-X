@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>CaeJob</AssemblyName><RootNamespace>CaeJob</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+  </ItemGroup>
+</Project>

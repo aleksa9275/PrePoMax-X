@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>CaeMesh</AssemblyName><RootNamespace>CaeMesh</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+    <ProjectReference Include="../GmshCommon/GmshCommon.csproj" />
+  </ItemGroup>
+</Project>

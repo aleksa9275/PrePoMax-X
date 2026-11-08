@@ -163,8 +163,8 @@ namespace FileInOut.Output
                                                              bool referencePointMassNodes = true)
         {
             // Clone surfaces
-            OrderedDictionary<string, FeSurface> originalSurfaces = model.Mesh.Surfaces;
-            OrderedDictionary<string, FeElementSet> originalElementSets = model.Mesh.ElementSets;
+            CaeGlobals.OrderedDictionary<string, FeSurface> originalSurfaces = model.Mesh.Surfaces;
+            CaeGlobals.OrderedDictionary<string, FeElementSet> originalElementSets = model.Mesh.ElementSets;
             //
             model.Mesh.Surfaces = originalSurfaces.DeepClone();
             model.Mesh.ElementSets = originalElementSets.DeepClone();
@@ -186,7 +186,7 @@ namespace FileInOut.Output
                 List<SectionData> additionalSectionData = new List<SectionData>();
                 List<Material> additionalMaterials = new List<Material>();
                 List<BoundaryCondition> additionalBoundaryConditions = new List<BoundaryCondition>();
-                OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads;
+                CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads;
                 List<double[]> equationParameters = new List<double[]>();
                 //
                 // Collect pre-tension loads to use them in reference point preparation
@@ -320,12 +320,12 @@ namespace FileInOut.Output
                 Clean(model);
             }
         }
-        static private void GetPretensionLoads(FeModel model, out OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads)
+        static private void GetPretensionLoads(FeModel model, out CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads)
         {
             string name;
             List<PreTensionLoad> preTensionLoadsList;
             preTensionLoads =
-                new OrderedDictionary<string, List<PreTensionLoad>>("Pretension Loads", StringComparer.OrdinalIgnoreCase);
+                new CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>>("Pretension Loads", StringComparer.OrdinalIgnoreCase);
             foreach (var step in model.StepCollection.StepsList)
             {
                 if (step.Active)
@@ -344,7 +344,7 @@ namespace FileInOut.Output
                 }
             }
         }
-        static private void GetReferencePoints(FeModel model, OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
+        static private void GetReferencePoints(FeModel model, CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
                                                ref int maxNodeId, ref List<FeNodeSet> additionalNodeSets,
                                                out Dictionary<string, CalReferencePoint> referencePoints)
         {
@@ -2057,7 +2057,7 @@ namespace FileInOut.Output
             }
             return materialNames;
         }
-        static private void AppendPreTensionSections(OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
+        static private void AppendPreTensionSections(CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
                                                      Dictionary<string, CalReferencePoint> referencePoints,
                                                      CalculixKeyword parent)
         {

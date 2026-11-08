@@ -91,7 +91,8 @@ try{
   Check("original convergence components and record numbering",conv.Count==1&&conv.RecordNumbers[0]==1&&conv.Iterations[0]==4&&conv.ResidualForces[0]==0.06&&conv.TemperatureCorrections[0]==0.00009);
  }finally{System.Globalization.CultureInfo.CurrentCulture=previousCulture;}
  Check("monitor types retain CaeJob ownership",typeof(CalculixStatusData).Assembly==typeof(ExecutableJob).Assembly&&typeof(CalculixConvergenceData).Assembly==typeof(ExecutableJob).Assembly);
- Check("portable job has no WMI or Windows desktop dependencies",!typeof(ExecutableJob).Assembly.GetReferencedAssemblies().Any(a=>a.Name!.Contains("Management")||a.Name.Contains("Windows")||a.Name.Contains("Presentation")));
+ // Whole original CaeJob (D062) uses the portable WinForms API stand-ins; WMI and the real desktop frameworks stay excluded.
+ Check("portable job has no WMI or Windows desktop dependencies",!typeof(ExecutableJob).Assembly.GetReferencedAssemblies().Any(a=>a.Name!.Contains("Management")||a.Name=="System.Windows.Forms"||a.Name.StartsWith("System.Windows.Forms.")||a.Name.Contains("Presentation")));
 }catch(Exception e){Check("unexpected test exception: "+e,false);}
 finally{Directory.Delete(root,true);}
 Console.WriteLine(JsonSerializer.Serialize(new{success=failed==0,passed=checks.Count-failed,failed,checks,runtime=new{os=RuntimeInformation.OSDescription,architecture=RuntimeInformation.ProcessArchitecture.ToString()},solverExecuted=false}));return failed==0?0:1;

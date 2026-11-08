@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Portable C# port of the original C++/CLI GmshCommon wrapper (D062). -->
+  <PropertyGroup>
+    <AssemblyName>GmshCommon</AssemblyName>
+    <RootNamespace>GmshCommon</RootNamespace>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <NoWarn>$(NoWarn);CS0108;CA2101</NoWarn>
+  </PropertyGroup>
+</Project>

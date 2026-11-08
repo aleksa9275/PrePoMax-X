@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>vtkControl</AssemblyName><RootNamespace>vtkControl</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+  </ItemGroup>
+</Project>

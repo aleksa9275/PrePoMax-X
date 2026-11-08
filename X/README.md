@@ -6,6 +6,7 @@ Native installer/Homebrew requirements: [release delivery](../.project/RELEASE.m
 
 | Build | Current purpose |
 | --- | --- |
+| [Domain](Domain/) | Whole original CaeGlobals/CaeMesh/CaeModel/CaeResults/CaeJob (+GmshCommon P/Invoke, STL, ThreeMF, vtkControl data subset) for .NET 10; source lists generated from the original csproj files (D062) |
 | [Analysis](Analysis/README.md) | Original engineering data, complete bounded C3D8 static deck and regression checks |
 | [Execution](Execution/README.md) | Native process lifecycle and pinned solver preflight/run seam |
 | [Results](Results/README.md) | Original ASCII/binary FRD C3D8 static mesh/field inspection and invariants; full FeResults/DAT graph remains pending |
@@ -15,6 +16,7 @@ Native installer/Homebrew requirements: [release delivery](../.project/RELEASE.m
 
 These are development tools, not the installable desktop release. Engineering
 sources remain in their original owning folders and are source-linked by the
-modern build projects. Never mix partial-build DLLs with an original installed
+modern build projects in `X/Domain` (`domain-sources.json` lists the few
+excluded/added files). Never mix partial-build DLLs with an original installed
 application. [Recovered third-party source](../ThirdParty/Sources/README.md)
 is separate from ignored downloaded packages, build outputs and binary artifacts.

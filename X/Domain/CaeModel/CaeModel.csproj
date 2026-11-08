@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>CaeModel</AssemblyName><RootNamespace>CaeModel</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <ProjectReference Include="../CaeResults/CaeResults.csproj" />
+    <ProjectReference Include="../STL/STL.csproj" />
+    <ProjectReference Include="../ThreeMF/ThreeMF.csproj" />
+    <ProjectReference Include="../vtkControl/vtkControl.csproj" />
+  </ItemGroup>
+</Project>

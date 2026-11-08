@@ -13,10 +13,6 @@ class CheckProfiles(unittest.TestCase):
         self.assertEqual([(s["area"], s["revision"]) for s in steps], [("results", "current")])
         self.assertNotIn("--upstream-revision", steps[0]["arguments"])
 
-    def test_compatibility_keeps_guards_and_both_pins(self):
-        steps = check.plan("compatibility", ["analysis"], Path("out"), {"os": "Darwin", "architecture": "Arm64"})
-        self.assertEqual([s["revision"] for s in steps], ["source-guards", *check.REVISIONS])
-
     def test_zero_exit_without_successful_report_fails(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)

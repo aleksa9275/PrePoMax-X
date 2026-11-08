@@ -21,7 +21,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Resources;
 using System.Text;
-using System.Windows.Forms.Design;
 
 //
 // http://www.codeproject.com/Articles/189521/Dynamic-Properties-for-PropertyGrid
@@ -479,53 +478,6 @@ namespace DynamicTypeDescriptor
             {
                 m_CategoryId = value;
             }
-        }
-    }
-
-    public class StandardValueEditor : UITypeEditor
-    {
-        private StandardValueEditorUI m_ui = new StandardValueEditorUI();
-
-        public StandardValueEditor()
-        {
-
-        }
-
-        public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
-        {
-            return false;
-        }
-
-        public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.DropDown;
-        }
-
-        public override bool IsDropDownResizable
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
-        {
-            if (provider != null)
-            {
-                IWindowsFormsEditorService editorService = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-                if (editorService == null)
-                    return value;
-
-                m_ui.SetData(context, editorService, value);
-
-                editorService.DropDownControl(m_ui);
-
-                value = m_ui.GetValue();
-
-            }
-
-            return value;
         }
     }
 

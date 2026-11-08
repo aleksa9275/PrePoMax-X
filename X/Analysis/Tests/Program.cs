@@ -146,7 +146,9 @@ Check("original assembly identities and serialized type markers", () => {
 var assemblies=new[]{typeof(EquationContainer).Assembly,typeof(FeNode).Assembly,typeof(Material).Assembly};
 Check("expanded assemblies have no desktop platform references", () => {
     foreach(var a in assemblies)foreach(var r in a.GetReferencedAssemblies())
-        Require(r.Name is "CaeGlobals" or "CaeMesh" or "CaeResults" or "UnitsNet" or "NCalc" or "mscorlib" or "netstandard" or "System" || (r.Name.StartsWith("System.") && !r.Name.Contains("Windows") && !r.Name.Contains("Drawing.Common")));
+        // Whole original assemblies (D062): original packages and portable assemblies are expected;
+        // the real WinForms/WPF desktop frameworks and ActiViz stay excluded.
+        Require(r.Name != "System.Windows.Forms" && !r.Name.StartsWith("System.Windows.Forms.") && !r.Name.StartsWith("Presentation") && !r.Name.StartsWith("Kitware"));
 });
 // A unit tetrahedron with deliberately distinct VOL/original node ordering.
 string vol = "mesh3d\ndimension\n3\nsurfaceelements\n4\n1 1 1 0 3 1 2 3\n2 2 1 0 3 1 2 4\n3 3 1 0 3 1 3 4\n4 4 1 0 3 2 3 4\nvolumeelements\n1\n7 4 1 3 2 4\nedgesegmentsgi2\n1\n1 0 1 2 -1 -1 0 0 1 0 9 1\npoints\n4\n0 0 0\n1 0 0\n0 1 0\n0 0 1\nendmesh\n";

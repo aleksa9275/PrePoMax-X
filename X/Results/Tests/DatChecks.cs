@@ -65,7 +65,7 @@ internal static class DatChecks
   check("DAT retains a bounded 4096 dataset limit",Reject("dataset-limit",LongHistory(4097)));
   check("DAT excessive size rejected before decoding",Reject("size",new string(' ',8*1024*1024+1)));
   check("DAT oversized line rejected",Reject("long-line",simple+new string('1',4097)));
-  check("DAT no full history graph or persistence selection",typeof(DatFileReader).Assembly.GetType("CaeResults.HistoryResults")==null);
+  check("DAT full original history graph included (whole assembly, D062)",typeof(DatFileReader).Assembly.GetType("CaeResults.HistoryResults")!=null);
   var parallel=Task.WhenAll(Enumerable.Range(0,4).Select(_=>Task.Run(()=>DatFileReader.ReadStaticSnapshot(fixture)))).GetAwaiter().GetResult();
   check("DAT concurrent calls retain independent original entries",parallel.All(d=>d.Histories.Count==96)&&!ReferenceEquals(parallel[0].Histories[0].Entries,parallel[1].Histories[0].Entries));
  }

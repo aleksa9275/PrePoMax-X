@@ -24,14 +24,15 @@ Check("complete deck has original analysis keywords in order",()=>{
     string[] names={"*Node\n","*Element,","*Material,","*Elastic\n","*Solid section,","*Step,","*Static\n","*Boundary\n","*Cload\n","*Output,","*Node print,","*El print,","*Node file\n","*El file\n","*End step\n"};
     int previous=-1;foreach(string keyword in names){int at=deck.IndexOf(keyword,StringComparison.Ordinal);Require(at>previous);previous=at;}
 });
-Check("original concentrated-load virtual dispatch writes data and rejects missing local context",()=>{
+Check("original concentrated-load virtual dispatch writes data and keeps original missing-context behaviour",()=>{
     var load=(CLoad)AnalysisFiles.Create(Spec()).Step.Loads["Axial"];
     Type type=typeof(Material).Assembly.GetType("FileInOut.Output.Calculix.CalCLoad");
     var keyword=Activator.CreateInstance(type,new object[]{load,null,FileInOut.Output.Calculix.ComplexLoadTypeEnum.None});
     var method=type.GetMethod("GetDataString");Require(((string)method.Invoke(keyword,null)).Replace("\r\n","\n")=="X1, 1, 25\n");
+    // Whole original assembly (D062): without a mesh the original writer cannot find the local system
+    // and writes global directions (recorded original behaviour, see the Phase A report).
     load.CoordinateSystemName="Local";
-    try{method.Invoke(keyword,null);throw new Exception("Missing local context accepted");}
-    catch(System.Reflection.TargetInvocationException e){Require(e.InnerException is NotSupportedException);}
+    Require(((string)method.Invoke(keyword,null)).Replace("\r\n","\n")=="X1, 1, 25\n");
 });
 Check("unported derived step cannot lose its extra behavior",()=>Reject(()=>StaticAnalysisDeckWriter.Write(Mesh(),baseline.Materials,baseline.Sections,new ExtraStaticStep())));
 Check("structural user-keyword quantities are invariant and restore caller culture",()=>{
@@ -66,7 +67,16 @@ Check("original assembly and serialized field identities",()=>{
     Require(info.GetValue("_boundaryConditions",typeof(CaeGlobals.OrderedDictionary<string,BoundaryCondition>)) is CaeGlobals.OrderedDictionary<string,BoundaryCondition>);
     Require(info.GetValue("_loads",typeof(CaeGlobals.OrderedDictionary<string,Load>)) is CaeGlobals.OrderedDictionary<string,Load>);
 });
-Check("read and write do not select unsafe serialization",()=>Require(typeof(Selection).GetConstructor(new[]{typeof(Selection),typeof(bool),typeof(bool)})==null));
+Check("read and write do not select unsafe serialization",()=>{
+    // The original Selection copy constructor deep-copies with BinaryFormatter. It is part of the whole
+    // original assembly (D062), but BinaryFormatter stays disabled on .NET 10 until Phase B adds
+    // allowlisted original serialization: using it must fail, not silently enable unsafe serialization.
+    Require(typeof(Selection).GetConstructor(new[]{typeof(Selection),typeof(bool),typeof(bool)})!=null);
+#pragma warning disable SYSLIB0011
+    try{new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter().Serialize(new System.IO.MemoryStream(),1);throw new Exception("BinaryFormatter enabled");}
+    catch(NotSupportedException){}
+#pragma warning restore SYSLIB0011
+});
 Check("original coordinate system data is callable",()=>{
     var cs=new CoordinateSystem("Local",false);var v=cs.GetOrientedVectorAtPoint(new[]{1d,2d,3d},new[]{0d,0d,0d});Require(v.SequenceEqual(new[]{1d,2d,3d}));
 });

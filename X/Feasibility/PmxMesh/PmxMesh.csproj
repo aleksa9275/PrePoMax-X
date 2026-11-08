@@ -7,6 +7,6 @@
     <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../Results/CaeResults/CaeResults.csproj" />
+    <ProjectReference Include="../../Domain/CaeResults/CaeResults.csproj" />
   </ItemGroup>
 </Project>

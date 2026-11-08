@@ -53,6 +53,7 @@
     <Compile Include="ExecutableJob.Legacy.cs" />
     <Compile Include="JobStatus.cs" />
     <Compile Include="AnalysisJob.cs" />
+    <Compile Include="AnalysisJob.Windows.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

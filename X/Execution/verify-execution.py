@@ -3,11 +3,9 @@
 import argparse,hashlib,json,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
 from datetime import datetime,timezone
-import job_layout
 import definition_control
 import cli_control
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
-sys.path.insert(0,str(ROOT/'X/Analysis'));import analysis_layout
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
@@ -22,37 +20,17 @@ def main():
  try:
   arch={'arm64':'Arm64','aarch64':'Arm64','x86_64':'X64','amd64':'X64'}.get(platform.machine().lower())
   if (a.expect_os and a.expect_os!=platform.system())or(a.expect_architecture and a.expect_architecture!=arch):raise ValueError('Unexpected native verification host')
-  pin=job_layout.BASELINE
-  if a.upstream_revision:pin=next(r['commit']for r in json.loads((ROOT/'X/Core/upstream-replays.json').read_text())['revisions']if r['name']==a.upstream_revision)
-  rows=analysis_layout.source_rows(pin);jobs=job_layout.verify(pin);portable='CaeJob/ExecutableJob.Portable.cs'
-  density='CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs'
-  density_bytes=(ROOT/density).read_bytes()
-  if density_bytes!=analysis_layout.original(pin,density) or density_bytes!=analysis_layout.original(job_layout.BASELINE,density):
-   raise ValueError('Original PMX density keyword source changed')
-  rows.append({'path':density,'sha256':hashlib.sha256(density_bytes).hexdigest()})
-  report.update(upstreamRevision=a.upstream_revision or'current',sources=rows,jobSources=jobs,portableAdapter={'path':portable,'sha256':sha(ROOT/portable)},repository={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT))})
+  if a.upstream_revision:raise ValueError('Historical upstream slice replays were retired with the whole-library build (D062)')
+  chk=subprocess.run([sys.executable,str(ROOT/'X/Domain/domain_sources.py'),'--check'],cwd=ROOT,capture_output=True,text=True)
+  if chk.returncode:raise ValueError('Whole-library source lists are stale: '+chk.stdout.strip())
+  report.update(upstreamRevision='current',sources={'mode':'whole original assemblies (X/Domain)','manifestSha256':sha(ROOT/'X/Domain/domain-sources.json')},repository={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT))})
   report['tools']={p.relative_to(HERE).as_posix():sha(p)for p in sorted(HERE.rglob('*'))if p.is_file()and not {'artifacts','bin','obj','__pycache__'}.intersection(p.relative_to(HERE).parts)}
   report['analysisTools']={p.relative_to(ROOT/'X/Analysis').as_posix():sha(p)for p in sorted((ROOT/'X/Analysis').rglob('*'))if p.is_file()and not {'artifacts','bin','obj','__pycache__'}.intersection(p.relative_to(ROOT/'X/Analysis').parts)}
   report['monitorFixtures']={str(p.relative_to(ROOT)):sha(p)for p in (ROOT/'.project/reports/windows-reference/solver').iterdir()if p.suffix in {'.sta','.cvg'}}
   report['thirdPartySources']=json.loads(run(['python3',ROOT/'ThirdParty/Sources/verify-sources.py']).stdout)
   with tempfile.TemporaryDirectory(prefix='prepomaxx-execution-')as temp:
-   work=Path(temp);source=work/'source'
-   if a.upstream_revision:report['upstreamReplay']=analysis_layout.core_verify.prepare_upstream_sources(a.upstream_revision,source,analysis_layout.core_verify.sources())
-   for row in rows:
-    path=row['path'];target=source/path;target.parent.mkdir(parents=True,exist_ok=True)
-    data=analysis_layout.original(pin,path)if row.get('upstreamVariant')else target.read_bytes()if target.exists()else(ROOT/path).read_bytes()
-    if hashlib.sha256(data).hexdigest()!=row['sha256']:raise ValueError('Snapshot hash differs: '+path)
-    target.write_bytes(data)
-   for path in [r['path']for r in jobs]+[portable]:
-    target=source/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((ROOT/path).read_bytes())
-   feed=work/'feed';feed.mkdir()
-   for name,version in analysis_layout.PACKAGES.items():
-    package=ROOT/'X/Analysis/artifacts/packages'/name.lower()/version/(name.lower()+'.'+version+'.nupkg')
-    if not package.exists():raise ValueError('Exact cached package required; run documented Analysis restore first')
-    expected=next(r['packageSha256']for r in json.loads((ROOT/'X/Analysis/dependency-artifacts.json').read_text())['packages']if r['id'].lower()==name.lower())
-    if sha(package)!=expected:raise ValueError('Cached package hash changed')
-    shutil.copyfile(package,feed/package.name)
-   run(['dotnet','build',HERE/'PrePoMaxX.Execution.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-p:RepositoryRoot='+str(source)+'/', '-p:RestorePackagesPath='+str(work/'packages'),'--source',feed,'-v:minimal'])
+   work=Path(temp)
+   run(['dotnet','build',HERE/'PrePoMaxX.Execution.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-v:minimal'])
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll']).stdout)
    if not report['tests']['success']or report['tests']['passed']!=49 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
    cli=work/'build/bin/Solve/release/PrePoMaxX.Solve.dll'

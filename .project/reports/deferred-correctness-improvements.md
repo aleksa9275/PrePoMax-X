@@ -73,3 +73,14 @@ root causes remain unresolved. No numerical change, sign normalization or existi
 tolerance change. The separate zero-exit solver-error completion check is an
 integration repair and retains the failed calculation as failure. D061 and every
 original functionality/platform/release obligation remain.
+
+8 November 2026, Phase A ([report](phase-a-domain-libraries.md)): building the
+whole original libraries for .NET 10 recorded: original `CalCLoad` writes global
+directions when its local coordinate system cannot be resolved; `BinaryFormatter`
+clone paths (`DeepClone`, `Selection` copy constructor) need Phase B allowlisted
+serialization; Windows-only APIs reachable on all platforms (registry/WMI in
+`Tools.cs`, `AnalysisJob.IsAdministrator`, bitmap export, `GmshAPI`
+`Thread.Abort`); missing Q-Morph `QuadMesher` source; GmshCommon quirks
+(`OCC.Remove` with (0,0) pairs, `GetMaxNodeTag` int truncation); 83 compiler/
+analyzer warnings including `CS1717` in `Tools.cs`. Platform API repairs are
+port work for Phase B; the rest waits for the post-parity fixes.

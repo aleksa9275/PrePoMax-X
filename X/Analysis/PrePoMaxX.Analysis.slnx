@@ -1,8 +1,8 @@
 <Solution>
-  <Project Path="CaeGlobals/CaeGlobals.csproj" />
-  <Project Path="CaeMesh/CaeMesh.csproj" />
-  <Project Path="CaeResults/CaeResults.csproj" />
-  <Project Path="CaeModel/CaeModel.csproj" />
+  <Project Path="../Domain/CaeGlobals/CaeGlobals.csproj" />
+  <Project Path="../Domain/CaeMesh/CaeMesh.csproj" />
+  <Project Path="../Domain/CaeResults/CaeResults.csproj" />
+  <Project Path="../Domain/CaeModel/CaeModel.csproj" />
   <Project Path="MaterialDeck/MaterialDeck.csproj" />
   <Project Path="Tests/Tests.csproj" />
   <Project Path="MeasureMesh/MeasureMesh.csproj" />

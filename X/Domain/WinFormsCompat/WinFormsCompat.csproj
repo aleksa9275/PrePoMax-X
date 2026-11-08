@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Non-visual WinForms/design-time API types used by the original domain
+       code (enums, interfaces, editor metadata), so it compiles unchanged on
+       macOS/Linux. No visual control types are provided: UI-only code is kept
+       in *.WinForms.cs partials of the original projects. Not referenced by
+       builds that use the real System.Windows.Forms. -->
+  <PropertyGroup>
+    <AssemblyName>PrePoMaxX.WinFormsCompat</AssemblyName>
+    <RootNamespace>PrePoMaxX.WinFormsCompat</RootNamespace>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="[10.0.0]" />
+  </ItemGroup>
+</Project>

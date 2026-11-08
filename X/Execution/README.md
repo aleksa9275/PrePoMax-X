@@ -1,5 +1,10 @@
 # Native job execution boundary
 
+> **D062 (8 November 2026):** this area now builds against the whole original
+> assemblies in [`X/Domain`](../Domain). Paragraphs below about extracted slices,
+> layout guards, source pins and upstream replays describe retired tooling and
+> are kept as history. Run `python3 X/Checks/check.py --area <area>`.
+
 Task 0038 adds an explicit research registry override:
 `PrePoMaxX.Solve --registry <build-registry.json> run-static ...`. The default
 registry remains the Windows reference. `ThirdParty/Build/calculix-cpu.py`
@@ -78,10 +83,8 @@ verifier also checks real-host auto/manual CLI results and malformed inputs.
 GitLab execution checks use `tini -s` so attached descendants are reaped, matching
 the local Podman `--init` requirement.
 
-    python3 -m unittest discover -s X/Execution -p test_job_layout.py
     python3 X/Execution/verify-execution.py --expect-os Darwin --expect-architecture Arm64 --output X/Execution/artifacts/current-macos-arm64.json
 
-Repeat with --upstream-revision 3.0.0-rc2 and post-rc2-2026-10-17. Verification
 uses isolated source overlays, disposable offline package/build storage, native
 process tests, original monitor fixtures and negative CLI controls. Source/enum/
 legacy-project checks and downloaded source pins are retained in JSON.

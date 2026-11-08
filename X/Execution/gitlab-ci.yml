@@ -13,7 +13,6 @@ execution-workflow-linux-x64:
     - apt-get install -y --no-install-recommends python3 git tini
   script:
     - python3 ThirdParty/Sources/verify-sources.py
-    - python3 -m unittest discover -s X/Execution -p test_job_layout.py
     - dotnet restore X/Execution/PrePoMaxX.Execution.slnx --configfile X/Analysis/NuGet.Config --packages X/Analysis/artifacts/packages
     - tini -s -- python3 X/Checks/check.py --profile fast --area execution --output X/Checks/artifacts/execution-linux-x64
   artifacts:

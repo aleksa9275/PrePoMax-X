@@ -5,6 +5,9 @@ _Replace this file's content as work progresses; history is in git and in
 
 ## Where we are (8 November 2026)
 
+- **Phase A done:** the whole original domain assemblies build for .NET 10 in
+  `X/Domain` from generated original source lists; all checks pass on Mac
+  (`python3 X/Checks/check.py`, about one minute).
 - **Strategy reset (D062):** whole-code reuse in three phases. Progress is
   measured in [PARITY_INVENTORY.md](PARITY_INVENTORY.md) (generated from the
   original sources: 127 model/mesh features, 237 commands, 72 forms).
@@ -21,7 +24,7 @@ _Replace this file's content as work progresses; history is in git and in
 
 | Phase | Content | State |
 |---|---|---|
-| A | Whole CaeGlobals/CaeMesh/CaeModel/CaeResults/CaeJob for .NET 10, net48 kept | in progress |
+| A | Whole CaeGlobals/CaeMesh/CaeModel/CaeResults/CaeJob for .NET 10, net48 kept | done — [report](reports/phase-a-domain-libraries.md) |
 | B | Original Controller + Commands headless; original PMX open/save (allowlisted) | next |
 | C | Cross-platform UI reusing original forms/property classes + native VTK viewport | later |
 | Fixes | All recorded bugs and compiler warnings | after parity |
@@ -29,8 +32,12 @@ _Replace this file's content as work progresses; history is in git and in
 
 ## Next step
 
-Finish Phase A (see the Phase A report once written), then start Phase B by
-putting the Controller's main-form dependency behind an interface.
+Phase B: build the original `PrePoMax` Controller and Commands headless against
+`X/Domain` — put the Controller's main-form/VTK dependencies behind small
+interfaces (original code keeps compiling for net48), add allowlisted
+serialization for PMX and the `BinaryFormatter` clone paths, and repair the
+Windows-only API calls the commands reach (Phase A report, finding 4).
+Parity inventory: 126/127 model/mesh features at **A**; commands/forms at 0.
 
 ## Environment notes
 

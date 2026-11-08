@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.Solve</AssemblyName><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../CaeJob/CaeJob.csproj" />
+    <ProjectReference Include="../../Domain/CaeJob/CaeJob.csproj" />
     <ProjectReference Include="../../Analysis/StaticDeck/StaticDeck.csproj" />
     <None Include="../solver-builds.json" Link="solver-builds.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

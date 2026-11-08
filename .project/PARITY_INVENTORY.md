@@ -9,7 +9,7 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 127 | 0 | 0 | 0 | 0 |
+| Model and mesh features | 127 | 126 | 0 | 0 | 0 |
 | Commands | 237 | 0 | 0 | 0 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
@@ -19,208 +19,208 @@ are cumulative: **A** builds in the whole cross-platform domain libraries,
 
 | Item | Status |
 |---|---|
-| BoundaryDisplacementStep | - |
-| BuckleStep | - |
-| ComplexFrequencyStep | - |
-| CoupledTempDispStep | - |
-| DynamicStep | - |
-| FrequencyStep | - |
-| HeatTransferStep | - |
-| ModalDynamicsStep | - |
-| SlipWearStep | - |
-| StaticStep | - |
-| SteadyStateDynamicsStep | - |
-| UncoupledTempDispStep | - |
+| BoundaryDisplacementStep | A |
+| BuckleStep | A |
+| ComplexFrequencyStep | A |
+| CoupledTempDispStep | A |
+| DynamicStep | A |
+| FrequencyStep | A |
+| HeatTransferStep | A |
+| ModalDynamicsStep | A |
+| SlipWearStep | A |
+| StaticStep | A |
+| SteadyStateDynamicsStep | A |
+| UncoupledTempDispStep | A |
 
 ### Materials
 
 | Item | Status |
 |---|---|
-| Density | - |
-| Elastic | - |
-| ElasticEngineeringConstants | - |
-| ElasticLamina | - |
-| ElasticWithDensity | - |
-| Plastic | - |
-| SlipWear | - |
-| SpecificHeat | - |
-| ThermalConductivity | - |
-| ThermalExpansion | - |
+| Density | A |
+| Elastic | A |
+| ElasticEngineeringConstants | A |
+| ElasticLamina | A |
+| ElasticWithDensity | A |
+| Plastic | A |
+| SlipWear | A |
+| SpecificHeat | A |
+| ThermalConductivity | A |
+| ThermalExpansion | A |
 
 ### Sections
 
 | Item | Status |
 |---|---|
-| DistributedMassSection | - |
-| MassSection | - |
-| MembraneSection | - |
-| PointMassSection | - |
-| ShellSection | - |
-| SolidSection | - |
+| DistributedMassSection | A |
+| MassSection | A |
+| MembraneSection | A |
+| PointMassSection | A |
+| ShellSection | A |
+| SolidSection | A |
 
 ### Constraints
 
 | Item | Status |
 |---|---|
-| CompressionOnly | - |
-| Coupling | - |
-| CyclicSymmetry | - |
-| DistributingCoupling | - |
-| Joint | - |
-| KinematicCoupling | - |
-| PointSpring | - |
-| RigidBody | - |
-| SpringConstraint | - |
-| SurfaceSpring | - |
-| Tie | - |
+| CompressionOnly | A |
+| Coupling | A |
+| CyclicSymmetry | A |
+| DistributingCoupling | A |
+| Joint | A |
+| KinematicCoupling | A |
+| PointSpring | A |
+| RigidBody | A |
+| SpringConstraint | A |
+| SurfaceSpring | A |
+| Tie | A |
 
 ### Contact
 
 | Item | Status |
 |---|---|
-| ContactPair | - |
-| Friction | - |
-| GapConductance | - |
-| SurfaceBehavior | - |
-| SurfaceInteraction | - |
-| SurfaceInteractionProperty | - |
+| ContactPair | A |
+| Friction | A |
+| GapConductance | A |
+| SurfaceBehavior | A |
+| SurfaceInteraction | A |
+| SurfaceInteractionProperty | A |
 
 ### Amplitudes
 
 | Item | Status |
 |---|---|
-| Amplitude | - |
-| AmplitudeTabular | - |
+| Amplitude | A |
+| AmplitudeTabular | A |
 
 ### Distributions
 
 | Item | Status |
 |---|---|
-| Distribution | - |
-| DistributionFromEquation | - |
-| DistributionFromFile | - |
-| MappedDistribution | - |
+| Distribution | A |
+| DistributionFromEquation | A |
+| DistributionFromFile | A |
+| MappedDistribution | A |
 
 ### Initial conditions
 
 | Item | Status |
 |---|---|
-| InitialAngularVelocity | - |
-| InitialCondition | - |
-| InitialTemperature | - |
-| InitialTranslationalVelocity | - |
+| InitialAngularVelocity | A |
+| InitialCondition | A |
+| InitialTemperature | A |
+| InitialTranslationalVelocity | A |
 
 ### Boundary conditions
 
 | Item | Status |
 |---|---|
-| DisplacementRotation | - |
-| FixedBC | - |
-| SubmodelBC | - |
-| TemperatureBC | - |
+| DisplacementRotation | A |
+| FixedBC | A |
+| SubmodelBC | A |
+| TemperatureBC | A |
 
 ### Loads
 
 | Item | Status |
 |---|---|
-| BodyFlux | - |
-| CFlux | - |
-| CLoad | - |
-| CentrifLoad | - |
-| DFlux | - |
-| DLoad | - |
-| FilmHeatTransfer | - |
-| GravityLoad | - |
-| HydrostaticPressure | - |
-| MomentLoad | - |
-| PreTensionLoad | - |
-| RadiationHeatTransfer | - |
-| STLoad | - |
-| ShellEdgeLoad | - |
-| VariablePressure | - |
+| BodyFlux | A |
+| CFlux | A |
+| CLoad | A |
+| CentrifLoad | A |
+| DFlux | A |
+| DLoad | A |
+| FilmHeatTransfer | A |
+| GravityLoad | A |
+| HydrostaticPressure | A |
+| MomentLoad | A |
+| PreTensionLoad | A |
+| RadiationHeatTransfer | A |
+| STLoad | A |
+| ShellEdgeLoad | A |
+| VariablePressure | A |
 
 ### Defined fields
 
 | Item | Status |
 |---|---|
-| DefinedField | - |
-| DefinedTemperature | - |
+| DefinedField | A |
+| DefinedTemperature | A |
 
 ### Field outputs
 
 | Item | Status |
 |---|---|
-| ContactFieldOutput | - |
-| ElementFieldOutput | - |
-| FieldOutput | - |
-| NodalFieldOutput | - |
+| ContactFieldOutput | A |
+| ElementFieldOutput | A |
+| FieldOutput | A |
+| NodalFieldOutput | A |
 
 ### History outputs
 
 | Item | Status |
 |---|---|
-| ContactHistoryOutput | - |
-| ElementHistoryOutput | - |
-| HistoryOutput | - |
-| NodalHistoryOutput | - |
-| SectionHistoryOutput | - |
+| ContactHistoryOutput | A |
+| ElementHistoryOutput | A |
+| HistoryOutput | A |
+| NodalHistoryOutput | A |
+| SectionHistoryOutput | A |
 
 ### Step controls / damping
 
 | Item | Status |
 |---|---|
-| ContactStepControlParameter | - |
-| FieldStepControlParameter | - |
-| ResetStepControlParameter | - |
-| StepControlParameter | - |
-| StepControls | - |
-| TimeIncrementationStepControlParameter - Copy | - |
-| Damping | - |
-| DampingRatioFromTo | - |
-| ModalDamping | - |
+| ContactStepControlParameter | A |
+| FieldStepControlParameter | A |
+| ResetStepControlParameter | A |
+| StepControlParameter | A |
+| StepControls | A |
+| TimeIncrementationStepControlParameter - Copy | A |
+| Damping | A |
+| DampingRatioFromTo | A |
+| ModalDamping | A |
 
 ### Elements
 
 | Item | Status |
 |---|---|
-| ElementTypeCount | - |
-| FeElement | - |
-| FeElement0D | - |
-| FeElement1D | - |
-| FeElement2D | - |
-| FeElement3D | - |
-| FeElementType | - |
-| IntegrationScale | - |
-| InvertedElements | - |
-| LinearBeamElement | - |
-| LinearGapElement | - |
-| LinearHexaElement | - |
-| LinearPyramidElement | - |
-| LinearQuadrilateralElement | - |
-| LinearSpringElement | - |
-| LinearTetraElement | - |
-| LinearTriangleElement | - |
-| LinearWedgeElement | - |
-| MassElement | - |
-| ParabolicBeamElement | - |
-| ParabolicHexaElement | - |
-| ParabolicPyramidElement | - |
-| ParabolicQuadrilateralElement | - |
-| ParabolicTetraElement | - |
-| ParabolicTriangleElement | - |
-| ParabolicWedgeElement | - |
-| VtkCellType | - |
+| ElementTypeCount | A |
+| FeElement | A |
+| FeElement0D | A |
+| FeElement1D | A |
+| FeElement2D | A |
+| FeElement3D | A |
+| FeElementType | A |
+| IntegrationScale | A |
+| InvertedElements | A |
+| LinearBeamElement | A |
+| LinearGapElement | A |
+| LinearHexaElement | A |
+| LinearPyramidElement | A |
+| LinearQuadrilateralElement | A |
+| LinearSpringElement | A |
+| LinearTetraElement | A |
+| LinearTriangleElement | A |
+| LinearWedgeElement | A |
+| MassElement | A |
+| ParabolicBeamElement | A |
+| ParabolicHexaElement | A |
+| ParabolicPyramidElement | A |
+| ParabolicQuadrilateralElement | A |
+| ParabolicTetraElement | A |
+| ParabolicTriangleElement | A |
+| ParabolicWedgeElement | A |
+| VtkCellType | A |
 | WireElement | - |
 
 ### Meshers
 
 | Item | Status |
 |---|---|
-| Gmsh | - |
-| Mmg | - |
-| Netgen | - |
-| QuadWild | - |
-| Transfinite | - |
+| Gmsh | A |
+| Mmg | A |
+| Netgen | A |
+| QuadWild | A |
+| Transfinite | A |
 
 ## Commands
 

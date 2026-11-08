@@ -1,5 +1,10 @@
 # PrePoMax-X portable static analysis increment
 
+> **D062 (8 November 2026):** this area now builds against the whole original
+> assemblies in [`X/Domain`](../Domain). Paragraphs below about extracted slices,
+> layout guards, source pins and upstream replays describe retired tooling and
+> are kept as history. Run `python3 X/Checks/check.py --area <area>`.
+
 Tasks 0092/0093 add `step.kind` = `frequency` or `buckling` (default `static`),
 `modes`, optional `lowerFrequency`/`upperFrequency` in Hz, and `bucklingAccuracy`.
 Original FrequencyStep/BuckleStep and keyword writers are shared unchanged
@@ -103,10 +108,7 @@ independent reference-semantics rejection controls. Both earlier correctness
 failures are recorded separately and remain failures. Nine analysis guards
 verify extraction, closure, dependencies and legacy project inclusion.
 
-    python3 -m unittest discover -s X/Analysis -p test_analysis_layout.py
     python3 X/Analysis/verify-analysis.py --expect-os Darwin --expect-architecture Arm64 --output X/Analysis/artifacts/current-macos-arm64.json
-    python3 X/Analysis/verify-analysis.py --upstream-revision 3.0.0-rc2 --output X/Analysis/artifacts/rc2.json
-    python3 X/Analysis/verify-analysis.py --upstream-revision post-rc2-2026-10-17 --output X/Analysis/artifacts/post-rc2.json
     python3 X/Analysis/run-podman.py --output-dir X/Analysis/artifacts/linux-arm64
 
 The cached Podman image and package archives are prerequisites for the last

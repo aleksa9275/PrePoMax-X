@@ -1,0 +1,23 @@
+<Project>
+  <!-- PrePoMax-X Phase A (D062): whole original assemblies for .NET 10.
+       Source lists are generated from the original net48 .csproj files by
+       domain_sources.py so both builds compile the same files. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>13</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Deterministic>true</Deterministic>
+    <NuGetAudit>false</NuGetAudit>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)../../</RepositoryRoot>
+    <!-- Original code relies on APIs that are obsolete on modern .NET (e.g.
+         BinaryFormatter, WebClient); these are reviewed in the post-parity
+         warning pass (D061/D062), not silenced in the original sources. -->
+    <NoWarn>$(NoWarn);SYSLIB0011;SYSLIB0050;SYSLIB0051</NoWarn>
+  </PropertyGroup>
+</Project>

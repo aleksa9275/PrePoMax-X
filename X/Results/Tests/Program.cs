@@ -103,7 +103,7 @@ try
  var missing=(string[])lines.Clone();missing[value]="";Check("partial field records rejected",Reject("partial",string.Join('\n',missing.Where(l=>l!=""))));
  Check("wrong component names rejected",Reject("wrong-component",raw.Replace(" -5  D3"," -5  F3")));
  Check("incomplete/changed connectivity rejected",Reject("bad-node",raw.Replace("         7         8\n","         7        99\n")));
- Check("full legacy FeResults graph excluded",typeof(Field).Assembly.GetType("CaeResults.FeResults")==null);
+ Check("full original FeResults graph included (whole assembly, D062)",typeof(Field).Assembly.GetType("CaeResults.FeResults")!=null);
  var shear=new Field("STRESS");foreach(string n in new[]{"S11","S22","S33","S12","S23","S13"})shear.AddComponent(n,new[]{n=="S12"?10f:0f});shear.ComputeInvariants();
  Check("independent pure-shear Mises calculation",Near(shear.GetComponentValues("MISES")[0],Math.Sqrt(3)*10,1e-5));
  Check("independent pure-shear principal stresses",Near(shear.GetComponentValues("PRINCIPAL_MAX")[0],10,1e-5)&&Near(shear.GetComponentValues("PRINCIPAL_MIN")[0],-10,1e-5));

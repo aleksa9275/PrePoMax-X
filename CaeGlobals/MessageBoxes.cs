@@ -20,15 +20,13 @@ using System.ComponentModel;
 using DynamicTypeDescriptor;
 using System.Linq.Expressions;
 using System.Drawing;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace CaeGlobals
 {
     [Serializable]
-    public static class MessageBoxes
+    public static partial class MessageBoxes
     {
         // MessageBox
-        public static Form ParentForm;
         public static Action<string> WriteDataToOutput;
         public static MessageBoxModeEnum Mode = MessageBoxModeEnum.Interactive;
         public static Action<MessageBoxPrompt> PromptRecorder;
@@ -104,41 +102,25 @@ namespace CaeGlobals
         private static DialogResult ShowCrossThread(string text, string caption, MessageBoxButtons buttons,
                                                     MessageBoxIcon icon, MessageBoxModeEnum mode)
         {
-            using (new CenterWinDialog(ParentForm))
+            if (mode == MessageBoxModeEnum.Interactive) return ShowInteractive(text, caption, buttons, icon);
+            //
+            if (WriteDataToOutput != null)
             {
-                if (mode == MessageBoxModeEnum.Interactive) return ShowNative(ParentForm, text, caption, buttons, icon);
-                //
-                if (WriteDataToOutput != null)
-                {
-                    WriteDataToOutput(caption);
-                    WriteDataToOutput(text);
-                }
-                // A single button box only reports; anything else asks for a decision the caller cannot make unattended
-                bool isDecision = buttons != MessageBoxButtons.OK;
-                if (isDecision && mode == MessageBoxModeEnum.Strict)
-                {
-                    RecordPrompt(caption, text, buttons, DialogResult.None, true, true);
-                    throw new PromptRefusedException(PromptRefusedException.RefusalText + Environment.NewLine +
-                                                     caption + ": " + text);
-                }
-                //
-                DialogResult result = GetNonInteractiveResult(buttons);
-                RecordPrompt(caption, text, buttons, result, isDecision, false);
-                return result;
+                WriteDataToOutput(caption);
+                WriteDataToOutput(text);
             }
-        }
-        private static DialogResult ShowNative(IWin32Window owner, string text, string caption, MessageBoxButtons buttons,
-                                               MessageBoxIcon icon)
-        {
-            System.Threading.Interlocked.Increment(ref _numberOfOpenMessageBoxes);
-            try
+            // A single button box only reports; anything else asks for a decision the caller cannot make unattended
+            bool isDecision = buttons != MessageBoxButtons.OK;
+            if (isDecision && mode == MessageBoxModeEnum.Strict)
             {
-                return MessageBox.Show(owner, text, caption, buttons, icon);
+                RecordPrompt(caption, text, buttons, DialogResult.None, true, true);
+                throw new PromptRefusedException(PromptRefusedException.RefusalText + Environment.NewLine +
+                                                 caption + ": " + text);
             }
-            finally
-            {
-                System.Threading.Interlocked.Decrement(ref _numberOfOpenMessageBoxes);
-            }
+            //
+            DialogResult result = GetNonInteractiveResult(buttons);
+            RecordPrompt(caption, text, buttons, result, isDecision, false);
+            return result;
         }
         private static DialogResult GetNonInteractiveResult(MessageBoxButtons buttons)
         {
@@ -155,19 +137,6 @@ namespace CaeGlobals
             //
             recorder(new MessageBoxPrompt(caption, text, buttons.ToString(), answer.ToString(), isDecision, isRefused));
         }
-        private static object InvokeIfRequired(Func<object> function)
-        {
-            if (ParentForm.InvokeRequired)
-            {
-                return (object)ParentForm.Invoke((MethodInvoker)delegate () { function(); });
-            }
-            else
-            {
-                return function();
-            }
-        }
-
-
         // Information
         public static void ShowInfo(string text)
         {

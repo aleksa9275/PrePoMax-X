@@ -163,15 +163,12 @@ internal static class Program
             Require(!Matches(grid, grid.InnerUv, bad, 0, 1e-9, out _));
         });
         Check("portable libraries have no Windows or presentation references", () => {
+            // Whole original assemblies (D062) may use the portable WinForms API stand-ins and
+            // System.Drawing types; the real desktop frameworks and ActiViz stay excluded.
             foreach (var assembly in new[] {typeof(CaeException).Assembly, typeof(ThreeBlockMapping).Assembly})
-                Require(!assembly.GetReferencedAssemblies().Any(a => a.Name.Contains("Windows") || a.Name.Contains("VTK") ||
-#if ANALYSIS_SLICE
-                    // Original region/coordinate-system state retains managed Color data; GDI remains excluded.
-                    (a.Name.Contains("Drawing") && a.Name != "System.Drawing.Primitives")
-#else
-                    a.Name.Contains("Drawing")
-#endif
-                    ));
+                Require(!assembly.GetReferencedAssemblies().Any(a => a.Name == "System.Windows.Forms" ||
+                    a.Name.StartsWith("System.Windows.Forms.") || a.Name.StartsWith("Presentation") ||
+                    a.Name.Contains("VTK") || a.Name == "System.Drawing"));
         });
         Console.WriteLine(JsonSerializer.Serialize(new { success = Failed == 0, passed = Checks.Count - Failed, failed = Failed,
             runtime = new {os = RuntimeInformation.OSDescription, architecture = RuntimeInformation.ProcessArchitecture.ToString()},

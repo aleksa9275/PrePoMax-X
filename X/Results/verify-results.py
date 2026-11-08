@@ -3,7 +3,7 @@
 import argparse,hashlib,json,platform,shutil,subprocess,tempfile
 from datetime import datetime,timezone
 from pathlib import Path
-import results_layout as layout
+import sys
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
@@ -19,22 +19,16 @@ def main():
   arch={'arm64':'Arm64','aarch64':'Arm64','x86_64':'X64','amd64':'X64'}.get(platform.machine().lower());host=platform.system()
   report['host']={'os':host,'architecture':arch}
   if(a.expect_os and host!=a.expect_os)or(a.expect_architecture and arch!=a.expect_architecture):raise ValueError('Unexpected native host')
-  pin=layout.BASELINE
-  if a.upstream_revision:pin=next(r['commit']for r in json.loads((ROOT/'X/Core/upstream-replays.json').read_text())['revisions']if r['name']==a.upstream_revision)
-  report.update(upstreamRevision=a.upstream_revision or'current',sources=layout.verify(pin),repository={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT))})
+  if a.upstream_revision:raise ValueError('Historical upstream slice replays were retired with the whole-library build (D062)')
+  s=subprocess.run([sys.executable,str(ROOT/'X/Domain/domain_sources.py'),'--check'],cwd=ROOT,capture_output=True,text=True)
+  if s.returncode:raise ValueError('Whole-library source lists are stale: '+s.stdout.strip())
+  report.update(upstreamRevision='current',sources={'mode':'whole original assemblies (X/Domain)','manifestSha256':sha(ROOT/'X/Domain/domain-sources.json')},repository={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT))})
   report['tools']={f.relative_to(HERE).as_posix():sha(f)for f in sorted(HERE.rglob('*'))if f.is_file()and not {'artifacts','bin','obj','__pycache__'}.intersection(f.relative_to(HERE).parts)}
-  report['analysisTools']={n:sha(ROOT/'X/Analysis'/n)for n in ['analysis_layout.py','static_layout.py']}
   fixture=ROOT/'.project/reports/windows-reference/solver/uniaxial.frd';report['fixtureSha256']=sha(fixture)
   dat_fixture=fixture.with_suffix('.dat');report['datFixtureSha256']=sha(dat_fixture)
   with tempfile.TemporaryDirectory(prefix='prepomaxx-results-')as temp:
-   work=Path(temp);source=work/'source'
-   for row in report['sources']:
-    name=row['path'];data=layout.original(pin,name)if row.get('upstreamVariant')else(ROOT/name).read_bytes();assert hashlib.sha256(data).hexdigest()==row['sha256'],name
-    path=source/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)
-   feed=work/'feed';feed.mkdir();pins=json.loads((ROOT/'X/Analysis/dependency-artifacts.json').read_text())['packages'];report['packageArchives']={}
-   for name,version in layout.analysis_layout.PACKAGES.items():
-    path=ROOT/'X/Analysis/artifacts/packages'/name.lower()/version/(name.lower()+'.'+version+'.nupkg');expected=next(r['packageSha256']for r in pins if r['id'].lower()==name.lower());assert sha(path)==expected;shutil.copyfile(path,feed/path.name);report['packageArchives'][name]=expected
-   run(['dotnet','build',HERE/'PrePoMaxX.Results.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-p:RepositoryRoot='+str(source)+'/','-p:RestorePackagesPath='+str(work/'packages'),'--source',feed,'-v:minimal'])
+   work=Path(temp)
+   run(['dotnet','build',HERE/'PrePoMaxX.Results.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-v:minimal'])
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ResultsTests.dll']).stdout)
    if not report['tests']['success']or report['tests']['passed']!=90 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native results checks failed/incomplete')
    cli=work/'build/bin/Inspect/release/PrePoMaxX.InspectResults.dll'

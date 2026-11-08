@@ -1,5 +1,10 @@
 # Portable original FRD fields and DAT histories
 
+> **D062 (8 November 2026):** this area now builds against the whole original
+> assemblies in [`X/Domain`](../Domain). Paragraphs below about extracted slices,
+> layout guards, source pins and upstream replays describe retired tooling and
+> are kept as history. Run `python3 X/Checks/check.py --area <area>`.
+
 This modern partial build reuses original CaeResults FRD ASCII/binary decoding,
 Field/FieldData/FieldComponent and invariant calculations in their original
 assemblies. CaeMesh nodes/elements retain original ownership. Required original
@@ -50,10 +55,7 @@ Snapshot/CLI code is modern-only; do not mix its partial DLLs with an installed
 original application.
 
 ```sh
-python3 -m unittest discover -s X/Results -p test_results_layout.py
 python3 X/Results/verify-results.py --expect-os Darwin --expect-architecture Arm64 --output X/Results/artifacts/current-macos-arm64.json
-python3 X/Results/verify-results.py --upstream-revision 3.0.0-rc2 --expect-os Darwin --expect-architecture Arm64 --output X/Results/artifacts/rc2-macos-arm64.json
-python3 X/Results/verify-results.py --upstream-revision post-rc2-2026-10-17 --expect-os Darwin --expect-architecture Arm64 --output X/Results/artifacts/post-rc2-macos-arm64.json
 python3 X/Results/run-podman.py --output-dir X/Results/artifacts/linux-arm64
 ```
 

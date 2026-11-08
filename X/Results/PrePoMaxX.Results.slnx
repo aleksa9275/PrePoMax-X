@@ -1,7 +1,7 @@
 <Solution>
- <Project Path="CaeGlobals/CaeGlobals.csproj" />
- <Project Path="CaeMesh/CaeMesh.csproj" />
- <Project Path="CaeResults/CaeResults.csproj" />
+ <Project Path="../Domain/CaeGlobals/CaeGlobals.csproj" />
+ <Project Path="../Domain/CaeMesh/CaeMesh.csproj" />
+ <Project Path="../Domain/CaeResults/CaeResults.csproj" />
  <Project Path="Inspect/Inspect.csproj" />
  <Project Path="Tests/Tests.csproj" />
 </Solution>

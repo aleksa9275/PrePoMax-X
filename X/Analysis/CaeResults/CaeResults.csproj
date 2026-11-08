@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><AssemblyName>CaeResults</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
-    <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs" Link="FileInOut/Input/CalculiX/FrdStreamReader.cs" />
-    <InternalsVisibleTo Include="PrePoMaxX.CoreDataTests" />
-    <Compile Include="$(RepositoryRoot)CaeResults/Enums/SlipWearResultsEnum.cs" Link="Enums/SlipWearResultsEnum.cs" />
-  </ItemGroup>
-</Project>

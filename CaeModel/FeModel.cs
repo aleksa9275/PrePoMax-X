@@ -39,18 +39,18 @@ namespace CaeModel
         private string _hashName;                                                               //ISerializable
         private FeMesh _geometry;                                                               //ISerializable
         private FeMesh _mesh;                                                                   //ISerializable
-        protected OrderedDictionary<string, UserViewParameters> _userViews;                     //ISerializable
+        protected CaeGlobals.OrderedDictionary<string, UserViewParameters> _userViews;                     //ISerializable
         private EquationParameterCollection _parameters;                                        //ISerializable
-        private OrderedDictionary<string, Material> _materials;                                 //ISerializable
-        private OrderedDictionary<string, Section> _sections;                                   //ISerializable
-        private OrderedDictionary<string, Constraint> _constraints;                             //ISerializable
-        private OrderedDictionary<string, SurfaceInteraction> _surfaceInteractions;             //ISerializable
-        private OrderedDictionary<string, ContactPair> _contactPairs;                           //ISerializable
-        private OrderedDictionary<string, Distribution> _distributions;                         //ISerializable
-        private OrderedDictionary<string, Amplitude> _amplitudes;                               //ISerializable
-        private OrderedDictionary<string, InitialCondition> _initialConditions;                 //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Material> _materials;                                 //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Section> _sections;                                   //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Constraint> _constraints;                             //ISerializable
+        private CaeGlobals.OrderedDictionary<string, SurfaceInteraction> _surfaceInteractions;             //ISerializable
+        private CaeGlobals.OrderedDictionary<string, ContactPair> _contactPairs;                           //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Distribution> _distributions;                         //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Amplitude> _amplitudes;                               //ISerializable
+        private CaeGlobals.OrderedDictionary<string, InitialCondition> _initialConditions;                 //ISerializable
         private StepCollection _stepCollection;                                                 //ISerializable
-        private OrderedDictionary<int[], Calculix.CalculixUserKeyword> _calculixUserKeywords;   //ISerializable
+        private CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> _calculixUserKeywords;   //ISerializable
         private List<Calculix.CalculixKeywordOverride> _calculixKeywordOverrides;                //ISerializable
         private ModelProperties _properties;                                                    //ISerializable
         private UnitSystem _unitSystem;                                                         //ISerializable
@@ -67,18 +67,18 @@ namespace CaeModel
         public string HashName { get { return _hashName; } }
         public FeMesh Geometry { get { return _geometry; } set { _geometry = value; } }
         public FeMesh Mesh { get { return _mesh; } }
-        public OrderedDictionary<string, UserViewParameters> UserViews { get { return _userViews; } }
+        public CaeGlobals.OrderedDictionary<string, UserViewParameters> UserViews { get { return _userViews; } }
         public EquationParameterCollection Parameters { get { return _parameters; } }
-        public OrderedDictionary<string, Material> Materials { get { return _materials; } }
-        public OrderedDictionary<string, Section> Sections { get { return _sections; } }
-        public OrderedDictionary<string, Constraint> Constraints { get { return _constraints; } }
-        public OrderedDictionary<string, SurfaceInteraction> SurfaceInteractions { get { return _surfaceInteractions; } }
-        public OrderedDictionary<string, ContactPair> ContactPairs { get { return _contactPairs; } }
-        public OrderedDictionary<string, Distribution> Distributions { get { return _distributions; } }
-        public OrderedDictionary<string, Amplitude> Amplitudes { get { return _amplitudes; } }
-        public OrderedDictionary<string, InitialCondition> InitialConditions { get { return _initialConditions; } }
+        public CaeGlobals.OrderedDictionary<string, Material> Materials { get { return _materials; } }
+        public CaeGlobals.OrderedDictionary<string, Section> Sections { get { return _sections; } }
+        public CaeGlobals.OrderedDictionary<string, Constraint> Constraints { get { return _constraints; } }
+        public CaeGlobals.OrderedDictionary<string, SurfaceInteraction> SurfaceInteractions { get { return _surfaceInteractions; } }
+        public CaeGlobals.OrderedDictionary<string, ContactPair> ContactPairs { get { return _contactPairs; } }
+        public CaeGlobals.OrderedDictionary<string, Distribution> Distributions { get { return _distributions; } }
+        public CaeGlobals.OrderedDictionary<string, Amplitude> Amplitudes { get { return _amplitudes; } }
+        public CaeGlobals.OrderedDictionary<string, InitialCondition> InitialConditions { get { return _initialConditions; } }
         public StepCollection StepCollection { get { return _stepCollection; } }
-        public OrderedDictionary<int[], Calculix.CalculixUserKeyword> CalculixUserKeywords 
+        public CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> CalculixUserKeywords 
         { 
             get { return _calculixUserKeywords; } 
             set 
@@ -104,7 +104,7 @@ namespace CaeModel
 
         // Constructors                                                                                                             
         public FeModel(string name, UnitSystem unitSystem, bool resetGlobalNCalcParameters,
-                       OrderedDictionary<string, EquationParameter> overriddenParameters = null)
+                       CaeGlobals.OrderedDictionary<string, EquationParameter> overriddenParameters = null)
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             //
@@ -112,16 +112,16 @@ namespace CaeModel
             _hashName = Tools.GetRandomString(8);
             _geometry = new FeMesh(MeshRepresentation.Geometry);
             _mesh = new FeMesh(MeshRepresentation.Mesh);
-            _userViews = new OrderedDictionary<string, UserViewParameters>("User Views", sc);
+            _userViews = new CaeGlobals.OrderedDictionary<string, UserViewParameters>("User Views", sc);
             _parameters = new EquationParameterCollection();
-            _materials = new OrderedDictionary<string, Material>("Materials", sc);
-            _sections = new OrderedDictionary<string, Section>("Sections", sc);
-            _constraints = new OrderedDictionary<string, Constraint>("Constraints", sc);
-            _surfaceInteractions = new OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
-            _contactPairs = new OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
-            _initialConditions = new OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
-            _distributions = new OrderedDictionary<string, Distribution>("Distributions", sc);
-            _amplitudes = new OrderedDictionary<string, Amplitude>("Amplitudes", sc);
+            _materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", sc);
+            _sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sc);
+            _constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", sc);
+            _surfaceInteractions = new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
+            _contactPairs = new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
+            _initialConditions = new CaeGlobals.OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
+            _distributions = new CaeGlobals.OrderedDictionary<string, Distribution>("Distributions", sc);
+            _amplitudes = new CaeGlobals.OrderedDictionary<string, Amplitude>("Amplitudes", sc);
             _stepCollection = new StepCollection();
             _calculixKeywordOverrides = new List<Calculix.CalculixKeywordOverride>();
             _properties = new ModelProperties();
@@ -162,22 +162,22 @@ namespace CaeModel
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             // Compatibility for version v.0.6.0
-            _surfaceInteractions = new OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
-            _contactPairs = new OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
+            _surfaceInteractions = new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
+            _contactPairs = new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
             // Compatibility for version v.0.7.0
             _unitSystem = new UnitSystem();
             // Compatibility for version v.0.8.0
             _hashName = Tools.GetRandomString(8);
             // Compatibility for version v.1.0.0
-            _initialConditions = new OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
+            _initialConditions = new CaeGlobals.OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
             // Compatibility for version v.2.3.3
-            _distributions = new OrderedDictionary<string, Distribution>("Distributions", sc);
+            _distributions = new CaeGlobals.OrderedDictionary<string, Distribution>("Distributions", sc);
             // Compatibility for version v.1.2.1
-            _amplitudes = new OrderedDictionary<string, Amplitude>("Amplitudes", sc);
+            _amplitudes = new CaeGlobals.OrderedDictionary<string, Amplitude>("Amplitudes", sc);
             // Compatibility for version v.1.4.0
             _parameters = new EquationParameterCollection();
             // Compatibility for version v.2.3.9
-            _userViews = new OrderedDictionary<string, UserViewParameters>("User Views", sc);
+            _userViews = new CaeGlobals.OrderedDictionary<string, UserViewParameters>("User Views", sc);
             // Compatibility for models saved before CalculiX keyword overrides were introduced
             _calculixKeywordOverrides = new List<Calculix.CalculixKeywordOverride>();
             //
@@ -193,10 +193,10 @@ namespace CaeModel
                     case "_mesh":
                         _mesh = (FeMesh)entry.Value; break;
                     case "_userViews":
-                        _userViews = (OrderedDictionary<string, UserViewParameters>)entry.Value;
+                        _userViews = (CaeGlobals.OrderedDictionary<string, UserViewParameters>)entry.Value;
                         break;
                     case "_parameters":                         // Compatibility for version v.2.1.11
-                        if (entry.Value is OrderedDictionary<string, EquationParameter> dic)
+                        if (entry.Value is CaeGlobals.OrderedDictionary<string, EquationParameter> dic)
                         {
                             dic.OnDeserialization(null);
                             _parameters = new EquationParameterCollection(dic);
@@ -208,9 +208,9 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             md.OnDeserialization(null);
-                            _materials = new OrderedDictionary<string, Material>("Materials", md, sc);
+                            _materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", md, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Material> mod) _materials = mod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Material> mod) _materials = mod;
                         else if (entry.Value == null) _materials = null;
                         else throw new NotSupportedException();
                         break;
@@ -219,9 +219,9 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             sd.OnDeserialization(null);
-                            _sections = new OrderedDictionary<string, Section>("Sections", sd, sc);
+                            _sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Section> sod) _sections = sod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Section> sod) _sections = sod;
                         else if (entry.Value == null) _sections = null;
                         else throw new NotSupportedException();
                         break;
@@ -230,22 +230,22 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             cd.OnDeserialization(null);
-                            _constraints = new OrderedDictionary<string, Constraint>("Constraints", cd, sc);
+                            _constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", cd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Constraint> cod) _constraints = cod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Constraint> cod) _constraints = cod;
                         else if (entry.Value == null) _constraints = null;
                         else throw new NotSupportedException();
                         break;
                     case "_surfaceInteractions":
-                        _surfaceInteractions = (OrderedDictionary<string, SurfaceInteraction>)entry.Value; break;
+                        _surfaceInteractions = (CaeGlobals.OrderedDictionary<string, SurfaceInteraction>)entry.Value; break;
                     case "_contactPairs":
-                        _contactPairs = (OrderedDictionary<string, ContactPair>)entry.Value; break;
+                        _contactPairs = (CaeGlobals.OrderedDictionary<string, ContactPair>)entry.Value; break;
                     case "_distributions":
-                        _distributions = (OrderedDictionary<string, Distribution>)entry.Value; break;
+                        _distributions = (CaeGlobals.OrderedDictionary<string, Distribution>)entry.Value; break;
                     case "_amplitudes":
-                        _amplitudes = (OrderedDictionary<string, Amplitude>)entry.Value; break;
+                        _amplitudes = (CaeGlobals.OrderedDictionary<string, Amplitude>)entry.Value; break;
                     case "_initialConditions":
-                        _initialConditions = (OrderedDictionary<string, InitialCondition>)entry.Value; break;
+                        _initialConditions = (CaeGlobals.OrderedDictionary<string, InitialCondition>)entry.Value; break;
                     case "_stepCollection":
                         _stepCollection = (StepCollection)entry.Value; break;
                     case "_calculixUserKeywords":
@@ -253,9 +253,9 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             cukd.OnDeserialization(null);
-                            _calculixUserKeywords = new OrderedDictionary<int[], Calculix.CalculixUserKeyword>("Keywords", cukd);
+                            _calculixUserKeywords = new CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword>("Keywords", cukd);
                         }
-                        else if (entry.Value is OrderedDictionary<int[], Calculix.CalculixUserKeyword> cukod)
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> cukod)
                             _calculixUserKeywords = cukod;
                         else if (entry.Value == null) _calculixUserKeywords = null;
                         else throw new NotSupportedException();
@@ -2369,7 +2369,7 @@ namespace CaeModel
         }
         public List<string> ImportModelFromInpFile(string fileName, Action<string> WriteDataToOutput)
         {
-            OrderedDictionary<int[], Calculix.CalculixUserKeyword> indexedUserKeywords;
+            CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> indexedUserKeywords;
             InpFileReader.Read(fileName,
                                ElementsToImport.Solid | ElementsToImport.Shell, 
                                this,
@@ -2397,7 +2397,7 @@ namespace CaeModel
                                ElementsToImport.Solid | ElementsToImport.Shell,
                                model,
                                WriteDataToOutput,
-                               out OrderedDictionary<int[], Calculix.CalculixUserKeyword>  indexedUserKeywords);
+                               out CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword>  indexedUserKeywords);
             //
             CalculixUserKeywords = indexedUserKeywords;
             // Remove existing model materials
@@ -8446,19 +8446,19 @@ namespace CaeModel
             info.AddValue("_name", _name, typeof(string));
             info.AddValue("_geometry", _geometry, typeof(FeMesh));
             info.AddValue("_mesh", _mesh, typeof(FeMesh));
-            info.AddValue("_userViews", _userViews, typeof(OrderedDictionary<string, UserViewParameters>));
+            info.AddValue("_userViews", _userViews, typeof(CaeGlobals.OrderedDictionary<string, UserViewParameters>));
             info.AddValue("_parameters", _parameters, typeof(EquationParameterCollection));
-            info.AddValue("_materials", _materials, typeof(OrderedDictionary<string, Material>));
-            info.AddValue("_sections", _sections, typeof(OrderedDictionary<string, Section>));
-            info.AddValue("_constraints", _constraints, typeof(OrderedDictionary<string, Constraint>));
-            info.AddValue("_surfaceInteractions", _surfaceInteractions, typeof(OrderedDictionary<string, SurfaceInteraction>));
-            info.AddValue("_contactPairs", _contactPairs, typeof(OrderedDictionary<string, ContactPair>));
-            info.AddValue("_distributions", _distributions, typeof(OrderedDictionary<string, Distribution>));
-            info.AddValue("_amplitudes", _amplitudes, typeof(OrderedDictionary<string, Amplitude>));
-            info.AddValue("_initialConditions", _initialConditions, typeof(OrderedDictionary<string, InitialCondition>));
+            info.AddValue("_materials", _materials, typeof(CaeGlobals.OrderedDictionary<string, Material>));
+            info.AddValue("_sections", _sections, typeof(CaeGlobals.OrderedDictionary<string, Section>));
+            info.AddValue("_constraints", _constraints, typeof(CaeGlobals.OrderedDictionary<string, Constraint>));
+            info.AddValue("_surfaceInteractions", _surfaceInteractions, typeof(CaeGlobals.OrderedDictionary<string, SurfaceInteraction>));
+            info.AddValue("_contactPairs", _contactPairs, typeof(CaeGlobals.OrderedDictionary<string, ContactPair>));
+            info.AddValue("_distributions", _distributions, typeof(CaeGlobals.OrderedDictionary<string, Distribution>));
+            info.AddValue("_amplitudes", _amplitudes, typeof(CaeGlobals.OrderedDictionary<string, Amplitude>));
+            info.AddValue("_initialConditions", _initialConditions, typeof(CaeGlobals.OrderedDictionary<string, InitialCondition>));
             info.AddValue("_stepCollection", _stepCollection, typeof(StepCollection));
             info.AddValue("_calculixUserKeywords", _calculixUserKeywords,
-                          typeof(OrderedDictionary<int[], Calculix.CalculixUserKeyword>));
+                          typeof(CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword>));
             info.AddValue("_calculixKeywordOverrides", _calculixKeywordOverrides,
                           typeof(List<Calculix.CalculixKeywordOverride>));
             info.AddValue("_properties", _properties, typeof(ModelProperties));

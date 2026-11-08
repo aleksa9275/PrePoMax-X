@@ -161,13 +161,11 @@ internal static class Program
             Require(typeof(StandardValueAttribute).Assembly.GetName().Name == "CaeGlobals");
             var attr = (StandardValueAttribute)typeof(ConvertPyramidsToEnum).GetField("Wedges")!.GetCustomAttributes(typeof(StandardValueAttribute), false).Single();
             Require(attr.DisplayName == "Collapsed wedges" && attr.Visible && attr.Enabled);
+            // Whole original assemblies (D062): original package and portable assembly references are
+            // expected; the real WinForms/WPF desktop frameworks and ActiViz stay excluded.
             Require(new[] { typeof(InpFileReader).Assembly,typeof(FeNode).Assembly,typeof(StandardValueAttribute).Assembly }.All(a =>
-                a.GetReferencedAssemblies().All(r => r.Name == "CaeGlobals" || r.Name == "CaeMesh" || r.Name == "System" || r.Name.StartsWith("System.")
-#if ANALYSIS_SLICE
-                    // Expanded original equations/materials and ModelProperties retain their upstream owners.
-                    || r.Name == "NCalc" || r.Name == "UnitsNet" || r.Name == "CaeResults"
-#endif
-                    )));
+                a.GetReferencedAssemblies().All(r => r.Name != "System.Windows.Forms" && !r.Name.StartsWith("System.Windows.Forms.") &&
+                    !r.Name.StartsWith("Presentation") && !r.Name.StartsWith("Kitware"))));
         });
         Check("concurrent standalone reads retain their own IDs and sets", () => Parallel.For(0,30,index =>
         {

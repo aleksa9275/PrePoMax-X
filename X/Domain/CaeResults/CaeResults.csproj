@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>CaeResults</AssemblyName><RootNamespace>CaeResults</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
+    <PackageReference Include="OptimizedPriorityQueue" Version="[5.1.0]" />
+  </ItemGroup>
+</Project>

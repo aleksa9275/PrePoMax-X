@@ -12,7 +12,6 @@ results-workflow-linux-x64:
     - apt-get update
     - apt-get install -y --no-install-recommends python3 git
   script:
-    - python3 -m unittest discover -s X/Results -p test_results_layout.py
     - dotnet restore X/Results/PrePoMaxX.Results.slnx --configfile X/Analysis/NuGet.Config --packages X/Analysis/artifacts/packages
     - python3 X/Checks/check.py --profile fast --area results --output X/Checks/artifacts/results-linux-x64
   artifacts:

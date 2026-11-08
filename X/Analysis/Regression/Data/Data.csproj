@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.CoreDataTests</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings><DefineConstants>$(DefineConstants);SHARED_CORE</DefineConstants></PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../CaeMesh/CaeMesh.csproj" />
-    <ProjectReference Include="../../CaeResults/CaeResults.csproj" />
+    <ProjectReference Include="../../../Domain/CaeMesh/CaeMesh.csproj" />
+    <ProjectReference Include="../../../Domain/CaeResults/CaeResults.csproj" />
     <Compile Include="../../../Feasibility/Data/Program.cs" Link="Program.cs" />
     <Compile Include="../../../Core/Tests/Data/TypeContracts.cs" Link="TypeContracts.cs" />
   </ItemGroup>

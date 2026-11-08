@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.MeasureMesh</AssemblyName><EnableDefaultCompileItems>false</EnableDefaultCompileItems><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
+    <ProjectReference Include="../../Domain/CaeMesh/CaeMesh.csproj" />
     <Compile Include="../../Core/MeasureMesh/Program.cs" Link="Program.cs" />
   </ItemGroup>
 </Project>

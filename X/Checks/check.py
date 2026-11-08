@@ -13,14 +13,16 @@ import uuid
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
+# Whole original assemblies (D062): every area builds X/Domain; historical slice
+# replays and source-layout guards were retired with the slice projects.
 AREAS = {
-    "core": ("X/Core/verify.py", "test_upstream_replay.py"),
-    "analysis": ("X/Analysis/verify-analysis.py", "test_analysis_layout.py"),
-    "execution": ("X/Execution/verify-execution.py", "test_job_layout.py"),
-    "results": ("X/Results/verify-results.py", "test_results_layout.py"),
+    "domain": "X/Domain/verify-domain.py",
+    "core": "X/Core/verify.py",
+    "analysis": "X/Analysis/verify-analysis.py",
+    "execution": "X/Execution/verify-execution.py",
+    "results": "X/Results/verify-results.py",
 }
-REVISIONS = ("current", "3.0.0-rc2", "post-rc2-2026-10-17")
-SOURCE_ROOTS = ("X/", "CaeGlobals/", "CaeMesh/", "CaeModel/", "CaeResults/", "CaeJob/")
+SOURCE_ROOTS = ("X/", "CaeGlobals/", "CaeMesh/", "CaeModel/", "CaeResults/", "CaeJob/", "vtkControl/")
 SOURCE_SUFFIXES = {".cs", ".cpp", ".h", ".py", ".csproj", ".props", ".targets", ".slnx", ".yml", ".yaml", ".Config"}
 
 
@@ -33,20 +35,12 @@ def git(*arguments):
 
 
 def plan(profile, areas, output, host):
-    revisions = REVISIONS if profile == "compatibility" else ("current",)
     steps = []
     for area in areas:
-        script, guard = AREAS[area]
-        if profile == "compatibility":
-            steps.append({"area": area, "revision": "source-guards", "result": None,
-                "arguments": [sys.executable, "-m", "unittest", "discover", "-s", str(Path(script).parent), "-p", guard]})
-        for revision in revisions:
-            result = output / f"{area}-{revision}.json"
-            arguments = [sys.executable, script, "--expect-os", host["os"],
-                "--expect-architecture", host["architecture"], "--output", str(result)]
-            if revision != "current":
-                arguments.extend(["--upstream-revision", revision])
-            steps.append({"area": area, "revision": revision, "result": result, "arguments": arguments})
+        result = output / f"{area}-current.json"
+        arguments = [sys.executable, AREAS[area], "--expect-os", host["os"],
+            "--expect-architecture", host["architecture"], "--output", str(result)]
+        steps.append({"area": area, "revision": "current", "result": result, "arguments": arguments})
     return steps
 
 
@@ -121,7 +115,7 @@ def run_step(step, output, execute=subprocess.run):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=["fast", "compatibility"], default="fast")
+    parser.add_argument("--profile", choices=["fast"], default="fast")
     parser.add_argument("--area", choices=list(AREAS), action="append", help="Repeat to select areas; default: all")
     parser.add_argument("--output", type=Path, help="New diagnostic directory; existing directories are refused")
     parser.add_argument("--dry-run", action="store_true", help="Show commands without executing or writing")
@@ -144,7 +138,6 @@ def main():
     started = time.monotonic()
     try:
         manifest["repository"] = retain_source(output)
-        manifest["upstreamPins"] = json.loads((ROOT / "X/Core/upstream-replays.json").read_text())
         manifest["runnerSha256"] = sha(Path(__file__).read_bytes())
         manifest["dotnetSdk"] = subprocess.check_output(["dotnet", "--version"], text=True, timeout=30).strip()
         for step in steps:

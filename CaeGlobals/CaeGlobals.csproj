@@ -113,6 +113,7 @@
     <Compile Include="Equation\EquationContainer.cs" />
     <Compile Include="DynamicTypeDescriptor\CustomComponentModel.cs" />
     <Compile Include="DynamicTypeDescriptor\DynamicTypeDescriptor.cs" />
+    <Compile Include="DynamicTypeDescriptor\DynamicTypeDescriptor.WinForms.cs" />
     <Compile Include="DynamicTypeDescriptor\StandardValueAttribute.cs" />
     <Compile Include="DynamicTypeDescriptor\StandardValueEditorUI.cs">
       <SubType>UserControl</SubType>
@@ -122,6 +123,7 @@
     </Compile>
     <Compile Include="ExceptionTools.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions.WinForms.cs" />
     <Compile Include="Extensions.Calculix.cs" />
     <Compile Include="Editors\FilteredFileNameEditor.cs" />
     <Compile Include="IContainsEquations.cs" />
@@ -164,10 +166,12 @@
     <Compile Include="StringCompressor.cs" />
     <Compile Include="StringSplitter.cs" />
     <Compile Include="MessageBoxes.cs" />
+    <Compile Include="MessageBoxes.WinForms.cs" />
     <Compile Include="RenamedTypeSerializationBinder.cs" />
     <Compile Include="Tools.Equations.cs" />
     <Compile Include="Tools.Results.cs" />
     <Compile Include="Tools.cs" />
+    <Compile Include="Tools.WinForms.cs" />
     <Compile Include="Comparers\CompareObjects.cs" />
     <Compile Include="CommonClasses\UniqueQueue.cs" />
     <Compile Include="CommonClasses\Vec3D.cs" />

@@ -13,8 +13,7 @@ shared-core-linux-x64:
     - apt-get install -y --no-install-recommends python3 git
   script:
     - python3 -m unittest discover -s X/Checks -p test_check.py
-    - python3 -m unittest discover -s X/Core -p test_upstream_replay.py
-    - python3 X/Checks/check.py --profile fast --area core --output X/Checks/artifacts/core-linux-x64
+    - python3 X/Checks/check.py --profile fast --area domain --area core --output X/Checks/artifacts/core-linux-x64
     - python3 X/Core/package.py
     - python3 X/Core/check-package.py --archive X/Core/artifacts/development-build/PrePoMaxX-Core-development.zip --report X/Core/artifacts/development-build/verification.json --expect-os Linux --expect-architecture X64
   artifacts:

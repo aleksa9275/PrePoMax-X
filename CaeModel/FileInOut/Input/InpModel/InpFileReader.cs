@@ -92,12 +92,12 @@ namespace FileInOut.Input
         // Methods                                                                                                                  
         static public void Read(string fileName, ElementsToImport elementsToImport, FeModel model,
                                 Action<string> WriteDataToOutput,
-                                out OrderedDictionary<int[], CalculixUserKeyword> indexedUserKeywords)
+                                out CaeGlobals.OrderedDictionary<int[], CalculixUserKeyword> indexedUserKeywords)
         {
             WriteDataToOutputStatic = WriteDataToOutput;
             _errors = new List<string>();
             _warnings = new List<string>();
-            indexedUserKeywords = new OrderedDictionary<int[], CalculixUserKeyword>("User Calculix keywords");
+            indexedUserKeywords = new CaeGlobals.OrderedDictionary<int[], CalculixUserKeyword>("User Calculix keywords");
             //
             if (fileName != null && File.Exists(fileName))
             {
@@ -150,17 +150,17 @@ namespace FileInOut.Input
                 //
                 StringComparer sc = StringComparer.OrdinalIgnoreCase;
                 //
-                OrderedDictionary<string, FeReferencePoint> referencePoints
-                    = new OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
-                OrderedDictionary<string, Material> materials = new OrderedDictionary<string, Material>("Materials", sc);
-                OrderedDictionary<string, Section> sections = new OrderedDictionary<string, Section>("Sections", sc);
-                OrderedDictionary<string, Constraint> constraints = new OrderedDictionary<string, Constraint>("Constraints", sc);
-                OrderedDictionary<string, SurfaceInteraction> surfaceInteractions =
-                    new OrderedDictionary<string, SurfaceInteraction>("Surface Interactions", sc);
-                OrderedDictionary<string, ContactPair> contactPairs =
-                    new OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
-                OrderedDictionary<string, Amplitude> amplitudes = new OrderedDictionary<string, Amplitude>("Amplitudes", sc);
-                OrderedDictionary<string, Step> steps = new OrderedDictionary<string, Step>("Steps", sc);
+                CaeGlobals.OrderedDictionary<string, FeReferencePoint> referencePoints
+                    = new CaeGlobals.OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
+                CaeGlobals.OrderedDictionary<string, Material> materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", sc);
+                CaeGlobals.OrderedDictionary<string, Section> sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sc);
+                CaeGlobals.OrderedDictionary<string, Constraint> constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", sc);
+                CaeGlobals.OrderedDictionary<string, SurfaceInteraction> surfaceInteractions =
+                    new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Interactions", sc);
+                CaeGlobals.OrderedDictionary<string, ContactPair> contactPairs =
+                    new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
+                CaeGlobals.OrderedDictionary<string, Amplitude> amplitudes = new CaeGlobals.OrderedDictionary<string, Amplitude>("Amplitudes", sc);
+                CaeGlobals.OrderedDictionary<string, Step> steps = new CaeGlobals.OrderedDictionary<string, Step>("Steps", sc);
                 List<CalculixUserKeyword> userKeywords = new List<CalculixUserKeyword>();
                 //
                 for (int i = 0; i < dataSets.Length; i++)
@@ -298,7 +298,7 @@ namespace FileInOut.Input
                 Stack<int> indexStack = new Stack<int>();
                 List<CalculixKeyword> keywords =
                     Output.CalculixFileWriter.GetModelKeywords(model, ConvertPyramidsToEnum.Wedges, null, true);
-                indexedUserKeywords = new OrderedDictionary<int[], CalculixUserKeyword>("User Calculix keywords");
+                indexedUserKeywords = new CaeGlobals.OrderedDictionary<int[], CalculixUserKeyword>("User Calculix keywords");
                 //
                 foreach (CalculixUserKeyword userKeyword in userKeywords)
                 {
@@ -818,8 +818,8 @@ namespace FileInOut.Input
         }
         // Rigid body
         private static Constraint GetRigidBody(string[] lines, Dictionary<int, FeNode> nodes,
-                                               OrderedDictionary<string, Constraint> constraints,
-                                               OrderedDictionary<string, FeReferencePoint> referencePoints)
+                                               CaeGlobals.OrderedDictionary<string, Constraint> constraints,
+                                               CaeGlobals.OrderedDictionary<string, FeReferencePoint> referencePoints)
         {
             try
             {
@@ -1367,7 +1367,7 @@ namespace FileInOut.Input
             }
         }
         // Section
-        private static SolidSection GetSolidSection(string[] dataSet, OrderedDictionary<string, Section> sections)
+        private static SolidSection GetSolidSection(string[] dataSet, CaeGlobals.OrderedDictionary<string, Section> sections)
         {
             // Solid section can exist in two (2) formats as shown below:
             // *Solid Section, ELSET=STEEL_A, MATERIAL=STEEL_A
@@ -1404,7 +1404,7 @@ namespace FileInOut.Input
                 return null;
             }
         }
-        private static ShellSection GetShellSection(string[] dataSet, OrderedDictionary<string, Section> sections)
+        private static ShellSection GetShellSection(string[] dataSet, CaeGlobals.OrderedDictionary<string, Section> sections)
         {
             // *Shell section, Elset=S4R, Material=Material-1, Offset=0
             // 5
@@ -1569,8 +1569,8 @@ namespace FileInOut.Input
             }
         }
         // Step
-        private static Step GetStep(string[][] dataSets, ref int dataSetId, FeMesh mesh, OrderedDictionary<string, Step> steps,
-                                    OrderedDictionary<string, ContactPair> contactPairs, List<CalculixUserKeyword> userKeywords)
+        private static Step GetStep(string[][] dataSets, ref int dataSetId, FeMesh mesh, CaeGlobals.OrderedDictionary<string, Step> steps,
+                                    CaeGlobals.OrderedDictionary<string, ContactPair> contactPairs, List<CalculixUserKeyword> userKeywords)
         {
             // *STEP, NAME=STEP-1, NLGEOM=NO, PERTURBATION -- ABAQUS
             //
@@ -2444,7 +2444,7 @@ namespace FileInOut.Input
             }
         }
         private static void AddStepContactHistoryOutput(Step step, string[] lines,
-                                                        OrderedDictionary<string, ContactPair> contactPairs)
+                                                        CaeGlobals.OrderedDictionary<string, ContactPair> contactPairs)
         {
             //*Contact print, Elset=Internal_Selection-7_Fz, Totals=Only, Totals=Yes
             // S, E, ME, PEEQ

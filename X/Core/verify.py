@@ -9,14 +9,13 @@ import os
 from pathlib import Path
 import platform
 import subprocess
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
-import source_layout
 import mesh_workflow_checks
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-BASELINE = "de8f73032a72746e3d6d9afd53d9fbd289eb310a"
 
 
 def sha(data):
@@ -24,64 +23,14 @@ def sha(data):
 
 
 def sources():
-    paths = set()
-    for owner in ("CaeGlobals", "CaeMesh", "CaeResults", "CaeModel"):
-        project = HERE / owner / (owner + ".csproj")
-        tree = ET.parse(project)
-        if tree.findall(".//PackageReference"):
-            raise ValueError("The shared slice has no package dependencies")
-        owned = {item.attrib["Include"].replace("$(RepositoryRoot)", "") for item in tree.findall(".//Compile")}
-        if any(not path.startswith(owner + "/") for path in owned):
-            raise ValueError("Shared source moved to a different assembly owner")
-        paths.update(owned)
-    expected = {"CaeGlobals/CaeException.cs", "CaeGlobals/CommonClasses/Matrix.cs", "CaeGlobals/CommonClasses/Vec3D.cs",
-                "CaeMesh/Nodes/FeNode.cs", "CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs",
-                "CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs", "CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs",
-                "CaeMesh/GeometryMetadata/GeometryMetadata.cs", "CaeMesh/GeometryMetadata/GeometryMetadataEntity.cs",
-                "CaeMesh/GeometryMetadata/GeometryMetadataProperty.cs", "CaeMesh/Elements/IntegrationScale.cs",
-                "CaeResults/FileInOut/Input/CalculiX/FrdStreamReader.cs"}
-    manifest = json.loads((HERE / "element-sources.json").read_text())
-    additional = {row["path"]: row for row in manifest["sources"]}
-    if manifest["baseline"] != BASELINE or len(additional) != 25:
-        raise ValueError("Element source manifest changed unexpectedly")
-    expected.update(additional)
-    workflow_rows = source_layout.source_rows(ROOT)
-    workflow_paths = {row["path"] for row in workflow_rows}
-    expected.update(workflow_paths)
-    if paths != expected:
-        raise ValueError("Shared library source closure changed")
-    rows = []
-    for name in sorted(paths - {"CaeGlobals/CaeException.cs"} - workflow_paths):
-        original = subprocess.check_output(["git", "show", BASELINE + ":" + name], cwd=ROOT)
-        current = (ROOT / name).read_bytes()
-        if name in additional and sha(original) != additional[name]["baselineSha256"]:
-            raise ValueError("Element manifest differs from pinned source: " + name)
-        allowed = original
-        if name == "CaeMesh/GeometryTools.cs":
-            line = b"using System.Windows.Forms.VisualStyles;\n"
-            if original.count(line) != 1:
-                raise ValueError("Unexpected original GeometryTools import boundary")
-            allowed = original.replace(line, b"")
-        if allowed != current:
-            raise ValueError("Engineering source changed: " + name)
-        row = {"path": name, "sha256": sha(current), "unchangedFromBaseline": original == current}
-        if original != current:
-            row.update(baselineSha256=sha(original), onlyRemovedUnusedImport="using System.Windows.Forms.VisualStyles;")
-        rows.append(row)
-    original = subprocess.check_output(["git", "show", BASELINE + ":CaeGlobals/ExceptionTools.cs"], cwd=ROOT).decode()
-    start = original.index("    public class CaeException : Exception\n")
-    end = original.index("    //\n    public static class ExceptionTools", start)
-    body = original[start:end]
-    moved = (ROOT / "CaeGlobals/CaeException.cs").read_text(encoding="utf-8")
-    if body not in moved or (ROOT / "CaeGlobals/ExceptionTools.cs").read_text(encoding="utf-8") != original[:start] + original[end + 7:]:
-        raise ValueError("Exception extraction changed existing class behavior or Windows presentation")
-    ns = {"m": "http://schemas.microsoft.com/developer/msbuild/2003"}
-    items = ET.parse(ROOT / "CaeGlobals/CaeGlobals.csproj").findall(".//m:Compile", ns)
-    if sum(item.attrib.get("Include") == "CaeException.cs" for item in items) != 1:
-        raise ValueError("Legacy Windows project must include the separated class exactly once")
-    rows.append({"path": "CaeGlobals/CaeException.cs", "sha256": sha(moved.encode()), "originalClassBodyUnchanged": True})
-    rows.extend(workflow_rows)
-    return rows
+    """Whole original assemblies (D062): the source lists must match the original projects."""
+    check = subprocess.run([sys.executable, str(ROOT / "X/Domain/domain_sources.py"), "--check"], cwd=ROOT,
+                           capture_output=True, text=True)
+    if check.returncode != 0:
+        raise ValueError("Whole-library source lists are stale: " + check.stdout.strip())
+    manifest = ROOT / "X/Domain/domain-sources.json"
+    return {"mode": "whole original assemblies (X/Domain)", "manifest": "X/Domain/domain-sources.json",
+            "manifestSha256": sha(manifest.read_bytes()), "generatedListsCurrent": True}
 
 
 def validate_data(result, reference):
@@ -108,83 +57,17 @@ def validate_data(result, reference):
         raise ValueError("Metadata serialization interfaces changed")
     if {row["name"] for row in contracts["assemblies"]} != {"CaeGlobals", "CaeMesh", "CaeResults"}:
         raise ValueError("Shared data assembly closure changed")
+    # Whole original assemblies (D062) reference their original packages and the portable
+    # GmshCommon/vtkControl/WinForms-compat assemblies; real desktop frameworks stay excluded.
+    # Microsoft.Win32.Registry: original Tools.cs reads the Windows registry (runtime portability item).
+    allowed = {"CaeGlobals", "CaeMesh", "CaeResults", "GmshCommon", "vtkControl", "PrePoMaxX.WinFormsCompat",
+               "NCalc", "UnitsNet", "ExtendedNumerics.BigDecimal", "Parlot", "PriorityQueue", "Microsoft.CSharp",
+               "Microsoft.Win32.Registry", "netstandard", "mscorlib"}
     for assembly in contracts["assemblies"]:
-        if any(not (name in {"CaeGlobals", "CaeMesh", "CaeResults", "netstandard", "mscorlib"} or
-                    name == "System" or name.startswith("System.")) or
-               any(token in name for token in ("Windows", "Presentation", "Drawing.Common", "Microsoft.Win32"))
+        if any(not (name in allowed or name == "System" or name.startswith("System.")) or
+               any(token in name for token in ("System.Windows.Forms", "Presentation", "Kitware"))
                for name in assembly["references"]):
             raise ValueError("Unexpected platform/package reference: " + assembly["name"])
-        if assembly["name"] == "CaeResults" and assembly["exportedTypes"]:
-            raise ValueError("Internal FRD reader was exposed publicly")
-
-
-def prepare_upstream_sources(revision, destination, source_rows):
-    """Replay reviewed Git bytes; refuse changed engineering code until separately adapted."""
-    manifest = json.loads((HERE / "upstream-replays.json").read_text())
-    if manifest["baseline"] != BASELINE:
-        raise ValueError("Upstream replay baseline differs from the guarded shared slice")
-    matches = [row for row in manifest["revisions"] if revision in (row["name"], row["commit"])]
-    if len(matches) != 1:
-        raise ValueError("Upstream revision is not a reviewed immutable replay pin")
-    pin = matches[0]
-    commit = pin["commit"]
-    if len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit):
-        raise ValueError("Upstream replay requires a full immutable commit SHA")
-    subprocess.run(["git", "merge-base", "--is-ancestor", BASELINE, commit], cwd=ROOT, check=True,
-                   capture_output=True)
-    extracted = source_layout.verify_layout(ROOT, commit)
-    rows = []
-    for row in source_rows:
-        name = row["path"]
-        if name in (source_layout.PARSING, source_layout.ATTRIBUTE_FILE) or name in source_layout.ADDED:
-            selected = (ROOT / name).read_bytes()
-            upstream_name = source_layout.INP if name == source_layout.PARSING else source_layout.ATTRIBUTE
-            upstream = (subprocess.check_output(["git", "show", commit + ":" + upstream_name], cwd=ROOT)
-                        if name in extracted else None)
-            if sha(selected) != row["sha256"]:
-                raise ValueError("Reviewed mesh boundary changed before replay: " + name)
-            path = destination / name
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(selected)
-            rows.append({"path": name, "upstreamPath": upstream_name if upstream else None,
-                         "upstreamSha256": sha(upstream) if upstream else None, "compiledSha256": sha(selected),
-                         "adapter": "verified mechanical source extraction" if upstream else "new portable mesh boundary"})
-            continue
-        upstream_name = "CaeGlobals/ExceptionTools.cs" if name == "CaeGlobals/CaeException.cs" else name
-        upstream = subprocess.check_output(["git", "show", commit + ":" + upstream_name], cwd=ROOT)
-        selected = upstream
-        adapter = None
-        if name == "CaeGlobals/CaeException.cs":
-            baseline = subprocess.check_output(["git", "show", BASELINE + ":" + upstream_name], cwd=ROOT)
-            if upstream != baseline:
-                raise ValueError("Upstream exception boundary changed; review extraction before replay")
-            # sources() has already proven the existing extraction preserves the original class body.
-            selected = (ROOT / name).read_bytes()
-            adapter = "existing verified CaeException extraction"
-        elif name == "CaeMesh/GeometryTools.cs":
-            line = b"using System.Windows.Forms.VisualStyles;\n"
-            if upstream.count(line) != 1:
-                raise ValueError("Upstream GeometryTools import boundary changed")
-            selected = upstream.replace(line, b"")
-            adapter = "remove existing unused WinForms import"
-        if sha(selected) != row["sha256"]:
-            raise ValueError("Upstream engineering source changed; review before replay: " + name)
-        path = destination / name
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(selected)
-        rows.append({"path": name, "upstreamPath": upstream_name, "upstreamSha256": sha(upstream),
-                     "compiledSha256": sha(selected), "adapter": adapter})
-    fixture = "CaeMesh/Meshing/Transfinite/Cpp/three_block_vectors.txt"
-    data = subprocess.check_output(["git", "show", commit + ":" + fixture], cwd=ROOT)
-    if data != (ROOT / fixture).read_bytes():
-        raise ValueError("Upstream mapping vectors changed; review expectations before replay")
-    path = destination / fixture
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(data)
-    return {"name": pin["name"], "commit": commit, "sources": rows,
-            "fixture": {"path": fixture, "sha256": sha(data)},
-            "mode": "temporary Git source snapshot with the two existing boundary adapters",
-            "engineeringBytesMatchCurrentSlice": True}
 
 
 def main():
@@ -192,11 +75,11 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--expect-os", choices=["Windows", "Linux", "Darwin"])
     parser.add_argument("--expect-architecture", choices=["X64", "Arm64"])
-    parser.add_argument("--upstream-revision", help="Reviewed name or full SHA from upstream-replays.json")
+    parser.add_argument("--upstream-revision", help="Retired with the whole-library build (D062)")
     args = parser.parse_args()
     report = {"success": False, "recordedAtUtc": datetime.now(timezone.utc).isoformat(),
               "host": {"os": platform.system(), "architecture": platform.machine()},
-              "baseline": BASELINE, "commands": []}
+              "commands": []}
     folder = None
     try:
         if args.expect_os and platform.system() != args.expect_os:
@@ -225,14 +108,10 @@ def main():
                     raise RuntimeError("Unexpected exit code; see retained command output")
                 return done
             report["sdk"] = run(["dotnet", "--version"]).stdout.strip()
-            source_options = []
             if args.upstream_revision:
-                snapshot = work / "upstream"
-                report["upstreamReplay"] = prepare_upstream_sources(args.upstream_revision, snapshot, report["sources"])
-                source_options = ["-p:RepositoryRoot=" + snapshot.as_posix() + "/"]
+                raise ValueError("Historical upstream slice replays were retired with the whole-library build (D062)")
             run(["dotnet", "build", HERE / "PrePoMaxX.Core.slnx", "-c", "Release", "--disable-build-servers",
-                 "-m:1", "--artifacts-path", work / "build", "-p:RestoreConfigFile=" + str(HERE / "NuGet.Config"),
-                 *source_options, "-v:minimal"])
+                 "-m:1", "--artifacts-path", work / "build", "-v:minimal"])
             test = work / "build/bin/CoreTests/release/PrePoMaxX.CoreTests.dll"
             result = json.loads(run(["dotnet", test]).stdout)
             report["mappingTests"] = result
@@ -352,7 +231,7 @@ def main():
             report["success"] = True
     except (OSError, KeyError, TypeError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         report["error"] = str(error).replace(str(ROOT), "<repository>").replace(folder or "<unused>", "<temporary>")
-    report["limits"] = ["Partial source-linked libraries, not the full application, FRD or PMX reader",
+    report["limits"] = ["Whole original domain assemblies (X/Domain); not the full application or PMX reader",
                         "Full persistence/history/clone, CAD/interactive VTK and native-source release gates remain open",
                         "Element slice still needs native Windows and exact-commit Linux x64 execution",
                         "Two original-source analytical/classifier checks remain unresolved; quadratic tetrahedra are gated in the host"]

@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using Kitware.VTK;
 using CaeGlobals;
 
 namespace vtkControl
@@ -26,7 +25,7 @@ namespace vtkControl
         Wire,
         Unknown
     }
-    public class vtkMaxActorData
+    public partial class vtkMaxActorData
     {
         // Variables                                                                                                                
         public string Name;
@@ -112,10 +111,5 @@ namespace vtkControl
         }
 
         // Methods                                                                                                                  
-        public double[][][] GetStlTriangles()
-        {
-            vtkMaxActor actor = new vtkMaxActor(this);
-            return actor.GetStlTriangles();
-        }
     }
 }

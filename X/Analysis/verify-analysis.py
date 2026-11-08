@@ -9,10 +9,10 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
-import analysis_layout as layout
 import static_deck_checks
 
 HERE = Path(__file__).resolve().parent
@@ -39,12 +39,14 @@ def main():
         arch = {'arm64':'Arm64','aarch64':'Arm64','amd64':'X64','x86_64':'X64'}.get(platform.machine().lower())
         if (args.expect_os and args.expect_os != platform.system()) or (args.expect_architecture and args.expect_architecture != arch):
             raise ValueError('Unexpected native verification host')
-        pin = None
         if args.upstream_revision:
-            pin = next(r['commit'] for r in json.loads((ROOT/'X/Core/upstream-replays.json').read_text())['revisions'] if r['name'] == args.upstream_revision)
-        rows = layout.source_rows(pin or layout.BASELINE)
-        report['sources'] = rows
-        report['upstreamRevision'] = args.upstream_revision or 'current'
+            raise ValueError('Historical upstream slice replays were retired with the whole-library build (D062)')
+        sources = subprocess.run([sys.executable, str(ROOT/'X/Domain/domain_sources.py'), '--check'], cwd=ROOT,
+                                 capture_output=True, text=True)
+        if sources.returncode != 0: raise ValueError('Whole-library source lists are stale: '+sources.stdout.strip())
+        report['sources'] = {'mode':'whole original assemblies (X/Domain)',
+                             'manifestSha256':sha((ROOT/'X/Domain/domain-sources.json').read_bytes())}
+        report['upstreamRevision'] = 'current'
         report['repository'] = {'head': subprocess.check_output(['git','rev-parse','HEAD'], cwd=ROOT, text=True).strip(),
                                 'dirty': bool(subprocess.check_output(['git','status','--porcelain'], cwd=ROOT))}
         report['toolHashes'] = {p.relative_to(HERE).as_posix():sha(p.read_bytes()) for p in sorted(HERE.rglob('*')) if p.is_file() and not {'artifacts','bin','obj','__pycache__'}.intersection(p.relative_to(HERE).parts)}
@@ -61,55 +63,12 @@ def main():
                 if done.returncode != expected: raise ValueError('Analysis command failed; see retained command output')
                 return done
             report['sdk'] = run(['dotnet','--version']).stdout.strip()
-            source = work/'source'
-            if pin:
-                report['upstreamReplay'] = layout.core_verify.prepare_upstream_sources(args.upstream_revision, source, layout.core_verify.sources())
-            for row in rows:
-                path = row['path']
-                target = source/path; target.parent.mkdir(parents=True, exist_ok=True)
-                if row.get('upstreamVariant'):
-                    data = layout.original(pin,path)
-                elif not target.exists(): data = (ROOT/path).read_bytes()
-                else: data = target.read_bytes()
-                if sha(data) != row['sha256']: raise ValueError('Compiled snapshot hash mismatch: '+path)
-                target.write_bytes(data)
-            # Reuse downloaded exact packages offline when supplied; first CI restore
-            # uses only official NuGet. Always restore to disposable per-run storage.
-            feed = work/'feed';feed.mkdir()
-            cached = []
-            for name,version in layout.PACKAGES.items():
-                package = args.package_cache/name.lower()/version/(name.lower()+'.'+version+'.nupkg')
-                if package.exists():
-                    cached.append(package);shutil.copyfile(package,feed/package.name)
-            build = ['dotnet','build',HERE/'PrePoMaxX.Analysis.slnx','-c','Release','--disable-build-servers','-m:1',
-                '--artifacts-path',work/'build','-p:RepositoryRoot='+str(source)+'/',
-                '-p:RestorePackagesPath='+str(work/'packages'),'-p:RestoreLockedMode=true',
-                '-p:RestoreConfigFile='+str(HERE/'NuGet.Config'),'-v:minimal']
-            if len(cached) == len(layout.PACKAGES): build.extend(['--source',feed])
-            run(build)
-            assets = json.loads((work/'build/obj/CaeGlobals/project.assets.json').read_text())
-            expected = {'ncalc/1.3.8':'lib/NCalc.dll','UnitsNet/4.89.1':'lib/netstandard2.0/UnitsNet.dll'}
-            if set(assets['targets']['net10.0']) != set(expected): raise ValueError('Unexpected package dependency closure')
-            lock = json.loads((HERE/'CaeGlobals/packages.lock.json').read_text())['dependencies']['net10.0']
-            report['dependencies'] = []
-            for key,asset in expected.items():
-                name,version=key.split('/');row=assets['targets']['net10.0'][key]
-                if list(row['runtime']) != [asset] or list(row['compile']) != [asset]: raise ValueError('Package asset changed')
-                folder=work/'packages'/name.lower()/version
-                package=folder/(name.lower()+'.'+version+'.nupkg');data=package.read_bytes()
-                digest=base64.b64encode(hashlib.sha512(data).digest()).decode()
-                nuget_hash = json.loads((folder/'.nupkg.metadata').read_text())['contentHash']
-                pinned = next(r for r in json.loads((HERE/'dependency-artifacts.json').read_text())['packages'] if r['id']==name)
-                observed = {'id':name,'version':version,'packageSha256':sha(data),'packageSha512':digest,
-                    'nugetContentHash':nuget_hash,'runtimeAsset':asset,'runtimeAssetSha256':sha((folder/asset).read_bytes())}
-                if nuget_hash != lock[name]['contentHash'] or observed != pinned:
-                    raise ValueError('Restored package/archive/asset differs from reviewed artifact pins')
-                with zipfile.ZipFile(package) as archive:
-                    nuspec=next(n for n in archive.namelist() if n.endswith('.nuspec'))
-                    metadata=ET.fromstring(archive.read(nuspec));license_entries={e.tag.split('}')[-1]:e.text for e in metadata.iter() if e.tag.split('}')[-1] in ('license','licenseUrl','projectUrl')}
-                report['dependencies'].append({'id':name,'version':version,'packageSha256':sha(data),
-                    'packageSha512':digest,'nugetContentHash':nuget_hash,'runtimeAsset':asset,'runtimeAssetSha256':sha((folder/asset).read_bytes()),'licenseMetadata':license_entries})
-            post = args.upstream_revision == 'post-rc2-2026-10-17'
+            run(['dotnet','build',HERE/'PrePoMaxX.Analysis.slnx','-c','Release','--disable-build-servers','-m:1',
+                 '--artifacts-path',work/'build','-v:minimal'])
+            # Package closure of the whole original assemblies, as locked by their projects.
+            report['dependencies'] = {name: json.loads((ROOT/'X/Domain'/name/'packages.lock.json').read_text())['dependencies']['net10.0']
+                                      for name in ('CaeGlobals','CaeResults')}
+            post = False
             test_command=['dotnet',work/'build/bin/Tests/release/PrePoMaxX.Tests.dll']+(['--post-rc2'] if post else [])
             tests=json.loads(run(test_command).stdout)
             report['tests']=tests
@@ -151,15 +110,14 @@ def main():
                 report['cli']['controls'].append(name)
             report['limits']=['Bounded full C3D8 static deck and material fragment; no solver execution or desktop installer',
                 'NCalc 1.3.8 NU1701 compatibility warning retained; broader Windows/full-equation acceptance pending',
-                'UnitsNet same version; netstandard2.0 asset replaces legacy net40 asset in this bounded modern build',
-                'Source-linked superset uses original assembly identities; never mix partial build DLLs with an original application',
+                'Whole original assemblies (X/Domain) keep original identities; never mix these DLLs with an original application',
                 'Two earlier correctness failures and quadratic-tetra measurement gate remain unchanged']
             report['success']=True
     except (OSError,ValueError,KeyError,TypeError,RuntimeError,subprocess.SubprocessError) as error:
         report['error']=clean(str(error))
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2)+'\n')
-    print(json.dumps({'success':report['success'],'tests':report.get('tests',{}).get('passed'),'sources':len(report.get('sources',[])),'staticChecks':report.get('staticTests',{}).get('passed'),'error':report.get('error')}))
+    print(json.dumps({'success':report['success'],'tests':report.get('tests',{}).get('passed'),'staticChecks':report.get('staticTests',{}).get('passed'),'error':report.get('error')}))
     return 0 if report['success'] else 1
 
 
