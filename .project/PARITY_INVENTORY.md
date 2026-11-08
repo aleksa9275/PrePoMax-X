@@ -15,11 +15,14 @@ utilities, automation, dependencies and installers need separate acceptance. B r
 structural reachability, not execution of every feature. V requires full item coverage.
 The dormant Q-Morph wrapper is not exposed. B coverage is documented in the Phase B report;
 bounded original-app interoperability does not mark whole feature families V.
+C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing
+and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).
+Partial form reuse does not mark the complete original form C.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 0 | 0 |
-| Commands | 237 | 237 | 236 | 0 | 0 |
+| Commands | 237 | 237 | 236 | 3 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -227,8 +230,8 @@ bounded original-app interoperability does not mark whole feature families V.
 | CExportToAbaqus | AB |
 | CExportToCalculix | AB |
 | CImportFile | AB |
-| COpenFile | AB |
-| CSaveToPmx | AB |
+| COpenFile | ABC |
+| CSaveToPmx | ABC |
 
 ### General
 
@@ -360,7 +363,7 @@ bounded original-app interoperability does not mark whole feature families V.
 | CDuplicateMaterial | AB |
 | CDuplicateMaterials | AB |
 | CRemoveMaterials | AB |
-| CReplaceMaterial | AB |
+| CReplaceMaterial | ABC |
 
 ### Section
 

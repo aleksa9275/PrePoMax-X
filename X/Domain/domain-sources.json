@@ -521,7 +521,19 @@
         "Properties/AssemblyInfo.cs",
         "IControllerHost.cs",
         "RuntimePaths.cs",
-        "RuntimeInitialization.cs"
+        "RuntimeInitialization.cs",
+        "Forms/41_Material/ViewDensity.cs",
+        "Forms/41_Material/ViewElastic.cs",
+        "Forms/41_Material/ViewElasticEngineeringConstants.cs",
+        "Forms/41_Material/ViewElasticLamina.cs",
+        "Forms/41_Material/ViewElasticWithDensity.cs",
+        "Forms/41_Material/ViewMaterialProperty.cs",
+        "Forms/41_Material/ViewPlastic.cs",
+        "Forms/41_Material/ViewSlipWear.cs",
+        "Forms/41_Material/ViewSpecificHeat.cs",
+        "Forms/41_Material/ViewThermalConductivity.cs",
+        "Forms/41_Material/ViewThermalExpansion.cs",
+        "Forms/41_Material/MaterialEditor.cs"
       ],
       "exclude": {},
       "add": {}
@@ -545,7 +557,8 @@
         "SidePanel/XYPlot/XYPlotState.cs",
         "SidePanel/XYPlot/IXYPlotSettings.cs",
         "SidePanel/XYPlot/XYPlotSettingsTools.cs",
-        "Properties/AssemblyInfo.cs"
+        "Properties/AssemblyInfo.cs",
+        "Forms/PropertyNameValidation.cs"
       ],
       "exclude": {},
       "add": {

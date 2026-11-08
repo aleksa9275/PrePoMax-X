@@ -98,6 +98,7 @@
     <Compile Include="Forms\ChildMouseWheelManagedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\PropertyNameValidation.cs" />
     <Compile Include="Forms\FrmProperties.cs">
       <SubType>Form</SubType>
     </Compile>

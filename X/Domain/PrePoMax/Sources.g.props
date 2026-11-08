@@ -422,5 +422,17 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/IControllerHost.cs" Link="IControllerHost.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/RuntimePaths.cs" Link="RuntimePaths.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/RuntimeInitialization.cs" Link="RuntimeInitialization.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewDensity.cs" Link="Forms/41_Material/ViewDensity.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewElastic.cs" Link="Forms/41_Material/ViewElastic.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewElasticEngineeringConstants.cs" Link="Forms/41_Material/ViewElasticEngineeringConstants.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewElasticLamina.cs" Link="Forms/41_Material/ViewElasticLamina.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewElasticWithDensity.cs" Link="Forms/41_Material/ViewElasticWithDensity.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewMaterialProperty.cs" Link="Forms/41_Material/ViewMaterialProperty.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewPlastic.cs" Link="Forms/41_Material/ViewPlastic.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewSlipWear.cs" Link="Forms/41_Material/ViewSlipWear.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewSpecificHeat.cs" Link="Forms/41_Material/ViewSpecificHeat.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewThermalConductivity.cs" Link="Forms/41_Material/ViewThermalConductivity.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/ViewThermalExpansion.cs" Link="Forms/41_Material/ViewThermalExpansion.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/41_Material/MaterialEditor.cs" Link="Forms/41_Material/MaterialEditor.cs" />
   </ItemGroup>
 </Project>

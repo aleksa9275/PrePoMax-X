@@ -18,6 +18,7 @@
     <Compile Include="$(RepositoryRoot)UserControls/SidePanel/XYPlot/IXYPlotSettings.cs" Link="SidePanel/XYPlot/IXYPlotSettings.cs" />
     <Compile Include="$(RepositoryRoot)UserControls/SidePanel/XYPlot/XYPlotSettingsTools.cs" Link="SidePanel/XYPlot/XYPlotSettingsTools.cs" />
     <Compile Include="$(RepositoryRoot)UserControls/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />
+    <Compile Include="$(RepositoryRoot)UserControls/Forms/PropertyNameValidation.cs" Link="Forms/PropertyNameValidation.cs" />
     <Compile Include="$(RepositoryRoot)X/Controller/Host/ViewType.cs" Link="X/ViewType.cs" /> <!-- Original model-tree view discriminator, without rendering control -->
   </ItemGroup>
 </Project>

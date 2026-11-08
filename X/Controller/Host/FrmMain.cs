@@ -16,6 +16,9 @@ namespace PrePoMax
     /// explicit host implementation rather than returning invented selection data.</summary>
     public partial class FrmMain : IControllerHost
     {
+        public string UndoText {get;private set;}
+        public string RedoText {get;private set;}
+        public vtkMaxActor[] SceneActors => System.Linq.Enumerable.ToArray(actors.Values);
         public IntPtr Handle => IntPtr.Zero;
         public Action<string, object[]> Presentation { get; set; }
         public Func<string, object[], object> Query { get; set; }
@@ -46,6 +49,7 @@ namespace PrePoMax
         {
             switch(name)
             {
+                case "EnableDisableUndoRedo":UndoText=(string)arguments[0];RedoText=(string)arguments[1];break;
                 case "Open":
                     ((Action<string,string>)arguments[1])((string)arguments[0],(string)arguments[3]);
                     if(Controller.CurrentView==ViewGeometryModelResults.Geometry)Controller.DrawGeometry((bool)arguments[2]);
