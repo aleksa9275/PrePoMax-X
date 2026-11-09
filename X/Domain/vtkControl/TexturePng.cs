@@ -9,6 +9,7 @@ namespace vtkControl
     public partial class vtkMaxLookupTable
     {
         // Original texture row/color mapping; only the PNG encoding is platform code.
+        public void SetExportData(double minimum,double maximum,Color[] colors,bool smooth){_minValue=minimum;_maxValue=maximum;_colors=colors;_smoothColors=smooth;}
         private void WriteTexture(int width, int height, string filePath)
         {
             using var pixels = new MemoryStream();

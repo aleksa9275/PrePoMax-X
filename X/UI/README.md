@@ -187,3 +187,38 @@ The independent stress diagnostic remains false in `engineeringChecks`; UI/servi
 success is not numerical acceptance. Full form/control, viewport edge-case,
 automation, corpus, physical/native platform and distribution acceptance remain
 open for C5/release. [C4 report](../../.project/reports/phase-c4-jobs-results.md).
+
+### C5 application tools
+
+File/Edit/Tools/Camera expose original PMH/history/keyword and material-library
+workflows, thirteen original settings pages, script execution/Stop and journals,
+query/Find/contact search, original advisor pages, saved/follower views, original
+plot state/data, part appearance and result-component actions. Tree F2/Delete/
+duplicate actions and ID/angle/rectangle selection use original Controller paths.
+Original engineering objects remain in C#; no Python model or new file format.
+
+`--settings /absolute/path/to/prepomaxx-settings.bin` explicitly loads/persists a
+private strict settings file. Installed original settings are untouched. The
+original loopback RPC/MCP server is off until explicitly started, or until the
+user's loaded preferences request startup. Generate a token in Tools → Automation
+server; its connection dialog allows copying/revealing it. Original authentication,
+Origin/read-only/busy rules and command recording apply. Stop removes the private
+session-discovery file. Do not put tokens in redistributable preferences.
+
+Capture supports original PNG naming/transparency/magnification/clipboard options.
+Animation offers first/last/step/FPS, direction, Once/Loop/Swing and current/all-frame
+scalar limits. AVI uses VTK on platforms that provide its writer and portable
+uncompressed BGR AVI otherwise; the latter refuses files above 2 GiB. Native Windows
+codec-option equivalence/OpenDML remains open. PNG sequence naming/Swing endpoints
+follow the original exporter. Ogg remains available through pinned VTK.
+
+Colored 3MF requires adding `lib3mf.dll` to the explicit `--native-tools` manifest,
+with the absolute library path and SHA256 for existing lib3mf **2.4.1**. The UI
+verifier accepts `--three-mf-library ABS` to construct that test manifest. The
+optional independent `verify-video.py` decoder uses pinned Qt multimedia; the local
+Linux check image includes `libpulse0` for loading that module.
+
+[C5 report](../../.project/reports/phase-c5-application-tools.md) and
+[all-form source audit](../../.project/reports/phase-c5-ui-audit.json) distinguish
+available tools from full control/input/form acceptance. All 72 complete forms
+remain unaccepted; the audit is not a claim of full original UI parity.

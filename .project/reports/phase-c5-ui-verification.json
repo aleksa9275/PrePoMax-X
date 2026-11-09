@@ -1,0 +1,1205 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-11-09T16:54:24.188537+00:00",
+  "parentCommit": "fab4f05d8020b288671cb2756fa868440971e90e",
+  "uiAndServiceSuccess": true,
+  "fullUiParityAccepted": false,
+  "numericalAcceptance": false,
+  "hosts": {
+    "macArm64": {
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "combinedReceipt": {
+        "path": "/private/tmp/prepomaxx-c5/mac-final.json",
+        "sha256": "b257d3f0b8857b2634e0a3ea7c9fb55206ced45c308efc5b736e8400b39008e3",
+        "bytes": 70021
+      },
+      "combinedChecks": {
+        "service": 20,
+        "authoringService": 33,
+        "applicationService": 30,
+        "geometryService": 25,
+        "resultsService": 41,
+        "gui": 18,
+        "authoringGui": 18,
+        "geometryGui": 21,
+        "resultsGui": 35,
+        "applicationGui": 39
+      },
+      "finalC5Service": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/service/application.json",
+        "sha256": "4f3584d0bb13992555708ec818f49e92cbc87a77baae975f083a0e2843a9e9f3",
+        "bytes": 2775
+      },
+      "finalC5Gui": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/gui/application-gui.json",
+        "sha256": "4db20032ee15f501cedb91e78c5e9db50a6126684cb251c327e77ac7b9b47fd3",
+        "bytes": 3562
+      },
+      "c5ServiceChecks": [
+        "all thirteen original settings pages",
+        "original graphics descriptors",
+        "settings apply through original container",
+        "strict settings save/load",
+        "original .lib category and material graph",
+        "library import isolated before apply",
+        "library copies use original naming and commands",
+        "library category rename persisted",
+        "original history rows exposed",
+        "original command property inspector",
+        "strict PMH round-trip",
+        "original Python journal exporter",
+        "stale history draft refused",
+        "history reorder uses original commands",
+        "original user keyword added by command",
+        "original user keyword tree movement and update",
+        "generated keyword signature override recorded",
+        "generated override reset retains user keywords",
+        "original CalculiX and Abaqus deck exporters",
+        "original parameter exporter",
+        "original rename command",
+        "original plot state survives strict PMX",
+        "keyword/library state survives strict PMX",
+        "original Python execution output",
+        "script recorded as original command",
+        "automation starts disabled",
+        "original node and assembly query calculations",
+        "original distance and angle query outputs",
+        "original follower point camera projection",
+        "original advisor pages and action arguments",
+        "original contact search runs on live model"
+      ],
+      "c5GuiChecks": [
+        "C5 menus and native viewport",
+        "all original settings pages presented",
+        "original graphics property widget",
+        "settings GUI applies original values",
+        "command grid and original Python preview",
+        "original command property inspector descriptors",
+        "original keyword tree and preview",
+        "material library graph is visible",
+        "user view captures original camera",
+        "original saved view controls native camera",
+        "original advisor pages visible",
+        "original query calculations available from UI",
+        "original Find highlight and annotation",
+        "no-edge mode controls native actors",
+        "rectangle gesture resolves original frustum element IDs",
+        "native orientation and scale preference widgets",
+        "magnified RGBA capture",
+        "transparent capture background",
+        "script task locks document menus",
+        "original Python output in panel",
+        "script task unlocks document",
+        "original Python Stop interrupts active script",
+        "original XY plot state rendered",
+        "plot settings use original scale state",
+        "script and plot state reopen through PMX",
+        "MCP refuses unauthenticated request",
+        "MCP refuses browser Origin",
+        "original MCP handshake",
+        "original automation tools catalog",
+        "original live Python through MCP",
+        "original read-only automation refuses model command",
+        "original current-user named pipe protocol",
+        "automation respects active modeless editor",
+        "private session file created",
+        "automation stop removes session file",
+        "portable AVI stream contains native frames",
+        "original native 3MF contour export",
+        "result field/history component trees",
+        "original per-component field removal",
+        "original per-component history removal"
+      ],
+      "videoDecode": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/avi-decode.json",
+        "sha256": "134386b4e0bbd8ea6aad59144e0ce9e8eeced2baee231c077e47d757e6c5cd36",
+        "bytes": 868
+      },
+      "decodedFrames": [
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 0,
+          "endTime": 83333,
+          "imageValid": true
+        },
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 83333,
+          "endTime": 166666,
+          "imageValid": true
+        },
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 166667,
+          "endTime": 250000,
+          "imageValid": true
+        },
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 250000,
+          "endTime": 333333,
+          "imageValid": true
+        },
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 333333,
+          "endTime": 416666,
+          "imageValid": true
+        },
+        {
+          "width": 1810,
+          "height": 1170,
+          "startTime": 416667,
+          "endTime": 500000,
+          "imageValid": true
+        }
+      ],
+      "video": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/gui/animation.avi",
+        "sha256": "abbb0b5c220f08f0b638120f60e4d166338f57a36b0199084e58a8de3e9725eb",
+        "bytes": 38133016
+      },
+      "colored3mf": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/gui/contours.3mf",
+        "sha256": "620c899b659f52db6230f24660412fc583164a3ae9e25c723f3e21b81d2e41de",
+        "bytes": 4510
+      },
+      "capture": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/gui/transparent.png",
+        "sha256": "88447e22854f1ff884f3df5caa0208793866e33d7526adfe8ba374f295aa4c12",
+        "bytes": 67084
+      },
+      "workbenchScreenshot": {
+        "path": "/private/tmp/prepomaxx-c5/mac-c5-final/application/gui/workbench.png",
+        "sha256": "e00d1a7790365cd5face6ef83ddcb761a2ef2c9337576b4991066bae5d76b9bf",
+        "bytes": 592842
+      },
+      "scope": "Native ARM64. Linux GUI is Xvfb/software rendering, not physical GPU/Wayland/human-input acceptance."
+    },
+    "linuxArm64": {
+      "host": {
+        "os": "Linux",
+        "architecture": "Arm64"
+      },
+      "combinedReceipt": {
+        "path": "/private/tmp/prepomaxx-c5/linux/final.json",
+        "sha256": "933137ffcdc3398c6a0d34f8cb711fa6826a144bcc162ffee5fdf9c69b14d453",
+        "bytes": 64603
+      },
+      "combinedChecks": {
+        "service": 20,
+        "authoringService": 33,
+        "applicationService": 30,
+        "geometryService": 25,
+        "resultsService": 41,
+        "gui": 18,
+        "authoringGui": 18,
+        "geometryGui": 21,
+        "resultsGui": 35,
+        "applicationGui": 33
+      },
+      "finalC5Service": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/service/application.json",
+        "sha256": "4f3584d0bb13992555708ec818f49e92cbc87a77baae975f083a0e2843a9e9f3",
+        "bytes": 2775
+      },
+      "finalC5Gui": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/gui/application-gui.json",
+        "sha256": "4db20032ee15f501cedb91e78c5e9db50a6126684cb251c327e77ac7b9b47fd3",
+        "bytes": 3562
+      },
+      "c5ServiceChecks": [
+        "all thirteen original settings pages",
+        "original graphics descriptors",
+        "settings apply through original container",
+        "strict settings save/load",
+        "original .lib category and material graph",
+        "library import isolated before apply",
+        "library copies use original naming and commands",
+        "library category rename persisted",
+        "original history rows exposed",
+        "original command property inspector",
+        "strict PMH round-trip",
+        "original Python journal exporter",
+        "stale history draft refused",
+        "history reorder uses original commands",
+        "original user keyword added by command",
+        "original user keyword tree movement and update",
+        "generated keyword signature override recorded",
+        "generated override reset retains user keywords",
+        "original CalculiX and Abaqus deck exporters",
+        "original parameter exporter",
+        "original rename command",
+        "original plot state survives strict PMX",
+        "keyword/library state survives strict PMX",
+        "original Python execution output",
+        "script recorded as original command",
+        "automation starts disabled",
+        "original node and assembly query calculations",
+        "original distance and angle query outputs",
+        "original follower point camera projection",
+        "original advisor pages and action arguments",
+        "original contact search runs on live model"
+      ],
+      "c5GuiChecks": [
+        "C5 menus and native viewport",
+        "all original settings pages presented",
+        "original graphics property widget",
+        "settings GUI applies original values",
+        "command grid and original Python preview",
+        "original command property inspector descriptors",
+        "original keyword tree and preview",
+        "material library graph is visible",
+        "user view captures original camera",
+        "original saved view controls native camera",
+        "original advisor pages visible",
+        "original query calculations available from UI",
+        "original Find highlight and annotation",
+        "no-edge mode controls native actors",
+        "rectangle gesture resolves original frustum element IDs",
+        "native orientation and scale preference widgets",
+        "magnified RGBA capture",
+        "transparent capture background",
+        "script task locks document menus",
+        "original Python output in panel",
+        "script task unlocks document",
+        "original Python Stop interrupts active script",
+        "original XY plot state rendered",
+        "plot settings use original scale state",
+        "script and plot state reopen through PMX",
+        "MCP refuses unauthenticated request",
+        "MCP refuses browser Origin",
+        "original MCP handshake",
+        "original automation tools catalog",
+        "original live Python through MCP",
+        "original read-only automation refuses model command",
+        "original current-user named pipe protocol",
+        "automation respects active modeless editor",
+        "private session file created",
+        "automation stop removes session file",
+        "portable AVI stream contains native frames",
+        "original native 3MF contour export",
+        "result field/history component trees",
+        "original per-component field removal",
+        "original per-component history removal"
+      ],
+      "videoDecode": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/avi-decode.json",
+        "sha256": "34f7972b5978daf4617171bda0f78fa314e47bc1456df892e03e365241c13983",
+        "bytes": 856
+      },
+      "decodedFrames": [
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 0,
+          "endTime": 83333,
+          "imageValid": true
+        },
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 83333,
+          "endTime": 166666,
+          "imageValid": true
+        },
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 166667,
+          "endTime": 250000,
+          "imageValid": true
+        },
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 250000,
+          "endTime": 333333,
+          "imageValid": true
+        },
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 333333,
+          "endTime": 416666,
+          "imageValid": true
+        },
+        {
+          "width": 907,
+          "height": 591,
+          "startTime": 416667,
+          "endTime": 500000,
+          "imageValid": true
+        }
+      ],
+      "video": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/gui/animation.avi",
+        "sha256": "758e1709bb1ca011a74d78a0e474fe70ecf720a20cf48cde50143ab62f938ee6",
+        "bytes": 9659680
+      },
+      "colored3mf": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/gui/contours.3mf",
+        "sha256": "15d5df144544b871bfbc98e0af78c8ef9ccb9e6cec8379c99e4217d2b08678a7",
+        "bytes": 4509
+      },
+      "capture": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/gui/transparent.png",
+        "sha256": "40665476ebd675e6e94db0d54496a6fe51f05136cc695764f27b98572fa04340",
+        "bytes": 28822
+      },
+      "workbenchScreenshot": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/application/gui/workbench.png",
+        "sha256": "d62d879420c2f473514c0bdb2a5d615b99046a07b5de08c34e851aff6796c715",
+        "bytes": 193437
+      },
+      "scope": "Native ARM64. Linux GUI is Xvfb/software rendering, not physical GPU/Wayland/human-input acceptance."
+    }
+  },
+  "verificationCadence": "Complete C1\u2013C5 milestone runs, followed by focused C5 checks after application-only inspector/preview additions. Earlier C1\u2013C4 numerical expectations are unchanged. No full platform/package sweep.",
+  "failedEngineeringChecks": [
+    {
+      "name": "analytic double stress",
+      "passed": false,
+      "expected": 200,
+      "actual": 199.99200439453125,
+      "absoluteTolerance": 0.001,
+      "status": "failed; D061 deferred, engineering acceptance remains open"
+    }
+  ],
+  "net48": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/net48/result.json",
+      "sha256": "396cabf05b5945bd4b8f335bda9a7d2e432c67f67a143686b2887b8e21aa5d06",
+      "bytes": 821
+    },
+    "assemblies": [
+      {
+        "assembly": "CaeGlobals",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "ThreeMF",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "vtkControl",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeMesh",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeResults",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeModel",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeJob",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "UserControls",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "APIs",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "PrePoMax",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "GmshCaller",
+        "passed": true,
+        "errors": []
+      }
+    ]
+  },
+  "controller": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/controller-current.json",
+      "sha256": "38ca85ce1511be0cedc2983b3599c512f9cfb04670fe7605f630e96bdafaf2f7",
+      "bytes": 8573
+    },
+    "passedStages": [
+      "source-lists",
+      "build",
+      "host-contract",
+      "persistence",
+      "solid-workflow",
+      "fresh-process",
+      "embedded-python",
+      "spatial-replay",
+      "script-host",
+      "native-exports"
+    ],
+    "pending": [
+      "Original Controller native solve/results: no explicit solver profile supplied",
+      "Original Controller CAD/Gmsh: explicit native profile/fixture not supplied"
+    ],
+    "persistence": {
+      "success": true,
+      "checks": [
+        "cycle identity",
+        "shared object identity",
+        "ordered dictionary and comparer",
+        "dictionary shared values",
+        "rectangular array shape",
+        "IEEE values and signed zero",
+        "UTF-8 characters",
+        "UTC DateTime value",
+        "converter Type metadata",
+        "settings interface declarations",
+        "unknown framework type",
+        "unknown assembly",
+        "delegate payload",
+        "delegate serialization",
+        "trailing bytes",
+        "unknown Type metadata",
+        "unknown data member",
+        "spoofed comparer assembly",
+        "original renamed type mapping",
+        "unsafe formatter remains disabled"
+      ]
+    }
+  },
+  "originalWindowsReadback": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/windows/readback.json",
+      "sha256": "42d60b00c5f0a7be77d94b42bf3b7b273676c511bc10b18d169e16a1c2bcf990",
+      "bytes": 81
+    },
+    "outcome": {
+      "success": true,
+      "libraryMaterial": "XSTEEL",
+      "nodes": 8,
+      "modelMaterial": true
+    }
+  },
+  "originalWindowsReport": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/windows/report.json",
+      "sha256": "16c6197e820e6c4cbbe815bb4ddd8dfc0979d5ec8b876d2cca530c560adc2ee6",
+      "bytes": 2777
+    },
+    "outcome": {
+      "exitCode": 0,
+      "exitStatus": "Ok",
+      "error": null
+    }
+  },
+  "strictNativeReopen": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/reopen-original.json",
+      "sha256": "49045b8cc5e0987438e42aa10b1bee6c0deaf02c872f65e2b9398a6b50d2fd2a",
+      "bytes": 183
+    },
+    "outcome": {
+      "success": true,
+      "nodes": 8,
+      "libraryMaterial": true,
+      "originalUserKeywordCount": 1,
+      "originalScriptPanelState": true,
+      "originalPlotValues": [
+        2,
+        4,
+        6
+      ]
+    }
+  },
+  "explicitPreferenceStartup": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c5/preferences-startup/result.json",
+      "sha256": "4cecf4b391164b4f657ef5d0a716134cf02ffd08f88f84cc818c6ccbc2345b55",
+      "bytes": 100
+    },
+    "outcome": {
+      "success": true,
+      "serverStartedFromExplicitPreferences": true,
+      "privateSessionFile": true
+    }
+  },
+  "originalWindowsCommand": {
+    "path": "/private/tmp/prepomaxx-c5/reference-command.json",
+    "sha256": "640d730c6576ad21900f7f8628ca672cbe0640b357cfa509f9549583c23e3df6",
+    "bytes": 525
+  },
+  "originalWindowsExecutable": {
+    "path": "/private/tmp/prepomaxx-phase-b/original-app/PrePoMax v3.0.0/PrePoMax.exe",
+    "sha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c",
+    "bytes": 2841088
+  },
+  "addedOriginalSources": {
+    "PrePoMax": [
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/00_Common/FileExporter/ViewExport3mfFileProperties.cs",
+        "sha256": "9ca58ce294ccbd03588dc7bb153e94f37ade35732f4f417a62d52fcf4892dce9",
+        "bytes": 1824
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/00_Common/FileExporter/ViewExportHistoryResultSetFileProperties.cs",
+        "sha256": "62aea5038e582bf050719f3a92fd9a6602b4e7e4de0315720cc4587bdd43f71b",
+        "bytes": 3901
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/00_Common/ViewObjectTypeDescriptor.cs",
+        "sha256": "712a80c381f7ca847c04c9e0fbd0df24ec6fe1a028fef1874afa9a22eedb9c12",
+        "bytes": 9963
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/01_Edit/ViewCommand.cs",
+        "sha256": "dc34324cca2686fe54e28b6e498da074ff41f9f7e4f8faa36ec958db17504dc2",
+        "bytes": 3553
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/02_View/ViewFollowerViewParameters.cs",
+        "sha256": "1eae63e60ce858dda118505177e66ef303f3203c4f6080fd947c17b942f1ea3d",
+        "bytes": 5956
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/02_View/ViewUserViewParameters.cs",
+        "sha256": "88f0da67ba61fcb9e50daafc20313058a6b4b16a3e22f4cbb15a9aa7fa4edf73",
+        "bytes": 6283
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewAutomationSettings.cs",
+        "sha256": "a9e5253f4955d8412f114830138e78518ffc21458569681a4f4d25986e2e1e25",
+        "bytes": 7507
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewColorSettings.cs",
+        "sha256": "d608a241fc09d8579a120a6062039362b7290715d70c4501e2986efe9b806671",
+        "bytes": 9966
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewGeneralSettings.cs",
+        "sha256": "087db551abda3e8d071241198cc4cee9ce9e0b244ca14ccc26d2767358f0bbe4",
+        "bytes": 8814
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewGraphicsSettings.cs",
+        "sha256": "d19d4ebf7739371c0b251f455c965660e3891a729e2ce84599b05c44a7ec41f4",
+        "bytes": 10390
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewMeshingSettings.cs",
+        "sha256": "1663edc143e8bb3b9df15d1a024f1c7950d85be1e9d2298ff317dbb9caa24722",
+        "bytes": 3103
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewNavigationSettings.cs",
+        "sha256": "669cc2a3d2682174045c149e3781dc8110047b732048a06be6c1bf5b35e933f1",
+        "bytes": 6552
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewPreSettings.cs",
+        "sha256": "8ecb2655a9fae44c8b9c8466e092d4ac3e3f7d30314129d9ba5446157376ace7",
+        "bytes": 7386
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewSolverSettings.cs",
+        "sha256": "4928b3fc84c12d76f2e88262e7cb59a7ba39856f985d2e1f5f4f4bd624f0575e",
+        "bytes": 6442
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/61_Settings/ViewUnitSystemlSettings.cs",
+        "sha256": "f0a913587f597eb89ae297f598c662cd2b460b5cf5b73145632ed8d4dbc323aa",
+        "bytes": 2471
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/64_CaptureViewport/ViewCaptureViewportProperties.cs",
+        "sha256": "a00667f5bd3d8decd221facf12952b5a6a696f6658930198fe3707f3a3b201d2",
+        "bytes": 5776
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpAccessToken.cs",
+        "sha256": "9aa655b66e7fce0cd258e51e275aa9529a6f40f95dfe14a882eb08bb29a9fdbf",
+        "bytes": 3293
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpAgentGuide.cs",
+        "sha256": "790cec4bc31f32ad4fc70595d68bf2c1e92676a9aa29d75985d8c12859afe41a",
+        "bytes": 15687
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpArgumentValidator.cs",
+        "sha256": "a9fd32c3609e157484f290dfc5c3ac5cd027c8be45aaf14890e4eb29df1ed095",
+        "bytes": 9022
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpException.cs",
+        "sha256": "70b5a1c162daa0b2e04e5ab073553613ff603cc0d53ee39a9675c388a6e9cc0a",
+        "bytes": 882
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpHttpRequestHandler.cs",
+        "sha256": "0210c8a771ee1886618ae2ee7b27876bb92539978518f6592accb19e0954e554",
+        "bytes": 12655
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpHttpServer.cs",
+        "sha256": "4dddd170c0dc83ab517ab3701b1b9c8d8e1a06d8f198391d31aa9f3d7de2b1f9",
+        "bytes": 13722
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpModelScript.cs",
+        "sha256": "a68fdd3054b02483dca4188abad0853deb031dd53f7e80ae3dff894162b0ccaa",
+        "bytes": 8826
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpPrivateScript.cs",
+        "sha256": "482bca7cdc6eb82eb1f364b90cde8430f7674f0eb17b2063deb62d628329deab",
+        "bytes": 1661
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpProtocolServer.cs",
+        "sha256": "a7f79883a3b9b840da85686b2cd3b8eeb2ce7643dee6d0602a4490d3772d61f2",
+        "bytes": 17129
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpTool.cs",
+        "sha256": "5f6ee80373733fee26a80938adba3c6cfa34939cff2fbbff4b51797950bdaaca",
+        "bytes": 1946
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpToolCatalog.cs",
+        "sha256": "1a6efe42f4cacf27ef7c36bba861adf6c4606259d3c72920a10bee89c5fb04f5",
+        "bytes": 53609
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Mcp/McpTopologyScript.cs",
+        "sha256": "5a509a9f5c2c655518af8c9eb3620c98ba394369677a10af71770709c196cd83",
+        "bytes": 9636
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcApiTypeLocator.cs",
+        "sha256": "cad68898d93eba4747d2803d390b40a59727178e370cd0a0122600b8083495da",
+        "bytes": 9210
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcBusyState.cs",
+        "sha256": "08c840bcc851fafb2b9f8c68392317a8b80a58e3f27878be7355c00ddc75cdd4",
+        "bytes": 4383
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcCall.cs",
+        "sha256": "57817431b5f42b31fbf45686c0fcf2d8cf2ddd378dc9b7999686c5856192767c",
+        "bytes": 3252
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcDescribeBuilder.cs",
+        "sha256": "e48d5402128f9e649dfbe8de424207565691bfdf12c1fa75f3211a14edffd7b2",
+        "bytes": 13736
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcDescribePath.cs",
+        "sha256": "162d63e9791aa518efd8b500a88a553df5c61ba1a1eeee54a24aeb321f381380",
+        "bytes": 8431
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcDispatcher.cs",
+        "sha256": "3b47ccf83c69baefffa8ec5a2e9c541e25e1f4a11960f262c3f8d2331da66dd7",
+        "bytes": 23954
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcCancelMethod.cs",
+        "sha256": "6adbd858ea737451dcd73b4a5a33e524d1a20996fde0f1165d1979747f2cc9f4",
+        "bytes": 9953
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcDescribeMethod.cs",
+        "sha256": "13479822223f9c34b4f7d21b06c292a5ae3a1944eeb0d73795e64e7b81d73128",
+        "bytes": 8376
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcEvalMethod.cs",
+        "sha256": "cb5977e0c8e1ee524441538481ab2f5f5c7be20c34778316fe832e19a3a19016",
+        "bytes": 4506
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcExecMethod.cs",
+        "sha256": "f001bf6d434f7cea6c22389472eb666dfb119d1d658fd4e9fc27e0e759eb271f",
+        "bytes": 10508
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcExitMethod.cs",
+        "sha256": "2215c346cf9f744b984af7a3124e34cd64f8aa269a95553d3799e35c15bf41c1",
+        "bytes": 3398
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcHistoryMethod.cs",
+        "sha256": "ccf0cb58513a86a408a8074c83391e306b66d39ffd848828d8ba4503e929d0c8",
+        "bytes": 9006
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcPingMethod.cs",
+        "sha256": "936a2a9b28cae1e5f45784e42969d1906bb6525d3b041ae7cabb194c9e02d987",
+        "bytes": 1803
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcScreenshotMethod.cs",
+        "sha256": "48d386598ae70a3d235457a823d6853a251b0e2e92d0a381e8207f34ed06aa8a",
+        "bytes": 5353
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcShutdownMethod.cs",
+        "sha256": "27149fc73ec7e435c1af0ffc318594312641f21857b1f408cf4f680799353a6b",
+        "bytes": 1309
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcStatusMethod.cs",
+        "sha256": "f498c52b5ae5edfc0688d5a477c277a8b2c13e8ea6a77efa3bdacbd3592bdd99",
+        "bytes": 7550
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcMethods/RpcWaitMethod.cs",
+        "sha256": "c6b254bfc38d63730429ebf340d1f71f980b54f46f7163a601d4af19652a38a0",
+        "bytes": 2107
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcRequest.cs",
+        "sha256": "c416940bfdddc9a52363bc8432ca8c5584bfa7217ae7fdfeb4cc65509fa23300",
+        "bytes": 12446
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcResponse.cs",
+        "sha256": "d9993cdb5ab8830f573ca4a50df8d5dc2f84a1c2d1f5189a6c01623951974f66",
+        "bytes": 3138
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcSession.cs",
+        "sha256": "116cbb21f98a8d8520b532e09279644e9e259ebd48453537e12f5066d5cad850",
+        "bytes": 5383
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcSessionInfo.cs",
+        "sha256": "a5097e2ff010077f53b82409d4152db1a46d69f762ddae9eb527701bafee39cf",
+        "bytes": 3167
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcSessionInfoReader.cs",
+        "sha256": "fe9a974f32cd22fc0c2ea25a4b113a0ee0835387e85017ad7e21867b35490c97",
+        "bytes": 5021
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcStartException.cs",
+        "sha256": "97020c89bb00d0661372192f491f54d7b81fb3c6886fb07d1be3555bf02e47d5",
+        "bytes": 925
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Rpc/RpcUiThread.cs",
+        "sha256": "14199463fdee9d5a39347e85298c7747ef3f474500536b6b57a4752314fabc79",
+        "bytes": 4543
+      }
+    ],
+    "UserControls": [
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/UserControls/SidePanel/PanelItem.cs",
+        "sha256": "2beaf478d4741515af2c8ef6ce3df13778c4116c6d812cb268134a7d74a738d5",
+        "bytes": 1485
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/UserControls/SidePanel/PanelItemLabel.cs",
+        "sha256": "fd7ffc1c0f3407d5b6f382b441905e4c84755ea8b534b24cf612a2587aeccc27",
+        "bytes": 983
+      },
+      {
+        "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/UserControls/SidePanel/PanelItemLinkLabel.cs",
+        "sha256": "546b93514862e5f251ab00c605a4404a9dc327efd419118c982f2d59d1f83a03",
+        "bytes": 1981
+      }
+    ]
+  },
+  "changedSourceFingerprints": [
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/PrePoMax/Forms/00_Common/FileExporter/ViewExportHistoryResultSetFileProperties.cs",
+      "sha256": "62aea5038e582bf050719f3a92fd9a6602b4e7e4de0315720cc4587bdd43f71b",
+      "bytes": 3901
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/AutomationHost.cs",
+      "sha256": "59547a8d5bfca59f0b0cfb424c7b345ac4c952a4f284da78672f2588e2c2e280",
+      "bytes": 1519
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/OriginalCommandTools.g.cs",
+      "sha256": "e3ec33bb0122f85912c6794108f658a8d1f48723982f8c4aa3d9ff188a77e3f2",
+      "bytes": 2747
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/RpcServer.Portable.g.cs",
+      "sha256": "e3d4a4ac82905cce2d58aad0baa0f887d11a411b16d1d13b2dbfee9bab9dec85",
+      "bytes": 15134
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/RpcSessionInfoWriter.Portable.g.cs",
+      "sha256": "2f6a38aebb8a122a8983f9726a50b0cdd138f18391f100328af4f184220af2bd",
+      "bytes": 7166
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/UiReports.cs",
+      "sha256": "8a7d6d30c3b0db9f53f561d566960f1c9a286e3761460f76aca089b691968692",
+      "bytes": 445
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/Host/ViewExportFileProperties.Portable.g.cs",
+      "sha256": "e6584fbf6f2d5d2829d42a9d1c8477afbad933b7593b13c2912c86e82510fac0",
+      "bytes": 1430
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/SourceGen/Program.cs",
+      "sha256": "9909f807a4a7604ae661abadb2761512aca1ae8285a2a3fb07ae8e91f6565f26",
+      "bytes": 5990
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Controller/generate-automation.py",
+      "sha256": "ed6f11c9f4f9cd07487bbff3277bb935e199677243e7b8ec25eb45c159c42009",
+      "bytes": 4376
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/PrePoMax/Sources.g.props",
+      "sha256": "c6f74b262363302b24dfd52d80aff21a8490a7d7d0d1ef18d5bc3fa3e74dbe78",
+      "bytes": 94741
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/UserControls/Sources.g.props",
+      "sha256": "95bc6c67428873d92a27779a24b211bb28daf83c562b4155ef0b1d9a88729789",
+      "bytes": 3095
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/WinFormsCompat/Forms.cs",
+      "sha256": "bd79d0d7adf36db38d111a7c86ff072f263ed4b774b65c2b3e00d75b18033887",
+      "bytes": 2441
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/domain-sources.json",
+      "sha256": "e964be638384609d99e62c942617f0d01866835432b03b45c01e5af3eefb0973",
+      "bytes": 42138
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/vtkControl/TexturePng.cs",
+      "sha256": "bdcd505888ebb78c740bcc84b9c1495da0ca1ccccea32b7da8f3f504f8bcffad",
+      "bytes": 2471
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Containerfile.checks",
+      "sha256": "910a5b608b07a4432f5d83456c2b2feb66900db383b07a89b3042b0c0f28a2c8",
+      "bytes": 481
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/FormSourceGen/Program.cs",
+      "sha256": "4aaf2bb8b459d50d659bbe90937cb190f1e3c4952e8923b97b4d91416ec1f0b1",
+      "bytes": 3458
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/ApplicationSession.cs",
+      "sha256": "c145b51925ae7fe9e6d613a8c45677fcb39fd4dc7b7ba7f153391bde808c6de1",
+      "bytes": 6200
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/ContactSearchSession.cs",
+      "sha256": "49779b0b7380d6c80a700e68b023680562a3a1b74f0a4f86173f0603cbf2ec4d",
+      "bytes": 2105
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/KeywordTree.cs",
+      "sha256": "10c2e7d3f6948bafb1205c5f6fa899045c9397153a937dc2dfc8ebcbb7d6b80a",
+      "bytes": 2403
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/MaterialEditSession.cs",
+      "sha256": "65929d05214d3db6db9af483f180ed23f86eec06cfc1efeb53192ae0eb3eb7bc",
+      "bytes": 4648
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/MaterialLibrarySession.cs",
+      "sha256": "f303a2fb0bf31a61bffa285864304ab4cb983e75cbf43ea40526a306e2c48a3b",
+      "bytes": 3858
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/MeshHistoryEditSession.cs",
+      "sha256": "fb9009a772596843b7df0ed2b0d92815e44f187fe104c2fced6525da6bf90f63",
+      "bytes": 1050
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/OriginalAdvisor.g.cs",
+      "sha256": "f8f76a8084e4d0f6d7a094c2539078d6c04ad067bdfa085bd163800ffe9ba9aa",
+      "bytes": 19868
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/OriginalApplicationRules.g.cs",
+      "sha256": "c88cc1eb6074e11e9dada44af7a3ca5daa012921e306f5b38383d6987347b0be",
+      "bytes": 49694
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/OriginalFollowerCamera.g.cs",
+      "sha256": "0235bdb8939666e6afc8b499415250a8a4e9cd142c6823dc06fcad4ca567c23a",
+      "bytes": 5929
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/OriginalKeywordRules.g.cs",
+      "sha256": "57440b70594d2d098fd77054cec8e369f7991810d75e4a41da47d4e0d8f0f7d7",
+      "bytes": 14778
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/PlotSession.cs",
+      "sha256": "47c7cd537cdea414b59ea64c57a698bcccb687015aa33cfbd70e6c17a34b35dd",
+      "bytes": 1965
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/PropertySheet.cs",
+      "sha256": "8536fc7d9f70d267f6fd68c60c71a8b9d8c69c8ae9f831297f821a906e580172",
+      "bytes": 4003
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/ResultsSession.cs",
+      "sha256": "ff6f7e81e424ff8eceeaf41ce8ece24d197c60ef012ea91075cb2db9754f230e",
+      "bytes": 8847
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/UserViewsSession.cs",
+      "sha256": "0ab7314781d97fb4ba7e88dda52833aa705f725ef53e585840ab4aba4e5041ee",
+      "bytes": 1317
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/application_gui_probe.py",
+      "sha256": "c8ec18716a6e610edd4a9c431615fa6c0b00e198f37001eb2845dede7cbee695",
+      "bytes": 13551
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/application_probe.py",
+      "sha256": "c6b5d688b08e4134a1ef29a1eaa00893d26ab08d80db15a0f24c2965ed7dd284",
+      "bytes": 8681
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/application_widgets.py",
+      "sha256": "6506956e70e3ef8484955311e1c632108a63f3716aa1f13147b400fa3102c9a3",
+      "bytes": 25804
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/application_workbench.py",
+      "sha256": "dab9be5bd83575f61d5d86c071e4c8305e4ff69749568f44d958dcedb81e83bc",
+      "bytes": 41585
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/area_selection.py",
+      "sha256": "3b2619e804a7614616960cb8f6e3aa7379939e7326102296c2ff0bc0e48dcade",
+      "bytes": 1669
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/audit-ui.py",
+      "sha256": "17859fc073890de72f1030a492743dc6bd5f3ee0ee7442a40a75d41430d5e07b",
+      "bytes": 7544
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/authoring_widgets.py",
+      "sha256": "2f1c8d69f0cb01b5dd97b587e97bb20a74d609cb731dc2cd4c4bd56f41790f04",
+      "bytes": 21507
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/avi_writer.py",
+      "sha256": "a1e8707f86bb2b7f26e5b7aedd9241d66edf44beb80a61db1d421fa708147cc7",
+      "bytes": 3206
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-advisor.py",
+      "sha256": "059b657f7bdb6d0ef81f6a3c6018f0249510cbadce9a198d93d53f90b808468d",
+      "bytes": 1689
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-application-forms.py",
+      "sha256": "e7bb01b0f86e6a9364bfd523337badaa3238ad556e25751073a2dda053f70ab3",
+      "bytes": 9509
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-keyword-editor.py",
+      "sha256": "2c8ee29dd149556f67513b8bb623d11ed4126d497f50270a448431a5577662b6",
+      "bytes": 6166
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-presentation-rules.py",
+      "sha256": "fc1eb839dd9a1ce6b7212343af5a78a422aa49a497acb25c619ba43e17afd7a1",
+      "bytes": 2888
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/plot_widgets.py",
+      "sha256": "311dab9d9890222ddc43fb0fd55e46f4e35f11cfd92e557cee1895c45b7071db",
+      "bytes": 9154
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/presentation.py",
+      "sha256": "cc4d3950782980a70998d2a434fefc1e2500eefd9bc8cf0c3b83519b2037b57f",
+      "bytes": 13110
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/results_gui_probe.py",
+      "sha256": "4757a631cdbc4ffd814fa28e744137ac09872908f9edd54d56b2974e6d4473e7",
+      "bytes": 11516
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/results_workbench.py",
+      "sha256": "45fcdfb388ada2f5332bebc7c0791692e8c924078585b24e470682b4285c3339",
+      "bytes": 29699
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/run.py",
+      "sha256": "5625956306670bf3a1a35b2901f0427507fccb0a8b061861cc623cfc12c447b4",
+      "bytes": 2142
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/verify-ui.py",
+      "sha256": "db82867e49de33fd3b03780479e8e86754f27037d5a4549a02791b22f92dd075",
+      "bytes": 9585
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/verify-video.py",
+      "sha256": "d426ad60f8c47983dcf65e8d19c62cac746632b8c7f23232b9f2f54d6c20989d",
+      "bytes": 1400
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+      "sha256": "4e42c09e5e6cb72271bab79b5c5712215790404cec24919e9f94fc4f09274a86",
+      "bytes": 37966
+    }
+  ],
+  "profiles": [
+    {
+      "path": "/private/tmp/prepomaxx-phase-b/python.json",
+      "sha256": "607e99523482184149563048619f13a34ff94a626d7e43a2abd1c0b0c6636de4",
+      "bytes": 449
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c5/tools-3mf.json",
+      "sha256": "7a1ff48a11e0543f8789052451f6d32d3b45bdefcd09403056b42cca39bb503d",
+      "bytes": 691
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c5/linux/python.json",
+      "sha256": "bdb5e59616af75795efd8fc0c784c3cefd3829a2a805f69d5531bf3a7663d13d",
+      "bytes": 303
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c5/linux/c5-final/tools.json",
+      "sha256": "6f40e6090fb0d018e2a33efcf916273db08a5d0d3ef05c50387053fc82b56900",
+      "bytes": 569
+    },
+    {
+      "path": "/private/tmp/prepomaxx-phase-a-closeout/runtime/gmsh-build.json",
+      "sha256": "33aa72dc4009258b22dcc1ebada694c12f2bb7f76957cdda9a2deebd8d7d9341",
+      "bytes": 219
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/build-registry.json",
+      "sha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+      "bytes": 1824
+    },
+    {
+      "path": "/private/tmp/prepomaxx-task0067-evidence/linux/solver-preview/build-registry.json",
+      "sha256": "ba0161d8e8f35985d9b4ef9bc1e07b8eb440258ddbc15e2c49bb553fb7f2e8f5",
+      "bytes": 1071
+    }
+  ],
+  "runtimePins": {
+    "macSdk": "10.0.403",
+    "linuxSdk": "10.0.402",
+    "vtk": "9.5.2",
+    "PyQt": "6.10.0",
+    "Qt": "6.10.2",
+    "Python.NET": "3.1.0",
+    "CPython": "3.12 explicit profiles",
+    "gmsh": "patched 4.13.0",
+    "CalculiX": "2.22 explicit SPOOLES profiles",
+    "lib3mf": "2.4.1",
+    "decoder": "Qt bundled FFmpeg 7.1.2, CPU; no new encoder selected",
+    "linuxPulse": "libpulse0 1:16.1+dfsg1-2ubuntu10.1"
+  },
+  "resolvedIntegrationFailures": [
+    {
+      "issue": "Controller host contract generator included four RPC methods already implemented by AutomationHost.cs",
+      "resolution": "Explicit native-method exclusion; final host-contract stage passed."
+    },
+    {
+      "issue": "Initial Linux independent decode could not load libpulse.so.0",
+      "resolution": "Added libpulse0 to the local check image; both final AVI decodes produce all six valid frames.",
+      "initialLog": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/avi-decode-initial.log",
+        "sha256": "0a3d4c1d1deea93fe1b68969bc892b9e0c832480d36a98a9f2aee8720c000d82",
+        "bytes": 219
+      },
+      "resolvedLog": {
+        "path": "/private/tmp/prepomaxx-c5/linux/c5-final/avi-decode.log",
+        "sha256": "a703ae3141e8b1620fa6c2642e7ccff1fa40f4ee0dbc1da3272e4c1ae201cbe3",
+        "bytes": 1129
+      }
+    },
+    {
+      "issue": "Initial native Windows-resave probe used .Count on a Python.NET dictionary",
+      "resolution": "Use len; strict native readback passed. Initial log retained."
+    }
+  ],
+  "audit": {
+    "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/.project/reports/phase-c5-ui-audit.json",
+    "sha256": "f052717473e22ac21278b82fc4dcd37b72c38d75ca2c21c9aadace2c5914291d",
+    "bytes": 809099
+  },
+  "auditCounts": {
+    "forms": 72,
+    "designerFields": 993,
+    "eventSubscriptions": 796,
+    "fullFormsAccepted": 0
+  },
+  "openAcceptance": [
+    "All 72 full original forms/control/keyboard/focus/selection/DPI comparisons remain unaccepted; source audit is not behavior acceptance.",
+    "Full complex/all-analysis/mesher/viewport/section/picking/animation/large-project matrices and PMX corpus remain open.",
+    "Native Windows AVI codec options and portable AVI >2 GiB/OpenDML remain open.",
+    "B011 failed stress diagnostic, D029 and other D061 findings, including B010/B012 native cancellation, remain open.",
+    "Native Windows, deferred Linux x64, physical Linux/GPU/Wayland/human input and all installer/signing/distribution acceptance remain pending."
+  ],
+  "retention": {
+    "cleanupJournal": {
+      "path": "/private/tmp/prepomaxx-c5/cleanup-journal.json",
+      "sha256": "3e2bb7213d3c931405f2c7d6390e23c8c36a707351179cb42282e3958b8fe64c",
+      "bytes": 486
+    },
+    "removedSupersededBuilds": [
+      "/private/tmp/prepomaxx-c5/mac/build",
+      "/private/tmp/prepomaxx-c5/mac-current/build",
+      "/private/tmp/prepomaxx-c5/services-only/build",
+      "/private/tmp/prepomaxx-c5/controller/build",
+      "/private/tmp/prepomaxx-c5/mac-final/build",
+      "/private/tmp/prepomaxx-c5/linux/final/build"
+    ],
+    "removedBytes": 567536997,
+    "retainedBuilds": [
+      "/private/tmp/prepomaxx-c5/mac-c5-final/build",
+      "/private/tmp/prepomaxx-c5/linux/c5-final/build",
+      "/private/tmp/prepomaxx-c5/controller-current/build"
+    ],
+    "preview": "1580fa9c unchanged; no new package or installer",
+    "podman": "Independently inspected stopped after verification: podman machine inspect podman-machine-default --format {{.State}}",
+    "hostedCi": "Not run; D058 quota hold"
+  }
+}

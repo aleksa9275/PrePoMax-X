@@ -47,3 +47,6 @@ namespace System.Windows.Forms
         public MouseEventArgs(MouseButtons button,int clicks,int x,int y,int delta) {Button=button;Clicks=clicks;X=x;Y=y;Delta=delta;}
     }
 }
+namespace System.Windows.Forms { public delegate void MethodInvoker(); }
+namespace System.Windows.Forms.Design { public sealed class FolderNameEditor : System.Drawing.Design.UITypeEditor {} }
+namespace System.Windows.Forms.Design { public sealed class FileNameEditor : System.Drawing.Design.UITypeEditor {} }

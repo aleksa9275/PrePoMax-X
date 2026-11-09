@@ -116,3 +116,17 @@ values, without establishing the cause. [B012](../bugs/B012-analysis-cancellatio
 records cancellation before process initialization; active-child cancellation
 passes separately. Neither finding is marked fixed. Original/generated unused
 field/unreachable/modal-path warnings remain deferred; C4 does not suppress them.
+
+## C5 application/UI audit (9 November 2026)
+
+C5 reuses original application/property/automation/query/plotting rules. No
+engineering tolerance/algorithm change was made. B011 remains failed and B010/B012
+remain open; script Stop is not a native-job pre-start/concurrency fix. See the
+[C5 report](phase-c5-application-tools.md) and [72-form source audit](phase-c5-ui-audit.json)
+for unaccepted control/input/viewport matrices; these are parity work, before the
+post-parity correctness sweep. New original-source build warnings include existing
+reflection/nullability/unused members and platform annotations in original plot/
+settings/RPC code. Do not suppress them or alter algorithms to make checks pass.
+The Linux video-decode dependency failure (`libpulse.so.0`) was a test-image
+integration issue, resolved with `libpulse0`; hardware decode remains unavailable
+and verified AVI frames use CPU decoding. No backend/solver/library version changed.

@@ -22,6 +22,7 @@ p.add_argument('--feed',type=Path)
 p.add_argument('--native-tools',type=Path,help='Explicit fingerprinted native mesher tool manifest for C3')
 p.add_argument('--gmsh-library',type=Path,help='Pinned Gmsh 4.13.0 library with adjacent gmsh-build.json')
 p.add_argument('--cad-fixture',type=Path)
+p.add_argument('--three-mf-library',type=Path,help='Explicit lib3mf 2.4.1 profile for C5 contour export')
 p.add_argument('--solver-registry',type=Path)
 p.add_argument('--solver-id')
 p.add_argument('--solver-directory',type=Path)
@@ -53,11 +54,21 @@ try:
     run('original-forms',[sys.executable,HERE/'generate-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-geometry-forms',[sys.executable,HERE/'generate-geometry-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-results-forms',[sys.executable,HERE/'generate-results-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-application-forms',[sys.executable,HERE/'generate-application-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-keyword-editor',[sys.executable,HERE/'generate-keyword-editor.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-automation',[sys.executable,ROOT/'X/Controller/generate-automation.py','--check'])
+    run('original-advisor',[sys.executable,HERE/'generate-advisor.py','--check'])
+    run('original-follower',[sys.executable,HERE/'generate-presentation-rules.py','--check'])
+    run('ui-audit',[sys.executable,HERE/'audit-ui.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
         base=['dotnet',binary,a.python_profile.resolve(),folder/'session',HERE/'workbench.py']
+        native_manifest=a.native_tools
+        if a.three_mf_library:
+            tools=json.loads(a.native_tools.read_text()) if a.native_tools else {'schemaVersion':1,'tools':{}}
+            tools['tools']['lib3mf.dll']={'path':str(a.three_mf_library.resolve()),'sha256':sha(a.three_mf_library.resolve())};native_manifest=folder/'tools-with-3mf.json';native_manifest.write_text(json.dumps(tools,indent=2)+'\n');base+=['--native-tools',native_manifest,'--check-3mf']
         run('service',base+['--service-probe',folder/'service'])
         result=json.loads((folder/'service/service.json').read_text())
         if not result.get('success'):raise ValueError('Service workflow failed')
@@ -66,8 +77,12 @@ try:
         result=json.loads((folder/'authoring/service/authoring.json').read_text())
         if not result.get('success'):raise ValueError('C2 authoring workflow failed')
         report['authoringService']=result
+        run('application-service',base+['--application-service-probe',folder/'application/service'])
+        result=json.loads((folder/'application/service/application.json').read_text())
+        if not result.get('success'):raise ValueError('C5 service workflow failed')
+        report['applicationService']=result
         if a.native_tools and a.gmsh_library:
-            geometry_base=base+['--native-tools',a.native_tools.resolve()]
+            geometry_base=base+['--native-tools',native_manifest.resolve()]
             if a.cad_fixture:geometry_base+=['--cad-fixture',a.cad_fixture.resolve()]
             geometry_env={'PREPOMAXX_GMSH_LIBRARY':str(a.gmsh_library.resolve())}
             run('geometry-service',geometry_base+['--geometry-service-probe',folder/'geometry/service'],geometry_env)
@@ -102,6 +117,10 @@ try:
                 result=json.loads((folder/'results/gui/results-gui.json').read_text())
                 if not result.get('success'):raise ValueError('C4 GUI workflow failed')
                 report['resultsGui']=result
+            run('application-gui',base+['--application-probe',folder/'application/gui'])
+            result=json.loads((folder/'application/gui/application-gui.json').read_text())
+            if not result.get('success'):raise ValueError('C5 GUI workflow failed: '+str(result))
+            report['applicationGui']=result
         else:report['pending'].append('GUI workflow not executed: --gui not supplied')
     else:report['pending'].append('Property/native UI workflow not executed: no explicit CPython profile')
     report['success']=True

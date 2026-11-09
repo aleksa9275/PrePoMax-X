@@ -18,6 +18,7 @@ public sealed class PropertyField
     public string Editor {get;init;}
     public bool IsFlags {get;init;}
     public bool CanConvertFromString {get;init;}
+    public bool HasChildren {get;init;}
 }
 public sealed class PropertySheet
 {
@@ -42,10 +43,11 @@ public sealed class PropertySheet
             var choices=p.Converter.GetStandardValuesSupported(context)?p.Converter.GetStandardValues(context):null;
             return new PropertyField {Name=p.Name,Label=p.DisplayName,Category=p.Category,Description=p.Description,
                 Text=p.Converter.ConvertToString(context,CultureInfo.InvariantCulture,p.GetValue(instance)),
-                ReadOnly=p.IsReadOnly,Editor=(p.Attributes[typeof(EditorAttribute)] as EditorAttribute)?.EditorTypeName,
+                HasChildren=p.GetValue(instance) is ICustomTypeDescriptor,ReadOnly=p.IsReadOnly,Editor=(p.Attributes[typeof(EditorAttribute)] as EditorAttribute)?.EditorTypeName,
                 IsFlags=p.PropertyType.IsEnum && p.PropertyType.IsDefined(typeof(FlagsAttribute),false),CanConvertFromString=p.Converter.CanConvertFrom(context,typeof(string)),Exclusive=p.Converter.GetStandardValuesExclusive(context),
                 Choices=choices?.Cast<object>().Select(v=>p.Converter.ConvertToString(context,CultureInfo.InvariantCulture,v)).ToArray()??[]};
         }).ToArray();
+    public PropertySheet Child(string name)=>new((TypeDescriptor.GetProperties(instance)[name]??throw new ArgumentException(name)).GetValue(instance));
     public CollectionSheet Collection(string name)
     {
         var property=TypeDescriptor.GetProperties(instance)[name];

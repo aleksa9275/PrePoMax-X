@@ -6,3 +6,4 @@ namespace CaeGlobals
 {
     public static class AutoClosingMessageBox {public static void ShowError(string text,int milliseconds) => MessageBoxes.ShowError(text);}
 }
+namespace PrePoMax.Forms { public sealed class EnvVarsUIEditor : System.Drawing.Design.UITypeEditor {} }

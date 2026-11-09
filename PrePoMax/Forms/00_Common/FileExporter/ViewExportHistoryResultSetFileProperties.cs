@@ -17,8 +17,6 @@ using CaeGlobals;
 using CaeModel;
 using DynamicTypeDescriptor;
 using CaeResults;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using static System.Windows.Forms.Design.AxImporter;
 using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.Windows.Forms;

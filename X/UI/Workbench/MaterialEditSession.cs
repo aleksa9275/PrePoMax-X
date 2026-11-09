@@ -33,6 +33,12 @@ public sealed class MaterialEditSession
         views=MaterialEditor.CreateViews(material).ToList();
         changed=false;
     }
+    public static MaterialEditSession Preview(Controller controller,Material material)=>new(controller,material,true);
+    MaterialEditSession(Controller controller,Material material,bool preview)
+    {
+        this.controller=controller;originalName=material.Name;Name=material.Name;Description=material.Description;initialDescription=material.Description;
+        TemperatureDependent=material.TemperatureDependent;views=MaterialEditor.CreateViews(material.DeepClone()).ToList();changed=false;
+    }
     public void AddProperty(int index)
     {
         MaterialProperty property=MaterialEditor.PropertyTemplates()[index].Value;

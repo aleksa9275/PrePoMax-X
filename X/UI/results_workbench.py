@@ -48,6 +48,8 @@ class ResultsWorkbench:
         self.addToolBarBreak();self.animation_toolbar=self.addToolBar('Animation')
         self.animation_type=QtWidgets.QComboBox();self.animation_type.addItems(['Scale factor','Time increments','Harmonic']);self.animation_toolbar.addWidget(self.animation_type)
         self.frames=QtWidgets.QSpinBox();self.frames.setRange(2,1000);self.frames.setValue(21);self.frames.setToolTip('Animation frames');self.animation_toolbar.addWidget(self.frames)
+        self.animation_options={'fps':20,'style':'Loop','step':1,'first':0,'last':None,'all_frames':True,'backward':False}
+        self.animation_toolbar.addAction('Options…',lambda:self.guard(self.animation_options_dialog))
         self.animation_toolbar.addAction('Play',lambda:self.guard(self.play_animation));self.animation_toolbar.addAction('Stop',self.stop_animation)
         self.frame_slider=QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal);self.frame_slider.setMaximumWidth(130);self.animation_toolbar.addWidget(self.frame_slider)
         self.frame_slider.valueChanged.connect(lambda frame:self.guard(lambda:self.show_frame(frame)))
@@ -118,6 +120,8 @@ class ResultsWorkbench:
             else:
                 # Raw solver history sets have data but no editable derived-output definition.
                 editable=(entry.Family!='Result fields' or any(o.Name==entry.Name for o in self.controller.GetResultFieldOutputs())) and (entry.Family!='Result histories' or any(o.Name==entry.Name for o in self.controller.GetResultHistoryOutputs()))
+                if not editable and entry.Family=='Result histories':
+                    menu.addAction('Remove raw history set',lambda:self.guard(lambda:self.remove_raw_history(entry.Name)))
                 if editable:
                     menu.addAction('Edit…',lambda:self.guard(lambda:self.edit_results(entry.Family,entry.Name)))
                     suffix={'Jobs':'jobs','Result fields':'fields','Result histories':'histories','Result reference points':'reference points','Result coordinate systems':'coordinate systems'}[entry.Family]
@@ -209,12 +213,20 @@ class ResultsWorkbench:
 
     def play_animation(self):
         self.animation_timer.stop();self.animation_count=self.results.Animate(self.animation_type.currentText(),self.frames.value());self.animation_frame=0
+        self.animation_delta=-abs(self.animation_options['step']) if self.animation_options['backward'] else abs(self.animation_options['step'])
         self.frame_slider.blockSignals(True);self.frame_slider.setRange(0,self.animation_count-1);self.frame_slider.setValue(0);self.frame_slider.blockSignals(False)
-        self.refresh();self.show_frame(0);self.animation_timer.start(50)
-    def next_frame(self):self.frame_slider.setValue((self.animation_frame+1)%self.animation_count)
+        self.refresh();self.show_frame(self.animation_count-1 if self.animation_options['backward'] else min(self.animation_count-1,self.animation_options['first']));self.animation_timer.start(max(1,round(1000/self.animation_options['fps'])))
+    def next_frame(self):
+        first=min(self.animation_options['first'],self.animation_count-1);last=min(self.animation_count-1,self.animation_options['last'] if self.animation_options['last'] is not None else self.animation_count-1);value=self.animation_frame+self.animation_delta;style=self.animation_options['style']
+        if value<first or value>last:
+            if style=='Once':value=max(first,min(last,value));self.animation_timer.stop()
+            elif style=='Loop':value=last if value<first else first
+            else:self.animation_delta=-self.animation_delta;value=first if value<first else last
+        # Set directly: a Swing endpoint can repeat, matching the original timer.
+        self.frame_slider.blockSignals(True);self.frame_slider.setValue(value);self.frame_slider.blockSignals(False);self.show_frame(value)
     def show_frame(self,frame):
         if self.animation_frame is None:return
-        self.animation_frame=frame;self.scene.set_frame(frame);self.results.AnimationFrame(frame);self.render()
+        self.animation_frame=frame;self.scene.set_frame(frame);self.scene.presentation.rescale_frame(frame,self.animation_options['all_frames']);self.results.AnimationFrame(frame);self.update_follower();self.render()
     def stop_animation(self,redraw=True):
         self.animation_timer.stop();was=self.animation_frame is not None;self.animation_frame=None
         if was and redraw and self.controller.ResultsInitialized:self.controller.DrawResults(False);self.refresh()
@@ -222,31 +234,59 @@ class ResultsWorkbench:
     def capture(self,path,transparent=False,magnification=1):
         from vtkmodules.vtkRenderingCore import vtkWindowToImageFilter
         from vtkmodules.vtkIOImage import vtkPNGWriter
-        self.render();window=self.viewport.GetRenderWindow();old=window.GetAlphaBitPlanes();window.SetAlphaBitPlanes(1)
+        window=self.viewport.GetRenderWindow();old=window.GetAlphaBitPlanes();alpha=self.renderer.GetBackgroundAlpha();gradient=self.renderer.GetGradientBackground();window.SetAlphaBitPlanes(1)
         try:
-            image=vtkWindowToImageFilter();image.SetInput(window);image.SetScale(magnification)
+            self.renderer.SetBackgroundAlpha(0 if transparent else 1)
+            if transparent:self.renderer.GradientBackgroundOff()
+            self.render();image=vtkWindowToImageFilter();image.SetInput(window);image.SetScale(magnification)
             if transparent:image.SetInputBufferTypeToRGBA()
             else:image.SetInputBufferTypeToRGB()
             image.ReadFrontBufferOff();image.Update();writer=vtkPNGWriter();writer.SetFileName(str(path));writer.SetInputConnection(image.GetOutputPort());writer.Write()
-        finally:window.SetAlphaBitPlanes(old)
+            if writer.GetErrorCode():raise RuntimeError('The viewport capture could not be written.')
+        finally:window.SetAlphaBitPlanes(old);self.renderer.SetBackgroundAlpha(alpha);self.renderer.SetGradientBackground(gradient);self.render()
     def capture_dialog(self):
-        path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Capture viewport','','PNG (*.png)')
-        if path:self.capture(path)
+        from PrePoMax import CaptureViewportProperties
+        from PrePoMax.Forms import ViewCaptureViewportProperties
+        from PrePoMaxX.UI import PropertySheet
+        from application_widgets import SheetDialog
+        properties=getattr(self,'capture_properties',None) or CaptureViewportProperties(self.controller.GetWorkDirectory(),'Viewport')
+        def capture():
+            import tempfile
+            path=properties.GetFileName() if properties.SaveToFile else None
+            if path is None:
+                with tempfile.TemporaryDirectory(prefix='prepomaxx-capture-') as folder:
+                    target=str(Path(folder)/'viewport.png');self.capture(target,properties.TransparentBackground,properties.Magnification)
+                    if properties.CopyToClipboard:QtWidgets.QApplication.clipboard().setImage(__import__('PyQt6.QtGui',fromlist=['QImage']).QImage(target))
+            else:
+                self.capture(path,properties.TransparentBackground,properties.Magnification)
+                if properties.CopyToClipboard:QtWidgets.QApplication.clipboard().setImage(__import__('PyQt6.QtGui',fromlist=['QImage']).QImage(path))
+            self.capture_properties=properties
+        SheetDialog(self,'Capture viewport',PropertySheet(ViewCaptureViewportProperties(properties)),capture).exec()
     def export_animation(self,path,fps=20,swing=False):
         if self.animation_count<1 or self.animation_frame is None:raise ValueError('Prepare an animation with Play first.')
-        self.animation_timer.stop();indices=list(range(self.animation_count))
-        if swing:indices+=indices[-2:0:-1]
+        self.animation_timer.stop();first=min(self.animation_options['first'],self.animation_count-1);last=min(self.animation_count-1,self.animation_options['last'] if self.animation_options['last'] is not None else self.animation_count-1);indices=list(range(first,last+1,max(1,self.animation_options['step'])))
+        if swing:indices+=list(range(last,first-1,-max(1,self.animation_options['step'])))
         path=Path(path);old=self.animation_frame
         try:
             if path.suffix.lower()=='.png':
-                for n,index in enumerate(indices):self.show_frame(index);self.capture(str(path.with_name(path.stem+f'-{n+1:05d}.png')))
+                for n,index in enumerate(indices):self.show_frame(index);self.capture(str(path.with_name(str(n+1).zfill(len(str(len(indices))))+'_'+path.name)))
             else:
                 # VTK's original AVI writer is platform-specific. Try the native pinned
                 # VTK video modules explicitly; never install or select an encoder silently.
                 from vtkmodules.vtkRenderingCore import vtkWindowToImageFilter
                 if path.suffix.lower()=='.avi':
-                    from vtkmodules.vtkIOAVI import vtkAVIWriter
-                    writer=vtkAVIWriter()
+                    import importlib.util
+                    if importlib.util.find_spec('vtkmodules.vtkIOAVI'):
+                        from vtkmodules.vtkIOAVI import vtkAVIWriter
+                        writer=vtkAVIWriter()
+                    else:
+                        from avi_writer import AviWriter
+                        self.render();image=vtkWindowToImageFilter();image.SetInput(self.viewport.GetRenderWindow());image.SetInputBufferTypeToRGB();image.ReadFrontBufferOff();image.Update();dimensions=image.GetOutput().GetDimensions();avi=AviWriter(path,dimensions[0],dimensions[1],fps,len(indices))
+                        try:
+                            for index in indices:self.show_frame(index);image.Modified();image.Update();avi.write(image.GetOutput())
+                            avi.finish()
+                        except BaseException:avi.abort();raise
+                        return
                 elif path.suffix.lower()=='.ogv':
                     from vtkmodules.vtkIOOggTheora import vtkOggTheoraWriter
                     writer=vtkOggTheoraWriter()
@@ -258,11 +298,10 @@ class ResultsWorkbench:
         finally:self.show_frame(old)
     def export_animation_dialog(self):
         import importlib.util
-        formats=['PNG frames (*.png)']
-        if importlib.util.find_spec('vtkmodules.vtkIOAVI'):formats.append('AVI (*.avi)')
+        formats=['PNG frames (*.png)','AVI (*.avi)']
         if importlib.util.find_spec('vtkmodules.vtkIOOggTheora'):formats.append('Ogg Theora (*.ogv)')
         path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export animation','',';;'.join(formats))
-        if path:self.export_animation(path)
+        if path:self.export_animation(path,self.animation_options['fps'],self.animation_options['style']=='Swing')
     def export_field(self):
         path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export current field','','CSV (*.csv)')
         if path:self.results.ExportField(path)
@@ -272,3 +311,37 @@ class ResultsWorkbench:
             name,ok=QtWidgets.QInputDialog.getItem(self,'History output','Set',list(self.controller.GetHistoryResultSetNames()),0,False)
             if not ok:return
         show_history(self,name)
+
+    def open_result_leaf(self,entry):
+        if entry.Family=='Result field components':
+            current=self.controller.CurrentFieldData;self.results.Field(entry.Step,entry.Name,current.StepId,current.StepIncrementId);self.refresh()
+        else:
+            from history_widgets import show_history
+            show_history(self,entry.Step.split('|')[0])
+    def results_leaf_menu(self,entry,position):
+        menu=QtWidgets.QMenu(self);menu.addAction('View',lambda:self.guard(lambda:self.open_result_leaf(entry)));menu.addAction('Remove',lambda:self.guard(lambda:self.remove_result_leaf(entry)))
+        if entry.Family=='Result history components':
+            menu.addAction('Add to XY plot',lambda:self.guard(lambda:self.plot_result_leaf(entry)))
+        menu.exec(self.tree.viewport().mapToGlobal(position))
+    def remove_result_leaf(self,entry):
+        names=Array[String]([entry.Name])
+        if entry.Family=='Result field components':self.controller.RemoveResultFieldOutputComponentsCommand(entry.Step,names)
+        elif entry.Family=='Result history fields':self.controller.RemoveResultHistoryFieldsCommand(entry.Step,names)
+        else:
+            set_name,field=entry.Step.split('|',1);self.controller.RemoveResultHistoryFieldsCommand(set_name,field,names)
+        self.refresh()
+    def plot_result_leaf(self,entry):
+        from CaeResults import HistoryResultData
+        name,field=entry.Step.split('|',1)
+        if self.plot_panel.current()<0:self.plot_panel.add()
+        self.plot_panel.session.AddHistory(self.plot_panel.current(),HistoryResultData(name,field,entry.Name));self.plot_panel.rebuild();self.plot_dock.show()
+    def remove_raw_history(self,name):self.controller.RemoveResultHistoryOutputsCommand(Array[String]([name]));self.refresh()
+
+    def animation_options_dialog(self):
+        dialog=QtWidgets.QDialog(self);dialog.setWindowTitle('Animation options');layout=QtWidgets.QFormLayout(dialog);entries={}
+        for name,label,maximum in [('first','First frame',1000),('last','Last frame (0 = all)',1000),('step','Increment step',1000),('fps','Frames per second',120)]:
+            edit=QtWidgets.QSpinBox();edit.setRange(0 if name in ['first','last'] else 1,maximum);edit.setValue((self.animation_options[name] or 0)+(1 if name=='first' else 0));entries[name]=edit;layout.addRow(label,edit)
+        style=QtWidgets.QComboBox();style.addItems(['Once','Loop','Swing']);style.setCurrentText(self.animation_options['style']);limits=QtWidgets.QCheckBox('Use scalar limits from all frames');limits.setChecked(self.animation_options['all_frames']);back=QtWidgets.QCheckBox('Play backward');back.setChecked(self.animation_options['backward']);layout.addRow('Style',style);layout.addRow(limits);layout.addRow(back);self.dialog_buttons(dialog,layout)
+        if dialog.exec():
+            if entries['last'].value() and entries['last'].value()<entries['first'].value():raise ValueError('The last frame must be at least the first frame.')
+            self.animation_options.update({name:edit.value() for name,edit in entries.items()});self.animation_options['first']=max(0,self.animation_options['first']-1);self.animation_options['last']=self.animation_options['last']-1 if self.animation_options['last'] else None;self.animation_options.update(style=style.currentText(),all_frames=limits.isChecked(),backward=back.isChecked())

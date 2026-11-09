@@ -13,6 +13,9 @@ var sourceNames = System.Xml.Linq.XDocument.Load(Path.Combine(root,"X/Domain/Pre
 foreach (var f in files.Where(f => sourceNames.Contains(f)))
  foreach (var n in CSharpSyntaxTree.ParseText(File.ReadAllText(f)).GetRoot().DescendantNodes().OfType<MemberAccessExpressionSyntax>())
   if(n.Expression.ToString() is "_form" or "Form" or "form" || (n.Expression.ToString().EndsWith(".Form") || n.Expression.ToString().EndsWith(".Host")) || n.Expression.ToString().EndsWith("Form()")) names.Add(n.Name.Identifier.Text);
+// RPC talks directly to FrmMain. These four methods have typed native implementations
+// in AutomationHost.cs; emitting presentation forwarding methods would duplicate them.
+var nativeAutomationMembers=new HashSet<string>{"PrepareAutomationPythonEngine","EchoAutomationExecution","GetAutomationBusyReason","RequestAutomationExit","AutomationModelFileName"};
 var output = new System.Text.StringBuilder("// Generated presentation contract from original FrmMain signatures.\nusing CaeGlobals; using CaeJob; using CaeMesh; using CaeModel; using CaeResults; using FileInOut.Output; using PrePoMax.Commands; using PrePoMax.Forms; using PrePoMax.Python; using System; using System.Collections.Generic; using System.Drawing; using System.Threading.Tasks; using System.Windows.Forms; using UserControls; using vtkControl;\nnamespace PrePoMax { public partial class FrmMain {\n");
 foreach(var f in files.Where(f=>Path.GetFileName(f).StartsWith("FrmMain.") || Path.GetFileName(f)=="FrmMain.cs"))
 {
@@ -20,7 +23,7 @@ foreach(var f in files.Where(f=>Path.GetFileName(f).StartsWith("FrmMain.") || Pa
  foreach(var c in tree.DescendantNodes().OfType<ClassDeclarationSyntax>().Where(c=>c.Identifier.Text=="FrmMain"))
  foreach(var m in c.Members)
  {
-  if(m is MethodDeclarationSyntax method && names.Contains(method.Identifier.Text) && method.Identifier.Text != "InvokeIfRequired" && method.Modifiers.Any(SyntaxKind.PublicKeyword))
+  if(m is MethodDeclarationSyntax method && names.Contains(method.Identifier.Text) && method.Identifier.Text != "InvokeIfRequired" && !nativeAutomationMembers.Contains(method.Identifier.Text) && method.Modifiers.Any(SyntaxKind.PublicKeyword))
   {
    var values=method.ParameterList.Parameters.Select(p=>p.Modifiers.Any(SyntaxKind.OutKeyword)?"null":p.Identifier.Text);
    string argsExpr="new object[] {"+string.Join(",",values)+"}";
@@ -33,7 +36,7 @@ foreach(var f in files.Where(f=>Path.GetFileName(f).StartsWith("FrmMain.") || Pa
    var sig=method.WithAttributeLists(default).WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword))).WithBody(SyntaxFactory.ParseStatement("{"+body+"}") as BlockSyntax).WithExpressionBody(null).WithSemicolonToken(default);
    output.AppendLine(sig.NormalizeWhitespace().ToFullString());
   }
-  if(m is PropertyDeclarationSyntax prop && names.Contains(prop.Identifier.Text) && prop.Modifiers.Any(SyntaxKind.PublicKeyword))
+  if(m is PropertyDeclarationSyntax prop && names.Contains(prop.Identifier.Text) && !nativeAutomationMembers.Contains(prop.Identifier.Text) && prop.Modifiers.Any(SyntaxKind.PublicKeyword))
    output.AppendLine("public "+prop.Type+" "+prop.Identifier.Text+" {get; set;}");
  }
 }

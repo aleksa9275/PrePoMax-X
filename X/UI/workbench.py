@@ -28,6 +28,10 @@ parser.add_argument('--solver-id')
 parser.add_argument('--solver-directory',type=Path)
 parser.add_argument('--results-service-probe',type=Path)
 parser.add_argument('--results-probe',type=Path)
+parser.add_argument('--application-service-probe',type=Path)
+parser.add_argument('--application-probe',type=Path)
+parser.add_argument('--settings',type=Path)
+parser.add_argument('--check-3mf',action='store_true')
 args = parser.parse_args(list(ui_arguments))
 controller = session.Controller
 if args.native_tools:
@@ -39,7 +43,10 @@ if any([args.solver_registry,args.solver_id,args.solver_directory]):
     from PrePoMaxX.UI import ResultsSession
     ResultsSession(session).ConfigureSolver(str(args.solver_registry.resolve()),args.solver_id,str(args.solver_directory.resolve()))
 
-if args.results_service_probe:
+if args.application_service_probe:
+    from application_probe import run
+    run(session,args.application_service_probe)
+elif args.results_service_probe:
     from results_probe import run
     run(session,args.results_service_probe)
 elif args.geometry_service_probe:
@@ -69,8 +76,9 @@ else:
     from geometry_workbench import GeometryWorkbench
 
     from results_workbench import ResultsWorkbench
+    from application_workbench import ApplicationWorkbench
 
-    class Workbench(ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
+    class Workbench(ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -96,9 +104,12 @@ else:
                     action.setShortcut({'Save':'Ctrl+S','Undo':'Ctrl+Z','Redo':'Ctrl+Shift+Z'}[title])
             self.pick_mode = QtWidgets.QComboBox()
             self.pick_mode.addItems(['Pick element', 'Pick face nodes', 'Pick node', 'Pick surface', 'Pick part','Pick geometry','Pick geometry vertex','Pick geometry edge','Pick geometry surface','Pick geometry part'])
+            self.pick_mode.addItems(['Pick edge nodes','Pick nodes by edge angle','Pick nodes by surface angle','Pick geometry edges by angle','Pick geometry surfaces by angle'])
             self.addToolBarBreak()
             self.viewport_toolbar=self.addToolBar('Viewport')
             self.viewport_toolbar.addWidget(self.pick_mode)
+            self.selection_angle=QtWidgets.QDoubleSpinBox();self.selection_angle.setRange(0,180);self.selection_angle.setValue(30);self.selection_angle.setSuffix('°');self.selection_angle.setMaximumWidth(90);self.viewport_toolbar.addWidget(self.selection_angle)
+            self.box_select=QtWidgets.QCheckBox('Box select');self.box_select.toggled.connect(lambda value:setattr(self.viewport,'box_selection',value));self.viewport_toolbar.addWidget(self.box_select)
             self.view = QtWidgets.QComboBox()
             self.view.addItems(['Model', 'Geometry'])
             self.view.currentTextChanged.connect(lambda value: self.guard(lambda: self.change_view(value)))
@@ -123,6 +134,9 @@ else:
                 from qt_viewport import NativeQtView
                 self.viewport = NativeQtView(self)
                 self.viewport.clicked.connect(self.pick)
+            from area_selection import AreaSelectionFilter
+            self.area_selection_filter=AreaSelectionFilter(self.viewport)
+            self.viewport.area_selected.connect(lambda *rect:self.guard(lambda:self.area_pick(*rect)))
             splitter.addWidget(self.viewport)
             splitter.setSizes([270, 910])
             self.setCentralWidget(splitter)
@@ -146,20 +160,33 @@ else:
             MessageBoxes.Mode=MessageBoxModeEnum.Interactive
             self.build_geometry_menus()
             self.build_results_ui()
+            self.preferences_path=args.settings.resolve() if args.settings else None
+            self.build_application_ui()
+            if self.preferences_path and self.preferences_path.is_file():self.application.LoadPreferences(str(self.preferences_path));self.apply_preferences()
             self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
             session.Presentation.Screenshot=self.screenshot_delegate
             from CaeGlobals import UnitSystemType
             self.result_units_delegate=Func[UnitSystemType](lambda:self.dispatcher.call(self.select_result_units))
             session.Presentation.ResultUnitsSelector=self.result_units_delegate
             self.refresh()
+            if controller.AutomationSettings.StartWithApplication:self.guard(self.start_automation)
 
         def query(self, name, arguments):
-            if name in ['GetViewParameters','GetViewPlaneNormal']:
+            if name in ['GetViewParameters','GetViewPlaneNormal','GetFileNameToOpen','GetFileNameToSaveAs','EditMeshingParametersFromHistory']:
                 return self.dispatcher.call(lambda:self.ui_query(name,arguments))
             return self.native_query(name,arguments)
 
         def ui_query(self,name,arguments):
             camera = self.renderer.GetActiveCamera()
+            if name=='EditMeshingParametersFromHistory':
+                from PrePoMaxX.UI import MeshHistoryEditSession
+                from application_widgets import SheetDialog
+                edit=MeshHistoryEditSession(controller,arguments[0]);dialog=SheetDialog(self,'Edit mesh setup during regeneration',edit.Properties,edit.Apply);return edit.Result if dialog.exec() else None
+            if name=='GetFileNameToOpen':
+                original=str(arguments[1]) if len(arguments)>1 else 'All files|*.*';parts=original.split('|');filters=';;'.join(parts[i]+' ('+parts[i+1]+')' for i in range(0,len(parts)-1,2))
+                path,_=QtWidgets.QFileDialog.getOpenFileName(self,str(arguments[0]),'',filters);return path or None
+            if name=='GetFileNameToSaveAs':
+                path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Save project',self.path or '', 'PrePoMax (*.pmx)');return path or None
             if name == 'GetViewParameters':
                 arguments[0] = Array[Double](camera.GetPosition())
                 arguments[1] = Array[Double](camera.GetFocalPoint())
@@ -193,6 +220,18 @@ else:
                 self.render()
             elif name=='UpdateArrowWidgetAnimationData':
                 self.scene.presentation.update_annotation(*arguments)
+            elif name=='ApplyFollowerView':
+                self.apply_follower(*arguments)
+            elif name=='UpdateFollowerView':
+                self.update_follower()
+            elif name=='RemoveFollowerView':
+                self.follower_nodes=None
+            elif name=='SetPendingSidePanelsState' and hasattr(self,'plot_panel'):
+                self.restore_panel_state(arguments[0])
+            elif name=='SetStateWorking' and hasattr(self,'application'):
+                self.set_application_busy(True)
+            elif name=='SetStateReady' and hasattr(self,'application'):
+                self.set_application_busy(False)
             elif name == 'SetZoomToFit':
                 if self.operation_task is not None:
                     self.pending_fit=True;return
@@ -203,7 +242,7 @@ else:
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -246,6 +285,8 @@ else:
             self.view.setCurrentText(str(controller.CurrentView))
             self.view.blockSignals(False)
             expanded={item.data(0,QtCore.Qt.ItemDataRole.UserRole+1):item.isExpanded() for item in self.walk_tree()}
+            selected_keys={i.data(0,QtCore.Qt.ItemDataRole.UserRole+1) for i in self.tree.selectedItems()}
+            self.tree.blockSignals(True)
             self.tree.clear()
             def add(parent,entry):
                 item=QtWidgets.QTreeWidgetItem(parent,[entry.Name])
@@ -255,12 +296,16 @@ else:
                 item.setToolTip(0,entry.Type or entry.Family)
                 for child in entry.Children:add(item,child)
                 item.setExpanded(expanded.get(key,entry.Group))
+                item.setSelected(key in selected_keys)
             entries=self.geometry.Tree if controller.CurrentView==ViewGeometryModelResults.Geometry else self.results.Tree if controller.CurrentView==ViewGeometryModelResults.Results else list(self.authoring.Tree)+[self.results.Jobs]
             for entry in entries:add(self.tree,entry)
             self.tree.setHeaderLabel(str(controller.CurrentView))
+            self.tree.blockSignals(False)
             self.selected = []
             self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView!=ViewGeometryModelResults.Geometry
             self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
+            self.apply_edge_mode()
+            self.apply_view_widgets()
             for name in ['Undo', 'Redo']:
                 text = getattr(session.Presentation, name + 'Text')
                 self.actions[name].setEnabled(bool(text))
@@ -364,6 +409,8 @@ else:
         def edit_item(self,item,column=0):
             entry=item.data(0,QtCore.Qt.ItemDataRole.UserRole)
             if entry is None:return
+            if entry.Family in ['Result field components','Result history fields','Result history components']:
+                self.guard(lambda:self.open_result_leaf(entry));return
             if entry.Family in ['Jobs','Result fields','Result histories','Result reference points','Result coordinate systems']:
                 if entry.Family=='Result fields' and not entry.Group and not any(f.Name==entry.Name for f in controller.GetResultFieldOutputs()):
                     self.result_boxes['Field'].setCurrentText(entry.Name);return
@@ -416,6 +463,8 @@ else:
             if item is None:return
             entry=item.data(0,QtCore.Qt.ItemDataRole.UserRole)
             if entry is None:return
+            if entry.Family in ['Result field components','Result history fields','Result history components']:
+                self.results_leaf_menu(entry,position);return
             if entry.Family in ['Geometry parts','Mesh setup','Parts']:
                 return self.geometry_tree_menu(entry,position)
             if entry.Family in ['Jobs','Result fields','Result histories','Result parts','Result reference points','Result coordinate systems']:
@@ -435,6 +484,7 @@ else:
                     for title,active in [('Activate',True),('Deactivate',False)]:
                         action=menu.addAction(title)
                         actions[action]=lambda value=active,n=names:self.authoring.Activate(entry.Family,entry.Step,Array[String](n),value)
+            self.add_model_tree_actions(menu,actions,entry)
             if self.authoring.CanOrganize(entry.Family,entry.Step):
                 action=menu.addAction('New folder…')
                 def new_folder():
@@ -467,6 +517,7 @@ else:
         def save(self):
             if not self.path:
                 return self.save_as()
+            self.capture_panel_state()
             controller.SaveToPmxCommand(self.path)
             self.dirty = False
             self.refresh()
@@ -477,6 +528,7 @@ else:
             if not path:
                 return False
             path = path if path.lower().endswith('.pmx') else path + '.pmx'
+            self.capture_panel_state()
             controller.SaveToPmxCommand(str(Path(path).resolve()))
             self.path = str(Path(path).resolve())
             self.dirty = False
@@ -512,8 +564,8 @@ else:
             name, point, element = hit
             part_id = controller.DisplayedMesh.Parts[name].PartId
             mode = self.pick_mode.currentIndex()
-            select_by = [vtkSelectBy.Element, vtkSelectBy.Surface, vtkSelectBy.Node, vtkSelectBy.Surface, vtkSelectBy.Part,vtkSelectBy.Geometry,vtkSelectBy.GeometryVertex,vtkSelectBy.GeometryEdge,vtkSelectBy.GeometrySurface,vtkSelectBy.GeometryPart][mode]
-            select_item = [vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part][mode]
+            select_by = [vtkSelectBy.Element, vtkSelectBy.Surface, vtkSelectBy.Node, vtkSelectBy.Surface, vtkSelectBy.Part,vtkSelectBy.Geometry,vtkSelectBy.GeometryVertex,vtkSelectBy.GeometryEdge,vtkSelectBy.GeometrySurface,vtkSelectBy.GeometryPart,vtkSelectBy.Edge,vtkSelectBy.EdgeAngle,vtkSelectBy.SurfaceAngle,vtkSelectBy.GeometryEdgeAngle,vtkSelectBy.GeometrySurfaceAngle][mode]
+            select_item = [vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface][mode]
             self.last_pick_point=point
             modifiers=QtWidgets.QApplication.keyboardModifiers()
             shift=bool(modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
@@ -521,7 +573,7 @@ else:
             operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
             direction = self.renderer.GetActiveCamera().GetDirectionOfProjection()
             node = SelectionNodeMouse(Array[Double](point), Array[Double](direction), None, False,
-                operation, Array[Int32]([part_id]), None, select_by, 0)
+                operation, Array[Int32]([part_id]), None, select_by, self.selection_angle.value())
             # Six display pixels converted into world distance at the picked depth.
             self.renderer.SetWorldPoint(*point, 1)
             self.renderer.WorldToDisplay()
@@ -542,18 +594,27 @@ else:
             self.statusBar().showMessage(f'{name}: {str(select_item)} IDs ' + ', '.join(map(str, self.selected)))
 
         def closeEvent(self, event):
-            if self.operation_task is not None:
-                event.ignore();return
+            if self.operation_task is not None or (hasattr(self,'application') and self.application.Automation.GetDispatcher().GetRunningCall() is not None):
+                self.statusBar().showMessage('Wait for the active operation or stop it before closing.');event.ignore();return
             self.stop_animation(False)
             if not self.confirm_discard():
                 event.ignore()
                 return
+            self.persist_preferences()
+            self.application.Dispose()
+            self.session.Presentation.IsDisposed=True
             self.viewport.Finalize()
             super().closeEvent(event)
 
     application = QtWidgets.QApplication.instance() or QtWidgets.QApplication(['PrePoMax-X'])
+    splash=None
+    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe]):
+        original_splash=Path(ui_directory).parents[1]/'PrePoMax/Resources/Splash_01.png'
+        if original_splash.is_file():
+            splash=QtWidgets.QSplashScreen(QtGui.QPixmap(str(original_splash)));splash.showMessage('Loading PrePoMax-X…',QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignHCenter,QtGui.QColor('black'));splash.show();application.processEvents()
     window = Workbench()
     window.show()
+    if splash:splash.finish(window)
     if sys.platform != 'darwin':
         window.viewport.Initialize()
     if args.project:
@@ -570,4 +631,7 @@ else:
     if args.results_probe:
         from results_gui_probe import start
         start(application,window,args.results_probe)
+    if args.application_probe:
+        from application_gui_probe import start
+        start(application,window,args.application_probe,args.check_3mf)
     application.exec()

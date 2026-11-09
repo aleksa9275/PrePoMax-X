@@ -52,7 +52,7 @@ def start(app,window,output):
         window.animation_type.setCurrentText('Scale factor');window.frames.setValue(5);window.play_animation();window.animation_timer.stop()
         window.show_frame(0);state['first']=window.scene.presentation.animated[0][1].GetMapper().GetInput().GetPoint(1);window.show_frame(4);state['last']=window.scene.presentation.animated[0][1].GetMapper().GetInput().GetPoint(1)
         check('original frame data moves native points',state['first']!=state['last']);check('animation slider supports all frames',window.frame_slider.maximum()==4)
-        window.export_animation(str(output/'frames.png'));check('animation PNG sequence exported',len(list(output.glob('frames-*.png')))==5)
+        window.export_animation(str(output/'frames.png'));check('animation PNG sequence exported',len(list(output.glob('*_frames.png')))==5)
         window.export_animation(str(output/'animation.ogv'));check('native Ogg Theora animation exported',(output/'animation.ogv').stat().st_size>1000)
         window.stop_animation();window.fit();window.capture(str(output/'contours.png'))
         check('native PNG capture',(output/'contours.png').stat().st_size>2000)

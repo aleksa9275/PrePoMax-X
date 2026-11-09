@@ -50,6 +50,7 @@ class Presentation:
         if 'SetAnimationFrameData' in state:
             bounds=state['SetAnimationFrameData'][6]
             if bounds is not None and all(math.isfinite(v) for v in bounds):ranges.extend(bounds)
+        self.spectrum=spectrum
         self.range=(min(ranges),max(ranges)) if ranges else (0,1)
         self.table=lookup(spectrum,*self.range)
         for mapper in self.scalar_mappers:mapper.SetLookupTable(self.table);mapper.SetScalarRange(self.table.GetTableRange());mapper.ScalarVisibilityOn();mapper.SetColorModeToMapScalars();mapper.InterpolateScalarsBeforeMappingOn()
@@ -119,3 +120,37 @@ class Presentation:
         state={str(c.Name):c.Arguments for c in self.commands}
         if self.status is not None and 'SetAnimationFrameData' in state:
             a=state['SetAnimationFrameData'];self.status.SetInput(f'Frame {index+1}/{len(a[0])}\nTime {a[0][index]}\nStep {a[1][index]}, increment {a[2][index]}\nScale {a[5][index]}')
+
+    def rescale_frame(self,index,all_frames):
+        values=[]
+        if all_frames and hasattr(self,'all_frames_range'):low,high=self.all_frames_range
+        else:
+            for original in self.scene.drawn:
+                data=original.Data
+                if not data.ColorContours:continue
+                frames=data.Geometry.NodesAnimation
+                sources=list(frames) if all_frames and frames is not None else [frames[index]] if frames is not None else [data.Geometry.Nodes]
+                for nodes in sources:
+                    if nodes.Values is not None:
+                        finite=[float(v) for v in nodes.Values if math.isfinite(v)]
+                        if finite:values.extend([min(finite),max(finite)])
+            for name,args,actor in self.plot_commands:
+                nodes=args[0].Geometry;frames=nodes.NodesAnimation;sources=list(frames) if all_frames and frames is not None else [frames[index]] if frames is not None else [nodes.Nodes]
+                for data in sources:
+                    if data.Values is not None:
+                        finite=[float(v) for v in data.Values if math.isfinite(v)]
+                        if finite:values.extend([min(finite),max(finite)])
+            for original,actor,copy,transform in self.features.copy_sources:
+                if original is None or not original.Data.ColorContours:continue
+                from System import Array,Double
+                frames=original.Data.Geometry.NodesAnimation;sources=list(frames) if all_frames and frames is not None else [frames[index]] if frames is not None else [original.Data.Geometry.Nodes];rotation=Array[Double]([transform.GetMatrix().GetElement(i,j) for i in range(3) for j in range(3)])
+                for nodes in sources:
+                    field=nodes.ResultField;data=field.GetTransformedValues(rotation) if field is not None and field.IsValid() else nodes.Values
+                    if data is not None:
+                        finite=[float(v) for v in data if math.isfinite(v)]
+                        if finite:values.extend([min(finite),max(finite)])
+            if not values:return
+            low,high=min(values),max(values)
+            if all_frames:self.all_frames_range=(low,high)
+        self.table.DeepCopy(lookup(self.spectrum,low,high))
+        for mapper in self.scalar_mappers+[a.GetMapper() for a in self.features.copies+self.features.cuts if a.GetMapper().GetScalarVisibility()]:mapper.SetScalarRange(self.table.GetTableRange());mapper.SetLookupTable(self.table)

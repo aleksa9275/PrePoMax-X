@@ -134,7 +134,7 @@ class PropertyPanel(QtWidgets.QWidget):
             edit.setToolTip(field.Description)
             row.addWidget(edit)
             editor=field.Editor or ''
-            if 'FilteredFileNameEditor' in editor:
+            if 'FilteredFileNameEditor' in editor or 'FileNameEditor' in editor or 'FolderNameEditor' in editor:
                 button=QtWidgets.QPushButton('Browse…')
                 button.clicked.connect(lambda checked=False,w=edit,f=field:self.browse(f,w))
                 row.addWidget(button)
@@ -146,10 +146,16 @@ class PropertyPanel(QtWidgets.QWidget):
                 button=QtWidgets.QPushButton('Select…')
                 button.clicked.connect(lambda checked=False,w=edit,f=field:self.flags(f,w))
                 row.addWidget(button)
-            elif 'DampingRatiosAndValues' in editor:
+            elif 'DampingRatiosAndValues' in editor or 'EnvVarsUIEditor' in editor:
                 button=QtWidgets.QPushButton('Edit rows…')
                 button.clicked.connect(lambda checked=False,f=field:self.edit_table(f))
                 row.addWidget(button)
+            elif field.HasChildren:
+                button=QtWidgets.QPushButton('Properties…')
+                def expand(checked=False,f=field):
+                    from application_widgets import SheetDialog
+                    SheetDialog(self,f.Label,self.sheet.Child(f.Name)).exec()
+                button.clicked.connect(expand);row.addWidget(button)
             elif 'SinglePointDataEditor' in editor and pick is not None:
                 button=QtWidgets.QPushButton('Use picked point')
                 button.clicked.connect(lambda checked=False,f=field:self.use_point(f))
@@ -182,7 +188,7 @@ class PropertyPanel(QtWidgets.QWidget):
             self.error(message(error))
 
     def browse(self, field, edit):
-        path,_=QtWidgets.QFileDialog.getOpenFileName(self,'Select file',edit.text())
+        path=QtWidgets.QFileDialog.getExistingDirectory(self,'Select folder',edit.text()) if 'FolderNameEditor' in (field.Editor or '') else (QtWidgets.QFileDialog.getSaveFileName if 'CreateFileNameEditor' in (field.Editor or '') else QtWidgets.QFileDialog.getOpenFileName)(self,'Select file',edit.text())[0]
         if path:
             edit.setText(path)
             self.commit_field(field,edit)
@@ -324,10 +330,10 @@ class PropertyDialog(QtWidgets.QDialog):
 
 
 class MultiPropertyDialog(QtWidgets.QDialog):
-    def __init__(self,parent,name=None,kind='Materials',step=None):
+    def __init__(self,parent,name=None,kind='Materials',step=None,draft=None):
         super().__init__(parent)
         self.kind=kind
-        self.draft=parent.authoring.Material(name) if kind=='Materials' else parent.authoring.Interaction(name) if kind=='Surface interactions' else parent.authoring.Controls(step)
+        self.draft=draft if draft is not None else parent.authoring.Material(name) if kind=='Materials' else parent.authoring.Interaction(name) if kind=='Surface interactions' else parent.authoring.Controls(step)
         self.setWindowTitle(('Edit ' if name else 'Create ')+kind.lower())
         self.resize(840,650)
         layout=QtWidgets.QVBoxLayout(self)

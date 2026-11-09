@@ -577,5 +577,57 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewSymetry.cs" Link="Forms/84_Transformation/ViewSymetry.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewTransformation.cs" Link="Forms/84_Transformation/ViewTransformation.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/02_View/ViewExplodedViewParameters.cs" Link="Forms/02_View/ViewExplodedViewParameters.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewPreSettings.cs" Link="Forms/61_Settings/ViewPreSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewGeneralSettings.cs" Link="Forms/61_Settings/ViewGeneralSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewSolverSettings.cs" Link="Forms/61_Settings/ViewSolverSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewAutomationSettings.cs" Link="Forms/61_Settings/ViewAutomationSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewGraphicsSettings.cs" Link="Forms/61_Settings/ViewGraphicsSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewColorSettings.cs" Link="Forms/61_Settings/ViewColorSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewMeshingSettings.cs" Link="Forms/61_Settings/ViewMeshingSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewNavigationSettings.cs" Link="Forms/61_Settings/ViewNavigationSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewUnitSystemlSettings.cs" Link="Forms/61_Settings/ViewUnitSystemlSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/01_Edit/ViewCommand.cs" Link="Forms/01_Edit/ViewCommand.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/02_View/ViewUserViewParameters.cs" Link="Forms/02_View/ViewUserViewParameters.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/02_View/ViewFollowerViewParameters.cs" Link="Forms/02_View/ViewFollowerViewParameters.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcApiTypeLocator.cs" Link="Rpc/RpcApiTypeLocator.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcBusyState.cs" Link="Rpc/RpcBusyState.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcCall.cs" Link="Rpc/RpcCall.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcDescribeBuilder.cs" Link="Rpc/RpcDescribeBuilder.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcDescribePath.cs" Link="Rpc/RpcDescribePath.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcDispatcher.cs" Link="Rpc/RpcDispatcher.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcCancelMethod.cs" Link="Rpc/RpcMethods/RpcCancelMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcDescribeMethod.cs" Link="Rpc/RpcMethods/RpcDescribeMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcEvalMethod.cs" Link="Rpc/RpcMethods/RpcEvalMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcExecMethod.cs" Link="Rpc/RpcMethods/RpcExecMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcExitMethod.cs" Link="Rpc/RpcMethods/RpcExitMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcHistoryMethod.cs" Link="Rpc/RpcMethods/RpcHistoryMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcPingMethod.cs" Link="Rpc/RpcMethods/RpcPingMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcScreenshotMethod.cs" Link="Rpc/RpcMethods/RpcScreenshotMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcShutdownMethod.cs" Link="Rpc/RpcMethods/RpcShutdownMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcStatusMethod.cs" Link="Rpc/RpcMethods/RpcStatusMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcMethods/RpcWaitMethod.cs" Link="Rpc/RpcMethods/RpcWaitMethod.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcRequest.cs" Link="Rpc/RpcRequest.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcResponse.cs" Link="Rpc/RpcResponse.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcSession.cs" Link="Rpc/RpcSession.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcSessionInfo.cs" Link="Rpc/RpcSessionInfo.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcSessionInfoReader.cs" Link="Rpc/RpcSessionInfoReader.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcStartException.cs" Link="Rpc/RpcStartException.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Rpc/RpcUiThread.cs" Link="Rpc/RpcUiThread.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpAccessToken.cs" Link="Mcp/McpAccessToken.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpAgentGuide.cs" Link="Mcp/McpAgentGuide.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpArgumentValidator.cs" Link="Mcp/McpArgumentValidator.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpException.cs" Link="Mcp/McpException.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpHttpRequestHandler.cs" Link="Mcp/McpHttpRequestHandler.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpHttpServer.cs" Link="Mcp/McpHttpServer.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpModelScript.cs" Link="Mcp/McpModelScript.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpPrivateScript.cs" Link="Mcp/McpPrivateScript.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpProtocolServer.cs" Link="Mcp/McpProtocolServer.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpTool.cs" Link="Mcp/McpTool.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpToolCatalog.cs" Link="Mcp/McpToolCatalog.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Mcp/McpTopologyScript.cs" Link="Mcp/McpTopologyScript.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/00_Common/FileExporter/ViewExport3mfFileProperties.cs" Link="Forms/00_Common/FileExporter/ViewExport3mfFileProperties.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/00_Common/FileExporter/ViewExportHistoryResultSetFileProperties.cs" Link="Forms/00_Common/FileExporter/ViewExportHistoryResultSetFileProperties.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/64_CaptureViewport/ViewCaptureViewportProperties.cs" Link="Forms/64_CaptureViewport/ViewCaptureViewportProperties.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/00_Common/ViewObjectTypeDescriptor.cs" Link="Forms/00_Common/ViewObjectTypeDescriptor.cs" />
   </ItemGroup>
 </Project>

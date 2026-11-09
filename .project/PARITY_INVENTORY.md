@@ -21,13 +21,15 @@ C2 adds core model authoring through original property views/factories/apply rul
 C marks UI availability, not exhaustive execution of each item or complete form/control parity.
 C3 connects geometry editing, all original mesh setup types, native meshing and mesh editing.
 C4 connects original jobs, results authoring/display, viewport symbols/plots/sections/patterns/animation/captures.
-See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md) and [C4](reports/phase-c4-jobs-results.md).
+C5 adds original application/settings/library/history/keyword/automation/query/advisor/plotting tools and result-component actions.
+See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).
+The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.
 Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 108 | 108 | 108 | 87 | 0 |
-| Commands | 237 | 237 | 236 | 175 | 0 |
+| Model and mesh features | 108 | 108 | 108 | 88 | 0 |
+| Commands | 237 | 237 | 236 | 227 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -190,7 +192,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| ElementTypeCount | AB |
+| ElementTypeCount | ABC |
 | InvertedElements | AB |
 | LinearBeamElement | AB |
 | LinearGapElement | AB |
@@ -231,9 +233,9 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CExportResultFieldOutputToCsv | ABC |
 | CExportResultHistoryOutputToCsv | ABC |
 | CExportResultParts | ABC |
-| CExportTo3mf | AB |
-| CExportToAbaqus | AB |
-| CExportToCalculix | AB |
+| CExportTo3mf | ABC |
+| CExportToAbaqus | ABC |
+| CExportToCalculix | ABC |
 | CImportFile | ABC |
 | COpenFile | ABC |
 | CSaveToPmx | ABC |
@@ -243,19 +245,19 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Item | Status |
 |---|---|
 | CActivateDeactivateMultiple | ABC |
-| CClear | AB |
+| CClear | ABC |
 | CRemoveResults | AB |
-| CRenamePost | AB |
-| CRenamePre | AB |
-| CRunPythonScript | AB |
+| CRenamePost | ABC |
+| CRenamePre | ABC |
+| CRunPythonScript | ABC |
 | CSetOrderedDictionaryItemLayout | ABC |
-| CommandsCollection | AB |
+| CommandsCollection | ABC |
 
 ### Edit
 
 | Item | Status |
 |---|---|
-| CSetCalculixKeywordEditorState | AB |
+| CSetCalculixKeywordEditorState | ABC |
 | CSetCalculixUserKeywords | AB |
 
 ### Geometry
@@ -282,11 +284,11 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CRenameSplitSubPart | ABC |
 | CRepairGeometry | ABC |
 | CReplaceGeometryPartProperties | ABC |
-| CResetColorForGeometryParts | AB |
+| CResetColorForGeometryParts | ABC |
 | CRotateGeometryParts | ABC |
 | CScaleGeometryParts | ABC |
-| CSetColorForGeometryParts | AB |
-| CSetTransparencyForGeometryParts | AB |
+| CSetColorForGeometryParts | ABC |
+| CSetTransparencyForGeometryParts | ABC |
 | CShowGeometryParts | ABC |
 | CSplitGeometry | ABC |
 | CSplitPeriodicFaces | ABC |
@@ -314,7 +316,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CAddModelReferencePoint | ABC |
 | CAddNodeSet | ABC |
 | CAddSurface | ABC |
-| CConvertElementSetsToMeshParts | AB |
+| CConvertElementSetsToMeshParts | ABC |
 | CCreateBoundaryLayer | ABC |
 | CCreateElementSetFromElementQuality | ABC |
 | CDuplicateElementSets | ABC |
@@ -323,9 +325,9 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CDuplicateNodeSets | ABC |
 | CDuplicateSurfaces | ABC |
 | CFindEdgesByAngleForModelPartsCommand | ABC |
-| CHideModelCoordinateSystems | AB |
+| CHideModelCoordinateSystems | ABC |
 | CHideModelParts | ABC |
-| CHideModelReferencePoints | AB |
+| CHideModelReferencePoints | ABC |
 | CMergeCoincidentNodes | ABC |
 | CMergeModelParts | ABC |
 | CMirrorModelParts | ABC |
@@ -345,16 +347,16 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CReplaceModelReferencePoint | ABC |
 | CReplaceNodeSet | ABC |
 | CReplaceSurface | ABC |
-| CResetColorForModelParts | AB |
+| CResetColorForModelParts | ABC |
 | CRotateModelParts | ABC |
 | CScaleModelParts | ABC |
-| CSetColorForModelParts | AB |
+| CSetColorForModelParts | ABC |
 | CSetModelUnitSystem | AB |
 | CSetNewModelProperties | ABC |
-| CSetTransparencyForModelParts | AB |
-| CShowModelCoordinateSystems | AB |
+| CSetTransparencyForModelParts | ABC |
+| CShowModelCoordinateSystems | ABC |
 | CShowModelParts | ABC |
-| CShowModelReferencePoints | AB |
+| CShowModelReferencePoints | ABC |
 | CSplitPartMeshUsingSurface | ABC |
 | CThickenShellMesh | ABC |
 | CTranslateModelParts | ABC |
@@ -385,12 +387,12 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddConstraint | ABC |
 | CDuplicateConstraints | ABC |
-| CHideConstraints | AB |
-| CMergeByMasterSlaveConstraints | AB |
+| CHideConstraints | ABC |
+| CMergeByMasterSlaveConstraints | ABC |
 | CRemoveConstraints | ABC |
 | CReplaceConstraint | ABC |
-| CShowConstraints | AB |
-| CSwapMasterSlaveConstraints | AB |
+| CShowConstraints | ABC |
+| CSwapMasterSlaveConstraints | ABC |
 
 ### SurfaceInteraction
 
@@ -407,12 +409,12 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddContactPair | ABC |
 | CDuplicateContactPairs | ABC |
-| CHideContactPairs | AB |
-| CMergeByMasterSlaveContactPairs | AB |
+| CHideContactPairs | ABC |
+| CMergeByMasterSlaveContactPairs | ABC |
 | CRemoveContactPairs | ABC |
 | CReplaceContactPair | ABC |
-| CShowContactPairs | AB |
-| CSwapMasterSlaveContactPairs | AB |
+| CShowContactPairs | ABC |
+| CSwapMasterSlaveContactPairs | ABC |
 
 ### Distribution
 
@@ -438,10 +440,10 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddInitialCondition | ABC |
 | CDuplicateInitialConditions | ABC |
-| CHideInitialConditions | AB |
+| CHideInitialConditions | ABC |
 | CRemoveInitialConditions | ABC |
 | CReplaceInitialCondition | ABC |
-| CShowInitialConditions | AB |
+| CShowInitialConditions | ABC |
 
 ### Step
 
@@ -460,7 +462,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddHistoryOutput | ABC |
 | CDuplicateHistoryOutputs | ABC |
-| CPropagateHistoryOutput | AB |
+| CPropagateHistoryOutput | ABC |
 | CRemoveHistoryOutputs | ABC |
 | CReplaceHistoryOutput | ABC |
 
@@ -470,7 +472,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddFieldOutput | ABC |
 | CDuplicateFieldOutputs | ABC |
-| CPropagateFieldOutput | AB |
+| CPropagateFieldOutput | ABC |
 | CRemoveFieldOutputs | ABC |
 | CReplaceFieldOutput | ABC |
 
@@ -478,13 +480,13 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| CAddBC | AB |
-| CDuplicateBCs | AB |
-| CHideBCs | AB |
-| CPropagateBC | AB |
-| CRemoveBCs | AB |
-| CReplaceBC | AB |
-| CShowBCs | AB |
+| CAddBC | ABC |
+| CDuplicateBCs | ABC |
+| CHideBCs | ABC |
+| CPropagateBC | ABC |
+| CRemoveBCs | ABC |
+| CReplaceBC | ABC |
+| CShowBCs | ABC |
 
 ### Load
 
@@ -492,11 +494,11 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddLoad | ABC |
 | CDuplicateLoads | ABC |
-| CHideLoads | AB |
-| CPropagateLoad | AB |
+| CHideLoads | ABC |
+| CPropagateLoad | ABC |
 | CRemoveLoads | ABC |
 | CReplaceLoad | ABC |
-| CShowLoads | AB |
+| CShowLoads | ABC |
 
 ### DefinedField
 
@@ -504,19 +506,19 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CAddDefinedField | ABC |
 | CDuplicateDefinedFields | ABC |
-| CHideDefinedFields | AB |
-| CPropagateDefinedField | AB |
+| CHideDefinedFields | ABC |
+| CPropagateDefinedField | ABC |
 | CRemoveDefinedFields | ABC |
 | CReplaceDefinedField | ABC |
-| CShowDefinedFields | AB |
+| CShowDefinedFields | ABC |
 
 ### Tools
 
 | Item | Status |
 |---|---|
 | CAddParameter | AB |
-| CExportParameters | AB |
-| CImportParameters | AB |
+| CExportParameters | ABC |
+| CImportParameters | ABC |
 | CRemoveParameters | AB |
 | CReplaceParameter | AB |
 | CSetParameters | ABC |
@@ -555,13 +557,13 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CHideResultReferencePoints | ABC |
 | CMergeResultParts | ABC |
 | COpenResults | ABC |
-| CRemoveAllResults | AB |
+| CRemoveAllResults | ABC |
 | CRemoveCurrentResults | ABC |
 | CRemoveResultCoordinateSystems | ABC |
-| CRemoveResultFieldOutputComponents | AB |
+| CRemoveResultFieldOutputComponents | ABC |
 | CRemoveResultFieldOutputs | ABC |
-| CRemoveResultHistoryComponents | AB |
-| CRemoveResultHistoryFields | AB |
+| CRemoveResultHistoryComponents | ABC |
+| CRemoveResultHistoryFields | ABC |
 | CRemoveResultHistoryOutputs | ABC |
 | CRemoveResultParts | ABC |
 | CRemoveResultReferencePoints | ABC |
@@ -570,7 +572,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CReplaceResultHisotryOutput | ABC |
 | CReplaceResultPartProperties | ABC |
 | CReplaceResultReferencePoint | ABC |
-| CResetColorForResultParts | AB |
+| CResetColorForResultParts | ABC |
 | CSetColorContoursForResultPartsCommand | ABC |
 | CSetColorForResultParts | ABC |
 | CSetCurrentResults | ABC |

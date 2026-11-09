@@ -16,6 +16,7 @@ p.add_argument('--native-tools',type=Path,help='Explicit fingerprinted native to
 p.add_argument('--solver-registry',type=Path)
 p.add_argument('--solver-id')
 p.add_argument('--solver-directory',type=Path)
+p.add_argument('--settings',type=Path,help='Explicit PrePoMax-X settings file; never the installed original settings')
 p.add_argument('--no-build', action='store_true')
 p.add_argument('project', nargs='?', type=Path)
 a = p.parse_args()
@@ -27,6 +28,7 @@ if not a.no_build:
     subprocess.run(command, cwd=ROOT, check=True)
 command = ['dotnet',str(HERE/'Workbench/bin/Release/net10.0/PrePoMaxX.Workbench.dll'),
            str(a.python_profile.resolve()),str(a.work_directory.resolve()),str(HERE/'workbench.py')]
+if a.settings:command += ['--settings',str(a.settings.resolve())]
 if a.native_tools:command += ['--native-tools',str(a.native_tools.resolve())]
 for key in ['solver_registry','solver_id','solver_directory']:
     value=getattr(a,key)
