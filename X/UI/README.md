@@ -121,7 +121,7 @@ Mac reuses the VTK-owned native Cocoa child view. Windows/Linux use QVTK's nativ
 interactor with widget-level click/drag separation. C1 uses no framebuffer-copy
 bridge. Native VTK supplies hit coordinates; original selection resolves IDs.
 Original Controller highlight actors, topology and camera callbacks drive the
-scene. PMX results remain preserved; results presentation belongs to C4.
+scene. C4 connects original results and transient rendering commands.
 
 ```sh
 python3 X/UI/verify-ui.py --output /absolute/check.json \
@@ -138,7 +138,7 @@ an explicit profile. Linux under `xvfb-run`/`QT_QPA_PLATFORM=xcb` is supplementa
 virtual-display evidence. Physical Linux/GPU/Wayland, human input and native
 Windows execution remain pending.
 
-C3 connects geometry/meshing tools; C4 next connects jobs/results and full viewport
+C3 connects geometry/meshing tools; C4 connects jobs/results and viewport
 symbols/annotations/contours/animation; C5 finishes remaining application,
 automation and UI parity. Original form conveniences such as curve plotting,
 material libraries, complete selection-tool/keyboard/focus parity and application
@@ -148,3 +148,42 @@ The full D060 scope and all four-target/installer/signing gates remain required.
 [C1 report](../../.project/reports/phase-c1-ui-foundation.md) ·
 [C2 report](../../.project/reports/phase-c2-model-authoring.md) ·
 [C3 report](../../.project/reports/phase-c3-geometry-meshing.md).
+
+## C4 jobs, results and viewport
+
+Supply all three solver arguments to `run.py` or `verify-ui.py` to select a
+fingerprinted CalculiX 2.22 build:
+
+```sh
+--solver-registry /absolute/build-registry.json \
+--solver-id explicit-build-id --solver-directory /absolute/solver-bin
+```
+
+No solver or mesher is discovered/upgraded implicitly. Analysis setup uses the
+original `ViewAnalysisJob`, validation and commands. Run/check/monitor/kill and
+result opening use the original job lifecycle. Monitor tables/plots use original
+status/convergence/energy parsers. Stop coverage is active-child coverage;
+[B012](../../.project/bugs/B012-analysis-cancellation-before-start.md) remains open.
+
+Result fields, components, steps/increments, units, representation, complex
+selection and deformation operate on the original live results. Unknown units
+use the original interactive/unattended policy. Original field/history factories,
+validation, filters, calculations, coordinate systems/reference points, part
+properties and exports remain C#. Tables/plots display original history data.
+`generate-results-forms.py --check` fingerprints the reused original rules;
+`generate-colormaps.py --check` checks all fourteen original color maps.
+
+Native VTK renders original scalar/frame data, colors/legends, symbols,
+annotations/measurements, vector/tensor plots, section cuts/hatching, result
+patterns and undeformed copies. Camera/annotation callbacks stay on the UI thread;
+solver/native operations lock document edits and preserve output. Animation uses
+original scale/time/harmonic frame generation. PNG capture/frame sequences and
+native Ogg Theora export are available; AVI is offered only when the pinned VTK
+runtime provides its platform writer. Exact cross-platform AVI parity remains
+open. No encoder is installed/selected silently.
+
+C4 adds `--results-service-probe` and `--results-probe` to the workbench script.
+The independent stress diagnostic remains false in `engineeringChecks`; UI/service
+success is not numerical acceptance. Full form/control, viewport edge-case,
+automation, corpus, physical/native platform and distribution acceptance remain
+open for C5/release. [C4 report](../../.project/reports/phase-c4-jobs-results.md).

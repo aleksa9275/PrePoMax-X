@@ -48,7 +48,7 @@ public abstract class FormRule
     public virtual void SetPoint(string property,int[] nodeIds)
     {
         if(nodeIds==null || nodeIds.Length!=1)throw new CaeException("Pick exactly one mesh node first.");
-        var node=_controller.Model.Mesh.Nodes[nodeIds[0]];
+        var node=_controller.DisplayedMesh.Nodes[nodeIds[0]];
         string suffix=property=="FirstPointItemSet"?"1":property=="SecondPointItemSet"?"2":property=="ThirdPointItemSet"?"3":"";
         foreach(var coordinate in new[]{("X",node.X),("Y",node.Y),("Z",node.Z)})
         {
@@ -57,7 +57,7 @@ public abstract class FormRule
         }
         Changed();
     }
-    public string[] CollectionNames=>Properties.CollectionNames;
+    public virtual string[] CollectionNames=>Properties.CollectionNames;
     public CollectionSheet Collection(string name)=>Properties.Collection(name);
     public virtual string[] SelectionPrefixes
     {
@@ -69,7 +69,14 @@ public abstract class FormRule
         }
     }
     public void Commit() {OnApply(false);}
-    protected virtual string[] Names(string key)=>key switch
+    protected virtual string[] Names(string key) {
+        if(_controller.CurrentView==ViewGeometryModelResults.Results)return key switch {
+            "nodeSetNames"=>_controller.GetResultUserNodeSetNames(),"elementSetNames"=>_controller.GetResultUserElementSetNames(),
+            "surfaceNames"=>_controller.GetResultUserSurfaceNames(),"referencePointNames"=>_controller.GetResultReferencePointNames(),
+            "coordinateSystemNames"=>_controller.GetResultCoordinateSystemNames(),"partNames"=>_controller.GetResultPartNames(),_=>ModelNames(key)};
+        return ModelNames(key);
+    }
+    string[] ModelNames(string key)=>key switch
     {
         "materialNames"=>_controller.GetMaterialNames(),
         "partNames"=>_controller.GetModelPartNames(),
@@ -133,9 +140,9 @@ public abstract class FormRule
             type.GetProperty(prefix+"CreationIds").SetValue(item,ids);
             var region=type.GetProperty(prefix+"RegionType");
             if(region!=null)region.SetValue(item,RegionTypeEnum.Selection);
-            else if(item is CoordinateSystem coordinate) _controller.UpdateModelCoordinateSystem(coordinate);
+            else if(item is CoordinateSystem coordinate) {if(_controller.CurrentView==ViewGeometryModelResults.Results)_controller.UpdateResultCoordinateSystem(coordinate);else _controller.UpdateModelCoordinateSystem(coordinate);}
         }
-        if(item is FeReferencePoint point)_controller.UpdateModelReferencePoint(point);
+        if(item is FeReferencePoint point){if(_controller.CurrentView==ViewGeometryModelResults.Results)_controller.UpdateResultReferencePoint(point);else _controller.UpdateModelReferencePoint(point);}
         Changed();
     }
     protected static void RestoreSelectionRegions(object item)

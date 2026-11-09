@@ -450,7 +450,7 @@ public sealed class FrmPartPropertiesRule : GeometryFormRule {
 HashSet<string> _partNames=[];string _partToEditName;ViewPartProperties _viewPartProperties;ViewGeometryModelResults _currentView;
 public FrmPartPropertiesRule(Controller controller,string name=null,string[] parts=null):base(controller,name) { _currentView=controller.CurrentView;_partToEditName=name;
 _partNames.UnionWith(controller.GetGeometryPartNames()??[]);_partNames.UnionWith(controller.GetAllMeshEntityNames()??[]);
-PartProperties=(_currentView==ViewGeometryModelResults.Geometry?(BasePart)controller.GetGeometryPart(name):controller.GetModelPart(name)).GetProperties().DeepClone();SelectedObject=_viewPartProperties; }
+PartProperties=(_currentView==ViewGeometryModelResults.Geometry?(BasePart)controller.GetGeometryPart(name):controller.CurrentView==ViewGeometryModelResults.Results?controller.GetResultPart(name):controller.GetModelPart(name)).GetProperties().DeepClone();SelectedObject=_viewPartProperties; }
 public CaeMesh.PartProperties PartProperties
         {
             get { return _viewPartProperties.GetBase(); }

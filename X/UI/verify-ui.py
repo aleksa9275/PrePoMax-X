@@ -22,6 +22,9 @@ p.add_argument('--feed',type=Path)
 p.add_argument('--native-tools',type=Path,help='Explicit fingerprinted native mesher tool manifest for C3')
 p.add_argument('--gmsh-library',type=Path,help='Pinned Gmsh 4.13.0 library with adjacent gmsh-build.json')
 p.add_argument('--cad-fixture',type=Path)
+p.add_argument('--solver-registry',type=Path)
+p.add_argument('--solver-id')
+p.add_argument('--solver-directory',type=Path)
 p.add_argument('--gui',action='store_true',help='Requires a display (Xvfb is supplemental Linux evidence)')
 a=p.parse_args()
 out=a.output.resolve()
@@ -49,6 +52,8 @@ try:
     run('form-extractor-build',extractor_build)
     run('original-forms',[sys.executable,HERE/'generate-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-geometry-forms',[sys.executable,HERE/'generate-geometry-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-results-forms',[sys.executable,HERE/'generate-results-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
@@ -70,6 +75,14 @@ try:
             if not result.get('success'):raise ValueError('C3 geometry/meshing workflow failed')
             report['geometryService']=result
         else:report['pending'].append('C3 native CAD/meshing not executed: explicit --native-tools and --gmsh-library not supplied')
+        if all([a.solver_registry,a.solver_id,a.solver_directory]):
+            result_base=base+['--solver-registry',a.solver_registry.resolve(),'--solver-id',a.solver_id,'--solver-directory',a.solver_directory.resolve()]
+            run('results-service',result_base+['--results-service-probe',folder/'results/service'])
+            result=json.loads((folder/'results/service/results.json').read_text())
+            if not result.get('success'):raise ValueError('C4 service workflow failed')
+            report['resultsService']=result
+            report['failedEngineeringChecks']=[c for c in result.get('engineeringChecks',[]) if not c['passed']]
+        else:report['pending'].append('C4 solver/results workflow not executed: explicit solver registry/id/directory not supplied')
         if a.gui:
             run('gui',base+['--probe',folder/'gui'])
             result=json.loads((folder/'gui/gui.json').read_text())
@@ -84,6 +97,11 @@ try:
                 result=json.loads((folder/'geometry/gui/geometry-gui.json').read_text())
                 if not result.get('success'):raise ValueError('C3 GUI workflow failed')
                 report['geometryGui']=result
+            if all([a.solver_registry,a.solver_id,a.solver_directory]):
+                run('results-gui',result_base+['--results-probe',folder/'results/gui'])
+                result=json.loads((folder/'results/gui/results-gui.json').read_text())
+                if not result.get('success'):raise ValueError('C4 GUI workflow failed')
+                report['resultsGui']=result
         else:report['pending'].append('GUI workflow not executed: --gui not supplied')
     else:report['pending'].append('Property/native UI workflow not executed: no explicit CPython profile')
     report['success']=True

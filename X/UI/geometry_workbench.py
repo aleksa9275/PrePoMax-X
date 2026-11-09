@@ -71,9 +71,13 @@ class GeometryWorkbench:
             self.refresh()
         self.run_operation(self.geometry.Execute(operation,names),done)
 
-    def run_operation(self,task,done=None,editor=None):
+    def run_operation(self,task,done=None,editor=None,cancel=None):
         if self.operation_task is not None:raise RuntimeError('Another operation is in progress.')
         self.operation_task=task
+        if hasattr(self,'animation_timer'):self.animation_timer.stop()
+        if hasattr(self,'result_toolbar'):self.result_toolbar.setEnabled(False);self.animation_toolbar.setEnabled(False);self.symbols.setEnabled(False)
+        self.cancel_operation.clicked.disconnect()
+        self.cancel_operation.clicked.connect(lambda:self.guard(cancel or self.geometry.Cancel))
         for action in self.actions.values():action.setEnabled(False)
         for menu in self.geometry_menus:menu.setEnabled(False)
         self.tree.setEnabled(False);self.view.setEnabled(False);self.viewport.setEnabled(False);self.pick_mode.setEnabled(False)
@@ -85,6 +89,7 @@ class GeometryWorkbench:
             if not task.IsCompleted:return
             self.operation_timer.stop();self.operation_timer.deleteLater()
             self.operation_task=None;self.cancel_operation.hide()
+            if hasattr(self,'result_toolbar'):self.result_toolbar.setEnabled(self.active_editor is None);self.animation_toolbar.setEnabled(self.active_editor is None);self.symbols.setEnabled(self.active_editor is None)
             for menu in self.geometry_menus:menu.setEnabled(self.active_editor is None)
             self.viewport.setEnabled(True);self.pick_mode.setEnabled(True)
             self.element_edges.setEnabled(True)
@@ -93,9 +98,9 @@ class GeometryWorkbench:
                 for action in self.actions.values():action.setEnabled(True)
                 self.tree.setEnabled(True);self.view.setEnabled(True)
             else:self.actions['Fit'].setEnabled(True)
-            self.refresh()
-            if getattr(self,'pending_fit',False):self.pending_fit=False;self.fit()
             try:
+                self.refresh()
+                if getattr(self,'pending_fit',False):self.pending_fit=False;self.fit()
                 if task.IsCanceled:raise RuntimeError('Operation cancelled.')
                 if task.IsFaulted:raise RuntimeError(str(task.Exception.GetBaseException().Message))
                 if done:done()

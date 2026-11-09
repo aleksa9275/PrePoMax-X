@@ -108,3 +108,11 @@ Cancellation of concurrent CAD visualization/import stages is therefore not
 accepted; see [B010](../bugs/B010-concurrent-cad-cancellation.md). Preserve the
 original behavior under D061 and address this in the post-parity correctness
 pass; do not claim the new Cancel control covers every native stage.
+
+9 November 2026 C4 closeout: [B011](../bugs/B011-c4-linear-cube-stress-diagnostic.md)
+retains the failed 200 doubled-stress expectation (actual 199.99200439453125,
+absolute tolerance .001); original Windows PMX readback gives identical stored
+values, without establishing the cause. [B012](../bugs/B012-analysis-cancellation-before-start.md)
+records cancellation before process initialization; active-child cancellation
+passes separately. Neither finding is marked fixed. Original/generated unused
+field/unreachable/modal-path warnings remain deferred; C4 does not suppress them.

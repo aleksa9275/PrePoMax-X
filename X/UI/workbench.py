@@ -7,7 +7,7 @@ from pathlib import Path
 import clr
 for assembly in ['CaeGlobals', 'CaeModel', 'CaeMesh', 'PrePoMax', 'PrePoMaxX.Workbench']:
     clr.AddReference(assembly)
-from System import Array, Double, String, Int32, Object, Func, Action
+from System import Array, Double, String, Int32, Object, Func, Action, Boolean
 from CaeGlobals import vtkSelectItem, vtkSelectBy, vtkSelectOperation, Selection, SelectionNodeMouse
 from PrePoMax import ViewGeometryModelResults
 from PrePoMax.Commands import RegenerateTypeEnum
@@ -23,13 +23,26 @@ parser.add_argument('--native-tools', type=Path)
 parser.add_argument('--geometry-service-probe', type=Path)
 parser.add_argument('--geometry-probe', type=Path)
 parser.add_argument('--cad-fixture', type=Path)
+parser.add_argument('--solver-registry',type=Path)
+parser.add_argument('--solver-id')
+parser.add_argument('--solver-directory',type=Path)
+parser.add_argument('--results-service-probe',type=Path)
+parser.add_argument('--results-probe',type=Path)
 args = parser.parse_args(list(ui_arguments))
 controller = session.Controller
 if args.native_tools:
     from PrePoMax import NativeTools
     NativeTools.Configure(str(args.native_tools.resolve()))
 
-if args.geometry_service_probe:
+if any([args.solver_registry,args.solver_id,args.solver_directory]):
+    if not all([args.solver_registry,args.solver_id,args.solver_directory]):raise ValueError('Supply the complete explicit solver profile.')
+    from PrePoMaxX.UI import ResultsSession
+    ResultsSession(session).ConfigureSolver(str(args.solver_registry.resolve()),args.solver_id,str(args.solver_directory.resolve()))
+
+if args.results_service_probe:
+    from results_probe import run
+    run(session,args.results_service_probe)
+elif args.geometry_service_probe:
     from geometry_probe import run
     run(session,args.geometry_service_probe,args.cad_fixture)
 elif args.authoring_service_probe:
@@ -55,13 +68,16 @@ else:
 
     from geometry_workbench import GeometryWorkbench
 
-    class Workbench(GeometryWorkbench,QtWidgets.QMainWindow):
+    from results_workbench import ResultsWorkbench
+
+    class Workbench(ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
             self.resize(1180, 760)
             self.path = None
             self.controller = controller
+            self.session=session
             self.authoring = AuthoringSession(controller)
             self.geometry = GeometrySession(controller)
             self.dispatcher = Dispatcher()
@@ -114,6 +130,7 @@ else:
             self.renderer.SetBackground(.93, .95, .98)
             self.viewport.GetRenderWindow().AddRenderer(self.renderer)
             self.scene = Scene(self.renderer)
+            self.scene.volume_provider=controller.GetVolumeGridData
             self.native_query = session.Presentation.Query
             self.previous_presentation = session.Presentation.Presentation
             self.query_delegate = Func[String, Array[Object], Object](self.query)
@@ -128,6 +145,12 @@ else:
             MessageBoxes.InteractivePresenter=self.prompt_delegate
             MessageBoxes.Mode=MessageBoxModeEnum.Interactive
             self.build_geometry_menus()
+            self.build_results_ui()
+            self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
+            session.Presentation.Screenshot=self.screenshot_delegate
+            from CaeGlobals import UnitSystemType
+            self.result_units_delegate=Func[UnitSystemType](lambda:self.dispatcher.call(self.select_result_units))
+            session.Presentation.ResultUnitsSelector=self.result_units_delegate
             self.refresh()
 
         def query(self, name, arguments):
@@ -168,17 +191,19 @@ else:
                 camera.Roll(float(arguments[2]))
                 self.renderer.ResetCameraClippingRange()
                 self.render()
+            elif name=='UpdateArrowWidgetAnimationData':
+                self.scene.presentation.update_annotation(*arguments)
             elif name == 'SetZoomToFit':
                 if self.operation_task is not None:
                     self.pending_fit=True;return
-                self.scene.update(session.Presentation.SceneActors)
+                self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
                 self.fit()
 
         def guard(self, callback):
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe or args.geometry_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -204,22 +229,21 @@ else:
             session.Open(str(Path(path).resolve()))
             self.path = str(Path(path).resolve())
             self.dirty = False
-            # C1 opens the model/geometry; result presentation is connected in C4.
-            controller.CurrentView = ViewGeometryModelResults.Model if controller.Model.Mesh is not None else ViewGeometryModelResults.Geometry
-            if controller.CurrentView == ViewGeometryModelResults.Model:
-                controller.DrawModel(False)
+            if controller.ResultsInitialized:
+                controller.CurrentView=ViewGeometryModelResults.Results
+                controller.DrawResults(False)
+            elif controller.Model.Mesh is not None:
+                controller.CurrentView=ViewGeometryModelResults.Model;controller.DrawModel(False)
             else:
-                controller.DrawGeometry(False)
-            self.view.blockSignals(True)
-            self.view.setCurrentText('Geometry' if controller.CurrentView == ViewGeometryModelResults.Geometry else 'Model')
-            self.view.blockSignals(False)
+                controller.CurrentView=ViewGeometryModelResults.Geometry;controller.DrawGeometry(False)
             self.refresh()
             self.fit()
 
         def refresh(self):
+            self.update_results_ui()
             self.dirty = controller.ModelChanged
             self.view.blockSignals(True)
-            self.view.setCurrentText('Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model')
+            self.view.setCurrentText(str(controller.CurrentView))
             self.view.blockSignals(False)
             expanded={item.data(0,QtCore.Qt.ItemDataRole.UserRole+1):item.isExpanded() for item in self.walk_tree()}
             self.tree.clear()
@@ -231,11 +255,12 @@ else:
                 item.setToolTip(0,entry.Type or entry.Family)
                 for child in entry.Children:add(item,child)
                 item.setExpanded(expanded.get(key,entry.Group))
-            for entry in (self.geometry.Tree if controller.CurrentView==ViewGeometryModelResults.Geometry else self.authoring.Tree):add(self.tree,entry)
-            self.tree.setHeaderLabel('Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model')
+            entries=self.geometry.Tree if controller.CurrentView==ViewGeometryModelResults.Geometry else self.results.Tree if controller.CurrentView==ViewGeometryModelResults.Results else list(self.authoring.Tree)+[self.results.Jobs]
+            for entry in entries:add(self.tree,entry)
+            self.tree.setHeaderLabel(str(controller.CurrentView))
             self.selected = []
-            self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView==ViewGeometryModelResults.Model
-            self.scene.update(session.Presentation.SceneActors)
+            self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView!=ViewGeometryModelResults.Geometry
+            self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
             for name in ['Undo', 'Redo']:
                 text = getattr(session.Presentation, name + 'Text')
                 self.actions[name].setEnabled(bool(text))
@@ -255,8 +280,10 @@ else:
             self.render()
 
         def change_view(self, value):
-            controller.CurrentView = ViewGeometryModelResults.Model if value == 'Model' else ViewGeometryModelResults.Geometry
-            if value == 'Model':
+            controller.CurrentView = getattr(ViewGeometryModelResults,value)
+            if value == 'Results':
+                controller.DrawResults(False)
+            elif value == 'Model':
                 controller.DrawModel(False)
             else:
                 controller.DrawGeometry(False)
@@ -329,7 +356,7 @@ else:
                 if values is None:return
                 controller.SetNewModelPropertiesCommand(*values)
             def done():
-                value='Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model'
+                value=str(controller.CurrentView)
                 self.view.setCurrentText(value)
                 self.change_view(value);self.fit()
             self.run_operation(self.geometry.Import(str(Path(path).resolve())),done)
@@ -337,6 +364,15 @@ else:
         def edit_item(self,item,column=0):
             entry=item.data(0,QtCore.Qt.ItemDataRole.UserRole)
             if entry is None:return
+            if entry.Family in ['Jobs','Result fields','Result histories','Result reference points','Result coordinate systems']:
+                if entry.Family=='Result fields' and not entry.Group and not any(f.Name==entry.Name for f in controller.GetResultFieldOutputs()):
+                    self.result_boxes['Field'].setCurrentText(entry.Name);return
+                if entry.Family=='Result histories' and not entry.Group and not any(f.Name==entry.Name for f in controller.GetResultHistoryOutputs()):
+                    self.guard(lambda:self.history_data(entry.Name));return
+                self.guard(lambda:self.edit_results(entry.Family,None if entry.Group else entry.Name));return
+            if entry.Family=='Result parts':
+                if not entry.Group:self.guard(lambda:self.edit_geometry('Parts',entry.Name))
+                return
             if entry.Group and entry.FolderId:
                 item.setExpanded(not item.isExpanded());return
             if entry.Group:
@@ -362,12 +398,14 @@ else:
             for title,action in self.actions.items():
                 if title!='Fit':action.setEnabled(False)
             self.tree.setEnabled(False);self.view.setEnabled(False)
+            self.result_toolbar.setEnabled(False);self.animation_toolbar.setEnabled(False);self.symbols.setEnabled(False)
             if family=='Parameters':self.viewport.setEnabled(False);self.pick_mode.setEnabled(False)
             def finish(result):
                 self.active_editor=None
                 for menu in self.geometry_menus:menu.setEnabled(True)
                 for action in self.actions.values():action.setEnabled(True)
                 self.tree.setEnabled(True);self.view.setEnabled(True);self.viewport.setEnabled(True);self.pick_mode.setEnabled(True)
+                self.result_toolbar.setEnabled(True);self.animation_toolbar.setEnabled(True);self.symbols.setEnabled(True)
                 self.refresh()
                 dialog.deleteLater()
             dialog.finished.connect(finish)
@@ -380,6 +418,8 @@ else:
             if entry is None:return
             if entry.Family in ['Geometry parts','Mesh setup','Parts']:
                 return self.geometry_tree_menu(entry,position)
+            if entry.Family in ['Jobs','Result fields','Result histories','Result parts','Result reference points','Result coordinate systems']:
+                self.results_tree_menu(entry);return
             menu=QtWidgets.QMenu(self)
             actions={}
             if entry.Family!='Parts':
@@ -444,14 +484,14 @@ else:
             return True
 
         def undo(self):
-            if self.geometry.HasGeometryHistory:
+            if self.geometry.HasGeometryHistory or self.results.HasBackgroundHistory:
                 return self.run_operation(self.geometry.Undo())
             controller.UndoHistory(RegenerateTypeEnum.All)
             self.dirty = True
             self.refresh()
 
         def redo(self):
-            if self.geometry.HasGeometryHistory:
+            if self.geometry.HasGeometryHistory or self.results.HasBackgroundHistory:
                 return self.run_operation(self.geometry.Redo())
             controller.RedoHistory()
             self.dirty = True
@@ -504,6 +544,7 @@ else:
         def closeEvent(self, event):
             if self.operation_task is not None:
                 event.ignore();return
+            self.stop_animation(False)
             if not self.confirm_discard():
                 event.ignore()
                 return
@@ -526,4 +567,7 @@ else:
     if args.geometry_probe:
         from geometry_gui_probe import start
         start(application,window,args.geometry_probe,args.cad_fixture)
+    if args.results_probe:
+        from results_gui_probe import start
+        start(application,window,args.results_probe)
     application.exec()

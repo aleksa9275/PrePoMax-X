@@ -22,6 +22,29 @@ namespace PrePoMax
         public string RedoText {get;private set;}
         public vtkMaxActor[] SceneActors => System.Linq.Enumerable.ToArray(actors.Values);
         public IntPtr Handle => IntPtr.Zero;
+        // Transient presentation commands: never serialized into the engineering model.
+        public sealed class RenderCommand(string name,object[] args){public string Name=>name;public object[] Arguments=>args;}
+        readonly Dictionary<string,RenderCommand> renderCommands=new(StringComparer.Ordinal);
+        public RenderCommand[] RenderCommands=>System.Linq.Enumerable.ToArray(renderCommands.Values);
+        public Action<string,bool,int> Screenshot {get;set;}
+        public Func<UnitSystemType> ResultUnitsSelector {get;set;}
+        public int AnimationFrame {get;set;}
+        public void SetDeformationVariable(string name){deformationVariable=name;Controller.ClearSelectionBuffer();}
+        void CaptureRenderCommand(string name,object[] args)
+        {
+            string key=name;
+            if(name=="RemoveSectionView"){renderCommands.Remove("section");return;}
+            if(name is "CreateSectionView" or "UpdateSectionView"){renderCommands["section"]=new RenderCommand(name,args);return;}
+            if(name is "AddSymmetry" or "AddLinearPattern" or "AddCircularPattern"){renderCommands["pattern:"+renderCommands.Count]=new RenderCommand(name,args);return;}
+            bool glyph=name.StartsWith("AddOriented",StringComparison.Ordinal) || name is "AddSphereActor" or "AddVectorFieldActor" or "AddTensorFieldActor" or "AddAnimatedVectorFieldActor" or "AddAnimatedTensorFieldActor";
+            if(glyph && args[0] is vtkMaxActorData data)key="actor:"+data.Name;
+            else if(name is "AddCaptionActor" or "AddLabelActor" or "AddArrowWidget" )key="overlay:"+(string)args[0];
+            else if(name=="AddMeasurementAnnotation")key="measurement:"+(string)args[0];
+            else if(name is "AddCoordinateSystemSymbol")key="coordinates:"+renderCommands.Count;
+            else if(name is "RemoveOverlayActors" or "RemoveArrowWidgets" or "RemoveMeasurementAnnotations") {foreach(string item in (string[])args[0]){renderCommands.Remove("overlay:"+item);renderCommands.Remove("measurement:"+item);}return;}
+            else if(!name.StartsWith("SetScalarBar",StringComparison.Ordinal) && !name.StartsWith("SetStatusBlock",StringComparison.Ordinal) && !name.StartsWith("DrawLegend",StringComparison.Ordinal) && !name.StartsWith("DrawStatusBlock",StringComparison.Ordinal) && name!="SetAnimationFrameData" && !glyph)return;
+            renderCommands[key]=new RenderCommand(name,args);
+        }
         public Action<string, object[]> Presentation { get; set; }
         public Func<string, object[], object> Query { get; set; }
         // Explicit export view data. Contour lookup tables belong to the renderer;
@@ -49,14 +72,18 @@ namespace PrePoMax
         public void Invalidate() => InvokePresentation("Invalidate", Array.Empty<object>());
         private void InvokePresentation(string name, object[] arguments)
         {
+            CaptureRenderCommand(name,arguments);
             switch(name)
             {
                 case "EnableDisableUndoRedo":UndoText=(string)arguments[0];RedoText=(string)arguments[1];break;
                 case "Open":
                     ((Action<string,string>)arguments[1])((string)arguments[0],(string)arguments[3]);
+                    // Original FrmMain.Open -> UpdateResultMenus selects a valid default before DrawResults.
+                    if(Controller.ResultsInitialized)Controller.CurrentFieldData=Controller.CurrentResult.GetFirstComponentOfTheFirstFieldAtDefaultIncrement();
                     if(Controller.CurrentView==ViewGeometryModelResults.Geometry)Controller.DrawGeometry((bool)arguments[2]);
                     else if(Controller.CurrentView==ViewGeometryModelResults.Model)Controller.DrawModel((bool)arguments[2]);
                     else Controller.ViewResultsType=ViewResultsTypeEnum.ColorContours;
+                    if(Controller.ResultsInitialized)SelectResultsUnitSystem(arguments[3] as string);
                     Controller.Annotations.DrawAnnotations(false,true);
                     break;
                 case "SetAnnotateWithColor":Controller.AnnotateWithColor=(AnnotateWithColorEnum)arguments[0];break;
@@ -79,7 +106,7 @@ namespace PrePoMax
                     if(Controller.CurrentResult?.UnitSystem.UnitSystemType==UnitSystemType.Undefined)
                     {
                         UnitSystemType units;
-                        if(!Enum.TryParse(arguments[0] as string,out units))units=UnitSystemType.UNIT_LESS;
+                        if(!Enum.TryParse(arguments[0] as string,out units))units=MessageBoxes.Mode==MessageBoxModeEnum.Interactive && ResultUnitsSelector!=null?ResultUnitsSelector():UnitSystemType.UNIT_LESS;
                         Controller.SetResultsUnitSystem(units);
                     }
                     break;
@@ -102,7 +129,18 @@ namespace PrePoMax
                 case "SetQuerySelection":querySelection=(bool)arguments[0];break;
                 case "SetStateReady":workingState=null;break;
                 case "Clear3DSelection":selectionActors.Clear();break;
-                case "Clear3D":case "ClearControls":actors.Clear();selectionActors.Clear();break;
+                case "ClearButKeepParts":
+                    foreach(var key in System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Where(actors.Keys,key=>!actors[key].Data.IsAPart)))actors.Remove(key);
+                    foreach(var key in System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Where(renderCommands.Keys,key=>key.StartsWith("actor:",StringComparison.Ordinal)||key.StartsWith("coordinates:",StringComparison.Ordinal))))renderCommands.Remove(key);
+                    selectionActors.Clear();break;
+                case "UpdateArrowWidgetAnimationData":
+                    if(renderCommands.TryGetValue("overlay:"+(string)arguments[0],out var annotation)) {if(arguments[1]!=null)annotation.Arguments[1]=arguments[1];if(arguments[2]!=null)annotation.Arguments[3]=arguments[2];}break;
+                case "Clear3D":case "ClearControls":actors.Clear();selectionActors.Clear();renderCommands.Clear();break;
+                case "AddScalarFieldOn3DCells":var scalar=(vtkMaxActorData)arguments[0];actors[scalar.Name]=new vtkMaxActor(scalar);break;
+                case "UpdateActorSurfaceScalarField":
+                    if(actors.TryGetValue((string)arguments[0],out var scalarActor)){scalarActor.Data.Geometry.Nodes.Values=(float[])arguments[1];scalarActor.Data.Geometry.ExtremeNodes=(NodesExchangeData)arguments[2];scalarActor.Data.Geometry.Nodes.ResultField=(ResultFieldExchangeData)arguments[3];}break;
+                case "UpdateActorColorContoursVisibility":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var contourActor))contourActor.Data.ColorContours=(bool)arguments[1];break;
+                case "UpdateActor":if(actors.Remove((string)arguments[0],out var renamed)){renamed.Data.Name=(string)arguments[1];renamed.Color=(System.Drawing.Color)arguments[2];actors[renamed.Data.Name]=renamed;}break;
                 case "HideActors":case "ShowActors":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var hidden))hidden.Visible=name=="ShowActors";break;
                 case "AddActor":var actor=(vtkMaxActor)arguments[0];if(actor.Data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);else actors[actor.Data.Name]=actor;break;
                 case "Add3DCells":foreach(var data in (vtkMaxActorData[])arguments[0])actors[data.Name]=new vtkMaxActor(data);break;
@@ -110,7 +148,8 @@ namespace PrePoMax
                     if(nativeGeometry==null)throw new NotSupportedException("Enable the native geometry host for: "+name);
                     nativeGeometry.ProcessSurface(name,actors[(string)arguments[0]].Data,arguments);break;
                 case "SaveAutomationScreenshot":
-                    throw new NotSupportedException("A screenshot requires a rendered viewport host.");
+                    if(Screenshot==null)throw new NotSupportedException("A screenshot requires a rendered viewport host.");
+                    Screenshot((string)arguments[0],(bool)arguments[1],(int)arguments[2]);break;
             }
             Presentation?.Invoke(name,arguments);
         }
@@ -119,6 +158,20 @@ namespace PrePoMax
             object result;
             switch(name)
             {
+                case "TryGetAnimationNodeData":
+                    arguments[1]=null;arguments[2]=0f;result=false;
+                    foreach(var candidate in actors.Values){
+                        if(!candidate.Visible)continue;
+                        var frames=candidate.Data.Geometry.NodesAnimation;
+                        if(frames==null || AnimationFrame<0 || AnimationFrame>=frames.Length)continue;
+                        var nodes=frames[AnimationFrame];int index=Array.IndexOf(nodes.Ids??candidate.Data.Geometry.Nodes.Ids??Array.Empty<int>(),(int)arguments[0]);
+                        if(index<0)continue;
+                        arguments[1]=nodes.Coor!=null?nodes.Coor[index]:new double[]{nodes.FlatCoor[index*3],nodes.FlatCoor[index*3+1],nodes.FlatCoor[index*3+2]};
+                        arguments[2]=nodes.Values?[index]??0f;result=true;break;
+                    }break;
+                case "AddAnimatedScalarFieldOn3DCells":
+                    var animated=(vtkMaxActorData)arguments[0];actors[animated.Name]=new vtkMaxActor(animated);result=true;break;
+                case "AddAnimatedVectorFieldActor":case "AddAnimatedTensorFieldActor":CaptureRenderCommand(name,arguments);result=true;break;
                 case "GetTreeExpandCollapseState":result=treeState;break;
                 case "GetStableTreeExpandCollapseState":result=stableTreeState;break;
                 case "GetSidePanelsState":result=panels;break;
@@ -171,7 +224,7 @@ namespace PrePoMax
                 }
                 else if(!job.IsUpToDate && MessageBoxes.ShowWarningQuestionOKCancel("The result file was modified after the analysis "+name+" completed. Continue?")!=System.Windows.Forms.DialogResult.OK)return;
             }
-            Controller.Open(Path.Combine(job.WorkDirectory,job.ResultsFileName),parameters);
+            Open(Path.Combine(job.WorkDirectory,job.ResultsFileName),Controller.Open,false,parameters);
             LastOpenResultsAccepted=true;
         }
     }

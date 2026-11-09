@@ -13,6 +13,9 @@ p.add_argument('--work-directory', required=True, type=Path)
 p.add_argument('--feed', type=Path, help='Optional offline NuGet feed')
 p.add_argument('--gmsh-library',type=Path,help='Pinned Gmsh 4.13.0 library with adjacent gmsh-build.json')
 p.add_argument('--native-tools',type=Path,help='Explicit fingerprinted native tool manifest')
+p.add_argument('--solver-registry',type=Path)
+p.add_argument('--solver-id')
+p.add_argument('--solver-directory',type=Path)
 p.add_argument('--no-build', action='store_true')
 p.add_argument('project', nargs='?', type=Path)
 a = p.parse_args()
@@ -25,6 +28,9 @@ if not a.no_build:
 command = ['dotnet',str(HERE/'Workbench/bin/Release/net10.0/PrePoMaxX.Workbench.dll'),
            str(a.python_profile.resolve()),str(a.work_directory.resolve()),str(HERE/'workbench.py')]
 if a.native_tools:command += ['--native-tools',str(a.native_tools.resolve())]
+for key in ['solver_registry','solver_id','solver_directory']:
+    value=getattr(a,key)
+    if value:command += ['--'+key.replace('_','-'),str(value.resolve() if isinstance(value,Path) else value)]
 if a.project:
     command.append(str(a.project.resolve()))
 environment=dict(os.environ)

@@ -124,7 +124,7 @@ n='FrmPartProperties'
 add(n,'HashSet<string> _partNames=[];string _partToEditName;ViewPartProperties _viewPartProperties;ViewGeometryModelResults _currentView;',
 '''_currentView=controller.CurrentView;_partToEditName=name;
 _partNames.UnionWith(controller.GetGeometryPartNames()??[]);_partNames.UnionWith(controller.GetAllMeshEntityNames()??[]);
-PartProperties=(_currentView==ViewGeometryModelResults.Geometry?(BasePart)controller.GetGeometryPart(name):controller.GetModelPart(name)).GetProperties().DeepClone();SelectedObject=_viewPartProperties;''',
+PartProperties=(_currentView==ViewGeometryModelResults.Geometry?(BasePart)controller.GetGeometryPart(name):controller.CurrentView==ViewGeometryModelResults.Results?controller.GetResultPart(name):controller.GetModelPart(name)).GetProperties().DeepClone();SelectedObject=_viewPartProperties;''',
 '\n'.join(clean(c) for c in [prop(n,'PartProperties'),method(n,'GetElementTypeCounts'),method(n,'OnApply')]),'PartProperties','',[])
 
 for operation in ['Translate','Rotate','Mirror','Scale']:

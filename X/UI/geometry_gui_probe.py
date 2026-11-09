@@ -52,6 +52,13 @@ def start(app,window,output,fixture=None):
     def sizing():
         if not wait():return False
         check('native CAD imported into geometry tree',window.controller.CurrentView==ViewGeometryModelResults.Geometry and len(window.scene.actors)>0 and any(i.data(0,QtCore.Qt.ItemDataRole.UserRole).Family=='Geometry parts' and not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group for i in window.walk_tree()))
+        from System import Array,Double
+        from System.Drawing import Color
+        window.controller.CreateSectionView(Array[Double]([5,5,5]),Array[Double]([1,0,0]),True,Color.Empty,False,True);window.refresh()
+        report['cadCapData']=[{'name':str(a.Data.Name),'representation':str(a.Data.ActorRepresentation),'volumeCells':bool(a.Data.HasVolumeCells),'section':bool(a.Data.SectionViewPossible)} for a in window.session.Presentation.SceneActors]
+        report['cadCuts']=[{'cells':a.GetMapper().GetInput().GetNumberOfCells(),'type':a.GetMapper().GetInput().GetClassName()} for a in window.scene.presentation.features.cuts]
+        check('closed CAD section cap rendered without volume cells',any(a.GetMapper().GetInput().GetNumberOfCells()>0 and a.GetMapper().GetInput().GetCell(0).GetCellDimension()==2 for a in window.scene.presentation.features.cuts))
+        window.controller.RemoveSectionView(False);window.refresh()
         window.edit_geometry('Mesh setup');dialog=window.active_editor
         check('all ten original meshing types offered',dialog.types.count()==10)
         choose(dialog,'AdvancedView','Advanced');choose(dialog,'Relative','Absolute')

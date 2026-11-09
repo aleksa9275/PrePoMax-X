@@ -20,13 +20,14 @@ and the native viewport foundation are detailed in [the C1 report](reports/phase
 C2 adds core model authoring through original property views/factories/apply rules;
 C marks UI availability, not exhaustive execution of each item or complete form/control parity.
 C3 connects geometry editing, all original mesh setup types, native meshing and mesh editing.
-See [C2](reports/phase-c2-model-authoring.md) and [C3](reports/phase-c3-geometry-meshing.md).
+C4 connects original jobs, results authoring/display, viewport symbols/plots/sections/patterns/animation/captures.
+See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md) and [C4](reports/phase-c4-jobs-results.md).
 Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 87 | 0 |
-| Commands | 237 | 237 | 236 | 136 | 0 |
+| Commands | 237 | 237 | 236 | 175 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -227,9 +228,9 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CExportGeometryParts | ABC |
 | CExportMeshParts | ABC |
-| CExportResultFieldOutputToCsv | AB |
-| CExportResultHistoryOutputToCsv | AB |
-| CExportResultParts | AB |
+| CExportResultFieldOutputToCsv | ABC |
+| CExportResultHistoryOutputToCsv | ABC |
+| CExportResultParts | ABC |
 | CExportTo3mf | AB |
 | CExportToAbaqus | AB |
 | CExportToCalculix | AB |
@@ -531,52 +532,52 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Item | Status |
 |---|---|
 | CAddDeafaultJob | ABC |
-| CAddJob | AB |
-| CDuplicateJobs | AB |
-| CPrepareAndRunJob | AB |
-| CRemoveJobs | AB |
-| CReplaceJob | AB |
+| CAddJob | ABC |
+| CDuplicateJobs | ABC |
+| CPrepareAndRunJob | ABC |
+| CRemoveJobs | ABC |
+| CReplaceJob | ABC |
 
 ### Results
 
 | Item | Status |
 |---|---|
-| CAddResultCoordinateSystem | AB |
-| CAddResultFieldOutput | AB |
-| CAddResultHistoryOutput | AB |
-| CAddResultReferencePoint | AB |
-| CDuplicateResultCoordinateSystems | AB |
-| CDuplicateResultFieldOutputs | AB |
-| CDuplicateResultHistoryOutputs | AB |
-| CDuplicateResultReferencePoints | AB |
-| CHideResultCoordinateSystems | AB |
-| CHideResultParts | AB |
-| CHideResultReferencePoints | AB |
-| CMergeResultParts | AB |
-| COpenResults | AB |
+| CAddResultCoordinateSystem | ABC |
+| CAddResultFieldOutput | ABC |
+| CAddResultHistoryOutput | ABC |
+| CAddResultReferencePoint | ABC |
+| CDuplicateResultCoordinateSystems | ABC |
+| CDuplicateResultFieldOutputs | ABC |
+| CDuplicateResultHistoryOutputs | ABC |
+| CDuplicateResultReferencePoints | ABC |
+| CHideResultCoordinateSystems | ABC |
+| CHideResultParts | ABC |
+| CHideResultReferencePoints | ABC |
+| CMergeResultParts | ABC |
+| COpenResults | ABC |
 | CRemoveAllResults | AB |
-| CRemoveCurrentResults | AB |
-| CRemoveResultCoordinateSystems | AB |
+| CRemoveCurrentResults | ABC |
+| CRemoveResultCoordinateSystems | ABC |
 | CRemoveResultFieldOutputComponents | AB |
-| CRemoveResultFieldOutputs | AB |
+| CRemoveResultFieldOutputs | ABC |
 | CRemoveResultHistoryComponents | AB |
 | CRemoveResultHistoryFields | AB |
-| CRemoveResultHistoryOutputs | AB |
-| CRemoveResultParts | AB |
-| CRemoveResultReferencePoints | AB |
-| CReplaceResultCoordinateSystem | AB |
-| CReplaceResultFieldOutput | AB |
-| CReplaceResultHisotryOutput | AB |
-| CReplaceResultPartProperties | AB |
-| CReplaceResultReferencePoint | AB |
+| CRemoveResultHistoryOutputs | ABC |
+| CRemoveResultParts | ABC |
+| CRemoveResultReferencePoints | ABC |
+| CReplaceResultCoordinateSystem | ABC |
+| CReplaceResultFieldOutput | ABC |
+| CReplaceResultHisotryOutput | ABC |
+| CReplaceResultPartProperties | ABC |
+| CReplaceResultReferencePoint | ABC |
 | CResetColorForResultParts | AB |
-| CSetColorContoursForResultPartsCommand | AB |
-| CSetColorForResultParts | AB |
-| CSetCurrentResults | AB |
-| CSetTransparencyForResultParts | AB |
-| CShowResultCoordinateSystems | AB |
-| CShowResultParts | AB |
-| CShowResultReferencePoints | AB |
+| CSetColorContoursForResultPartsCommand | ABC |
+| CSetColorForResultParts | ABC |
+| CSetCurrentResults | ABC |
+| CSetTransparencyForResultParts | ABC |
+| CShowResultCoordinateSystems | ABC |
+| CShowResultParts | ABC |
+| CShowResultReferencePoints | ABC |
 
 ## Forms
 

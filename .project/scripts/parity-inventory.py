@@ -112,7 +112,8 @@ def main() -> None:
         "C2 adds core model authoring through original property views/factories/apply rules;",
         "C marks UI availability, not exhaustive execution of each item or complete form/control parity.",
         "C3 connects geometry editing, all original mesh setup types, native meshing and mesh editing.",
-        "See [C2](reports/phase-c2-model-authoring.md) and [C3](reports/phase-c3-geometry-meshing.md).",
+        "C4 connects original jobs, results authoring/display, viewport symbols/plots/sections/patterns/animation/captures.",
+        "See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md) and [C4](reports/phase-c4-jobs-results.md).",
         "Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.",
         "",
     ]

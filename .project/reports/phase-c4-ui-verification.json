@@ -1,0 +1,805 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUtc": "2026-11-09T15:04:43.729473+00:00",
+  "parentCommit": "2ce31209b3ed24d89902cd39d3065eaf252f378f",
+  "uiAndServiceSuccess": true,
+  "numericalAcceptance": false,
+  "hosts": {
+    "macArm64": {
+      "host": {
+        "os": "Darwin",
+        "architecture": "Arm64"
+      },
+      "checks": {
+        "service": 20,
+        "gui": 18,
+        "authoringService": 33,
+        "authoringGui": 18,
+        "geometryService": 25,
+        "resultsService": 41,
+        "geometryGui": 21,
+        "resultsGui": 35
+      },
+      "combinedReceipt": {
+        "path": "/private/tmp/prepomaxx-c4/mac-final-current.json",
+        "sha256": "88117263fa2f55a7fce6d37e92388ed47b74de93297010f111fceb7cc083dcf6",
+        "bytes": 57896
+      },
+      "finalGeometryGui": {
+        "path": "/private/tmp/prepomaxx-c4/cad-cap-verified/geometry-gui.json",
+        "sha256": "b8743434a95c8626344d76e953dba3bc7dd2cfdba23ea94da8e4da0f39ede9dd",
+        "bytes": 1514
+      },
+      "finalResultsGui": {
+        "path": "/private/tmp/prepomaxx-c4/gui-render-verified/results-gui.json",
+        "sha256": "f3f523fc8eb01019a8201275a3dd6ad324c93be7ea3cdd4fb3b20435154bbb18",
+        "bytes": 1824
+      },
+      "c4ServiceChecks": [
+        "original analysis descriptors",
+        "original analysis command",
+        "original analysis name validation",
+        "duplicate analysis original command",
+        "remove analysis original command",
+        "job undo",
+        "job redo",
+        "original Controller native solver completed",
+        "original job output retained",
+        "original status parser",
+        "original convergence parser",
+        "original FRD reader",
+        "explicit original result-unit selection",
+        "scalar actors retained",
+        "original legend/status commands retained",
+        "field/component inventory",
+        "original displacement field unchanged",
+        "true-scale original deformation",
+        "original Undeformed representation",
+        "original Deformed representation",
+        "original ColorContours representation",
+        "original VectorPlot representation",
+        "original tensor plot",
+        "original Result coordinate systems command",
+        "original Result reference points command",
+        "original result coordinate edit",
+        "Result fields original factory count",
+        "Result fields original descriptors",
+        "Result histories original factory count",
+        "Result histories original descriptors",
+        "original equation field command",
+        "original equation doubles source field unchanged",
+        "original table history validation/calculation",
+        "original derived-history duplication",
+        "original animation frames",
+        "original increment animation",
+        "original result field export",
+        "controlled cancellation child is running",
+        "Controller cancellation task returned",
+        "Controller analysis cancellation status",
+        "strict PMX result round trip"
+      ],
+      "c4GuiChecks": [
+        "analysis editor commits off UI thread",
+        "original job in model tree",
+        "solver locks document and retains monitor",
+        "original solver succeeded",
+        "monitor displays solver output and status",
+        "unknown result units use interactive original policy",
+        "results view and scalar surface visible",
+        "field controls contain original data",
+        "field control changes original current field",
+        "native scalar mapper active",
+        "original legend colors and status rendered",
+        "deformation uses original scale",
+        "native vector plot rendered",
+        "native tensor plot rendered",
+        "original annotations rendered",
+        "original frame data moves native points",
+        "animation slider supports all frames",
+        "animation PNG sequence exported",
+        "native Ogg Theora animation exported",
+        "native PNG capture",
+        "original automation screenshot reaches rendered viewport",
+        "original legend view descriptors",
+        "native section plane and cap rendered",
+        "original linear pattern rendered",
+        "rotated tensor component included in scalar range",
+        "result coordinate/reference editors commit original definitions",
+        "result equation widget uses original command",
+        "pending history cells survive property rebuild",
+        "table history widget creates original output",
+        "original history table and plot opened",
+        "result part properties use original command",
+        "GUI PMX preserves results/tools",
+        "original BC/load symbols captured",
+        "native BC/load symbols rendered",
+        "results window captured"
+      ],
+      "finalGeometryChecks": [
+        "CAD import runs with document controls locked",
+        "CAD import undo leaves empty geometry",
+        "CAD import redo stays asynchronous with empty geometry",
+        "native CAD imported into geometry tree",
+        "closed CAD section cap rendered without volume cells",
+        "all ten original meshing types offered",
+        "native pointer picks original CAD part",
+        "mesh setup retains native mouse selection",
+        "setup commit locks active editor",
+        "sizing widget committed original object",
+        "second mesher widget records original setup",
+        "native meshing leaves event loop responsive",
+        "generated solid mesh displayed in model view",
+        "native mesher output reaches output panel",
+        "operation completion restores controls",
+        "original element face edges rendered",
+        "mesh transform widget uses original command",
+        "GUI transform undo preserves mesh",
+        "GUI transform redo",
+        "GUI PMX preserves CAD setup and mesh",
+        "meshed CAD window captured"
+      ],
+      "pending": []
+    },
+    "linuxArm64": {
+      "host": {
+        "os": "Linux",
+        "architecture": "Arm64"
+      },
+      "checks": {
+        "service": 20,
+        "gui": 18,
+        "authoringService": 33,
+        "authoringGui": 18,
+        "geometryService": 25,
+        "resultsService": 41,
+        "geometryGui": 21,
+        "resultsGui": 35
+      },
+      "combinedReceipt": {
+        "path": "/private/tmp/prepomaxx-c4/linux-final-current/final.json",
+        "sha256": "0901c73f89d99db92aa24581d7549884d844a1e0ed8d1726e19cb3725143d6d8",
+        "bytes": 54792
+      },
+      "finalGeometryGui": {
+        "path": "/private/tmp/prepomaxx-c4/linux-final-current/cad-cap/geometry-gui.json",
+        "sha256": "a67a01b5a9d0fa4c8dff29bcee3cc4eb320ee373e5bbcfc503c095499ff088c3",
+        "bytes": 1484
+      },
+      "finalResultsGui": {
+        "path": "/private/tmp/prepomaxx-c4/linux-final-current/gui-render-verified/results-gui.json",
+        "sha256": "2295b61729d4cc487777e37936d951865550f28281acf37f9073508a16e28f9c",
+        "bytes": 1803
+      },
+      "c4ServiceChecks": [
+        "original analysis descriptors",
+        "original analysis command",
+        "original analysis name validation",
+        "duplicate analysis original command",
+        "remove analysis original command",
+        "job undo",
+        "job redo",
+        "original Controller native solver completed",
+        "original job output retained",
+        "original status parser",
+        "original convergence parser",
+        "original FRD reader",
+        "explicit original result-unit selection",
+        "scalar actors retained",
+        "original legend/status commands retained",
+        "field/component inventory",
+        "original displacement field unchanged",
+        "true-scale original deformation",
+        "original Undeformed representation",
+        "original Deformed representation",
+        "original ColorContours representation",
+        "original VectorPlot representation",
+        "original tensor plot",
+        "original Result coordinate systems command",
+        "original Result reference points command",
+        "original result coordinate edit",
+        "Result fields original factory count",
+        "Result fields original descriptors",
+        "Result histories original factory count",
+        "Result histories original descriptors",
+        "original equation field command",
+        "original equation doubles source field unchanged",
+        "original table history validation/calculation",
+        "original derived-history duplication",
+        "original animation frames",
+        "original increment animation",
+        "original result field export",
+        "controlled cancellation child is running",
+        "Controller cancellation task returned",
+        "Controller analysis cancellation status",
+        "strict PMX result round trip"
+      ],
+      "c4GuiChecks": [
+        "analysis editor commits off UI thread",
+        "original job in model tree",
+        "solver locks document and retains monitor",
+        "original solver succeeded",
+        "monitor displays solver output and status",
+        "unknown result units use interactive original policy",
+        "results view and scalar surface visible",
+        "field controls contain original data",
+        "field control changes original current field",
+        "native scalar mapper active",
+        "original legend colors and status rendered",
+        "deformation uses original scale",
+        "native vector plot rendered",
+        "native tensor plot rendered",
+        "original annotations rendered",
+        "original frame data moves native points",
+        "animation slider supports all frames",
+        "animation PNG sequence exported",
+        "native Ogg Theora animation exported",
+        "native PNG capture",
+        "original automation screenshot reaches rendered viewport",
+        "original legend view descriptors",
+        "native section plane and cap rendered",
+        "original linear pattern rendered",
+        "rotated tensor component included in scalar range",
+        "result coordinate/reference editors commit original definitions",
+        "result equation widget uses original command",
+        "pending history cells survive property rebuild",
+        "table history widget creates original output",
+        "original history table and plot opened",
+        "result part properties use original command",
+        "GUI PMX preserves results/tools",
+        "original BC/load symbols captured",
+        "native BC/load symbols rendered",
+        "results window captured"
+      ],
+      "finalGeometryChecks": [
+        "CAD import runs with document controls locked",
+        "CAD import undo leaves empty geometry",
+        "CAD import redo stays asynchronous with empty geometry",
+        "native CAD imported into geometry tree",
+        "closed CAD section cap rendered without volume cells",
+        "all ten original meshing types offered",
+        "native pointer picks original CAD part",
+        "mesh setup retains native mouse selection",
+        "setup commit locks active editor",
+        "sizing widget committed original object",
+        "second mesher widget records original setup",
+        "native meshing leaves event loop responsive",
+        "generated solid mesh displayed in model view",
+        "native mesher output reaches output panel",
+        "operation completion restores controls",
+        "original element face edges rendered",
+        "mesh transform widget uses original command",
+        "GUI transform undo preserves mesh",
+        "GUI transform redo",
+        "GUI PMX preserves CAD setup and mesh",
+        "meshed CAD window captured"
+      ],
+      "pending": []
+    }
+  },
+  "failedEngineeringChecks": [
+    {
+      "name": "analytic double stress",
+      "passed": false,
+      "expected": 200,
+      "actual": 199.99200439453125,
+      "absoluteTolerance": 0.001,
+      "status": "failed; D061 deferred, engineering acceptance remains open"
+    }
+  ],
+  "scope": "C4 representative workflows and affected regressions; not full forms/numerical/four-target/distribution acceptance",
+  "originalWindowsReference": {
+    "scope": "isolated original Windows PrePoMax 3.0.0 via CrossOver; not native Windows acceptance",
+    "sourceBinaryVersionWarning": "source identifies as 3.0.0 RC1; stable/source correspondence gate open",
+    "readback": {
+      "success": true,
+      "values": {
+        "u1": 0.00047619000542908907,
+        "s11": 99.99600219726562,
+        "doubleStress": 199.99200439453125
+      },
+      "nodes": 8,
+      "elements": 1,
+      "derivedField": "DoubleStress",
+      "tableHistory": "Measured"
+    },
+    "nativeReopen": {
+      "success": true,
+      "values": {
+        "u1": 0.00047619000542908907,
+        "s11": 99.99600219726562,
+        "doubleStress": 199.99200439453125
+      },
+      "identicalToOriginalWindowsReadback": true,
+      "nodes": 8,
+      "elements": 1,
+      "derivedFieldAndTableHistoryPreserved": true
+    },
+    "artifacts": [
+      {
+        "path": "/private/tmp/prepomaxx-c4/windows/report.json",
+        "sha256": "04398b5b0dbc784ef080b7b2eeb19934d8e6977b0aacb16c21ccec1ddf77a113",
+        "bytes": 2928
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/windows/readback.json",
+        "sha256": "2d8d0525ca21c0e38f6a91e54a5ab61e71db18bebba5f37d131cebc33f3782e1",
+        "bytes": 208
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/windows/original-resave.pmx",
+        "sha256": "64a7c95b36113783f9258028cc397d3bc93d6ed3d0165c3bf540605cccbb7fd6",
+        "bytes": 16474
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/reopen-original.json",
+        "sha256": "88b64d19c57e1dc219e86f9d4ed4c9b3ea47b5fa2c3139e42c1a1382076e60bd",
+        "bytes": 269
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/reference-command.json",
+        "sha256": "63991301ff5385f66213e25f139b17664b80c8567b5e510bc44e31a8ecb69859",
+        "bytes": 524
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/windows-closeout.log",
+        "sha256": "508c91e2392e4e10772202512311de443b22da84c41c2bc75a38a435f3d31b33",
+        "bytes": 64
+      }
+    ]
+  },
+  "net48": {
+    "assemblies": [
+      {
+        "assembly": "CaeGlobals",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "ThreeMF",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "vtkControl",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeMesh",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeResults",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeModel",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "CaeJob",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "UserControls",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "APIs",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "PrePoMax",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "assembly": "GmshCaller",
+        "passed": true,
+        "errors": []
+      }
+    ],
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c4/net48/result.json",
+      "sha256": "396cabf05b5945bd4b8f335bda9a7d2e432c67f67a143686b2887b8e21aa5d06",
+      "bytes": 821
+    }
+  },
+  "controller": {
+    "receipt": {
+      "path": "/private/tmp/prepomaxx-c4/controller-current.json",
+      "sha256": "812c6581f8a124144983591c1f3a88de64376117b60a36646a4672b7a3390d9f",
+      "bytes": 7898
+    },
+    "passedStages": [
+      "source-lists",
+      "build",
+      "host-contract",
+      "persistence",
+      "solid-workflow",
+      "fresh-process",
+      "embedded-python",
+      "spatial-replay",
+      "script-host"
+    ],
+    "pending": [
+      "Native 3MF/surface exports: explicit lib3mf/Python profiles not supplied",
+      "Original Controller native solve/results: no explicit solver profile supplied",
+      "Original Controller CAD/Gmsh: explicit native profile/fixture not supplied"
+    ]
+  },
+  "nativeProfiles": [
+    {
+      "path": "/private/tmp/prepomaxx-phase-b/python.json",
+      "sha256": "607e99523482184149563048619f13a34ff94a626d7e43a2abd1c0b0c6636de4",
+      "bytes": 449
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/linux-final-current/python.json",
+      "sha256": "bdb5e59616af75795efd8fc0c784c3cefd3829a2a805f69d5531bf3a7663d13d",
+      "bytes": 303
+    },
+    {
+      "path": "/private/tmp/prepomaxx-phase-b/mac-final/tools.json",
+      "sha256": "592b811ce23189d9d6e529916346a626bb24d0c206e6103a9d6e3889d95ec23a",
+      "bytes": 477
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/linux-final-current/tools.json",
+      "sha256": "353c4096c93fedc45e6222179d3852e657e5460b6aa5a22a0eea545101414871",
+      "bytes": 412
+    },
+    {
+      "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Build/artifacts/task0041-final-mac-solver/solver/build-registry.json",
+      "sha256": "558c05f6d004a439966cbe2226f29da876d40f4b732d71fbce1c158d649a3bcc",
+      "bytes": 1824
+    },
+    {
+      "path": "/private/tmp/prepomaxx-task0067-evidence/linux/solver-preview/build-registry.json",
+      "sha256": "ba0161d8e8f35985d9b4ef9bc1e07b8eb440258ddbc15e2c49bb553fb7f2e8f5",
+      "bytes": 1071
+    },
+    {
+      "path": "/private/tmp/prepomaxx-phase-a-closeout/runtime/gmsh-build.json",
+      "sha256": "33aa72dc4009258b22dcc1ebada694c12f2bb7f76957cdda9a2deebd8d7d9341",
+      "bytes": 219
+    }
+  ],
+  "pins": {
+    "gmsh": "patched 4.13.0",
+    "calculix": "2.22, explicit SPOOLES profile",
+    "vtk": "9.5.2",
+    "pyqt": "6.10.0",
+    "qt": "6.10.2",
+    "pythonNet": "3.1.0",
+    "python": "explicit CPython 3.12 profiles",
+    "sdk": {
+      "mac": "10.0.403",
+      "linux": "10.0.402"
+    }
+  },
+  "qaArtifacts": [
+    {
+      "path": "/private/tmp/prepomaxx-c4/gui-render-verified/contours.png",
+      "sha256": "24878651d76fdd92316e2ead499bd8d8c701dfdb4eefdf1afd42eab17f576845",
+      "bytes": 37395
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/gui-render-verified/workbench.png",
+      "sha256": "bb23f6f77b7cddb0684551c7db7f6f3a027bbaf8e49a6206b737cf47ea102c19",
+      "bytes": 354835
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/gui-render-verified/animation.ogv",
+      "sha256": "de77b8ac99c054ac917c5bed67c2dee9970789924f26a8f02fbb96af49971108",
+      "bytes": 178396
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/linux-final-current/gui-render-verified/contours.png",
+      "sha256": "c95b68f92e08bea2e01bc8efda793a70e4e0341353d28b0410c473f76f0983e3",
+      "bytes": 31546
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/linux-final-current/gui-render-verified/workbench.png",
+      "sha256": "6d39e6737b28c4c33d875fa1f2d643d96ef2f0e1fca2f5b21f8ddf8fb3f74b03",
+      "bytes": 75227
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c4/linux-final-current/gui-render-verified/animation.ogv",
+      "sha256": "0916a14440ae650bcad63b145c9a43a4f1f7f95c66b2c52290b5219c3896fd57",
+      "bytes": 120287
+    }
+  ],
+  "retention": {
+    "prunedBuilds": [
+      {
+        "path": "/private/tmp/prepomaxx-c4/mac-final/build",
+        "bytes": 89898743
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/mac-verified/build",
+        "bytes": 89900965
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/mac-closeout-current/build",
+        "bytes": 89923293
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/linux/final/build",
+        "bytes": 89617185
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/linux/native/build",
+        "bytes": 50454704
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/linux-verified/final/build",
+        "bytes": 89617217
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/linux-closeout/final/build",
+        "bytes": 89633881
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c4/controller/build",
+        "bytes": 124133895
+      }
+    ],
+    "bytesRemoved": 713179883,
+    "retainedCurrentBuilds": [
+      "/private/tmp/prepomaxx-c4/mac-final-current/build",
+      "/private/tmp/prepomaxx-c4/linux-final-current/final/build",
+      "/private/tmp/prepomaxx-c4/linux-verified/native/build",
+      "/private/tmp/prepomaxx-c4/controller-current/build"
+    ],
+    "smallEvidenceRetained": true,
+    "previewCandidate": "1580fa9c unchanged",
+    "podman": "stopped; independently inspected before publication",
+    "hostedCi": "not run"
+  },
+  "changedSource": [
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutput.cs",
+      "sha256": "4d9e2f4a94d6a83e1105f6749dc9778a56ff7765ee12953db4f6435177b4f4e7"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutput.cs",
+      "sha256": "dc7702d6f05dd0baac0ec2e56e7df7bc1bb025647a3aadba10ae28598b2346ff"
+    },
+    {
+      "path": "X/Controller/Host/FrmMain.cs",
+      "sha256": "0c19a87a04702b9517c43855ea07e5a0e15d4c92d6a4982aeea3ade6e146a96a"
+    },
+    {
+      "path": "X/Domain/PrePoMax/Sources.g.props",
+      "sha256": "ef61487ffd88af3c918308138a33b4a124e3c8e010d03491b9055876e76bcfb8"
+    },
+    {
+      "path": "X/Domain/domain-sources.json",
+      "sha256": "f4231112551b8ab63ff7e5e33cbc58d27647e058113ca97b0c65c291a58dcbc8"
+    },
+    {
+      "path": "X/UI/Workbench/FormRule.cs",
+      "sha256": "7edd59bfe4b3d76379885b76db597348051d7b89db7fa209768c18bb6e51b7fc"
+    },
+    {
+      "path": "X/UI/Workbench/OriginalGeometryRules.g.cs",
+      "sha256": "996c4aeda0613a08b7870a95041d7442979ab426048a1acb40db00eec707ec66"
+    },
+    {
+      "path": "X/UI/Workbench/OriginalResultsRules.g.cs",
+      "sha256": "f88f90a8b2b2befbc1e77b1c5b9378080bfec87759d8736f77ce65c3cd2a91f1"
+    },
+    {
+      "path": "X/UI/Workbench/PresentationEditSession.cs",
+      "sha256": "f7b8371d29be4dbb0a25c4e5d47e9a717d6e6ce5c3906ca9aa132fa436b35cfd"
+    },
+    {
+      "path": "X/UI/Workbench/ResultFormRule.cs",
+      "sha256": "f65e76390184955aff757029ed182f98a71136403ebc4a15771f3062fde42d85"
+    },
+    {
+      "path": "X/UI/Workbench/ResultsSession.cs",
+      "sha256": "44e4a3c4c597f6b9515cd4a24bdfba5ccaf93438a3c8b34e2487a609ce13022a"
+    },
+    {
+      "path": "X/UI/contours.py",
+      "sha256": "4d3b51643091cfb084ac2f7d7da974bde14d6a01135b12bea737735b53c87f0b"
+    },
+    {
+      "path": "X/UI/generate-colormaps.py",
+      "sha256": "e24ce7921b5369a319928aa8d8257088e216c58b3d8a2fe0688f8ff3a9274744"
+    },
+    {
+      "path": "X/UI/generate-geometry-forms.py",
+      "sha256": "d45b4daa936f8c8f8e0fa50acd195ab6b9df56355baa2097c9efb362dd14f309"
+    },
+    {
+      "path": "X/UI/generate-results-forms.py",
+      "sha256": "3a1adb0f9a6d666dd8a39bce46ba3773a97a7d15435a9fb8f821bb99cf8e99d8"
+    },
+    {
+      "path": "X/UI/geometry_gui_probe.py",
+      "sha256": "911701662628381f09f9d2f0c2443362040738018a250d307d20df8a627199dd"
+    },
+    {
+      "path": "X/UI/geometry_workbench.py",
+      "sha256": "3754f20b3147ad2c9c5486cff87d1c0d89dae8e3219bac888329bda42b51be07"
+    },
+    {
+      "path": "X/UI/glyphs.py",
+      "sha256": "391e03cc722830b735bb604c863c27712563be762831577074ab6b0ead1b9475"
+    },
+    {
+      "path": "X/UI/history_widgets.py",
+      "sha256": "3af2171d5e30cfe597043679319606d300f546b6f4e30e0cb987f3cde3f3925c"
+    },
+    {
+      "path": "X/UI/original_colormaps.py",
+      "sha256": "7356e6db1f305bf384a1ed0c88cfdaf3444cdcb6049cec68903b293c3dad8fa6"
+    },
+    {
+      "path": "X/UI/presentation.py",
+      "sha256": "eba20be051b38859786a11f7695a12058587b8829561555ba2f8a13d816f1fc2"
+    },
+    {
+      "path": "X/UI/presentation_widgets.py",
+      "sha256": "b0afea6c0b0d5cc030c6b53b64b6d6331eca315eaeb6ed03bed91ed18772fff8"
+    },
+    {
+      "path": "X/UI/results_gui_probe.py",
+      "sha256": "a406685c1f202b4ace16741a4b9459d0ced7f94545981bf712c64f13d0bd45ed"
+    },
+    {
+      "path": "X/UI/results_probe.py",
+      "sha256": "e33e2a7d9eb9bab3078fc11180114d6c6fb5b555bd4eff24572b2bd2ef69ae2e"
+    },
+    {
+      "path": "X/UI/results_widgets.py",
+      "sha256": "e5b917a2d114f7b4e8540641bcb75ab99ababda7bf70e28d064f5408c305c84e"
+    },
+    {
+      "path": "X/UI/results_workbench.py",
+      "sha256": "0ba65a97c46e9717314a8f5bbaf0400a380463b1e2485797c5fbeb9fd38e6c41"
+    },
+    {
+      "path": "X/UI/run.py",
+      "sha256": "881b6cc5a3ac8a9280befe99e8ca8efb2cef197d697c237dee3c18ebbe1f4282"
+    },
+    {
+      "path": "X/UI/scene.py",
+      "sha256": "e15545a7787f903d28cb686d2049b93d7cbdd9f96adba002e181cba7a5a2b2e9"
+    },
+    {
+      "path": "X/UI/verify-ui.py",
+      "sha256": "d59e3b4c30fbb38779438555d09853ca600383247a9b2955fbeaea9ac115c7c2"
+    },
+    {
+      "path": "X/UI/view_features.py",
+      "sha256": "44c66605f23b3db0a3068554e15e3200635b86bca3e42f69ebd135c3035d2d5e"
+    },
+    {
+      "path": "X/UI/workbench.py",
+      "sha256": "594cb916dabcd84a7aac508fbfbe9964907016b7f862461f0ac131c8292f49f9"
+    }
+  ],
+  "additionalOriginalViewsAndHelpers": [
+    {
+      "path": "PrePoMax/Forms/02_View/ViewExplodedViewParameters.cs",
+      "sha256": "f19c412d09f940d5700e76e422c27f1e0691454251704396c267902d6ca7f1b5"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewAnnotationSettings.cs",
+      "sha256": "48926024c4eec66062212574feadac779fe94312ed924f111e2ccbf41dca939a"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewLegendSettings.cs",
+      "sha256": "1204da6661c371556b78e9e31cd455a06640494189a9d84e0c2c911c4830bc4e"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewNumberFormatSettings.cs",
+      "sha256": "5f6f6e90e3b131d5de3de8a69f6b7f3b152b6a84b691f303174c47214448344d"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewPostSettings.cs",
+      "sha256": "2291d57bdbf48f6d02462d0056910c6375a4aed506cd3d00e1f80778cccab943"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewSettings.cs",
+      "sha256": "6f49e3375c8099ef1c9d4e2235c158e7074767a3a743f861d567bc06b3004a34"
+    },
+    {
+      "path": "PrePoMax/Forms/61_Settings/ViewStatusBlockSettings.cs",
+      "sha256": "1c4b11c6e8140b110a704b690bad720b7669c123784f1f95b7af25a8d3b8fff9"
+    },
+    {
+      "path": "PrePoMax/Forms/71_Analysis/ViewAnalysisJob.cs",
+      "sha256": "589e0b80dc14f9e14925efd15fd5a43ad9816238e4522f11b67a0e966feab10a"
+    },
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutput.cs",
+      "sha256": "4d9e2f4a94d6a83e1105f6749dc9778a56ff7765ee12953db4f6435177b4f4e7"
+    },
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputCoordinateSystemTransform.cs",
+      "sha256": "e5fb1a7310ca2f04e6b896b0553ddafc791e7750eb8a1c9724c63df97f04deeb"
+    },
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputEnvelope.cs",
+      "sha256": "21e272276b85bbfe0c07f5a5251dade5522b6b625aa585f26acf0ca158d30358"
+    },
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputEquation.cs",
+      "sha256": "feb59b6ed7109c35a7338901fe1f57a86da0d3a3581ace32aa26b524820cdf1e"
+    },
+    {
+      "path": "PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputLimit.cs",
+      "sha256": "aa23285d0082f6519722ea158c09ad5be2e2c7390a32e66a66051d5147457a97"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutput.cs",
+      "sha256": "dc7702d6f05dd0baac0ec2e56e7df7bc1bb025647a3aadba10ae28598b2346ff"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromAffineFit.cs",
+      "sha256": "f317438b86f1b81c3f42d96982c26ae57e04d97083e5774d0b5364fb89ca378b"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromEquation.cs",
+      "sha256": "ff99e9c486cc25c91ae5281796dc604023fbb1996bcc0ae85d92a2008691b573"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromExtractedEntry.cs",
+      "sha256": "4e373582fded0c764478dd2e0e21aac36384d2db6e39d5458dacfd8ae37611a9"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromField.cs",
+      "sha256": "a782efc164220af039bae827f08a57d7ebe3f239753575e7dce22bf13e02b6c4"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromIntegration.cs",
+      "sha256": "d1b8c36758d598dc91bc57aeaccf2bd46d7b97ef2cf12d8a99e3ae3c5c9a2f3e"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromMergedHistories.cs",
+      "sha256": "6bfa5d368e9d6c945a2866370e7c4dd10e21925db6573ef69e508a1aa665893c"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromTable.cs",
+      "sha256": "aea0eb580a48c318f4d1bc36fa79ed5f696d9d04f164001fde96df08d4913cb2"
+    },
+    {
+      "path": "PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputXY.cs",
+      "sha256": "f72c3a6f4a80611de365fc6de02ecdfdc3fb0c9e6cd7e174da993c6ddfdbd7db"
+    },
+    {
+      "path": "PrePoMax/Forms/84_Transformation/ViewCircularPattern.cs",
+      "sha256": "b6b797324a280d5c3d132835c9ff3f292df9442768dcfc729096981a9911b0f3"
+    },
+    {
+      "path": "PrePoMax/Forms/84_Transformation/ViewLinearPattern.cs",
+      "sha256": "65123485b65f5847c7d9f25a279c5e0ccfc6c5f5be92de88b6285b632092936d"
+    },
+    {
+      "path": "PrePoMax/Forms/84_Transformation/ViewSymetry.cs",
+      "sha256": "e7b6cbf4c22eab1eed2d810031d56f74e19d155cf6550c1196d51141bf0afd90"
+    },
+    {
+      "path": "PrePoMax/Forms/84_Transformation/ViewTransformation.cs",
+      "sha256": "5e9f97118cd2a09aeeee93a386ccc7e478763fb443bde355ebbf43737714a757"
+    }
+  ],
+  "knownLimitations": [
+    "B011 analytical doubled stress remains failed: 200 expected, 199.99200439453125 actual, .001 absolute tolerance",
+    "B012 pre-start analysis cancellation not repaired; active-child cancellation passes",
+    "B010 concurrent CAD cancellation remains open",
+    "AVI writer unavailable on pinned Mac/Linux VTK; native Ogg Theora and PNG frame export verified",
+    "Full form/control/viewport/animation/backend/corpus matrices and native Windows/Linux x64/physical Linux/distribution acceptance remain open"
+  ]
+}

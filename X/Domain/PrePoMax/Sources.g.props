@@ -551,5 +551,31 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewSplitPartMeshData.cs" Link="Forms/21_FEModel/ViewSplitPartMeshData.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/22_Node/ViewMergeCoincidentNodes.cs" Link="Forms/22_Node/ViewMergeCoincidentNodes.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/23_Element/ViewElementQuality.cs" Link="Forms/23_Element/ViewElementQuality.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/71_Analysis/ViewAnalysisJob.cs" Link="Forms/71_Analysis/ViewAnalysisJob.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutput.cs" Link="Forms/82_ResultFieldOutput/ViewResultFieldOutput.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputCoordinateSystemTransform.cs" Link="Forms/82_ResultFieldOutput/ViewResultFieldOutputCoordinateSystemTransform.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputEnvelope.cs" Link="Forms/82_ResultFieldOutput/ViewResultFieldOutputEnvelope.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputEquation.cs" Link="Forms/82_ResultFieldOutput/ViewResultFieldOutputEquation.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/82_ResultFieldOutput/ViewResultFieldOutputLimit.cs" Link="Forms/82_ResultFieldOutput/ViewResultFieldOutputLimit.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutput.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutput.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromAffineFit.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromAffineFit.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromEquation.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromEquation.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromExtractedEntry.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromExtractedEntry.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromField.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromField.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromIntegration.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromIntegration.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromMergedHistories.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromMergedHistories.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromTable.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputFromTable.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/83_ResultHistoryOutput/ViewResultHistoryOutputXY.cs" Link="Forms/83_ResultHistoryOutput/ViewResultHistoryOutputXY.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewLegendSettings.cs" Link="Forms/61_Settings/ViewLegendSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewSettings.cs" Link="Forms/61_Settings/ViewSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewPostSettings.cs" Link="Forms/61_Settings/ViewPostSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewAnnotationSettings.cs" Link="Forms/61_Settings/ViewAnnotationSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewStatusBlockSettings.cs" Link="Forms/61_Settings/ViewStatusBlockSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/61_Settings/ViewNumberFormatSettings.cs" Link="Forms/61_Settings/ViewNumberFormatSettings.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewCircularPattern.cs" Link="Forms/84_Transformation/ViewCircularPattern.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewLinearPattern.cs" Link="Forms/84_Transformation/ViewLinearPattern.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewSymetry.cs" Link="Forms/84_Transformation/ViewSymetry.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/84_Transformation/ViewTransformation.cs" Link="Forms/84_Transformation/ViewTransformation.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/02_View/ViewExplodedViewParameters.cs" Link="Forms/02_View/ViewExplodedViewParameters.cs" />
   </ItemGroup>
 </Project>
