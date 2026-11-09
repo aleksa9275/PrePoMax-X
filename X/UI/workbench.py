@@ -19,10 +19,20 @@ parser.add_argument('--probe', type=Path)
 parser.add_argument('--service-probe', type=Path)
 parser.add_argument('--authoring-service-probe', type=Path)
 parser.add_argument('--authoring-probe', type=Path)
+parser.add_argument('--native-tools', type=Path)
+parser.add_argument('--geometry-service-probe', type=Path)
+parser.add_argument('--geometry-probe', type=Path)
+parser.add_argument('--cad-fixture', type=Path)
 args = parser.parse_args(list(ui_arguments))
 controller = session.Controller
+if args.native_tools:
+    from PrePoMax import NativeTools
+    NativeTools.Configure(str(args.native_tools.resolve()))
 
-if args.authoring_service_probe:
+if args.geometry_service_probe:
+    from geometry_probe import run
+    run(session,args.geometry_service_probe,args.cad_fixture)
+elif args.authoring_service_probe:
     from authoring_probe import run
     run(session,args.authoring_service_probe)
 elif args.service_probe:
@@ -37,11 +47,15 @@ else:
         raise RuntimeError('C1 requires the existing VTK 9.5.2 / PyQt 6.10.0 / Qt 6.10.2 pins')
 
     from authoring_widgets import MaterialDialog, PropertyDialog, MultiPropertyDialog, ParametersDialog
-    from PrePoMaxX.UI import AuthoringSession
+    from PrePoMaxX.UI import AuthoringSession, GeometrySession
+    from geometry_widgets import GeometryDialog
+    from operation_dispatch import Dispatcher
     from CaeGlobals import MessageBoxes, MessageBoxModeEnum
     from System.Windows.Forms import IWin32Window, MessageBoxButtons, MessageBoxIcon, DialogResult
 
-    class Workbench(QtWidgets.QMainWindow):
+    from geometry_workbench import GeometryWorkbench
+
+    class Workbench(GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -49,12 +63,15 @@ else:
             self.path = None
             self.controller = controller
             self.authoring = AuthoringSession(controller)
+            self.geometry = GeometrySession(controller)
+            self.dispatcher = Dispatcher()
+            self.operation_task = None
             self.last_pick_point = None
             self.active_editor = None
             self.selected = []
             self.toolbar = self.addToolBar('Project')
             self.actions = {}
-            for title, callback in [('New…', self.new_project), ('Import mesh…', self.import_mesh), ('Open…', self.choose_open), ('Save', self.save), ('Save As…', self.save_as),
+            for title, callback in [('New…', self.new_project), ('Import mesh…', self.import_mesh), ('Import CAD…', self.import_cad), ('Open…', self.choose_open), ('Save', self.save), ('Save As…', self.save_as),
                                     ('Undo', self.undo), ('Redo', self.redo), ('Fit', self.fit)]:
                 action = self.toolbar.addAction(title)
                 self.actions[title] = action
@@ -62,12 +79,17 @@ else:
                 if title in ('Save', 'Undo', 'Redo'):
                     action.setShortcut({'Save':'Ctrl+S','Undo':'Ctrl+Z','Redo':'Ctrl+Shift+Z'}[title])
             self.pick_mode = QtWidgets.QComboBox()
-            self.pick_mode.addItems(['Pick element', 'Pick face nodes', 'Pick node', 'Pick surface', 'Pick part'])
-            self.toolbar.addWidget(self.pick_mode)
+            self.pick_mode.addItems(['Pick element', 'Pick face nodes', 'Pick node', 'Pick surface', 'Pick part','Pick geometry','Pick geometry vertex','Pick geometry edge','Pick geometry surface','Pick geometry part'])
+            self.addToolBarBreak()
+            self.viewport_toolbar=self.addToolBar('Viewport')
+            self.viewport_toolbar.addWidget(self.pick_mode)
             self.view = QtWidgets.QComboBox()
             self.view.addItems(['Model', 'Geometry'])
             self.view.currentTextChanged.connect(lambda value: self.guard(lambda: self.change_view(value)))
-            self.toolbar.addWidget(self.view)
+            self.viewport_toolbar.addWidget(self.view)
+            self.element_edges=QtWidgets.QCheckBox('Element edges')
+            self.element_edges.toggled.connect(lambda checked:self.refresh())
+            self.viewport_toolbar.addWidget(self.element_edges)
             splitter = QtWidgets.QSplitter()
             self.tree = QtWidgets.QTreeWidget()
             self.tree.setHeaderLabel('Model')
@@ -105,9 +127,15 @@ else:
             self.prompt_delegate=Func[IWin32Window,String,String,MessageBoxButtons,MessageBoxIcon,DialogResult](self.prompt)
             MessageBoxes.InteractivePresenter=self.prompt_delegate
             MessageBoxes.Mode=MessageBoxModeEnum.Interactive
+            self.build_geometry_menus()
             self.refresh()
 
         def query(self, name, arguments):
+            if name in ['GetViewParameters','GetViewPlaneNormal']:
+                return self.dispatcher.call(lambda:self.ui_query(name,arguments))
+            return self.native_query(name,arguments)
+
+        def ui_query(self,name,arguments):
             camera = self.renderer.GetActiveCamera()
             if name == 'GetViewParameters':
                 arguments[0] = Array[Double](camera.GetPosition())
@@ -120,7 +148,12 @@ else:
             return self.native_query(name, arguments)
 
         def present(self, name, arguments):
-            self.previous_presentation(name, arguments)
+            self.previous_presentation(name,arguments)
+            self.dispatcher.post(lambda:self.ui_present(name,arguments))
+
+        def ui_present(self,name,arguments):
+            if name in ['WriteDataToOutput','WriteErrorToOutput']:
+                self.output.appendPlainText(str(arguments[0]))
             camera = self.renderer.GetActiveCamera()
             if name == 'SetViewParameters':
                 camera.SetPosition(*arguments[1])
@@ -136,6 +169,8 @@ else:
                 self.renderer.ResetCameraClippingRange()
                 self.render()
             elif name == 'SetZoomToFit':
+                if self.operation_task is not None:
+                    self.pending_fit=True;return
                 self.scene.update(session.Presentation.SceneActors)
                 self.fit()
 
@@ -143,7 +178,7 @@ else:
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -183,6 +218,9 @@ else:
 
         def refresh(self):
             self.dirty = controller.ModelChanged
+            self.view.blockSignals(True)
+            self.view.setCurrentText('Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model')
+            self.view.blockSignals(False)
             expanded={item.data(0,QtCore.Qt.ItemDataRole.UserRole+1):item.isExpanded() for item in self.walk_tree()}
             self.tree.clear()
             def add(parent,entry):
@@ -193,8 +231,10 @@ else:
                 item.setToolTip(0,entry.Type or entry.Family)
                 for child in entry.Children:add(item,child)
                 item.setExpanded(expanded.get(key,entry.Group))
-            for entry in self.authoring.Tree:add(self.tree,entry)
+            for entry in (self.geometry.Tree if controller.CurrentView==ViewGeometryModelResults.Geometry else self.authoring.Tree):add(self.tree,entry)
+            self.tree.setHeaderLabel('Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model')
             self.selected = []
+            self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView==ViewGeometryModelResults.Model
             self.scene.update(session.Presentation.SceneActors)
             for name in ['Undo', 'Redo']:
                 text = getattr(session.Presentation, name + 'Text')
@@ -215,8 +255,6 @@ else:
             self.render()
 
         def change_view(self, value):
-            if not self.path:
-                return
             controller.CurrentView = ViewGeometryModelResults.Model if value == 'Model' else ViewGeometryModelResults.Geometry
             if value == 'Model':
                 controller.DrawModel(False)
@@ -233,6 +271,9 @@ else:
             return children(self.tree.invisibleRootItem())
 
         def prompt(self,owner,text,caption,buttons,icon):
+            return self.dispatcher.call(lambda:self.ui_prompt(owner,text,caption,buttons,icon))
+
+        def ui_prompt(self,owner,text,caption,buttons,icon):
             # The original unattended-thread policy runs before this UI boundary.
             mapping={str(MessageBoxButtons.OK):[('OK',DialogResult.OK)],
                      str(MessageBoxButtons.OKCancel):[('OK',DialogResult.OK),('Cancel',DialogResult.Cancel)],
@@ -252,6 +293,13 @@ else:
 
         def new_project(self):
             if not self.confirm_discard():return
+            values=self.select_model_properties()
+            if values is None:return
+            controller.New()
+            controller.SetNewModelPropertiesCommand(*values)
+            self.path=None;self.refresh()
+
+        def select_model_properties(self):
             from CaeModel import ModelSpaceEnum
             from CaeGlobals import UnitSystemType
             from System import Enum
@@ -264,17 +312,27 @@ else:
             layout.addRow('Model space',spaces);layout.addRow('Units',units)
             buttons=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok|QtWidgets.QDialogButtonBox.StandardButton.Cancel)
             buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);layout.addRow(buttons)
-            if dialog.exec()!=QtWidgets.QDialog.DialogCode.Accepted:return
-            controller.New()
-            controller.SetNewModelPropertiesCommand(Enum.Parse(ModelSpaceEnum,spaces.currentText()),Enum.Parse(UnitSystemType,units.currentText()))
-            self.path=None;self.refresh()
+            if dialog.exec()!=QtWidgets.QDialog.DialogCode.Accepted:return None
+            return Enum.Parse(ModelSpaceEnum,spaces.currentText()),Enum.Parse(UnitSystemType,units.currentText())
 
         def import_mesh(self):
-            path,_=QtWidgets.QFileDialog.getOpenFileName(self,'Import mesh','','Mesh (*.inp *.unv *.vol *.stl)')
-            if path:
-                controller.ImportFileCommand(str(Path(path).resolve()),False)
-                controller.CurrentView=ViewGeometryModelResults.Model
-                controller.DrawModel(False);self.refresh();self.fit()
+            path,_=QtWidgets.QFileDialog.getOpenFileName(self,'Import mesh','','Mesh (*.inp *.unv *.vol *.mesh *.obj)')
+            if path:self.import_path(path,False)
+
+        def import_cad(self):
+            path,_=QtWidgets.QFileDialog.getOpenFileName(self,'Import geometry','','Geometry (*.brep *.step *.stp *.iges *.igs *.stl)')
+            if path:self.import_path(path,True)
+
+        def import_path(self,path,geometry=True):
+            if str(controller.Model.Properties.ModelSpace)=='Undefined' or str(controller.Model.UnitSystem.UnitSystemType)=='Undefined':
+                values=self.select_model_properties()
+                if values is None:return
+                controller.SetNewModelPropertiesCommand(*values)
+            def done():
+                value='Geometry' if controller.CurrentView==ViewGeometryModelResults.Geometry else 'Model'
+                self.view.setCurrentText(value)
+                self.change_view(value);self.fit()
+            self.run_operation(self.geometry.Import(str(Path(path).resolve())),done)
 
         def edit_item(self,item,column=0):
             entry=item.data(0,QtCore.Qt.ItemDataRole.UserRole)
@@ -282,7 +340,10 @@ else:
             if entry.Group and entry.FolderId:
                 item.setExpanded(not item.isExpanded());return
             if entry.Group:
-                self.guard(lambda:self.edit_definition(entry.Family,entry.Step,None))
+                if entry.Family=='Mesh setup':self.guard(lambda:self.edit_geometry('Mesh setup'))
+                elif entry.Family not in ['Parts','Geometry parts']:self.guard(lambda:self.edit_definition(entry.Family,entry.Step,None))
+            elif entry.Family in ['Parts','Geometry parts','Mesh setup']:
+                self.guard(lambda:self.edit_geometry(entry.Family,entry.Name))
             elif entry.Family!='Parts':
                 self.guard(lambda:self.edit_definition(entry.Family,entry.Step,entry.Name))
 
@@ -293,13 +354,18 @@ else:
             elif family in ['Surface interactions','Solution controls']:dialog=MultiPropertyDialog(self,name,family,step)
             elif family=='Parameters':dialog=ParametersDialog(self)
             else:dialog=PropertyDialog(self,family,step,name)
+            self.show_editor(dialog,family)
+
+        def show_editor(self,dialog,family):
             self.active_editor=dialog
+            for menu in self.geometry_menus:menu.setEnabled(False)
             for title,action in self.actions.items():
                 if title!='Fit':action.setEnabled(False)
             self.tree.setEnabled(False);self.view.setEnabled(False)
             if family=='Parameters':self.viewport.setEnabled(False);self.pick_mode.setEnabled(False)
             def finish(result):
                 self.active_editor=None
+                for menu in self.geometry_menus:menu.setEnabled(True)
                 for action in self.actions.values():action.setEnabled(True)
                 self.tree.setEnabled(True);self.view.setEnabled(True);self.viewport.setEnabled(True);self.pick_mode.setEnabled(True)
                 self.refresh()
@@ -312,6 +378,8 @@ else:
             if item is None:return
             entry=item.data(0,QtCore.Qt.ItemDataRole.UserRole)
             if entry is None:return
+            if entry.Family in ['Geometry parts','Mesh setup','Parts']:
+                return self.geometry_tree_menu(entry,position)
             menu=QtWidgets.QMenu(self)
             actions={}
             if entry.Family!='Parts':
@@ -376,11 +444,15 @@ else:
             return True
 
         def undo(self):
+            if self.geometry.HasGeometryHistory:
+                return self.run_operation(self.geometry.Undo())
             controller.UndoHistory(RegenerateTypeEnum.All)
             self.dirty = True
             self.refresh()
 
         def redo(self):
+            if self.geometry.HasGeometryHistory:
+                return self.run_operation(self.geometry.Redo())
             controller.RedoHistory()
             self.dirty = True
             self.refresh()
@@ -400,8 +472,8 @@ else:
             name, point, element = hit
             part_id = controller.DisplayedMesh.Parts[name].PartId
             mode = self.pick_mode.currentIndex()
-            select_by = [vtkSelectBy.Element, vtkSelectBy.Surface, vtkSelectBy.Node, vtkSelectBy.Surface, vtkSelectBy.Part][mode]
-            select_item = [vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part][mode]
+            select_by = [vtkSelectBy.Element, vtkSelectBy.Surface, vtkSelectBy.Node, vtkSelectBy.Surface, vtkSelectBy.Part,vtkSelectBy.Geometry,vtkSelectBy.GeometryVertex,vtkSelectBy.GeometryEdge,vtkSelectBy.GeometrySurface,vtkSelectBy.GeometryPart][mode]
+            select_item = [vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part][mode]
             self.last_pick_point=point
             modifiers=QtWidgets.QApplication.keyboardModifiers()
             shift=bool(modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
@@ -430,6 +502,8 @@ else:
             self.statusBar().showMessage(f'{name}: {str(select_item)} IDs ' + ', '.join(map(str, self.selected)))
 
         def closeEvent(self, event):
+            if self.operation_task is not None:
+                event.ignore();return
             if not self.confirm_discard():
                 event.ignore()
                 return
@@ -449,4 +523,7 @@ else:
     if args.authoring_probe:
         from authoring_gui_probe import start
         start(application,window,args.authoring_probe)
+    if args.geometry_probe:
+        from geometry_gui_probe import start
+        start(application,window,args.geometry_probe,args.cad_fixture)
     application.exec()

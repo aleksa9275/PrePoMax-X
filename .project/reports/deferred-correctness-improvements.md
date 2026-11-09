@@ -93,3 +93,18 @@ in the post-parity warning pass; do not edit the generated file independently
 of its original-source generator. The C2 legacy encoding-provider startup gap
 and stale computed-property writeback were port/integration defects and are
 repaired now; no original numerical algorithm/tolerance changed.
+
+C3 follow-up, 9 November 2026: generated nonvisual geometry/mesh adapters retain
+some original presentation fields and the inactive modal-regeneration branch.
+CS0169/CS0414 and CS0162/CS0642 are recorded for the post-parity generator cleanup,
+alongside the existing original warnings. Keep the generator and generated rules
+in sync. Reused Controller history needed separate per-invocation portable native
+logs; that integration defect and dynamic draft-field flushing were repaired now.
+No original numerical algorithm, tolerance or mesher version changed.
+
+C3 cancellation audit: original `ExecutableJobRunner.RunConcurrently` creates
+local job objects, whereas `Kill` only stops `_executableJob` assigned by `Run`.
+Cancellation of concurrent CAD visualization/import stages is therefore not
+accepted; see [B010](../bugs/B010-concurrent-cad-cancellation.md). Preserve the
+original behavior under D061 and address this in the post-parity correctness
+pass; do not claim the new Cancel control covers every native stage.

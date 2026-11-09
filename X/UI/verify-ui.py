@@ -5,6 +5,7 @@ import ast
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -18,6 +19,9 @@ p.add_argument('--expect-os')
 p.add_argument('--expect-architecture')
 p.add_argument('--python-profile',type=Path)
 p.add_argument('--feed',type=Path)
+p.add_argument('--native-tools',type=Path,help='Explicit fingerprinted native mesher tool manifest for C3')
+p.add_argument('--gmsh-library',type=Path,help='Pinned Gmsh 4.13.0 library with adjacent gmsh-build.json')
+p.add_argument('--cad-fixture',type=Path)
 p.add_argument('--gui',action='store_true',help='Requires a display (Xvfb is supplemental Linux evidence)')
 a=p.parse_args()
 out=a.output.resolve()
@@ -26,8 +30,8 @@ folder.mkdir(parents=True,exist_ok=True)
 host={'os':platform.system(),'architecture':{'arm64':'Arm64','aarch64':'Arm64','x86_64':'X64','amd64':'X64'}.get(platform.machine().lower())}
 report={'success':False,'recordedAtUtc':datetime.now(timezone.utc).isoformat(),'host':host,'steps':[],'pending':[]}
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
-def run(name,command):
-    result=subprocess.run(list(map(str,command)),cwd=ROOT,capture_output=True,text=True,timeout=300)
+def run(name,command,environment=None):
+    result=subprocess.run(list(map(str,command)),cwd=ROOT,capture_output=True,text=True,timeout=300,env={**os.environ,**(environment or {})})
     log=folder/(name+'.log')
     log.write_text(result.stdout+'\n'+result.stderr)
     report['steps'].append({'name':name,'exitCode':result.returncode,'log':str(log),'sha256':sha(log),'command':list(map(str,command))})
@@ -44,6 +48,7 @@ try:
     extractor_build[2]=HERE/'FormSourceGen/FormSourceGen.csproj'
     run('form-extractor-build',extractor_build)
     run('original-forms',[sys.executable,HERE/'generate-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
+    run('original-geometry-forms',[sys.executable,HERE/'generate-geometry-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
@@ -56,6 +61,15 @@ try:
         result=json.loads((folder/'authoring/service/authoring.json').read_text())
         if not result.get('success'):raise ValueError('C2 authoring workflow failed')
         report['authoringService']=result
+        if a.native_tools and a.gmsh_library:
+            geometry_base=base+['--native-tools',a.native_tools.resolve()]
+            if a.cad_fixture:geometry_base+=['--cad-fixture',a.cad_fixture.resolve()]
+            geometry_env={'PREPOMAXX_GMSH_LIBRARY':str(a.gmsh_library.resolve())}
+            run('geometry-service',geometry_base+['--geometry-service-probe',folder/'geometry/service'],geometry_env)
+            result=json.loads((folder/'geometry/service/geometry.json').read_text())
+            if not result.get('success'):raise ValueError('C3 geometry/meshing workflow failed')
+            report['geometryService']=result
+        else:report['pending'].append('C3 native CAD/meshing not executed: explicit --native-tools and --gmsh-library not supplied')
         if a.gui:
             run('gui',base+['--probe',folder/'gui'])
             result=json.loads((folder/'gui/gui.json').read_text())
@@ -65,6 +79,11 @@ try:
             result=json.loads((folder/'authoring/gui/authoring-gui.json').read_text())
             if not result.get('success'):raise ValueError('C2 GUI workflow failed: '+str(result))
             report['authoringGui']=result
+            if a.native_tools and a.gmsh_library:
+                run('geometry-gui',geometry_base+['--geometry-probe',folder/'geometry/gui'],geometry_env)
+                result=json.loads((folder/'geometry/gui/geometry-gui.json').read_text())
+                if not result.get('success'):raise ValueError('C3 GUI workflow failed')
+                report['geometryGui']=result
         else:report['pending'].append('GUI workflow not executed: --gui not supplied')
     else:report['pending'].append('Property/native UI workflow not executed: no explicit CPython profile')
     report['success']=True

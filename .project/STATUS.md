@@ -2,77 +2,75 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (8 November 2026)
+## Where we are (9 November 2026)
 
-- **C2 core model authoring implemented.** The C1 host now exposes the model tree,
-  model properties/parameters, sets/surfaces, reference points/coordinate systems,
-  materials/sections/constraints, interactions/contacts, distributions/amplitudes,
-  initial conditions, steps, BCs/loads/defined fields, outputs and solution controls.
-  Original factories, descriptors, validation, command dispatch and PMX/history
-  remain the implementation. Tree folders/order and modeless viewport picking work.
-- **C2 verification:** Mac ARM64 and Linux ARM64/Xvfb each pass 33 C2 authoring +
-  18 GUI checks, plus C1's 20 property + 18 GUI regressions. The factory/property
-  matrix covers all 12 step families, including the wear boundary-step sequence.
-  Original Windows 3.0.0 via CrossOver opens/resaves the authored PMX and exports
-  identical deck content apart from CRLF/LF. Native readback retains engineering
-  definitions, picked set history and tree layout. All eleven original C# assemblies
-  pass C# 7.3/net48 compile-only checks; focused Controller/persistence/UI checks pass.
-- [C2 report](reports/phase-c2-model-authoring.md),
-  [receipt](reports/phase-c2-ui-verification.json), [run/verify](../X/UI/README.md).
-- **C1 foundation remains valid:** Qt/PyQt6 widgets access the same live original
-  C# objects through embedded Python.NET; native VTK renders original actor data.
-  [C1 report](reports/phase-c1-ui-foundation.md).
-- **Phase A/B closeouts remain valid:** whole domain/Controller/Commands assemblies,
-  explicit allowlisted original PMX/history/cloning, representative ARM64 native
-  meshing/solve/results/export and original-app interoperability.
-  [Phase B report](reports/phase-b-controller.md).
-- Inventory: 108 selected model/mesh entries AB, 82 now C; 237 Commands entries A,
-  236 structurally B, 83 now C. All 72 full-form entries remain unaccepted: core
-  authoring reuse is not complete control/form parity. V remains zero; no whole
-  feature-family acceptance is inferred. [Inventory](PARITY_INVENTORY.md).
-- No numerical algorithm/tolerance or native version changed. D029's two original
-  failures and D061 findings remain open. Patched Gmsh 4.13.0 remains the baseline;
-  4.15.2 is unadopted. Exact dormant Q-Morph wrapper sources/license remain unresolved.
-- Retained Python/Qt preview `1580fa9c` is unchanged. The new host remains a
-  development application; no new installer/package candidate or hosted CI run.
+- **C3 core geometry/meshing UI implemented.** Original part properties/transforms,
+  CAD split/offset/repair/surface operations, compound/cell/subpart controls, all
+  ten mesh setup types (nine in 2D), native mesh/preview commands, mesh editing,
+  quality/geometry analysis and imports/exports are connected through original
+  views, rules, Controller and Commands. Element edges render from original faces.
+- Native operations/CAD history run on .NET tasks with Qt-thread presentation,
+  output and locked document mutations. Modeless drafts retain native picking.
+  Repeated native jobs/history now allocate separate logs without overwriting
+  evidence or changing native work paths. Original stop is exposed; concurrent
+  CAD-stage cancellation is unaccepted ([B010](bugs/B010-concurrent-cad-cancellation.md)).
+- **C3 verification:** Mac ARM64 and Linux ARM64/Xvfb each pass 25 service +
+  20 GUI checks. Each also passes C1's 20 service + 18 GUI and C2's 33 service +
+  18 GUI regressions. The synthetic cube meshes to 241 nodes/677 linear tetrahedra;
+  separate CAD translation/split/group/rename and PMX workflows pass.
+- Original Windows 3.0.0 via isolated CrossOver opens/resaves both meshed and
+  split/grouped CAD projects; native readback preserves data. Mesh export matches
+  after normalizing only CRLF/LF and the original per-export random heading ID.
+  All eleven net48/C# 7.3 assemblies compile; 49 process regressions and nine
+  focused Controller stages (20 strict persistence checks) pass.
+- [C3 report](reports/phase-c3-geometry-meshing.md),
+  [receipt](reports/phase-c3-ui-verification.json), [run/verify](../X/UI/README.md).
+  C1/C2 and Phase A/B closeouts remain valid: whole original assemblies,
+  Controller/Commands, allowlisted original PMX/history, shared native viewport
+  and representative engineering workflows.
+- Inventory: 108 selected model/mesh entries AB, 87 C; 237 Commands A, 236 B,
+  136 C. All 72 full-form entries remain unaccepted; V remains zero. UI availability
+  is not complete form/backend/four-target acceptance. [Inventory](PARITY_INVENTORY.md).
+- No numerical algorithm/tolerance or native version changed. D029's original
+  failures and D061 findings remain open. Patched Gmsh 4.13.0 remains selected;
+  4.15.2 is unadopted. Dormant Q-Morph wrapper sources/license remain unresolved.
+- Retained preview `1580fa9c` is unchanged. This is a development host; no new
+  installer/package candidate or hosted CI run.
 
 ## Phases
 
 | Phase | Content | State |
 |---|---|---|
 | A | Whole domain libraries, original net48 kept | build + ARM64 closeout verified |
-| B | Original Controller/Commands headless; allowlisted PMX/history/clone | implemented; representative ARM64/reference workflows verified |
+| B | Original Controller/Commands headless; allowlisted PMX/history/clone | representative ARM64/reference workflows verified |
 | C1 | Native UI foundation | representative workflow verified |
-| C2 | Original-code core model authoring | implemented; representative Mac/Xvfb/reference checks passed |
-| C3 | Geometry/meshing UI | next |
-| C4 | Jobs/results and complete viewport presentation | pending |
+| C2 | Original-code core model authoring | implemented; representative ARM64/reference checks passed |
+| C3 | Core geometry/meshing UI | implemented; representative ARM64/reference checks passed |
+| C4 | Jobs/results and complete viewport presentation | next |
 | C5 | Remaining application/automation and complete UI parity audit | pending |
-| Fixes | Recorded numerical bugs and compiler warnings | after parity |
+| Fixes | Recorded numerical/original bugs and compiler warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-C3: connect original geometry/mesh setup/property classes and Controller commands
-for CAD import/editing, mesh controls/options, mesh creation and editing. Reuse
-existing pinned native tool adapters and runtime profiles; do not recreate the
-engineering model or change backend versions.
+C4: connect original job setup/run/monitor/cancel and results tools, then complete
+native viewport glyphs/annotations, contours/legends, deformation, animation and
+captures. Reuse original Controller, property classes, solver/native profiles and
+result readers; preserve original numerical behavior and strict PMX persistence.
 
-C4 completes jobs/results and viewport presentation; C5 covers remaining original
-application/automation, material libraries/curve plotting, full selection-tool/
-keyboard/focus/preferences and form-control parity. The development hosts are
-not the finished original CLI/RPC/MCP surface.
-
-Continue representative original-app comparisons. Exhaustive feature/backend/PMX
-matrices, native Windows, deferred Linux x64, physical Linux/GPU/Wayland and human
-input, source/stable-binary correspondence and four-target distribution remain
-open. CrossOver is reference evidence, not native Windows acceptance. Recorded
-numerical findings remain under the [D061 backlog](reports/deferred-correctness-improvements.md).
+C5 completes original application/automation, libraries/plotting, full tree/
+selection/keyboard/focus/preferences and form-control parity. Exhaustive CAD,
+mesh-type/backend/edit/export/cancellation matrices, broader original PMX corpus,
+native Windows, deferred Linux x64, physical Linux/GPU/Wayland/human input,
+source/stable-binary correspondence and four-target distribution remain open.
+CrossOver is reference evidence, not native Windows acceptance. Recorded numerical
+findings remain in the [D061 backlog](reports/deferred-correctness-improvements.md).
 
 ## Environment
 
 - .NET 10: Mac SDK 10.0.403; Linux verification SDK 10.0.402.
 - VTK 9.5.2, PyQt6 6.10.0, Qt 6.10.2, Python.NET 3.1.0; explicit CPython 3.12 profiles.
-- C2 evidence: `/private/tmp/prepomaxx-c2`. Temporary builds/profiles are not
-  distributed runtimes. Prior A/B/C1 evidence is retained separately.
+- C3 evidence: `/private/tmp/prepomaxx-c3`. Temporary builds/profiles are not
+  distributed runtimes. Prior A/B/C1/C2 evidence is retained separately.
 - Podman restored to stopped. Keep the single existing preview candidate.
 - Hosted CI hold remains (D058): `[skip ci]` / `git push -o ci.skip`.

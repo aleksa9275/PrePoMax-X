@@ -41,12 +41,15 @@ class Scene:
         self.names = {}
         self.highlight_actor = None
         self.source = []
+        self.element_edges = False
+        self.element_edge_actors = []
 
     def clear(self):
         self.renderer.RemoveAllViewProps()
         self.actors.clear()
         self.names.clear()
         self.highlight_actor = None
+        self.element_edge_actors = []
 
     def update(self, source):
         self.clear()
@@ -70,13 +73,19 @@ class Scene:
             self.renderer.AddActor(actor)
             self.actors.append(actor)
             self.names[actor.GetAddressAsString('')] = str(data.Name)
-            edges = data.ModelEdgesToDraw or data.ModelEdges
+            # Element faces retain original quads/quadratic cells. Drawing their
+            # edges avoids showing the triangulation used only for surface picking.
+            edges = data.Geometry if self.element_edges else data.ModelEdgesToDraw or data.ModelEdges
             if edges is not None and edges.Nodes.Coor is not None:
                 edge_mapper = vtkDataSetMapper()
                 edge_mapper.SetInputData(grid(edges))
                 edge_actor = vtkActor()
                 edge_actor.SetMapper(edge_mapper)
                 edge_actor.GetProperty().SetColor(.15, .18, .22)
+                if self.element_edges:
+                    edge_actor.GetProperty().SetRepresentationToWireframe()
+                    edge_mapper.SetResolveCoincidentTopologyToPolygonOffset()
+                    self.element_edge_actors.append(edge_actor)
                 edge_actor.PickableOff()
                 self.renderer.AddActor(edge_actor)
 

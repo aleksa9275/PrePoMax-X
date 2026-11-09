@@ -1,4 +1,4 @@
-# Original-code desktop host — C1/C2
+# Original-code desktop host — C1/C2/C3
 
 The .NET 10 application owns the original Controller/model. Embedded
 Python.NET exposes those same live C# objects to a thin Qt/PyQt6 widget layer;
@@ -23,6 +23,39 @@ python3 X/UI/run.py --python-profile /absolute/python.json \
 uses existing Release output. Omit the project for an empty window. This is a
 single-document development host with isolated session settings, not an installed
 application/package candidate.
+
+
+C3 native geometry/meshing also takes an explicit tool manifest and pinned Gmsh
+library; neither is discovered through PATH or silently upgraded:
+
+```sh
+python3 X/UI/run.py --python-profile /absolute/python.json \
+  --work-directory /absolute/session --native-tools /absolute/tools.json \
+  --gmsh-library /absolute/libgmsh.4.13.0.dylib
+```
+
+The manifest schema and original native identities are described in
+`X/Controller/README.md`. Include the retained NetGenMesher and GmshCaller paths
+and SHA-256 values; other mesher families require their own explicit native
+payloads. Gmsh still validates the adjacent `gmsh-build.json` patched-source
+profile. All ten original mesh setup factories are exposed (nine in 2D); that
+is UI availability, not execution acceptance of every backend.
+
+Geometry/model trees expose original part properties and transforms, CAD
+splitting/repair/offset/surface operations, compound/group/fuse controls, mesh
+setup, mesh creation/edge preview, boundary layer, remesh/thicken/split/merge,
+renumbering, coordinate import, quality and geometry analysis, and part exports.
+CAD/mesh native tasks and CAD history replay run off the Qt thread; document
+mutations are locked while running, output is marshalled to Qt, and Cancel calls
+the original executable-job stop method. Cancel coverage across all concurrent
+CAD/native stages remains unaccepted. Modeless region drafts still allow picks.
+
+`generate-geometry-forms.py` extracts the original C3 factories/apply/validation
+members into `OriginalGeometryRules.g.cs`; the original type registries and
+property classes compile directly. `GeometrySession` wires the original
+main-window command/delegate actions. The portable host allocates separate
+`native-logs/<job>-<id>/` folders for repeated native operations/history replay;
+job working directories and no-overwrite log creation remain intact.
 
 ## Authoring
 
@@ -77,6 +110,7 @@ an independently maintained implementation of the rules.
 ```sh
 dotnet build X/UI/FormSourceGen/FormSourceGen.csproj -c Release
 python3 X/UI/generate-forms.py --check
+python3 X/UI/generate-geometry-forms.py --check
 ```
 
 Use the generator without `--check` after reviewing an upstream change.
@@ -94,6 +128,9 @@ python3 X/UI/verify-ui.py --output /absolute/check.json \
   --python-profile /absolute/python.json --gui --feed /absolute/offline-feed
 ```
 
+Add `--native-tools /absolute/tools.json --gmsh-library /absolute/libgmsh` to
+execute C3 CAD/mesh workflows; without both, C3 runtime checks stay pending.
+
 This checks generated-source consistency, C1 regressions, C2 authoring and, with
 `--gui`, actual display/widget workflows. `python3 X/Checks/check.py --area ui`
 runs source/syntax/build checks; runtime checks remain explicitly pending without
@@ -101,7 +138,7 @@ an explicit profile. Linux under `xvfb-run`/`QT_QPA_PLATFORM=xcb` is supplementa
 virtual-display evidence. Physical Linux/GPU/Wayland, human input and native
 Windows execution remain pending.
 
-C3 connects geometry/meshing tools; C4 connects jobs/results and full viewport
+C3 connects geometry/meshing tools; C4 next connects jobs/results and full viewport
 symbols/annotations/contours/animation; C5 finishes remaining application,
 automation and UI parity. Original form conveniences such as curve plotting,
 material libraries, complete selection-tool/keyboard/focus parity and application
@@ -109,4 +146,5 @@ preferences are not inferred complete from these core authoring adapters.
 The full D060 scope and all four-target/installer/signing gates remain required.
 
 [C1 report](../../.project/reports/phase-c1-ui-foundation.md) ·
-[C2 report](../../.project/reports/phase-c2-model-authoring.md).
+[C2 report](../../.project/reports/phase-c2-model-authoring.md) ·
+[C3 report](../../.project/reports/phase-c3-geometry-meshing.md).

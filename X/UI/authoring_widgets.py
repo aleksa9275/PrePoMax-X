@@ -174,6 +174,7 @@ class PropertyPanel(QtWidgets.QWidget):
             if text==self.initial[field.Name]:return
             self.sheet.Set(field.Name,text)
             self.initial[field.Name]=text
+            self.flush()
             # Layout changes are queued until the widget's signal has returned.
             if self.changed:
                 QtCore.QTimer.singleShot(0,self.changed)
@@ -236,10 +237,10 @@ class PropertyPanel(QtWidgets.QWidget):
 
 class PropertyDialog(QtWidgets.QDialog):
     """A modal draft; original form rules own construction/acceptance."""
-    def __init__(self, parent, family, step=None, name=None):
+    def __init__(self, parent, family, step=None, name=None, rule=None):
         super().__init__(parent)
         self.family,self.parent_window=family,parent
-        self.rule=parent.authoring.Edit(family,step,name)
+        self.rule=rule if rule is not None else parent.authoring.Edit(family,step,name)
         self.setWindowTitle(('Edit ' if name else 'Create ')+family.lower())
         self.resize(750,680)
         layout=QtWidgets.QVBoxLayout(self)
@@ -279,6 +280,10 @@ class PropertyDialog(QtWidgets.QDialog):
             row=QtWidgets.QHBoxLayout()
             label=prefix or ('Items' if self.family in ['Node sets','Element sets','Surfaces'] else 'Region')
             row.addWidget(QtWidgets.QLabel(label))
+            if hasattr(self,'prepare_selection'):
+                prepare=QtWidgets.QPushButton('Pick…')
+                prepare.clicked.connect(lambda checked=False,p=prefix:self.prepare_selection(p))
+                row.addWidget(prepare)
             button=QtWidgets.QPushButton('Use picked selection')
             button.clicked.connect(lambda checked=False,p=prefix:self.use_selection(p))
             row.addWidget(button)

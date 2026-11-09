@@ -19,6 +19,8 @@ namespace PrePoMax
             InstallPersistence();
             MessageBoxes.Mode=MessageBoxModeEnum.Strict;
             NativeTools.EnablePlatformExecutables();
+            CaeJob.ExecutableJob.ProcessLogDirectoryFactory=(directory,name)=>
+                Path.Combine(directory,"native-logs",name+"-"+Guid.NewGuid().ToString("N"));
             // Headless runs use session settings, never the installed user's file.
             SettingsContainer.OverrideFileName=Path.Combine(workDirectory,"settings.bin");
             SettingsContainer.IsSaveDisabled=true;

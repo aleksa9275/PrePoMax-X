@@ -1,0 +1,2 @@
+# Preserve the byte-exact generated OpenCASCADE fixture on every host.
+cube.brep -diff -text

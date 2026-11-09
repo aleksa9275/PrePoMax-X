@@ -24,7 +24,8 @@ public sealed class PropertySheet
     readonly object instance;
     readonly Func<PropertyDescriptor,bool> filter;
     readonly Action changed;
-    public PropertySheet(object value,Func<PropertyDescriptor,bool> filter=null,Action changed=null) {instance=value;this.filter=filter;this.changed=changed;}
+    readonly Action<string> changedProperty;
+    public PropertySheet(object value,Func<PropertyDescriptor,bool> filter=null,Action changed=null,Action<string> changedProperty=null) {instance=value;this.filter=filter;this.changed=changed;this.changedProperty=changedProperty;}
     sealed class Context(object instance,PropertyDescriptor descriptor) : ITypeDescriptorContext
     {
         public IContainer Container=>null;
@@ -60,5 +61,6 @@ public sealed class PropertySheet
         if(previous==text)return;
         p.SetValue(instance,p.Converter.ConvertFromString(context,CultureInfo.InvariantCulture,text));
         changed?.Invoke();
+        changedProperty?.Invoke(name);
     }
 }

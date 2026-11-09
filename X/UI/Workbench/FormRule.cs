@@ -37,15 +37,15 @@ public abstract class FormRule
         OnSelect(SelectedObject);
         _propertyItemChanged=true;
     }
-    public PropertySheet Properties=>new(SelectedObject,changed:Changed);
-    public void Changed()
+    public virtual PropertySheet Properties=>new(SelectedObject,changed:Changed);
+    public virtual void Changed()
     {
         _propertyItemChanged=true;
         // The original setters update most visibility. Steps and BCs also have
         // a property-grid change callback which calls their UpdateVisibility.
         SelectedObject?.GetType().GetMethod("UpdateVisibility",Type.EmptyTypes)?.Invoke(SelectedObject,null);
     }
-    public void SetPoint(string property,int[] nodeIds)
+    public virtual void SetPoint(string property,int[] nodeIds)
     {
         if(nodeIds==null || nodeIds.Length!=1)throw new CaeException("Pick exactly one mesh node first.");
         var node=_controller.Model.Mesh.Nodes[nodeIds[0]];
@@ -59,7 +59,7 @@ public abstract class FormRule
     }
     public string[] CollectionNames=>Properties.CollectionNames;
     public CollectionSheet Collection(string name)=>Properties.Collection(name);
-    public string[] SelectionPrefixes
+    public virtual string[] SelectionPrefixes
     {
         get
         {
@@ -116,7 +116,7 @@ public abstract class FormRule
         selection.Add(new SelectionNodeIds(vtkSelectOperation.None,false,ids));
         return selection;
     }
-    public void SetSelection(int[] ids,Selection source=null,string prefix="")
+    public virtual void SetSelection(int[] ids,Selection source=null,string prefix="")
     {
         var item=Item;
         vtkSelectItem kind=item is FeNodeSet?vtkSelectItem.Node:item is FeElementSet?vtkSelectItem.Element:item is FeSurface?vtkSelectItem.Surface:source?.SelectItem??throw new ArgumentException("A region needs an explicit selection kind.");

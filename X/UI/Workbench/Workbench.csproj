@@ -7,4 +7,8 @@
     <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../../Domain/PrePoMax/PrePoMax.csproj" /></ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../PrePoMax/Forms/11_MeshSetup/Base/MeshSetupItemTypes.cs" Link="Original/MeshSetupItemTypes.cs" />
+    <Compile Include="../../../PrePoMax/Forms/04_GeometryFeature/GeometryFeatureTypes.cs" Link="Original/GeometryFeatureTypes.cs" />
+  </ItemGroup>
 </Project>

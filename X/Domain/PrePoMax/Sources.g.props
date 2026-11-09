@@ -525,5 +525,31 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/ViewError.cs" Link="Forms/ViewError.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/44_SurfaceInteraction/SurfaceInteractionEditor.cs" Link="Forms/44_SurfaceInteraction/SurfaceInteractionEditor.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewModelProperties.cs" Link="Forms/21_FEModel/ViewModelProperties.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewFaceOffset.cs" Link="Forms/04_GeometryFeature/ViewFaceOffset.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewGeometryRepair.cs" Link="Forms/04_GeometryFeature/ViewGeometryRepair.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewPeriodicFaceSplit.cs" Link="Forms/04_GeometryFeature/ViewPeriodicFaceSplit.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSplitByExtendedFace.cs" Link="Forms/04_GeometryFeature/ViewSplitByExtendedFace.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSplitByExtrudedEdges.cs" Link="Forms/04_GeometryFeature/ViewSplitByExtrudedEdges.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSplitByLineTwoPoints.cs" Link="Forms/04_GeometryFeature/ViewSplitByLineTwoPoints.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSplitByPlaneThreePoints.cs" Link="Forms/04_GeometryFeature/ViewSplitByPlaneThreePoints.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSplitByPointAndNormal.cs" Link="Forms/04_GeometryFeature/ViewSplitByPointAndNormal.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/04_GeometryFeature/ViewSurfaceOperation.cs" Link="Forms/04_GeometryFeature/ViewSurfaceOperation.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Base/ViewLocalMeshSize.cs" Link="Forms/11_MeshSetup/Base/ViewLocalMeshSize.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Base/ViewMeshingParameters.cs" Link="Forms/11_MeshSetup/Base/ViewMeshingParameters.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Base/ViewThickenShellMesh.cs" Link="Forms/11_MeshSetup/Base/ViewThickenShellMesh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Gmsh/ViewGmshSetupItem.cs" Link="Forms/11_MeshSetup/Gmsh/ViewGmshSetupItem.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Gmsh/ViewShellGmsh.cs" Link="Forms/11_MeshSetup/Gmsh/ViewShellGmsh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Gmsh/ViewSweepMesh.cs" Link="Forms/11_MeshSetup/Gmsh/ViewSweepMesh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Gmsh/ViewTetrahedralGmsh.cs" Link="Forms/11_MeshSetup/Gmsh/ViewTetrahedralGmsh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Gmsh/ViewTransfiniteMesh.cs" Link="Forms/11_MeshSetup/Gmsh/ViewTransfiniteMesh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Mmg/ViewShellMmg.cs" Link="Forms/11_MeshSetup/Mmg/ViewShellMmg.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/Netgen/ViewNetgenMesh.cs" Link="Forms/11_MeshSetup/Netgen/ViewNetgenMesh.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/11_MeshSetup/QuadWild/ViewShellQuadWild.cs" Link="Forms/11_MeshSetup/QuadWild/ViewShellQuadWild.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/24_Part/ViewPartProperties.cs" Link="Forms/24_Part/ViewPartProperties.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewBoundaryLayer.cs" Link="Forms/21_FEModel/ViewBoundaryLayer.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewRemeshingParameters.cs" Link="Forms/21_FEModel/ViewRemeshingParameters.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewSplitPartMeshData.cs" Link="Forms/21_FEModel/ViewSplitPartMeshData.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/22_Node/ViewMergeCoincidentNodes.cs" Link="Forms/22_Node/ViewMergeCoincidentNodes.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/23_Element/ViewElementQuality.cs" Link="Forms/23_Element/ViewElementQuality.cs" />
   </ItemGroup>
 </Project>

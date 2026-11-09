@@ -1,0 +1,690 @@
+{
+  "milestone": "C3 core geometry and meshing UI",
+  "recordedAtUtc": "2026-11-09T10:06:47.002925+00:00",
+  "baseRevision": "ea5751529e4b143dfca2f4b43d2fb3fbd10ad411",
+  "sourceState": "reviewed working tree before milestone commit",
+  "success": true,
+  "versions": {
+    "dotnetMac": "10.0.403",
+    "dotnetLinux": "10.0.402",
+    "vtk": "9.5.2",
+    "PyQt": "6.10.0",
+    "Qt": "6.10.2",
+    "PythonNET": "3.1.0",
+    "gmsh": "patched PrePoMax 4.13.0; unchanged"
+  },
+  "workflows": [
+    {
+      "host": "macOS ARM64",
+      "result": {
+        "path": "/private/tmp/prepomaxx-c3/mac-closeout.json",
+        "sha256": "3864e815bedf537881b5a4a4e70a09d661db72688406d61430560952843cd055"
+      },
+      "counts": {
+        "service": 20,
+        "authoringService": 33,
+        "geometryService": 25,
+        "gui": 18,
+        "authoringGui": 18,
+        "geometryGui": 20
+      },
+      "steps": [
+        {
+          "name": "sources",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/sources.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/Domain/domain_sources.py",
+            "--check"
+          ]
+        },
+        {
+          "name": "form-extractor-build",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/form-extractor-build.log",
+          "sha256": "e5ef8002488efdba028fb7469b919b1560dedae71c09c0b7031c3db2fa632886",
+          "command": [
+            "dotnet",
+            "build",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/FormSourceGen/FormSourceGen.csproj",
+            "-c",
+            "Release",
+            "--disable-build-servers",
+            "-m:1",
+            "-p:UseSharedCompilation=false",
+            "--artifacts-path",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build",
+            "-p:NativePreviewLockRoot=/private/tmp/prepomaxx-c3/mac-closeout/locks",
+            "-v:q",
+            "-p:RestoreSources=/private/tmp/prepomaxx-phase-a-closeout/feed"
+          ]
+        },
+        {
+          "name": "original-forms",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/original-forms.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-forms.py",
+            "--check",
+            "--extractor",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/FormSourceGen/release/FormSourceGen.dll"
+          ]
+        },
+        {
+          "name": "original-geometry-forms",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/original-geometry-forms.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/generate-geometry-forms.py",
+            "--check",
+            "--extractor",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/FormSourceGen/release/FormSourceGen.dll"
+          ]
+        },
+        {
+          "name": "build",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/build.log",
+          "sha256": "75adb1e708fd94fcaf96a8aefbdbddb305c6257a0da9ad252053565f933be76e",
+          "command": [
+            "dotnet",
+            "build",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/Workbench/Workbench.csproj",
+            "-c",
+            "Release",
+            "--disable-build-servers",
+            "-m:1",
+            "-p:UseSharedCompilation=false",
+            "--artifacts-path",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build",
+            "-p:NativePreviewLockRoot=/private/tmp/prepomaxx-c3/mac-closeout/locks",
+            "-v:q",
+            "-p:RestoreSources=/private/tmp/prepomaxx-phase-a-closeout/feed"
+          ]
+        },
+        {
+          "name": "service",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/service.log",
+          "sha256": "1a506fa57e2c4cb69c731110c6b34f80b0767e9dfac5f008a8413c9534bd3274",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--service-probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/service"
+          ]
+        },
+        {
+          "name": "authoring-service",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/authoring-service.log",
+          "sha256": "2d5e2ef0c41ab348250b13d1f66d692341ea9405af3d7253463cc2fcd12d4bd5",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--authoring-service-probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/authoring/service"
+          ]
+        },
+        {
+          "name": "geometry-service",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/geometry-service.log",
+          "sha256": "5a6c9dc6004f39dca51e7773beb395300662c353614d399298a8a9d809814cd6",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--native-tools",
+            "/private/tmp/prepomaxx-phase-b/mac-final/tools.json",
+            "--geometry-service-probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/geometry/service"
+          ]
+        },
+        {
+          "name": "gui",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/gui.log",
+          "sha256": "c640f7205d828dd8436e2e7d434feed0389e441e7d29fa24b03c4661ee9120dc",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/gui"
+          ]
+        },
+        {
+          "name": "authoring-gui",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/authoring-gui.log",
+          "sha256": "4371b6d535ccfcf2a9994995917b4401dc91f44376b60c9ef1f4c02ad5a8cd7e",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--authoring-probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/authoring/gui"
+          ]
+        },
+        {
+          "name": "geometry-gui",
+          "exitCode": 0,
+          "log": "/private/tmp/prepomaxx-c3/mac-closeout/geometry-gui.log",
+          "sha256": "46500e1fbb8eb7127d6c280039ac8d3515c34bbbf4edcb7f710fdb40dfc4f179",
+          "command": [
+            "dotnet",
+            "/private/tmp/prepomaxx-c3/mac-closeout/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/private/tmp/prepomaxx-phase-b/python.json",
+            "/private/tmp/prepomaxx-c3/mac-closeout/session",
+            "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/workbench.py",
+            "--native-tools",
+            "/private/tmp/prepomaxx-phase-b/mac-final/tools.json",
+            "--geometry-probe",
+            "/private/tmp/prepomaxx-c3/mac-closeout/geometry/gui"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "Linux ARM64 Podman/Xvfb",
+      "result": {
+        "path": "/private/tmp/prepomaxx-c3/linux/final.json",
+        "sha256": "77ad5b314a9726fe703c0ae439b290c18dbe1abb9f9316d1bef9ca742a96f765"
+      },
+      "counts": {
+        "service": 20,
+        "authoringService": 33,
+        "geometryService": 25,
+        "gui": 18,
+        "authoringGui": 18,
+        "geometryGui": 20
+      },
+      "steps": [
+        {
+          "name": "sources",
+          "exitCode": 0,
+          "log": "/out/final/sources.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/usr/bin/python3",
+            "/src/X/Domain/domain_sources.py",
+            "--check"
+          ]
+        },
+        {
+          "name": "form-extractor-build",
+          "exitCode": 0,
+          "log": "/out/final/form-extractor-build.log",
+          "sha256": "7471b69ef1c83ab13f2acc3191992a6518e87dbf4de3ade68f4c8d2f446cee77",
+          "command": [
+            "dotnet",
+            "build",
+            "/src/X/UI/FormSourceGen/FormSourceGen.csproj",
+            "-c",
+            "Release",
+            "--disable-build-servers",
+            "-m:1",
+            "-p:UseSharedCompilation=false",
+            "--artifacts-path",
+            "/out/final/build",
+            "-p:NativePreviewLockRoot=/out/final/locks",
+            "-v:q",
+            "-p:RestoreSources=/feed"
+          ]
+        },
+        {
+          "name": "original-forms",
+          "exitCode": 0,
+          "log": "/out/final/original-forms.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/usr/bin/python3",
+            "/src/X/UI/generate-forms.py",
+            "--check",
+            "--extractor",
+            "/out/final/build/bin/FormSourceGen/release/FormSourceGen.dll"
+          ]
+        },
+        {
+          "name": "original-geometry-forms",
+          "exitCode": 0,
+          "log": "/out/final/original-geometry-forms.log",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "command": [
+            "/usr/bin/python3",
+            "/src/X/UI/generate-geometry-forms.py",
+            "--check",
+            "--extractor",
+            "/out/final/build/bin/FormSourceGen/release/FormSourceGen.dll"
+          ]
+        },
+        {
+          "name": "build",
+          "exitCode": 0,
+          "log": "/out/final/build.log",
+          "sha256": "e12ea33127aa989e35adedf9cf582cc8b01e0006fee0b20cc350ed7a4b0388b3",
+          "command": [
+            "dotnet",
+            "build",
+            "/src/X/UI/Workbench/Workbench.csproj",
+            "-c",
+            "Release",
+            "--disable-build-servers",
+            "-m:1",
+            "-p:UseSharedCompilation=false",
+            "--artifacts-path",
+            "/out/final/build",
+            "-p:NativePreviewLockRoot=/out/final/locks",
+            "-v:q",
+            "-p:RestoreSources=/feed"
+          ]
+        },
+        {
+          "name": "service",
+          "exitCode": 0,
+          "log": "/out/final/service.log",
+          "sha256": "967968b23c28e18e143541b5d2a55a8b9ef40feba0295e63a4c4c2d75af2eec3",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--service-probe",
+            "/out/final/service"
+          ]
+        },
+        {
+          "name": "authoring-service",
+          "exitCode": 0,
+          "log": "/out/final/authoring-service.log",
+          "sha256": "7c30e2d7d15b0c07f75b32d8c631822f56f3cb175158f30d5d23632af862c6d5",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--authoring-service-probe",
+            "/out/final/authoring/service"
+          ]
+        },
+        {
+          "name": "geometry-service",
+          "exitCode": 0,
+          "log": "/out/final/geometry-service.log",
+          "sha256": "60d363ab5243d09641d2b6d0e0a7b2a5fbd07b256a089ca3e270ba52d0c997d4",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--native-tools",
+            "/out/tools.json",
+            "--geometry-service-probe",
+            "/out/final/geometry/service"
+          ]
+        },
+        {
+          "name": "gui",
+          "exitCode": 0,
+          "log": "/out/final/gui.log",
+          "sha256": "a72d0ad75c94ca3d8dde9fc711314890e4d85fa0ada0cc5fc5c2b42170034f17",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--probe",
+            "/out/final/gui"
+          ]
+        },
+        {
+          "name": "authoring-gui",
+          "exitCode": 0,
+          "log": "/out/final/authoring-gui.log",
+          "sha256": "2c6887e99b434efaf7db2fcf334bfec7658e19fa77bd63944cbcaa0d997dac7c",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--authoring-probe",
+            "/out/final/authoring/gui"
+          ]
+        },
+        {
+          "name": "geometry-gui",
+          "exitCode": 0,
+          "log": "/out/final/geometry-gui.log",
+          "sha256": "e23fc5ca21fbb8c9f7f0bcf5aadfc031178ba14817bdcc1a62f068385240fb3f",
+          "command": [
+            "dotnet",
+            "/out/final/build/bin/Workbench/release/PrePoMaxX.Workbench.dll",
+            "/out/python.json",
+            "/out/final/session",
+            "/src/X/UI/workbench.py",
+            "--native-tools",
+            "/out/tools.json",
+            "--geometry-probe",
+            "/out/final/geometry/gui"
+          ]
+        }
+      ]
+    }
+  ],
+  "supportingChecks": {
+    "net48Compile": {
+      "path": "/private/tmp/prepomaxx-c3/net48/result.json",
+      "sha256": "396cabf05b5945bd4b8f335bda9a7d2e432c67f67a143686b2887b8e21aa5d06"
+    },
+    "processRegressions": {
+      "path": "/private/tmp/prepomaxx-c3/execution.json",
+      "sha256": "7b4c024bec7cac483dfd6b45891e8ef26f6fb06b58f7671adbd78a3b604d92da"
+    },
+    "focusedController": {
+      "path": "/private/tmp/prepomaxx-c3/controller.json",
+      "sha256": "77839241de5830649a290d6f9832f0c723e421f9a334338fd1adda50526d433f"
+    },
+    "controllerPending": [
+      "Native 3MF/surface exports: explicit lib3mf/Python profiles not supplied",
+      "Original Controller native solve/results: no explicit solver profile supplied",
+      "Original Controller CAD/Gmsh: explicit native profile/fixture not supplied"
+    ]
+  },
+  "reference": {
+    "app": "Original Windows PrePoMax 3.0.0 in isolated CrossOver PhaseB-reference bottle; not native Windows acceptance",
+    "executable": {
+      "path": "/private/tmp/prepomaxx-phase-b/original-app/PrePoMax v3.0.0/PrePoMax.exe",
+      "sha256": "3f73da2f17941f857c51045f3650992af5eb639031052b338f88dc83b843278c"
+    },
+    "inputBuild": "mac-verified; original engineering/form/persistence code unchanged afterward, later changes are frontend task routing/viewport presentation",
+    "results": [
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows/report.json",
+        "sha256": "e3bf27c20ed3b1c19dfcfc6444fac39e4fb386ba1d1ea1edb09916cb71683854"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows/readback.json",
+        "sha256": "b3857d54ef471dda2270424d292a567640e397933bdbe57b89779c8f5ccc43af"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows/original-resave.pmx",
+        "sha256": "4898bdb7089d046a245000fe39bc9a1a4b92046efa01800816a7a38332c1eed4"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows/original-mesh.inp",
+        "sha256": "a543cc8053c68c6142f8daa883a61e8814e1f760fb0c15f3af3380b14dd00db8"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows-comparison.json",
+        "sha256": "0b8e8ce5bca70bf35c704945333ae7753578814e778ab7038328f421b2f4118b"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/reopen-original.json",
+        "sha256": "35351b5389f728cf7d87a20eb7c6e5ee0ea3ff4b58ea2e1f629c15c306fc6e35"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows-split/report.json",
+        "sha256": "0a8997e306e1f88e059a47b78194c333fd14d93735d16f6b17dfc8031237c4df"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows-split/readback.json",
+        "sha256": "c8202d612a23a34c33f84631d432bbb7c68e13aed532dee7671d873bc11b4c68"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/windows-split/original-resave.pmx",
+        "sha256": "21c40a9931081ca2610b10c7ee1e5db88642adcfcbf830332096fe4385ef8cfc"
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/reopen-original-split.json",
+        "sha256": "94ab4fc12a8fd39d775bc4cd09228f68cbfe514dad41e70ff13d851a3c53287e"
+      }
+    ],
+    "comparison": {
+      "success": true,
+      "identicalMeshDeckApartFromLineEndingsAndPerExportRandomHash": true,
+      "randomHashes": [
+        "Hash: 7j3E0Eg2,",
+        "Hash: XL6OwQsD,"
+      ],
+      "reason": "Original CreateMeshPartsModel constructs a new FeModel with Tools.GetRandomString(8)."
+    }
+  },
+  "runtimeInputs": [
+    {
+      "path": "/private/tmp/prepomaxx-phase-b/python.json",
+      "sha256": "607e99523482184149563048619f13a34ff94a626d7e43a2abd1c0b0c6636de4"
+    },
+    {
+      "path": "/private/tmp/prepomaxx-phase-b/mac-final/tools.json",
+      "sha256": "592b811ce23189d9d6e529916346a626bb24d0c206e6103a9d6e3889d95ec23a"
+    },
+    {
+      "path": "/private/tmp/prepomaxx-phase-a-closeout/runtime/gmsh-build.json",
+      "sha256": "33aa72dc4009258b22dcc1ebada694c12f2bb7f76957cdda9a2deebd8d7d9341"
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c3/linux/python.json",
+      "sha256": "bdb5e59616af75795efd8fc0c784c3cefd3829a2a805f69d5531bf3a7663d13d"
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c3/linux/tools.json",
+      "sha256": "179ab643dd692220ac0823d1bf48638ab3978906b8bc3bd4e28ce7b93bcf2db9"
+    }
+  ],
+  "publicFixture": {
+    "path": "/Users/aleksa/Documents/GitLab/pre-po-max-x/X/UI/fixtures/cube.brep",
+    "sha256": "7897c92eee924d3923bcc29fa39cfa0af38e7d5bc63f67b18d2ea481d90120c9"
+  },
+  "captures": [
+    {
+      "path": "/private/tmp/prepomaxx-c3/mac-closeout/geometry/gui/meshed.png",
+      "sha256": "8e3d456040632938a0c08f7657ccfce40857c80b840bf7c3eb48502575bf43ad"
+    },
+    {
+      "path": "/private/tmp/prepomaxx-c3/linux/final/geometry/gui/meshed.png",
+      "sha256": "44cb29ab98c7a7d8b5d93c062297b035f18d8a3bf0acb2dde65660194347ecaa"
+    }
+  ],
+  "retainedFailedExpectations": [
+    {
+      "artifact": {
+        "path": "/private/tmp/prepomaxx-c3/mac-final.json",
+        "sha256": "5637cda70ec771c7126becad37096f434fcd9f1dbcc91f85adab0404b1b74ca8"
+      },
+      "reason": "Initial extra grouping check incorrectly expected redundant grouping to be accepted. Original rule refusal retained; valid subset and explicit rejection verified in final workflow."
+    },
+    {
+      "artifact": {
+        "path": "/private/tmp/prepomaxx-c3/windows.log",
+        "sha256": "8a40d44703a1b30213a90b8cc3721b16b031722e78493f33d493dc99a22b2ded"
+      },
+      "reason": "Raw export comparison differed only in original per-export random ID; windows-comparison.json normalizes that one header token and line endings, all other text identical."
+    }
+  ],
+  "pending": [
+    "Full CAD/mesh/backend/edit/export/PMX/selection matrices",
+    "Mmg/QuadWild/all sweep and transfinite variant execution",
+    "Concurrent CAD cancellation B010",
+    "Full original form/control parity (all 72 form entries remain C0)",
+    "Native Windows x64 and deferred Linux x64",
+    "Physical Linux/GPU/Wayland and human input",
+    "C4 jobs/results/complete viewport, C5 application/automation",
+    "Installer/signing/release and exact stable source/binary correspondence"
+  ],
+  "sourceChanges": [
+    {
+      "path": ".project/PARITY_INVENTORY.md",
+      "sha256": "e836950716a559a71a249cee3a3598bdd5d4134fcd40a96f8894d21540ee1e8d"
+    },
+    {
+      "path": ".project/STATUS.md",
+      "sha256": "c594c122b2ea6cb8e62a427cedea5bd71eb4f93bbb9dcce562ab58f44101097c"
+    },
+    {
+      "path": ".project/bugs/B010-concurrent-cad-cancellation.md",
+      "sha256": "f442cbf58fd63f8dc38f051f4fd750e84859d1a6c432631067ea09c5ff1359c5"
+    },
+    {
+      "path": ".project/parity-status.json",
+      "sha256": "458581b1a4a3f603c60b6a71f8f074071eeb27cd90f688f63a25e9ddc8289355"
+    },
+    {
+      "path": ".project/reports/deferred-correctness-improvements.md",
+      "sha256": "f7cec890799d81bc6676d5cc87948540c371b0eb568982243a9c35aa4606481b"
+    },
+    {
+      "path": ".project/reports/phase-c3-geometry-meshing.md",
+      "sha256": "3ee802492edcede96fcebe2a905c0457fbec48c8e0ad5223bcd550475a72fad8"
+    },
+    {
+      "path": ".project/scripts/parity-inventory.py",
+      "sha256": "475281de5479985233a0add7a0873b0c0b50c88457c9bb72a063f6d91c99857c"
+    },
+    {
+      "path": "CaeJob/ExecutableJob.Portable.cs",
+      "sha256": "d52d3596cae917fdeb90f657c8c8dba6ba1c314d58b82e3414e2fd53db0b7c92"
+    },
+    {
+      "path": "X/Controller/Host/HeadlessSession.cs",
+      "sha256": "2ad51cadc10a5bbd2823ddaa37edbbc704074b931bb7be4d31a77f25dedddeca"
+    },
+    {
+      "path": "X/Domain/PrePoMax/Sources.g.props",
+      "sha256": "30d64c965c867ca0099a6bc1e5ffd53e2adb08915aa8ce6637997b662d3c2e7a"
+    },
+    {
+      "path": "X/Domain/domain-sources.json",
+      "sha256": "0c1ab4bd548f2ad8f6c6d40735e5199aa400b05e522e73b52e095d3d0a7d2fc5"
+    },
+    {
+      "path": "X/UI/README.md",
+      "sha256": "099c9bf285bac3e5c6b5208e19f10d3f13fd7f178af548ab91c6ab70ce6206af"
+    },
+    {
+      "path": "X/UI/Workbench/FormRule.cs",
+      "sha256": "d1491101e3e547f354aa5a066baaf939a0214d7809f2acd38f7e334c8db6f240"
+    },
+    {
+      "path": "X/UI/Workbench/GeometryFormRule.cs",
+      "sha256": "a8f224ee11a93b92c904005cc3b63b7445b69e04179bc010dc9f2daa448c35b4"
+    },
+    {
+      "path": "X/UI/Workbench/GeometrySession.cs",
+      "sha256": "b6eb5e9365590a507af62a86b15f0c36a02418efa3e942c0f85b96b48fb2fa3d"
+    },
+    {
+      "path": "X/UI/Workbench/OriginalGeometryRules.g.cs",
+      "sha256": "1f0055f8e1e8ff48fc1f0114a8e158bbaeeba2a9d41a43e11d845efdf190ee19"
+    },
+    {
+      "path": "X/UI/Workbench/PropertySheet.cs",
+      "sha256": "d9391998259525ce4a8e01e821f7b3ee47139b8e614b0ed6248ea2fac959d31f"
+    },
+    {
+      "path": "X/UI/Workbench/Workbench.csproj",
+      "sha256": "73720c67288d910e9010d34f5020777f82cf8135a2ba6aa07dbb5ce709f00283"
+    },
+    {
+      "path": "X/UI/authoring_widgets.py",
+      "sha256": "fc6a0ec07e284efaac70a1df3f0c8385e36a9040f69e4261b5e9f32723d752c2"
+    },
+    {
+      "path": "X/UI/fixtures/.gitattributes",
+      "sha256": "0815349b248e826001ba555ffa0adc37f876f8886d2a351032241b44b76eee7f"
+    },
+    {
+      "path": "X/UI/fixtures/README.md",
+      "sha256": "ee56f306ee267eafcd0edf2b902f4fa3f3f0725f33c61d2895257493bb855474"
+    },
+    {
+      "path": "X/UI/fixtures/cube.brep",
+      "sha256": "7897c92eee924d3923bcc29fa39cfa0af38e7d5bc63f67b18d2ea481d90120c9"
+    },
+    {
+      "path": "X/UI/generate-geometry-forms.py",
+      "sha256": "a7d6d3e85d4f3bcd179d80a658ae68c79723cd3d7ee1d0dd25e576b72799b922"
+    },
+    {
+      "path": "X/UI/geometry_gui_probe.py",
+      "sha256": "14c9b5a25b6e681aa91ec9940e4c77b3dd719254c027c2b58efe623fc11a87ef"
+    },
+    {
+      "path": "X/UI/geometry_probe.py",
+      "sha256": "a2e8cbbb708957138d6065c286162384e6843f22380f8c3c51b22e051d254831"
+    },
+    {
+      "path": "X/UI/geometry_widgets.py",
+      "sha256": "4694fafc93d7b37eb92c045d6bac4ae74a92c148155018447344fbdcd75b77cd"
+    },
+    {
+      "path": "X/UI/geometry_workbench.py",
+      "sha256": "be883ee413dd4fc1989d5231bf26911cf384a45b2a03386ec8aa3a8a4cf7fc51"
+    },
+    {
+      "path": "X/UI/operation_dispatch.py",
+      "sha256": "b20c957b90cbee0dff015ec687eb07db585f018b7ad2e34e5c6cdb063947c98b"
+    },
+    {
+      "path": "X/UI/run.py",
+      "sha256": "b0cc7d33c0a9dc552e943ae0d69c6bab07571f13a2b63d8fd51c8e5c20e5d7ec"
+    },
+    {
+      "path": "X/UI/scene.py",
+      "sha256": "16eaa307a269a3b9c6a2286e6da10f44c3b0e7510ef5605d04833e74816cea9e"
+    },
+    {
+      "path": "X/UI/verify-ui.py",
+      "sha256": "5c099e6747dcb7a40d660957e166d51de8d7633af5699198525a2c958b1af29d"
+    },
+    {
+      "path": "X/UI/workbench.py",
+      "sha256": "fdcaedb52a1e3b946f097c2e7714748adeab974ebe64fd1b0b1808bad6be6a50"
+    }
+  ],
+  "retention": {
+    "prunedSupersededBuilds": [
+      {
+        "path": "/private/tmp/prepomaxx-c3/mac-final/build",
+        "bytes": 89407803
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/mac-verified/build",
+        "bytes": 89409957
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/mac-final-view/build",
+        "bytes": 89411465
+      },
+      {
+        "path": "/private/tmp/prepomaxx-c3/execution/build",
+        "bytes": 64299077
+      }
+    ],
+    "retained": "mac-closeout and Linux final/current native tool builds, logs/JSON/fixtures/reference artifacts; no new preview/package candidate",
+    "podman": "stopped; inspected after final run"
+  }
+}

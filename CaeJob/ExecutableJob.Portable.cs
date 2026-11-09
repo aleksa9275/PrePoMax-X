@@ -14,6 +14,10 @@ namespace CaeJob
 {
     public partial class ExecutableJob
     {
+        // Original Controller operations reuse their work directory and job
+        // names during history replay. Hosts can allocate separate log folders
+        // without changing native-tool working paths or overwriting evidence.
+        public static Func<string,string,string> ProcessLogDirectoryFactory { get; set; }
         private static readonly ConcurrentDictionary<string,SemaphoreSlim> _executableSlots =
             new ConcurrentDictionary<string,SemaphoreSlim>(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
         [NonSerialized] private readonly object _processLock = new object();
@@ -63,8 +67,11 @@ namespace CaeJob
                         Thread.Sleep(10);
                     }
                 }
-                string outputPath = Path.Combine(_workDirectory, "_output_" + Name + ".txt");
-                string errorPath = Path.Combine(_workDirectory, "_error_" + Name + ".txt");
+                string logDirectory = ProcessLogDirectoryFactory?.Invoke(_workDirectory, Name) ?? _workDirectory;
+                if (!Path.IsPathFullyQualified(logDirectory)) throw new ArgumentException("Absolute process log directory required.");
+                Directory.CreateDirectory(logDirectory);
+                string outputPath = Path.Combine(logDirectory, "_output_" + Name + ".txt");
+                string errorPath = Path.Combine(logDirectory, "_error_" + Name + ".txt");
                 // Never overwrite evidence from an earlier run. Callers allocate a fresh run directory.
                 using (new FileStream(outputPath, FileMode.CreateNew)) { }
                 using (new FileStream(errorPath, FileMode.CreateNew)) { }

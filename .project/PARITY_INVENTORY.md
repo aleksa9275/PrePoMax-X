@@ -19,12 +19,14 @@ C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing
 and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).
 C2 adds core model authoring through original property views/factories/apply rules;
 C marks UI availability, not exhaustive execution of each item or complete form/control parity.
-See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse does not mark a complete form C.
+C3 connects geometry editing, all original mesh setup types, native meshing and mesh editing.
+See [C2](reports/phase-c2-model-authoring.md) and [C3](reports/phase-c3-geometry-meshing.md).
+Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 108 | 108 | 108 | 82 | 0 |
-| Commands | 237 | 237 | 236 | 83 | 0 |
+| Model and mesh features | 108 | 108 | 108 | 87 | 0 |
+| Commands | 237 | 237 | 236 | 136 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -211,11 +213,11 @@ See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse doe
 
 | Item | Status |
 |---|---|
-| Gmsh | AB |
-| Mmg | AB |
-| Netgen | AB |
-| QuadWild | AB |
-| Transfinite | AB |
+| Gmsh | ABC |
+| Mmg | ABC |
+| Netgen | ABC |
+| QuadWild | ABC |
+| Transfinite | ABC |
 
 ## Commands
 
@@ -223,8 +225,8 @@ See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse doe
 
 | Item | Status |
 |---|---|
-| CExportGeometryParts | AB |
-| CExportMeshParts | AB |
+| CExportGeometryParts | ABC |
+| CExportMeshParts | ABC |
 | CExportResultFieldOutputToCsv | AB |
 | CExportResultHistoryOutputToCsv | AB |
 | CExportResultParts | AB |
@@ -259,48 +261,48 @@ See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse doe
 
 | Item | Status |
 |---|---|
-| CConvertShellToSolid | AB |
-| CConvertSolidToShell | AB |
-| CCreateAndImportCompoundPart | AB |
-| CDefeature | AB |
-| CDeleteCadPartFaces | AB |
-| CDeleteStlPartFaces | AB |
-| CFindEdgesByAngleForGeometryParts | AB |
-| CFlipFaceOrientations | AB |
-| CFlipStlPartSurfacesNormal | AB |
-| CFuseBodies | AB |
-| CFuseFaces | AB |
-| CGroupSplitCells | AB |
-| CHideGeometryParts | AB |
-| CMirrorGeometryParts | AB |
-| COffsetFace | AB |
-| CRegenerateCompoundParts | AB |
-| CRemoveGeometryParts | AB |
-| CRenameSplitSubPart | AB |
-| CRepairGeometry | AB |
-| CReplaceGeometryPartProperties | AB |
+| CConvertShellToSolid | ABC |
+| CConvertSolidToShell | ABC |
+| CCreateAndImportCompoundPart | ABC |
+| CDefeature | ABC |
+| CDeleteCadPartFaces | ABC |
+| CDeleteStlPartFaces | ABC |
+| CFindEdgesByAngleForGeometryParts | ABC |
+| CFlipFaceOrientations | ABC |
+| CFlipStlPartSurfacesNormal | ABC |
+| CFuseBodies | ABC |
+| CFuseFaces | ABC |
+| CGroupSplitCells | ABC |
+| CHideGeometryParts | ABC |
+| CMirrorGeometryParts | ABC |
+| COffsetFace | ABC |
+| CRegenerateCompoundParts | ABC |
+| CRemoveGeometryParts | ABC |
+| CRenameSplitSubPart | ABC |
+| CRepairGeometry | ABC |
+| CReplaceGeometryPartProperties | ABC |
 | CResetColorForGeometryParts | AB |
-| CRotateGeometryParts | AB |
-| CScaleGeometryParts | AB |
+| CRotateGeometryParts | ABC |
+| CScaleGeometryParts | ABC |
 | CSetColorForGeometryParts | AB |
 | CSetTransparencyForGeometryParts | AB |
-| CShowGeometryParts | AB |
-| CSplitGeometry | AB |
-| CSplitPeriodicFaces | AB |
-| CSwapPartGeometries | AB |
-| CTranslateGeometryParts | AB |
+| CShowGeometryParts | ABC |
+| CSplitGeometry | ABC |
+| CSplitPeriodicFaces | ABC |
+| CSwapPartGeometries | ABC |
+| CTranslateGeometryParts | ABC |
 
 ### Meshing
 
 | Item | Status |
 |---|---|
-| CAddMeshSetupItem | AB |
+| CAddMeshSetupItem | ABC |
 | CAddNetgenMeshToUncoveredParts | AB |
-| CCreateMesh | AB |
+| CCreateMesh | ABC |
 | CDisableDefaultMeshTypes | AB |
-| CDuplicateMeshSetupItems | AB |
-| CRemoveMeshSetupItems | AB |
-| CReplaceMeshSetupItem | AB |
+| CDuplicateMeshSetupItems | ABC |
+| CRemoveMeshSetupItems | ABC |
+| CReplaceMeshSetupItem | ABC |
 
 ### Model
 
@@ -312,50 +314,50 @@ See [the C2 report](reports/phase-c2-model-authoring.md). Partial form reuse doe
 | CAddNodeSet | ABC |
 | CAddSurface | ABC |
 | CConvertElementSetsToMeshParts | AB |
-| CCreateBoundaryLayer | AB |
-| CCreateElementSetFromElementQuality | AB |
+| CCreateBoundaryLayer | ABC |
+| CCreateElementSetFromElementQuality | ABC |
 | CDuplicateElementSets | ABC |
 | CDuplicateModelCoordinateSystems | ABC |
 | CDuplicateModelReferencePoints | ABC |
 | CDuplicateNodeSets | ABC |
 | CDuplicateSurfaces | ABC |
-| CFindEdgesByAngleForModelPartsCommand | AB |
+| CFindEdgesByAngleForModelPartsCommand | ABC |
 | CHideModelCoordinateSystems | AB |
-| CHideModelParts | AB |
+| CHideModelParts | ABC |
 | CHideModelReferencePoints | AB |
-| CMergeCoincidentNodes | AB |
-| CMergeModelParts | AB |
-| CMirrorModelParts | AB |
-| CRemeshElements | AB |
+| CMergeCoincidentNodes | ABC |
+| CMergeModelParts | ABC |
+| CMirrorModelParts | ABC |
+| CRemeshElements | ABC |
 | CRemoveElementSets | ABC |
 | CRemoveModelCoordinateSystems | ABC |
-| CRemoveModelParts | AB |
+| CRemoveModelParts | ABC |
 | CRemoveModelReferencePoints | ABC |
 | CRemoveNodeSets | ABC |
 | CRemoveSurfaces | ABC |
-| CRenumberElements | AB |
-| CRenumberNodes | AB |
+| CRenumberElements | ABC |
+| CRenumberNodes | ABC |
 | CReplaceElementSet | ABC |
 | CReplaceModelCoordinateSystem | ABC |
-| CReplaceModelPartProperties | AB |
+| CReplaceModelPartProperties | ABC |
 | CReplaceModelProperties | ABC |
 | CReplaceModelReferencePoint | ABC |
 | CReplaceNodeSet | ABC |
 | CReplaceSurface | ABC |
 | CResetColorForModelParts | AB |
-| CRotateModelParts | AB |
-| CScaleModelParts | AB |
+| CRotateModelParts | ABC |
+| CScaleModelParts | ABC |
 | CSetColorForModelParts | AB |
 | CSetModelUnitSystem | AB |
 | CSetNewModelProperties | ABC |
 | CSetTransparencyForModelParts | AB |
 | CShowModelCoordinateSystems | AB |
-| CShowModelParts | AB |
+| CShowModelParts | ABC |
 | CShowModelReferencePoints | AB |
-| CSplitPartMeshUsingSurface | AB |
-| CThickenShellMesh | AB |
-| CTranslateModelParts | AB |
-| CUpdateNodalCoordinatesFromFile | AB |
+| CSplitPartMeshUsingSurface | ABC |
+| CThickenShellMesh | ABC |
+| CTranslateModelParts | ABC |
+| CUpdateNodalCoordinatesFromFile | ABC |
 
 ### Material
 
