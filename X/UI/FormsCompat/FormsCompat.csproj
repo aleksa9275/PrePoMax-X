@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Headless WinForms control model so the original PrePoMax form classes compile and run
+       unchanged on macOS/Linux (D062). Rendering belongs to X/UI/original_forms.py. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>PrePoMaxX.FormsCompat</AssemblyName>
+    <RootNamespace>System.Windows.Forms</RootNamespace>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>13</LangVersion>
+    <NuGetAudit>false</NuGetAudit>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
+    <NoWarn>$(NoWarn);CA1416;CS0067</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Domain/CaeGlobals/CaeGlobals.csproj" />
+  </ItemGroup>
+</Project>

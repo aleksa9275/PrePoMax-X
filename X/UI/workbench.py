@@ -32,6 +32,7 @@ parser.add_argument('--application-service-probe',type=Path)
 parser.add_argument('--application-probe',type=Path)
 parser.add_argument('--menu-probe',type=Path)
 parser.add_argument('--elements-probe',type=Path)
+parser.add_argument('--forms-probe',type=Path)
 parser.add_argument('--menu-model',type=Path)
 parser.add_argument('--menu-results',type=Path)
 parser.add_argument('--settings',type=Path)
@@ -85,8 +86,9 @@ else:
     from main_toolbars import OriginalToolbarsWorkbench
     from model_tree import OriginalModelTreeWorkbench
     from output_links import OutputLinksWorkbench
+    from original_form_host import OriginalFormHostWorkbench
 
-    class Workbench(MainMenuWorkbench,OriginalToolbarsWorkbench,OriginalModelTreeWorkbench,OutputLinksWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
+    class Workbench(OriginalFormHostWorkbench,MainMenuWorkbench,OriginalToolbarsWorkbench,OriginalModelTreeWorkbench,OutputLinksWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -174,6 +176,7 @@ else:
             self.build_original_toolbars()
             self.build_original_tree()
             self.build_output_links()
+            self.build_original_forms()
             if self.preferences_path and self.preferences_path.is_file():self.application.LoadPreferences(str(self.preferences_path));self.apply_preferences()
             self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
             session.Presentation.Screenshot=self.screenshot_delegate
@@ -184,6 +187,12 @@ else:
             if controller.AutomationSettings.StartWithApplication:self.guard(self.start_automation)
 
         def query(self, name, arguments):
+            if name=='GetSelectionPrecision':
+                # Answered without waiting for the UI thread: the Controller also asks from background work
+                # while the UI thread waits for it. The value is recomputed on the UI thread at every render.
+                import threading
+                if threading.get_ident()==self.dispatcher.owner:self.update_selection_precision()
+                return Double(getattr(self,'selection_precision',0.0))
             if name in ['GetViewParameters','GetViewPlaneNormal','GetFileNameToOpen','GetFileNameToSaveAs','EditMeshingParametersFromHistory']:
                 return self.dispatcher.call(lambda:self.ui_query(name,arguments))
             return self.native_query(name,arguments)
@@ -207,6 +216,7 @@ else:
                 return None
             if name == 'GetViewPlaneNormal':
                 return Array[Double](camera.GetViewPlaneNormal())
+
             return self.native_query(name, arguments)
 
         def present(self, name, arguments):
@@ -214,6 +224,10 @@ else:
             self.dispatcher.post(lambda:self.ui_present(name,arguments))
 
         def ui_present(self,name,arguments):
+            if name=='SetSelectionDistance':
+                self.selection_distance=max(1,int(arguments[0]))
+            if name in ('SelectionChanged','UpdateHighlight','CloseAllForms'):
+                self.form_presentation(name,arguments)
             if name in ['WriteDataToOutput','WriteErrorToOutput']:
                 self.write_output(arguments[0],name=='WriteErrorToOutput')
             camera = self.renderer.GetActiveCamera()
@@ -254,7 +268,7 @@ else:
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe or args.elements_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe or args.elements_probe or args.forms_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -317,7 +331,18 @@ else:
             self.render()
             self.setWindowTitle('PrePoMax-X — ' + (Path(self.path).name if self.path else 'New project') + (' *' if self.dirty else ''))
 
+        def update_selection_precision(self):
+            # vtkControl.GetSelectionPrecision: DisplayToWorldScale(renderer, selection distance) - the world
+            # length of the selection distance (Controller: 7 px; logical pixels on HiDPI displays).
+            from vtkmodules.vtkRenderingCore import vtkInteractorObserver
+            pixels=getattr(self,'selection_distance',7)*self.viewport.devicePixelRatioF()
+            p1=[0.0]*4;p2=[0.0]*4
+            vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,0,0,0,p1)
+            vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,pixels,0,0,p2)
+            self.selection_precision=sum((p1[i]-p2[i])**2 for i in range(3))**.5
+
         def render(self):
+            self.update_selection_precision()
             if sys.platform == 'darwin':
                 self.viewport.render()
             else:
@@ -351,6 +376,12 @@ else:
 
         def ui_prompt(self,owner,text,caption,buttons,icon):
             # The original unattended-thread policy runs before this UI boundary.
+            if getattr(self,'auto_prompts',None) is not None:
+                # Probe capture: original message text recorded, the first (affirmative) answer returned.
+                self.auto_prompts.append(str(text))
+                first={str(MessageBoxButtons.OK):DialogResult.OK,str(MessageBoxButtons.OKCancel):DialogResult.OK,
+                       str(MessageBoxButtons.YesNo):DialogResult.Yes,str(MessageBoxButtons.YesNoCancel):DialogResult.Yes}
+                return getattr(self,'auto_prompt_answer',None) or first[str(buttons)]
             mapping={str(MessageBoxButtons.OK):[('OK',DialogResult.OK)],
                      str(MessageBoxButtons.OKCancel):[('OK',DialogResult.OK),('Cancel',DialogResult.Cancel)],
                      str(MessageBoxButtons.YesNo):[('Yes',DialogResult.Yes),('No',DialogResult.No)],
@@ -369,27 +400,11 @@ else:
 
         def new_project(self):
             if not self.confirm_discard():return
-            values=self.select_model_properties()
-            if values is None:return
+            # FrmMain.New with undefined properties: the modal original FrmNewModel, then a new model.
+            if not self.in_ui_context(lambda:self.form_host.SelectNewModel(True)):return
             controller.New()
-            controller.SetNewModelPropertiesCommand(*values)
+            self.in_ui_context(self.form_host.ApplyNewModelProperties)
             self.path=None;self.refresh()
-
-        def select_model_properties(self):
-            from CaeModel import ModelSpaceEnum
-            from CaeGlobals import UnitSystemType
-            from System import Enum
-            dialog=QtWidgets.QDialog(self);dialog.setWindowTitle('New model')
-            layout=QtWidgets.QFormLayout(dialog)
-            spaces=QtWidgets.QComboBox();spaces.addItems([str(v) for v in Enum.GetValues(ModelSpaceEnum)])
-            spaces.setCurrentText('ThreeD')
-            units=QtWidgets.QComboBox();units.addItems([str(v) for v in Enum.GetValues(UnitSystemType) if str(v)!='Undefined'])
-            units.setCurrentText('MM_TON_S_C')
-            layout.addRow('Model space',spaces);layout.addRow('Units',units)
-            buttons=QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok|QtWidgets.QDialogButtonBox.StandardButton.Cancel)
-            buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);layout.addRow(buttons)
-            if dialog.exec()!=QtWidgets.QDialog.DialogCode.Accepted:return None
-            return Enum.Parse(ModelSpaceEnum,spaces.currentText()),Enum.Parse(UnitSystemType,units.currentText())
 
         def import_mesh(self):
             path,_=QtWidgets.QFileDialog.getOpenFileName(self,'Import mesh','','Mesh (*.inp *.unv *.vol *.mesh *.obj)')
@@ -400,10 +415,9 @@ else:
             if path:self.import_path(path,True)
 
         def import_path(self,path,geometry=True):
-            if str(controller.Model.Properties.ModelSpace)=='Undefined' or str(controller.Model.UnitSystem.UnitSystemType)=='Undefined':
-                values=self.select_model_properties()
-                if values is None:return
-                controller.SetNewModelPropertiesCommand(*values)
+            # FrmMain.ImportFile: IfNeededSelectAndSetNewModelProperties (original FrmNewModel, modal).
+            self.in_ui_context(lambda:self.form_host.Invoke('IfNeededSelectAndSetNewModelProperties'))
+            if str(controller.Model.Properties.ModelSpace)=='Undefined' or str(controller.Model.UnitSystem.UnitSystemType)=='Undefined':return
             def done():
                 value=str(controller.CurrentView)
                 self.view.setCurrentText(value)
@@ -437,6 +451,8 @@ else:
         def edit_definition(self,family,step=None,name=None):
             if self.active_editor is not None:
                 self.active_editor.raise_();self.active_editor.activateWindow();return
+            # Original form compiled whole (C9): FrmMain create/edit entry point.
+            if self.open_original(family,step,name):return
             if family=='Materials':dialog=MaterialDialog(self,name)
             elif family in ['Surface interactions','Solution controls']:dialog=MultiPropertyDialog(self,name,family,step)
             elif family=='Parameters':dialog=ParametersDialog(self)
@@ -558,6 +574,17 @@ else:
 
         def _pick(self, x, y):
             hit = self.scene.pick(x, y)
+            if self.original_form_open():
+                modifiers=QtWidgets.QApplication.keyboardModifiers()
+                shift=bool(modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
+                control=bool(modifiers & (QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier))
+                operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
+                direction=self.renderer.GetActiveCamera().GetDirectionOfProjection()
+                if hit is None:
+                    return self.original_pick(None,direction,None,False,operation,None)
+                name, point, element = hit
+                self.last_pick_point=point
+                return self.original_pick(point,direction,None,False,operation,[name])
             if hit is None:
                 self.selected = []
                 controller.ClearSelectionHistoryAndCallSelectionChanged()
@@ -614,7 +641,7 @@ else:
     # RuntimeInitialization.SetCultureAndLanguage: invariant culture without group separator.
     invariant=QtCore.QLocale.c();invariant.setNumberOptions(QtCore.QLocale.NumberOption.OmitGroupSeparator);QtCore.QLocale.setDefault(invariant)
     splash=None
-    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe,args.menu_probe,args.elements_probe]):
+    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe,args.menu_probe,args.elements_probe,args.forms_probe]):
         original_splash=Path(ui_directory).parents[1]/'PrePoMax/Resources/Splash_01.png'
         if original_splash.is_file():
             splash=QtWidgets.QSplashScreen(QtGui.QPixmap(str(original_splash)));splash.showMessage('Loading PrePoMax-X…',QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignHCenter,QtGui.QColor('black'));splash.show();application.processEvents()
@@ -643,6 +670,9 @@ else:
     if args.elements_probe:
         from elements_gui_probe import start
         start(application,window,args.elements_probe)
+    if args.forms_probe:
+        from forms_gui_probe import start
+        start(application,window,args.forms_probe)
     if args.menu_probe:
         from menu_gui_probe import start
         start(application,window,args.menu_probe,str(args.menu_model.resolve()),str(args.menu_results.resolve()) if args.menu_results else None)

@@ -31,12 +31,16 @@ Commands marked 'compatibility only' are never constructed by the original UI (o
 See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).
 The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.
 Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.
+C9 compiles 39 original form classes whole (FrmProperties family, FrmNewModel, FrmSelectItemSet) against a headless
+WinForms control model and hosts them with the original FrmMain members; forms reachable from the UI with executed
+evidence are ABC (A: the original class builds, B: it runs without WinForms, C: in the UI); see
+[C9](reports/phase-c9-original-forms.md).
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 106 | 0 |
 | Commands | 237 | 237 | 236 | 230 | 0 |
-| Forms | 72 | 0 | 0 | 0 | 0 |
+| Forms | 72 | 38 | 38 | 38 | 0 |
 
 ## Model and mesh features
 
@@ -593,13 +597,13 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmExportFileWithProperties | - |
+| FrmExportFileWithProperties | ABC |
 | FrmGetColor | - |
 | FrmGetValue | - |
-| FrmNewModel | - |
+| FrmNewModel | ABC |
 | FrmRegenerate | - |
 | FrmSelectEntity | - |
-| FrmSelectItemSet | - |
+| FrmSelectItemSet | ABC |
 | FrmViewObjectProperties | - |
 
 ### Parameters
@@ -633,81 +637,81 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmOffsetFace | - |
-| FrmRepairGeometry | - |
-| FrmSplitPeriodicFaces | - |
-| FrmSplitShell | - |
-| FrmSplitSolid | - |
-| FrmSurfaceOperation | - |
+| FrmOffsetFace | ABC |
+| FrmRepairGeometry | ABC |
+| FrmSplitPeriodicFaces | ABC |
+| FrmSplitShell | ABC |
+| FrmSplitSolid | ABC |
+| FrmSurfaceOperation | ABC |
 
 ### MeshSetup
 
 | Item | Status |
 |---|---|
-| FrmMeshSetupItem | - |
+| FrmMeshSetupItem | ABC |
 
 ### FEModel
 
 | Item | Status |
 |---|---|
-| FrmBoundaryLayer | - |
+| FrmBoundaryLayer | ABC |
 | FrmCalculixKeywordEditor | - |
-| FrmModelProperties | - |
-| FrmRemeshingParameters | - |
-| FrmSplitPartMeshUsingSurface | - |
-| FrmThickenShellMesh | - |
+| FrmModelProperties | ABC |
+| FrmRemeshingParameters | ABC |
+| FrmSplitPartMeshUsingSurface | ABC |
+| FrmThickenShellMesh | ABC |
 
 ### Node
 
 | Item | Status |
 |---|---|
-| FrmMergeCoincidentNodes | - |
+| FrmMergeCoincidentNodes | ABC |
 
 ### Element
 
 | Item | Status |
 |---|---|
-| FrmElementQuality | - |
+| FrmElementQuality | ABC |
 
 ### Part
 
 | Item | Status |
 |---|---|
-| FrmMirror | - |
-| FrmPartProperties | - |
-| FrmRotate | - |
-| FrmScale | - |
-| FrmTranslate | - |
+| FrmMirror | ABC |
+| FrmPartProperties | ABC |
+| FrmRotate | ABC |
+| FrmScale | ABC |
+| FrmTranslate | ABC |
 
 ### NodeSet
 
 | Item | Status |
 |---|---|
-| FrmNodeSet | - |
+| FrmNodeSet | ABC |
 
 ### ElementSet
 
 | Item | Status |
 |---|---|
-| FrmElementSet | - |
+| FrmElementSet | ABC |
 
 ### Surface
 
 | Item | Status |
 |---|---|
-| FrmSurface | - |
+| FrmSurface | ABC |
 
 ### ReferencePoint
 
 | Item | Status |
 |---|---|
-| FrmReferencePoint | - |
+| FrmReferencePoint | ABC |
 
 ### CoordinateSystems
 
 | Item | Status |
 |---|---|
-| FrmCoordinateSystem | - |
+| FrmCoordinateSystem | ABC |
 
 ### Material
 
@@ -720,13 +724,13 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmSection | - |
+| FrmSection | ABC |
 
 ### Constraint
 
 | Item | Status |
 |---|---|
-| FrmConstraint | - |
+| FrmConstraint | ABC |
 
 ### SurfaceInteraction
 
@@ -738,7 +742,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmContactPair | - |
+| FrmContactPair | ABC |
 
 ### SearchContactPairs
 
@@ -762,44 +766,44 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmInitialCondition | - |
+| FrmInitialCondition | ABC |
 
 ### Step
 
 | Item | Status |
 |---|---|
-| FrmStep | - |
+| FrmStep | ABC |
 | FrmStepControls | - |
 
 ### HistoryOutput
 
 | Item | Status |
 |---|---|
-| FrmHistoryOutput | - |
+| FrmHistoryOutput | ABC |
 
 ### FieldOutput
 
 | Item | Status |
 |---|---|
-| FrmFieldOutput | - |
+| FrmFieldOutput | ABC |
 
 ### BoundaryConditions
 
 | Item | Status |
 |---|---|
-| FrmBC | - |
+| FrmBC | ABC |
 
 ### Load
 
 | Item | Status |
 |---|---|
-| FrmLoad | - |
+| FrmLoad | ABC |
 
 ### DefinedField
 
 | Item | Status |
 |---|---|
-| FrmDefinedField | - |
+| FrmDefinedField | ABC |
 
 ### Settings
 
@@ -824,7 +828,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| FrmCaptureViewport | - |
+| FrmCaptureViewport | ABC |
 
 ### Analysis
 

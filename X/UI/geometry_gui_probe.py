@@ -59,23 +59,29 @@ def start(app,window,output,fixture=None):
         report['cadCuts']=[{'cells':a.GetMapper().GetInput().GetNumberOfCells(),'type':a.GetMapper().GetInput().GetClassName()} for a in window.scene.presentation.features.cuts]
         check('closed CAD section cap rendered without volume cells',any(a.GetMapper().GetInput().GetNumberOfCells()>0 and a.GetMapper().GetInput().GetCell(0).GetCellDimension()==2 for a in window.scene.presentation.features.cuts))
         window.controller.RemoveSectionView(False);window.refresh()
-        window.edit_geometry('Mesh setup');dialog=window.active_editor
-        check('all ten original meshing types offered',dialog.types.count()==10)
-        choose(dialog,'AdvancedView','Advanced');choose(dialog,'Relative','Absolute')
-        choose(dialog,'SecondOrder','No')
-        dialog.entries['Name'][1].setText('GUI_Sizing');dialog.entries['MaxH'][1].setText('4')
-        dialog.prepare_selection('');click_part()
-        check('native pointer picks original CAD part',len(window.selected)==1)
-        dialog.use_selection('')
-        check('mesh setup retains native mouse selection',dialog.rule.Item.CreationData.Nodes.Count==1)
-        dialog.apply()
-        check('setup commit locks active editor',window.operation_task is not None and not dialog.isEnabled())
+        # Original FrmMeshSetupItem compiled whole (C9), opened through FrmMain.CreateMeshSetupItem.
+        from form_driver import FormDriver
+        forms=FormDriver(window);state['forms']=forms
+        window.edit_geometry('Mesh setup')
+        check('original FrmMeshSetupItem offers all ten meshing types',type(forms.form).__name__=='FrmMeshSetupItem' and len(forms.types)==10)
+        report['meshSetupTypes']=forms.types
+        forms.select_type(forms.types[0])
+        forms.set_choice('AdvancedView','Advanced');forms.set_choice('Relative','Absolute')
+        forms.set_choice('SecondOrder','No')
+        forms.set('Name','GUI_Sizing');forms.set('MaxH','4')
+        check('FrmSelectItemSet shown for the region selection',forms.host.SelectItemSetForm.Visible)
+        click_part()
+        check('native pointer picks the original CAD part through Controller.SelectPointOrArea',len(window.selected)==1)
+        check('mesh setup form records the pick (FrmMeshSetupItem.SelectionChanged)',forms.form.MeshSetupItem.CreationIds is not None and len(forms.form.MeshSetupItem.CreationIds)==1)
+        forms.ok()
+        check('original OnApply adds the setup and hides the form',forms.form is None and window.controller.GetMeshSetupItem('GUI_Sizing') is not None)
     def tetra():
         if not wait():return False
-        check('sizing widget committed original object',window.controller.GetMeshSetupItem('GUI_Sizing').MaxH==4 and window.active_editor is None)
-        window.edit_geometry('Mesh setup');dialog=window.active_editor
-        dialog.types.setCurrentIndex(next(i for i in range(dialog.types.count()) if dialog.types.itemText(i)=='Tetrahedral Gmsh'));app.processEvents()
-        dialog.entries['Name'][1].setText('GUI_Tetrahedra');dialog.prepare_selection('');click_part();dialog.use_selection('');dialog.apply()
+        forms=state['forms']
+        check('sizing form committed original object',window.controller.GetMeshSetupItem('GUI_Sizing').MaxH==4 and window.active_editor is None)
+        window.edit_geometry('Mesh setup')
+        forms.select_type('Tetrahedral Gmsh')
+        forms.set('Name','GUI_Tetrahedra');click_part();forms.ok()
     def mesh():
         if not wait():return False
         check('second mesher widget records original setup',len(window.controller.GetMeshSetupItemNames())==2)
@@ -93,8 +99,10 @@ def start(app,window,output,fixture=None):
         part=next(iter(c.Model.Mesh.Parts.Values));state['part']=part.Name;state['minx']=part.BoundingBox.MinX
         item=next(i for i in window.walk_tree() if i.data(0,QtCore.Qt.ItemDataRole.UserRole).Family=='Parts' and not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group)
         window.tree.setCurrentItem(item)
-        window.edit_geometry('Translate');dialog=window.active_editor
-        dialog.entries['X2'][1].setText('2');dialog.apply()
+        window.edit_geometry('Translate')
+        forms=state['forms']
+        check('original FrmTranslate opened through FrmMain.TranslateModelParts',type(forms.form).__name__=='FrmTranslate')
+        forms.set('X2','2');forms.ok()
     def moved():
         if not wait():return False
         c=window.controller

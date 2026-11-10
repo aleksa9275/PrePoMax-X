@@ -2,11 +2,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>disable</Nullable>
-    <AssemblyName>PrePoMaxX.Workbench</AssemblyName><NuGetAudit>false</NuGetAudit>
+    <AssemblyName>PrePoMaxX.Workbench</AssemblyName><NuGetAudit>false</NuGetAudit><NoWarn>$(NoWarn);CS0436;CS0168;CS0169;CS0414;CS0649;CS0067;CA1416;SYSLIB0050</NoWarn>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
   </PropertyGroup>
-  <ItemGroup><ProjectReference Include="../../Domain/PrePoMax/PrePoMax.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="../../Domain/PrePoMax/PrePoMax.csproj" /><ProjectReference Include="../FormsCompat/FormsCompat.csproj" /></ItemGroup>
   <ItemGroup>
     <Compile Include="../../../PrePoMax/Forms/11_MeshSetup/Base/MeshSetupItemTypes.cs" Link="Original/MeshSetupItemTypes.cs" />
     <Compile Include="../../../PrePoMax/Forms/04_GeometryFeature/GeometryFeatureTypes.cs" Link="Original/GeometryFeatureTypes.cs" />

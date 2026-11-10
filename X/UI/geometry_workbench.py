@@ -60,6 +60,8 @@ class GeometryWorkbench:
         parts=self.selected_names()
         if family in list(GeometrySession.Transforms) and len(parts)==0:raise ValueError('Select at least one part first.')
         if family=='Element quality' and len(parts)==0:raise ValueError('Select at least one mesh part first.')
+        # Original form compiled whole (C9): FrmMain entry point.
+        if self.open_original(family,None,name,list(parts)):return
         dialog=GeometryDialog(self,family,name,parts)
         self.show_editor(dialog,family)
 

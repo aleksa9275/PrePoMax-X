@@ -398,6 +398,12 @@ class ApplicationWorkbench:
         picker=vtkAreaPicker();picker.AreaPick(min(x0,x1),min(y0,y1),max(x0,x1),max(y0,y1),self.renderer);frustum=picker.GetFrustum();planes=[]
         for i in range(frustum.GetNumberOfPlanes()):
             plane=vtkPlane();frustum.GetPlane(i,plane);planes.append(Array[Double](list(plane.GetOrigin())+list(plane.GetNormal())))
+        if self.original_form_open():
+            modifiers=QtWidgets.QApplication.keyboardModifiers();shift=bool(modifiers&QtCore.Qt.KeyboardModifier.ShiftModifier);control=bool(modifiers&(QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier))
+            operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
+            visible=[str(p.Name) for p in (self.controller.DisplayedMesh.Parts.values() if isinstance(self.controller.DisplayedMesh.Parts,dict) else self.controller.DisplayedMesh.Parts.Values) if p.Visible]
+            # FrmMain._vtk_SelectPointOrArea with the frustum planes (completely inside: left-to-right drag).
+            return self.original_pick(None,self.renderer.GetActiveCamera().GetDirectionOfProjection(),[list(p) for p in planes],x1>=x0,operation,visible)
         index=self.pick_mode.currentIndex();kinds=[vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface]
         mode=vtkSelectBy.Geometry if index in [5,6,7,8,9,13,14] else vtkSelectBy.Node if kinds[index]==vtkSelectItem.Node else vtkSelectBy.Surface if kinds[index]==vtkSelectItem.Surface else vtkSelectBy.Part if kinds[index]==vtkSelectItem.Part else vtkSelectBy.Element
         modifiers=QtWidgets.QApplication.keyboardModifiers();shift=bool(modifiers&QtCore.Qt.KeyboardModifier.ShiftModifier);control=bool(modifiers&(QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier));operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')

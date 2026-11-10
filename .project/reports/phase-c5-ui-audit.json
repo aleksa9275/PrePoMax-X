@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "scope": "Complete source inventory and explicit adapter/gap audit. Static source coverage is not behavioral acceptance. All 72 forms retain full-form C/V pending.",
+  "scope": "Complete source inventory and explicit adapter/gap audit. Static source coverage is not behavioral acceptance. Forms compiled whole run the original class on the headless control model; V (original-app comparison) is pending for all 72.",
   "forms": [
     {
       "form": "FrmAmplitude",
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
       "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/47_Amplitude/FrmAmplitude.cs",
@@ -130,6 +131,7 @@
       "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
       "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmAnalysis.Designer.cs",
@@ -266,6 +268,7 @@
       "adapter": "X/UI/geometry_workbench.py",
       "reuse": "X/UI/Workbench/GeometrySession.cs",
       "remaining": "Representative measurement/highlight workflow available; full original control/input matrix pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/03_AnalyzeGeometry/FrmAnalyzeGeometry.Designer.cs",
@@ -439,6 +442,7 @@
       "adapter": "X/UI/results_workbench.py",
       "reuse": "PrePoMax/Forms/64_CaptureViewport/CaptureViewportProperties.cs",
       "remaining": "PNG/clipboard/magnification and portable AVI/OGV paths connected; Windows codec-chooser and full capture/video option/layout equivalence pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/81_Animation/FrmAnimation.Designer.cs",
@@ -1064,9 +1068,10 @@
     },
     {
       "form": "FrmBC",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/54_BoundaryConditions/FrmBC.cs",
@@ -1251,9 +1256,10 @@
     },
     {
       "form": "FrmBoundaryLayer",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmBoundaryLayer.cs",
@@ -1372,6 +1378,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
       "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmCalculixKeywordEditor.Designer.cs",
@@ -1982,9 +1989,10 @@
     },
     {
       "form": "FrmCaptureViewport",
-      "adapter": "X/UI/results_workbench.py",
-      "reuse": "PrePoMax/Forms/64_CaptureViewport/CaptureViewportProperties.cs",
-      "remaining": "PNG/clipboard/magnification and portable AVI/OGV paths connected; Windows codec-chooser and full capture/video option/layout equivalence pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/64_CaptureViewport/FrmCaptureViewport.cs",
@@ -2030,9 +2038,10 @@
     },
     {
       "form": "FrmConstraint",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/43_Constraint/FrmConstraint.cs",
@@ -2336,9 +2345,10 @@
     },
     {
       "form": "FrmContactPair",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/45_ContactPair/FrmContactPair.cs",
@@ -2495,9 +2505,10 @@
     },
     {
       "form": "FrmCoordinateSystem",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/32_CoordinateSystems/FrmCoordinateSystem.cs",
@@ -2776,9 +2787,10 @@
     },
     {
       "form": "FrmDefinedField",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/56_DefinedField/FrmDefinedField.cs",
@@ -2939,6 +2951,7 @@
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
       "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/46_Distribution/FrmDistribution.cs",
@@ -3090,6 +3103,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
       "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/01_Edit/FrmEditCommands.Designer.cs",
@@ -3581,9 +3595,10 @@
     },
     {
       "form": "FrmElementQuality",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/23_Element/FrmElementQuality.cs",
@@ -3665,9 +3680,10 @@
     },
     {
       "form": "FrmElementSet",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/26_ElementSet/FrmElementSet.cs",
@@ -3776,6 +3792,7 @@
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
       "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
+      "compiledWhole": false,
       "originalSources": [],
       "declaredDesignerFields": [],
       "eventSubscriptions": [],
@@ -3788,6 +3805,7 @@
       "adapter": "X/UI/presentation_widgets.py",
       "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmExplodedView.Designer.cs",
@@ -3997,9 +4015,10 @@
     },
     {
       "form": "FrmExportFileWithProperties",
-      "adapter": "X/UI/application_widgets.py; X/UI/application_workbench.py",
-      "reuse": "X/Controller/Host/ViewExportFileProperties.Portable.g.cs",
-      "remaining": "Original export properties available; full original file-dialog/filter/overwrite interaction acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FileExporter/FrmExportFileWithProperties.cs",
@@ -4040,9 +4059,10 @@
     },
     {
       "form": "FrmFieldOutput",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/53_FieldOutput/FrmFieldOutput.cs",
@@ -4110,6 +4130,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
       "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/63_Find/FrmFind.Designer.cs",
@@ -4324,6 +4345,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/application_workbench.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalFollowerCamera.g.cs",
       "remaining": "Original parameter/camera rules reused; full frame/input/lifecycle comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmFollowerView.Designer.cs",
@@ -4508,6 +4530,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
       "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
       "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetColor.Designer.cs",
@@ -4596,6 +4619,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
       "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmGetEnvVars.Designer.cs",
@@ -4710,6 +4734,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
       "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
       "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetValue.Designer.cs",
@@ -4799,9 +4824,10 @@
     },
     {
       "form": "FrmHistoryOutput",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/52_HistoryOutput/FrmHistoryOutput.cs",
@@ -4969,9 +4995,10 @@
     },
     {
       "form": "FrmInitialCondition",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/48_InitialConditions/FrmInitialCondition.cs",
@@ -5161,9 +5188,10 @@
     },
     {
       "form": "FrmLoad",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/55_Load/FrmLoad.cs",
@@ -5436,6 +5464,7 @@
       "adapter": "X/UI/workbench.py; X/UI/application_workbench.py",
       "reuse": "Original Controller/Python engine/Rpc/Mcp; X/UI/Workbench/OriginalAdvisor.g.cs",
       "remaining": "Core menus/tree/side-panels/commands/automation connected; complete menu/control/shortcut/drag-drop/navigation/focus/DPI acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/FrmMain.ControllerHost.cs",
@@ -18431,6 +18460,7 @@
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
       "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterial.Designer.cs",
@@ -18876,6 +18906,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
       "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterialLibrary.Designer.cs",
@@ -19417,9 +19448,10 @@
     },
     {
       "form": "FrmMergeCoincidentNodes",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/22_Node/FrmMergeCoincidentNodes.cs",
@@ -19540,9 +19572,10 @@
     },
     {
       "form": "FrmMeshSetupItem",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/11_MeshSetup/FrmMeshSetupItem.cs",
@@ -19777,9 +19810,10 @@
     },
     {
       "form": "FrmMirror",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmMirror.cs",
@@ -19882,9 +19916,10 @@
     },
     {
       "form": "FrmModelProperties",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmModelProperties.cs",
@@ -19932,6 +19967,7 @@
       "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
       "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmMonitor.Designer.cs",
@@ -20168,9 +20204,10 @@
     },
     {
       "form": "FrmNewModel",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmNewModel.cs",
@@ -20276,9 +20313,10 @@
     },
     {
       "form": "FrmNodeSet",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/25_NodeSet/FrmNodeSet.cs",
@@ -20384,9 +20422,10 @@
     },
     {
       "form": "FrmOffsetFace",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmOffsetFace.cs",
@@ -20525,9 +20564,10 @@
     },
     {
       "form": "FrmPartProperties",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmPartProperties.cs",
@@ -20590,6 +20630,7 @@
       "adapter": "X/UI/workbench.py; X/UI/application_workbench.py",
       "reuse": "Original Controller/Python engine/Rpc/Mcp; X/UI/Workbench/OriginalAdvisor.g.cs",
       "remaining": "Core menus/tree/side-panels/commands/automation connected; complete menu/control/shortcut/drag-drop/navigation/focus/DPI acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/FrmPythonStop.Designer.cs",
@@ -20691,6 +20732,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
       "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/62_Query/FrmQuery.Designer.cs",
@@ -21110,9 +21152,10 @@
     },
     {
       "form": "FrmReferencePoint",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/31_ReferencePoint/FrmReferencePoint.cs",
@@ -21364,6 +21407,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
       "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
       "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmRegenerate.Designer.cs",
@@ -21443,9 +21487,10 @@
     },
     {
       "form": "FrmRemeshingParameters",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmRemeshingParameters.cs",
@@ -21599,9 +21644,10 @@
     },
     {
       "form": "FrmRepairGeometry",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmRepairGeometry.cs",
@@ -21753,6 +21799,7 @@
       "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
       "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/82_ResultFieldOutput/FrmResultFieldOutput.cs",
@@ -21912,6 +21959,7 @@
       "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
       "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmResultHistoryOutput.cs",
@@ -22315,9 +22363,10 @@
     },
     {
       "form": "FrmRotate",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmRotate.cs",
@@ -22419,9 +22468,10 @@
     },
     {
       "form": "FrmScale",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmScale.cs",
@@ -22521,6 +22571,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
       "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/45_SearchContactPairs/FrmSearchContactPairs.Designer.cs",
@@ -22909,9 +22960,10 @@
     },
     {
       "form": "FrmSection",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/42_Section/FrmSection.cs",
@@ -23100,6 +23152,7 @@
       "adapter": "X/UI/presentation_widgets.py",
       "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmSectionView.Designer.cs",
@@ -23423,6 +23476,7 @@
       "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
       "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
       "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectEntity.Designer.cs",
@@ -23614,9 +23668,10 @@
     },
     {
       "form": "FrmSelectItemSet",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectItemSet.Designer.cs",
@@ -24080,6 +24135,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
       "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmSettings.Designer.cs",
@@ -24310,6 +24366,7 @@
       "adapter": "X/UI/workbench.py",
       "reuse": "Original engineering assemblies",
       "remaining": "Original splash artwork and native startup/about/home/sponsor links connected; full timing/layout/input comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/FrmSplash.Designer.cs",
@@ -24457,9 +24514,10 @@
     },
     {
       "form": "FrmSplitPartMeshUsingSurface",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmSplitPartMeshUsingSurface.cs",
@@ -24646,9 +24704,10 @@
     },
     {
       "form": "FrmSplitPeriodicFaces",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitPeriodicFaces.cs",
@@ -24761,9 +24820,10 @@
     },
     {
       "form": "FrmSplitShell",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitShell.cs",
@@ -24793,9 +24853,10 @@
     },
     {
       "form": "FrmSplitSolid",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitSolid.cs",
@@ -25073,9 +25134,10 @@
     },
     {
       "form": "FrmStep",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/51_Step/FrmStep.cs",
@@ -25203,6 +25265,7 @@
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
       "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/51_Step/Controls/FrmStepControls.Designer.cs",
@@ -25529,9 +25592,10 @@
     },
     {
       "form": "FrmSurface",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalFormRules.g.cs",
-      "remaining": "Full selection convenience, property focus/tab sequence, sizing and per-subtype interaction matrix require original-app comparison.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/27_Surface/FrmSurface.cs",
@@ -25685,6 +25749,7 @@
       "adapter": "X/UI/authoring_widgets.py",
       "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
       "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/44_SurfaceInteraction/FrmSurfaceInteraction.Designer.cs",
@@ -26019,9 +26084,10 @@
     },
     {
       "form": "FrmSurfaceOperation",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSurfaceOperation.cs",
@@ -26136,9 +26202,10 @@
     },
     {
       "form": "FrmThickenShellMesh",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmThickenShellMesh.cs",
@@ -26258,6 +26325,7 @@
       "adapter": "X/UI/presentation_widgets.py",
       "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/84_Transformation/FrmTransformation.Designer.cs",
@@ -26527,9 +26595,10 @@
     },
     {
       "form": "FrmTranslate",
-      "adapter": "X/UI/geometry_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalGeometryRules.g.cs",
-      "remaining": "Factories/validation/commands reused. Full picked-region conveniences, hover/preview/reset modes, all native backends and keyboard/focus acceptance pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmTranslate.cs",
@@ -26644,6 +26713,7 @@
       "adapter": "X/UI/application_widgets.py; X/UI/application_workbench.py",
       "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalFollowerCamera.g.cs",
       "remaining": "Original parameter/camera rules reused; full frame/input/lifecycle comparison pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmUserVew.Designer.cs",
@@ -26915,9 +26985,10 @@
     },
     {
       "form": "FrmViewObjectProperties",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged; forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs and the property-grid autocomplete popup remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmViewObjectProperties.cs",
@@ -26940,6 +27011,7 @@
       "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
       "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
       "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
+      "compiledWhole": false,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmViewResultHistoryOutput.Designer.cs",
@@ -27050,6 +27122,7 @@
     "forms": 72,
     "designerFields": 993,
     "eventSubscriptions": 796,
-    "fullFormsAccepted": 0
+    "fullFormsAccepted": 0,
+    "compiledWhole": 39
   }
 }

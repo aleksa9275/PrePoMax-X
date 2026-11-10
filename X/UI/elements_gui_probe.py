@@ -145,23 +145,6 @@ def start(app, window, output):
               len(window.session.Presentation.SelectionActors) > 0 and len(window.scene.selection_actors) > 0
               and 'has no inverted' not in window.output.toPlainText())
 
-    def dialog_type(dialog, text):
-        names = [dialog.types.itemText(i) for i in range(dialog.types.count())]
-        if text not in names:
-            raise AssertionError('form type ' + text + ' not offered: ' + ', '.join(names))
-        index = names.index(text)
-        dialog.types.setCurrentIndex(index)
-        app.processEvents()
-
-    def set_choice(dialog, name, text):
-        field = [f for f in dialog.rule.Properties.Fields if f.Name == name]
-        choices = [str(v) for v in field[0].Choices] if field else []
-        found = [v for v in choices if text.lower() in v.lower()]
-        if not found:
-            raise AssertionError('choice ' + text + ' not offered for ' + name + ': ' + ', '.join(choices))
-        dialog.rule.Properties.Set(name, found[0])
-        dialog.rebuild()
-
     def mass_and_damping():
         new_model('ThreeD')
         window.import_path(str(DECKS / 'c3d10-force.inp'), False)
@@ -170,87 +153,70 @@ def start(app, window, output):
         if not ready():
             return False
         from CaeModel import PointMassSection, DampingTypeEnum
+        from form_driver import FormDriver
+        # Original FrmSection/FrmConstraint/FrmSurface/FrmStep/FrmLoad compiled whole (C9).
+        forms = FormDriver(window)
         window.edit_definition('Sections')
-        dialog = window.active_editor
-        dialog_type(dialog, 'Point Mass')
-        set_choice(dialog, 'RegionType', 'node set')
-        dialog.rule.Properties.Set('NodeSetName', 'TRACTION')
-        dialog.rebuild()
-        name = dialog.entries['Name'][1].text()
-        dialog.entries['Mass'][1].setText('-1')
-        dialog.apply()
-        app.processEvents()
-        report['negativeMassError'] = dialog.error.text()
-        # MassSection.CheckPositive rejects the value in the property grid before FrmSection's own check.
-        check('section form rejects a negative mass (MassSection.CheckPositive / FrmSection)',
-              ('mass must be larger or equal to zero' in dialog.error.text().lower() or
-               'mass must be larger or equal to 0' in dialog.error.text()) and window.active_editor is dialog)
-        dialog.entries['Mass'][1].setText('0.5')
-        dialog.apply()
-        app.processEvents()
+        forms.select_type('Point Mass')
+        forms.set_choice('RegionType', 'node set')
+        forms.set('NodeSetName', 'TRACTION')
+        name = forms.get('Name')
+        before = len(forms.prompts)
+        forms.set('Mass', '-1')
+        report['negativeMassError'] = forms.prompts[before:]
+        # MassSection.CheckPositive rejects the value in the property grid (WinForms: invalid property value).
+        check('section form rejects a negative mass (MassSection.CheckPositive)',
+              any('mass must be larger or equal to zero' in t.lower() or 'mass must be larger or equal to 0' in t.lower()
+                  for t in forms.prompts[before:]) and forms.form is not None)
+        forms.set('Mass', '0.5')
+        forms.ok()
         section = c.GetSection(name)
         check('point mass section created through the section form', isinstance(section, PointMassSection)
-              and section.Mass.Value == 0.5 and window.active_editor is None)
+              and section.Mass.Value == 0.5 and forms.form is None and window.active_editor is None)
         state['mass'] = name
         window.edit_definition('Constraints')
-        dialog = window.active_editor
-        dialog_type(dialog, 'Point Spring')
-        set_choice(dialog, 'MasterRegionType', 'node set')
-        dialog.rule.Properties.Set('NodeSetName', 'BOTTOM')
-        dialog.rebuild()
-        dialog.entries['K1'][1].setText('100')
-        dialog.apply()
-        app.processEvents()
-        check('point spring through the constraint form', window.active_editor is None and c.Model.Constraints.Count == 1)
+        forms.select_type('Point Spring')
+        forms.set_choice('MasterRegionType', 'node set')
+        forms.set('NodeSetName', 'BOTTOM')
+        forms.set('K1', '100')
+        forms.ok()
+        check('point spring through the constraint form', forms.form is None and c.Model.Constraints.Count == 1)
         window.edit_definition('Surfaces')
-        dialog = window.active_editor
-        set_choice(dialog, 'CreateSurfaceFrom', 'node')
-        dialog.rule.Properties.Set('NodeSetName', 'BOTTOM')
-        dialog.rebuild()
-        surface = dialog.entries['Name'][1].text()
-        dialog.apply()
-        app.processEvents()
-        check('surface from a node set through the surface form', c.GetSurface(surface) is not None and window.active_editor is None)
+        forms.set_choice('CreateSurfaceFrom', 'node')
+        forms.set('NodeSetName', 'BOTTOM')
+        surface = forms.get('Name')
+        forms.ok()
+        check('surface from a node set through the surface form', c.GetSurface(surface) is not None and forms.form is None)
         window.edit_definition('Constraints')
-        dialog = window.active_editor
-        dialog_type(dialog, 'Surface Support')
-        set_choice(dialog, 'SupportType', 'compression')
-        set_choice(dialog, 'MasterRegionType', 'surface')
-        dialog.rule.Properties.Set('SurfaceName', surface)
-        dialog.rebuild()
-        dialog.apply()
-        app.processEvents()
-        check('compression-only surface support through the constraint form', window.active_editor is None
-              and c.Model.Constraints.Count == 2, )
+        forms.select_type('Surface Support')
+        forms.set_choice('SupportType', 'compression')
+        forms.set_choice('MasterRegionType', 'surface')
+        forms.set('SurfaceName', surface)
+        forms.ok()
+        check('compression-only surface support through the constraint form', forms.form is None
+              and c.Model.Constraints.Count == 2)
         window.edit_definition('Steps')
-        dialog = window.active_editor
-        dialog_type(dialog, 'Static Step')
-        static = dialog.entries['Name'][1].text()
-        dialog.apply()
-        app.processEvents()
+        forms.select_type('Static Step')
+        static = forms.get('Name')
+        forms.ok()
         window.edit_definition('Loads', static)
-        dialog = window.active_editor
-        dialog_type(dialog, 'Gravity')
-        set_choice(dialog, 'RegionType', 'mass')
-        dialog.rule.Properties.Set('MassSectionName', name)
-        dialog.rebuild()
-        dialog.entries['F3'][1].setText('-9810')
-        dialog.apply()
-        app.processEvents()
+        forms.select_type('Gravity')
+        forms.set_choice('RegionType', 'mass')
+        forms.set('MassSectionName', name)
+        forms.set('F3', '-9810')
+        forms.ok()
         gravity = values(c.GetStep(static).Loads)[0]
         check('gravity load on the mass section through the load form', str(gravity.RegionType) == 'MassSection'
               and gravity.RegionName == name)
         window.edit_definition('Steps')
-        dialog = window.active_editor
-        dialog_type(dialog, 'Dynamic Step')
-        dynamic = dialog.entries['Name'][1].text()
-        set_choice(dialog, 'DampingType', 'rayleigh')
+        forms.select_type('Dynamic Step')
+        dynamic = forms.get('Name')
+        forms.set_choice('DampingType', 'rayleigh')
         check('Rayleigh damping shows Alpha and Beta (ViewDynamicStep.UpdateVisibility)',
-              'AlphaRayleigh' in dialog.entries and 'BetaRayleigh' in dialog.entries)
-        dialog.entries['AlphaRayleigh'][1].setText('0.2')
-        dialog.entries['BetaRayleigh'][1].setText('0.001')
-        dialog.apply()
-        app.processEvents()
+              forms.has('AlphaRayleigh') and forms.has('BetaRayleigh'))
+        forms.set('AlphaRayleigh', '0.2')
+        forms.set('BetaRayleigh', '0.001')
+        forms.ok()
         damping = c.GetStep(dynamic).Damping
         check('dynamic step Damping set through the step form', damping.DampingType == DampingTypeEnum.Rayleigh
               and abs(damping.Alpha - 0.2) < 1e-12 and abs(damping.Beta - 0.001) < 1e-12)
@@ -301,6 +267,7 @@ def start(app, window, output):
     def finish():
         if window.active_editor is not None:
             window.active_editor.reject()
+        window.form_host.CloseAllForms()
         (output / 'elements-gui.json').write_text(json.dumps(report, indent=2) + '\n')
         window.dirty = False
         window.close()

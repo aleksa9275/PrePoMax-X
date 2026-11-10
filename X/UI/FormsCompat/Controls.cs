@@ -1,0 +1,736 @@
+// Headless WinForms control model for the original PrePoMax forms (D062).
+// The original form classes are compiled unchanged against these types; a
+// toolkit renderer (X/UI/original_forms.py) draws the control tree and feeds
+// user input back through the same events WinForms would raise. Names and
+// semantics follow System.Windows.Forms; only state and events are modelled.
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+
+namespace System.Windows.Forms
+{
+    /// <summary>Designer font description (System.Drawing.Font needs GDI+, which is Windows-only on .NET 10).</summary>
+    public sealed class FontSpec
+    {
+        public string Name { get; }
+        public float Size { get; }
+        public FontStyle Style { get; }
+        public bool Bold => (Style & FontStyle.Bold) != 0;
+        public bool Italic => (Style & FontStyle.Italic) != 0;
+        public bool Underline => (Style & FontStyle.Underline) != 0;
+        public FontSpec(string name, float size) : this(name, size, FontStyle.Regular) { }
+        public FontSpec(string name, float size, FontStyle style) { Name = name; Size = size; Style = style; }
+        public FontSpec(string name, float size, FontStyle style, GraphicsUnit unit) : this(name, size, style) { }
+        public FontSpec(string name, float size, FontStyle style, GraphicsUnit unit, byte charSet) : this(name, size, style) { }
+        public FontSpec(FontSpec prototype, FontStyle style) : this(prototype?.Name ?? "Segoe UI", prototype?.Size ?? 9F, style) { }
+        public static FontSpec Default { get; } = new FontSpec("Segoe UI", 9F);
+    }
+
+    /// <summary>An original embedded image (Properties.Resources entry) by name and repository file.</summary>
+    public sealed class ImageResource
+    {
+        public string Name { get; }
+        public string Path { get; }
+        public ImageResource(string name, string path) { Name = name; Path = path; }
+        public override string ToString() => Name;
+    }
+
+    public enum ImageLayout { None, Tile, Center, Stretch, Zoom }
+    public enum AnchorStyles { None = 0, Top = 1, Bottom = 2, Left = 4, Right = 8 }
+    public enum DockStyle { None, Top, Bottom, Left, Right, Fill }
+    public enum AutoScaleMode { None, Font, Dpi, Inherit }
+    public enum FormStartPosition { Manual, CenterScreen, WindowsDefaultLocation, WindowsDefaultBounds, CenterParent }
+    public enum FormBorderStyle { None, FixedSingle, Fixed3D, FixedDialog, Sizable, FixedToolWindow, SizableToolWindow }
+    public enum CloseReason { None, WindowsShutDown, MdiFormClosing, UserClosing, TaskManagerClosing, FormOwnerClosing, ApplicationExitCall }
+    public enum View { LargeIcon, Details, SmallIcon, List, Tile }
+    public enum ColumnHeaderStyle { None, Nonclickable, Clickable }
+    public enum HorizontalAlignment { Left, Right, Center }
+    public enum Appearance { Normal, Button }
+    public enum FlatStyle { Flat, Popup, Standard, System }
+    public enum ScrollBars { None, Horizontal, Vertical, Both }
+    public enum PropertySort { NoSort = 0, Alphabetical = 1, Categorized = 2, CategorizedAlphabetical = 3 }
+    public enum GridItemType { Property, Category, ArrayValue, Root }
+    public enum ToolStripItemDisplayStyle { None, Text, Image, ImageAndText }
+    public enum ContentAlignment { TopLeft = 1, TopCenter = 2, TopRight = 4, MiddleLeft = 16, MiddleCenter = 32, MiddleRight = 64, BottomLeft = 256, BottomCenter = 512, BottomRight = 1024 }
+    public enum ImeMode { Inherit = -1, NoControl = 0, On = 1, Off = 2, Disable = 3 }
+    public enum RightToLeft { No, Yes, Inherit }
+    public enum BorderStyle { None, FixedSingle, Fixed3D }
+    public enum TabAlignment { Top, Bottom, Left, Right }
+    public enum TabSizeMode { Normal, FillToRight, Fixed }
+    public enum SizeType { AutoSize, Absolute, Percent }
+    public enum AutoSizeMode { GrowAndShrink, GrowOnly }
+
+    public struct Padding
+    {
+        public int Left, Top, Right, Bottom;
+        public Padding(int all) { Left = Top = Right = Bottom = all; }
+        public Padding(int left, int top, int right, int bottom) { Left = left; Top = top; Right = right; Bottom = bottom; }
+        public int All { get => Left; set { Left = Top = Right = Bottom = value; } }
+        public int Horizontal => Left + Right;
+        public int Vertical => Top + Bottom;
+        public static readonly Padding Empty = new Padding(0);
+    }
+
+    public interface IMessageFilter { bool PreFilterMessage(ref Message m); }
+    public struct Message
+    {
+        public IntPtr HWnd; public int Msg; public IntPtr WParam; public IntPtr LParam; public IntPtr Result;
+        public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) => new Message { HWnd = hWnd, Msg = msg, WParam = wparam, LParam = lparam };
+    }
+    [Flags] public enum ControlStyles { ContainerControl = 1, UserPaint = 2, Opaque = 4, ResizeRedraw = 16, FixedWidth = 32, FixedHeight = 64, StandardClick = 256, Selectable = 512, UserMouse = 1024, SupportsTransparentBackColor = 2048, StandardDoubleClick = 4096, AllPaintingInWmPaint = 8192, CacheText = 16384, EnableNotifyMessage = 32768, DoubleBuffer = 65536, OptimizedDoubleBuffer = 131072, UseTextForAccessibility = 262144 }
+    /// <summary>Text clipboard; the renderer installs the platform clipboard.</summary>
+    public static class Clipboard
+    {
+        public static Func<string> GetTextHandler;
+        public static Action<string> SetTextHandler;
+        static string local = "";
+        public static string GetText() => GetTextHandler != null ? GetTextHandler() ?? "" : local;
+        public static void SetText(string text) { if (SetTextHandler != null) SetTextHandler(text); else local = text ?? ""; }
+        public static bool ContainsText() => GetText().Length > 0;
+        public static void Clear() => SetText("");
+    }
+    public class CreateParams { public int ExStyle; public int Style; public int ClassStyle; public string Caption; public string ClassName; }
+
+    public class ControlEventArgs : EventArgs { public Control Control { get; } public ControlEventArgs(Control control) { Control = control; } }
+    public class KeyEventArgs : EventArgs
+    {
+        public Keys KeyData { get; }
+        public Keys KeyCode => KeyData & Keys.KeyCode;
+        public Keys Modifiers => KeyData & Keys.Modifiers;
+        public bool Control => (KeyData & Keys.Control) != 0;
+        public bool Shift => (KeyData & Keys.Shift) != 0;
+        public bool Alt => (KeyData & Keys.Alt) != 0;
+        public int KeyValue => (int)(KeyData & Keys.KeyCode);
+        public bool Handled { get; set; }
+        public bool SuppressKeyPress { get; set; }
+        public KeyEventArgs(Keys keyData) { KeyData = keyData; }
+    }
+    public class KeyPressEventArgs : EventArgs { public char KeyChar { get; set; } public bool Handled { get; set; } public KeyPressEventArgs(char keyChar) { KeyChar = keyChar; } }
+    public class FormClosingEventArgs : CancelEventArgs { public CloseReason CloseReason { get; } public FormClosingEventArgs(CloseReason reason, bool cancel) : base(cancel) { CloseReason = reason; } }
+    public class FormClosedEventArgs : EventArgs { public CloseReason CloseReason { get; } public FormClosedEventArgs(CloseReason reason) { CloseReason = reason; } }
+    public class PaintEventArgs : EventArgs { public Graphics Graphics { get; } public Rectangle ClipRectangle { get; } public PaintEventArgs(Graphics graphics, Rectangle clip) { Graphics = graphics; ClipRectangle = clip; } }
+    public class ItemCheckEventArgs : EventArgs { public int Index { get; } public CheckState NewValue { get; set; } public CheckState CurrentValue { get; } public ItemCheckEventArgs(int index, CheckState newValue, CheckState currentValue) { Index = index; NewValue = newValue; CurrentValue = currentValue; } }
+    public enum CheckState { Unchecked, Checked, Indeterminate }
+    public class ListViewItemSelectionChangedEventArgs : EventArgs { public ListViewItem Item { get; } public int ItemIndex { get; } public bool IsSelected { get; } public ListViewItemSelectionChangedEventArgs(ListViewItem item, int index, bool selected) { Item = item; ItemIndex = index; IsSelected = selected; } }
+    public class ToolStripItemClickedEventArgs : EventArgs { public ToolStripItem ClickedItem { get; } public ToolStripItemClickedEventArgs(ToolStripItem item) { ClickedItem = item; } }
+    public class TabControlEventArgs : EventArgs { public TabPage TabPage { get; } public int TabPageIndex { get; } public TabControlEventArgs(TabPage page, int index) { TabPage = page; TabPageIndex = index; } }
+    public class PreviewKeyDownEventArgs : EventArgs { public Keys KeyData { get; } public bool IsInputKey { get; set; } public PreviewKeyDownEventArgs(Keys keyData) { KeyData = keyData; } }
+
+    public delegate void KeyEventHandler(object sender, KeyEventArgs e);
+    public delegate void KeyPressEventHandler(object sender, KeyPressEventArgs e);
+    public delegate void MouseEventHandler(object sender, MouseEventArgs e);
+    public delegate void FormClosingEventHandler(object sender, FormClosingEventArgs e);
+    public delegate void FormClosedEventHandler(object sender, FormClosedEventArgs e);
+    public delegate void PaintEventHandler(object sender, PaintEventArgs e);
+    public delegate void ControlEventHandler(object sender, ControlEventArgs e);
+    public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
+    public delegate void ListViewItemSelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e);
+    public delegate void ToolStripItemClickedEventHandler(object sender, ToolStripItemClickedEventArgs e);
+    public delegate void TabControlEventHandler(object sender, TabControlEventArgs e);
+    public delegate void PreviewKeyDownEventHandler(object sender, PreviewKeyDownEventArgs e);
+    public delegate void PropertyValueChangedEventHandler(object s, PropertyValueChangedEventArgs e);
+    public delegate void SelectedGridItemChangedEventHandler(object sender, SelectedGridItemChangedEventArgs e);
+
+    /// <summary>Raised for every state change a renderer must mirror (control, property name).</summary>
+    public static class ControlNotifications
+    {
+        public static event Action<Control, string> Changed;
+        internal static void Raise(Control control, string property) => Changed?.Invoke(control, property);
+    }
+
+    public class Control : Component, IWin32Window
+    {
+        string _text = "";
+        Point _location;
+        Size _size;
+        bool _visible = true, _enabled = true;
+        int _layoutSuspended;
+        Control _parent;
+
+        public Control() { Controls = new ControlCollection(this); }
+        public IntPtr Handle => IntPtr.Zero;
+        public bool IsHandleCreated => true;
+        public bool IsDisposed { get; private set; }
+        public bool Disposing => false;
+        public string Name { get; set; } = "";
+        public object Tag { get; set; }
+        public virtual string Text { get => _text; set { value ??= ""; if (_text == value) return; _text = value; Notify(nameof(Text)); OnTextChanged(EventArgs.Empty); } }
+        public Point Location { get => _location; set { if (_location == value) return; _location = value; UpdateAnchorInfo(); Notify(nameof(Location)); OnLocationChanged(EventArgs.Empty); } }
+        public virtual Size Size { get => _size; set => SetSizeCore(value); }
+        protected void SetSizeCore(Size value)
+        {
+            if (_size == value) return;
+            _size = value;
+            UpdateAnchorInfo();
+            if (_layoutSuspended == 0) LayoutChildren();
+            Notify(nameof(Size));
+            OnSizeChanged(EventArgs.Empty);
+            OnResize(EventArgs.Empty);
+        }
+
+        // WinForms anchoring/docking: a child keeps its distances to the anchored edges of its parent's client
+        // area. Distances are taken whenever the child's bounds are set or the parent's layout resumes, and
+        // applied whenever the parent's size changes while its layout is not suspended.
+        int _gapRight, _gapBottom;
+        internal void UpdateAnchorInfo()
+        {
+            if (_parent == null) return;
+            Size client = _parent.ClientSize;
+            _gapRight = client.Width - Right;
+            _gapBottom = client.Height - Bottom;
+        }
+        protected virtual void LayoutChildren()
+        {
+            Size client = ClientSize;
+            foreach (Control c in Controls.Cast<Control>().ToArray())
+            {
+                if (c.Dock == DockStyle.Fill) { c.Bounds = new Rectangle(Padding.Left, Padding.Top, client.Width - Padding.Horizontal, client.Height - Padding.Vertical); continue; }
+                if (c.Dock != DockStyle.None) continue;
+                int gapRight = c._gapRight, gapBottom = c._gapBottom;
+                int x = c.Left, y = c.Top, w = c.Width, h = c.Height;
+                bool left = (c.Anchor & AnchorStyles.Left) != 0, right = (c.Anchor & AnchorStyles.Right) != 0;
+                bool top = (c.Anchor & AnchorStyles.Top) != 0, bottom = (c.Anchor & AnchorStyles.Bottom) != 0;
+                if (right) { if (left) w = Math.Max(0, client.Width - gapRight - x); else x = client.Width - gapRight - w; }
+                if (bottom) { if (top) h = Math.Max(0, client.Height - gapBottom - y); else y = client.Height - gapBottom - h; }
+                if (x != c.Left || y != c.Top || w != c.Width || h != c.Height) c.Bounds = new Rectangle(x, y, w, h);
+                c._gapRight = gapRight; c._gapBottom = gapBottom;
+            }
+        }
+        public Size ClientSize { get => ClientSizeCore; set => ClientSizeCore = value; }
+        protected virtual Size ClientSizeCore { get => Size; set => Size = value; }
+        public Rectangle ClientRectangle => new Rectangle(Point.Empty, ClientSize);
+        public Rectangle Bounds { get => new Rectangle(Location, Size); set { Location = value.Location; Size = value.Size; } }
+        public Rectangle DisplayRectangle => ClientRectangle;
+        public int Left { get => Location.X; set => Location = new Point(value, Top); }
+        public int Top { get => Location.Y; set => Location = new Point(Left, value); }
+        public int Width { get => Size.Width; set => Size = new Size(value, Height); }
+        public int Height { get => Size.Height; set => Size = new Size(Width, value); }
+        public int Right => Left + Width;
+        public int Bottom => Top + Height;
+        public Size MinimumSize { get; set; }
+        public Size MaximumSize { get; set; }
+        public AnchorStyles Anchor { get; set; } = AnchorStyles.Top | AnchorStyles.Left;
+        public DockStyle Dock { get; set; }
+        public Padding Margin { get; set; } = new Padding(3);
+        public Padding Padding { get; set; }
+        public int TabIndex { get; set; }
+        public bool TabStop { get; set; } = true;
+        public bool AutoSize { get; set; }
+        public AutoSizeMode AutoSizeMode { get; set; }
+        public FontSpec Font { get; set; } = FontSpec.Default;
+        public Color BackColor { get; set; } = SystemColors.Control;
+        public ImageLayout BackgroundImageLayout { get; set; }
+        public Color ForeColor { get; set; } = SystemColors.ControlText;
+        public ImageResource BackgroundImage { get; set; }
+        public ImeMode ImeMode { get; set; }
+        public RightToLeft RightToLeft { get; set; }
+        public Cursor Cursor { get; set; }
+        public bool CausesValidation { get; set; } = true;
+        public bool UseWaitCursor { get; set; }
+        public bool AllowDrop { get; set; }
+        public ContextMenuStrip ContextMenuStrip { get; set; }
+        public ControlCollection Controls { get; }
+        public bool HasChildren => Controls.Count > 0;
+        public Control Parent { get => _parent; set { if (_parent == value) return; _parent?.Controls.Remove(this); value?.Controls.Add(this); } }
+        internal void SetParentInternal(Control parent) { _parent = parent; Notify(nameof(Parent)); }
+        internal void SetVisibleCore(bool value) => _visible = value;
+        public Form FindForm() { for (Control c = this; c != null; c = c._parent) if (c is Form f) return f; return null; }
+        public Control TopLevelControl { get { Control c = this; while (c._parent != null) c = c._parent; return c; } }
+        public bool Focused { get; internal set; }
+        public bool ContainsFocus => Focused || Controls.Cast<Control>().Any(c => c.ContainsFocus);
+        public BindingContext BindingContext { get; set; } = new BindingContext();
+        public ControlBindingsCollection DataBindings { get; } = new ControlBindingsCollection();
+
+        public bool Visible
+        {
+            get => _visible && (_parent == null || _parent.Visible);
+            set { if (_visible == value) return; _visible = value; Notify(nameof(Visible)); OnVisibleChanged(EventArgs.Empty); }
+        }
+        internal bool VisibleCore => _visible;
+        public bool Enabled
+        {
+            get => _enabled && (_parent == null || _parent.Enabled);
+            set { if (_enabled == value) return; _enabled = value; Notify(nameof(Enabled)); OnEnabledChanged(EventArgs.Empty); }
+        }
+
+        protected void Notify(string property) { if (_layoutSuspended == 0 || property == nameof(Visible)) ControlNotifications.Raise(this, property); }
+        public void SuspendLayout() => _layoutSuspended++;
+        public void ResumeLayout() => ResumeLayout(true);
+        public void ResumeLayout(bool performLayout)
+        {
+            if (_layoutSuspended > 0 && --_layoutSuspended == 0)
+            {
+                foreach (Control c in Controls) c.UpdateAnchorInfo();
+                if (performLayout) LayoutChildren();
+                Notify("Layout");
+            }
+        }
+        public void PerformLayout() { LayoutChildren(); Notify("Layout"); }
+        public void Show() => Visible = true;
+        public void Hide() => Visible = false;
+        public bool Focus() { Focused = true; Notify("Focus"); OnGotFocus(EventArgs.Empty); return true; }
+        public void Select() => Focus();
+        public virtual void Refresh() => Notify("Refresh");
+        public void Invalidate() => Notify("Refresh");
+        public void Invalidate(bool invalidateChildren) => Notify("Refresh");
+        public void Invalidate(Rectangle rectangle) => Notify("Refresh");
+        public void Update() { }
+        public void BringToFront() => Notify("ZOrder");
+        public void SendToBack() => Notify("ZOrder");
+        public void CreateControl() { }
+        public object Invoke(Delegate method) => method.DynamicInvoke();
+        public object Invoke(Delegate method, params object[] args) => method.DynamicInvoke(args);
+        public IAsyncResult BeginInvoke(Delegate method) { method.DynamicInvoke(); return null; }
+        public IAsyncResult BeginInvoke(Delegate method, params object[] args) { method.DynamicInvoke(args); return null; }
+        public bool InvokeRequired => false;
+        public Point PointToScreen(Point p) => p;
+        public Point PointToClient(Point p) => p;
+        public Graphics CreateGraphics() => throw new PlatformNotSupportedException("GDI+ drawing is not available; the renderer owns painting.");
+        public void SetBounds(int x, int y, int width, int height) { Location = new Point(x, y); Size = new Size(width, height); }
+        public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) => true;
+        protected override void Dispose(bool disposing) { IsDisposed = true; base.Dispose(disposing); }
+
+        public event EventHandler Click, DoubleClick, TextChanged, VisibleChanged, EnabledChanged, Resize, SizeChanged, LocationChanged, Move,
+            GotFocus, LostFocus, Enter, Leave, Validated, MouseEnter, MouseLeave, MouseHover, HandleCreated, Layout, ParentChanged, BackColorChanged, FontChanged;
+        public event CancelEventHandler Validating;
+        public event MouseEventHandler MouseDown, MouseUp, MouseMove, MouseClick, MouseDoubleClick, MouseWheel;
+        public event KeyEventHandler KeyDown, KeyUp;
+        public event KeyPressEventHandler KeyPress;
+        public event PreviewKeyDownEventHandler PreviewKeyDown;
+        public event PaintEventHandler Paint;
+        public event ControlEventHandler ControlAdded, ControlRemoved;
+
+        protected virtual void OnTextChanged(EventArgs e) => TextChanged?.Invoke(this, e);
+        protected virtual void OnVisibleChanged(EventArgs e) { VisibleChanged?.Invoke(this, e); foreach (Control c in Controls.Cast<Control>().ToArray()) if (c._visible) c.OnParentVisibleChanged(e); }
+        protected virtual void OnParentVisibleChanged(EventArgs e) => OnVisibleChanged(e);
+        protected virtual void OnEnabledChanged(EventArgs e) => EnabledChanged?.Invoke(this, e);
+        protected virtual void OnResize(EventArgs e) => Resize?.Invoke(this, e);
+        protected virtual void OnSizeChanged(EventArgs e) => SizeChanged?.Invoke(this, e);
+        protected virtual void OnLocationChanged(EventArgs e) { LocationChanged?.Invoke(this, e); Move?.Invoke(this, e); }
+        protected virtual void OnClick(EventArgs e) => Click?.Invoke(this, e);
+        protected virtual void OnDoubleClick(EventArgs e) => DoubleClick?.Invoke(this, e);
+        protected virtual void OnGotFocus(EventArgs e) => GotFocus?.Invoke(this, e);
+        protected virtual void OnLostFocus(EventArgs e) => LostFocus?.Invoke(this, e);
+        protected virtual void OnEnter(EventArgs e) => Enter?.Invoke(this, e);
+        protected virtual void OnLeave(EventArgs e) => Leave?.Invoke(this, e);
+        protected virtual void OnMouseDown(MouseEventArgs e) => MouseDown?.Invoke(this, e);
+        protected virtual void OnMouseUp(MouseEventArgs e) => MouseUp?.Invoke(this, e);
+        protected virtual void OnMouseMove(MouseEventArgs e) => MouseMove?.Invoke(this, e);
+        protected virtual void OnMouseClick(MouseEventArgs e) => MouseClick?.Invoke(this, e);
+        protected virtual void OnMouseDoubleClick(MouseEventArgs e) => MouseDoubleClick?.Invoke(this, e);
+        protected virtual void OnMouseEnter(EventArgs e) => MouseEnter?.Invoke(this, e);
+        protected virtual void OnMouseLeave(EventArgs e) => MouseLeave?.Invoke(this, e);
+        protected virtual void OnMouseWheel(MouseEventArgs e) => MouseWheel?.Invoke(this, e);
+        protected virtual void OnKeyDown(KeyEventArgs e) => KeyDown?.Invoke(this, e);
+        protected virtual void OnKeyUp(KeyEventArgs e) => KeyUp?.Invoke(this, e);
+        protected virtual void OnKeyPress(KeyPressEventArgs e) => KeyPress?.Invoke(this, e);
+        protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) => PreviewKeyDown?.Invoke(this, e);
+        protected virtual void OnPaint(PaintEventArgs e) => Paint?.Invoke(this, e);
+        protected virtual void OnHandleCreated(EventArgs e) => HandleCreated?.Invoke(this, e);
+        protected virtual void OnValidating(CancelEventArgs e) => Validating?.Invoke(this, e);
+        protected virtual void OnValidated(EventArgs e) => Validated?.Invoke(this, e);
+        protected virtual void OnControlAdded(ControlEventArgs e) => ControlAdded?.Invoke(this, e);
+        protected virtual void OnControlRemoved(ControlEventArgs e) => ControlRemoved?.Invoke(this, e);
+        protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) => false;
+        protected virtual void WndProc(ref Message m) { }
+        protected virtual void DefWndProc(ref Message m) { }
+        protected void SetStyle(ControlStyles flag, bool value) { }
+        protected bool GetStyle(ControlStyles flag) => false;
+        protected virtual bool DoubleBuffered { get; set; }
+        protected virtual void OnCreateControl() { }
+        protected void UpdateStyles() { }
+        protected void RecreateHandle() { }
+        public static Point MousePosition { get; set; }
+        public static Keys ModifierKeys { get; set; }
+        public static MouseButtons MouseButtons { get; set; }
+        protected virtual bool ProcessDialogKey(Keys keyData) => false;
+        protected virtual bool IsInputKey(Keys keyData) => false;
+
+        // Renderer input: the same notifications WinForms raises for user actions.
+        public void RaiseClick() { if (Enabled) OnClick(EventArgs.Empty); }
+        public void RaiseDoubleClick() { if (Enabled) OnDoubleClick(EventArgs.Empty); }
+        public void RaiseMouse(string kind, MouseButtons button, int clicks, int x, int y)
+        {
+            var e = new MouseEventArgs(button, clicks, x, y, 0);
+            switch (kind)
+            {
+                case "down": OnMouseDown(e); break;
+                case "up": OnMouseUp(e); break;
+                case "click": OnMouseClick(e); break;
+                case "doubleclick": OnMouseDoubleClick(e); break;
+                case "move": OnMouseMove(e); break;
+            }
+        }
+        public bool RaiseKeyDown(Keys keyData)
+        {
+            var message = new Message();
+            if (FindForm() is Form form && form.ProcessCmdKeyInternal(ref message, keyData)) return true;
+            var e = new KeyEventArgs(keyData);
+            if (FindForm() is Form f && f.KeyPreview && f != this) f.OnKeyDownInternal(e);
+            if (!e.Handled) OnKeyDown(e);
+            return e.Handled;
+        }
+        public void RaiseKeyUp(Keys keyData) => OnKeyUp(new KeyEventArgs(keyData));
+        public void RaiseEnter() { Focused = true; OnEnter(EventArgs.Empty); OnGotFocus(EventArgs.Empty); }
+        public void RaiseLeave() { Focused = false; OnLeave(EventArgs.Empty); OnLostFocus(EventArgs.Empty); }
+        public void RaiseMouseEnter() => OnMouseEnter(EventArgs.Empty);
+        public void RaiseMouseLeave() => OnMouseLeave(EventArgs.Empty);
+        internal void OnKeyDownInternal(KeyEventArgs e) => OnKeyDown(e);
+
+        public class ControlCollection : IList, IEnumerable<Control>
+        {
+            readonly Control owner;
+            readonly List<Control> items = new List<Control>();
+            public ControlCollection(Control owner) { this.owner = owner; }
+            public Control Owner => owner;
+            public int Count => items.Count;
+            public Control this[int index] => items[index];
+            public Control this[string key] => items.FirstOrDefault(c => c.Name == key);
+            public void Add(Control value)
+            {
+                if (value == null || items.Contains(value)) return;
+                value._parent?.Controls.Remove(value);
+                items.Add(value);
+                value.SetParentInternal(owner);
+                value.UpdateAnchorInfo();
+                owner.OnControlAdded(new ControlEventArgs(value));
+                owner.Notify("Controls");
+            }
+            public void AddRange(Control[] controls) { foreach (Control c in controls) Add(c); }
+            public void Remove(Control value)
+            {
+                if (!items.Remove(value)) return;
+                value.SetParentInternal(null);
+                owner.OnControlRemoved(new ControlEventArgs(value));
+                owner.Notify("Controls");
+            }
+            public void RemoveAt(int index) => Remove(items[index]);
+            public void Clear() { foreach (Control c in items.ToArray()) Remove(c); }
+            public bool Contains(Control c) => items.Contains(c);
+            public int IndexOf(Control c) => items.IndexOf(c);
+            public int GetChildIndex(Control c) => items.IndexOf(c);
+            public void SetChildIndex(Control c, int index) { if (!items.Remove(c)) return; items.Insert(Math.Min(index, items.Count), c); owner.Notify("ZOrder"); }
+            public Control[] Find(string key, bool searchAllChildren)
+            {
+                var found = new List<Control>();
+                foreach (Control c in items) { if (c.Name == key) found.Add(c); if (searchAllChildren) found.AddRange(c.Controls.Find(key, true)); }
+                return found.ToArray();
+            }
+            public IEnumerator<Control> GetEnumerator() => items.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => items.GetEnumerator();
+            int IList.Add(object value) { Add((Control)value); return items.Count - 1; }
+            bool IList.Contains(object value) => items.Contains(value as Control);
+            int IList.IndexOf(object value) => items.IndexOf(value as Control);
+            void IList.Insert(int index, object value) => throw new NotSupportedException();
+            void IList.Remove(object value) => Remove((Control)value);
+            bool IList.IsFixedSize => false;
+            bool IList.IsReadOnly => false;
+            object IList.this[int index] { get => items[index]; set => throw new NotSupportedException(); }
+            void ICollection.CopyTo(Array array, int index) => ((ICollection)items).CopyTo(array, index);
+            bool ICollection.IsSynchronized => false;
+            object ICollection.SyncRoot => this;
+        }
+    }
+
+    public class Cursor { public static Point Position { get; set; } }
+    public static class Cursors { public static readonly Cursor Default = new Cursor(), WaitCursor = new Cursor(), Hand = new Cursor(), Arrow = new Cursor(), SizeAll = new Cursor(); }
+    public class BindingContext
+    {
+        public BindingManagerBase this[object dataSource] => new BindingManagerBase();
+        public BindingManagerBase this[object dataSource, string dataMember] => new BindingManagerBase();
+    }
+    public class BindingManagerBase { public void CancelCurrentEdit() { } public void EndCurrentEdit() { } public int Position { get; set; } public int Count => 0; }
+    public class ControlBindingsCollection : List<object> { public void Clear(bool ignored) => Clear(); }
+
+    public class ScrollableControl : Control
+    {
+        public bool AutoScroll { get; set; }
+        public Size AutoScrollMinSize { get; set; }
+        public Point AutoScrollPosition { get; set; }
+    }
+    public class ContainerControl : ScrollableControl
+    {
+        public SizeF AutoScaleDimensions { get; set; }
+        public AutoScaleMode AutoScaleMode { get; set; }
+        public Control ActiveControl { get; set; }
+        public bool Validate() => true;
+        public bool ValidateChildren() => true;
+    }
+    public class UserControl : ContainerControl { public BorderStyle BorderStyle { get; set; } }
+    public class Panel : ScrollableControl { public BorderStyle BorderStyle { get; set; } }
+    public class FlowLayoutPanel : Panel { }
+    public class SplitContainer : ContainerControl
+    {
+        public SplitterPanel Panel1 { get; } = new SplitterPanel();
+        public SplitterPanel Panel2 { get; } = new SplitterPanel();
+        public int SplitterDistance { get; set; }
+        public Orientation Orientation { get; set; }
+        public SplitContainer() { Controls.Add(Panel1); Controls.Add(Panel2); }
+    }
+    public enum Orientation { Horizontal, Vertical }
+    public sealed class SplitterPanel : Panel { }
+
+    public class GroupBox : Control { public FlatStyle FlatStyle { get; set; } }
+    public class Label : Control
+    {
+        public ContentAlignment TextAlign { get; set; } = ContentAlignment.TopLeft;
+        public BorderStyle BorderStyle { get; set; }
+        public ImageResource Image { get; set; }
+        public bool UseMnemonic { get; set; } = true;
+    }
+    public class LinkLabel : Label { public event LinkLabelLinkClickedEventHandler LinkClicked; public void RaiseLinkClicked() => LinkClicked?.Invoke(this, new LinkLabelLinkClickedEventArgs()); }
+    public class LinkLabelLinkClickedEventArgs : EventArgs { }
+    public delegate void LinkLabelLinkClickedEventHandler(object sender, LinkLabelLinkClickedEventArgs e);
+
+    public abstract class ButtonBase : Control
+    {
+        public FlatStyle FlatStyle { get; set; }
+        public ImageResource Image { get; set; }
+        public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleCenter;
+        public ContentAlignment TextAlign { get; set; } = ContentAlignment.MiddleCenter;
+        public TextImageRelation TextImageRelation { get; set; }
+        public bool UseVisualStyleBackColor { get; set; }
+        public bool UseMnemonic { get; set; } = true;
+        public FlatButtonAppearance FlatAppearance { get; } = new FlatButtonAppearance();
+        public ImageList ImageList { get; set; }
+        public int ImageIndex { get; set; } = -1;
+        public string ImageKey { get; set; } = "";
+    }
+    public enum TextImageRelation { Overlay = 0, ImageAboveText = 1, TextAboveImage = 2, ImageBeforeText = 4, TextBeforeImage = 8 }
+    public class FlatButtonAppearance { public int BorderSize { get; set; } = 1; public Color BorderColor { get; set; } public Color MouseOverBackColor { get; set; } public Color MouseDownBackColor { get; set; } public Color CheckedBackColor { get; set; } }
+    public class Button : ButtonBase, IButtonControl
+    {
+        public DialogResult DialogResult { get; set; }
+        public void PerformClick() => RaiseClick();
+        public void NotifyDefault(bool value) { }
+        protected override void OnClick(EventArgs e)
+        {
+            if (DialogResult != DialogResult.None && FindForm() is Form form) form.DialogResult = DialogResult;
+            base.OnClick(e);
+        }
+    }
+    public interface IButtonControl { DialogResult DialogResult { get; set; } void NotifyDefault(bool value); void PerformClick(); }
+    public class CheckBox : ButtonBase
+    {
+        bool _checked;
+        public Appearance Appearance { get; set; }
+        public bool AutoCheck { get; set; } = true;
+        public bool ThreeState { get; set; }
+        public ContentAlignment CheckAlign { get; set; } = ContentAlignment.MiddleLeft;
+        public bool Checked { get => _checked; set { if (_checked == value) return; _checked = value; Notify(nameof(Checked)); CheckedChanged?.Invoke(this, EventArgs.Empty); CheckStateChanged?.Invoke(this, EventArgs.Empty); } }
+        public CheckState CheckState { get => _checked ? CheckState.Checked : CheckState.Unchecked; set => Checked = value != CheckState.Unchecked; }
+        public event EventHandler CheckedChanged, CheckStateChanged;
+        protected override void OnClick(EventArgs e) { if (AutoCheck) Checked = !Checked; base.OnClick(e); }
+    }
+    public class RadioButton : ButtonBase
+    {
+        bool _checked;
+        public Appearance Appearance { get; set; }
+        public bool AutoCheck { get; set; } = true;
+        public ContentAlignment CheckAlign { get; set; } = ContentAlignment.MiddleLeft;
+        public bool Checked
+        {
+            get => _checked;
+            set
+            {
+                if (_checked == value) return;
+                _checked = value;
+                if (value && AutoCheck && Parent != null)
+                    foreach (Control c in Parent.Controls) if (c is RadioButton r && r != this && r.AutoCheck) r.Checked = false;
+                Notify(nameof(Checked));
+                CheckedChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler CheckedChanged;
+        protected override void OnClick(EventArgs e) { if (AutoCheck) Checked = true; base.OnClick(e); }
+    }
+
+    public class TextBoxBase : Control
+    {
+        public bool ReadOnly { get; set; }
+        public bool Multiline { get; set; }
+        public bool WordWrap { get; set; } = true;
+        public BorderStyle BorderStyle { get; set; } = BorderStyle.Fixed3D;
+        public int MaxLength { get; set; } = 32767;
+        public int SelectionStart { get; set; }
+        public int SelectionLength { get; set; }
+        public bool HideSelection { get; set; } = true;
+        public bool ShortcutsEnabled { get; set; } = true;
+        public bool Modified { get; set; }
+        public string[] Lines { get => Text.Split('\n'); set => Text = string.Join(Environment.NewLine, value ?? new string[0]); }
+        public void SelectAll() { SelectionStart = 0; SelectionLength = Text.Length; Notify("Selection"); }
+        public void Select(int start, int length) { SelectionStart = start; SelectionLength = length; Notify("Selection"); }
+        public void AppendText(string text) => Text += text;
+        public void Clear() => Text = "";
+        public void ScrollToCaret() { }
+        public void DeselectAll() => SelectionLength = 0;
+        public void Copy() { }
+        public void Paste() { }
+        public void Cut() { }
+        public void Undo() { }
+    }
+    public class TextBox : TextBoxBase
+    {
+        public HorizontalAlignment TextAlign { get; set; }
+        public ScrollBars ScrollBars { get; set; }
+        public char PasswordChar { get; set; }
+        public bool AcceptsReturn { get; set; }
+        public bool AcceptsTab { get; set; }
+        public CharacterCasing CharacterCasing { get; set; }
+        // Renderer input: committed user text.
+        public void SetUserText(string text) { Text = text; Modified = true; }
+    }
+    public enum CharacterCasing { Normal, Upper, Lower }
+    public class RichTextBox : TextBoxBase { public string Rtf { get; set; } public RichTextBoxScrollBars ScrollBars { get; set; } }
+    public enum RichTextBoxScrollBars { None, Horizontal, Vertical, Both, ForcedHorizontal, ForcedVertical, ForcedBoth }
+
+    public class ListControl : Control
+    {
+        public string DisplayMember { get; set; } = "";
+        public string ValueMember { get; set; } = "";
+        public object DataSource { get; set; }
+    }
+    public class ComboBox : ListControl
+    {
+        int _selectedIndex = -1;
+        public ObjectCollection Items { get; }
+        public ComboBox() { Items = new ObjectCollection(this); }
+        public ComboBoxStyle DropDownStyle { get; set; } = ComboBoxStyle.DropDown;
+        public int DropDownWidth { get; set; }
+        public int MaxDropDownItems { get; set; } = 8;
+        public bool FormattingEnabled { get; set; }
+        public bool Sorted { get; set; }
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                if (value < -1 || value >= Items.Count) throw new ArgumentOutOfRangeException(nameof(value));
+                if (_selectedIndex == value) return;
+                _selectedIndex = value;
+                base.Text = value >= 0 ? Convert.ToString(Items[value], Globalization.CultureInfo.CurrentCulture) : "";
+                Notify(nameof(SelectedIndex));
+                SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+                SelectedValueChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public object SelectedItem { get => _selectedIndex >= 0 ? Items[_selectedIndex] : null; set => SelectedIndex = value == null ? -1 : Items.IndexOf(value); }
+        public override string Text { get => base.Text; set { int index = Items.IndexOf(value); if (index >= 0) SelectedIndex = index; else base.Text = value; } }
+        public event EventHandler SelectedIndexChanged, SelectedValueChanged, SelectionChangeCommitted, DropDown, DropDownClosed;
+        public void RaiseSelectionChangeCommitted(int index) { SelectedIndex = index; SelectionChangeCommitted?.Invoke(this, EventArgs.Empty); }
+        public class ObjectCollection : IList
+        {
+            readonly ComboBox owner;
+            readonly List<object> items = new List<object>();
+            public ObjectCollection(ComboBox owner) { this.owner = owner; }
+            public int Count => items.Count;
+            public object this[int index] { get => items[index]; set { items[index] = value; owner.Notify("Items"); } }
+            public int Add(object item) { items.Add(item); owner.Notify("Items"); return items.Count - 1; }
+            public void AddRange(object[] values) { items.AddRange(values); owner.Notify("Items"); }
+            public void Clear() { items.Clear(); owner._selectedIndex = -1; owner.Notify("Items"); }
+            public void Insert(int index, object item) { items.Insert(index, item); owner.Notify("Items"); }
+            public void Remove(object item) { items.Remove(item); owner.Notify("Items"); }
+            public void RemoveAt(int index) { items.RemoveAt(index); owner.Notify("Items"); }
+            public bool Contains(object item) => items.Contains(item);
+            public int IndexOf(object item) => items.IndexOf(item);
+            public IEnumerator GetEnumerator() => items.GetEnumerator();
+            bool IList.IsFixedSize => false;
+            bool IList.IsReadOnly => false;
+            void ICollection.CopyTo(Array array, int index) => ((ICollection)items).CopyTo(array, index);
+            bool ICollection.IsSynchronized => false;
+            object ICollection.SyncRoot => this;
+        }
+    }
+    public enum ComboBoxStyle { Simple, DropDown, DropDownList }
+    public class NumericUpDown : Control
+    {
+        decimal _value;
+        public decimal Minimum { get; set; }
+        public decimal Maximum { get; set; } = 100;
+        public decimal Increment { get; set; } = 1;
+        public int DecimalPlaces { get; set; }
+        public HorizontalAlignment TextAlign { get; set; }
+        public decimal Value { get => _value; set { if (_value == value) return; if (value < Minimum || value > Maximum) throw new ArgumentOutOfRangeException(nameof(value)); _value = value; Notify(nameof(Value)); ValueChanged?.Invoke(this, EventArgs.Empty); } }
+        public event EventHandler ValueChanged;
+    }
+    public class TrackBar : Control
+    {
+        int _value;
+        public int Minimum { get; set; }
+        public int Maximum { get; set; } = 10;
+        public int SmallChange { get; set; } = 1;
+        public int LargeChange { get; set; } = 5;
+        public int TickFrequency { get; set; } = 1;
+        public TickStyle TickStyle { get; set; }
+        public Orientation Orientation { get; set; }
+        public int Value { get => _value; set { if (_value == value) return; _value = value; Notify(nameof(Value)); ValueChanged?.Invoke(this, EventArgs.Empty); Scroll?.Invoke(this, EventArgs.Empty); } }
+        public event EventHandler ValueChanged, Scroll;
+    }
+    public enum TickStyle { None, TopLeft, BottomRight, Both }
+    public class ProgressBar : Control { public int Minimum { get; set; } public int Maximum { get; set; } = 100; public int Value { get; set; } public ProgressBarStyle Style { get; set; } }
+    public enum ProgressBarStyle { Blocks, Continuous, Marquee }
+    public class PictureBox : Control { public ImageResource Image { get; set; } public PictureBoxSizeMode SizeMode { get; set; } public BorderStyle BorderStyle { get; set; } }
+    public enum PictureBoxSizeMode { Normal, StretchImage, AutoSize, CenterImage, Zoom }
+
+    public class ToolTip : Component
+    {
+        readonly Dictionary<Control, string> tips = new Dictionary<Control, string>();
+        public ToolTip() { }
+        public ToolTip(IContainer container) { container?.Add(this); }
+        public int AutoPopDelay { get; set; } = 5000;
+        public int InitialDelay { get; set; } = 500;
+        public int ReshowDelay { get; set; } = 100;
+        public bool ShowAlways { get; set; }
+        public bool IsBalloon { get; set; }
+        public void SetToolTip(Control control, string caption) { tips[control] = caption; ControlNotifications.Raise(control, "ToolTip"); }
+        public string GetToolTip(Control control) => tips.TryGetValue(control, out string text) ? text : "";
+        public void RemoveAll() => tips.Clear();
+    }
+
+    public class ImageList : Component
+    {
+        public ImageList() { }
+        public ImageList(IContainer container) { container?.Add(this); }
+        public ImageCollection Images { get; } = new ImageCollection();
+        public Size ImageSize { get; set; } = new Size(16, 16);
+        public ColorDepth ColorDepth { get; set; }
+        public Color TransparentColor { get; set; }
+        public ImageListStreamer ImageStream { get; set; }
+        public class ImageCollection : List<ImageResource>
+        {
+            readonly Dictionary<string, ImageResource> keyed = new Dictionary<string, ImageResource>();
+            public void Add(string key, ImageResource image) { keyed[key] = image; Add(image); }
+            public void SetKeyName(int index, string name) { }
+            public ImageResource this[string key] => keyed.TryGetValue(key, out ImageResource image) ? image : null;
+            public bool ContainsKey(string key) => keyed.ContainsKey(key);
+        }
+    }
+    public enum ColorDepth { Depth4Bit = 4, Depth8Bit = 8, Depth16Bit = 16, Depth24Bit = 24, Depth32Bit = 32 }
+    public sealed class ImageListStreamer { }
+
+    public class Screen
+    {
+        public Rectangle Bounds { get; private set; }
+        public Rectangle WorkingArea { get; private set; }
+        public bool Primary { get; private set; }
+        static Rectangle[] screens = { new Rectangle(0, 0, 1920, 1080) };
+        /// <summary>The renderer reports the desktop geometry.</summary>
+        public static void SetScreens(Rectangle[] bounds) => screens = bounds != null && bounds.Length > 0 ? bounds : screens;
+        public static Screen[] AllScreens => screens.Select((b, i) => new Screen { Bounds = b, WorkingArea = b, Primary = i == 0 }).ToArray();
+        public static Screen PrimaryScreen => AllScreens[0];
+        public static Screen FromControl(Control control) => PrimaryScreen;
+        public static Screen FromPoint(Point point) => AllScreens.FirstOrDefault(s => s.Bounds.Contains(point)) ?? PrimaryScreen;
+    }
+}
+namespace System.Windows.Forms.VisualStyles
+{
+    public static class VisualStyleElement { public static class TaskbarClock { } }
+}
+namespace AutocompleteMenuNS
+{
+    // Original autocomplete popup namespace (UserControls/AutocompleteMenu); the renderer provides completion.
+    internal static class NamespaceAnchor { }
+}

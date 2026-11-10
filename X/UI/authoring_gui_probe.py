@@ -53,37 +53,39 @@ def start(app,window,output):
             check('material widget commits new property',len(c.GetMaterial('Steel').Properties)==3)
             window.undo();check('material authoring undo',len(c.GetMaterial('Steel').Properties)==2)
             window.redo();check('material authoring redo',len(c.GetMaterial('Steel').Properties)==3)
+            # Original FrmLoad compiled whole (C9), opened by the tree through FrmMain.EditLoad.
+            from form_driver import FormDriver
+            forms=FormDriver(window)
             dialog=open_editor(find('Loads','Force','Static'))
-            check('tree opens original force property view','F1' in dialog.entries)
+            check('tree opens the original FrmLoad',type(forms.form).__name__=='FrmLoad' and forms.has('F1') and str(forms.form.Text)=='Edit Load: Force')
             before=c.GetLoad('Static','Force').F1.Value
-            dialog.entries['F1'][1].setText('0')
-            dialog.apply();app.processEvents()
-            check('widget original zero-load rejection',bool(dialog.error.text()) and c.GetLoad('Static','Force').F1.Value==before)
-            dialog.entries['F1'][1].setText('250')
-            dialog.apply();app.processEvents()
-            check('widget edits original load',c.GetLoad('Static','Force').F1.Value==250)
-            # A set dialog remains modeless while the actual viewport accepts picks.
+            forms.set('F1','0');forms.ok()
+            check('original FrmLoad zero-load rejection in a message box',any('must not be equal to 0' in t for t in forms.prompts) and forms.form is not None and c.GetLoad('Static','Force').F1.Value==before)
+            forms.set('F1','250');forms.ok()
+            check('original FrmLoad edits the load',forms.form is None and c.GetLoad('Static','Force').F1.Value==250)
+            # FrmNodeSet stays open while the viewport picks through FrmMain._vtk_SelectPointOrArea.
             dialog=open_editor(find('Node sets'))
-            check('authoring dialog keeps viewport enabled',window.viewport.isEnabled() and not window.tree.isEnabled())
+            check('original FrmNodeSet keeps viewport enabled, tree mouse off',type(forms.form).__name__=='FrmNodeSet' and window.viewport.isEnabled() and not window.tree.isEnabled())
+            check('FrmSelectItemSet shown with the node set form',forms.host.SelectItemSetForm.Visible)
             camera=window.renderer.GetActiveCamera();camera.SetPosition(4,.5,.5);camera.SetFocalPoint(.5,.5,.5);camera.SetViewUp(0,0,1);window.fit()
-            window.pick_mode.setCurrentIndex(1)
+            # FrmSelectItemSet: mesh-based selection by surface.
+            forms.click('rbSurface',forms.host.SelectItemSetForm)
             window.renderer.SetWorldPoint(1,.5,.5,1);window.renderer.WorldToDisplay()
             x,y,_=window.renderer.GetDisplayPoint()
-            # These are the same native picker and original selection path as C1;
-            # the C1 probe separately dispatches Cocoa/Qt pointer events.
             window._pick(x,y)
-            check('viewport selects while set draft stays open',sorted(window.selected)==[2,3,6,7])
-            dialog.entries['Name'][1].setText('FromDialog')
-            dialog.use_selection('')
-            dialog.apply();app.processEvents()
-            check('widget creates picked node set with history',sorted(c.GetNodeSet('FromDialog').Labels)==[2,3,6,7] and c.GetNodeSet('FromDialog').CreationData.Nodes.Count==1)
+            report['pick']={'selected':list(window.selected),'selectBy':str(c.SelectBy),'item':str(c.Selection.SelectItem),'nodes':c.Selection.Nodes.Count,'hit':str(window.scene.pick(x,y))}
+            check('viewport selects while the original set form stays open',sorted(window.selected)==[2,3,6,7])
+            forms.set('Name','FromDialog')
+            forms.ok()
+            check('original FrmNodeSet creates the picked node set with history',sorted(c.GetNodeSet('FromDialog').Labels)==[2,3,6,7] and c.GetNodeSet('FromDialog').CreationData.Nodes.Count>=1)
             dialog=open_editor(find('Sections'))
-            # The original region setter changes which named-region property is visible.
-            choices=next(f.Choices for f in dialog.rule.Properties.Fields if f.Name=='RegionType')
-            region=next(v for v in choices if 'Element' in v)
-            dialog.rule.Properties.Set('RegionType',region);dialog.rebuild()
-            check('original region visibility updates widgets','ElementSetName' in dialog.entries and 'PartName' not in dialog.entries)
-            dialog.reject();app.processEvents()
+            check('tree opens the original FrmSection',type(forms.form).__name__=='FrmSection')
+            report['sectionTypes']=forms.types
+            forms.select_type(next(t for t in forms.types if 'Solid' in t))
+            region=next(v for v in forms.choices('Region type') if 'Element' in v)
+            forms.set('Region type',region)
+            check('original region setter updates the visible grid rows',forms.has('Element set') and not forms.has('Part'))
+            forms.cancel()
             check('closing editor restores document commands',window.active_editor is None and window.tree.isEnabled() and window.actions['Open…'].isEnabled())
             window.raise_();window.activateWindow();QtTest.QTest.qWait(150);app.processEvents()
             check('complete authoring tree captured',capture('tree'))

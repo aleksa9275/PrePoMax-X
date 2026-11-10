@@ -267,3 +267,17 @@ drawn, the inverted-element link, and mass sections, point springs, compression-
 supports, gravity on a mass section and Rayleigh damping through the original forms
 and the CalculiX export.
 [C8 report](../../.project/reports/phase-c8-tree-elements.md).
+
+### C9 original forms compiled whole
+
+`generate-original-forms.py` copies 39 original form classes (the `FrmProperties`/
+`FrmPropertyListView` family, `FrmNewModel`, `FrmSelectItemSet`) with their base forms and
+controls into `Workbench/OriginalForms/` and extracts the FrmMain form hosting members into
+`OriginalForms/OriginalFormHost.g.cs`; `--check` fails when an original changed. They build
+against `FormsCompat`, a headless WinForms control model, and `original_forms.py` draws them
+with Qt at the designer geometry and feeds input back as WinForms events, so the original
+handlers run unchanged. `original_form_host.py` routes menus/tree to the original `FrmMain`
+entry points and picks to `Controller.SelectPointOrArea` while a form is open.
+`forms_gui_probe.py` (`--forms-probe`) opens every compiled form through its entry point and
+checks title, designer size, edit/OK - New/Cancel rules; `form_driver.py` lets the other probes
+operate original forms. [C9 report](../../.project/reports/phase-c9-original-forms.md).

@@ -1,6 +1,6 @@
 # Remaining work to full completion (D060)
 
-Review of 9 November 2026 at `303b43c8`, updated 10 November after C8. Replace, don't append. Evidence for
+Review of 9 November 2026 at `303b43c8`, updated 10 November after C9. Replace, don't append. Evidence for
 each item is in the phase reports, `.project/bugs/` and the
 [backlog](reports/deferred-correctness-improvements.md).
 
@@ -10,7 +10,7 @@ each item is in the phase reports, `.project/bugs/` and the
 |---|---|
 | A — domain libraries | **Done.** All checks pass (`python3 X/Checks/check.py`, 7 areas, 95 s, re-run 9 Nov). |
 | B — Controller/Commands/PMX headless | **Done as a code path.** 236/237 commands structurally reachable; restricted NRBF PMX reader with allowlist, size/depth limits; bidirectional PMX with original 3.0.0 (CrossOver) on representative files only. |
-| C — UI | **Implemented, not complete.** C6–C8 (10 Nov) add the original main menu, tool strips and complete model tree. Still 0/72 original forms accepted, 2 model/mesh entries (beam elements) without executed UI evidence, no installable app. |
+| C — UI | **Implemented, not complete.** C6–C8 (10 Nov) add the original main menu, tool strips and complete model tree; C9 runs 39 original form classes whole (38 forms C). 33 forms still use toolkit dialogs, 2 model/mesh entries (beam elements) lack executed UI evidence, no installable app. |
 | V — verified vs original | 0 items in every inventory section. |
 
 ## What I (Claude) can do
@@ -39,9 +39,15 @@ Done on 10 November ([C6 report](reports/phase-c6-main-window.md)):
 Still open:
 2. **Beam element classes**: `LinearBeamElement`/`ParabolicBeamElement` need a CAD
    wire/shell or beam-results fixture (the original model import drops beams).
-3. **72 forms**: close the C5 audit per form (993 designer fields, 796 event
-   handlers): selection filters, property menus, keyboard/focus, row editing,
-   clipboard, sizing. Mark C only when the whole form matches.
+3. **72 forms** — 39 compiled whole in [C9](reports/phase-c9-original-forms.md)
+   (38 C). Remaining 33 the same way: FrmPropertyDataListView forms (Amplitude,
+   Distribution, Result field/history output: DataGridView model), PrePoMaxChildForm
+   forms (Material, Surface interaction, Step controls, Analysis, Monitor, Animation,
+   Query, Find, view forms, Transformation, Settings, Keyword editor), plain dialogs
+   (Edit commands, Parameters, Material library, Regenerate, Get value/colour, Select
+   entity, Analyze geometry, Search contact pairs, View result history, Python stop,
+   Splash) and FrmMain itself. Renderer gaps: autocomplete popup, owner-drawn paint,
+   light theme/HiDPI.
 4. **Matrices**: all analysis types, Mmg/QuadWild/sweep/transfinite/shell/compound
    meshing, section/cap/picking, glyph variants, animation extrema,
    plots/annotations, exports, large projects.

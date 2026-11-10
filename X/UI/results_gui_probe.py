@@ -89,7 +89,11 @@ def start(app,window,output):
         check('table history widget creates original output','GUI_Table' in list(window.controller.GetHistoryResultSetNames()))
         state['history']=show_history(window,'GUI_Table');check('original history table and plot opened',state['history'].isVisible())
         state['oldPart']=list(window.controller.GetResultPartNames())[0]
-        window.edit_geometry('Parts',state['oldPart']);dialog=window.active_editor;dialog.entries['Name'][1].setText('GUI_ResultPart');dialog.apply()
+        # Original FrmPartProperties compiled whole (C9), opened through FrmMain.EditResultPart.
+        from form_driver import FormDriver
+        forms=FormDriver(window);window.edit_geometry('Parts',state['oldPart'])
+        check('original FrmPartProperties opened through FrmMain.EditResultPart',type(forms.form).__name__=='FrmPartProperties' and str(forms.form.Text).startswith('Edit Part'))
+        forms.set('Name','GUI_ResultPart');forms.ok()
     def renamed():
         if not wait():return False
         check('result part properties use original command','GUI_ResultPart' in list(window.controller.GetResultPartNames()))

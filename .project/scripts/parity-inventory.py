@@ -123,6 +123,10 @@ def main() -> None:
         "See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).",
         "The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.",
         "Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.",
+        "C9 compiles 39 original form classes whole (FrmProperties family, FrmNewModel, FrmSelectItemSet) against a headless",
+        "WinForms control model and hosts them with the original FrmMain members; forms reachable from the UI with executed",
+        "evidence are ABC (A: the original class builds, B: it runs without WinForms, C: in the UI); see",
+        "[C9](reports/phase-c9-original-forms.md).",
         "",
     ]
     summary = []

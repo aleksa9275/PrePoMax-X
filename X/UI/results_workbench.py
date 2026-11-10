@@ -106,6 +106,7 @@ class ResultsWorkbench:
     def edit_results(self,family,name=None):
         if self.active_editor is not None:return
         if family!='Jobs' and not self.controller.ResultsInitialized:raise ValueError('Open results first.')
+        if self.open_original(family,None,name):return
         self.show_editor(ResultsDialog(self,family,name),family)
 
     def run_job(self,check=False,name=None):

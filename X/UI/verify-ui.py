@@ -63,6 +63,7 @@ try:
     run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
     run('original-main-menu',[sys.executable,HERE/'generate-main-menu.py','--check'])
     run('original-model-tree',[sys.executable,HERE/'generate-model-tree.py','--check'])
+    run('original-form-classes',[sys.executable,HERE/'generate-original-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
@@ -127,6 +128,14 @@ try:
             result=json.loads((folder/'elements/elements-gui.json').read_text())
             if not result.get('success'):raise ValueError('Element/mass/damping GUI workflow failed: '+str(result.get('error')))
             report['elementsGui']={k:result[k] for k in ('success','checks','elementClasses','deck','invertedElements') if k in result}
+            # Original property forms compiled whole (C9): every FrmMain entry point, designer geometry,
+            # edit/OK - New rules; geometry forms and Gmsh-based element quality with the native profile.
+            if a.native_tools and a.gmsh_library:run('forms-gui',geometry_base+['--forms-probe',folder/'forms'],geometry_env)
+            else:run('forms-gui',base+['--forms-probe',folder/'forms'])
+            result=json.loads((folder/'forms/forms-gui.json').read_text())
+            if not result.get('success'):raise ValueError('Original forms GUI workflow failed: '+str(result.get('error')))
+            report['formsGui']={k:result[k] for k in ('success','checks','pending') if k in result}
+            report['pending']+=['Original forms: '+p for p in result.get('pending',[])]
             menu_results=folder/'results/service/results.pmx'
             menu=base+['--menu-probe',folder/'menu','--menu-model',folder/'application/service/application.pmx']
             if menu_results.is_file():menu+=['--menu-results',menu_results]
