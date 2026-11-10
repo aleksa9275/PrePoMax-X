@@ -34,7 +34,7 @@ public sealed class GeometrySession(Controller controller)
     };
     public ModelTreeEntry[] Tree=>[
         new(){Family="Geometry parts",Name="Geometry",Group=true,Children=GeometryParts()},
-        new(){Family="Mesh setup",Name="Mesh setup",Group=true,Children=Entries("Mesh setup",controller.Model.Geometry?.MeshSetupItems.Values.Cast<NamedClass>()??[])}
+        new(){Family="Mesh setup",Name="Mesh setup",Group=true,Children=OriginalTreeLayout.Build(controller,"Mesh setup",null,controller.Model.Geometry?.MeshSetupItems.Values.Where(i=>!i.Internal).Cast<NamedClass>()??[],i=>Entries("Mesh setup",[i])[0])}
     ];
     ModelTreeEntry[] Entries(string family,IEnumerable<NamedClass> items)=>items.Where(i=>!i.Internal).Select(i=>OriginalModelTree.Annotate(new ModelTreeEntry {Family=family,Name=i.Name,Type=i.GetType().Name},i,OriginalModelTree.Geometry,controller)).ToArray();
     /// <summary>ModelTree.AddObjectsToNode/AddOrderedDictionaryLayoutNodes for geometry parts: folders, and the

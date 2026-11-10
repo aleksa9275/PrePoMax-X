@@ -129,6 +129,19 @@ namespace PrePoMax
                 case "SetQuerySelection":querySelection=(bool)arguments[0];break;
                 case "SetStateReady":workingState=null;break;
                 case "Clear3DSelection":selectionActors.Clear();break;
+                case "HighlightActor":
+                    // vtkControl.HighlightActor/GetCopyOfModelEdgesActor: a copy of the part's model edges in the
+                    // selection layer, drawn in the primary highlight colour.
+                    if(actors.TryGetValue((string)arguments[0],out var highlighted)&&highlighted.Visible)
+                    {
+                        var edges=highlighted.Data.ModelEdges;
+                        bool hasEdges=edges?.Nodes.Coor!=null&&edges.Nodes.Coor.Length>0&&edges.Cells.CellNodeIds!=null&&edges.Cells.CellNodeIds.Length>0;
+                        // Without model edges the original draws a camera silhouette; the headless host keeps the part surface.
+                        var copy=new vtkMaxActorData{Name=highlighted.Data.Name,Layer=vtkRendererLayer.Selection,Geometry=hasEdges?edges:highlighted.Data.Geometry,
+                            NodeSize=highlighted.Data.NodeSize,LineWidth=highlighted.Data.LineWidth,Pickable=false,Color=System.Drawing.Color.Red};
+                        selectionActors.Add(new vtkMaxActor(copy){Color=highlighted.UseSecondaryHighlightColor?System.Drawing.Color.Violet:System.Drawing.Color.Red});
+                    }
+                    break;
                 case "ClearButKeepParts":
                     foreach(var key in System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Where(actors.Keys,key=>!actors[key].Data.IsAPart)))actors.Remove(key);
                     foreach(var key in System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Where(renderCommands.Keys,key=>key.StartsWith("actor:",StringComparison.Ordinal)||key.StartsWith("coordinates:",StringComparison.Ordinal))))renderCommands.Remove(key);

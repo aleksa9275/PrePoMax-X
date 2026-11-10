@@ -115,8 +115,50 @@ def start(app,window,output,fixture=None):
         check('GUI PMX preserves CAD setup and mesh',len(c.Model.Geometry.Parts)==1 and len(c.GetMeshSetupItemNames())==2 and len(c.Model.Mesh.Elements)==state['elements'])
         window.raise_();window.activateWindow();QtTest.QTest.qWait(150)
         check('meshed CAD window captured',window.screen().grabWindow(0,window.x(),window.y(),window.width(),window.height()).save(str(output/'meshed.png')))
-        report.update(success=True,elements=state['elements'],nodes=len(c.Model.Mesh.Nodes),project=window.path)
-    steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone]);current=[None]
+        report.update(elements=state['elements'],nodes=len(c.Model.Mesh.Nodes),project=window.path)
+    def compound_tree():
+        """Original ModelTree rules for the cells of a split CAD part: rename, Group Cells, Fuse Bodies."""
+        import model_tree
+        from System import Int32
+        from CaeModel import ModelSpaceEnum
+        from CaeGlobals import UnitSystemType,Selection,SelectionNodeIds,vtkSelectItem,vtkSelectOperation
+        c=window.controller
+        c.New();c.SetNewModelPropertiesCommand(ModelSpaceEnum.ThreeD,UnitSystemType.MM_TON_S_C);c.ImportFileCommand(str(fixture.resolve()),False)
+        c.CurrentView=ViewGeometryModelResults.Geometry
+        part=next(iter(c.Model.Geometry.Parts.Values));original=str(part.Name)
+        split=window.geometry.Edit('Split solid');split.Select(1)
+        for key,value in [('X','6'),('Nx','1'),('Ny','0'),('Nz','0')]:split.Properties.Set(key,value)
+        selection=Selection();selection.CurrentView=int(c.CurrentView);selection.SelectItem=vtkSelectItem.Part
+        selection.Add(SelectionNodeIds(getattr(vtkSelectOperation,'None'),False,Array[Int32]([part.PartId])))
+        split.SetSelection(Array[Int32]([part.PartId]),selection,'');split.Commit();window.refresh();app.processEvents()
+        def compound_item():
+            return next((i for i in window.walk_tree() if type(getattr(i.data(0,QtCore.Qt.ItemDataRole.UserRole),'Item',None)).__name__=='CompoundGeometryPart'),None)
+        item=compound_item()
+        check('split part shown as the part it was cut from with its cells',item is not None and item.text(0)==original and item.childCount()==2)
+        cells=[item.child(i) for i in range(2)]
+        visible,_=window.prepare_tree_menu(cells)
+        check('two cells: Fuse Bodies offered, Group Cells not (whole sub part)',visible['tsmiFuseBodies'] and not visible['tsmiGroupSplitCells'])
+        visible,_=window.prepare_tree_menu([cells[0]])
+        check('one cell: Group Cells offered, Fuse Bodies not',visible['tsmiGroupSplitCells'] and not visible['tsmiFuseBodies'])
+        visible,_=window.prepare_tree_menu([item])
+        check('split compound row stands for all its cells (Fuse Bodies)',visible['tsmiFuseBodies'])
+        check('split compound row is renameable as the part',window.can_rename_entry(item.data(0,QtCore.Qt.ItemDataRole.UserRole)))
+        window.rename_node(item.data(0,QtCore.Qt.ItemDataRole.UserRole),'Body')
+        compound=next(p for p in c.Model.Geometry.Parts.Values if type(p).__name__=='CompoundGeometryPart')
+        check('compound row rename renames the split sub part (RenameSplitSubPartCommand)',str(compound.GetSingleSplitSubPartName())=='Body' and compound_item().text(0)=='Body')
+        cell=str(compound_item().child(0).data(0,QtCore.Qt.ItemDataRole.UserRole).Name)
+        window.tree_action('tsmiGroupSplitCells',[compound_item().child(0)]);app.processEvents()
+        compound=next(p for p in c.Model.Geometry.Parts.Values if type(p).__name__=='CompoundGeometryPart')
+        selected=[i.data(0,QtCore.Qt.ItemDataRole.UserRole) for i in window.tree.selectedItems()]
+        report['groupedSubParts']=[str(n) for n in compound.CellSubPartNames]
+        check('tree Group Cells runs GroupSplitCellsCommand and selects the new sub part',len(set(report['groupedSubParts']))==2 and len(selected)==1)
+        item=compound_item();cells=[item.child(i) for i in range(item.childCount())]
+        window.tree_action('tsmiFuseBodies',cells);app.processEvents()
+        parts=[p for p in c.Model.Geometry.Parts.Values if not p.Internal]
+        report['fusedParts']=[str(p.Name)+':'+type(p).__name__ for p in parts]
+        check('tree Fuse Bodies runs FuseBodiesCommand',not any(type(p).__name__=='CompoundGeometryPart' and len(p.SubPartNames)>1 for p in parts))
+        report.update(success=True)
+    steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone,compound_tree]);current=[None]
     timer=QtCore.QTimer(window)
     def tick():
         try:

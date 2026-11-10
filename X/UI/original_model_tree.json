@@ -2,7 +2,8 @@
  "source": {
   "UserControls/ModelTree.Designer.cs": "f36b34c8b5abbd837f776b5b9a5ed1fef9ce05c8297ae7e8f4b082fbfd82dbe8",
   "UserControls/ModelTree.cs": "93ed94983ce46dc9fdbb67c9e2acc99dc45d70400583878c6fa68f377f3304a1",
-  "UserControls/Properties/Resources.resx": "e21ace4678b71141c46a853940229660fa0b784ca711143aa85576ec64c8cf23"
+  "UserControls/Properties/Resources.resx": "e21ace4678b71141c46a853940229660fa0b784ca711143aa85576ec64c8cf23",
+  "UserControls/ModelTree.resx": "4b9526ebe592ca1a0dc6abe6fba501bcb30b07ecb89e7a76bc43c22392d2cdc5"
  },
  "tabs": [
   {
@@ -546,7 +547,7 @@
   "Meshing_parameters.ico": "UserControls/Resources/Meshing_parameters.ico",
   "Mesh_refinement.ico": "PrePoMax/Icons/Geometry/Mesh_refinement.ico",
   "Mesh.ico": "UserControls/Resources/Mesh.ico",
-  "BasePart.ico": null,
+  "BasePart.ico": "X/UI/ImageList/BasePart.png",
   "Node_set.ico": "UserControls/Resources/Node_set.ico",
   "Element_set.ico": "UserControls/Resources/Element_set.ico",
   "Surface.ico": "UserControls/Resources/Surface.ico",

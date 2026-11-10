@@ -131,7 +131,10 @@ class Scene:
         self.highlight_actor=None
         for original in source:
             mapper=vtkDataSetMapper()
-            mapper.SetInputData(grid(original.Data.Geometry,original.SurfaceTopology))
+            topology=original.SurfaceTopology
+            # Edge copies (HighlightActor) have line cells only: draw the cells as given.
+            if topology is not None and len(topology.Cells)==0:topology=None
+            mapper.SetInputData(grid(original.Data.Geometry,topology))
             mapper.SetResolveCoincidentTopologyToPolygonOffset()
             mapper.SetRelativeCoincidentTopologyPolygonOffsetParameters(-1,-1)
             mapper.SetRelativeCoincidentTopologyPointOffsetParameter(-2)

@@ -123,6 +123,10 @@ try:
             result=json.loads((folder/'application/gui/application-gui.json').read_text())
             if not result.get('success'):raise ValueError('C5 GUI workflow failed: '+str(result))
             report['applicationGui']=result
+            run('elements-gui',base+['--elements-probe',folder/'elements'])
+            result=json.loads((folder/'elements/elements-gui.json').read_text())
+            if not result.get('success'):raise ValueError('Element/mass/damping GUI workflow failed: '+str(result.get('error')))
+            report['elementsGui']={k:result[k] for k in ('success','checks','elementClasses','deck','invertedElements') if k in result}
             menu_results=folder/'results/service/results.pmx'
             menu=base+['--menu-probe',folder/'menu','--menu-model',folder/'application/service/application.pmx']
             if menu_results.is_file():menu+=['--menu-results',menu_results]

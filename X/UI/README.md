@@ -250,3 +250,20 @@ original context menu, whose actions reuse the C6 FrmMain helper mapping. Icons 
 read from the repository's original `.ico` files (`PrePoMax/Icons`,
 `UserControls/Resources`) or an `Icons` folder next to the UI.
 [C7 report](../../.project/reports/phase-c7-toolbars-tree.md).
+
+### C8 model tree remainder and element evidence
+
+`model_tree.py` adds the remaining ModelTree behaviour: in-place rename (a click on
+the selected node or F2; `CanRename`, `CheckNodeName`, `cltv_AfterLabelEdit`), drag
+and drop of items, groups and steps, original group creation/removal, Group Cells and
+Fuse Bodies, the Space/Enter/Delete keys, the mouse-over highlight and the Model
+node's keyword counts. The group and drop rules are ported in
+`Workbench/OriginalTreeLayout.cs`; the compound-cell rules in `OriginalModelTree.cs`.
+`generate-model-tree.py` decodes `BasePart.ico`, which exists only inside the
+ModelTree.resx image stream, to `ImageList/BasePart.png`. `output_links.py` ports the
+output-panel links (geometry names and inverted-element reports). The verifier adds
+`--elements-probe` (`elements_gui_probe.py`): original element classes imported and
+drawn, the inverted-element link, and mass sections, point springs, compression-only
+supports, gravity on a mass section and Rayleigh damping through the original forms
+and the CalculiX export.
+[C8 report](../../.project/reports/phase-c8-tree-elements.md).

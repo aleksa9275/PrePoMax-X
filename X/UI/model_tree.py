@@ -6,7 +6,10 @@ Layout, texts, images and menu items come from original_model_tree.json
 ModelTree rules (Workbench/OriginalModelTree.cs). This module ports
 PrepareToolStripItem, FilterTree, the tab events and the menu actions; each action
 runs the same FrmMain helper as the original main menu item (main_menu.apply_target),
-so confirmations and Controller commands are shared.
+so confirmations and Controller commands are shared. In-place rename (CanRename,
+CheckNodeName, cltv_AfterLabelEdit), drag and drop of items, groups and steps
+(cltv_ItemDrag/DragOver/DragDrop), tree groups (tsmiCreateGroup_Click) and the
+keyboard keys (cltv_KeyDown) use the C# ports in Workbench/OriginalTreeLayout.cs.
 """
 import json
 from pathlib import Path
@@ -80,6 +83,93 @@ def tree_icon(key):
     return original_icon(TREE['icons'].get(key)) if key else QtGui.QIcon()
 
 
+def entry_of(item):
+    return item.data(0, ROLE) if item is not None else None
+
+
+def is_folder(entry):
+    return entry is not None and bool(entry.Group) and bool(entry.FolderId)
+
+
+def is_collection(entry):
+    """A static collection node (the OrderedDictionaryTreeContext root)."""
+    return entry is not None and bool(entry.Group) and not entry.FolderId and entry.Family not in ('Split sub parts', 'Original folder')
+
+
+def single_split_compound(entry):
+    item = getattr(entry, 'Item', None)
+    if item is not None and type(item).__name__ == 'CompoundGeometryPart':
+        name = item.GetSingleSplitSubPartName()
+        return str(name) if name is not None else None
+    return None
+
+
+class TreeRenameDelegate(QtWidgets.QStyledItemDelegate):
+    """Native label edit of CodersLabTreeView: IsNodeRenameable before, CheckNodeName and the rename event after."""
+
+    def __init__(self, owner):
+        super().__init__(owner.tree)
+        self.owner = owner
+
+    def createEditor(self, parent, option, index):
+        if not self.owner.can_rename(self.owner.tree.itemFromIndex(index)):
+            return None
+        return super().createEditor(parent, option, index)
+
+    def setEditorData(self, editor, index):
+        editor.setText(self.owner.rename_text(self.owner.tree.itemFromIndex(index)))
+
+    def setModelData(self, editor, model, index):
+        item = self.owner.tree.itemFromIndex(index)
+        entry, text = entry_of(item), editor.text()
+        # The rename rebuilds the tree, which waits until the editor has closed (BeginInvoke in the original).
+        QtCore.QTimer.singleShot(0, lambda: self.owner.guard(lambda: self.owner.rename_node(entry, text)))
+
+
+class TreeDragFilter(QtCore.QObject):
+    """cltv_DragEnter/DragOver/DragDrop on the tree viewport (drags start with the tree's own item drag)."""
+
+    def __init__(self, owner):
+        super().__init__(owner.tree)
+        self.owner = owner
+
+    def eventFilter(self, watched, event):
+        kind = event.type()
+        T = QtCore.QEvent.Type
+        if kind == T.Leave:
+            self.owner.tree_mouse_over(None)
+            return False
+        if kind not in (T.DragEnter, T.DragMove, T.Drop, T.DragLeave):
+            return False
+        owner = self.owner
+        if kind == T.DragLeave:
+            owner.tree_drop_hint(None)
+            return True
+        if event.source() is not owner.tree:
+            event.ignore()
+            return True
+        if kind == T.DragEnter:
+            owner.tree_drag = owner.drag_data(owner.tree.selectedItems())
+            if owner.tree_drag is None:
+                event.ignore()
+            else:
+                event.acceptProposedAction()
+            return True
+        target = owner.drop_target(event.position().toPoint()) if owner.tree_drag else None
+        owner.tree_drop_hint(target)
+        if target is None:
+            event.ignore()
+            return True
+        # Copy: the view must not remove the dragged rows; the tree is rebuilt from the model.
+        event.setDropAction(QtCore.Qt.DropAction.CopyAction)
+        event.accept()
+        if kind == T.Drop:
+            data, owner.tree_drag = owner.tree_drag, None
+            owner.tree_drop_hint(None)
+            QtCore.QTimer.singleShot(0, lambda: owner.guard(lambda: owner.drop(data, target)))
+        return True
+
+
 def select_specs():
     specs = {}
     for top in MENU['menus']:
@@ -126,6 +216,40 @@ class OriginalModelTreeWorkbench:
             pass
         self.tree.customContextMenuRequested.connect(lambda position: self.guard(lambda: self.original_tree_menu(position)))
         self.tree.itemDoubleClicked.connect(lambda item, column: self.guard(lambda: self.original_double_click(item)))
+        # In-place rename: a click on the selected node or F2 (CodersLabTreeView label edit).
+        try:
+            self.tree.itemChanged.disconnect()
+        except TypeError:
+            pass
+        self.tree_rename_delegate = TreeRenameDelegate(self)
+        self.tree.setItemDelegate(self.tree_rename_delegate)
+        self.tree.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.SelectedClicked |
+                                  QtWidgets.QAbstractItemView.EditTrigger.EditKeyPressed)
+        # Drag and drop of ordered-dictionary items, groups and steps.
+        self.tree_drag = None
+        self.tree_drop_item = None
+        self.tree.setDragEnabled(True)
+        self.tree.setAcceptDrops(True)
+        self.tree.setDropIndicatorShown(False)
+        self.tree.setDragDropMode(QtWidgets.QAbstractItemView.DragDropMode.DragDrop)
+        self.tree_drag_filter = TreeDragFilter(self)
+        self.tree.viewport().installEventFilter(self.tree_drag_filter)
+        # Mouse over highlight (MouseOverNodeChangedEvent -> timerMouseMove -> SelectEvent(items, true)).
+        self.tree.setMouseTracking(True)
+        self.tree_hover_item = None
+        self.tree_hover_timer = QtCore.QTimer(self)
+        self.tree_hover_timer.setSingleShot(True)
+        self.tree_hover_timer.setInterval(100)
+        self.tree_hover_timer.timeout.connect(lambda: self.guard(self.tree_hover_highlight))
+        self.tree.itemEntered.connect(self.tree_mouse_over)
+        # cltv_KeyDown: Space inverts hide/show or activate/deactivate, Enter creates or edits.
+        for key, callback in (('Space', self.invert_hide_show_or_activate), ('Return', self.tree_enter_key),
+                              ('Enter', self.tree_enter_key)):
+            shortcut = QtGui.QShortcut(QtGui.QKeySequence(key), self.tree)
+            shortcut.setContext(QtCore.Qt.ShortcutContext.WidgetShortcut)
+            shortcut.activated.connect(lambda cb=callback: self.guard(cb))
+            self.tree_shortcuts = getattr(self, 'tree_shortcuts', [])
+            self.tree_shortcuts.append(shortcut)
 
     def current_tree_view(self):
         return str(self.controller.CurrentView)
@@ -179,6 +303,8 @@ class OriginalModelTreeWorkbench:
             item.setToolTip(0, str(entry.Type or entry.Family))
             item.setIcon(0, tree_icon(icon or entry.Icon))
             item.setData(0, QtCore.Qt.ItemDataRole.UserRole + 2, icon or entry.Icon)
+            if self.can_rename_entry(entry):
+                item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsEditable)
             if getattr(entry, 'Gray', False):
                 item.setForeground(0, QtGui.QBrush(QtGui.QColor('gray')))
             if getattr(entry, 'Invalid', False):
@@ -200,6 +326,8 @@ class OriginalModelTreeWorkbench:
             if entry is None:
                 entry = Folder(node['text'])
             text = node['text']
+            if node['name'] == 'Model' and view == 'Model':
+                text = self.model_node_text(text)
             if family and entry.Group:
                 n = item_count(entry)
                 if n > 0:
@@ -293,12 +421,12 @@ class OriginalModelTreeWorkbench:
         result = []
         for item in items:
             entry = item.data(0, ROLE)
-            if entry is not None and entry.Group and entry.FolderId:
+            if is_folder(entry) or (entry is not None and entry.Family == 'Split sub parts'):
                 stack = [item.child(i) for i in range(item.childCount())]
                 while stack:
                     child = stack.pop(0)
                     e = child.data(0, ROLE)
-                    if e is not None and e.Group and e.FolderId:
+                    if is_folder(e):
                         stack += [child.child(i) for i in range(child.childCount())]
                     elif child not in result:
                         result.append(child)
@@ -331,8 +459,8 @@ class OriginalModelTreeWorkbench:
         visible['tsmiAddToPlot'] = visible['tsmiAddToNewPlot'] = has and F('AddToPlot') == n
         visible['tsmiCompoundPart'] = F('CompoundPart') == n and n > 1
         visible['tsmiSwapPartGeometries'] = F('SwapParts') == n and n == 2
-        # TryGetSplitCellsToGroup / TryGetBodiesToFuse are not ported yet: these items stay hidden.
-        visible['tsmiGroupSplitCells'] = visible['tsmiFuseBodies'] = False
+        visible['tsmiGroupSplitCells'] = self.split_cells_to_group(nodes) is not None
+        visible['tsmiFuseBodies'] = self.bodies_to_fuse(nodes) is not None
         visible['tsmiPreviewEdgeMesh'] = has and F('MeshingParameters') == n
         visible['tsmiCreateMesh'] = has and F('CreateMesh') == n
         visible['tsmiCopyGeometryToResults'] = visible['tsmiPreviewEdgeMesh']
@@ -372,18 +500,21 @@ class OriginalModelTreeWorkbench:
             enabled[key] = F('Run') == 1
         return visible, enabled
 
+    def can_organize(self, family, step):
+        from PrePoMaxX.UI import OriginalTreeLayout
+        return bool(OriginalTreeLayout.CanOrganize(self.controller, family, step))
+
     def can_create_group(self, items):
-        """CanCreateOrderedDictionaryGroup: items of one organisable collection (or its root node)."""
-        entries = [i.data(0, ROLE) for i in items]
+        """CanCreateOrderedDictionaryGroup: one collection or group node, or items of one organisable collection."""
+        entries = [entry_of(i) for i in items]
         if not entries or any(e is None or isinstance(e, Folder) for e in entries):
             return False
+        if len(entries) == 1 and (is_folder(entries[0]) or is_collection(entries[0])):
+            return self.can_organize(entries[0].Family, entries[0].Step)
+        if any(e.Group or self.compound_of(i) is not None for i, e in zip(items, entries)):
+            return False
         keys = {(e.Family, e.Step) for e in entries}
-        if len(keys) != 1:
-            return False
-        family, step = next(iter(keys))
-        if family not in SUFFIX or family.startswith('Result') or family in ('Mesh setup', 'Geometry parts'):
-            return False
-        return bool(self.authoring.CanOrganize(family, step))
+        return len(keys) == 1 and self.can_organize(*next(iter(keys)))
 
     def original_tree_menu(self, position):
         item = self.tree.itemAt(position)
@@ -480,24 +611,14 @@ class OriginalModelTreeWorkbench:
             self.plot_dock.show()
             return
         if key == 'tsmiCreateGroup':
-            text, ok = QtWidgets.QInputDialog.getText(self, 'Create group', 'Name')
-            if ok:
-                e = entries[0]
-                names = [] if e.Group else [str(x.Name) for x in entries if not x.Group]
-                self.authoring.CreateFolder(e.Family, e.Step, text, Array[String](names), e.FolderId if e.Group else None)
-                self.refresh()
-            return
+            return self.create_tree_group(items)
         if key == 'tsmiDelete':
-            folders = [i.data(0, ROLE) for i in items if i.data(0, ROLE).Group and i.data(0, ROLE).FolderId]
-            for folder in folders:
-                self.authoring.RemoveFolder(folder.Family, folder.Step, folder.FolderId)
-            for (family, step), names in grouped().items():
-                if family in ('Result field components', 'Result history fields', 'Result history components'):
-                    for e in [x for x in entries if x.Family == family]:
-                        self.remove_result_leaf(e)
-                    continue
-                target('Delete', family, names, step)
-            return self.refresh()
+            return self.delete_tree_nodes(items)
+        if key in ('tsmiGroupSplitCells', 'tsmiFuseBodies'):
+            found = self.split_cells_to_group(nodes) if key == 'tsmiGroupSplitCells' else self.bodies_to_fuse(nodes)
+            if found is not None:
+                (self.group_split_cells_and_select if key == 'tsmiGroupSplitCells' else self.fuse_bodies_and_select)(found[0], found[1:])
+            return
         if key in ('tsmiActivate', 'tsmiDeactivate'):
             for (family, step), names in grouped().items():
                 if family == 'Mesh setup':
@@ -546,3 +667,368 @@ class OriginalModelTreeWorkbench:
                 target(prefixes[key], family, names, step)
             return self.refresh()
         raise ValueError('Unmapped original tree action ' + key)
+
+    # ---------------------------------------------------------------- groups
+    def create_tree_group(self, items):
+        """tsmiCreateGroup_Click: the group gets the next free name (GetNextGroupName/GetNextPartGroupName)."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        if not self.can_create_group(items):
+            return
+        entries = [entry_of(i) for i in items]
+        e = entries[0]
+        single = len(entries) == 1 and (is_folder(e) or is_collection(e))
+        names = [] if single else [str(x.Name) for x in entries]
+        OriginalTreeLayout.CreateGroup(self.controller, e.Family, e.Step, single, e.FolderId if single else None,
+                                       Array[String](names))
+        self.refresh()
+
+    def delete_tree_nodes(self, items):
+        """tsmiDelete_Click: only groups -> RemoveSelectedGroups (their items stay); otherwise the selected items
+        (split sub parts as their cells) are deleted and the selected groups removed afterwards."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        entries = [entry_of(i) for i in items]
+        folders = [e for e in entries if is_folder(e)]
+
+        def remove_groups():
+            if folders and len({(f.Family, f.Step) for f in folders}) == 1:
+                OriginalTreeLayout.RemoveGroups(self.controller, folders[0].Family, folders[0].Step,
+                                                Array[String]([str(f.FolderId) for f in folders]))
+        if folders and len(folders) == len(entries):
+            remove_groups()
+            return self.refresh()
+        direct = []
+        for item, e in zip(items, entries):
+            if e is not None and e.Family == 'Split sub parts':
+                direct += [item.child(i) for i in range(item.childCount())]
+            elif e is not None and not e.Group:
+                direct.append(item)
+        groups = {}
+        for e in [entry_of(i) for i in direct]:
+            if e is not None and not e.Group:
+                groups.setdefault((e.Family, e.Step), []).append(e)
+        for (family, step), group in groups.items():
+            if family in ('Result field components', 'Result history fields', 'Result history components'):
+                for e in group:
+                    self.remove_result_leaf(e)
+                continue
+            spec = self.tree_specs.get('Delete' + SUFFIX.get(family, ''))
+            if spec is None:
+                raise ValueError('The original tree action is not available for ' + family + '.')
+            self.apply_target(spec, [str(e.Name) for e in group], step)
+        if folders:
+            remove_groups()
+        self.refresh()
+
+    # ------------------------------------------------------- compound cells
+    def compound_of(self, item):
+        """IsCompoundGeometrySubPartNode: the compound a node hangs under, directly or through a split sub part."""
+        parent = item.parent() if item is not None else None
+        parent_entry = entry_of(parent)
+        if parent_entry is None:
+            return None
+        if parent_entry.Family == 'Split sub parts':
+            return str(parent_entry.Step)
+        if type(getattr(parent_entry, 'Item', None)).__name__ == 'CompoundGeometryPart':
+            return str(parent_entry.Name)
+        return None
+
+    def _compound_arguments(self, nodes):
+        compounds = [self.compound_of(n) for n in nodes]
+        cells = [str(entry_of(n).Name) if entry_of(n) is not None else '' for n in nodes]
+        return Array[String](compounds), Array[String](cells)
+
+    def split_cells_to_group(self, nodes):
+        from PrePoMaxX.UI import OriginalModelTree
+        if self.current_tree_view() != 'Geometry' or not nodes:
+            return None
+        found = OriginalModelTree.SplitCellsToGroup(self.controller, *self._compound_arguments(nodes))
+        return [str(x) for x in found] if found is not None else None
+
+    def bodies_to_fuse(self, nodes):
+        from PrePoMaxX.UI import OriginalModelTree
+        if self.current_tree_view() != 'Geometry' or not nodes:
+            return None
+        single = single_split_compound(entry_of(nodes[0])) if len(nodes) == 1 else None
+        single = str(entry_of(nodes[0]).Name) if single else None
+        found = OriginalModelTree.BodiesToFuse(self.controller, single, *self._compound_arguments(nodes))
+        return [str(x) for x in found] if found is not None else None
+
+    def select_tree_node(self, predicate, clear=True):
+        if clear:
+            self.tree.clearSelection()
+        for item in self.walk_tree():
+            if predicate(entry_of(item)):
+                self.tree.clearSelection()
+                item.setSelected(True)
+                parent = item.parent()
+                while parent is not None:
+                    parent.setExpanded(True)
+                    parent = parent.parent()
+                self.tree.scrollToItem(item)
+                return item
+        return None
+
+    def select_split_sub_part(self, compound, sub_part):
+        """ModelTree.SelectSplitSubPart: the sub part node, or the compound when it reads as that part."""
+        def sub_part_node(e):
+            return e is not None and e.Family == 'Split sub parts' and str(e.Step) == compound and str(e.Name) == sub_part
+
+        def cell_node(e):
+            return (e is not None and not e.Group and e.Family == 'Geometry parts' and str(e.Name) == sub_part and
+                    type(getattr(e, 'Item', None)).__name__ == 'GeometryPart')
+
+        def compound_node(e):
+            return e is not None and str(e.Name) == compound and single_split_compound(e) == sub_part
+        for match in (sub_part_node, cell_node, compound_node):
+            if self.select_tree_node(match, clear=False) is not None:
+                return True
+        return False
+
+    def group_split_cells_and_select(self, compound, cells):
+        """FrmMain.GroupSplitCellsAndSelect."""
+        sub_part = self.controller.GroupSplitCellsCommand(compound, Array[String](cells), None)
+        self.refresh()
+        self.select_split_sub_part(compound, str(sub_part))
+
+    def fuse_bodies_and_select(self, compound, cells):
+        """FrmMain.FuseBodiesAndSelect: the fused cell's sub part, or the fused part itself."""
+        c = self.controller
+        fused = c.FuseBodiesCommand(compound, Array[String](cells))
+        self.refresh()
+        sub_part = c.GetSplitSubPartNameOfCell(fused) if fused is not None else None
+        if sub_part is not None:
+            self.select_split_sub_part(str(c.GetCompoundPartNameOfBody(fused)), str(sub_part))
+        elif fused is not None:
+            self.select_tree_node(lambda e: e is not None and not e.Group and e.Family == 'Geometry parts' and str(e.Name) == str(fused))
+
+    # ---------------------------------------------------------------- rename
+    def can_rename_entry(self, entry):
+        """ModelTree.CanRename."""
+        from PrePoMaxX.UI import OriginalModelTree
+        if entry is None or isinstance(entry, Folder):
+            return False
+        if is_folder(entry) or entry.Family == 'Split sub parts':
+            return True
+        item = getattr(entry, 'Item', None)
+        return item is not None and not entry.Group and bool(OriginalModelTree.CanRename(item))
+
+    def can_rename(self, item):
+        if item is None or len(self.tree.selectedItems()) > 1:
+            return False
+        if getattr(self, 'operation_task', None) is not None or self.active_editor is not None:
+            return False
+        return self.can_rename_entry(entry_of(item))
+
+    def rename_text(self, item):
+        entry = entry_of(item)
+        return single_split_compound(entry) or str(entry.Name)
+
+    def rename_selected(self):
+        items = self.tree.selectedItems()
+        if len(items) == 1 and self.can_rename(items[0]):
+            self.tree.editItem(items[0], 0)
+
+    def rename_tree_item(self, item, column):
+        """Superseded by TreeRenameDelegate (original label edit)."""
+
+    def rename_node(self, entry, text):
+        """CodersLabTreeView.OnAfterLabelEdit + ModelTree.CheckNodeName + cltv_AfterLabelEdit."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        new_name = text.strip()
+        if new_name == self.rename_text_of(entry):
+            return
+        if not new_name:
+            raise ValueError('Name cannot be an empty string.')
+        c = self.controller
+        if is_folder(entry):
+            if OriginalTreeLayout.CheckGroupName(c, entry.Family, entry.Step, entry.FolderId, new_name):
+                OriginalTreeLayout.RenameGroup(c, entry.Family, entry.Step, entry.FolderId, new_name)
+        elif entry.Family == 'Split sub parts':
+            c.RenameSplitSubPartCommand(str(entry.Step), str(entry.Name), new_name)
+        elif single_split_compound(entry):
+            c.RenameSplitSubPartCommand(str(entry.Name), single_split_compound(entry), new_name)
+        elif c.CheckItemName(entry.Item, new_name, entry.Step):
+            c.RenameCommand(entry.Item, new_name, entry.Step)
+        self.refresh()
+
+    def rename_text_of(self, entry):
+        return single_split_compound(entry) or str(entry.Name)
+
+    # ---------------------------------------------------------- drag & drop
+    def drag_data(self, items):
+        """cltv_ItemDrag: steps, one group, or items of one ordered-dictionary collection."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        entries = [entry_of(i) for i in items]
+        if not entries or any(e is None for e in entries) or any(self.compound_of(i) is not None for i in items):
+            return None
+        if all(e.Family == 'Steps' and not e.Group for e in entries):
+            return {'steps': [str(e.Name) for e in entries]}
+        if len(entries) == 1 and is_folder(entries[0]):
+            e = entries[0]
+            return {'family': e.Family, 'step': e.Step, 'group': str(e.FolderId), 'names': []} \
+                if self.can_organize(e.Family, e.Step) else None
+        if any(e.Group for e in entries) or len({(e.Family, e.Step) for e in entries}) != 1:
+            return None
+        e = entries[0]
+        if not self.can_organize(e.Family, e.Step):
+            return None
+        names = OriginalTreeLayout.ItemNames(self.controller, e.Family, e.Step, Array[String]([str(x.Name) for x in entries]))
+        return {'family': e.Family, 'step': e.Step, 'group': None, 'names': [str(n) for n in names]}
+
+    def drop_target(self, point):
+        """TryGetStepDropTarget / TryGetOrderedDictionaryDropTarget for the row under the pointer."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        item = self.tree.itemAt(point)
+        e = entry_of(item)
+        data = self.tree_drag
+        if e is None or isinstance(e, Folder):
+            return None
+        rect = self.tree.visualItemRect(item)
+        fraction = (point.y() - rect.top()) / max(1, rect.height())
+        if 'steps' in data:
+            if e.Family != 'Steps' or is_folder(e):
+                return None
+            index = OriginalTreeLayout.StepDropIndex(self.controller, Array[String](data['steps']),
+                                                     None if e.Group else str(e.Name), fraction)
+            return (item, index) if index >= 0 else None
+        if (e.Family, e.Step) != (data['family'], data['step']):
+            return None
+        # Compound geometry parts are fixed presentation subtrees.
+        if e.Family == 'Geometry parts' and (type(getattr(e, 'Item', None)).__name__ == 'CompoundGeometryPart'
+                                             or self.compound_of(item) is not None):
+            return None
+        kind, key = ('Group', str(e.FolderId)) if is_folder(e) else ('Root', None) if e.Group else ('Item', str(e.Name))
+        found = OriginalTreeLayout.DropTarget(self.controller, data['family'], data['step'], Array[String](data['names']),
+                                              data['group'], kind, key, fraction)
+        return (item, found) if found is not None else None
+
+    def tree_drop_hint(self, target):
+        """ShowDropIndicator / HideDropIndicator: the target row is marked while dragging."""
+        previous, self.tree_drop_item = self.tree_drop_item, None
+        try:
+            if previous is not None:
+                previous.setBackground(0, QtGui.QBrush())
+        except RuntimeError:
+            pass
+        if target is not None:
+            self.tree_drop_item = target[0]
+            self.tree_drop_item.setBackground(0, QtGui.QBrush(self.palette().highlight().color().lighter(160)))
+
+    def drop(self, data, target):
+        """cltv_DragDrop: MoveStepsCommand or the ordered-dictionary layout change."""
+        from PrePoMaxX.UI import OriginalTreeLayout
+        if 'steps' in data:
+            self.controller.MoveStepsCommand(Array[String](data['steps']), target[1])
+        else:
+            OriginalTreeLayout.Drop(self.controller, data['family'], data['step'], Array[String](data['names']),
+                                    data['group'], target[1])
+        self.refresh()
+
+    # ------------------------------------------------------------ mouse over
+    def tree_mouse_over(self, item):
+        if item is self.tree_hover_item:
+            return
+        self.tree_hover_item = item
+        self.tree_hover_timer.start()
+
+    def node_items(self, item):
+        """The NamedClass items of a node (a split sub part stands for its cells)."""
+        e = entry_of(item)
+        if e is None:
+            return []
+        if e.Family == 'Split sub parts':
+            return [entry_of(item.child(i)).Item for i in range(item.childCount())
+                    if entry_of(item.child(i)) is not None and entry_of(item.child(i)).Item is not None]
+        return [e.Item] if getattr(e, 'Item', None) is not None else []
+
+    def tree_hover_highlight(self):
+        """timerMouseMove_Tick: selected items plus the item under the mouse, highlighted as mouse over."""
+        if getattr(self, 'operation_task', None) is not None or self.active_editor is not None:
+            return
+        from System import Object
+        items = []
+        for selected in self.tree.selectedItems():
+            items += self.node_items(selected)
+        try:
+            hover = self.tree_hover_item
+            if hover is not None:
+                items += self.node_items(hover)
+        except RuntimeError:
+            self.tree_hover_item = None
+        self.controller.Highlight3DObjects(Array[Object](items), True)
+        self.scene.show_selection(self.session.Presentation.SelectionActors)
+        self.render()
+
+    def tree_selection_changed(self):
+        """cltv_SelectionsChanged: a single field data node selects that field; otherwise the selected items
+        (split sub parts as their cells) are highlighted."""
+        if getattr(self, 'operation_task', None) is not None or self.active_editor is not None:
+            return
+        from System import Object
+        selected = self.tree.selectedItems()
+        if len(selected) == 1 and entry_of(selected[0]) is not None and entry_of(selected[0]).Family == 'Result field components':
+            self.controller.Highlight3DObjects(None)
+            return self.open_result_leaf(entry_of(selected[0]))
+        items = []
+        for item in selected:
+            items += self.node_items(item)
+        if items:
+            self.controller.Highlight3DObjects(Array[Object](items))
+        else:
+            self.controller.ClearAllSelection()
+        self.scene.show_selection(self.session.Presentation.SelectionActors)
+        self.render()
+
+    # -------------------------------------------------------------- keyboard
+    def remove_selected(self):
+        """cltv_KeyDown Delete -> tsmiDelete_Click (when the menu item would be offered)."""
+        items = self.tree.selectedItems()
+        if items and self.prepare_tree_menu(items)[0].get('tsmiDelete'):
+            self.tree_action('tsmiDelete', items)
+
+    def tree_enter_key(self):
+        """cltv_KeyDown Enter: a single static node creates, otherwise edit."""
+        items = self.tree.selectedItems()
+        if not items:
+            return
+        visible, enabled = self.prepare_tree_menu(items)
+        if len(items) == 1 and is_collection(entry_of(items[0])) and visible.get('tsmiCreate'):
+            return self.tree_action('tsmiCreate', items)
+        if visible.get('tsmiEdit') and enabled.get('tsmiEdit'):
+            self.tree_action('tsmiEdit', items)
+
+    def invert_hide_show_or_activate(self):
+        """InvertHideShowOrActivateDeactivate: hideable items swap visibility, the others activity."""
+        from PrePoMaxX.UI import OriginalModelTree
+        groups = {'tsmiHide': [], 'tsmiShow': [], 'tsmiDeactivate': [], 'tsmiActivate': []}
+        for node in self.action_items(self.tree.selectedItems()):
+            e = entry_of(node)
+            item = getattr(e, 'Item', None)
+            if item is None:
+                continue
+            if OriginalModelTree.CanHide(item):
+                groups['tsmiHide' if item.Visible else 'tsmiShow'].append(node)
+            elif 'Activate' in self.node_fields(node) or 'Deactivate' in self.node_fields(node):
+                groups['tsmiDeactivate' if item.Active else 'tsmiActivate'].append(node)
+        actions = [(key, nodes) for key, nodes in groups.items() if nodes]
+        # Each action rebuilds the tree, so the nodes are resolved by entry before the first one.
+        plans = [(key, [entry_of(n) for n in nodes]) for key, nodes in actions]
+        for key, entries in plans:
+            current = [i for i in self.walk_tree() if entry_of(i) is not None and any(
+                not entry_of(i).Group and entry_of(i).Family == x.Family and entry_of(i).Step == x.Step and
+                str(entry_of(i).Name) == str(x.Name) for x in entries)]
+            if current:
+                self.tree_action(key, current)
+
+    # ------------------------------------------------------------ Model node
+    def model_node_text(self, text):
+        """UpdateNumberOfKeywords: '(User Keywords: n; Modified Keywords: m)'."""
+        model = self.controller.Model
+        counts = []
+        if model is not None and model.CalculixUserKeywords is not None and model.CalculixUserKeywords.Count > 0:
+            counts.append('User Keywords: ' + str(model.CalculixUserKeywords.Count))
+        if model is not None and model.CalculixKeywordOverrides is not None:
+            modified = model.GetNumberOfUnsuppressedKeywordOverrides()
+            if modified > 0:
+                counts.append('Modified Keywords: ' + str(modified))
+        return text + (' (' + '; '.join(counts) + ')' if counts else '')

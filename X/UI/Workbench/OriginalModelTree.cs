@@ -185,6 +185,71 @@ public static class OriginalModelTree
         _ => image,
     };
 
+    /// <summary>CanRename for an item node (group and split sub part nodes are renameable as well).</summary>
+    public static bool CanRename(NamedClass item) =>
+        item is BasePart || item is MeshSetupItem || item is FeNodeSet || item is FeElementSet || item is FeSurface ||
+        item is FeReferencePoint || item is CoordinateSystem || item is Material || item is Section || item is Constraint ||
+        item is SurfaceInteraction || item is ContactPair || item is Distribution || item is Amplitude ||
+        item is InitialCondition || item is Step || item is HistoryOutput || item is FieldOutput ||
+        item is BoundaryCondition || item is Load || item is DefinedField || item is AnalysisJob ||
+        item is ResultFieldOutput || item is ResultHistoryOutput;
+
+    /// <summary>TryGetCompoundSubParts. compoundNames[i] is the compound the i-th action node hangs under
+    /// (directly or through a split sub part node), null when it is not a compound sub part node;
+    /// singleSplitCompound is set when the only action node is a compound shown as the part it was cut from.</summary>
+    static bool CompoundSubParts(Controller controller, string singleSplitCompound, string[] compoundNames, string[] cellNames,
+                                 out CompoundGeometryPart compound, out string[] cells)
+    {
+        compound = null;
+        cells = null;
+        if (singleSplitCompound != null)
+        {
+            compound = (CompoundGeometryPart)controller.GetGeometryPart(singleSplitCompound);
+            cells = compound.SubPartNames.ToArray();
+            return true;
+        }
+        if (cellNames.Length == 0) return false;
+        var names = new List<string>();
+        for (int i = 0; i < cellNames.Length; i++)
+        {
+            if (compoundNames[i] == null || controller.GetGeometryPart(cellNames[i]) == null) return false;
+            if (controller.GetGeometryPart(compoundNames[i]) is not CompoundGeometryPart nodeCompound) return false;
+            if (compound == null) compound = nodeCompound;
+            else if (compound != nodeCompound) return false;
+            names.Add(cellNames[i]);
+        }
+        cells = names.ToArray();
+        return true;
+    }
+
+    /// <summary>TryGetBodiesToFuse: two or more sub parts of one compound. Returns [compound, cells...] or null.</summary>
+    public static string[] BodiesToFuse(Controller controller, string singleSplitCompound, string[] compoundNames, string[] cellNames)
+    {
+        if (!CompoundSubParts(controller, singleSplitCompound, compoundNames, cellNames, out var compound, out var cells) || cells.Length < 2)
+            return null;
+        return new[] { compound.Name }.Concat(cells).ToArray();
+    }
+
+    /// <summary>TryGetSplitCellsToGroup: cells of one compound that are not already the whole of one sub part.
+    /// Returns [compound, cells...] or null.</summary>
+    public static string[] SplitCellsToGroup(Controller controller, string[] compoundNames, string[] cellNames)
+    {
+        if (cellNames.Length == 0 || !CompoundSubParts(controller, null, compoundNames, cellNames, out var compound, out var names))
+            return null;
+        if (!compound.HasCellSubParts)
+        {
+            if (names.Distinct().Count() < 2) return null;
+        }
+        else
+        {
+            var subParts = new HashSet<string>();
+            foreach (string name in names)
+                subParts.Add(compound.CellSubPartNames[Array.IndexOf(compound.SubPartNames, name)]);
+            if (subParts.Count == 1 && compound.GetCellNames(subParts.First()).Length == names.Length) return null;
+        }
+        return new[] { compound.Name }.Concat(names).ToArray();
+    }
+
     /// <summary>Annotates an item entry (status, menu fields).</summary>
     public static ModelTreeEntry Annotate(ModelTreeEntry entry, NamedClass item, string view, Controller controller, bool subPart = false)
     {

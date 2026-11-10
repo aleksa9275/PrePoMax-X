@@ -16,11 +16,18 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   original icons, and the ModelTree's Geometry / FE Model / Results tabs with the
   original layout, counts, node images, search box and context-menu rules, generated
   from the original sources. [C7 report](reports/phase-c7-toolbars-tree.md).
+- **C8 tree remainder and model/mesh evidence.** Tree rename, drag and drop,
+  original groups, Group Cells / Fuse Bodies, keys, mouse-over highlight, keyword
+  counts and the recovered Parts icon; output-panel links; part highlighting in the
+  headless host. Executed UI evidence for 18 model/mesh entries (element classes,
+  mass/spring/gap elements, InvertedElements, MassSection, Damping).
+  [C8 report](reports/phase-c8-tree-elements.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Full UI parity is not accepted.** Forms 0/72 accepted; tree rename, drag and
-  drop and Group Cells/Fuse Bodies tree items are not yet ported. Inventory: model/mesh 108 AB / 88 C; Commands
+- **Full UI parity is not accepted.** Forms 0/72 accepted. Inventory: model/mesh
+  108 AB / 106 C (beam element classes need a CAD wire/shell or beam-results
+  fixture); Commands
   237 A / 236 B / 230 C (six are compatibility-only with no original UI path);
   V remains zero. [Inventory](PARITY_INVENTORY.md).
 - B011's analytical stress diagnostic remains **failed** (199.99200439453125 vs
@@ -41,13 +48,14 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C5 | Application/automation and UI audit | application tools implemented; full parity audit findings remain open |
 | C6 | Original main menu, viewport defects, size limits | implemented; Mac ARM64 checks pass |
 | C7 | Original tool strips and three-tab model tree | implemented; Mac ARM64 checks pass |
+| C8 | Tree remainder, output links, model/mesh UI evidence | implemented; Mac ARM64 checks pass |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-Executed UI evidence for MassSection, Damping and the element classes
-(REMAINING_WORK §1.2), then the per-form behavioural comparisons of the C5 audit, then packaging the X/UI app.
+The per-form behavioural comparisons of the C5 audit (REMAINING_WORK §1.3), beam
+element evidence from a CAD wire/shell fixture, then packaging the X/UI app.
 After parity: the D061 correctness/warning sweep.
 
 ## Environment

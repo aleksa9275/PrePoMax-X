@@ -2,7 +2,8 @@
 """Extract the original UserControls/ModelTree layout: the three tabs, each tree's
 static nodes (name, text, image), the step sub-nodes added by AddStep, the node
 names of the ModelTree fields, the tree context menu (order, text, image,
-shortcut) and the ImageList icon keys with their icon files.
+shortcut) and the ImageList icon keys with their icon files. Icons that exist only inside the
+ilIcons ImageStream (BasePart.ico) are decoded to X/UI/ImageList/*.png.
 
 Output: X/UI/original_model_tree.json, consumed by model_tree.py. `--check` fails
 when the checked-in file no longer matches the original sources.
@@ -10,10 +11,13 @@ when the checked-in file no longer matches the original sources.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import re
+import struct
 import sys
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,6 +26,44 @@ SOURCE = ROOT / "UserControls/ModelTree.cs"
 RESOURCES = ROOT / "UserControls/Properties/Resources.resx"
 OUT = Path(__file__).with_name("original_model_tree.json")
 ICON_FOLDERS = [ROOT / "UserControls/Resources", ROOT / "PrePoMax/Icons"]
+RESX = ROOT / "UserControls/ModelTree.resx"
+# Icons that exist only inside the ilIcons ImageListStreamer of ModelTree.resx.
+IMAGE_LIST_DIR = Path(__file__).with_name("ImageList")
+
+
+def image_list_png(index: int) -> bytes:
+    """Decode image `index` of the ilIcons ImageStream: the BinaryFormatter byte array holds an
+    'MSFt' run-length stream of an ImageList_Write image (ILHEAD + 32-bit BMP, 4 images per row)."""
+    text = RESX.read_text(encoding="utf-8-sig")
+    value = re.search(r'<data name="ilIcons\.ImageStream"[^>]*>\s*<value>(.*?)</value>', text, re.S)[1]
+    blob = base64.b64decode("".join(value.split()))
+    start = blob.find(b"MSFt")
+    length = struct.unpack("<i", blob[start - 5:start - 1])[0]
+    runs = blob[start + 4:start + length]
+    stream = bytearray()
+    for k in range(0, len(runs) - 1, 2):
+        stream += bytes([runs[k + 1]]) * runs[k]
+    magic, _, count, _, _, cx, cy = struct.unpack("<2sHhhhhh", stream[:14])
+    bmp = stream[28:]
+    width, height = struct.unpack("<ii", bmp[18:26])
+    bits, offset = struct.unpack("<H", bmp[28:30])[0], struct.unpack("<I", bmp[10:14])[0]
+    if magic != b"IL" or bits != 32 or index >= count:
+        raise ValueError("unsupported ImageList stream")
+    per_row = width // cx
+    x0, y0 = (index % per_row) * cx, (index // per_row) * cy
+    rows = []
+    for y in range(cy):
+        row = bytearray(b"\x00")
+        for x in range(cx):
+            o = offset + ((height - 1 - (y0 + y)) * width + x0 + x) * 4
+            b, g, r, a = bmp[o:o + 4]
+            row += bytes([r, g, b, a])
+        rows.append(bytes(row))
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", cx, cy, 8, 6, 0, 0, 0)) +
+            chunk(b"IDAT", zlib.compress(b"".join(rows), 9)) + chunk(b"IEND", b""))
 
 
 def icon_file(key: str) -> str | None:
@@ -98,28 +140,41 @@ def extract() -> dict:
             entry["shortcut"] = keys[item]
         menu.append(entry)
     image_keys = re.findall(r"this\.ilIcons\.Images\.SetKeyName\(\d+, \"([^\"]+)\"\);", designer)
+    icons_by_key = {k: icon_file(k) for k in image_keys}
+    extracted = {}
+    for index, key in enumerate(image_keys):
+        if icons_by_key[key] is None:
+            target = IMAGE_LIST_DIR / (Path(key).stem + ".png")
+            extracted[target] = image_list_png(index)
+            icons_by_key[key] = target.relative_to(ROOT).as_posix()
     return {
-        "source": {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in (DESIGNER, SOURCE, RESOURCES)},
+        "source": {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in (DESIGNER, SOURCE, RESOURCES, RESX)},
         "tabs": tabs,
         "trees": trees,
         "names": names,
         "stepNodes": step_nodes,
         "contextMenu": menu,
-        "icons": {k: icon_file(k) for k in image_keys},
-    }
+        "icons": icons_by_key,
+    }, extracted
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    content = json.dumps(extract(), indent=1, ensure_ascii=False) + "\n"
+    data, extracted = extract()
+    content = json.dumps(data, indent=1, ensure_ascii=False) + "\n"
     if args.check:
-        if not OUT.exists() or OUT.read_text(encoding="utf-8") != content:
+        stale = not OUT.exists() or OUT.read_text(encoding="utf-8") != content
+        stale |= any(not path.exists() or path.read_bytes() != png for path, png in extracted.items())
+        if stale:
             print("original_model_tree.json is stale; run X/UI/generate-model-tree.py", file=sys.stderr)
             return 1
         return 0
     OUT.write_text(content, encoding="utf-8")
+    for path, png in extracted.items():
+        path.parent.mkdir(exist_ok=True)
+        path.write_bytes(png)
     return 0
 
 

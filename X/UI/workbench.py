@@ -31,6 +31,7 @@ parser.add_argument('--results-probe',type=Path)
 parser.add_argument('--application-service-probe',type=Path)
 parser.add_argument('--application-probe',type=Path)
 parser.add_argument('--menu-probe',type=Path)
+parser.add_argument('--elements-probe',type=Path)
 parser.add_argument('--menu-model',type=Path)
 parser.add_argument('--menu-results',type=Path)
 parser.add_argument('--settings',type=Path)
@@ -83,8 +84,9 @@ else:
     from main_menu import MainMenuWorkbench
     from main_toolbars import OriginalToolbarsWorkbench
     from model_tree import OriginalModelTreeWorkbench
+    from output_links import OutputLinksWorkbench
 
-    class Workbench(MainMenuWorkbench,OriginalToolbarsWorkbench,OriginalModelTreeWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
+    class Workbench(MainMenuWorkbench,OriginalToolbarsWorkbench,OriginalModelTreeWorkbench,OutputLinksWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -171,6 +173,7 @@ else:
             self.build_original_menus()
             self.build_original_toolbars()
             self.build_original_tree()
+            self.build_output_links()
             if self.preferences_path and self.preferences_path.is_file():self.application.LoadPreferences(str(self.preferences_path));self.apply_preferences()
             self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
             session.Presentation.Screenshot=self.screenshot_delegate
@@ -212,7 +215,7 @@ else:
 
         def ui_present(self,name,arguments):
             if name in ['WriteDataToOutput','WriteErrorToOutput']:
-                self.output.appendPlainText(str(arguments[0]))
+                self.write_output(arguments[0],name=='WriteErrorToOutput')
             camera = self.renderer.GetActiveCamera()
             if name == 'SetViewParameters':
                 camera.SetPosition(*arguments[1])
@@ -251,7 +254,7 @@ else:
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe or args.elements_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -611,7 +614,7 @@ else:
     # RuntimeInitialization.SetCultureAndLanguage: invariant culture without group separator.
     invariant=QtCore.QLocale.c();invariant.setNumberOptions(QtCore.QLocale.NumberOption.OmitGroupSeparator);QtCore.QLocale.setDefault(invariant)
     splash=None
-    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe,args.menu_probe]):
+    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe,args.menu_probe,args.elements_probe]):
         original_splash=Path(ui_directory).parents[1]/'PrePoMax/Resources/Splash_01.png'
         if original_splash.is_file():
             splash=QtWidgets.QSplashScreen(QtGui.QPixmap(str(original_splash)));splash.showMessage('Loading PrePoMax-X…',QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignHCenter,QtGui.QColor('black'));splash.show();application.processEvents()
@@ -637,6 +640,9 @@ else:
     if args.application_probe:
         from application_gui_probe import start
         start(application,window,args.application_probe,args.check_3mf)
+    if args.elements_probe:
+        from elements_gui_probe import start
+        start(application,window,args.elements_probe)
     if args.menu_probe:
         from menu_gui_probe import start
         start(application,window,args.menu_probe,str(args.menu_model.resolve()),str(args.menu_results.resolve()) if args.menu_results else None)

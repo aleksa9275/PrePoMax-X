@@ -76,16 +76,17 @@ public sealed class ResultsSession(HeadlessSession session)
   {
    var result=controller.CurrentResult;var mesh=result?.Mesh;const string view=OriginalModelTree.Results;
    ModelTreeEntry Item(string family,NamedClass item,string step=null,ModelTreeEntry[] children=null,string name=null)=>OriginalModelTree.Annotate(new ModelTreeEntry{Family=family,Step=step,Name=name??item.Name,Type=item.GetType().Name,Children=children??[]},item,view,controller);
+   ModelTreeEntry[] Layout(string family,IEnumerable<NamedClass> items)=>OriginalTreeLayout.Build(controller,family,null,items,i=>Item(family,i));
    ModelTreeEntry Group(string family,string name,IEnumerable<ModelTreeEntry> children)=>new(){Family=family,Name=name,Group=true,Children=children.ToArray()};
    var fieldOutputs=result==null?[]:controller.GetResultFieldOutputs();
    var historyOutputs=result==null?[]:controller.GetResultHistoryOutputs();
    return [
-    Group("Result reference points","Reference points",mesh==null?[]:mesh.ReferencePoints.Values.Where(i=>!i.Internal).Select(i=>Item("Result reference points",i))),
-    Group("Result coordinate systems","Coordinate systems",mesh==null?[]:mesh.CoordinateSystems.Values.Where(i=>!i.Internal).Select(i=>Item("Result coordinate systems",i))),
-    Group("Result parts","Parts",mesh==null?[]:mesh.Parts.Values.Where(i=>!i.Internal).Select(p=>Item("Result parts",p))),
-    Group("Result node sets","Node sets",mesh==null?[]:mesh.NodeSets.Values.Where(i=>!i.Internal).Select(i=>Item("Result node sets",i))),
-    Group("Result element sets","Element sets",mesh==null?[]:mesh.ElementSets.Values.Where(i=>!i.Internal).Select(i=>Item("Result element sets",i))),
-    Group("Result surfaces","Surfaces",mesh==null?[]:mesh.Surfaces.Values.Where(i=>!i.Internal).Select(i=>Item("Result surfaces",i))),
+    Group("Result reference points","Reference points",mesh==null?[]:Layout("Result reference points",mesh.ReferencePoints.Values.Where(i=>!i.Internal))),
+    Group("Result coordinate systems","Coordinate systems",mesh==null?[]:Layout("Result coordinate systems",mesh.CoordinateSystems.Values.Where(i=>!i.Internal))),
+    Group("Result parts","Parts",mesh==null?[]:Layout("Result parts",mesh.Parts.Values.Where(i=>!i.Internal))),
+    Group("Result node sets","Node sets",mesh==null?[]:Layout("Result node sets",mesh.NodeSets.Values.Where(i=>!i.Internal))),
+    Group("Result element sets","Element sets",mesh==null?[]:Layout("Result element sets",mesh.ElementSets.Values.Where(i=>!i.Internal))),
+    Group("Result surfaces","Surfaces",mesh==null?[]:Layout("Result surfaces",mesh.Surfaces.Values.Where(i=>!i.Internal))),
     // CreateOverwriteFieldOutputNodes: Field (or the ResultFieldOutput) with FieldData components.
     Group("Result fields","Field outputs",result==null?[]:controller.GetResultFieldOutputNames().Select(n=>Item("Result fields",(NamedClass)fieldOutputs.FirstOrDefault(f=>f.Name==n)??new Field(n),null,
       Components(n).Select(comp=>Item("Result field components",new FieldData(comp),n)).ToArray()))),
@@ -96,5 +97,5 @@ public sealed class ResultsSession(HeadlessSession session)
    ];
   }
  }
- public ModelTreeEntry Jobs=>new(){Family="Jobs",Name="Analyses",Group=true,Children=controller.GetAllJobs().Select(j=>OriginalModelTree.Annotate(new ModelTreeEntry{Family="Jobs",Name=j.Name,Type=j.JobStatus.ToString()},j,OriginalModelTree.Model,controller)).ToArray()};
+ public ModelTreeEntry Jobs=>new(){Family="Jobs",Name="Analyses",Group=true,Children=OriginalTreeLayout.Build(controller,"Jobs",null,controller.GetAllJobs(),i=>OriginalModelTree.Annotate(new ModelTreeEntry{Family="Jobs",Name=i.Name,Type=((AnalysisJob)i).JobStatus.ToString()},i,OriginalModelTree.Model,controller))};
 }

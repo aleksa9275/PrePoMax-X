@@ -299,6 +299,104 @@ def start(app, w, output, model, results):
             w.tree_tabs.setCurrentIndex(1); app.processEvents()
             check('FE Model tab switches back', str(c.CurrentView) == 'Model' and w.tree_tabs.currentIndex() == 1)
 
+            # Tree remainder: icon, keyword counts, rename, groups, drag and drop, keys and mouse over.
+            from System import Array, Int32, String
+            from FileInOut.Output.Calculix import CalculixUserKeyword
+            from CaeGlobals import OrderedDictionary
+            check('Parts node BasePart icon from the ilIcons stream', not find('Parts', find('Mesh')).icon(0).isNull()
+                  and model_tree.TREE['icons']['BasePart.ico'] == 'X/UI/ImageList/BasePart.png')
+            keywords = OrderedDictionary[Array[Int32], CalculixUserKeyword]('User CalculiX keywords')
+            keywords.Add(Array[Int32]([0]), CalculixUserKeyword('** probe keyword'))
+            c.SetCalculixUserKeywordsCommand(keywords); w.refresh()
+            check('Model node user keyword count (UpdateNumberOfKeywords)', w.tree.topLevelItem(0).text(0) == 'Model (User Keywords: 1)')
+            c.SetCalculixUserKeywordsCommand(OrderedDictionary[Array[Int32], CalculixUserKeyword]('User CalculiX keywords')); w.refresh()
+            check('Model node without keywords', w.tree.topLevelItem(0).text(0) == 'Model')
+            material = str(find('Materials').child(0).data(0, model_tree.ROLE).Name)
+            # Label edit through the tree's own editor (F2 path), committed with Enter.
+            w.tree.clearSelection(); item = find(material, find('Materials')); item.setSelected(True); w.tree.setCurrentItem(item)
+            check('material is renameable, static node is not', w.can_rename(item) and not w.can_rename(find('Materials')))
+            w.rename_selected(); app.processEvents()
+            editor = w.tree.findChild(QtWidgets.QLineEdit)
+            check('label editor opens with the item name', editor is not None and editor.text() == material)
+            editor.setText('ProbeRenamed'); QtTest.QTest.keyClick(editor, QtCore.Qt.Key.Key_Return); QtTest.QTest.qWait(50); app.processEvents()
+            check('in-place rename runs the original RenameCommand', c.Model.Materials.ContainsKey('ProbeRenamed')
+                  and find('ProbeRenamed', find('Materials')) is not None)
+            w.rename_node(find('ProbeRenamed', find('Materials')).data(0, model_tree.ROLE), material)
+            check('rename back', c.Model.Materials.ContainsKey(material))
+            w.tree_action('tsmiDuplicate', [find(material, find('Materials'))]); app.processEvents()
+            duplicate = [str(m.Name) for m in c.GetAllMaterials()][-1]
+            try:
+                w.rename_node(find(duplicate, find('Materials')).data(0, model_tree.ROLE), material.lower())
+                rejected = False
+            except Exception as error:
+                rejected = 'already exists' in str(error)
+            check('rename to an existing name rejected (CheckItemName)', rejected and c.Model.Materials.ContainsKey(duplicate))
+            # Groups: original auto name, rename, drag out, remove (items stay).
+            w.tree_action('tsmiCreateGroup', [find(duplicate, find('Materials'))]); app.processEvents()
+            group = next((i for i in w.walk_tree() if model_tree.is_folder(i.data(0, model_tree.ROLE)) and i.data(0, model_tree.ROLE).Family == 'Materials'), None)
+            check('Create Group with the original next group name', group is not None and group.text(0) == 'Group'
+                  and group.child(0).data(0, model_tree.ROLE).Name == duplicate)
+            w.rename_node(group.data(0, model_tree.ROLE), 'ProbeGroup')
+            group = find('ProbeGroup', find('Materials'))
+            check('group rename (RenameGroup layout change)', group is not None and model_tree.is_folder(group.data(0, model_tree.ROLE)))
+            w.tree.clearSelection(); group.child(0).setSelected(True)
+            w.tree_drag = w.drag_data(w.tree.selectedItems())
+            materials = find('Materials'); rect = w.tree.visualItemRect(materials)
+            target = w.drop_target(rect.center())
+            check('drag of a grouped item onto its collection (TryGetOrderedDictionaryDropTarget)', w.tree_drag is not None and target is not None)
+            w.drop(w.tree_drag, target); w.tree_drag = None; app.processEvents()
+            check('drop moves the item out of the group', find(duplicate, find('Materials')).parent().data(0, model_tree.ROLE).FolderId is None
+                  and find('ProbeGroup', find('Materials')).childCount() == 0)
+            first = find(material, find('Materials'))
+            w.tree.clearSelection(); find(duplicate, find('Materials')).setSelected(True)
+            w.tree_drag = w.drag_data(w.tree.selectedItems())
+            rect = w.tree.visualItemRect(find(material, find('Materials')))
+            target = w.drop_target(QtCore.QPoint(rect.center().x(), rect.top() + 1))
+            check('drop before another item allowed', target is not None and target[1].Position == 'Before')
+            w.drop(w.tree_drag, target); w.tree_drag = None; app.processEvents()
+            order = [str(m.Name) for m in c.GetAllMaterials()]
+            check('drag and drop reorders the original collection layout', order.index(duplicate) < order.index(material))
+            w.tree_drag = {'family': 'Materials', 'step': None, 'group': None, 'names': [duplicate]}
+            rect = w.tree.visualItemRect(find(duplicate, find('Materials')))
+            check('drop on itself is unchanged (IsOrderedDictionaryMoveUnchanged)', w.drop_target(rect.center()) is None)
+            w.tree_drag = w.drag_data([find('Steps').child(0)])
+            rect = w.tree.visualItemRect(find(material, find('Materials')))
+            check('step drag cannot drop into materials', w.tree_drag == {'steps': [str(find('Steps').child(0).data(0, model_tree.ROLE).Name)]}
+                  and w.drop_target(rect.center()) is None)
+            w.tree_drag = None
+            w.tree.clearSelection(); find('ProbeGroup', find('Materials')).setSelected(True)
+            w.tree_action('tsmiDelete', w.tree.selectedItems()); app.processEvents()
+            check('deleting only a group keeps its items', find('ProbeGroup', find('Materials')) is None
+                  and c.Model.Materials.ContainsKey(duplicate))
+            w.tree_action('tsmiDelete', [find(duplicate, find('Materials'))]); app.processEvents()
+            # Steps: duplicate a step, drag it before the first, check the order.
+            step = str(find('Steps').child(0).data(0, model_tree.ROLE).Name)
+            w.tree_action('tsmiDuplicate', [find('Steps').child(0)]); app.processEvents()
+            steps = [str(n) for n in c.GetStepNames()]
+            if len(steps) > 1:
+                last = find('Steps').child(find('Steps').childCount() - 1)
+                w.tree_drag = w.drag_data([last])
+                rect = w.tree.visualItemRect(find('Steps').child(0))
+                target = w.drop_target(QtCore.QPoint(rect.center().x(), rect.top() + 1))
+                w.drop(w.tree_drag, target); w.tree_drag = None; app.processEvents()
+                moved = [str(n) for n in c.GetStepNames()]
+                check('step drag runs MoveStepsCommand', moved[0] == steps[-1] and moved[1:] == steps[:-1])
+                w.tree_action('tsmiDelete', [find(steps[-1], find('Steps'))]); app.processEvents()
+            check('step list restored', [str(n) for n in c.GetStepNames()][0] == step)
+            # Keys: Space inverts Hide/Show, mouse over highlights.
+            part_item = find(part, find('Parts', find('Mesh')))
+            w.tree.clearSelection(); part_item.setSelected(True); w.tree.setFocus()
+            w.invert_hide_show_or_activate(); app.processEvents()
+            check('Space hides a visible part (InvertHideShowOrActivateDeactivate)', not c.Model.Mesh.Parts[part].Visible)
+            w.tree.clearSelection(); find(part, find('Parts', find('Mesh'))).setSelected(True)
+            w.invert_hide_show_or_activate(); app.processEvents()
+            check('Space shows it again', c.Model.Mesh.Parts[part].Visible)
+            w.tree.clearSelection()
+            w.tree_mouse_over(find(part, find('Parts', find('Mesh')))); QtTest.QTest.qWait(250); app.processEvents()
+            check('mouse over highlights the part (timerMouseMove_Tick)', len(w.session.Presentation.SelectionActors) > 0)
+            w.tree_mouse_over(None); QtTest.QTest.qWait(250); app.processEvents()
+            check('mouse leave clears the highlight', len(w.session.Presentation.SelectionActors) == 0)
+
             # Property > Material: Duplicate then Delete through original selection and commands.
             materials = [m.Name for m in c.GetAllMaterials()]
             chosen['Materials'] = [materials[0]]
