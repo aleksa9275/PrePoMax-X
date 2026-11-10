@@ -69,7 +69,18 @@ class ResultsWorkbench:
             box.blockSignals(True)
             if label in values:box.clear();box.addItems(values[label])
             box.setCurrentText(selected[label]);box.blockSignals(False)
+        self.resize_result_names()
 
+    def resize_result_names(self):
+        """FrmMain.SetResultNames/ResizeResultNamesComboBox: fit the selected name (125-400 px),
+        drop-down as wide as the longest name."""
+        box=self.result_boxes['Result'];metrics=box.fontMetrics()
+        names=[box.itemText(i) for i in range(box.count())]
+        if not names:return
+        box.setMaximumWidth(16777215);box.setMinimumContentsLength(0)
+        width=min(max(metrics.horizontalAdvance(box.currentText())+20+box.iconSize().width(),125),400)
+        box.setFixedWidth(width)
+        box.view().setMinimumWidth(max(metrics.horizontalAdvance(n) for n in names)+30)
     def result_changed(self,key,value):
         if not value or self.controller.CurrentView!=ViewGeometryModelResults.Results or not self.controller.ResultsInitialized:return
         self.stop_animation(False)

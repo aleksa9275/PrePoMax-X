@@ -109,8 +109,7 @@ class ApplicationWorkbench:
         path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export active history','','Python (*.py)')
         if path:self.application.Journal(path)
     def export_3mf(self):
-        from PrePoMax import Export3mfFileProperties
-        from PrePoMax.Forms import ViewExport3mfFileProperties
+        from PrePoMax import Export3mfFileProperties,ViewExport3mfFileProperties
         path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export current view','','3MF (*.3mf)')
         if path:
             props=Export3mfFileProperties();props.FileName=path
@@ -364,7 +363,7 @@ class ApplicationWorkbench:
         else:getattr(self.controller,'ResetColorFor'+suffix+'Command')(names)
         self.refresh()
     def apply_view_widgets(self):
-        from vtkmodules.vtkRenderingAnnotation import vtkAxesActor,vtkLegendScaleActor
+        from vtkmodules.vtkRenderingAnnotation import vtkAxesActor
         from vtkmodules.vtkInteractionWidgets import vtkOrientationMarkerWidget
         graphics=self.controller.Settings.Graphics
         if not hasattr(self,'orientation_widget'):
@@ -374,9 +373,24 @@ class ApplicationWorkbench:
         self.orientation_widget.SetEnabled(graphics.CoorSysVisibility)
         if graphics.CoorSysVisibility:self.orientation_widget.SetInteractive(graphics.WidgetHighlightEnabled)
         if not hasattr(self,'scale_actor'):
-            self.scale_actor=vtkLegendScaleActor();self.scale_actor.TopAxisVisibilityOff();self.scale_actor.LeftAxisVisibilityOff();self.scale_actor.RightAxisVisibilityOff();self.scale_actor.LegendVisibilityOff();self.scale_actor.SetBottomBorderOffset(45);self.scale_actor.GetBottomAxis().GetLabelTextProperty().SetColor(.1,.1,.1);self.scale_actor.GetBottomAxis().GetTitleTextProperty().SetColor(.1,.1,.1)
-        self.scale_actor.SetVisibility(graphics.ScaleWidgetVisibility)
-        self.renderer.AddActor(self.scale_actor)
+            from scale_widget import OriginalScaleWidget
+            self.scale_actor=OriginalScaleWidget(self.renderer);self.scene.overlays.extend(self.scale_actor.actors())
+        self.scale_actor.set_visibility(graphics.ScaleWidgetVisibility)
+        self.scale_actor.attach()  # scene updates remove view props; re-adding is idempotent
+        self.update_unit_system()
+    def update_unit_system(self):
+        """FrmMain.UpdateUnitSystem: status-bar unit system and scale-bar length unit."""
+        from CaeGlobals import UnitSystemType
+        c=self.controller
+        system=c.CurrentResult.UnitSystem if str(c.CurrentView)=='Results' and c.CurrentResult is not None and c.CurrentResult.UnitSystem is not None else (c.Model.UnitSystem if c.Model is not None else None)
+        if not hasattr(self,'unit_system_label'):
+            self.unit_system_label=QtWidgets.QLabel();self.statusBar().addPermanentWidget(self.unit_system_label)
+        if system is None:self.unit_system_label.setText('');self.scale_actor.set_unit('');return
+        from CaeGlobals import ExtensionMethods
+        try:description=str(ExtensionMethods.GetDescription[UnitSystemType](system.UnitSystemType))
+        except Exception:description=str(system.UnitSystemType)
+        self.unit_system_label.setText('Unit system: '+description)
+        self.scale_actor.set_unit('' if system.UnitSystemType==UnitSystemType.Undefined else str(system.LengthUnitAbbreviation))
     def area_pick(self,x0,y0,x1,y1):
         from vtkmodules.vtkRenderingCore import vtkAreaPicker
         from vtkmodules.vtkCommonDataModel import vtkPlane

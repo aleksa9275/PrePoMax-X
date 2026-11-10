@@ -1,0 +1,4934 @@
+{
+ "source": {
+  "PrePoMax/Forms/FrmMain.Designer.cs": "ac5ce48bf504113a493b38ee90ad96ad5410abf462153adad6c9972cbd1df0e7",
+  "PrePoMax/Forms/FrmMain.cs": "615be6b02b18de7a026b38c7d688817c6a5f67535a7eee678b16acdca5507efe"
+ },
+ "menus": [
+  {
+   "id": "tsmiFile",
+   "text": "File",
+   "children": [
+    {
+     "id": "tsmiNew",
+     "text": "New",
+     "handler": "tsmiNew_Click",
+     "shortcut": "Ctrl+N"
+    },
+    {
+     "id": "tsmiOpen",
+     "text": "Open",
+     "handler": "tsmiOpen_Click",
+     "shortcut": "Ctrl+O"
+    },
+    {
+     "id": "tsmiOpenRecent",
+     "text": "Open Recent"
+    },
+    {
+     "id": "tsmiRunHistoryFile",
+     "text": "Run History File",
+     "handler": "tsmiRunHistoryFile_Click"
+    },
+    {
+     "id": "tsmiImportFile",
+     "text": "Import",
+     "handler": "tsmiImportFile_Click",
+     "shortcut": "Ctrl+I"
+    },
+    {
+     "id": "tsmiDividerFile1",
+     "separator": true
+    },
+    {
+     "id": "tsmiSave",
+     "text": "Save",
+     "handler": "tsmiSave_Click",
+     "shortcut": "Ctrl+S"
+    },
+    {
+     "id": "tsmiSaveAs",
+     "text": "Save As",
+     "handler": "tsmiSaveAs_Click"
+    },
+    {
+     "id": "tsmiDividerFile2",
+     "separator": true
+    },
+    {
+     "id": "tsmiExport",
+     "text": "Export",
+     "children": [
+      {
+       "id": "tsmiExportGeometry",
+       "text": "Geometry",
+       "handler": "tsmiExportGeometry_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "ExportGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ExportGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiExportMesh",
+       "text": "Mesh",
+       "handler": "tsmiExportMesh_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "ExportMeshParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ExportMeshPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiExportModel",
+       "text": "Model",
+       "handler": "tsmiExportModel_Click"
+      },
+      {
+       "id": "tsmiExportResults",
+       "text": "Results",
+       "children": [
+        {
+         "id": "tsmiExportDeformedParts",
+         "text": "Deformed parts",
+         "handler": "tsmiExportDeformedParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetResultParts",
+          "target": "ExportResultParts",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ExportResultPartsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiExportFieldOutput",
+         "text": "Field output",
+         "handler": "tsmiExportResultFieldOutput_Click"
+        },
+        {
+         "id": "tsmiExportHistoryOutput",
+         "text": "History output",
+         "handler": "tsmiExportResultHistoryOutput_Click"
+        }
+       ]
+      },
+      {
+       "id": "tsmiDividerExport1",
+       "separator": true
+      },
+      {
+       "id": "tsmiExportTo3mf",
+       "text": "3D Manufacturing Format *.3mf",
+       "handler": "tsmiExportTo3mf_Click"
+      },
+      {
+       "id": "tsmiDividerExport2",
+       "separator": true
+      },
+      {
+       "id": "tsmiExportToPythonJournal",
+       "text": "Python session journal *.py",
+       "handler": "tsmiExportToPythonJournal_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerFile3",
+     "separator": true
+    },
+    {
+     "id": "tsmiCloseCurrentResult",
+     "text": "Close Current Result",
+     "handler": "tsmiCloseCurrentResult_Click"
+    },
+    {
+     "id": "tsmiCloseAllResults",
+     "text": "Close All Results",
+     "handler": "tsmiCloseAllResults_Click"
+    },
+    {
+     "id": "tsmiExit",
+     "text": "Exit",
+     "handler": "tsmiExit_Click",
+     "shortcut": "Alt+F4"
+    }
+   ]
+  },
+  {
+   "id": "tsmiEdit",
+   "text": "Edit",
+   "children": [
+    {
+     "id": "tsmiUndo",
+     "text": "Undo",
+     "handler": "tsmiUndo_Click"
+    },
+    {
+     "id": "tsmiRedo",
+     "text": "Redo",
+     "handler": "tsmiRedo_Click"
+    },
+    {
+     "id": "tsmiDividerEdit1",
+     "separator": true
+    },
+    {
+     "id": "tsmiEditHistory",
+     "text": "Edit History",
+     "handler": "tsmiEditHistory_Click"
+    },
+    {
+     "id": "toolStripMenuItem4",
+     "separator": true
+    },
+    {
+     "id": "tsmiRegenerateHistory",
+     "text": "Regenerate History",
+     "handler": "tsmiRegenerateHistory_Click"
+    },
+    {
+     "id": "tsmiRegenerateHistoryUsingOtherFiles",
+     "text": "Regenerate History Using Other Files",
+     "handler": "tsmiRegenerateHistoryUsingOtherFiles_Click"
+    },
+    {
+     "id": "tsmiRegenerateHistoryWithRemeshing",
+     "text": "Regenerate History With Remeshing",
+     "handler": "tsmiRegenerateHistoryWithRemeshing_Click"
+    }
+   ]
+  },
+  {
+   "id": "tsmiView",
+   "text": "View",
+   "children": [
+    {
+     "id": "tsmiViewSidePanels",
+     "text": "Side Panels",
+     "children": [
+      {
+       "id": "tsmiPythonScriptEditor",
+       "text": "Python Script Editor",
+       "handler": "tsmiPythonScriptEditor_Click"
+      },
+      {
+       "id": "tsmiXYPlotPanel",
+       "text": "XY Plot",
+       "handler": "tsmiXYPlotPanel_Click"
+      },
+      {
+       "id": "tsmiSidePanelAdvisor",
+       "text": "Advisor",
+       "handler": "tsmiAdvisor_Click"
+      }
+     ]
+    },
+    {
+     "id": "toolStripMenuItem6",
+     "separator": true
+    },
+    {
+     "id": "tsmiStandardViews",
+     "text": "Standard Views",
+     "children": [
+      {
+       "id": "tsmiFrontView",
+       "text": "Front View",
+       "handler": "tsmiFrontView_Click"
+      },
+      {
+       "id": "tsmiBackView",
+       "text": "Back View",
+       "handler": "tsmiBackView_Click"
+      },
+      {
+       "id": "tsmiTopView",
+       "text": "Top View",
+       "handler": "tsmiTopView_Click"
+      },
+      {
+       "id": "tsmiBottomView",
+       "text": "Bottom View",
+       "handler": "tsmiBottomView_Click"
+      },
+      {
+       "id": "tsmiLeftView",
+       "text": "Left View",
+       "handler": "tsmiLeftView_Click"
+      },
+      {
+       "id": "tsmiRightView",
+       "text": "Right View",
+       "handler": "tsmiRightView_Click"
+      },
+      {
+       "id": "tsmiNormalView",
+       "text": "Normal View",
+       "handler": "tsmiNormalView_Click"
+      },
+      {
+       "id": "tsmiVerticalView",
+       "text": "Vertical View",
+       "handler": "tsmiVerticalView_Click"
+      },
+      {
+       "id": "tsmiIsometricView",
+       "text": "Isometric View",
+       "handler": "tsmiIsometricView_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiUserViews",
+     "text": "User Views",
+     "children": [
+      {
+       "id": "tsmiEditUserViews",
+       "text": "Edit",
+       "handler": "tsmiEditUserViews_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiZoomToFit",
+     "text": "Zoom to Fit",
+     "handler": "tsmiZoomToFit_Click"
+    },
+    {
+     "id": "tsmiBoxZoom",
+     "text": "Box Zoom",
+     "handler": "tsmiBoxZoom_Click"
+    },
+    {
+     "id": "tsmiDividerView1",
+     "separator": true
+    },
+    {
+     "id": "tsmiShowWireframeEdges",
+     "text": "Wireframe",
+     "handler": "tsmiShowWireframeEdges_Click"
+    },
+    {
+     "id": "tsmiShowElementEdges",
+     "text": "Show Element Edges",
+     "handler": "tsmiShowElementEdges_Click"
+    },
+    {
+     "id": "tsmiShowModelEdges",
+     "text": "Show Model Edges",
+     "handler": "tsmiShowModelEdges_Click"
+    },
+    {
+     "id": "tsmiShowNoEdges",
+     "text": "No Edges",
+     "handler": "tsmiShowNoEdges_Click"
+    },
+    {
+     "id": "tsmiDividerView2",
+     "separator": true
+    },
+    {
+     "id": "tsmiSectionView",
+     "text": "Section View",
+     "handler": "tsmiSectionView_Click"
+    },
+    {
+     "id": "tsmiExplodedView",
+     "text": "Exploded View",
+     "handler": "tsmiExplodedView_Click"
+    },
+    {
+     "id": "tsmiFollowerView",
+     "text": "Follower View",
+     "handler": "tsmiFollowerView_Click"
+    },
+    {
+     "id": "tsmiDividerView3",
+     "separator": true
+    },
+    {
+     "id": "tsmiShowAllParts",
+     "text": "Show All",
+     "handler": "tsmiShowAllParts_Click"
+    },
+    {
+     "id": "tsmiHideAllParts",
+     "text": "Hide All",
+     "handler": "tsmiHideAllParts_Click"
+    },
+    {
+     "id": "tsmiInvertVisibleParts",
+     "text": "Invert Visible Parts",
+     "handler": "tsmiInvertVisibleParts_Click"
+    },
+    {
+     "id": "tsmiDividerView4",
+     "separator": true
+    },
+    {
+     "id": "tsmiResultsUndeformed",
+     "text": "Undeformed",
+     "handler": "tsmiResultsUndeformed_Click"
+    },
+    {
+     "id": "tsmiResultsDeformed",
+     "text": "Deformed",
+     "handler": "tsmiResultsDeformed_Click"
+    },
+    {
+     "id": "tsmiResultsColorContours",
+     "text": "Color Contours",
+     "handler": "tsmiResultsColorContours_Click"
+    },
+    {
+     "id": "tsmiResultsVectorPlot",
+     "text": "Vector Plot",
+     "handler": "tsmiResultsVectorPlot_Click"
+    },
+    {
+     "id": "tsmiDividerView5",
+     "separator": true
+    },
+    {
+     "id": "tsmiResultsUndeformedWireframe",
+     "text": "Undeformed Wireframe Model",
+     "handler": "tsmiResultsUndeformedWireframe_Click"
+    },
+    {
+     "id": "tsmiResultsUndeformedSolid",
+     "text": "Undeformed Solid Model",
+     "handler": "tsmiResultsUndeformedSolid_Click"
+    },
+    {
+     "id": "tsmiDividerView6",
+     "separator": true
+    },
+    {
+     "id": "tsmiColorAnnotations",
+     "text": "Color Annotations",
+     "children": [
+      {
+       "id": "tsmiAnnotateFaceOrientations",
+       "text": "Face Orientations",
+       "handler": "tsmiAnnotateFaceOrientations_Click"
+      },
+      {
+       "id": "tsmiAnnotateMeshTypes",
+       "text": "Mesh Types",
+       "handler": "tsmiAnnotateMeshTypes_Click"
+      },
+      {
+       "id": "tsmiDividerColorAnnotations1",
+       "separator": true
+      },
+      {
+       "id": "tsmiAnnotateParts",
+       "text": "Parts",
+       "handler": "tsmiAnnotateParts_Click"
+      },
+      {
+       "id": "tsmiAnnotateMaterials",
+       "text": "Materials",
+       "handler": "tsmiAnnotateMaterials_Click"
+      },
+      {
+       "id": "tsmiAnnotateSections",
+       "text": "Sections",
+       "handler": "tsmiAnnotateSections_Click"
+      },
+      {
+       "id": "tsmiAnnotateSectionThicknesses",
+       "text": "Section Thicknesses",
+       "handler": "tsmiAnnotateSectionThicknesses_Click"
+      },
+      {
+       "id": "tsmiDividerColorAnnotations2",
+       "separator": true
+      },
+      {
+       "id": "tsmiAnnotateAllSymbols",
+       "text": "All Symbols",
+       "handler": "tsmiAnnotateAllSymbols_Click"
+      },
+      {
+       "id": "tsmiAnnotateReferencePoints",
+       "text": "Reference Points",
+       "handler": "tsmiAnnotateReferencePoints_Click"
+      },
+      {
+       "id": "tsmiAnnotateConstraints",
+       "text": "Constraints",
+       "handler": "tsmiAnnotateConstraints_Click"
+      },
+      {
+       "id": "tsmiAnnotateContactPairs",
+       "text": "Contact Pairs",
+       "handler": "tsmiAnnotateContactPairs_Click"
+      },
+      {
+       "id": "tsmiAnnotateInitialConditions",
+       "text": "Initial conditions",
+       "handler": "tsmiAnnotateInitialConditions_Click"
+      },
+      {
+       "id": "tsmiAnnotateBCs",
+       "text": "BCs",
+       "handler": "tsmiAnnotateBCs_Click"
+      },
+      {
+       "id": "tsmiAnnotateLoads",
+       "text": "Loads",
+       "handler": "tsmiAnnotateLoads_Click"
+      },
+      {
+       "id": "tsmiAnnotateDefinedFields",
+       "text": "Defined Fields",
+       "handler": "tsmiAnnotateLoads_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiViewItems",
+     "text": "Items",
+     "children": [
+      {
+       "id": "tsmiViewVertexIds",
+       "text": "Vertex IDs",
+       "handler": "tsmiViewVertexIds_Click"
+      },
+      {
+       "id": "tsmiViewEdgeIds",
+       "text": "Edge IDs",
+       "handler": "tsmiViewEdgeIds_Click"
+      },
+      {
+       "id": "tsmiViewSurfaceIds",
+       "text": "Surface IDs",
+       "handler": "tsmiViewSurfaceIds_Click"
+      },
+      {
+       "id": "tsmiViewPartIds",
+       "text": "Part IDs",
+       "handler": "tsmiViewPartIds_Click"
+      },
+      {
+       "id": "tsmiViewPartNames",
+       "text": "Part Names",
+       "handler": "tsmiViewPartNames_Click"
+      },
+      {
+       "id": "tsmiDivideritemIds1",
+       "separator": true
+      },
+      {
+       "id": "tsmiViewNodeIds",
+       "text": "Node IDs",
+       "handler": "tsmiViewNodeIds_Click"
+      },
+      {
+       "id": "tsmiViewElementIds",
+       "text": "Element IDs",
+       "handler": "tsmiViewElementIds_Click"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tsmiGeometry",
+   "text": "Geometry",
+   "children": [
+    {
+     "id": "tsmiGeometryPart",
+     "text": "Part",
+     "children": [
+      {
+       "id": "tsmiEditGeometryPart",
+       "text": "Edit",
+       "handler": "tsmiEditGeometryPart_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "EditGeometryPart",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "PartProperties",
+          "title": "Edit Part"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiTransformGeometryParts",
+       "text": "Transform",
+       "children": [
+        {
+         "id": "tsmiTranslateGeometryParts",
+         "text": "Translate",
+         "handler": "tsmiTranslateGeometryParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetGeometryPartsWithoutSubParts",
+          "target": "TranslateGeometryParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Translate",
+            "title": "Translate parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiRotateGeometryParts",
+         "text": "Rotate",
+         "handler": "tsmiRotateGeometryParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetGeometryPartsWithoutSubParts",
+          "target": "RotateGeometryParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Rotate",
+            "title": "Rotate parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiMirrorGeometryParts",
+         "text": "Mirror",
+         "handler": "tsmiMirrorGeometryParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetGeometryPartsWithoutSubParts",
+          "target": "MirrorGeometryParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Mirror",
+            "title": "Mirror parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiScaleGeometryParts",
+         "text": "Scale",
+         "handler": "tsmiScaleGeometryParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetGeometryPartsWithoutSubParts",
+          "target": "ScaleGeometryParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Scale",
+            "title": "Scale parts: "
+           }
+          }
+         }
+        }
+       ]
+      },
+      {
+       "id": "tsmiDividerGeomPart1",
+       "separator": true
+      },
+      {
+       "id": "tsmiCopyGeometryPartsToResults",
+       "text": "Copy Geometry to Results",
+       "handler": "tsmiCopyGeometryPartsToResults_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "CopyGeometryPartsToResults",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "CopyGeometryPartsToResults"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerGeomPart2",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideGeometryParts",
+       "text": "Hide",
+       "handler": "tsmiHideGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "HideGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowGeometryParts",
+       "text": "Show",
+       "handler": "tsmiShowGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "ShowGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ShowGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowOnlyGeometryParts",
+       "text": "Show Only",
+       "handler": "tsmiShowOnlyGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "ShowOnlyGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideGeometryPartsCommand",
+          "ShowGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerGeomPart3",
+       "separator": true
+      },
+      {
+       "id": "tsmiSetColorForGeometryParts",
+       "text": "Set Color",
+       "handler": "tsmiSetColorForGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "SetColorForGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetColorForGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiResetColorForGeometryParts",
+       "text": "Reset Color",
+       "handler": "tsmiResetColorForGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "ResetColorForGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ResetColorForGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiSetTransparencyForGeometryParts",
+       "text": "Set Transparency",
+       "handler": "tsmiSetTransparencyForGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "SetTransparencyForGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetTransparencyForGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerGeomPart4",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteGeometryParts",
+       "text": "Delete",
+       "handler": "tsmiDeleteGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "DeleteGeometryParts",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected parts?",
+         "calls": [
+          "RemoveGeometryPartsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "cADPartToolStripMenuItem",
+     "text": "CAD Part",
+     "children": [
+      {
+       "id": "tsmiConvertShellToSolidCAD",
+       "text": "Convert Shell to Solid",
+       "handler": "tsmiConvertShellToSolidCAD_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetCADGeometryShellParts",
+        "target": "ConvertShellToSolid",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ConvertShellToSolidCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiConvertSolidToShellCAD",
+       "text": "Convert Solid to Shell",
+       "handler": "TsmiConvertSolidToShellCAD_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetCADGeometrySolidParts",
+        "target": "ConvertSolidToShell",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ConvertSolidToShellCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerCAD1",
+       "separator": true
+      },
+      {
+       "id": "tsmiFlipFaceNormalCAD",
+       "text": "Flip Face Normal",
+       "handler": "tsmiFlipFaceNormalCAD_Click"
+      },
+      {
+       "id": "tsmiSplitShell",
+       "text": "Split Face",
+       "handler": "tsmiSplitShell_Click"
+      },
+      {
+       "id": "tsmiSplitPeriodicFaces",
+       "text": "Split Periodic Faces",
+       "handler": "tsmiSplitPeriodicFaces_Click"
+      },
+      {
+       "id": "tsmiFuseFaces",
+       "text": "Fuse Faces",
+       "handler": "tsmiFuseFaces_Click"
+      },
+      {
+       "id": "tsmiOffsetFace",
+       "text": "Offset Face",
+       "handler": "tsmiOffsetFace_Click"
+      },
+      {
+       "id": "tsmiDeleteFacesCAD",
+       "text": "Delete Faces",
+       "handler": "tsmiDeleteFacesCAD_Click"
+      },
+      {
+       "id": "tsmiDividerCAD2",
+       "separator": true
+      },
+      {
+       "id": "tsmiSplitSolid",
+       "text": "Split Solid",
+       "handler": "tsmiSplitSolid_Click"
+      },
+      {
+       "id": "tsmiDefeature",
+       "text": "Defeature Solid",
+       "handler": "tsmiDefeature_Click"
+      },
+      {
+       "id": "tsmiDividerCAD3",
+       "separator": true
+      },
+      {
+       "id": "tsmiRepairGeometry",
+       "text": "Repair",
+       "handler": "tsmiRepairGeometry_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiStlPart",
+     "text": "Stl Part",
+     "children": [
+      {
+       "id": "tsmiFindStlEdgesByAngleForGeometryParts",
+       "text": "Find Model Edges by Angle",
+       "handler": "tsmiFindStlEdgesByAngleForGeometryParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetNonCADGeometryParts",
+        "target": "FindEdgesByAngleForGeometryParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "FindEdgesByAngleForGeometryPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiFlipStlPartFaceNormal",
+       "text": "Flip Part Face Normals",
+       "handler": "tsmiFlipStlPartFaceNormals_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetNonCADGeometryParts",
+        "target": "FlipStlPartSurfacesNormal",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "FlipStlPartSurfacesNormalCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiSmoothStlPart",
+       "text": "Smooth Part",
+       "handler": "tsmiSmoothStlPart_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetNonCADGeometryParts",
+        "target": "SmoothGeometryPart",
+        "minimum": 1
+       }
+      },
+      {
+       "id": "tsmiDeleteStlPartFaces",
+       "text": "Delete Part Faces",
+       "handler": "tsmiDeleteStlPartFaces_Click"
+      },
+      {
+       "id": "tsmiCropStlPartWithCylinder",
+       "text": "Crop With Cylinder",
+       "handler": "tsmiCropStlPartWithCylinder_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "CropGeometryPartWithCylinder",
+        "minimum": 1
+       },
+       "visible": false
+      },
+      {
+       "id": "tsmiCropStlPartWithCube",
+       "text": "Crop With Cube",
+       "handler": "tsmiCropStlPartWithCube_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetGeometryParts",
+        "target": "CropGeometryPartWithCube",
+        "minimum": 1
+       },
+       "visible": false
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerGeometry1",
+     "separator": true
+    },
+    {
+     "id": "tsmiCreateAndImportCompoundPart",
+     "text": "Create Compound Part",
+     "handler": "tsmiCreateAndImportCompoundPart_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetCADGeometryParts",
+      "target": "CreateAndImportCompoundPart",
+      "minimum": 2,
+      "action": {
+       "calls": [
+        "GetMeshablePartNames",
+        "CreateAndImportCompoundPartCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiRegenerateCompoundPart",
+     "text": "Regenerate Compound Part",
+     "handler": "tsmiRegenerateCompoundPart_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetCompoundParts",
+      "target": "RegenerateCompoundParts",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "RegenerateCompoundPartsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiGroupSplitCells",
+     "text": "Group Cells",
+     "handler": "tsmiGroupSplitCells_Click",
+     "select": {
+      "mode": "many",
+      "title": "Cells",
+      "getter": "GetSplitCells",
+      "target": "GroupSplitCells",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiFuseBodies",
+     "text": "Fuse Bodies",
+     "handler": "tsmiFuseBodies_Click",
+     "select": {
+      "mode": "many",
+      "title": "Bodies",
+      "getter": "GetFusableBodies",
+      "target": "FuseBodies",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiSwapGeometryPartGeometries",
+     "text": "Swap Part Geometries",
+     "handler": "tsmiSwapGeometryPartGeometries_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetGeometryParts",
+      "target": "SwapPartGeometries",
+      "minimum": 2,
+      "maximum": 2,
+      "action": {
+       "calls": [
+        "GetGeometryPartsWithoutSubParts",
+        "GetGeometryPart",
+        "SwapPartGeometriesCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerGeometry2",
+     "separator": true
+    },
+    {
+     "id": "tsmiGeometryAnalyze",
+     "text": "Analyze",
+     "handler": "tsmiGeometryAnalyze_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetGeometryParts",
+      "target": "AnalyzeGeometry",
+      "minimum": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiMesh",
+   "text": "Mesh",
+   "children": [
+    {
+     "id": "tsmiMeshSetupItem",
+     "text": "Mesh Setup Item",
+     "children": [
+      {
+       "id": "tsmiCreateMeshSetupItem",
+       "text": "Create",
+       "handler": "tsmiCreateMeshSetupItem_Click"
+      },
+      {
+       "id": "tsmiEditMeshSetupItem",
+       "text": "Edit",
+       "handler": "tsmiEditMeshSetupItem_Click",
+       "select": {
+        "mode": "one",
+        "title": "Mesh Setup Items",
+        "getter": "GetMeshSetupItems",
+        "target": "EditMeshSetupItem",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "MeshSetupItem",
+          "title": "Edit Mesh Setup Item"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateMeshSetupItem",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateMeshSetupItem_Click",
+       "select": {
+        "mode": "many",
+        "title": "Mesh Setup Items",
+        "getter": "GetMeshSetupItems",
+        "target": "DuplicateMeshSetupItems",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateMeshSetupItemsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "toolStripMenuItem1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteMeshSetupItem",
+       "text": "Delete",
+       "handler": "tsmiDeleteMeshSetupItem_Click",
+       "select": {
+        "mode": "many",
+        "title": "Mesh Setup Items",
+        "getter": "GetMeshSetupItems",
+        "target": "DeleteMeshSetupItems",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected mesh setup items?",
+         "calls": [
+          "RemoveMeshSetupItemsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiPreviewEdgeMesh",
+     "text": "Preview Edge Mesh",
+     "handler": "tsmiPreviewEdgeMesh_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetGeometryPartsWithoutSubParts",
+      "target": "PreviewEdgeMesh",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiCreateMesh",
+     "text": "Create Mesh",
+     "handler": "tsmiCreateMesh_Click",
+     "select": {
+      "mode": "many",
+      "title": "Parts",
+      "getter": "GetGeometryPartsWithoutSubParts",
+      "target": "CreatePartMeshes",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "CreateMeshesCommand",
+        "GetModelPart",
+        "UpdateExplodedView",
+        "HighlightLastMeshingErrorGeometry",
+        "GetLastMeshingErrorGeometryIds",
+        "ClearAllSelection",
+        "HighlightInvertedElements"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiModel",
+   "text": "Model",
+   "children": [
+    {
+     "id": "tsmiEditModel",
+     "text": "Edit",
+     "handler": "tsmiEditModel_Click"
+    },
+    {
+     "id": "tsmiEditCalculiXKeywords",
+     "text": "Edit CalculiX Keywords",
+     "handler": "tsmiEditCalculiXKeywords_Click"
+    },
+    {
+     "id": "tsmiToolsParts",
+     "text": "Tools",
+     "children": [
+      {
+       "id": "tsmiFindEdgesByAngleForModelParts",
+       "text": "Find Model Edges By Angle",
+       "handler": "tsmiFindEdgesByAngleForModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetNonCADModelParts",
+        "target": "FindEdgesByAngleForModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "FindEdgesByAngleForModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiCreateBoundaryLayer",
+       "text": "Create Boundary Layer",
+       "handler": "tsmiCreateBoundaryLayer_Click"
+      },
+      {
+       "id": "tsmiRemeshElements",
+       "text": "Remesh Elements",
+       "handler": "tsmiRemeshElements_Click"
+      },
+      {
+       "id": "tsmiThickenShellMesh",
+       "text": "Thicken Shell Mesh",
+       "handler": "tsmiThickenShellMesh_Click"
+      },
+      {
+       "id": "tsmiSplitPartMeshUsingSurface",
+       "text": "Split Part Mesh Using Surface",
+       "handler": "tsmiSplitPartMeshUsingSurface_Click"
+      },
+      {
+       "id": "tsmiUpdateNodalCoordinatesFromFile",
+       "text": "Update Nodal Coordinates From File",
+       "handler": "tsmiUpdateNodalCoordinatesFromFile_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerModel1",
+     "separator": true
+    },
+    {
+     "id": "tsmiNode",
+     "text": "Node",
+     "children": [
+      {
+       "id": "tsmiRenumberAllNodes",
+       "text": "Renumber All",
+       "handler": "tsmiRenumberAllNodes_Click"
+      },
+      {
+       "id": "tsmiMergeCoincidentNodes",
+       "text": "Merge Coincident Nodes",
+       "handler": "tsmiMergeCoincidentNodes_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiElement",
+     "text": "Element",
+     "children": [
+      {
+       "id": "tsmiRenumberAllElements",
+       "text": "Renumber All",
+       "handler": "tsmiRenumberAllElements_Click"
+      },
+      {
+       "id": "tsmiElementQuality",
+       "text": "Element Quality",
+       "handler": "tsmiElementQuality_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "ElementQuality",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "ElementQuality",
+          "title": "Element Quality"
+         }
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiPart",
+     "text": "Part",
+     "children": [
+      {
+       "id": "tsmiEditModelPart",
+       "text": "Edit",
+       "handler": "tsmiEditModelPart_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "EditModelPart",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "PartProperties",
+          "title": "Edit Part"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiTransformModelParts",
+       "text": "Transform",
+       "children": [
+        {
+         "id": "tsmiTranslateModelParts",
+         "text": "Translate",
+         "handler": "tsmiTranslateModelParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetModelParts",
+          "target": "TranslateModelParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Translate",
+            "title": "Translate Parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiRotateModelParts",
+         "text": "Rotate",
+         "handler": "tsmiRotateModelParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetModelParts",
+          "target": "RotateModelParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Rotate",
+            "title": "Rotate Parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiMirrorModelParts",
+         "text": "Mirror",
+         "handler": "tsmiMirrorModelParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetModelParts",
+          "target": "MirrorModelParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Mirror",
+            "title": "Mirror Parts: "
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiScaleModelParts",
+         "text": "Scale",
+         "handler": "tsmiScaleModelParts_Click",
+         "select": {
+          "mode": "many",
+          "title": "Parts",
+          "getter": "GetModelParts",
+          "target": "ScaleModelParts",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "Scale",
+            "title": "Scale Parts: "
+           }
+          }
+         }
+        }
+       ]
+      },
+      {
+       "id": "tsmiMergeModelParts",
+       "text": "Merge",
+       "handler": "tsmiMergeModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "MergeModelParts",
+        "minimum": 2,
+        "action": {
+         "confirm": "OK to merge selected parts?",
+         "calls": [
+          "AreModelPartsMergeable",
+          "MergeModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerPart2",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideModelParts",
+       "text": "Hide",
+       "handler": "tsmiHideModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "HideModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowModelParts",
+       "text": "Show",
+       "handler": "tsmiShowModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "ShowModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ShowModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowOnlyModelParts",
+       "text": "Show Only",
+       "handler": "tsmiShowOnlyModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "ShowOnlyModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideModelPartsCommand",
+          "ShowModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerPart3",
+       "separator": true
+      },
+      {
+       "id": "tsmiSetColorForModelParts",
+       "text": "Set Color",
+       "handler": "tsmiSetColorForModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "SetColorForModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetColorForModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiResetColorForModelParts",
+       "text": "Reset Color",
+       "handler": "tsmiResetColorForModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "ResetColorForModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ResetColorForModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiSetTransparencyForModelParts",
+       "text": "Set Transparency",
+       "handler": "tsmiSetTransparencyForModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "SetTransparencyForModelParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetTransparencyForModelPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerPart4",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteModelParts",
+       "text": "Delete",
+       "handler": "tsmiDeleteModelParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetModelParts",
+        "target": "DeleteModelParts",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected parts?",
+         "calls": [
+          "RemoveModelPartsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiNodeSet",
+     "text": "Node set",
+     "children": [
+      {
+       "id": "tsmiCreateNodeSet",
+       "text": "Create",
+       "handler": "tsmiCreateNodeSet_Click"
+      },
+      {
+       "id": "tsmiEditNodeSet",
+       "text": "Edit",
+       "handler": "tsmiEditNodeSet_Click",
+       "select": {
+        "mode": "one",
+        "title": "Node Sets",
+        "getter": "GetUserNodeSets",
+        "target": "EditNodeSet",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "NodeSet",
+          "title": "Edit Node Set"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateNodeSet",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateNodeSet_Click",
+       "select": {
+        "mode": "many",
+        "title": "Node Sets",
+        "getter": "GetUserNodeSets",
+        "target": "DuplicateNodeSets",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateNodeSetsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerNodeSet1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteNodeSet",
+       "text": "Delete",
+       "handler": "tsmiDeleteNodeSet_Click",
+       "select": {
+        "mode": "many",
+        "title": "Node Sets",
+        "getter": "GetUserNodeSets",
+        "target": "DeleteNodeSets",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected node sets?",
+         "calls": [
+          "RemoveNodeSetsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiElementSet",
+     "text": "Element set",
+     "children": [
+      {
+       "id": "tsmiCreateElementSet",
+       "text": "Create",
+       "handler": "tsmiCreateElementSet_Click"
+      },
+      {
+       "id": "tsmiEditElementSet",
+       "text": "Edit",
+       "handler": "tsmiEditElementSet_Click",
+       "select": {
+        "mode": "one",
+        "title": "Element Sets",
+        "getter": "GetUserElementSets",
+        "target": "EditElementSet",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "ElementSet",
+          "title": "Edit Element Set"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateElementSet",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateElementSet_Click",
+       "select": {
+        "mode": "many",
+        "title": "Element Sets",
+        "getter": "GetUserElementSets",
+        "target": "DuplicateElementSets",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateElementSetsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiConvertElementSetsToMeshParts",
+       "text": "Convert to Part",
+       "handler": "tsmiConvertElementSetsToMeshParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Element Sets",
+        "getter": "GetUserElementSets",
+        "target": "ConvertElementSetsToMeshParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ConvertElementSetsToMeshPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerElementSet1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteElementSet",
+       "text": "Delete",
+       "handler": "tsmiDeleteElementSet_Click",
+       "select": {
+        "mode": "many",
+        "title": "Element Sets",
+        "getter": "GetUserElementSets",
+        "target": "DeleteElementSets",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected element sets?",
+         "calls": [
+          "RemoveElementSetsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiSurface",
+     "text": "Surface",
+     "children": [
+      {
+       "id": "tsmiCreateSurface",
+       "text": "Create",
+       "handler": "tsmiCreateSurface_Click"
+      },
+      {
+       "id": "tsmiEditSurface",
+       "text": "Edit",
+       "handler": "tsmiEditSurface_Click",
+       "select": {
+        "mode": "one",
+        "title": "Surfaces",
+        "getter": "GetUserSurfaces",
+        "target": "EditSurface",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Surface",
+          "title": "Edit Surface"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateSurface",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateSurface_Click",
+       "select": {
+        "mode": "many",
+        "title": "Surfaces",
+        "getter": "GetUserSurfaces",
+        "target": "DuplicateSurfaces",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateSurfacesCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerSurface1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteSurface",
+       "text": "Delete",
+       "handler": "tsmiDeleteSurface_Click",
+       "select": {
+        "mode": "many",
+        "title": "Surfaces",
+        "getter": "GetUserSurfaces",
+        "target": "DeleteSurfaces",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected surfaces?",
+         "calls": [
+          "RemoveSurfacesCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiModelFeatures",
+     "text": "Features",
+     "children": [
+      {
+       "id": "tsmiModelReferencePointTool",
+       "text": "Reference point",
+       "children": [
+        {
+         "id": "tsmiCreateModelReferencePoint",
+         "text": "Create",
+         "handler": "tsmiCreateModelReferencePoint_Click"
+        },
+        {
+         "id": "tsmiEditModelReferencePoint",
+         "text": "Edit",
+         "handler": "tsmiEditModelReferencePoint_Click",
+         "select": {
+          "mode": "one",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "EditModelReferencePoint",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "ReferencePoint",
+            "title": "Edit Reference Point"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateModelReferencePoint",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateModelReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "DuplicateModelReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateModelReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiModelRP1",
+         "separator": true
+        },
+        {
+         "id": "tsmiHideModelReferencePoint",
+         "text": "Hide",
+         "handler": "tsmiHideModelReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "HideModelReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideModelReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowModelReferencePoint",
+         "text": "Show",
+         "handler": "tsmiShowModelReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "ShowModelReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ShowModelReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowOnlyModelReferencePoint",
+         "text": "Show Only",
+         "handler": "tsmiShowOnlyModelReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "ShowOnlyModelReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "GetModelReferencePointNames",
+            "HideModelReferencePointsCommand",
+            "ShowModelReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiModelRP2",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteModelReferencePoint",
+         "text": "Delete",
+         "handler": "tsmiDeleteModelReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Reference Points",
+          "getter": "GetAllModelReferencePoints",
+          "target": "DeleteModelReferencePoints",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected model reference points?",
+           "calls": [
+            "RemoveModelReferencePointsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      },
+      {
+       "id": "tsmiModelCoordinateSystem",
+       "text": "Coordinate System",
+       "children": [
+        {
+         "id": "tsmiCreateModelCoordinateSystem",
+         "text": "Create",
+         "handler": "tsmiCreateModelCoordinateSystem_Click"
+        },
+        {
+         "id": "tsmiEditModelCoordinateSystem",
+         "text": "Edit",
+         "handler": "tsmiEditModelCoordinateSystem_Click",
+         "select": {
+          "mode": "one",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "EditModelCoordinateSystem",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "CoordinateSystem",
+            "title": "Edit Coordinate System"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateModelCoordinateSystem",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateModelCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "DuplicateModelCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateModelCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerModelCoordinateSystem1",
+         "separator": true
+        },
+        {
+         "id": "tsmiHideModelCoordinateSystem",
+         "text": "Hide",
+         "handler": "tsmiHideModelCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "HideModelCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideModelCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowModelCoordinateSystem",
+         "text": "Show",
+         "handler": "tsmiShowModelCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "ShowModelCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ShowModelCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowOnlyModelCoordinateSystem",
+         "text": "Show Only",
+         "handler": "tsmiShowOnlyModelCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "ShowOnlyModelCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideModelCoordinateSystemsCommand",
+            "ShowModelCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerModelCoordinateSystem2",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteModelCoordinateSystem",
+         "text": "Delete",
+         "handler": "tsmiDeleteModelCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Model Coordinate Systems",
+          "getter": "GetAllModelCoordinateSystems",
+          "target": "DeleteModelCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected model coordinate systems?",
+           "calls": [
+            "RemoveModelCoordinateSystemsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tsmiProperty",
+   "text": "Property",
+   "children": [
+    {
+     "id": "tsmiMaterial",
+     "text": "Material",
+     "children": [
+      {
+       "id": "tsmiCreateMaterial",
+       "text": "Create",
+       "handler": "tsmiCreateMaterial_Click"
+      },
+      {
+       "id": "tsmiEditMaterial",
+       "text": "Edit",
+       "handler": "tsmiEditMaterial_Click",
+       "select": {
+        "mode": "one",
+        "title": "Materials",
+        "getter": "GetAllMaterials",
+        "target": "EditMaterial",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Material",
+          "title": "Edit Material"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateMaterial",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateMaterial_Click",
+       "select": {
+        "mode": "many",
+        "title": "Materials",
+        "getter": "GetAllMaterials",
+        "target": "DuplicateMaterials",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateMaterialsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerMaterial1",
+       "separator": true
+      },
+      {
+       "id": "tsmiImportMaterial",
+       "text": "Import from .inp",
+       "handler": "tsmiImportMaterial_Click"
+      },
+      {
+       "id": "tsmiExportMaterial",
+       "text": "Export to .inp",
+       "handler": "tsmiExportMaterial_Click",
+       "select": {
+        "mode": "many",
+        "title": "Materials",
+        "getter": "GetAllMaterials",
+        "target": "ExportMaterials",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ExportMaterials"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerMaterial2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteMaterial",
+       "text": "Delete",
+       "handler": "tsmiDeleteMaterial_Click",
+       "select": {
+        "mode": "many",
+        "title": "Materials",
+        "getter": "GetAllMaterials",
+        "target": "DeleteMaterials",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected materials?",
+         "calls": [
+          "RemoveMaterialsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiMaterialLibrary",
+     "text": "Material Library",
+     "handler": "tsmiMaterialLibrary_Click"
+    },
+    {
+     "id": "tsmiSection",
+     "text": "Section",
+     "children": [
+      {
+       "id": "tsmiCreateSection",
+       "text": "Create",
+       "handler": "tsmiCreateSection_Click"
+      },
+      {
+       "id": "tsmiEditSection",
+       "text": "Edit",
+       "handler": "tsmiEditSection_Click",
+       "select": {
+        "mode": "one",
+        "title": "Sections",
+        "getter": "GetAllSections",
+        "target": "EditSection",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Section",
+          "title": "Edit Section"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateSection",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateSection_Click",
+       "select": {
+        "mode": "many",
+        "title": "Sections",
+        "getter": "GetAllSections",
+        "target": "DuplicateSections",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateSectionsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerSection1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDelete",
+       "text": "Delete",
+       "handler": "tsmiDelete_Click",
+       "select": {
+        "mode": "many",
+        "title": "Sections",
+        "getter": "GetAllSections",
+        "target": "DeleteSections",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected sections?",
+         "calls": [
+          "RemoveSectionsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tsmiInteraction",
+   "text": "Interaction",
+   "children": [
+    {
+     "id": "tsmiConstraint",
+     "text": "Constraint",
+     "children": [
+      {
+       "id": "tsmiCreateConstraint",
+       "text": "Create",
+       "handler": "tsmiCreateConstraint_Click"
+      },
+      {
+       "id": "tsmiEditConstraint",
+       "text": "Edit",
+       "handler": "tsmiEditConstraint_Click",
+       "select": {
+        "mode": "one",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "EditConstraint",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Constraint",
+          "title": "Edit Constraint"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateConstraint",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "DuplicateConstraints",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateConstraintsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerConstraint1",
+       "separator": true
+      },
+      {
+       "id": "tsmiSwapMasterSlaveConstraint",
+       "text": "Swap Master/Slave",
+       "handler": "tsmiSwapMasterSlaveConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "SwapMasterSlaveConstraints",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SwapMasterSlaveConstraintsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiMergeByMasterSlaveConstraint",
+       "text": "Merge by Master/Slave",
+       "handler": "tsmiMergeByMasterSlaveConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "MergeByMasterSlaveConstraints",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "MergeByMasterSlaveConstraintsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerConstraint2",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideConstraint",
+       "text": "Hide",
+       "handler": "tsmiHideConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "HideConstraints",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideConstraintsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowConstraint",
+       "text": "Show",
+       "handler": "tsmiShowConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "ShowConstraints",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ShowConstraintsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerConstraint3",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteConstraint",
+       "text": "Delete",
+       "handler": "tsmiDeleteConstraint_Click",
+       "select": {
+        "mode": "many",
+        "title": "Constraints",
+        "getter": "GetAllConstraints",
+        "target": "DeleteConstraints",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected constraints?",
+         "calls": [
+          "RemoveConstraintsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiContact",
+     "text": "Contact",
+     "children": [
+      {
+       "id": "tsmiSurfaceInteraction",
+       "text": "Surface Interaction",
+       "children": [
+        {
+         "id": "tsmiCreateSurfaceInteraction",
+         "text": "Create",
+         "handler": "tsmiCreateSurfaceInteraction_Click"
+        },
+        {
+         "id": "tsmiEditSurfaceInteraction",
+         "text": "Edit",
+         "handler": "tsmiEditSurfaceInteraction_Click",
+         "select": {
+          "mode": "one",
+          "title": "Surface interactions",
+          "getter": "GetAllSurfaceInteractions",
+          "target": "EditSurfaceInteraction",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "SurfaceInteraction",
+            "title": "Edit surface interaction"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateSurfaceInteraction",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateSurfaceInteraction_Click",
+         "select": {
+          "mode": "many",
+          "title": "Surface interactions",
+          "getter": "GetAllSurfaceInteractions",
+          "target": "DuplicateSurfaceInteractions",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateSurfaceInteractionsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerSurfaceInteraction1",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteSurfaceInteraction",
+         "text": "Delete",
+         "handler": "tsmiDeleteSurfaceInteraction_Click",
+         "select": {
+          "mode": "many",
+          "title": "Surface interactions",
+          "getter": "GetAllSurfaceInteractions",
+          "target": "DeleteSurfaceInteractions",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected surface interactions?",
+           "calls": [
+            "RemoveSurfaceInteractionsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      },
+      {
+       "id": "contactPairToolStripMenuItem",
+       "text": "Contact Pair",
+       "children": [
+        {
+         "id": "tsmiCreateContactPair",
+         "text": "Create",
+         "handler": "tsmiCreateContactPair_Click"
+        },
+        {
+         "id": "tsmiEditContactPair",
+         "text": "Edit",
+         "handler": "tsmiEditContactPair_Click",
+         "select": {
+          "mode": "one",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "EditContactPair",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "ContactPair",
+            "title": "Edit Contact Pair"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateContactPair",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "DuplicateContactPairs",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateContactPairsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerContactPair1",
+         "separator": true
+        },
+        {
+         "id": "tsmiSwapMasterSlaveContactPair",
+         "text": "Swap Master/Slave",
+         "handler": "tsmiSwapMasterSlaveContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "SwapMasterSlaveContactPairs",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "SwapMasterSlaveContactPairsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiMergeByMasterSlaveContactPair",
+         "text": "Merge by Master/Slave",
+         "handler": "tsmiMergeByMasterSlaveContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "MergeByMasterSlaveContactPairs",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "MergeByMasterSlaveContactPairsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerContactPair2",
+         "separator": true
+        },
+        {
+         "id": "tsmiHideContactPair",
+         "text": "Hide",
+         "handler": "tsmiHideContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "HideContactPairs",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideContactPairsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowContactPair",
+         "text": "Show",
+         "handler": "tsmiShowContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "ShowContactPairs",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ShowContactPairsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerContactPair3",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteContactPair",
+         "text": "Delete",
+         "handler": "tsmiDeleteContactPair_Click",
+         "select": {
+          "mode": "many",
+          "title": "Contact pairs",
+          "getter": "GetAllContactPairs",
+          "target": "DeleteContactPairs",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected contact pairs?",
+           "calls": [
+            "RemoveContactPairsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerInteraction1",
+     "separator": true
+    },
+    {
+     "id": "tsmiSearchContactPairs",
+     "text": "Search Contact Pairs",
+     "handler": "tsmiSearchContactPairs_Click"
+    }
+   ]
+  },
+  {
+   "id": "tsmiDistribution",
+   "text": "Distribution",
+   "children": [
+    {
+     "id": "tsmiCreateDistribution",
+     "text": "Create",
+     "handler": "tsmiCreateDistribution_Click"
+    },
+    {
+     "id": "tsmiEditDistribution",
+     "text": "Edit",
+     "handler": "tsmiEditDistribution_Click",
+     "select": {
+      "mode": "one",
+      "title": "Distributions",
+      "getter": "GetAllDistributions",
+      "target": "EditDistribution",
+      "minimum": 1,
+      "action": {
+       "form": {
+        "form": "Distribution",
+        "title": "Edit Distribution"
+       }
+      }
+     }
+    },
+    {
+     "id": "tsmiDuplicateDistribution",
+     "text": "Duplicate",
+     "handler": "tsmiDuplicateDistribution_Click",
+     "select": {
+      "mode": "many",
+      "title": "Distributions",
+      "getter": "GetAllDistributions",
+      "target": "DuplicateDistributions",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "DuplicateDistributionsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerDistribution1",
+     "separator": true
+    },
+    {
+     "id": "tsmiDeleteDistribution",
+     "text": "Delete",
+     "handler": "tsmiDeleteDistribution_Click",
+     "select": {
+      "mode": "many",
+      "title": "Distributions",
+      "getter": "GetAllDistributions",
+      "target": "DeleteDistributions",
+      "minimum": 1,
+      "action": {
+       "confirm": "OK to delete selected distribution?",
+       "calls": [
+        "RemoveDistributionsCommand"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiAmplitude",
+   "text": "Amplitude",
+   "children": [
+    {
+     "id": "tsmiCreateAmplitude",
+     "text": "Create",
+     "handler": "tsmiCreateAmplitude_Click"
+    },
+    {
+     "id": "tsmiEditAmplitude",
+     "text": "Edit",
+     "handler": "tsmiEditAmplitude_Click",
+     "select": {
+      "mode": "one",
+      "title": "Amplitudes",
+      "getter": "GetAllAmplitudes",
+      "target": "EditAmplitude",
+      "minimum": 1,
+      "action": {
+       "form": {
+        "form": "Amplitude",
+        "title": "Edit Amplitude"
+       }
+      }
+     }
+    },
+    {
+     "id": "tsmiDuplicateAmplitude",
+     "text": "Duplicate",
+     "handler": "tsmiDuplicateAmplitude_Click",
+     "select": {
+      "mode": "many",
+      "title": "Amplitudes",
+      "getter": "GetAllAmplitudes",
+      "target": "DuplicateAmplitudes",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "DuplicateAmplitudesCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerAmplitude1",
+     "separator": true
+    },
+    {
+     "id": "tsmiDeleteAmplitude",
+     "text": "Delete",
+     "handler": "tsmiDeleteAmplitude_Click",
+     "select": {
+      "mode": "many",
+      "title": "Amplitudes",
+      "getter": "GetAllAmplitudes",
+      "target": "DeleteAmplitudes",
+      "minimum": 1,
+      "action": {
+       "confirm": "OK to delete selected amplitudes?",
+       "calls": [
+        "RemoveAmplitudesCommand"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiInitialCondition",
+   "text": "Initial Condition",
+   "children": [
+    {
+     "id": "tsmiCreateInitialCondition",
+     "text": "Create",
+     "handler": "tsmiCreateInitialCondition_Click"
+    },
+    {
+     "id": "tsmiEditInitialCondition",
+     "text": "Edit",
+     "handler": "tsmiEditInitialCondition_Click",
+     "select": {
+      "mode": "one",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "EditInitialCondition",
+      "minimum": 1,
+      "action": {
+       "form": {
+        "form": "InitialCondition",
+        "title": "Edit Initial Condition"
+       }
+      }
+     }
+    },
+    {
+     "id": "tsmiDuplicateInitialCondition",
+     "text": "Duplicate",
+     "handler": "tsmiDuplicateInitialCondition_Click",
+     "select": {
+      "mode": "many",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "DuplicateInitialConditions",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "DuplicateInitialConditionsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiPreviewInitialCondition",
+     "text": "Preview",
+     "handler": "tsmiPreviewInitialCondition_Click",
+     "select": {
+      "mode": "one",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "PreviewInitialCondition",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "PreviewInitialCondition"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerInitialCondition1",
+     "separator": true
+    },
+    {
+     "id": "tsmiHideInitialCondition",
+     "text": "Hide",
+     "handler": "tsmiHideInitialCondition_Click",
+     "select": {
+      "mode": "many",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "HideInitialConditions",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "HideInitialConditionsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiShowInitialCondition",
+     "text": "Show",
+     "handler": "tsmiShowInitialCondition_Click",
+     "select": {
+      "mode": "many",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "ShowInitialConditions",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "ShowInitialConditionsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerInitialCondition2",
+     "separator": true
+    },
+    {
+     "id": "tsmiDeleteInitialCondition",
+     "text": "Delete",
+     "handler": "tsmiDeleteInitialCondition_Click",
+     "select": {
+      "mode": "many",
+      "title": "Initial Conditions",
+      "getter": "GetAllInitialConditions",
+      "target": "DeleteInitialConditions",
+      "minimum": 1,
+      "action": {
+       "confirm": "OK to delete selected initial conditions?",
+       "calls": [
+        "RemoveInitialConditionsCommand"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiStepMenu",
+   "text": "Step",
+   "children": [
+    {
+     "id": "tsmiStep",
+     "text": "Step",
+     "children": [
+      {
+       "id": "tsmiCreateStep",
+       "text": "Create",
+       "handler": "tsmiCreateStep_Click"
+      },
+      {
+       "id": "tsmiEditStep",
+       "text": "Edit",
+       "handler": "tsmiEditStep_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "EditStep",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Step",
+          "title": "Edit Step"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditStepControls",
+       "text": "Edit Controls",
+       "handler": "tsmiEditStepControls_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "EditStepControls",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "StepControls",
+          "title": "Edit Step Controls"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateStep",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateStep_Click",
+       "select": {
+        "mode": "many",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "DuplicateSteps",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateStepsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerStep2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteStep",
+       "text": "Delete",
+       "handler": "tsmiDeleteStep_Click",
+       "select": {
+        "mode": "many",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "DeleteSteps",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected steps?",
+         "calls": [
+          "RemoveStepsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerStep1",
+     "separator": true
+    },
+    {
+     "id": "tsmiHistoryOutput",
+     "text": "History Output",
+     "children": [
+      {
+       "id": "tsmiCreateHistoryOutput",
+       "text": "Create",
+       "handler": "tsmiCreateHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "CreateHistoryOutput",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "HistoryOutput",
+          "title": "Create History Output"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditHistoryOutput",
+       "text": "Edit",
+       "handler": "tsmiEditHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndEditHistoryOutput",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "History outputs",
+         "getter": "GetAllHistoryOutputs",
+         "target": "EditHistoryOutput",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "form": {
+           "form": "HistoryOutput",
+           "title": "Edit History Output"
+          }
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllHistoryOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateHistoryOutput",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDuplicateHistoryOutputs",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "History outputs",
+         "getter": "GetAllHistoryOutputs",
+         "target": "DuplicateHistoryOutputs",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "DuplicateHistoryOutputsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllHistoryOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPropagateHistoryOutput",
+       "text": "Propagate",
+       "handler": "tsmiPropagateHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPropagateHistoryOutput",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "History outputs",
+         "getter": "GetAllHistoryOutputs",
+         "target": "PropagateHistoryOutput",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to overwrite the existing history output ",
+          "calls": [
+           "PropagateHistoryOutputCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllHistoryOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiHistoryOutputDivider1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteHistoryOutput",
+       "text": "Delete",
+       "handler": "tsmiDeleteHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDeleteHistoryOutputs",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "History outputs",
+         "getter": "GetAllHistoryOutputs",
+         "target": "DeleteHistoryOutputs",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to delete selected history outputs from step ",
+          "calls": [
+           "RemoveHistoryOutputsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllHistoryOutputs"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiFieldOutput",
+     "text": "Field Output",
+     "children": [
+      {
+       "id": "tsmiCreateFieldOutput",
+       "text": "Create",
+       "handler": "tsmiCreateFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "CreateFieldOutput",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "FieldOutput",
+          "title": "Create Field Output"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditFieldOutput",
+       "text": "Edit",
+       "handler": "tsmiEditFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndEditFieldOutput",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Field outputs",
+         "getter": "GetAllFieldOutputs",
+         "target": "EditFieldOutput",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "form": {
+           "form": "FieldOutput",
+           "title": "Edit Field Output"
+          }
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllFieldOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateFieldOutput",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDuplicateFieldOutputs",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Field outputs",
+         "getter": "GetAllFieldOutputs",
+         "target": "DuplicateFieldOutputs",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "DuplicateFieldOutputsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllFieldOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPropagateFieldOutput",
+       "text": "Propagate",
+       "handler": "tsmiPropagateFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPropagateFieldOutput",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Field outputs",
+         "getter": "GetAllFieldOutputs",
+         "target": "PropagateFieldOutput",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to overwrite the existing filed output ",
+          "calls": [
+           "PropagateFieldOutputCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllFieldOutputs"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerFieldOutput1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteFieldOutput",
+       "text": "Delete",
+       "handler": "tsmiDeleteFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDeleteFieldOutputs",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Field outputs",
+         "getter": "GetAllFieldOutputs",
+         "target": "DeleteFieldOutputs",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to delete selected field outputs from step ",
+          "calls": [
+           "RemoveFieldOutputsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetAllFieldOutputs"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiBC",
+     "text": "BC",
+     "children": [
+      {
+       "id": "tsmiCreateBC",
+       "text": "Create",
+       "handler": "tsmiCreateBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "CreateBoundaryCondition",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "BoundaryCondition",
+          "title": "Create Boundary Condition"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditBC",
+       "text": "Edit",
+       "handler": "tsmiEditBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndEditBoundaryCondition",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "EditBoundaryCondition",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "form": {
+           "form": "BoundaryCondition",
+           "title": "Edit Boundary Condition"
+          }
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateBC",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDuplicateBoundaryCondition",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "DuplicateBoundaryConditions",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "DuplicateBoundaryConditionsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPropagateBC",
+       "text": "Propagate",
+       "handler": "tsmiPropagateBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPropagateBoundaryCondition",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "PropagateBoundaryCondition",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to overwrite the existing boundary condition ",
+          "calls": [
+           "PropagateBoundaryConditionCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPreviewBC",
+       "text": "Preview",
+       "handler": "tsmiPreviewBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPreviewBoundaryCondition",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "PreviewBoundaryCondition",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "PreviewBoundaryCondition"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerBC1",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideBC",
+       "text": "Hide",
+       "handler": "tsmiHideBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndHideBoundaryConditions",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "HideBoundaryConditions",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "HideBoundaryConditionCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowBC",
+       "text": "Show",
+       "handler": "tsmiShowBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndShowBoundaryConditions",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "ShowBoundaryConditions",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "ShowBoundaryConditionCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerBC2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteBC",
+       "text": "Delete",
+       "handler": "tsmiDeleteBC_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDeleteBoundaryCondition",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Boundary conditions",
+         "getter": "GetStepBoundaryConditions",
+         "target": "DeleteBoundaryConditions",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to delete selected boundary conditions from step ",
+          "calls": [
+           "RemoveBoundaryConditionsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepBoundaryConditions"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiLoad",
+     "text": "Load",
+     "children": [
+      {
+       "id": "tsmiCreateLoad",
+       "text": "Create",
+       "handler": "tsmiCreateLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "CreateLoad",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "Load",
+          "title": "Create Load"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditLoad",
+       "text": "Edit",
+       "handler": "tsmiEditLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndEditLoad",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "EditLoad",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "form": {
+           "form": "Load",
+           "title": "Edit Load"
+          }
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateLoad",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDuplicateLoads",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "DuplicateLoads",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "DuplicateLoadsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPropagateLoad",
+       "text": "Propagate",
+       "handler": "tsmiPropagateLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPropagateLoad",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "PropagateLoad",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to overwrite the existing load ",
+          "calls": [
+           "PropagateLoadCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPreviewLoad",
+       "text": "Preview",
+       "handler": "tsmiPreviewLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPreviewLoad",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "PreviewLoad",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "PreviewLoad"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerLoad1",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideLoad",
+       "text": "Hide",
+       "handler": "tsmiHideLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndHideLoads",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "HideLoads",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "HideLoadsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowLoad",
+       "text": "Show",
+       "handler": "tsmiShowLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndShowLoads",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "ShowLoads",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "ShowLoadsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerLoad2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteLoad",
+       "text": "Delete",
+       "handler": "tsmiDeleteLoad_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDeleteLoads",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Loads",
+         "getter": "GetStepLoads",
+         "target": "DeleteLoads",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to delete selected loads from step ",
+          "calls": [
+           "RemoveLoadsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepLoads"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiDefinedField",
+     "text": "Defined Field",
+     "children": [
+      {
+       "id": "tsmiCreateDefinedField",
+       "text": "Create",
+       "handler": "tsmiCreateDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "CreateDefinedField",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "DefinedField",
+          "title": "Create Defined Field"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiEditDefinedField",
+       "text": "Edit",
+       "handler": "tsmiEditDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndEditDefinedField",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "EditDefinedField",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "form": {
+           "form": "DefinedField",
+           "title": "Edit Defined Field"
+          }
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateDefinedField",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDuplicateDefinedFields",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "DuplicateDefinedFields",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "DuplicateDefinedFieldsForStepCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPropagateDefinedField",
+       "text": "Propagate",
+       "handler": "tsmiPropagateDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPropagateDefinedField",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "PropagateDefinedField",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to overwrite the existing defined field ",
+          "calls": [
+           "PropagateDefinedFieldCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiPreviewDefinedField",
+       "text": "Preview",
+       "handler": "tsmiPreviewDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndPreviewDefinedField",
+        "minimum": 1,
+        "inStep": {
+         "mode": "one",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "PreviewDefinedField",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "PreviewDefinedField"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerDefinedField1",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideDefinedField",
+       "text": "Hide",
+       "handler": "tsmiHideDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndHideDefinedFields",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "HideDefinedFields",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "HideDefinedFieldsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowDefinedField",
+       "text": "Show",
+       "handler": "tsmiShowDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndShowDefinedFields",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "ShowDefinedFields",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "calls": [
+           "ShowDefinedFieldsCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerDefinedField2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteDefinedField",
+       "text": "Delete",
+       "handler": "tsmiDeleteDefinedField_Click",
+       "select": {
+        "mode": "one",
+        "title": "Steps",
+        "getter": "GetAllSteps",
+        "target": "SelectAndDeleteDefinedFields",
+        "minimum": 1,
+        "inStep": {
+         "mode": "many",
+         "title": "Defined fields",
+         "getter": "GetStepDefinedFields",
+         "target": "DeleteDefinedFields",
+         "minimum": 1,
+         "arguments": [
+          "stepName"
+         ],
+         "action": {
+          "confirm": "OK to delete selected defined fields from step ",
+          "calls": [
+           "RemoveDefinedFieldsForStepCommand"
+          ]
+         }
+        },
+        "action": {
+         "calls": [
+          "GetStepDefinedFields"
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tsmiAnalysis",
+   "text": "Analysis",
+   "children": [
+    {
+     "id": "tsmiCreateAnalysis",
+     "text": "Create",
+     "handler": "tsmiCreateAnalysis_Click"
+    },
+    {
+     "id": "tsmiEditAnalysis",
+     "text": "Edit",
+     "handler": "tsmiEditAnalysis_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "EditAnalysis",
+      "minimum": 1,
+      "action": {
+       "form": {
+        "form": "Analysis",
+        "title": "Edit Analysis"
+       }
+      }
+     }
+    },
+    {
+     "id": "tsmiDuplicateAnalysis",
+     "text": "Duplicate",
+     "handler": "tsmiDuplicateAnalysis_Click",
+     "select": {
+      "mode": "many",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "DuplicateAnalyses",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "DuplicateJobsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerAnalysis1",
+     "separator": true
+    },
+    {
+     "id": "tsmiRunAnalysis",
+     "text": "Run",
+     "handler": "tsmiRunAnalysis_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "RunAnalysis",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiCheckModel",
+     "text": "Check Model",
+     "handler": "tsmiCheckModel_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "CheckModel",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiMonitorAnalysis",
+     "text": "Monitor",
+     "handler": "tsmiMonitorAnalysis_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "MonitorAnalysis",
+      "minimum": 1
+     }
+    },
+    {
+     "id": "tsmiResultsAnalysis",
+     "text": "Results",
+     "handler": "tsmiResultsAnalysis_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "ResultsAnalysis",
+      "minimum": 1,
+      "action": {
+       "calls": [
+        "OpenResultsCommand"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiKillAnalysis",
+     "text": "Kill",
+     "handler": "tsmiKillAnalysis_Click",
+     "select": {
+      "mode": "one",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "KillAnalysis",
+      "minimum": 1,
+      "action": {
+       "confirm": "OK to kill selected analysis?",
+       "calls": [
+        "GetJob",
+        "KillJob"
+       ]
+      }
+     }
+    },
+    {
+     "id": "tsmiDividerAnalysis2",
+     "separator": true
+    },
+    {
+     "id": "tsmiDeleteAnalysis",
+     "text": "Delete",
+     "handler": "tsmiDeleteAnalysis_Click",
+     "select": {
+      "mode": "many",
+      "title": "Analyses",
+      "getter": "GetAllJobs",
+      "target": "DeleteAnalyses",
+      "minimum": 1,
+      "action": {
+       "confirm": "OK to delete selected analyses?",
+       "calls": [
+        "RemoveJobsCommand"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tsmiResults",
+   "text": "Results",
+   "children": [
+    {
+     "id": "tsmiResultPart",
+     "text": "Part",
+     "children": [
+      {
+       "id": "tsmiEditResultPart",
+       "text": "Edit",
+       "handler": "tsmiEditResultParts_Click",
+       "select": {
+        "mode": "one",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "EditResultPart",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "PartProperties",
+          "title": "Edit Part"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiMergeResultPart",
+       "text": "Merge",
+       "handler": "tsmiMergeResultPart_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "MergeResultParts",
+        "minimum": 2,
+        "action": {
+         "confirm": "OK to merge selected parts?",
+         "calls": [
+          "AreResultPartsMergeable",
+          "MergeResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultPart1",
+       "separator": true
+      },
+      {
+       "id": "tsmiHideResultParts",
+       "text": "Hide",
+       "handler": "tsmiHideResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "HideResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "HideResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowResultParts",
+       "text": "Show",
+       "handler": "tsmiShowResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "ShowResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ShowResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiShowOnlyResultParts",
+       "text": "Show Only",
+       "handler": "tsmiShowOnlyResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "ShowOnlyResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ShowResultPartsCommand",
+          "HideResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultPart3",
+       "separator": true
+      },
+      {
+       "id": "tsmiSetColorForResultParts",
+       "text": "Set Color",
+       "handler": "tsmiSetColorForResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "SetColorForResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetColorForResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiResetColorForResultParts",
+       "text": "Reset Color",
+       "handler": "tsmiResetColorForResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "ResetColorForResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "ResetColorForResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiSetTransparencyForResultParts",
+       "text": "Set Transparency",
+       "handler": "tsmiSetTransparencyForResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "SetTransparencyForResultParts",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetTransparencyForResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultPart2",
+       "separator": true
+      },
+      {
+       "id": "tsmiColorContoursOff",
+       "text": "Result Representation Off",
+       "handler": "tsmiResultRepresentationOff_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts<ResultPart>",
+        "target": "ResultRepresentationOffResultPart",
+        "minimum": 1
+       }
+      },
+      {
+       "id": "tsmiColorContoursOn",
+       "text": "Result Representation On",
+       "handler": "tsmiResultRepresentationOn_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts<ResultPart>",
+        "target": "ResultRepresentationOnResultPart",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "SetResultRepresentationForResultPartsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultPart4",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteResultParts",
+       "text": "Delete",
+       "handler": "tsmiDeleteResultParts_Click",
+       "select": {
+        "mode": "many",
+        "title": "Parts",
+        "getter": "GetResultParts",
+        "target": "DeleteResultParts",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected parts?",
+         "calls": [
+          "RemoveResultPartsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiResultFeatures",
+     "text": "Features",
+     "children": [
+      {
+       "id": "tsmiResultReferencePoints",
+       "text": "Reference Points",
+       "children": [
+        {
+         "id": "tsmiCreateResultReferencePoint",
+         "text": "Create",
+         "handler": "tsmiCreateResultReferencePoint_Click"
+        },
+        {
+         "id": "tsmiEditResultReferencePoint",
+         "text": "Edit",
+         "handler": "tsmiEditResultReferencePoint_Click",
+         "select": {
+          "mode": "one",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "EditResultReferencePoint",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "ReferencePoint",
+            "title": "Edit Reference Point"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateResultReferencePoint",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateResultReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "DuplicateResultReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateResultReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerResultReferencePoints1",
+         "separator": true
+        },
+        {
+         "id": "tsmiHideResultReferencePoint",
+         "text": "Hide",
+         "handler": "tsmiHideResultReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "HideResultReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideResultReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowResultReferencePoint",
+         "text": "Show",
+         "handler": "tsmiShowResultReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "ShowResultReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ShowResultReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowOnlyResultReferencePoint",
+         "text": "Show Only",
+         "handler": "tsmiShowOnlyResultReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "ShowOnlyResultReferencePoints",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "GetResultReferencePointNames",
+            "HideResultReferencePointsCommand",
+            "ShowResultReferencePointsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiDividerResultReferencePoints2",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteResultReferencePoint",
+         "text": "Delete",
+         "handler": "tsmiDeleteResultReferencePoint_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Reference Points",
+          "getter": "GetAllResultReferencePoints",
+          "target": "DeleteResultReferencePoints",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected result reference points?",
+           "calls": [
+            "RemoveResultReferencePointsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      },
+      {
+       "id": "tsmiResultCoordinateSystems",
+       "text": "Coordinate Systems",
+       "children": [
+        {
+         "id": "tsmiCreateResultCoordinateSystem",
+         "text": "Create",
+         "handler": "tsmiCreateResultCoordinateSystem_Click"
+        },
+        {
+         "id": "tsmiEditResultCoordinateSystem",
+         "text": "Edit",
+         "handler": "tsmiEditResultCoordinateSystem_Click",
+         "select": {
+          "mode": "one",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "EditResultCoordinateSystem",
+          "minimum": 1,
+          "action": {
+           "form": {
+            "form": "CoordinateSystem",
+            "title": "Edit Coordinate System"
+           }
+          }
+         }
+        },
+        {
+         "id": "tsmiDuplicateResultCoordinateSystem",
+         "text": "Duplicate",
+         "handler": "tsmiDuplicateResultCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "DuplicateResultCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "DuplicateResultCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "toolStripMenuItem3",
+         "separator": true
+        },
+        {
+         "id": "tsmiHideResultCoordinateSystem",
+         "text": "Hide",
+         "handler": "tsmiHideResultCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "HideResultCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideResultCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowResultCoordinateSystem",
+         "text": "Show",
+         "handler": "tsmiShowResultCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "ShowResultCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "ShowResultCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "tsmiShowOnlyResultCoordinateSystem",
+         "text": "Show Only",
+         "handler": "tsmiShowOnlyResultCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "ShowOnlyResultCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "calls": [
+            "HideResultCoordinateSystemsCommand",
+            "ShowResultCoordinateSystemsCommand"
+           ]
+          }
+         }
+        },
+        {
+         "id": "toolStripMenuItem2",
+         "separator": true
+        },
+        {
+         "id": "tsmiDeleteResultCoordinateSystem",
+         "text": "Delete",
+         "handler": "tsmiDeleteResultCoordinateSystem_Click",
+         "select": {
+          "mode": "many",
+          "title": "Result Coordinate Systems",
+          "getter": "GetAllResultCoordinateSystems",
+          "target": "DeleteResultCoordinateSystems",
+          "minimum": 1,
+          "action": {
+           "confirm": "OK to delete selected result coordinate systems?",
+           "calls": [
+            "RemoveResultCoordinateSystemsCommand"
+           ]
+          }
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerResults1",
+     "separator": true
+    },
+    {
+     "id": "tsmiResultFieldOutput",
+     "text": "Field Output",
+     "children": [
+      {
+       "id": "tsmiCreateResultFieldOutput",
+       "text": "Create",
+       "handler": "tsmiCreateResultFieldOutput_Click"
+      },
+      {
+       "id": "tsmiEditResultFieldOutput",
+       "text": "Edit",
+       "handler": "tsmiEditResultFieldOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "Field Outputs",
+        "getter": "GetResultFieldOutputs",
+        "target": "EditResultFieldOutput",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "ResultFieldOutput",
+          "title": "Edit Field Output"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultFieldOutput1",
+       "separator": true
+      },
+      {
+       "id": "tsmiExportResultFieldOutput",
+       "text": "Export",
+       "handler": "tsmiExportResultFieldOutput_Click"
+      },
+      {
+       "id": "tsmiDividerResultFieldOutput2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteResultFieldOutput",
+       "text": "Delete",
+       "handler": "tsmiDeleteResultFieldOutput_Click",
+       "select": {
+        "mode": "many",
+        "title": "Field Outputs",
+        "getter": "GetVisibleResultFieldOutputsAsNamedItems",
+        "target": "DeleteResultFieldOutputs",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected field outputs?",
+         "calls": [
+          "RemoveResultFieldOutputsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiResultHistoryOutput",
+     "text": "History Output",
+     "children": [
+      {
+       "id": "tsmiCreateResultHistoryOutput",
+       "text": "Create",
+       "handler": "tsmiCreateResultHistoryOutput_Click"
+      },
+      {
+       "id": "tsmiEditResultHistoryOutput",
+       "text": "Edit",
+       "handler": "tsmiEditResultHistoryOutput_Click",
+       "select": {
+        "mode": "one",
+        "title": "History Outputs",
+        "getter": "GetResultHistoryOutputs",
+        "target": "EditResultHistoryOutput",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "ResultHistoryOutput",
+          "title": "Edit History Output"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerResultHistoryOutput1",
+       "separator": true
+      },
+      {
+       "id": "tsmiExportResultHistoryOutput",
+       "text": "Export",
+       "handler": "tsmiExportResultHistoryOutput_Click"
+      },
+      {
+       "id": "tsmiDividerResultHistoryOutput2",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteResultHistoryOutput",
+       "text": "Delete",
+       "handler": "tsmiDeleteResultHistoryOutput_Click",
+       "select": {
+        "mode": "many",
+        "title": "History Outputs",
+        "getter": "GetResultHistoryOutputsAsNamedItems",
+        "target": "DeleteResultHistoryOutputs",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected history outputs?",
+         "calls": [
+          "RemoveResultHistoryOutputsCommand"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerResults2",
+     "separator": true
+    },
+    {
+     "id": "tsmiTransformation",
+     "text": "Transformation",
+     "handler": "tsmiTransformation_Click"
+    },
+    {
+     "id": "tsmiDividerResults3",
+     "separator": true
+    },
+    {
+     "id": "tsmiAppendResults",
+     "text": "Append Results",
+     "handler": "tsmiAppendResults_Click"
+    }
+   ]
+  },
+  {
+   "id": "tsmiTools",
+   "text": "Tools",
+   "children": [
+    {
+     "id": "tsmiSettings",
+     "text": "Settings",
+     "handler": "tsmiSettings_Click"
+    },
+    {
+     "id": "tsmiDividerTools1",
+     "separator": true
+    },
+    {
+     "id": "tsmiParameters",
+     "text": "Parameters",
+     "children": [
+      {
+       "id": "tsmiEditParameters",
+       "text": "Edit",
+       "handler": "tsmiEditParameters_Click"
+      },
+      {
+       "id": "toolStripMenuItem5",
+       "separator": true
+      },
+      {
+       "id": "tsmiExportParameters",
+       "text": "Export",
+       "handler": "tsmiExportParameters_Click"
+      },
+      {
+       "id": "tsmiImportParameters",
+       "text": "Import",
+       "handler": "tsmiImportParameters_Click"
+      }
+     ]
+    },
+    {
+     "id": "tsmiDividerTools2",
+     "separator": true
+    },
+    {
+     "id": "tsmiQuery",
+     "text": "Query",
+     "handler": "tsmiQuery_Click"
+    },
+    {
+     "id": "tsmiArrangeAnnotations",
+     "text": "Arrange Annotations",
+     "handler": "tsmiArrangeAnnotations_Click"
+    },
+    {
+     "id": "tsmiRemoveAnnotations",
+     "text": "Remove Annotations",
+     "handler": "tsmiRemoveAnnotations_Click"
+    },
+    {
+     "id": "tsmiFind",
+     "text": "Find",
+     "handler": "tsmiFind_Click"
+    },
+    {
+     "id": "tsmiCaptureViewport",
+     "text": "Capture Viewport",
+     "handler": "tsmiCaptureViewport_Click",
+     "shortcut": "Ctrl+P"
+    },
+    {
+     "id": "tsmiCaptureViewportAs",
+     "text": "Capture Viewport As...",
+     "handler": "tsmiCaptureViewportAs_Click"
+    },
+    {
+     "id": "tsmiDividerTools3",
+     "separator": true
+    },
+    {
+     "id": "tsmiBidirectionalMeshConverter",
+     "text": "Bidirectional Mesh Converter",
+     "handler": "tsmiBidirectionalMeshConverter_Click"
+    },
+    {
+     "id": "tsmiConvertOdbToFrd",
+     "text": "Convert .odb to .frd",
+     "handler": "tsmiConvertOdbToFrd_Click"
+    },
+    {
+     "id": "tsmiDividerTools4",
+     "separator": true
+    },
+    {
+     "id": "tsmiAutomationServer",
+     "text": "Automation Server",
+     "handler": "tsmiAutomationServer_Click"
+    }
+   ]
+  },
+  {
+   "id": "tsmiHelp",
+   "text": "Help",
+   "children": [
+    {
+     "id": "tsmiHelpAdvisor",
+     "text": "Advisor",
+     "handler": "tsmiAdvisor_Click"
+    },
+    {
+     "id": "tsmiHomePage",
+     "text": "Home Page",
+     "handler": "tsmiHomePage_Click"
+    },
+    {
+     "id": "tsmiDividerHelp1",
+     "separator": true
+    },
+    {
+     "id": "tsmiAbout",
+     "text": "About",
+     "handler": "tsmiAbout_Click"
+    },
+    {
+     "id": "tsmiTest",
+     "text": "Test",
+     "handler": "tsmiTest_Click",
+     "visible": false
+    }
+   ]
+  }
+ ]
+}

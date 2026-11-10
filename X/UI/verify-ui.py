@@ -61,6 +61,7 @@ try:
     run('original-follower',[sys.executable,HERE/'generate-presentation-rules.py','--check'])
     run('ui-audit',[sys.executable,HERE/'audit-ui.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
+    run('original-main-menu',[sys.executable,HERE/'generate-main-menu.py','--check'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:
@@ -121,6 +122,14 @@ try:
             result=json.loads((folder/'application/gui/application-gui.json').read_text())
             if not result.get('success'):raise ValueError('C5 GUI workflow failed: '+str(result))
             report['applicationGui']=result
+            menu_results=folder/'results/service/results.pmx'
+            menu=base+['--menu-probe',folder/'menu','--menu-model',folder/'application/service/application.pmx']
+            if menu_results.is_file():menu+=['--menu-results',menu_results]
+            else:report['pending'].append('Main-menu results view not executed: C4 results fixture not produced')
+            run('menu-gui',menu)
+            result=json.loads((folder/'menu/menu-gui.json').read_text())
+            if not result.get('success'):raise ValueError('Original main-menu workflow failed: '+str(result.get('error')))
+            report['menuGui']={k:result[k] for k in ('success','checks','leafItems','unmappedItems','smokeMappingErrors') if k in result}
         else:report['pending'].append('GUI workflow not executed: --gui not supplied')
     else:report['pending'].append('Property/native UI workflow not executed: no explicit CPython profile')
     report['success']=True

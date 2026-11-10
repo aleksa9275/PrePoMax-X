@@ -34,6 +34,14 @@ internal static class PersistenceChecks
         var settings=new Dictionary<string,PrePoMax.ISettings> {{"General",new PrePoMax.GeneralSettings()}};
         var settingsCopy=(Dictionary<string,PrePoMax.ISettings>)Read(Write(settings));
         Check("settings interface declarations",settingsCopy["General"] is PrePoMax.GeneralSettings);
+        // Large original projects: beyond the former fixed caps (2 M records, 32 M array slots).
+        var strings=new object[2100000];for(int i=0;i<strings.Length;i++)strings[i]="n"+i;
+        var stringsCopy=(object[])Read(Write(strings));
+        Check("more than two million records",stringsCopy.Length==strings.Length && (string)stringsCopy[^1]=="n2099999");
+        var large=new int[33000000];large[^1]=7;
+        var largeCopy=(int[])Read(Write(large));
+        Check("more than 32 million array elements",largeCopy.Length==large.Length && largeCopy[^1]==7);
+        large=null;largeCopy=null;strings=null;stringsCopy=null;GC.Collect();
         Reject("unknown framework type",()=>Read(Class("System.Diagnostics.Process",null)));
         Reject("unknown assembly",()=>Read(Class("CaeGlobals.NamedClass","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
         Reject("delegate payload",()=>Read(Class("System.DelegateSerializationHolder",null)));

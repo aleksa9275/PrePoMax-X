@@ -60,9 +60,11 @@ class Scene:
         self.element_edge_actors = []
         self.edges_by_name={}
         self.drawn=[]
+        self.overlays=[]  # persistent 2D widgets (scale bar) re-added after every clear
 
     def clear(self):
         self.renderer.RemoveAllViewProps()
+        for actor in self.overlays:self.renderer.AddActor2D(actor)
         self.actors.clear()
         self.names.clear()
         self.highlight_actor = None

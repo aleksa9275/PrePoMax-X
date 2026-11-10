@@ -22,6 +22,8 @@ C marks UI availability, not exhaustive execution of each item or complete form/
 C3 connects geometry editing, all original mesh setup types, native meshing and mesh editing.
 C4 connects original jobs, results authoring/display, viewport symbols/plots/sections/patterns/animation/captures.
 C5 adds original application/settings/library/history/keyword/automation/query/advisor/plotting tools and result-component actions.
+C6 rebuilds the original FrmMain main menu (16 menus, 313 release-visible items) from FrmMain; see [C6](reports/phase-c6-main-window.md).
+Commands marked 'compatibility only' are never constructed by the original UI (old-history types or controller-inserted).
 See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).
 The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.
 Partial form reuse does not mark a complete form C; backend/four-target execution remains separate.
@@ -29,7 +31,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 88 | 0 |
-| Commands | 237 | 237 | 236 | 227 | 0 |
+| Commands | 237 | 237 | 236 | 230 | 0 |
 | Forms | 72 | 0 | 0 | 0 | 0 |
 
 ## Model and mesh features
@@ -246,7 +248,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 |---|---|
 | CActivateDeactivateMultiple | ABC |
 | CClear | ABC |
-| CRemoveResults | AB |
+| CRemoveResults | AB (compatibility only; no UI path in original) |
 | CRenamePost | ABC |
 | CRenamePre | ABC |
 | CRunPythonScript | ABC |
@@ -258,7 +260,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Item | Status |
 |---|---|
 | CSetCalculixKeywordEditorState | ABC |
-| CSetCalculixUserKeywords | AB |
+| CSetCalculixUserKeywords | AB (compatibility only; no UI path in original) |
 
 ### Geometry
 
@@ -300,9 +302,9 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Item | Status |
 |---|---|
 | CAddMeshSetupItem | ABC |
-| CAddNetgenMeshToUncoveredParts | AB |
+| CAddNetgenMeshToUncoveredParts | AB (compatibility only; no UI path in original) |
 | CCreateMesh | ABC |
-| CDisableDefaultMeshTypes | AB |
+| CDisableDefaultMeshTypes | AB (compatibility only; no UI path in original) |
 | CDuplicateMeshSetupItems | ABC |
 | CRemoveMeshSetupItems | ABC |
 | CReplaceMeshSetupItem | ABC |
@@ -351,7 +353,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | CRotateModelParts | ABC |
 | CScaleModelParts | ABC |
 | CSetColorForModelParts | ABC |
-| CSetModelUnitSystem | AB |
+| CSetModelUnitSystem | AB (compatibility only; no UI path in original) |
 | CSetNewModelProperties | ABC |
 | CSetTransparencyForModelParts | ABC |
 | CShowModelCoordinateSystems | ABC |
@@ -367,7 +369,7 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 | Item | Status |
 |---|---|
 | CAddMaterial | ABC |
-| CDuplicateMaterial | AB |
+| CDuplicateMaterial | AB (compatibility only; no UI path in original) |
 | CDuplicateMaterials | ABC |
 | CRemoveMaterials | ABC |
 | CReplaceMaterial | ABC |
@@ -516,11 +518,11 @@ Partial form reuse does not mark a complete form C; backend/four-target executio
 
 | Item | Status |
 |---|---|
-| CAddParameter | AB |
+| CAddParameter | ABC |
 | CExportParameters | ABC |
 | CImportParameters | ABC |
-| CRemoveParameters | AB |
-| CReplaceParameter | AB |
+| CRemoveParameters | ABC |
+| CReplaceParameter | ABC |
 | CSetParameters | ABC |
 
 ### Base

@@ -1,4 +1,4 @@
-# Original-code desktop host — C1/C2/C3
+# Original-code desktop host — Phase C
 
 The .NET 10 application owns the original Controller/model. Embedded
 Python.NET exposes those same live C# objects to a thin Qt/PyQt6 widget layer;
@@ -222,3 +222,16 @@ Linux check image includes `libpulse0` for loading that module.
 [all-form source audit](../../.project/reports/phase-c5-ui-audit.json) distinguish
 available tools from full control/input/form acceptance. All 72 complete forms
 remain unaccepted; the audit is not a claim of full original UI parity.
+
+### C6 original main window
+
+The menu bar is the original `FrmMain` main menu: `generate-main-menu.py` writes
+`original_main_menu.json` (structure, shortcuts, release visibility and each
+handler's original entity selection) and `main_menu.py` maps every handler to the
+original Controller command or the Qt editor for the original form. Regenerate after
+an upstream change to `FrmMain` (`--check` runs in `verify-ui.py`). The GUI verifier
+adds `--menu-probe`: structure, per-view enabling, original camera views,
+selection/confirmation flows, parameter commands through the script panel, and a
+smoke pass that runs every reachable item in Geometry, Model and Results views.
+`scale_widget.py` ports the original `vtkMaxScaleWidget`.
+[C6 report](../../.project/reports/phase-c6-main-window.md).

@@ -12,18 +12,24 @@ namespace PrePoMaxX.Persistence;
 public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
 {
     readonly NrbfTypePolicy policy;
-    public const long MaximumBytes=512L*1024*1024;
-    const int MaximumRecords=2000000,MaximumArrayElements=32000000,MaximumDepth=256;
+    // The original BinaryFormatter has no size limits, so large projects must load.
+    // Limits scale with the input: every NRBF record needs at least one byte, and
+    // real arrays need at least one byte per element (doubles 8, references 5); the
+    // 8x factor and the fixed floor only refuse null-compressed allocation bombs.
+    public const long MaximumBytes=64L*1024*1024*1024;
+    const long MinimumRecords=2000000,MinimumArrayElements=32000000,ArrayElementsPerByte=8;
+    const int MaximumDepth=256;
     static readonly StreamingContext context = new(StreamingContextStates.All);
     public RestrictedNrbfSerializer(NrbfTypePolicy policy) {this.policy=policy;}
     public void Serialize(Stream stream,object value) => new Writer(stream,policy).Write(value);
     public object Deserialize(Stream stream)
     {
         if(!stream.CanSeek || stream.Length-stream.Position>MaximumBytes)throw new SerializationException("NRBF byte limit exceeded or input is not seekable.");
+        long bytes=stream.Length-stream.Position;
         SerializationRecord root=NrbfDecoder.Decode(stream,out var records,leaveOpen:true);
         if(stream.Position!=stream.Length)throw new SerializationException("Trailing bytes after NRBF MessageEnd.");
-        if(records.Count>MaximumRecords)throw new SerializationException("NRBF record limit exceeded.");
-        return new Reader(policy,records.Values).Read(root);
+        if(records.Count>Math.Max(MinimumRecords,bytes))throw new SerializationException("NRBF record limit exceeded.");
+        return new Reader(policy,records.Values,Math.Max(MinimumArrayElements,checked(bytes*ArrayElementsPerByte))).Read(root);
     }
     static FieldInfo[] Fields(Type type) => FormatterServices.GetSerializableMembers(type,context).Cast<FieldInfo>().ToArray();
     static void Callbacks(object value,Type attribute)
@@ -40,7 +46,8 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
         readonly HashSet<SerializationRecordId> filling=new(),filled=new(),legacyUiMetadata=new();
         readonly SerializationRecord[] records;
         int depth;
-        public Reader(NrbfTypePolicy policy,IEnumerable<SerializationRecord> records) {this.policy=policy;this.records=records.Where(r=>r is ClassRecord or ArrayRecord or PrimitiveTypeRecord).ToArray();}
+        readonly long maximumArrayElements;
+        public Reader(NrbfTypePolicy policy,IEnumerable<SerializationRecord> records,long maximumArrayElements) {this.policy=policy;this.maximumArrayElements=maximumArrayElements;this.records=records.Where(r=>r is ClassRecord or ArrayRecord or PrimitiveTypeRecord).ToArray();}
         Type Resolve(SerializationRecord record)=>policy.Resolve(record.TypeName.AssemblyQualifiedName);
         public object Read(SerializationRecord root)
         {
@@ -66,7 +73,7 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
                 if(record is ArrayRecord array)
                 {
                     long count=1;foreach(int n in array.Lengths)count=checked(count*n);
-                    total=checked(total+count);if(total>MaximumArrayElements)throw new SerializationException("NRBF array allocation limit exceeded.");
+                    total=checked(total+count);if(total>maximumArrayElements)throw new SerializationException("NRBF array allocation limit exceeded.");
                 }
             }
             object result=Convert(root);
@@ -181,7 +188,7 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
             int root=Id(value);writer.Write((byte)0);writer.Write(root);writer.Write(-1);writer.Write(1);writer.Write(0);
             while(queue.TryDequeue(out object item))
             {
-                if(writer.BaseStream.Position-start>MaximumBytes || ids.Count>MaximumRecords)throw new SerializationException("NRBF output limit exceeded.");
+                if(writer.BaseStream.Position-start>MaximumBytes)throw new SerializationException("NRBF output limit exceeded.");
                 Object(item,ids[item]);
             }
             writer.Write((byte)11);writer.Flush();
@@ -271,7 +278,7 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
         }
         void Array(Array array,int id,Type type)
         {
-            if(array.LongLength>MaximumArrayElements)throw new SerializationException("NRBF array length limit exceeded.");
+            if(array.LongLength>int.MaxValue)throw new SerializationException("NRBF array length limit exceeded.");  // format limit (Int32 lengths)
             if(Enumerable.Range(0,array.Rank).Any(d=>array.GetLowerBound(d)!=0))throw new SerializationException("Nonzero array lower bounds are not supported.");
             Type element=type.GetElementType();byte primitive=Primitive(element);
             if(array.Rank==1 && primitive!=0)

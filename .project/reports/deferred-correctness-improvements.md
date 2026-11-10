@@ -130,3 +130,14 @@ settings/RPC code. Do not suppress them or alter algorithms to make checks pass.
 The Linux video-decode dependency failure (`libpulse.so.0`) was a test-image
 integration issue, resolved with `libpulse0`; hardware decode remains unavailable
 and verified AVI frames use CPU decoding. No backend/solver/library version changed.
+
+## C6 main window (10 November 2026)
+
+Rebuilding the original FrmMain menu found two original 3.0.0 behaviours that are
+mirrored for parity: Tools › Arrange Annotations and Remove Annotations are
+disabled by `SetMenuAndToolStripVisibility` and never re-enabled; View › Color
+Annotations › Defined Fields is wired to the Loads click handler (it works via the
+sender). Post-parity proposal: re-enable the annotation items when annotations
+exist and give Defined Fields its own handler. Port/integration defects found by
+the new checks were repaired now (menu 3MF export import, Results view without
+results, Z-up standard views). See [C6](phase-c6-main-window.md).

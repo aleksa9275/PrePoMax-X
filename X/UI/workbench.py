@@ -30,6 +30,9 @@ parser.add_argument('--results-service-probe',type=Path)
 parser.add_argument('--results-probe',type=Path)
 parser.add_argument('--application-service-probe',type=Path)
 parser.add_argument('--application-probe',type=Path)
+parser.add_argument('--menu-probe',type=Path)
+parser.add_argument('--menu-model',type=Path)
+parser.add_argument('--menu-results',type=Path)
 parser.add_argument('--settings',type=Path)
 parser.add_argument('--check-3mf',action='store_true')
 args = parser.parse_args(list(ui_arguments))
@@ -77,8 +80,9 @@ else:
 
     from results_workbench import ResultsWorkbench
     from application_workbench import ApplicationWorkbench
+    from main_menu import MainMenuWorkbench
 
-    class Workbench(ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
+    class Workbench(MainMenuWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -162,6 +166,7 @@ else:
             self.build_results_ui()
             self.preferences_path=args.settings.resolve() if args.settings else None
             self.build_application_ui()
+            self.build_original_menus()
             if self.preferences_path and self.preferences_path.is_file():self.application.LoadPreferences(str(self.preferences_path));self.apply_preferences()
             self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
             session.Presentation.Screenshot=self.screenshot_delegate
@@ -242,7 +247,7 @@ else:
             try:
                 callback()
             except Exception as error:
-                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe:
+                if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
 
@@ -306,6 +311,7 @@ else:
             self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
             self.apply_edge_mode()
             self.apply_view_widgets()
+            if hasattr(self,'original_top'):self.update_original_menu_state()
             for name in ['Undo', 'Redo']:
                 text = getattr(session.Presentation, name + 'Text')
                 self.actions[name].setEnabled(bool(text))
@@ -607,8 +613,10 @@ else:
             super().closeEvent(event)
 
     application = QtWidgets.QApplication.instance() or QtWidgets.QApplication(['PrePoMax-X'])
+    # RuntimeInitialization.SetCultureAndLanguage: invariant culture without group separator.
+    invariant=QtCore.QLocale.c();invariant.setNumberOptions(QtCore.QLocale.NumberOption.OmitGroupSeparator);QtCore.QLocale.setDefault(invariant)
     splash=None
-    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe]):
+    if not any([args.probe,args.authoring_probe,args.geometry_probe,args.results_probe,args.application_probe,args.menu_probe]):
         original_splash=Path(ui_directory).parents[1]/'PrePoMax/Resources/Splash_01.png'
         if original_splash.is_file():
             splash=QtWidgets.QSplashScreen(QtGui.QPixmap(str(original_splash)));splash.showMessage('Loading PrePoMax-X…',QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignHCenter,QtGui.QColor('black'));splash.show();application.processEvents()
@@ -634,4 +642,7 @@ else:
     if args.application_probe:
         from application_gui_probe import start
         start(application,window,args.application_probe,args.check_3mf)
+    if args.menu_probe:
+        from menu_gui_probe import start
+        start(application,window,args.menu_probe,str(args.menu_model.resolve()),str(args.menu_results.resolve()) if args.menu_results else None)
     application.exec()
