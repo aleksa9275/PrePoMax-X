@@ -28,10 +28,16 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   open them through the original FrmMain entry points, and viewport picks inside them use the
   original `Controller.SelectPointOrArea`. 38 forms are ABC.
   [C9 report](reports/phase-c9-original-forms.md).
+- **C10 data grid forms compiled whole.** FrmAmplitude, FrmDistribution, FrmResultFieldOutput
+  and FrmResultHistoryOutput with the original FrmPropertyDataListView, DataGridViewCopyPaste
+  (cell edit, new row, copy/paste, plot, delete) and FrmDiagramView, on a headless
+  DataGridView/BindingSource model. 43 classes compiled whole; 42 forms ABC. Export → History
+  Output now opens the original export form (the port showed a viewer).
+  [C10 report](reports/phase-c10-data-grid-forms.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Full UI parity is not accepted.** Forms 38/72 C, 0 V. Inventory: model/mesh
+- **Full UI parity is not accepted.** Forms 42/72 C, 0 V. Inventory: model/mesh
   108 AB / 106 C (beam element classes need a CAD wire/shell or beam-results
   fixture); Commands
   237 A / 236 B / 230 C (six are compatibility-only with no original UI path);
@@ -56,13 +62,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C7 | Original tool strips and three-tab model tree | implemented; Mac ARM64 checks pass |
 | C8 | Tree remainder, output links, model/mesh UI evidence | implemented; Mac ARM64 checks pass |
 | C9 | Original form classes compiled whole (39), FrmMain form hosting | implemented; Mac ARM64 checks pass |
+| C10 | Data grid forms compiled whole (DataGridView model, plot window) | implemented; Mac ARM64 checks pass |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-The remaining 33 forms the same way (C9 approach): the FrmPropertyDataListView forms
-(needs a DataGridView model), the PrePoMaxChildForm forms and the plain dialogs; then beam
+The remaining 29 forms the same way (C9/C10 approach): the PrePoMaxChildForm forms
+(Material, Surface interaction, Step controls, Analysis, Monitor, views, ...) and the plain
+dialogs; then beam
 element evidence from a CAD wire/shell fixture and packaging the X/UI app.
 After parity: the D061 correctness/warning sweep.
 

@@ -40,7 +40,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 106 | 0 |
 | Commands | 237 | 237 | 236 | 230 | 0 |
-| Forms | 72 | 38 | 38 | 38 | 0 |
+| Forms | 72 | 42 | 42 | 42 | 0 |
 
 ## Model and mesh features
 
@@ -754,13 +754,13 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmDistribution | - |
+| FrmDistribution | ABC |
 
 ### Amplitude
 
 | Item | Status |
 |---|---|
-| FrmAmplitude | - |
+| FrmAmplitude | ABC |
 
 ### InitialConditions
 
@@ -847,13 +847,13 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmResultFieldOutput | - |
+| FrmResultFieldOutput | ABC |
 
 ### ResultHistoryOutput
 
 | Item | Status |
 |---|---|
-| FrmResultHistoryOutput | - |
+| FrmResultHistoryOutput | ABC |
 | FrmViewResultHistoryOutput | - |
 
 ### Transformation

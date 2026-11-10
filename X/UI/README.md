@@ -281,3 +281,13 @@ entry points and picks to `Controller.SelectPointOrArea` while a form is open.
 `forms_gui_probe.py` (`--forms-probe`) opens every compiled form through its entry point and
 checks title, designer size, edit/OK - New/Cancel rules; `form_driver.py` lets the other probes
 operate original forms. [C9 report](../../.project/reports/phase-c9-original-forms.md).
+
+### C10 data grid forms
+
+`FrmAmplitude`, `FrmDistribution`, `FrmResultFieldOutput` and `FrmResultHistoryOutput` compile
+whole with `FrmPropertyDataListView`, `DataGridViewCopyPaste` and `FrmDiagramView`.
+`FormsCompat/DataGrid.cs` models DataGridView/BindingSource/DataObject with WinForms semantics,
+`FormsCompat/ZedGraph.cs` the plot pane; `original_forms.py` draws them (`DataGridWidget`,
+`GraphWidget`). The forms probe drives the amplitude grid (edit, new row, invalid value,
+copy/paste, plot, delete); the results probe the result field/history forms.
+[C10 report](../../.project/reports/phase-c10-data-grid-forms.md).

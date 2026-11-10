@@ -34,8 +34,21 @@ namespace System.Windows.Forms
     {
         public string Name { get; }
         public string Path { get; }
+        /// <summary>Path is the image file, or the form's .resx for an image stored in it (Name = resx entry).</summary>
         public ImageResource(string name, string path) { Name = name; Path = path; }
         public override string ToString() => Name;
+    }
+
+    /// <summary>ComponentResourceManager stand-in for the designer images of a form: entries of the original .resx
+    /// (base64 image bytes, read by the renderer; nothing is deserialized). Form icons are the application's.</summary>
+    public sealed class ResxResources
+    {
+        public string Path { get; }
+        public ResxResources(string path) { Path = path; }
+        public object GetObject(string name) => new ImageResource(name, Path);
+        public System.Drawing.Icon GetIcon(string name) => null;
+        public string GetString(string name) => null;
+        public void ApplyResources(object value, string objectName) { }
     }
 
     public enum ImageLayout { None, Tile, Center, Stretch, Zoom }
@@ -91,6 +104,17 @@ namespace System.Windows.Forms
         public static void SetText(string text) { if (SetTextHandler != null) SetTextHandler(text); else local = text ?? ""; }
         public static bool ContainsText() => GetText().Length > 0;
         public static void Clear() => SetText("");
+        // Data objects: the text goes to the platform clipboard; the object (with its private formats) is kept
+        // while the clipboard still holds its text (WinForms keeps every format of a SetDataObject).
+        static DataObject stored;
+        public static void SetDataObject(object data) { stored = data as DataObject ?? new DataObject(data); SetText(stored.GetText()); }
+        public static void SetDataObject(object data, bool copy) => SetDataObject(data);
+        public static IDataObject GetDataObject()
+        {
+            string text = GetText();
+            if (stored != null && stored.GetText() == text) return stored;
+            return new DataObject(DataFormats.UnicodeText, text);
+        }
     }
     public class CreateParams { public int ExStyle; public int Style; public int ClassStyle; public string Caption; public string ClassName; }
 
@@ -731,6 +755,50 @@ namespace System.Windows.Forms.VisualStyles
 }
 namespace AutocompleteMenuNS
 {
-    // Original autocomplete popup namespace (UserControls/AutocompleteMenu); the renderer provides completion.
-    internal static class NamespaceAnchor { }
+    // Stand-in for the original autocomplete popup (UserControls/AutocompleteMenu, a Win32 popup list): it keeps
+    // the item list, the attached edit control and the Enabled rule the original code sets; the renderer completes.
+    public class AutocompleteItem
+    {
+        public AutocompleteItem() { }
+        public AutocompleteItem(string text) { Text = text; }
+        public string Text { get; set; }
+        public string MenuText { get; set; }
+        public string ToolTipTitle { get; set; }
+        public string ToolTipText { get; set; }
+        public int ImageIndex { get; set; } = -1;
+        public object Tag { get; set; }
+        public override string ToString() => MenuText ?? Text;
+    }
+    /// <summary>Original (AutocompleteItems.cs): a snippet with '^' marking the caret position after insertion.</summary>
+    public class SnippetAutocompleteItem : AutocompleteItem
+    {
+        public SnippetAutocompleteItem(string snippet) { Text = snippet.Replace("\r", ""); ToolTipTitle = "Code snippet:"; ToolTipText = Text; }
+        public override string ToString() => MenuText ?? Text.Replace("\n", " ").Replace("^", "");
+    }
+    public class AutocompleteMenu : System.ComponentModel.Component
+    {
+        static readonly System.Collections.Generic.Dictionary<System.Windows.Forms.Control, AutocompleteMenu> attached =
+            new System.Collections.Generic.Dictionary<System.Windows.Forms.Control, AutocompleteMenu>();
+        public AutocompleteMenu() { }
+        public bool AllowsTabKey { get; set; }
+        public System.Windows.Forms.FontSpec Font { get; set; }
+        public System.Windows.Forms.ImageList ImageList { get; set; }
+        public string[] Items { get; set; } = new string[0];
+        public System.Drawing.Size MaximumSize { get; set; }
+        public int MinFragmentLength { get; set; } = 2;
+        public string SearchPattern { get; set; } = @"[\w\.]";
+        public object TargetControlWrapper { get; set; }
+        public bool Enabled { get; set; } = true;
+        public bool Visible { get; set; }
+        public AutocompleteItem[] SourceItems { get; private set; } = new AutocompleteItem[0];
+        public void SetAutocompleteItems(System.Collections.Generic.IEnumerable<AutocompleteItem> items) => SourceItems = System.Linq.Enumerable.ToArray(items);
+        public void SetAutocompleteItems(System.Collections.Generic.IEnumerable<string> items) => SourceItems = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(items, i => new AutocompleteItem(i)));
+        public void SetAutocompleteMenu(System.Windows.Forms.Control control, AutocompleteMenu menu)
+        {
+            if (menu == null) attached.Remove(control); else attached[control] = menu;
+        }
+        public AutocompleteMenu GetAutocompleteMenu(System.Windows.Forms.Control control) => attached.TryGetValue(control, out var menu) ? menu : null;
+        /// <summary>Renderer: the menu attached to an edit control, when enabled (null otherwise).</summary>
+        public static AutocompleteMenu ActiveFor(System.Windows.Forms.Control control) => control != null && attached.TryGetValue(control, out var menu) && menu.Enabled ? menu : null;
+    }
 }

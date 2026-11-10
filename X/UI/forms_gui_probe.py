@@ -43,6 +43,8 @@ MODEL_FORMS = [
     ('ThickenShellMesh', {}, 'Thicken Shell Mesh'),
     ('tsmiSplitPartMeshUsingSurface_Click', {}, 'Split Part Mesh Using Surface'),
     ('tsmiCaptureViewportAs_Click', {}, 'Capture Viewport'),
+    ('tsmiCreateDistribution_Click', {}, 'Create Distribution'),
+    ('tsmiCreateAmplitude_Click', {}, 'Create Amplitude'),
 ]
 GEOMETRY_FORMS = [
     ('CreateMeshSetupItem', {}, 'Create Mesh Setup Item'),
@@ -143,6 +145,7 @@ def start(app, window, output):
     def import_model():
         nonlocal host, renderer
         host, renderer = window.form_host, window.form_renderer
+        window.auto_prompts = []
         from CaeModel import ModelSpaceEnum
         from CaeGlobals import UnitSystemType
         c.New()
@@ -241,7 +244,7 @@ def start(app, window, output):
                                                           arguments.get('operation')))
             form = visible_form()
             key = method + ('/' + arguments['operation'] if 'operation' in arguments else '')
-            check(key + ' opens an original form', form is not None)
+            check(key + ' opens an original form' + ('' if form is not None else ': ' + ' | '.join(window.auto_prompts[-1:])), form is not None)
             kind = type(form).__name__
             w = form_window(form)
             expected = designer_size(kind)
@@ -295,6 +298,107 @@ def start(app, window, output):
               and form.Visible and by_name(form, 'lvTypes').Enabled)
         cancel_form(form)
 
+    def data_grid_forms():
+        """FrmPropertyDataListView (C10): the original DataGridViewCopyPaste bound to the amplitude data points;
+        cell edits, the new row, parse errors, copy/paste, plot (FrmDiagramView) and the original OnApply."""
+        from System import Array, Int32
+        from System.Windows.Forms import Keys, DataGridView, TabControl, Clipboard
+        from forms_gui_probe_grid import grid_widget
+        window.auto_prompts = []
+        window.show_original_form('tsmiCreateAmplitude_Click', None, EventArgs.Empty)
+        form = visible_form()
+        check('FrmAmplitude opened through FrmMain.tsmiCreateAmplitude_Click', type(form).__name__ == 'FrmAmplitude' and str(form.Text) == 'Create Amplitude')
+        check('single amplitude type preselected (Tabular)', grid_of(form).SelectedObject is not None and type(grid_of(form).SelectedObject).__name__ == 'ViewAmplitudeTabular')
+        tabs = next(x for x in walk(form) if isinstance(x, TabControl))
+        dgv = next(x for x in walk(form) if isinstance(x, DataGridView))
+        w = form_window(form)
+        qtabs = w.widgets[tabs]
+        check('original tab pages Properties / Data points drawn', [qtabs.tabText(i) for i in range(qtabs.count())] == ['Properties', 'Data points'])
+        headers = [str(col.HeaderText) for col in dgv.Columns]
+        report['forms']['FrmAmplitude'] = {'headers': headers, 'rows': int(dgv.RowCount)}
+        check('columns from AmplitudeDataPoint DisplayName with model units', headers == ['Time [s]\nFrequency [Hz]', 'Amplitude\n[/]'])
+        check('one data point and the new row (AllowUserToAddRows)', dgv.RowCount == 2 and dgv.NewRowIndex == 1)
+        renderer.guard(lambda: setattr(tabs, 'SelectedIndex', 1))
+        renderer.flush()
+        table = grid_widget(w, dgv)
+        check('grid drawn with the cells and the new-row marker', table.rowCount() == 2 and table.item(0, 0).text() == '0'
+              and table.verticalHeaderItem(1).text() == '*')
+        # A user edit through the Qt cell editor: BeginEdit, typed text, EndEdit (new row -> BindingSource.AddNew).
+        from forms_gui_probe_grid import edit_cell
+        edit_cell(app, table, 1, 0, '1')
+        renderer.flush()
+        edit_cell(app, table, 1, 1, '=2*0.5')
+        renderer.flush()
+        report['forms']['FrmAmplitude']['afterEdit'] = [int(dgv.RowCount)] + [str(dgv.GetCellText(r, k)) for r in range(int(dgv.RowCount)) for k in range(2)] + list(window.auto_prompts)
+        check('typing in the new row adds a data point', dgv.RowCount == 3 and str(dgv.GetCellText(1, 0)) == '1' and str(dgv.GetCellText(1, 1)) == '1')
+        edit_cell(app, table, 0, 1, 'abc')
+        renderer.flush()
+        report['forms']['FrmAmplitude']['parseError'] = list(window.auto_prompts)
+        from forms_gui_probe_grid import cancel_cell
+        reopened = cancel_cell(app, table, 0, 1) if dgv.IsCurrentCellInEditMode else None
+        renderer.flush()
+        check('invalid cell text: original OnDataError message; the cell stays in edit mode with the text (WinForms)',
+              len(window.auto_prompts) == 1 and reopened == 'abc')
+        check('Escape cancels the edit and keeps the value', not dgv.IsCurrentCellInEditMode and str(dgv.GetCellText(0, 1)) == '0')
+        # Copy (Ctrl+C) two rows, paste (Ctrl+V) at the new row: the original adds rows through the BindingSource.
+        renderer.guard(lambda: dgv.SelectByUser(Array[Int32]([0, 0, 1, 1]), Array[Int32]([0, 1, 0, 1]), 0, 0))
+        renderer.guard(lambda: dgv.RaiseKeyDown(Keys.Control | Keys.C))
+        copied = str(Clipboard.GetText())
+        report['forms']['FrmAmplitude']['copied'] = copied
+        check('Ctrl+C copies the selected cells (tab separated, no header)', copied == '0\t0\r\n1\t1')
+        renderer.guard(lambda: dgv.SelectByUser(Array[Int32]([2]), Array[Int32]([0]), 2, 0))
+        Clipboard.SetText('2\t0.5\n3 0')
+        renderer.guard(lambda: dgv.RaiseKeyDown(Keys.Control | Keys.V))
+        renderer.flush()
+        check('Ctrl+V pastes rows below the table (space or tab separated)', dgv.RowCount == 5 and str(dgv.GetCellText(3, 0)) == '3' and str(dgv.GetCellText(2, 1)) == '0.5')
+        # Plot (Ctrl+P): the original FrmDiagramView with ZedGraph curves.
+        renderer.guard(lambda: dgv.SelectByUser(Array[Int32]([0, 0, 1, 1, 2, 2, 3, 3]), Array[Int32]([0, 1, 0, 1, 0, 1, 0, 1]), 0, 0))
+        renderer.guard(lambda: dgv.RaiseKeyDown(Keys.Control | Keys.P))
+        renderer.flush()
+        from System.Windows.Forms import Form
+        plot = next((f for f in Form.OpenForms if type(f).__name__ == 'FrmDiagramView' and f.Visible), None)
+        check('Ctrl+P shows the original FrmDiagramView', plot is not None and str(plot.Text) == 'Plot')
+        from ZedGraph import ZedGraphControl
+        pane = next(x for x in walk(plot) if isinstance(x, ZedGraphControl)).GraphPane
+        curve = pane.CurveList[0]
+        report['forms']['FrmDiagramView'] = {'x': list(curve.X), 'y': list(curve.Y), 'xTitle': str(pane.XAxis.Title.Text), 'yTitle': str(pane.YAxis.Title.Text),
+                                             'size': [plot.ClientSize.Width, plot.ClientSize.Height]}
+        check('plot curve from the selected rows', list(curve.X) == [0, 1, 2, 3] and list(curve.Y) == [0, 1, 0.5, 0])
+        check('plot axes from the column headers; StartPlotAtZero', str(pane.XAxis.Title.Text).startswith('Time [s]') and not pane.XAxis.Scale.MinAuto and pane.XAxis.Scale.Min == 0)
+        plot_window = form_window(plot)
+        check('plot window drawn beside the form', plot_window is not None and plot_window.isVisible())
+        snapshot('FrmDiagramView', plot)
+        renderer.guard(plot.CloseByUser)
+        renderer.flush()
+        check('closing the plot hides it (original FormClosing)', not plot.Visible)
+        # Context menu items of the original cmsCopyPaste, with the designer image of Plot from the .resx.
+        strip = dgv.ContextMenuStrip
+        texts = [str(i.Text) for i in strip.Items]
+        check('context menu: Cut / Copy / Paste / Plot', texts[0].startswith('Cut') and texts[-1].startswith('Plot') and len(texts) == 5)
+        check('Plot menu image read from DataGridViewCopyPaste.resx', renderer.icon(strip.Items[4].Image) is not None)
+        snapshot('FrmAmplitude', form)
+        by_name(form, 'btnOK').RaiseClick()
+        renderer.flush()
+        amplitudes = [str(n) for n in c.GetAmplitudeNames()]
+        check('original OnApply created the amplitude', len(amplitudes) == 1)
+        amplitude = c.GetAmplitude(amplitudes[0])
+        report['forms']['FrmAmplitude']['created'] = [list(p) for p in amplitude.TimeAmplitude]
+        check('amplitude holds the edited and pasted points', [list(p) for p in amplitude.TimeAmplitude] == [[0, 0], [1, 1], [2, 0.5], [3, 0]])
+        window.show_original_form('EditAmplitude', amplitudes[0])
+        form = visible_form()
+        dgv = next(x for x in walk(form) if isinstance(x, DataGridView))
+        check('edit shows the amplitude data points', str(form.Text) == 'Edit Amplitude: ' + amplitudes[0] and dgv.RowCount == 5)
+        renderer.guard(lambda: dgv.SelectByUser(Array[Int32]([]), Array[Int32]([]), Array[Int32]([3]), 3, 0))
+        renderer.guard(lambda: dgv.RaiseKeyDown(Keys.Control | Keys.C))
+        check('a row selected through its header copies with the header text (EnableWithAutoHeaderText)',
+              str(Clipboard.GetText()) == '\tTime [s]\nFrequency [Hz]\tAmplitude\n[/]\r\n\t3\t0')
+        renderer.guard(lambda: dgv.RaiseKeyDown(Keys.Delete))
+        renderer.flush()
+        check('Delete removes the row selected through its header', dgv.RowCount == 4)
+        by_name(form, 'btnOK').RaiseClick()
+        renderer.flush()
+        check('edit replaces the amplitude (Binding_ListChanged)', len(list(c.GetAmplitude(amplitudes[0]).TimeAmplitude)) == 3)
+
     def geometry_catalogue():
         import os
         if not os.environ.get('PREPOMAXX_GMSH_LIBRARY'):
@@ -317,7 +421,7 @@ def start(app, window, output):
         catalogue(GEOMETRY_FORMS, 'geometry')
         report['success'] = True
 
-    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, geometry_catalogue, geometry_ready])
+    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, geometry_catalogue, geometry_ready])
     current = [None]
     timer = QtCore.QTimer(window)
 

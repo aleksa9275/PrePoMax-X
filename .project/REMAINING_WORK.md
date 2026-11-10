@@ -39,15 +39,14 @@ Done on 10 November ([C6 report](reports/phase-c6-main-window.md)):
 Still open:
 2. **Beam element classes**: `LinearBeamElement`/`ParabolicBeamElement` need a CAD
    wire/shell or beam-results fixture (the original model import drops beams).
-3. **72 forms** — 39 compiled whole in [C9](reports/phase-c9-original-forms.md)
-   (38 C). Remaining 33 the same way: FrmPropertyDataListView forms (Amplitude,
-   Distribution, Result field/history output: DataGridView model), PrePoMaxChildForm
-   forms (Material, Surface interaction, Step controls, Analysis, Monitor, Animation,
+3. **72 forms** — 43 compiled whole in [C9](reports/phase-c9-original-forms.md) and
+   [C10](reports/phase-c10-data-grid-forms.md) (42 C). Remaining 29 the same way:
+   PrePoMaxChildForm forms (Material, Surface interaction, Step controls, Analysis, Monitor, Animation,
    Query, Find, view forms, Transformation, Settings, Keyword editor), plain dialogs
    (Edit commands, Parameters, Material library, Regenerate, Get value/colour, Select
    entity, Analyze geometry, Search contact pairs, View result history, Python stop,
-   Splash) and FrmMain itself. Renderer gaps: autocomplete popup, owner-drawn paint,
-   light theme/HiDPI.
+   Splash) and FrmMain itself. Renderer gaps: autocomplete popup look, owner-drawn paint
+   (TabPage.Paint: the grid forms select cell 0,0 there), light theme/HiDPI.
 4. **Matrices**: all analysis types, Mmg/QuadWild/sweep/transfinite/shell/compound
    meshing, section/cap/picking, glyph variants, animation extrema,
    plots/annotations, exports, large projects.

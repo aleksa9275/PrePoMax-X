@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         public event FormClosedEventHandler FormClosed;
         public event EventHandler Load, Shown, Activated, Deactivate, ResizeBegin, ResizeEnd;
 
-        public void Show(IWin32Window owner) { if (owner is Form f && f != this) Owner = f; Show(); }
+        public void Show(IWin32Window owner) { if ((owner as Control)?.FindForm() is Form f && f != this) Owner = f; Show(); }
         public new void Show()
         {
             bool first = !openForms.Contains(this);
@@ -465,6 +465,10 @@ namespace System.Windows.Forms
         int _selectedIndex = -1;
         public TabControl() { TabPages = new TabPageCollection(this); }
         public TabPageCollection TabPages { get; }
+        readonly List<TabPage> _allPages = new List<TabPage>();
+        /// <summary>Renderer: every page ever added (forms remove and re-add their pages per item type).</summary>
+        public TabPage[] AllPages => _allPages.ToArray();
+        internal void Remember(TabPage page) { if (!_allPages.Contains(page)) _allPages.Add(page); }
         public TabAlignment Alignment { get; set; }
         public TabSizeMode SizeMode { get; set; }
         public Size ItemSize { get; set; }
@@ -499,6 +503,18 @@ namespace System.Windows.Forms
         /// <summary>WinForms page area at 96 DPI with Segoe UI 9 pt tabs: 4 px border, 24 px tab row.</summary>
         public new Rectangle DisplayRectangle => new Rectangle(4, 24, Math.Max(0, Width - 8), Math.Max(0, Height - 28));
         protected override void LayoutChildren() { foreach (TabPage page in TabPages) page.Bounds = DisplayRectangle; }
+        // WinForms TabControl.ControlCollection: a TabPage added or removed through Controls (designer code) is
+        // added to or removed from TabPages.
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            if (e.Control is TabPage page && !TabPages.Contains(page)) TabPages.AddFromControls(page);
+            base.OnControlAdded(e);
+        }
+        protected override void OnControlRemoved(ControlEventArgs e)
+        {
+            if (e.Control is TabPage page && TabPages.Contains(page)) TabPages.RemoveFromControls(page);
+            base.OnControlRemoved(e);
+        }
         public class TabPageCollection : IList
         {
             readonly TabControl owner;
@@ -509,14 +525,23 @@ namespace System.Windows.Forms
             public TabPage this[string key] => pages.FirstOrDefault(p => p.Name == key);
             public void Add(TabPage page)
             {
+                owner.Remember(page);
                 pages.Add(page);
                 owner.Controls.Add(page);
                 if (owner._selectedIndex < 0) owner.SelectedIndex = 0;
                 owner.Notify("TabPages");
             }
             public void Add(string text) => Add(new TabPage(text));
+            internal void AddFromControls(TabPage page)
+            {
+                owner.Remember(page);
+                pages.Add(page);
+                if (owner._selectedIndex < 0) owner.SelectedIndex = 0;
+                owner.Notify("TabPages");
+            }
+            internal void RemoveFromControls(TabPage page) { pages.Remove(page); FixSelection(); }
             public void AddRange(TabPage[] values) { foreach (var p in values) Add(p); }
-            public void Insert(int index, TabPage page) { pages.Insert(index, page); owner.Controls.Add(page); owner.Notify("TabPages"); }
+            public void Insert(int index, TabPage page) { owner.Remember(page); pages.Insert(index, page); owner.Controls.Add(page); owner.Notify("TabPages"); }
             public void Remove(TabPage page)
             {
                 int index = pages.IndexOf(page);
@@ -993,14 +1018,5 @@ namespace System.Windows.Forms
             int c = string.Compare(x.Substring(px), y.Substring(py), CultureInfo.InvariantCulture, CompareOptions.IgnoreCase);
             return c != 0 ? c : string.CompareOrdinal(x, y);
         }
-    }
-
-    public class DataGridView : Control
-    {
-        public object DataSource { get; set; }
-        public string DataMember { get; set; } = "";
-        public bool IsCurrentCellInEditMode { get; private set; }
-        public bool CancelEdit() { IsCurrentCellInEditMode = false; return true; }
-        public bool EndEdit() { IsCurrentCellInEditMode = false; return true; }
     }
 }

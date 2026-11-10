@@ -13,7 +13,11 @@ from System import Array, Int32
 from System.Drawing import Point, Size, Rectangle
 from System.Windows.Forms import (Control, Form, GroupBox, ButtonBase, Button, CheckBox, RadioButton, Label, TextBoxBase,
                                   ListView, PropertyGrid, TabControl, TabPage, Panel, ComboBox, NumericUpDown,
-                                  ControlNotifications, GridItemType, Keys, MouseButtons, OrderedNameComparer, Screen)
+                                  ControlNotifications, GridItemType, Keys, MouseButtons, OrderedNameComparer, Screen,
+                                  DataGridView, DataGridViewContentAlignment, DataGridViewAutoSizeColumnMode,
+                                  ToolStripSeparator, Clipboard)
+from ZedGraph import ZedGraphControl, LegendPos
+from AutocompleteMenuNS import AutocompleteMenu
 
 ROOT = Path(__file__).resolve().parents[2]
 # Original forms use Segoe UI 9 pt at 96 DPI: 12 px text in 23 px buttons and 17 px list rows.
@@ -273,6 +277,390 @@ class ListViewWidget(QtWidgets.QListWidget):
         self.window.renderer.sync_soon()
 
 
+def qt_alignment(alignment):
+    """DataGridViewContentAlignment -> Qt alignment (NotSet: middle left)."""
+    A = QtCore.Qt.AlignmentFlag
+    value = int(alignment) or 16
+    vertical = A.AlignTop if value < 16 else A.AlignVCenter if value < 256 else A.AlignBottom
+    column = value if value < 16 else value >> 4 if value < 256 else value >> 8
+    horizontal = {1: A.AlignLeft, 2: A.AlignHCenter, 4: A.AlignRight}.get(column, A.AlignLeft)
+    return vertical | horizontal
+
+
+class FragmentCompleter(QtCore.QObject):
+    """Original AutocompleteMenu behaviour for an edit control: the fragment before the caret (the menu's
+    SearchPattern) is completed from the menu's items while the menu is enabled; a snippet's '^' is the caret."""
+
+    def __init__(self, edit, menu_for):
+        super().__init__(edit)
+        self.edit, self.menu_for = edit, menu_for
+        self.model = QtCore.QStringListModel()
+        self.completer = QtWidgets.QCompleter(self.model, edit)
+        self.completer.setWidget(edit)
+        self.completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
+        self.completer.setCompletionMode(QtWidgets.QCompleter.CompletionMode.PopupCompletion)
+        self.completer.activated[str].connect(self.insert)
+        self.items = {}
+        edit.textEdited.connect(self.update)
+
+    def fragment(self, menu):
+        import re
+        text = self.edit.text()[:self.edit.cursorPosition()]
+        match = re.search('(?:' + str(menu.SearchPattern) + ')+$', text)
+        return match.group(0) if match else ''
+
+    def update(self, _text=None):
+        menu = self.menu_for()
+        if menu is None:
+            self.completer.popup().hide()
+            return
+        fragment = self.fragment(menu)
+        if len(fragment) < int(menu.MinFragmentLength):
+            self.completer.popup().hide()
+            return
+        self.items = {str(item): str(item.Text) for item in menu.SourceItems}
+        self.model.setStringList(list(self.items))
+        self.completer.setCompletionPrefix(fragment)
+        self.completer.complete()
+
+    def insert(self, shown):
+        menu = self.menu_for()
+        text = self.items.get(shown, shown)
+        fragment = self.fragment(menu) if menu is not None else ''
+        position = self.edit.cursorPosition()
+        before, after = self.edit.text()[:position - len(fragment)], self.edit.text()[position:]
+        caret = text.find('^')
+        text = text.replace('^', '')
+        self.edit.setText(before + text + after)
+        self.edit.setCursorPosition(len(before) + (caret if caret >= 0 else len(text)))
+        self.edit.textEdited.emit(self.edit.text())
+
+
+class GridDelegate(QtWidgets.QStyledItemDelegate):
+    """Cell editing through the grid model: BeginEdit (EditingControlShowing), typed text into the editing
+    control (TextChanged), EndEdit on commit (parse/commit errors go to OnDataError), CancelEdit on Escape."""
+
+    def createEditor(self, parent, option, index):
+        view = self.parent()
+        grid, renderer = view.grid, view.window.renderer
+        if not renderer.guard(lambda: grid.BeginEditByUser(index.row(), index.column())):
+            return None
+        editor = QtWidgets.QLineEdit(parent)
+        editor.setFrame(False)
+        editor.setAlignment(qt_alignment(view.cell_alignment(index.column())))
+        editor.textEdited.connect(lambda text: renderer.guard(lambda: grid.EditTextByUser(text)))
+        editor.completion = FragmentCompleter(editor, lambda: AutocompleteMenu.ActiveFor(grid.EditingControl))
+        return editor
+
+    def setEditorData(self, editor, index):
+        view = self.parent()
+        if view.reopen is not None:
+            editor.setText(view.reopen[2])
+            return
+        control = view.grid.EditingControl
+        editor.setText(str(control.Text) if control is not None else str(index.data() or ''))
+
+    def setModelData(self, editor, model, index):
+        view = self.parent()
+        grid, text = view.grid, editor.text()
+        view.reopen = None
+        view.window.renderer.input(lambda: (grid.EditTextByUser(text), grid.EndEdit()))
+        if grid.IsCurrentCellInEditMode:
+            # The value was rejected (OnDataError, Cancel): WinForms keeps the cell in edit mode with the text.
+            view.reopen = (index.row(), index.column(), text)
+            QtCore.QTimer.singleShot(0, view.reopen_editor)
+
+    def destroyEditor(self, editor, index):
+        view = self.parent()
+        if view.grid.IsCurrentCellInEditMode and view.reopen is None:
+            view.window.renderer.input(view.grid.CancelEdit)
+        super().destroyEditor(editor, index)
+
+
+class DataGridWidget(QtWidgets.QTableWidget):
+    """DataGridView: the model's columns, rows (the new row marked '*'), cell text, selection and current cell;
+    edits, selection, keys and the context menu go back through the WinForms events."""
+
+    def __init__(self, window, grid, parent):
+        super().__init__(parent)
+        self.window, self.grid = window, grid
+        self.updating = False
+        self.reopen = None
+        self.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectItems)
+        T = QtWidgets.QAbstractItemView.EditTrigger
+        self.setEditTriggers(T.DoubleClicked | T.EditKeyPressed | T.AnyKeyPressed)
+        self.setItemDelegate(GridDelegate(self))
+        self.verticalHeader().setDefaultSectionSize(22)
+        self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Fixed)
+        self.horizontalHeader().setHighlightSections(False)
+        self.setWordWrap(False)
+        self.itemSelectionChanged.connect(self.selection_changed)
+        # Rows selected through the row header are WinForms selected rows (RowHeaderSelect).
+        self.header_rows = set()
+        self.verticalHeader().sectionPressed.connect(self.header_pressed)
+        self.verticalHeader().sectionEntered.connect(self.header_entered)
+        self.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.context_menu)
+        self.rebuild()
+
+    def reopen_editor(self):
+        if self.reopen is None:
+            return
+        row, column, _ = self.reopen
+        index = self.model().index(row, column)
+        self.setCurrentIndex(index)
+        self.edit(index)
+        self.reopen = None
+
+    def cell_alignment(self, column):
+        col = self.grid.Columns[column]
+        alignment = col.DefaultCellStyle.Alignment
+        return alignment if int(alignment) != 0 else self.grid.DefaultCellStyle.Alignment
+
+    def rebuild(self):
+        grid = self.grid
+        if self.state() == QtWidgets.QAbstractItemView.State.EditingState:
+            return
+        self.updating = True
+        try:
+            columns = list(grid.Columns)
+            rows = int(grid.RowCount)
+            self.setColumnCount(len(columns))
+            self.setRowCount(rows)
+            header = self.horizontalHeader()
+            for i, column in enumerate(columns):
+                item = QtWidgets.QTableWidgetItem(str(column.HeaderText))
+                item.setTextAlignment(qt_alignment(column.HeaderCell.Style.Alignment))
+                self.setHorizontalHeaderItem(i, item)
+                self.setColumnHidden(i, not column.Visible)
+                if column.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Interactive)
+                    self.setColumnWidth(i, int(column.Width))
+            new_row = int(grid.NewRowIndex)
+            self.setVerticalHeaderLabels(['*' if r == new_row else '' for r in range(rows)])
+            self.verticalHeader().setVisible(bool(grid.RowHeadersVisible))
+            self.verticalHeader().setFixedWidth(int(grid.RowHeadersWidth))
+            flags = QtCore.Qt.ItemFlag
+            for r in range(rows):
+                for c, column in enumerate(columns):
+                    item = QtWidgets.QTableWidgetItem(str(grid.GetCellText(r, c)))
+                    item.setTextAlignment(qt_alignment(self.cell_alignment(c)))
+                    editable = not (grid.ReadOnly or column.ReadOnly)
+                    item.setFlags(flags.ItemIsSelectable | flags.ItemIsEnabled | (flags.ItemIsEditable if editable else flags.NoItemFlags))
+                    self.setItem(r, c, item)
+            self.apply_selection()
+        finally:
+            self.updating = False
+
+    def apply_selection(self):
+        grid = self.grid
+        wanted = set(zip([int(r) for r in grid.SelectionRows], [int(c) for c in grid.SelectionColumns]))
+        current = (self.currentRow(), self.currentColumn())
+        address = grid.CurrentCellAddress
+        model = self.selectionModel()
+        if address.Y >= 0 and address.Y < self.rowCount() and address.X < self.columnCount() and current != (address.Y, address.X):
+            model.setCurrentIndex(self.model().index(address.Y, address.X), QtCore.QItemSelectionModel.SelectionFlag.NoUpdate)
+        have = {(i.row(), i.column()) for i in self.selectedIndexes()}
+        if have != wanted:
+            selection = QtCore.QItemSelection()
+            for r, c in wanted:
+                if r < self.rowCount() and c < self.columnCount():
+                    index = self.model().index(r, c)
+                    selection.select(index, index)
+            model.select(selection, QtCore.QItemSelectionModel.SelectionFlag.ClearAndSelect)
+
+    def select_current(self):
+        self.updating = True
+        try:
+            self.apply_selection()
+        finally:
+            self.updating = False
+
+    def header_pressed(self, row):
+        modifiers = QtWidgets.QApplication.keyboardModifiers()
+        if not modifiers & (QtCore.Qt.KeyboardModifier.ControlModifier | QtCore.Qt.KeyboardModifier.ShiftModifier):
+            self.header_rows = set()
+        self.header_rows.add(row)
+        self.selection_changed()
+
+    def header_entered(self, row):
+        if QtWidgets.QApplication.mouseButtons() & QtCore.Qt.MouseButton.LeftButton:
+            self.header_rows.add(row)
+            self.selection_changed()
+
+    def selection_changed(self):
+        if self.updating:
+            return
+        model = self.selectionModel()
+        self.header_rows = {r for r in self.header_rows if model.isRowSelected(r, QtCore.QModelIndex())}
+        indexes = self.selectedIndexes()
+        rows = [i.row() for i in indexes]
+        columns = [i.column() for i in indexes]
+        header_rows = sorted(self.header_rows)
+        current = self.currentIndex()
+        grid = self.grid
+        self.window.renderer.input(lambda: grid.SelectByUser(Array[Int32](rows), Array[Int32](columns), Array[Int32](header_rows), current.row(), current.column()))
+
+    def mousePressEvent(self, event):
+        # WinForms: a right click opens the context menu without changing the selection.
+        if event.button() == QtCore.Qt.MouseButton.RightButton:
+            return
+        if not event.modifiers() & (QtCore.Qt.KeyboardModifier.ControlModifier | QtCore.Qt.KeyboardModifier.ShiftModifier):
+            self.header_rows = set()
+        super().mousePressEvent(event)
+
+    def keyPressEvent(self, event):
+        key, modifiers = event.key(), event.modifiers()
+        K = QtCore.Qt.Key
+        keys = None
+        if modifiers & QtCore.Qt.KeyboardModifier.ControlModifier and key in (K.Key_C, K.Key_X, K.Key_V, K.Key_P):
+            keys = Keys.Control | getattr(Keys, chr(key))
+        elif key in (K.Key_Delete, K.Key_Backspace) and self.state() != QtWidgets.QAbstractItemView.State.EditingState:
+            keys = Keys.Delete
+        if keys is not None:
+            grid = self.grid
+            handled = self.window.renderer.input(lambda: grid.RaiseKeyDown(keys))
+            if handled or keys != Keys.Delete:
+                return
+        if key in (K.Key_Return, K.Key_Enter) and self.state() != QtWidgets.QAbstractItemView.State.EditingState:
+            # WinForms: Enter moves to the cell below and stays in the grid.
+            row = min(self.currentRow() + 1, self.rowCount() - 1)
+            self.setCurrentCell(row, max(0, self.currentColumn()))
+            return
+        super().keyPressEvent(event)
+
+    def context_menu(self, position):
+        grid, renderer = self.grid, self.window.renderer
+        index = self.indexAt(position)
+        renderer.guard(lambda: grid.RaiseCellMouseDown(index.row(), index.column(), MouseButtons.Right, position.x(), position.y()))
+        strip = grid.ContextMenuStrip
+        if strip is None or not renderer.guard(lambda: strip.OpenFor(grid)):
+            return
+        menu = QtWidgets.QMenu(self)
+        for item in strip.Items:
+            if not item.Visible:
+                continue
+            if isinstance(item, ToolStripSeparator):
+                menu.addSeparator()
+                continue
+            action = menu.addAction(str(item.Text))
+            icon = renderer.icon(item.Image)
+            if icon is not None:
+                action.setIcon(icon)
+            action.setEnabled(bool(item.Enabled))
+            action.triggered.connect(lambda checked=False, i=item: renderer.input(i.PerformClick))
+        menu.exec(self.viewport().mapToGlobal(position))
+
+
+class GraphWidget(QtWidgets.QWidget):
+    """ZedGraphControl: the curves, axis titles, legend and axis minima the original FrmDiagramView sets, drawn
+    with ZedGraph's defaults (nice 1-2-5 axis steps, line with circle symbols, legend above the chart)."""
+
+    COLORS = None
+
+    def __init__(self, window, control, parent):
+        super().__init__(parent)
+        self.window, self.control = window, control
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(QtGui.QPalette.ColorRole.Window, QtGui.QColor('white'))
+        self.setPalette(palette)
+
+    @staticmethod
+    def nice_range(low, high, auto_min, fixed_min):
+        import math
+        if not auto_min:
+            low = fixed_min
+        if not math.isfinite(low) or not math.isfinite(high):
+            return 0.0, 1.0, 0.2
+        if high <= low:
+            high = low + (abs(low) if low else 1.0)
+        raw = (high - low) / 7.0
+        magnitude = 10 ** math.floor(math.log10(raw))
+        step = next(m * magnitude for m in (1, 2, 5, 10) if m * magnitude >= raw)
+        start = low if not auto_min else math.floor(low / step) * step
+        return start, math.ceil(high / step) * step, step
+
+    def paintEvent(self, event):
+        import math
+        pane = self.control.GraphPane
+        curves = [c for c in pane.CurveList if c.IsVisible]
+        painter = QtGui.QPainter(self)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        painter.setFont(original_font())
+        metrics = painter.fontMetrics()
+        xs = [float(v) for c in curves for v in c.X if math.isfinite(float(v))]
+        ys = [float(v) for c in curves for v in c.Y if math.isfinite(float(v))]
+        x0, x1, xstep = self.nice_range(min(xs, default=0.0), max(xs, default=1.0), pane.XAxis.Scale.MinAuto, float(pane.XAxis.Scale.Min))
+        y0, y1, ystep = self.nice_range(min(ys, default=0.0), max(ys, default=1.0), pane.YAxis.Scale.MinAuto, float(pane.YAxis.Scale.Min))
+        legend = bool(pane.Legend.IsVisible) and len(curves) > 0
+        top = 12 + (metrics.height() + 8 if legend else 0)
+        x_title = str(pane.XAxis.Title.Text or '')
+        title_lines = max(1, len(x_title.split('\n')))
+        left, right, bottom = 70, 20, (1 + title_lines) * metrics.height() + 16
+        plot = QtCore.QRectF(left, top, max(10, self.width() - left - right), max(10, self.height() - top - bottom))
+        def px(x): return plot.left() + (x - x0) / (x1 - x0) * plot.width()
+        def py(y): return plot.bottom() - (y - y0) / (y1 - y0) * plot.height()
+        painter.setPen(QtGui.QPen(QtGui.QColor('black'), 1))
+        painter.drawRect(plot)
+        def ticks(start, end, step):
+            n = int(round((end - start) / step))
+            return [start + i * step for i in range(n + 1)]
+        def label(value, step):
+            digits = max(0, -int(math.floor(math.log10(step)))) if step < 1 else 0
+            return f'{value:.{digits}f}'
+        for x in ticks(x0, x1, xstep):
+            painter.drawLine(QtCore.QPointF(px(x), plot.bottom()), QtCore.QPointF(px(x), plot.bottom() - 5))
+            text = label(x, xstep)
+            painter.drawText(QtCore.QPointF(px(x) - metrics.horizontalAdvance(text) / 2, plot.bottom() + metrics.ascent() + 4), text)
+        for y in ticks(y0, y1, ystep):
+            painter.drawLine(QtCore.QPointF(plot.left(), py(y)), QtCore.QPointF(plot.left() + 5, py(y)))
+            text = label(y, ystep)
+            painter.drawText(QtCore.QPointF(plot.left() - metrics.horizontalAdvance(text) - 6, py(y) + metrics.ascent() / 2 - 1), text)
+        bold = QtGui.QFont(painter.font())
+        bold.setBold(True)
+        painter.setFont(bold)
+        painter.drawText(QtCore.QRectF(plot.left(), plot.bottom() + metrics.height() + 6, plot.width(), title_lines * metrics.height() + 4), int(QtCore.Qt.AlignmentFlag.AlignHCenter), x_title)
+        painter.save()
+        painter.translate(14, plot.center().y())
+        painter.rotate(-90)
+        painter.drawText(QtCore.QRectF(-plot.height() / 2, -metrics.height() / 2, plot.height(), metrics.height() + 4), int(QtCore.Qt.AlignmentFlag.AlignHCenter), str(pane.YAxis.Title.Text or ''))
+        painter.restore()
+        painter.setFont(original_font())
+        painter.setClipRect(plot.adjusted(-4, -4, 4, 4))
+        for curve in curves:
+            color = qcolor(curve.Color)
+            painter.setPen(QtGui.QPen(color, 1))
+            points = [QtCore.QPointF(px(float(x)), py(float(y))) for x, y in zip(curve.X, curve.Y) if math.isfinite(float(x)) and math.isfinite(float(y))]
+            if getattr(curve, 'Line', None) is None or curve.Line.IsVisible:
+                painter.drawPolyline(QtGui.QPolygonF(points))
+            if getattr(curve, 'Symbol', None) is not None and curve.Symbol.IsVisible:
+                painter.setBrush(QtGui.QBrush(QtGui.QColor('white')))
+                radius = float(curve.Symbol.Size) / 2
+                for point in points:
+                    painter.drawEllipse(point, radius, radius)
+                painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+        painter.setClipping(False)
+        if legend:
+            entries = [(qcolor(c.Color), str(c.Label.Text)) for c in curves]
+            widths = [34 + metrics.horizontalAdvance(text) + 12 for _, text in entries]
+            x = plot.center().x() - sum(widths) / 2 if pane.Legend.Position == LegendPos.TopCenter else plot.left()
+            y = 8 + metrics.height() / 2
+            for (color, text), width in zip(entries, widths):
+                painter.setPen(QtGui.QPen(color, 1))
+                painter.drawLine(QtCore.QPointF(x, y), QtCore.QPointF(x + 28, y))
+                painter.setBrush(QtGui.QBrush(QtGui.QColor('white')))
+                painter.drawEllipse(QtCore.QPointF(x + 14, y), 3.5, 3.5)
+                painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+                painter.setPen(QtGui.QPen(QtGui.QColor('black')))
+                painter.drawText(QtCore.QPointF(x + 34, y + metrics.ascent() / 2 - 1), text)
+                x += width
+        painter.end()
+
+
 class FormWindow(QtWidgets.QDialog):
     """One original form: a non-modal tool window owned by the main window (Form.Show(owner))."""
 
@@ -296,7 +684,7 @@ class FormWindow(QtWidgets.QDialog):
                 continue
             self.widgets[child] = widget
             container = widget.page_container if hasattr(widget, 'page_container') else widget
-            if not isinstance(child, (ListView, PropertyGrid, TabControl)):
+            if not isinstance(child, (ListView, PropertyGrid, TabControl, DataGridView, ZedGraphControl)):
                 self.build(child, container)
 
     def create(self, control, parent):
@@ -305,6 +693,10 @@ class FormWindow(QtWidgets.QDialog):
             return PropertyGridWidget(self, control, parent)
         if isinstance(control, ListView):
             return ListViewWidget(self, control, parent)
+        if isinstance(control, DataGridView):
+            return DataGridWidget(self, control, parent)
+        if isinstance(control, ZedGraphControl):
+            return GraphWidget(self, control, parent)
         if isinstance(control, GroupBox):
             return QtWidgets.QGroupBox(str(control.Text), parent)
         if isinstance(control, CheckBox):
@@ -347,17 +739,44 @@ class FormWindow(QtWidgets.QDialog):
             return widget
         if isinstance(control, TabControl):
             widget = QtWidgets.QTabWidget(parent)
-            pages = {}
-            for page in control.TabPages:
+            # Every page the form ever added is built once; the shown tabs follow TabPages (forms remove and
+            # re-add pages per item type).
+            widget.page_widgets = {}
+            for page in control.AllPages:
                 page_widget = QtWidgets.QWidget()
-                widget.addTab(page_widget, str(page.Text))
                 self.widgets[page] = page_widget
                 self.build(page, page_widget)
-                pages[page] = page_widget
-            widget.currentChanged.connect(lambda index, c=control: r.input(lambda: setattr(c, 'SelectedIndex', index)))
+                widget.page_widgets[page] = page_widget
+            self.sync_tabs(control, widget)
+            widget.currentChanged.connect(lambda index, c=control, w=widget: None if getattr(w, 'syncing_tabs', False) else r.input(lambda: setattr(c, 'SelectedIndex', index)))
             return widget
         # Panels and containers
         return QtWidgets.QFrame(parent)
+
+    def sync_tabs(self, control, widget):
+        pages = list(control.TabPages)
+        for page in pages:
+            if page not in widget.page_widgets:
+                page_widget = QtWidgets.QWidget()
+                self.widgets[page] = page_widget
+                self.build(page, page_widget)
+                widget.page_widgets[page] = page_widget
+        shown = [widget.widget(i) for i in range(widget.count())]
+        wanted = [widget.page_widgets[p] for p in pages]
+        widget.syncing_tabs = True
+        try:
+            if shown != wanted:
+                while widget.count():
+                    widget.removeTab(0)
+                for page in pages:
+                    widget.addTab(widget.page_widgets[page], str(page.Text))
+            for i, page in enumerate(pages):
+                if widget.tabText(i) != str(page.Text):
+                    widget.setTabText(i, str(page.Text))
+            if widget.currentIndex() != control.SelectedIndex:
+                widget.setCurrentIndex(control.SelectedIndex)
+        finally:
+            widget.syncing_tabs = False
 
     # State ----------------------------------------------------------------------------------------------------------------
     def sync(self):
@@ -417,17 +836,17 @@ class FormWindow(QtWidgets.QDialog):
                 widget.blockSignals(False)
             if widget.currentIndex() != control.SelectedIndex:
                 widget.setCurrentIndex(control.SelectedIndex)
-        if isinstance(widget, QtWidgets.QTabWidget) and widget.currentIndex() != control.SelectedIndex:
-            widget.blockSignals(True)
-            widget.setCurrentIndex(control.SelectedIndex)
-            widget.blockSignals(False)
+        if isinstance(widget, QtWidgets.QTabWidget) and isinstance(control, TabControl):
+            self.sync_tabs(control, widget)
 
     def refresh_control(self, control):
         widget = self.widgets.get(control)
         if isinstance(widget, PropertyGridWidget):
             widget.rebuild()
-        elif isinstance(widget, ListViewWidget):
+        elif isinstance(widget, (ListViewWidget, DataGridWidget)):
             widget.rebuild()
+        elif isinstance(widget, GraphWidget):
+            widget.update()
 
     # Window events --------------------------------------------------------------------------------------------------------
     def resizeEvent(self, event):
@@ -479,6 +898,10 @@ class OriginalFormRenderer:
         from System.Windows.Forms import DialogResult
         self.dialog_handler = System.Func[Form, DialogResult](self.show_dialog)
         Form.ShowDialogHandler = self.dialog_handler
+        # The grid's copy/paste reaches the platform clipboard (text; private formats stay in the model).
+        self.clipboard_get = System.Func[System.String](lambda: QtWidgets.QApplication.clipboard().text())
+        self.clipboard_set = System.Action[System.String](lambda text: QtWidgets.QApplication.clipboard().setText(str(text)))
+        Clipboard.GetTextHandler, Clipboard.SetTextHandler = self.clipboard_get, self.clipboard_set
         self.update_screens()
 
     def update_screens(self):
@@ -492,9 +915,11 @@ class OriginalFormRenderer:
         if form is None:
             return
         self.dirty.add(form)
-        if prop in ('SelectedObject', 'Refresh', 'Items', 'Expanded', 'Autocomplete', 'LabelRatio', 'Columns'):
+        if prop in ('SelectedObject', 'Refresh', 'Items', 'Expanded', 'Autocomplete', 'LabelRatio', 'Columns', 'Grid', 'Graph'):
             self.refresh.add(control)
-        if prop == 'SelectedGridItem':
+        if isinstance(control, DataGridView) and prop == 'Layout':
+            self.refresh.add(control)
+        if prop in ('SelectedGridItem', 'Selection'):
             self.refresh.add(('select', control))
         self.sync_soon()
 
@@ -533,6 +958,10 @@ class OriginalFormRenderer:
                 control = item[1]
                 window = self.windows.get(control.FindForm())
                 widget = window.widgets.get(control) if window else None
+                if isinstance(widget, DataGridWidget):
+                    if control not in refresh:
+                        widget.select_current()
+                    continue
                 if isinstance(widget, PropertyGridWidget):
                     widget.updating = True
                     try:
@@ -592,10 +1021,21 @@ class OriginalFormRenderer:
     def icon(self, image):
         if image is None:
             return None
-        path = str(image.Path)
-        if path not in self.icons:
-            self.icons[path] = QtGui.QIcon(str(ROOT / path))
-        return self.icons[path]
+        path, name = str(image.Path), str(image.Name)
+        key = path + '#' + name if path.endswith('.resx') else path
+        if key not in self.icons:
+            if path.endswith('.resx'):
+                # Designer image stored in the form's .resx: base64 image bytes (no deserialization).
+                import base64
+                import xml.etree.ElementTree as ET
+                pixmap = QtGui.QPixmap()
+                for data in ET.parse(ROOT / path).getroot().iter('data'):
+                    if data.get('name') == name and 'base64' in (data.get('mimetype') or ''):
+                        pixmap.loadFromData(base64.b64decode(''.join((data.findtext('value') or '').split())))
+                self.icons[key] = QtGui.QIcon(pixmap) if not pixmap.isNull() else None
+            else:
+                self.icons[key] = QtGui.QIcon(str(ROOT / path))
+        return self.icons[key]
 
     def user_resizing(self, window):
         """A spontaneous resize while a mouse button is held on the frame is the user's."""

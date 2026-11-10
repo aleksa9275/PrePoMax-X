@@ -463,7 +463,7 @@ class MainMenuWorkbench:
             'tsmiSave_Click': r(self.save), 'tsmiSaveAs_Click': r(self.save_as),
             'tsmiExportModel_Click': r(self.export_original_model),
             'tsmiExportResultFieldOutput_Click': r(self.export_field),
-            'tsmiExportResultHistoryOutput_Click': r(self.history_data),
+            'tsmiExportResultHistoryOutput_Click': r(lambda: self.run_original_entry('tsmiExportResultHistoryOutput_Click')),
             'tsmiExportTo3mf_Click': r(lambda: (self.update_export_view(), self.run_original_entry('tsmiExportTo3mf_Click'))), 'tsmiExportToPythonJournal_Click': r(self.export_journal),
             'tsmiCloseCurrentResult_Click': r(self.close_current_result), 'tsmiCloseAllResults_Click': r(self.close_results),
             'tsmiExit_Click': r(self.close),

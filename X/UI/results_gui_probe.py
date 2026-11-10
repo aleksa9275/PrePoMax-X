@@ -72,17 +72,32 @@ def start(app,window,output):
         for family,name in [('Result coordinate systems','GUI_CS'),('Result reference points','GUI_RP')]:
             feature=ResultsDialog(window,family);feature.entries['Name'][1].setText(name);feature.flush();feature.rule.Commit();feature.reject()
         window.refresh();check('result coordinate/reference editors commit original definitions','GUI_CS' in list(window.controller.GetResultCoordinateSystemNames()) and 'GUI_RP' in list(window.controller.GetResultReferencePointNames()))
-        window.edit_results('Result fields');dialog=window.active_editor;dialog.types.setCurrentIndex(2);app.processEvents();dialog.entries['Name'][1].setText('GUI_Double');dialog.entries['Equation'][1].setText('=2*STRESS.S11');dialog.apply()
+        # Original FrmResultFieldOutput compiled whole (C10), opened through FrmMain.tsmiCreateResultFieldOutput_Click.
+        from form_driver import FormDriver
+        forms=FormDriver(window);window.edit_results('Result fields')
+        check('original FrmResultFieldOutput opened',type(forms.form).__name__=='FrmResultFieldOutput' and str(forms.form.Text)=='Create Field Output')
+        check('original result field output types',forms.types==['Limit','Envelope','Equation','Coordinate System Transform'])
+        forms.select_type('Equation');forms.set('Name','GUI_Double');forms.set('Equation','=2*STRESS.S11');forms.ok()
     def authored():
         if not wait():return False
         check('result equation widget uses original command',window.controller.GetResultFieldOutput('GUI_Double') is not None)
         from history_widgets import show_history
-        window.edit_results('Result histories');dialog=window.active_editor;dialog.types.setCurrentIndex(dialog.types.count()-1);app.processEvents();dialog.entries['Name'][1].setText('GUI_Table');dialog.matrix.setRowCount(2)
+        # Original FrmResultHistoryOutput (C10): From Table with the original DataGridViewCopyPaste.
+        from form_driver import FormDriver,walk
+        from System.Windows.Forms import DataGridView,TabControl
+        from forms_gui_probe_grid import edit_cell
+        forms=FormDriver(window);window.edit_results('Result histories')
+        check('original FrmResultHistoryOutput opened',type(forms.form).__name__=='FrmResultHistoryOutput' and str(forms.form.Text)=='Create History Output')
+        forms.select_type('From Table');forms.set('Name','GUI_Table')
+        form=forms.form;w=window.form_renderer.windows[form]
+        dgv=next(c for c in walk(form) if isinstance(c,DataGridView));tabs=next(c for c in walk(form) if isinstance(c,TabControl))
+        window.form_renderer.guard(lambda:setattr(tabs,'SelectedIndex',1));forms.flush()
+        table=w.widgets[dgv]
         for row,values in enumerate([[0,1],[1,2]]):
-            for col,value in enumerate(values):dialog.matrix.setItem(row,col,QtWidgets.QTableWidgetItem(str(value)))
-        name_field=next(f for f in dialog.rule.Properties.Fields if f.Name=='Name');dialog.panel.commit_field(name_field,dialog.entries['Name'][1]);app.processEvents()
-        check('pending history cells survive property rebuild',dialog.matrix.rowCount()==2 and dialog.matrix.item(1,1).text()=='2.0')
-        dialog.apply()
+            for col,value in enumerate(values):edit_cell(app,table,row,col,str(value));forms.flush()
+        forms.set('Name','GUI_Table')
+        check('history table cells survive property edits (UpdateTableDataFromGrid)',dgv.RowCount==3 and str(dgv.GetCellText(1,1))=='2')
+        forms.ok()
     def history():
         if not wait():return False
         from history_widgets import show_history

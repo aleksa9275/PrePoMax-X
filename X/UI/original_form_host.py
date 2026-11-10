@@ -31,6 +31,10 @@ FAMILY_ENTRIES = {
     'Result parts': (None, 'EditResultPart'),
     'Result reference points': ('tsmiCreateResultReferencePoint_Click', 'EditResultReferencePoint'),
     'Result coordinate systems': ('tsmiCreateResultCoordinateSystem_Click', 'EditResultCoordinateSystem'),
+    'Distributions': ('tsmiCreateDistribution_Click', 'EditDistribution'),
+    'Amplitudes': ('tsmiCreateAmplitude_Click', 'EditAmplitude'),
+    'Result fields': ('tsmiCreateResultFieldOutput_Click', 'EditResultFieldOutput'),
+    'Result histories': ('tsmiCreateResultHistoryOutput_Click', 'EditResultHistoryOutput'),
 }
 TOOL_ENTRIES = {
     'Split solid': ('CreateSplitSolid', None), 'Split shell': ('CreateSplitShell', None),
