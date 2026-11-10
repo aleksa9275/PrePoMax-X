@@ -35,22 +35,30 @@ def start(app,window,output):
             c=window.controller
             window.open(str(output.parent/'service/authored.pmx'))
             check('authored model tree includes step children',find('Loads','Force','Static') is not None and find('Sections','Solid') is not None)
-            dialog=open_editor(find('Materials','Steel'))
-            check('tree opens original material draft',dialog is not None and dialog.draft.Name=='Steel')
-            dialog.available.setCurrentIndex(list(type(dialog.draft).AvailableProperties).index('Specific Heat'))
-            dialog.add_property()
-            index=len(dialog.draft.PropertyNames)-1
-            dialog.entries[(index,'SpecificHeat')][1].setText('500')
-            dialog.temperature.setChecked(True);app.processEvents()
-            check('temperature switch displays original data tables',bool(dialog.tables))
-            table=dialog.tables[0]
-            before=table.sheet.Count;table.add()
-            check('material widget adds a data row',table.sheet.Count==before+1)
-            table.table.selectRow(table.sheet.Count-1);table.remove()
-            dialog.temperature.setChecked(False);app.processEvents()
-            check('material editor capture',dialog.grab().save(str(output/'material.png')))
-            dialog.apply();app.processEvents()
-            check('material widget commits new property',len(c.GetMaterial('Steel').Properties)==3)
+            # Original FrmMaterial compiled whole (C11), opened by the tree through FrmMain.EditMaterial.
+            from form_driver import FormDriver, walk
+            from forms_gui_probe_child import ChildFormsProbe
+            open_editor(find('Materials','Steel'))
+            forms=FormDriver(window);form=forms.form
+            check('tree opens the original FrmMaterial',type(form).__name__=='FrmMaterial' and str(form.Text)=='Edit Material: Steel')
+            helper=ChildFormsProbe(app,window,check,{'forms':{}},lambda *a:None)
+            tree=forms.control('tvProperties');_,tree_widget=helper.widget(form,tree)
+            node=helper.find_node(tree.Nodes,'Specific Heat');node.EnsureVisible();window.form_renderer.flush()
+            helper.tree_click(tree_widget,node);forms.click('btnAdd')
+            added=[str(i.Text) for i in forms.control('lvAddedProperties').Items]
+            check('Specific Heat added through the original models tree',added[-1:]==['Specific Heat'])
+            helper.grid_set(form,'Specific heat','500')
+            temperature=forms.control('cbTemperatureDependent');window.form_renderer.guard(temperature.RaiseClick);forms.flush()
+            pages=[str(p.Name) for p in forms.control('tcProperties').TabPages]
+            check('temperature dependence shows the original data points page (HideShowTemperature)',pages==['tpDataPoints'])
+            grid=forms.control('dgvData');before=grid.RowCount
+            from forms_gui_probe_grid import edit_cell
+            _,table=helper.widget(form,grid);edit_cell(app,table,grid.NewRowIndex,0,'600');forms.flush()
+            check('a typed value on the new row adds a data point',grid.RowCount==before+1)
+            window.form_renderer.guard(temperature.RaiseClick);forms.flush()
+            check('material editor capture',window.form_renderer.windows[form].grab().save(str(output/'material.png')))
+            forms.ok();app.processEvents()
+            check('original FrmMaterial OK replaces the material with the new property',len(c.GetMaterial('Steel').Properties)==3 and not form.Visible)
             window.undo();check('material authoring undo',len(c.GetMaterial('Steel').Properties)==2)
             window.redo();check('material authoring redo',len(c.GetMaterial('Steel').Properties)==3)
             # Original FrmLoad compiled whole (C9), opened by the tree through FrmMain.EditLoad.

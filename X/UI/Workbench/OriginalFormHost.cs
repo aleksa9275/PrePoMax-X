@@ -3,6 +3,7 @@
 // tree, viewport, state machine and renderer are forwarded to the toolkit workbench through the hooks below.
 using System.Windows.Forms;
 using PrePoMax.Forms;
+using PrePoMax.Commands;
 
 namespace PrePoMax;
 
@@ -62,7 +63,29 @@ public sealed partial class OriginalFormHost : Form
     void UpdateHighlightFromTree() => HighlightFromTreeHandler?.Invoke();
     bool CommitViewportEdit() => CommitViewportEditHandler?.Invoke() ?? false;
     bool CaptureViewport(CaptureViewportProperties properties) => CaptureViewportHandler?.Invoke(properties) ?? false;
-    void InvokeIfRequired(Action action) => action();
+    // FrmMain members the child-window forms call back that belong to the main window (viewport selection,
+    // results opening with history postprocessing, settings/automation server, annotations): forwarded by name.
+    public Func<string, object[], object> MainWindowHandler { get; set; }
+    object MainWindow(string member, params object[] arguments) => MainWindowHandler?.Invoke(member, arguments);
+    void Clear3DSelection() => MainWindow(nameof(Clear3DSelection));
+    void ResultsAnalysis(string jobName) => MainWindow(nameof(ResultsAnalysis), jobName);
+    void UpdateSettings(SettingsContainer settings) => MainWindow(nameof(UpdateSettings), settings);
+    void SetAutomationAccessToken(string accessToken) => MainWindow(nameof(SetAutomationAccessToken), accessToken);
+    void tsbRemoveAnnotations_Click(object sender, EventArgs e) => MainWindow(nameof(tsbRemoveAnnotations_Click));
+    // FrmMain.InvokeIfRequired: runs on the user-interface thread (Control.Invoke when called from another).
+    void InvokeIfRequired(Action action) { if (InvokeRequired) Invoke(action); else action(); }
+    void InvokeIfRequired<T>(Action<T> action, T parameter) { if (InvokeRequired) Invoke(action, parameter); else action(parameter); }
+    /// <summary>FrmMain.TryGetRegenerateType (FrmRegenerate when the history uses regeneration types): the chosen
+    /// type, or null when the dialog was cancelled.</summary>
+    public RegenerateTypeEnum? SelectRegenerateType(bool regenerateTypeUsed) => TryGetRegenerateType(regenerateTypeUsed, out RegenerateTypeEnum type) ? type : null;
+    string GetRunningAutomationEndpointUrl() => MainWindow(nameof(GetRunningAutomationEndpointUrl)) as string ?? "";
+    bool PythonPanelShowFind() => MainWindow(nameof(PythonPanelShowFind)) is true;
+    // FrmMain._modelTree: the workbench's model tree (ModelTree.IntersectSelectionWithList).
+    sealed class ModelTreeHost(OriginalFormHost host)
+    {
+        public string[] IntersectSelectionWithList(CaeGlobals.NamedClass[] list) => host.MainWindow(nameof(IntersectSelectionWithList), new object[] { list }) as string[] ?? new string[0];
+    }
+    ModelTreeHost _modelTree => new ModelTreeHost(this);
 
     /// <summary>Calls a FrmMain create/edit entry point by its original name (menu and tree dispatch).</summary>
     public void Invoke(string method, params object[] arguments)

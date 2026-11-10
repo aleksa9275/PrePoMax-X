@@ -40,7 +40,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|---|---|---|---|
 | Model and mesh features | 108 | 108 | 108 | 106 | 0 |
 | Commands | 237 | 237 | 236 | 230 | 0 |
-| Forms | 72 | 42 | 42 | 42 | 0 |
+| Forms | 72 | 67 | 67 | 66 | 0 |
 
 ## Model and mesh features
 
@@ -598,11 +598,11 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | FrmExportFileWithProperties | ABC |
-| FrmGetColor | - |
-| FrmGetValue | - |
+| FrmGetColor | ABC |
+| FrmGetValue | ABC |
 | FrmNewModel | ABC |
-| FrmRegenerate | - |
-| FrmSelectEntity | - |
+| FrmRegenerate | ABC |
+| FrmSelectEntity | AB |
 | FrmSelectItemSet | ABC |
 | FrmViewObjectProperties | - |
 
@@ -610,7 +610,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmEquationParameters | - |
+| FrmEquationParameters | ABC |
 
 ### Edit
 
@@ -622,16 +622,16 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmExplodedView | - |
-| FrmFollowerView | - |
-| FrmSectionView | - |
-| FrmUserVew | - |
+| FrmExplodedView | ABC |
+| FrmFollowerView | ABC |
+| FrmSectionView | ABC |
+| FrmUserVew | ABC |
 
 ### AnalyzeGeometry
 
 | Item | Status |
 |---|---|
-| FrmAnalyzeGeometry | - |
+| FrmAnalyzeGeometry | ABC |
 
 ### GeometryFeature
 
@@ -717,8 +717,8 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmMaterial | - |
-| FrmMaterialLibrary | - |
+| FrmMaterial | ABC |
+| FrmMaterialLibrary | ABC |
 
 ### Section
 
@@ -736,7 +736,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmSurfaceInteraction | - |
+| FrmSurfaceInteraction | ABC |
 
 ### ContactPair
 
@@ -748,7 +748,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmSearchContactPairs | - |
+| FrmSearchContactPairs | ABC |
 
 ### Distribution
 
@@ -773,7 +773,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | FrmStep | ABC |
-| FrmStepControls | - |
+| FrmStepControls | ABC |
 
 ### HistoryOutput
 
@@ -809,20 +809,20 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmGetEnvVars | - |
-| FrmSettings | - |
+| FrmGetEnvVars | ABC |
+| FrmSettings | ABC |
 
 ### Query
 
 | Item | Status |
 |---|---|
-| FrmQuery | - |
+| FrmQuery | ABC |
 
 ### Find
 
 | Item | Status |
 |---|---|
-| FrmFind | - |
+| FrmFind | ABC |
 
 ### CaptureViewport
 
@@ -834,14 +834,14 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmAnalysis | - |
-| FrmMonitor | - |
+| FrmAnalysis | ABC |
+| FrmMonitor | ABC |
 
 ### Animation
 
 | Item | Status |
 |---|---|
-| FrmAnimation | - |
+| FrmAnimation | ABC |
 
 ### ResultFieldOutput
 
@@ -854,13 +854,13 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | FrmResultHistoryOutput | ABC |
-| FrmViewResultHistoryOutput | - |
+| FrmViewResultHistoryOutput | ABC |
 
 ### Transformation
 
 | Item | Status |
 |---|---|
-| FrmTransformation | - |
+| FrmTransformation | ABC |
 
 ### General
 
@@ -868,4 +868,4 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|
 | FrmMain | - |
 | FrmPythonStop | - |
-| FrmSplash | - |
+| FrmSplash | ABC |

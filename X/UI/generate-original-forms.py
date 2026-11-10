@@ -32,6 +32,15 @@ BASE = [
     # Data grid forms (C10): the grid with copy/paste/plot and the plot window
     'UserControls/Forms/FrmPropertyDataListView.cs', 'UserControls/DataGridView/DataGridViewCopyPaste.cs',
     'UserControls/DiagramView/DiagramView.cs', 'UserControls/DiagramView/DiagramView.Designer.cs',
+    # Child-window forms and dialogs (C11): their original controls
+    'UserControls/Trees/CoderslabTreeView.cs',
+    'UserControls/Trees/OrderedDictionary.cs',
+    'UserControls/GroupBoxes/CollapsableGroupBox.cs', 'UserControls/GroupBoxes/CollapsableGroupBox.Designer.cs',
+    'UserControls/TextBoxes/NumericTextBox.cs', 'UserControls/TextBoxes/NumericTextBox.Designer.cs',
+    'UserControls/AnalysisProgressView.cs', 'UserControls/AnalysisProgressView.Designer.cs',
+    'PrePoMax/Forms/00_Common/ViewDoubleValue.cs', 'PrePoMax/Forms/00_Common/ViewColor.cs',
+    'PrePoMax/Forms/01_Edit/DataGridViewExtension.cs', 'PrePoMax/Forms/44_SurfaceInteraction/ListViewItemComparer.cs',
+    'UserControls/MessageBoxes/AutoClosingMessageBox.cs', 'PrePoMax/Forms/61_Settings/EnvVarsUIEditor.cs',
 ]
 # Forms derived from FrmProperties / FrmPropertyListView / FrmPropertyDataListView.
 FORMS = '''FrmBoundaryLayer FrmCaptureViewport FrmContactPair FrmElementSet FrmMergeCoincidentNodes FrmMirror
@@ -40,7 +49,8 @@ FrmSplitPeriodicFaces FrmSurface FrmSurfaceOperation FrmThickenShellMesh FrmTran
 FrmFieldOutput FrmHistoryOutput FrmInitialCondition FrmLoad FrmMeshSetupItem FrmNewModel FrmSection FrmSplitSolid FrmStep
 FrmSplitShell FrmCoordinateSystem FrmElementQuality FrmExportFileWithProperties FrmReferencePoint
 FrmSplitPartMeshUsingSurface FrmViewObjectProperties
-FrmAmplitude FrmDistribution FrmResultFieldOutput FrmResultHistoryOutput'''.split()
+FrmAmplitude FrmDistribution FrmResultFieldOutput FrmResultHistoryOutput
+FrmGetColor FrmGetValue FrmRegenerate FrmSelectEntity FrmEquationParameters FrmExplodedView FrmFollowerView FrmSectionView FrmUserVew FrmAnalyzeGeometry FrmMaterial FrmMaterialLibrary FrmSurfaceInteraction FrmSearchContactPairs FrmStepControls FrmGetEnvVars FrmSettings FrmQuery FrmFind FrmAnalysis FrmMonitor FrmAnimation FrmViewResultHistoryOutput FrmTransformation FrmSplash'''.split()
 
 # (pattern, replacement, reason). Applied in order to every file.
 REWRITES = [
@@ -55,6 +65,27 @@ REWRITES = [
      'A designer image is an ImageResource (System.Drawing.Image needs GDI+).'),
     (r'\(\(System\.Drawing\.Icon\)\(resources\.GetObject\(', '((System.Drawing.Icon)(resources.GetIcon(',
      'Form icons are the application icon in the renderer (System.Drawing.Icon needs GDI+).'),
+    (r'(?<![\w.])OrderedDictionary<', lambda path: 'OrderedDictionary<' if path.startswith('UserControls/') else 'CaeGlobals.OrderedDictionary<',
+     '.NET 9+ adds System.Collections.Generic.OrderedDictionary<,>; the original CaeGlobals type is named in full.'),
+    (r'Image image = new Bitmap\(100, 100\);\n(\s*)Graphics g = Graphics\.FromImage\(image\);\n(\s*//.*\n)(\s*)SizeF textSize = g\.MeasureString\(',
+     r'// GDI+ bitmap: not created\n\1// GDI+ graphics: not created\n\2\3SizeF textSize = System.Windows.Forms.TextRenderer.MeasureString(',
+     'CollapsableGroupBox measures its caption on a GDI+ bitmap; the renderer\'s font metrics measure it instead.'),
+    (r'_drawBrush = new SolidBrush\(ForeColor\);', '_drawBrush = null; // SolidBrush needs GDI+; the renderer paints the caption',
+     'CollapsableGroupBox keeps an unused GDI+ brush (SolidBrush needs GDI+ on .NET 10).'),
+    (r'\b\w+\.CreateGraphics\(\)\.MeasureString\(', 'System.Windows.Forms.TextRenderer.MeasureString(',
+     'Graphics.MeasureString needs GDI+; the text is measured with the renderer\'s font metrics.'),
+    (r'\[System\.Runtime\.InteropServices\.DllImport\("user32\.dll", SetLastError = true\)\]\n(\s*)static extern IntPtr FindWindow\(string lpClassName, string lpWindowName\);',
+     r'\1static IntPtr FindWindow(string lpClassName, string lpWindowName) => System.Windows.Forms.MessageBox.FindOpen(lpClassName, lpWindowName);',
+     'AutoClosingMessageBox finds and closes its box through user32; the toolkit message boxes are found by caption instead.'),
+    (r'\[System\.Runtime\.InteropServices\.DllImport\("user32\.dll", CharSet = System\.Runtime\.InteropServices\.CharSet\.Auto\)\]\n(\s*)static extern IntPtr SendMessage\(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam\);',
+     r'\1static IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam) => System.Windows.Forms.MessageBox.SendMessage(hWnd, Msg, wParam, lParam);',
+     'AutoClosingMessageBox: WM_CLOSE goes to the toolkit message box.'),
+    (r'GetScrollPos\(\(int\)this\.Handle, ', 'NativeGetScrollPos(',
+     'CodersLabTreeView reads the native scroll position through user32; the TreeView model reports it.'),
+    (r'Graphics g = this\.CreateGraphics\(\);', 'System.Windows.Forms.FocusSurface g = new System.Windows.Forms.FocusSurface(this);',
+     'CodersLabTreeView draws its focus rectangle with GDI+; the renderer draws the focus the model records.'),
+    (r'g\.DrawRectangle\(new Pen\(new SolidBrush\((\w+)\), 1\), ', r'g.DrawRectangle(\1, ',
+     'CodersLabTreeView focus rectangle: the colour instead of a GDI+ pen.'),
 ]
 
 
@@ -84,8 +115,9 @@ def render(path, output):
     text = raw.decode('utf-8-sig').replace('\r\n', '\n')
     applied = []
     for pattern, replacement, reason in REWRITES:
+        before = text
         text, count = re.subn(pattern, (lambda m, r=replacement: r(path)) if callable(replacement) else replacement, text)
-        if count:
+        if count and text != before:
             applied.append(f'// Rewrite x{count}: {reason}')
     header = [f'// Generated by X/UI/generate-original-forms.py from {path}; do not edit.',
               f'// Original SHA256 {hashlib.sha256(raw).hexdigest()}',
@@ -134,10 +166,30 @@ HOST_METHODS = ['AddFormToAllForms', 'CloseAllForms', 'SetFormLocation', 'ShowFo
                 'SelectNewModelProperties', 'SetNewModelProperties', 'IfNeededSelectAndSetNewModelProperties',
                 # Menu handlers of the data grid forms (the model tree's create calls them too)
                 'tsmiCreateDistribution_Click', 'tsmiCreateAmplitude_Click', 'tsmiCreateResultFieldOutput_Click',
-                'tsmiCreateResultHistoryOutput_Click']
+                'tsmiCreateResultHistoryOutput_Click',
+                # Child-window forms and dialogs (C11): their FrmMain entry points and callbacks
+                'KillAnalysis', 'TryGetRegenerateType', 'TurnSectionViewOnOff', 'AnalyzeGeometry', 'SearchContactPairs',
+                'SetColorForGeometryParts', 'SetColorForModelParts', 'SetColorForResultParts',
+                'SetTransparencyForGeometryParts', 'SetTransparencyForModelParts', 'SetTransparencyForResultParts',
+                'FindEdgesByAngleForGeometryParts', 'FindEdgesByAngleForModelParts', 'SetUpFrmGetValueForEdgeAngle',
+                'tsmiRenumberAllNodes_Click', 'tsmiRenumberAllElements_Click', 'CreateSimpleMaterial', 'ShowMaterialLibrary',
+                'tsmiSettings_Click', 'ShowColorBarSettings', 'ShowAnnotationSettings', 'ShowLegendSettings',
+                'tsmiCoorSysSettings_Click', 'ShowStatusBlockSettings', 'tsmiEditParameters_Click', 'tsmiQuery_Click',
+                'tsmiFind_Click', 'MonitorAnalysis', 'CloseMonitorWindow', 'UpdateAnalysisProgress', 'GetDefaultJob',
+                'ViewResultHistoryOutputData', 'tsmiAbout_Click', 'SelectOneEntity', 'SelectOneEntityInStep',
+                'SelectMultipleEntities', 'SelectMultipleEntitiesInStep', 'tsbAnimate_Click', 'ClearSelection',
+                'AddNonpositiveJacobianElementSet', 'GetMeshIdentityOrNull', 'tsmiMaterialLibrary_Click',
+                'tsmiSearchContactPairs_Click']
+# FrmMain fields the members above use (declarations copied verbatim).
+HOST_FIELDS = ['_nonpositiveJacobianSetsAwaited', '_isNonpositiveJacobianSetAwaited']
 HOST_REWRITES = [
-    (r'form is FrmAnimation\b', 'false /* FrmAnimation is not compiled yet */',
-     'FrmAnimation is not compiled yet; its menu rule (SetMenuAndToolStripVisibilityByAnimation) cannot apply.'),
+    (r'(?<![\w.])OrderedDictionary<', 'CaeGlobals.OrderedDictionary<',
+     '.NET 9+ adds System.Collections.Generic.OrderedDictionary<,> (and UserControls has its own); FrmMain uses CaeGlobals\'.'),
+    (r'_frmAnimation\.PrepareForm\(this, _controller\)', '_frmAnimation.PrepareForm((FrmMain)_controller.Host, _controller)',
+     'FrmAnimation drives the viewport through FrmMain; the headless FrmMain host forwards those calls to the renderer.'),
+    (r'PythonPanel pythonPanel = _visibleSidePanel as PythonPanel;\n(\s*)if \(pythonPanel != null && pythonPanel\.Focused\)\n(\s*)\{\n(\s*)pythonPanel\.ShowFind\(\);',
+     r'// The Python side panel is the workbench\'s: its Find when it has the focus.\n\1if (PythonPanelShowFind())\n\2{',
+     'The Python side panel belongs to the workbench; FrmMain asks it to show its Find when it has the focus.'),
 ]
 
 
@@ -181,11 +233,16 @@ def host(extractor):
            '// Original source: PrePoMax, Copyright (C) 2016-2026 Matej Borovinšek; root LICENSE.',
            '// Forms not compiled yet (their routing lines are omitted): ' + ', '.join(skipped_forms),
            'using System;', 'using System.Collections.Generic;', 'using System.Drawing;', 'using System.Linq;',
-           'using System.Windows.Forms;', 'using CaeGlobals;', 'using CaeMesh;', 'using CaeModel;', 'using CaeResults;',
-           'using PrePoMax.Forms;', 'using UserControls;', '',
+           'using System.Windows.Forms;', 'using CaeGlobals;', 'using CaeJob;', 'using CaeMesh;', 'using CaeModel;', 'using CaeResults;',
+           'using PrePoMax.Commands;', 'using PrePoMax.Forms;', 'using PrePoMax.Python;', 'using UserControls;', '',
            'namespace PrePoMax', '{', '    public sealed partial class OriginalFormHost', '    {',
            '        private Point _formLocation;', '        private List<Form> _allForms;']
     out += [f'        private {fields[name]} {name};' for name in sorted(ours, key=list(fields).index)]
+    for field in HOST_FIELDS:
+        match = re.search(r'^        private [^;=]*\b' + field + r'\b[^;]*;', source, re.M | re.S)
+        if match is None:
+            raise SystemExit(f'{field}: no declaration in {HOST}')
+        out.append(match.group(0))
     out += ['        // FrmMain constructor: form creation', '        private void CreateForms()', '        {']
     out += ['    ' + line[8:] if line.startswith('        ') else line for line in '\n                //\n'.join(create).split('\n')]
     out += ['        }', '        // FrmMain._vtk_SelectPointOrArea: point picks of the transformation forms',
@@ -196,6 +253,17 @@ def host(extractor):
             continue
         seen.add(m['code'])
         out.append('        ' + strip_other_forms(m['code']))
+    # Menu items whose text the extracted handlers use (ShowForm titles): FrmMain.Designer.cs text.
+    designer = (ROOT / 'PrePoMax/Forms/FrmMain.Designer.cs').read_text(encoding='utf-8-sig')
+    body = '\n'.join(out)
+    items = sorted(set(re.findall(r'\b((?:tsmi|tsb)\w+)\.Text\b', body)))
+    if items:
+        out.append('        // FrmMain.Designer.cs: menu items whose Text the handlers above use')
+        for item in items:
+            match = re.search(r'this\.' + item + r'\.Text = (".*?");', designer)
+            if match is None:
+                raise SystemExit(f'{item}: no Text in FrmMain.Designer.cs')
+            out.append(f'        private readonly ToolStripMenuItem {item} = new ToolStripMenuItem({match.group(1)});')
     out += ['    }', '}', '']
     text = '\n'.join(out)
     notes = []

@@ -419,9 +419,25 @@ def start(app, window, output):
         if not ready():
             return False
         catalogue(GEOMETRY_FORMS, 'geometry')
+        from forms_gui_probe_child import ChildFormsProbe
+        ChildFormsProbe(app, window, check, report, snapshot).geometry([str(p) for p in c.GetGeometryPartNames()])
         report['success'] = True
 
-    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, geometry_catalogue, geometry_ready])
+    def child_forms():
+        """C11: child-window forms and dialogs (forms_gui_probe_child.py)."""
+        from forms_gui_probe_child import ChildFormsProbe
+        probe = ChildFormsProbe(app, window, check, report, snapshot)
+        probe.catalogue()
+        probe.material()
+        probe.user_views()
+        probe.get_value_dialogs()
+        probe.parameters()
+        probe.library()
+        probe.settings()
+        probe.regenerate()
+        probe.about()
+
+    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, child_forms, geometry_catalogue, geometry_ready])
     current = [None]
     timer = QtCore.QTimer(window)
 

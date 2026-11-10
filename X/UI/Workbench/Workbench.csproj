@@ -6,6 +6,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <NuGetLockFilePath Condition="'$(NativePreviewLockRoot)' != ''">$(NativePreviewLockRoot)/$(MSBuildProjectName).json</NuGetLockFilePath>
   </PropertyGroup>
+  <ItemGroup><Using Remove="System.Threading" /></ItemGroup>
   <ItemGroup><ProjectReference Include="../../Domain/PrePoMax/PrePoMax.csproj" /><ProjectReference Include="../FormsCompat/FormsCompat.csproj" /></ItemGroup>
   <ItemGroup>
     <Compile Include="../../../PrePoMax/Forms/11_MeshSetup/Base/MeshSetupItemTypes.cs" Link="Original/MeshSetupItemTypes.cs" />

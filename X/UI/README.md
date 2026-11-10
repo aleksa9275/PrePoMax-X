@@ -291,3 +291,17 @@ whole with `FrmPropertyDataListView`, `DataGridViewCopyPaste` and `FrmDiagramVie
 `GraphWidget`). The forms probe drives the amplitude grid (edit, new row, invalid value,
 copy/paste, plot, delete); the results probe the result field/history forms.
 [C10 report](../../.project/reports/phase-c10-data-grid-forms.md).
+
+### C11 child-window forms and dialogs
+
+25 more original forms compile whole (material, surface interaction, step controls, analysis,
+monitor, animation, query, find, user/section/exploded/follower views, transformation, settings,
+environment variables, parameters, material library, search contact pairs, analyze geometry,
+view result history, get value/colour, regenerate, select entity, splash) with the original
+`CodersLabTreeView`, `CollapsableGroupBox`, `NumericTextBox`, `AnalysisProgressView` and
+`AutoClosingMessageBox`. `FormsCompat/TreeView.cs` models the native TreeView (row geometry, hit
+tests, expand/select rules), `FormsCompat/Components.cs` timers, scroll bars, table layout, file
+dialogs, drag events and MessageBox, `FormsCompat/ZedGraph.cs` ZedGraph's axis auto-scaling
+(linear/log, Y2, zoom states). `original_controls.py` draws the new controls and installs the
+toolkit services; menus, tree and toolbars open these forms through their FrmMain members.
+[C11 report](../../.project/reports/phase-c11-child-forms.md).

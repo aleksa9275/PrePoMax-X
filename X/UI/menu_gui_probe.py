@@ -53,6 +53,11 @@ def start(app, w, output, model, results):
             'tsmiRegenerateHistory', 'tsmiRegenerateHistoryUsingOtherFiles', 'tsmiRegenerateHistoryWithRemeshing',
             'tsmiAppendResults', 'tsmiCreateMesh', 'tsmiResultsAnalysis', 'tsmiBidirectionalMeshConverter'}
 
+    def walk_controls(control):
+        for child in control.Controls:
+            yield child
+            yield from walk_controls(child)
+
     def smoke(results):
         """Execute every enabled original leaf once in its view; dialogs are cancelled."""
         c = w.controller
@@ -70,6 +75,18 @@ def start(app, w, output, model, results):
         patch(QtWidgets.QColorDialog, 'getColor', staticmethod(lambda *a, **k: __import__('PyQt6').QtGui.QColor()))
         patch(QtWidgets.QMessageBox, 'warning', staticmethod(lambda *a, **k: QtWidgets.QMessageBox.StandardButton.Cancel))
         patch(QtWidgets.QDialog, 'exec', lambda self: QtWidgets.QDialog.DialogCode.Rejected)
+        # Modal original forms (FrmGetValue, FrmGetColor, FrmParametersEditor, ...) are cancelled as a user would:
+        # their Cancel button, else the window close (FormClosing), inside their modal loop.
+        from System.Windows.Forms import Form as WinForm
+
+        def cancel_modal_forms():
+            for form in list(WinForm.OpenForms):
+                if form.Visible and form.Modal:
+                    cancel = next((x for x in walk_controls(form) if str(x.Name) == 'btnCancel' and x.Visible), None)
+                    w.form_renderer.guard(cancel.RaiseClick if cancel is not None else form.CloseByUser)
+        modal_timer = QtCore.QTimer()
+        modal_timer.timeout.connect(cancel_modal_forms)
+        modal_timer.start(100)
         chosen.clear()
         outcomes = {}
         views_seen = {}
@@ -113,6 +130,7 @@ def start(app, w, output, model, results):
                         outcomes.setdefault(item, {})[view] = outcome
                         views_seen.setdefault(view, set()).add(str(c.CurrentView))
         finally:
+            modal_timer.stop()
             for owner, name, value in reversed(patches):
                 setattr(owner, name, value)
         report['smoke'] = outcomes

@@ -15,8 +15,10 @@ from System.Windows.Forms import (Control, Form, GroupBox, ButtonBase, Button, C
                                   ListView, PropertyGrid, TabControl, TabPage, Panel, ComboBox, NumericUpDown,
                                   ControlNotifications, GridItemType, Keys, MouseButtons, OrderedNameComparer, Screen,
                                   DataGridView, DataGridViewContentAlignment, DataGridViewAutoSizeColumnMode,
-                                  ToolStripSeparator, Clipboard)
+                                  ToolStripSeparator, Clipboard, TreeView, TrackBar, ScrollBar, ProgressBar, LinkLabel,
+                                  PictureBox)
 from ZedGraph import ZedGraphControl, LegendPos
+import original_controls as oc
 from AutocompleteMenuNS import AutocompleteMenu
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -537,115 +539,174 @@ class DataGridWidget(QtWidgets.QTableWidget):
         index = self.indexAt(position)
         renderer.guard(lambda: grid.RaiseCellMouseDown(index.row(), index.column(), MouseButtons.Right, position.x(), position.y()))
         strip = grid.ContextMenuStrip
-        if strip is None or not renderer.guard(lambda: strip.OpenFor(grid)):
-            return
-        menu = QtWidgets.QMenu(self)
-        for item in strip.Items:
-            if not item.Visible:
-                continue
-            if isinstance(item, ToolStripSeparator):
-                menu.addSeparator()
-                continue
-            action = menu.addAction(str(item.Text))
-            icon = renderer.icon(item.Image)
-            if icon is not None:
-                action.setIcon(icon)
-            action.setEnabled(bool(item.Enabled))
-            action.triggered.connect(lambda checked=False, i=item: renderer.input(i.PerformClick))
-        menu.exec(self.viewport().mapToGlobal(position))
+        if strip is not None:
+            renderer.show_context_menu(strip, self.viewport().mapToGlobal(position), grid)
 
 
 class GraphWidget(QtWidgets.QWidget):
-    """ZedGraphControl: the curves, axis titles, legend and axis minima the original FrmDiagramView sets, drawn
-    with ZedGraph's defaults (nice 1-2-5 axis steps, line with circle symbols, legend above the chart)."""
-
-    COLORS = None
+    """ZedGraphControl drawn from its pane: the axis ranges and major steps the original code and AxisChange set
+    (ZedGraph PickScale in the model; linear or log, X, Y and Y2), grids, curves (line style, circle symbols, missing
+    points break the line), axis titles and the legend."""
 
     def __init__(self, window, control, parent):
         super().__init__(parent)
         self.window, self.control = window, control
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QtGui.QPalette.ColorRole.Window, QtGui.QColor('white'))
+        palette.setColor(QtGui.QPalette.ColorRole.Window, qcolor(control.GraphPane.Fill.Color) if control.GraphPane.Fill.Type.ToString() != 'None' else QtGui.QColor('white'))
         self.setPalette(palette)
 
     @staticmethod
-    def nice_range(low, high, auto_min, fixed_min):
+    def axis_map(scale, low, high, log):
         import math
-        if not auto_min:
-            low = fixed_min
-        if not math.isfinite(low) or not math.isfinite(high):
-            return 0.0, 1.0, 0.2
-        if high <= low:
-            high = low + (abs(low) if low else 1.0)
-        raw = (high - low) / 7.0
-        magnitude = 10 ** math.floor(math.log10(raw))
-        step = next(m * magnitude for m in (1, 2, 5, 10) if m * magnitude >= raw)
-        start = low if not auto_min else math.floor(low / step) * step
-        return start, math.ceil(high / step) * step, step
+        a, b = float(scale.Min), float(scale.Max)
+        if log:
+            a, b = math.log10(max(a, 1e-300)), math.log10(max(b, 1e-300))
+            if b <= a:
+                b = a + 1
+            return lambda v: low + (math.log10(v) - a) / (b - a) * (high - low) if v > 0 else float('nan')
+        if b <= a:
+            b = a + 1
+        return lambda v: low + (v - a) / (b - a) * (high - low)
+
+    @staticmethod
+    def ticks(scale, log):
+        import math
+        a, b, step = float(scale.Min), float(scale.Max), float(scale.MajorStep)
+        if log:
+            first, last = math.ceil(math.log10(max(a, 1e-300)) - 1e-9), math.floor(math.log10(max(b, 1e-300)) + 1e-9)
+            step = max(1, int(round(step)))
+            return [10.0 ** e for e in range(first, last + 1, step)][:200]
+        if not (step > 0) or not math.isfinite(step) or (b - a) / step > 500:
+            return [a, b]
+        base = float(scale.BaseTic)
+        start = base if base != System.Double.MaxValue and math.isfinite(base) else math.ceil(a / step - 1e-9) * step
+        while start - step >= a - 1e-9 * step:
+            start -= step
+        values, v = [], start
+        while v <= b + 1e-9 * step and len(values) < 500:
+            values.append(0.0 if abs(v) < 1e-12 * step else v)
+            v += step
+        return values
+
+    @staticmethod
+    def label(value, step, log):
+        import math
+        if log:
+            return f'{value:g}'
+        if step <= 0 or not math.isfinite(step):
+            return f'{value:g}'
+        digits = max(0, -int(math.floor(math.log10(step)))) if step < 1 else 0
+        return f'{value:.{digits}f}'
 
     def paintEvent(self, event):
         import math
+        from ZedGraph import AxisType
         pane = self.control.GraphPane
         curves = [c for c in pane.CurveList if c.IsVisible]
         painter = QtGui.QPainter(self)
         painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
         painter.setFont(original_font())
         metrics = painter.fontMetrics()
-        xs = [float(v) for c in curves for v in c.X if math.isfinite(float(v))]
-        ys = [float(v) for c in curves for v in c.Y if math.isfinite(float(v))]
-        x0, x1, xstep = self.nice_range(min(xs, default=0.0), max(xs, default=1.0), pane.XAxis.Scale.MinAuto, float(pane.XAxis.Scale.Min))
-        y0, y1, ystep = self.nice_range(min(ys, default=0.0), max(ys, default=1.0), pane.YAxis.Scale.MinAuto, float(pane.YAxis.Scale.Min))
+        y2 = bool(pane.Y2Axis.IsVisible)
         legend = bool(pane.Legend.IsVisible) and len(curves) > 0
         top = 12 + (metrics.height() + 8 if legend else 0)
         x_title = str(pane.XAxis.Title.Text or '')
         title_lines = max(1, len(x_title.split('\n')))
-        left, right, bottom = 70, 20, (1 + title_lines) * metrics.height() + 16
+        left, right, bottom = 70, 70 if y2 else 20, (1 + title_lines) * metrics.height() + 16
         plot = QtCore.QRectF(left, top, max(10, self.width() - left - right), max(10, self.height() - top - bottom))
-        def px(x): return plot.left() + (x - x0) / (x1 - x0) * plot.width()
-        def py(y): return plot.bottom() - (y - y0) / (y1 - y0) * plot.height()
+        painter.fillRect(plot, qcolor(pane.Chart.Fill.Color) or QtGui.QColor('white'))
+        logs = {name: getattr(pane, name).Type == AxisType.Log for name in ('XAxis', 'YAxis', 'Y2Axis')}
+        px = self.axis_map(pane.XAxis.Scale, plot.left(), plot.right(), logs['XAxis'])
+        py = self.axis_map(pane.YAxis.Scale, plot.bottom(), plot.top(), logs['YAxis'])
+        py2 = self.axis_map(pane.Y2Axis.Scale, plot.bottom(), plot.top(), logs['Y2Axis'])
+        xt, yt = self.ticks(pane.XAxis.Scale, logs['XAxis']), self.ticks(pane.YAxis.Scale, logs['YAxis'])
+        y2t = self.ticks(pane.Y2Axis.Scale, logs['Y2Axis']) if y2 else []
+        # Grids (dotted, as ZedGraph's dash 1/5).
+        for axis, values, horizontal, mapping in ((pane.XAxis, xt, False, px), (pane.YAxis, yt, True, py)):
+            if axis.MajorGrid.IsVisible:
+                pen = QtGui.QPen(qcolor(axis.MajorGrid.Color) or QtGui.QColor('black'), 1)
+                pen.setDashPattern([1, 5])
+                painter.setPen(pen)
+                for v in values:
+                    p = mapping(v)
+                    if math.isfinite(p):
+                        if horizontal:
+                            painter.drawLine(QtCore.QPointF(plot.left(), p), QtCore.QPointF(plot.right(), p))
+                        else:
+                            painter.drawLine(QtCore.QPointF(p, plot.top()), QtCore.QPointF(p, plot.bottom()))
         painter.setPen(QtGui.QPen(QtGui.QColor('black'), 1))
         painter.drawRect(plot)
-        def ticks(start, end, step):
-            n = int(round((end - start) / step))
-            return [start + i * step for i in range(n + 1)]
-        def label(value, step):
-            digits = max(0, -int(math.floor(math.log10(step)))) if step < 1 else 0
-            return f'{value:.{digits}f}'
-        for x in ticks(x0, x1, xstep):
-            painter.drawLine(QtCore.QPointF(px(x), plot.bottom()), QtCore.QPointF(px(x), plot.bottom() - 5))
-            text = label(x, xstep)
-            painter.drawText(QtCore.QPointF(px(x) - metrics.horizontalAdvance(text) / 2, plot.bottom() + metrics.ascent() + 4), text)
-        for y in ticks(y0, y1, ystep):
-            painter.drawLine(QtCore.QPointF(plot.left(), py(y)), QtCore.QPointF(plot.left() + 5, py(y)))
-            text = label(y, ystep)
-            painter.drawText(QtCore.QPointF(plot.left() - metrics.horizontalAdvance(text) - 6, py(y) + metrics.ascent() / 2 - 1), text)
+        for x in xt:
+            p = px(x)
+            painter.drawLine(QtCore.QPointF(p, plot.bottom()), QtCore.QPointF(p, plot.bottom() - 5))
+            text = self.label(x, float(pane.XAxis.Scale.MajorStep), logs['XAxis'])
+            painter.drawText(QtCore.QPointF(p - metrics.horizontalAdvance(text) / 2, plot.bottom() + metrics.ascent() + 4), text)
+        for y in yt:
+            p = py(y)
+            painter.drawLine(QtCore.QPointF(plot.left(), p), QtCore.QPointF(plot.left() + 5, p))
+            text = self.label(y, float(pane.YAxis.Scale.MajorStep), logs['YAxis'])
+            painter.drawText(QtCore.QPointF(plot.left() - metrics.horizontalAdvance(text) - 6, p + metrics.ascent() / 2 - 1), text)
+        for y in y2t:
+            p = py2(y)
+            painter.drawLine(QtCore.QPointF(plot.right(), p), QtCore.QPointF(plot.right() - 5, p))
+            text = self.label(y, float(pane.Y2Axis.Scale.MajorStep), logs['Y2Axis'])
+            painter.drawText(QtCore.QPointF(plot.right() + 6, p + metrics.ascent() / 2 - 1), text)
         bold = QtGui.QFont(painter.font())
         bold.setBold(True)
         painter.setFont(bold)
         painter.drawText(QtCore.QRectF(plot.left(), plot.bottom() + metrics.height() + 6, plot.width(), title_lines * metrics.height() + 4), int(QtCore.Qt.AlignmentFlag.AlignHCenter), x_title)
-        painter.save()
-        painter.translate(14, plot.center().y())
-        painter.rotate(-90)
-        painter.drawText(QtCore.QRectF(-plot.height() / 2, -metrics.height() / 2, plot.height(), metrics.height() + 4), int(QtCore.Qt.AlignmentFlag.AlignHCenter), str(pane.YAxis.Title.Text or ''))
-        painter.restore()
+        for title, x, angle in ((str(pane.YAxis.Title.Text or ''), 14, -90), (str(pane.Y2Axis.Title.Text or '') if y2 else '', self.width() - 14, 90)):
+            if not title:
+                continue
+            painter.save()
+            painter.translate(x, plot.center().y())
+            painter.rotate(angle)
+            painter.drawText(QtCore.QRectF(-plot.height() / 2, -metrics.height() / 2, plot.height(), metrics.height() + 4), int(QtCore.Qt.AlignmentFlag.AlignHCenter), title)
+            painter.restore()
         painter.setFont(original_font())
         painter.setClipRect(plot.adjusted(-4, -4, 4, 4))
+        dash = {'Dash': QtCore.Qt.PenStyle.DashLine, 'Dot': QtCore.Qt.PenStyle.DotLine, 'DashDot': QtCore.Qt.PenStyle.DashDotLine,
+                'DashDotDot': QtCore.Qt.PenStyle.DashDotDotLine}
+        missing = System.Double.MaxValue
         for curve in curves:
-            color = qcolor(curve.Color)
-            painter.setPen(QtGui.QPen(color, 1))
-            points = [QtCore.QPointF(px(float(x)), py(float(y))) for x, y in zip(curve.X, curve.Y) if math.isfinite(float(x)) and math.isfinite(float(y))]
-            if getattr(curve, 'Line', None) is None or curve.Line.IsVisible:
-                painter.drawPolyline(QtGui.QPolygonF(points))
-            if getattr(curve, 'Symbol', None) is not None and curve.Symbol.IsVisible:
-                painter.setBrush(QtGui.QBrush(QtGui.QColor('white')))
-                radius = float(curve.Symbol.Size) / 2
-                for point in points:
-                    painter.drawEllipse(point, radius, radius)
+            color = qcolor(curve.Color) or QtGui.QColor('black')
+            line = getattr(curve, 'Line', None)
+            pen = QtGui.QPen(color, float(line.Width) if line is not None else 1)
+            if line is not None:
+                pen.setStyle(dash.get(str(line.Style), QtCore.Qt.PenStyle.SolidLine))
+            mapy = py2 if curve.IsY2Axis else py
+            segments, current = [], []
+            for i in range(curve.Points.Count):
+                point = curve.Points[i]
+                x, y = float(point.X), float(point.Y)
+                if x == missing or y == missing or not (math.isfinite(x) and math.isfinite(y)):
+                    if current:
+                        segments.append(current)
+                    current = []
+                    continue
+                qx, qy = px(x), mapy(y)
+                if not (math.isfinite(qx) and math.isfinite(qy)):
+                    continue
+                current.append(QtCore.QPointF(qx, qy))
+            if current:
+                segments.append(current)
+            painter.setPen(pen)
+            if line is None or line.IsVisible:
+                for segment in segments:
+                    painter.drawPolyline(QtGui.QPolygonF(segment))
+            symbol = getattr(curve, 'Symbol', None)
+            if symbol is not None and symbol.IsVisible and str(symbol.Type) != 'None':
+                painter.setPen(QtGui.QPen(color, 1))
+                painter.setBrush(QtGui.QBrush(qcolor(symbol.Fill.Color) if str(symbol.Fill.Type) != 'None' else QtGui.QColor('white')))
+                radius = float(symbol.Size) / 2
+                for segment in segments:
+                    for point in segment:
+                        painter.drawEllipse(point, radius, radius)
                 painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setClipping(False)
         if legend:
-            entries = [(qcolor(c.Color), str(c.Label.Text)) for c in curves]
+            entries = [(qcolor(c.Color) or QtGui.QColor('black'), str(c.Label.Text)) for c in curves if str(c.Label.Text)]
             widths = [34 + metrics.horizontalAdvance(text) + 12 for _, text in entries]
             x = plot.center().x() - sum(widths) / 2 if pane.Legend.Position == LegendPos.TopCenter else plot.left()
             y = 8 + metrics.height() / 2
@@ -684,7 +745,7 @@ class FormWindow(QtWidgets.QDialog):
                 continue
             self.widgets[child] = widget
             container = widget.page_container if hasattr(widget, 'page_container') else widget
-            if not isinstance(child, (ListView, PropertyGrid, TabControl, DataGridView, ZedGraphControl)):
+            if not isinstance(child, (ListView, PropertyGrid, TabControl, DataGridView, ZedGraphControl, TreeView, TextBoxBase)):
                 self.build(child, container)
 
     def create(self, control, parent):
@@ -697,7 +758,27 @@ class FormWindow(QtWidgets.QDialog):
             return DataGridWidget(self, control, parent)
         if isinstance(control, ZedGraphControl):
             return GraphWidget(self, control, parent)
+        if isinstance(control, TreeView):
+            return oc.TreeWidget(self, control, parent)
+        if isinstance(control, TrackBar):
+            return oc.Slider(self, control, parent)
+        if isinstance(control, ScrollBar):
+            return oc.ScrollBarWidget(self, control, parent)
+        if isinstance(control, ProgressBar):
+            return QtWidgets.QProgressBar(parent)
+        if isinstance(control, PictureBox):
+            widget = QtWidgets.QLabel(parent)
+            widget.setScaledContents(True)
+            return widget
+        if isinstance(control, LinkLabel):
+            widget = QtWidgets.QLabel(f'<a href="#">{str(control.Text)}</a>', parent)
+            widget.linkActivated.connect(lambda _link, c=control: r.input(c.RaiseLinkClicked))
+            return widget
+        if isinstance(control, TextBoxBase) and control.Multiline:
+            return oc.OutputText(self, control, parent)
         if isinstance(control, GroupBox):
+            if type(control).__name__ == 'CollapsableGroupBox':
+                return oc.CollapsibleGroup(self, control, parent)
             return QtWidgets.QGroupBox(str(control.Text), parent)
         if isinstance(control, CheckBox):
             from System.Windows.Forms import Appearance
@@ -734,9 +815,7 @@ class FormWindow(QtWidgets.QDialog):
             widget.activated.connect(lambda index, c=control: r.input(lambda: c.RaiseSelectionChangeCommitted(index)))
             return widget
         if isinstance(control, NumericUpDown):
-            widget = QtWidgets.QDoubleSpinBox(parent)
-            widget.valueChanged.connect(lambda value, c=control: r.input(lambda: setattr(c, 'Value', System.Decimal(value))))
-            return widget
+            return oc.SpinBox(self, control, parent)
         if isinstance(control, TabControl):
             widget = QtWidgets.QTabWidget(parent)
             # Every page the form ever added is built once; the shown tabs follow TabPages (forms remove and
@@ -815,7 +894,7 @@ class FormWindow(QtWidgets.QDialog):
             icon = self.renderer.icon(control.Image)
             if icon is not None:
                 widget.setIcon(icon)
-        if isinstance(widget, (QtWidgets.QPushButton, QtWidgets.QCheckBox, QtWidgets.QRadioButton, QtWidgets.QLabel)):
+        if isinstance(widget, (QtWidgets.QPushButton, QtWidgets.QCheckBox, QtWidgets.QRadioButton, QtWidgets.QLabel)) and not isinstance(control, (LinkLabel, PictureBox)):
             if widget.text() != str(control.Text):
                 widget.setText(str(control.Text))
             if isinstance(control, ButtonBase):
@@ -838,6 +917,21 @@ class FormWindow(QtWidgets.QDialog):
                 widget.setCurrentIndex(control.SelectedIndex)
         if isinstance(widget, QtWidgets.QTabWidget) and isinstance(control, TabControl):
             self.sync_tabs(control, widget)
+        if isinstance(widget, (oc.SpinBox, oc.Slider, oc.ScrollBarWidget, oc.OutputText)):
+            widget.sync()
+        if isinstance(widget, QtWidgets.QProgressBar):
+            from System.Windows.Forms import ProgressBarStyle
+            if control.Style == ProgressBarStyle.Marquee:
+                widget.setRange(0, 0)
+            else:
+                widget.setRange(control.Minimum, control.Maximum)
+                widget.setValue(control.Value)
+        if isinstance(control, PictureBox) and isinstance(widget, QtWidgets.QLabel):
+            icon = self.renderer.icon(control.Image)
+            if icon is not None and widget.pixmap().isNull():
+                widget.setPixmap(icon.pixmap(bounds.Width, bounds.Height))
+        if isinstance(control, LinkLabel) and isinstance(widget, QtWidgets.QLabel):
+            widget.setText(f'<a href="#">{str(control.Text)}</a>')
 
     def refresh_control(self, control):
         widget = self.widgets.get(control)
@@ -847,6 +941,10 @@ class FormWindow(QtWidgets.QDialog):
             widget.rebuild()
         elif isinstance(widget, GraphWidget):
             widget.update()
+        elif isinstance(widget, oc.TreeWidget):
+            widget.rebuild()
+        elif isinstance(widget, oc.OutputText):
+            widget.sync(scroll_to_end=True)
 
     # Window events --------------------------------------------------------------------------------------------------------
     def resizeEvent(self, event):
@@ -902,7 +1000,27 @@ class OriginalFormRenderer:
         self.clipboard_get = System.Func[System.String](lambda: QtWidgets.QApplication.clipboard().text())
         self.clipboard_set = System.Action[System.String](lambda text: QtWidgets.QApplication.clipboard().setText(str(text)))
         Clipboard.GetTextHandler, Clipboard.SetTextHandler = self.clipboard_get, self.clipboard_set
+        self.services = oc.ToolkitServices(self)
         self.update_screens()
+
+    def show_context_menu(self, strip, global_position, owner=None):
+        """The control's ContextMenuStrip: Opening (may cancel), then its visible items."""
+        if not self.guard(lambda: strip.OpenFor(owner)):
+            return
+        menu = QtWidgets.QMenu(self.main_window)
+        for item in strip.Items:
+            if not item.Visible:
+                continue
+            if isinstance(item, ToolStripSeparator):
+                menu.addSeparator()
+                continue
+            action = menu.addAction(str(item.Text))
+            icon = self.icon(item.Image)
+            if icon is not None:
+                action.setIcon(icon)
+            action.setEnabled(bool(item.Enabled))
+            action.triggered.connect(lambda checked=False, i=item: self.input(i.PerformClick))
+        menu.exec(global_position)
 
     def update_screens(self):
         rects = [QtWidgets.QApplication.primaryScreen().availableGeometry()] if QtWidgets.QApplication.primaryScreen() else []
@@ -915,7 +1033,8 @@ class OriginalFormRenderer:
         if form is None:
             return
         self.dirty.add(form)
-        if prop in ('SelectedObject', 'Refresh', 'Items', 'Expanded', 'Autocomplete', 'LabelRatio', 'Columns', 'Grid', 'Graph'):
+        if prop in ('SelectedObject', 'Refresh', 'Items', 'Expanded', 'Autocomplete', 'LabelRatio', 'Columns', 'Grid', 'Graph',
+                    'Tree', 'TreeEdit', 'ScrollToEnd'):
             self.refresh.add(control)
         if isinstance(control, DataGridView) and prop == 'Layout':
             self.refresh.add(control)
@@ -1067,6 +1186,10 @@ class OriginalFormRenderer:
             path = QtWidgets.QFileDialog.getExistingDirectory(self.main_window, 'Select folder', str(grid.GetText(grid_item) or ''))
             if path:
                 self.input(lambda: grid.SetValueFromText(grid_item, path))
+        elif editor == 'EnvVarsUIEditor':
+            # The original editor shows the original modal FrmGetEnvVars.
+            from PrePoMaxX.UI import OriginalEditors
+            self.input(lambda: OriginalEditors.EditModal(grid, grid_item))
         elif editor == 'SinglePointDataEditor':
             from PrePoMaxX.UI import OriginalEditors
             self.input(lambda: OriginalEditors.EditSinglePoint(grid, grid_item))

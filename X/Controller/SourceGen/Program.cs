@@ -10,7 +10,9 @@ var root = Path.GetFullPath(args[0]);
 var files = Directory.GetFiles(Path.Combine(root, "PrePoMax"), "*.cs", SearchOption.AllDirectories);
 var names = new HashSet<string>();
 var sourceNames = System.Xml.Linq.XDocument.Load(Path.Combine(root,"X/Domain/PrePoMax/Sources.g.props")).Descendants("Compile").Select(e=>e.Attribute("Include").Value.Replace("$(RepositoryRoot)",root+"/")).ToHashSet();
-foreach (var f in files.Where(f => sourceNames.Contains(f)))
+// Original forms compiled whole by X/UI/generate-original-forms.py call FrmMain too (e.g. FrmAnimation).
+var compiledForms = Directory.Exists(Path.Combine(root,"X/UI/Workbench/OriginalForms")) ? Directory.GetFiles(Path.Combine(root,"X/UI/Workbench/OriginalForms"),"*.g.cs",SearchOption.AllDirectories) : new string[0];
+foreach (var f in files.Where(f => sourceNames.Contains(f)).Concat(compiledForms))
  foreach (var n in CSharpSyntaxTree.ParseText(File.ReadAllText(f)).GetRoot().DescendantNodes().OfType<MemberAccessExpressionSyntax>())
   if(n.Expression.ToString() is "_form" or "Form" or "form" || (n.Expression.ToString().EndsWith(".Form") || n.Expression.ToString().EndsWith(".Host")) || n.Expression.ToString().EndsWith("Form()")) names.Add(n.Name.Identifier.Text);
 // RPC talks directly to FrmMain. These four methods have typed native implementations

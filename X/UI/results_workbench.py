@@ -114,7 +114,8 @@ class ResultsWorkbench:
         self.run_operation(self.results.RunJob(name,check),cancel=lambda:self.results.Kill(name))
 
     def monitor_job(self,name=None):
-        monitor=JobMonitor(self,self.job_name(name));monitor.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose);self.monitors.append(monitor);monitor.show();return monitor
+        # FrmMain.MonitorAnalysis: the original FrmMonitor.
+        self.run_original_entry('MonitorAnalysis',name=str(self.job_name(name)))
 
     def kill_job(self):self.results.Kill(self.job_name())
     def open_job(self,name=None):self.run_operation(self.results.OpenJob(self.job_name(name)),lambda:self.result_opened())
@@ -240,6 +241,25 @@ class ResultsWorkbench:
     def show_frame(self,frame):
         if self.animation_frame is None:return
         self.animation_frame=frame;self.scene.set_frame(frame);self.scene.presentation.rescale_frame(frame,self.animation_options['all_frames']);self.results.AnimationFrame(frame);self.update_follower();self.render()
+    def show_original_animation_frame(self,frame,all_frames):
+        """FrmMain.SetAnimationFrame: the frame the original FrmAnimation selected (vtkControl.SetAnimationFrame)."""
+        if getattr(self,'animation_scene_stale',False) or not self.scene.presentation.animated:
+            self.animation_scene_stale=False;self.refresh()
+        self.animation_frame=frame;self.scene.set_frame(frame);self.scene.presentation.rescale_frame(frame,all_frames)
+        self.results.AnimationFrame(frame);self.update_follower();self.render()
+    def save_original_animation(self,name,arguments):
+        """FrmMain.SaveAnimationAsImages/AsAVI from the original FrmAnimation: its file name, frame range, step,
+        (fps,) colour range and swing, written with the native exporters."""
+        path=str(arguments[0]);first,last=int(arguments[1][0]),int(arguments[1][1]);step=int(arguments[2])
+        if name=='SaveAnimationAsAVI':fps,all_frames,swing=int(arguments[3]),bool(arguments[4]),bool(arguments[5])
+        else:fps,all_frames,swing=20,bool(arguments[3]),bool(arguments[4])
+        saved=dict(self.animation_options);count=self.animation_count
+        try:
+            self.animation_options.update(first=first,last=last,step=max(1,step),all_frames=all_frames)
+            self.animation_count=max(self.animation_count,last+1)
+            if self.animation_frame is None:self.animation_frame=first
+            self.export_animation(path,fps=fps,swing=swing)
+        finally:self.animation_options=saved;self.animation_count=count
     def stop_animation(self,redraw=True):
         self.animation_timer.stop();was=self.animation_frame is not None;self.animation_frame=None
         if was and redraw and self.controller.ResultsInitialized:self.controller.DrawResults(False);self.refresh()
@@ -345,8 +365,10 @@ class ResultsWorkbench:
         if entry.Family=='Result field components':
             current=self.controller.CurrentFieldData;self.results.Field(entry.Step,entry.Name,current.StepId,current.StepIncrementId);self.refresh()
         else:
-            from history_widgets import show_history
-            show_history(self,entry.Step.split('|')[0])
+            # FrmMain.ModelTree_EditEvent: HistoryResultData -> ViewResultHistoryOutputData (original FrmViewResultHistoryOutput).
+            from CaeResults import HistoryResultData
+            data=entry.Item if isinstance(entry.Item,HistoryResultData) else HistoryResultData(entry.Step.split('|')[0],entry.Name,None)
+            self.show_original_form('ViewResultHistoryOutputData',data)
     def results_leaf_menu(self,entry,position):
         menu=QtWidgets.QMenu(self);menu.addAction('View',lambda:self.guard(lambda:self.open_result_leaf(entry)));menu.addAction('Remove',lambda:self.guard(lambda:self.remove_result_leaf(entry)))
         if entry.Family=='Result history components':

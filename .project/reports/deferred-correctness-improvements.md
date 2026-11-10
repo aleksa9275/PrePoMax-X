@@ -141,3 +141,19 @@ sender). Post-parity proposal: re-enable the annotation items when annotations
 exist and give Defined Fields its own handler. Port/integration defects found by
 the new checks were repaired now (menu 3MF export import, Results view without
 results, Z-up standard views). See [C6](phase-c6-main-window.md).
+
+## C11 child-window forms (10 November 2026)
+
+Compiling the remaining child-window forms whole found three original 3.0.0
+behaviours, mirrored for parity:
+- `FrmAnimation.btnSaveMovieAs_Click`: when the chosen name has no `.avi`
+  extension, `Path.Combine(...)` is computed and discarded, so the movie is written
+  under the bare file name (relative to the process directory) instead of the
+  chosen folder. Post-parity proposal: assign the combined path.
+- `FrmMain.CloseMonitorWindow` sets `DialogResult = OK` on the modeless
+  `FrmMonitor`; its comment says this hides the monitor, but WinForms closes only
+  modal forms that way, so the monitor (an item form that keeps the menus off) stays
+  open after Results until the user closes it. Post-parity proposal: hide it.
+- `CollapsableGroupBox` measures its caption on a new 100×100 GDI+ bitmap per text
+  change (never disposed). Post-parity proposal: `TextRenderer.MeasureText`.
+No engineering algorithm or tolerance changed. B011 remains failed.

@@ -35,6 +35,11 @@ FAMILY_ENTRIES = {
     'Amplitudes': ('tsmiCreateAmplitude_Click', 'EditAmplitude'),
     'Result fields': ('tsmiCreateResultFieldOutput_Click', 'EditResultFieldOutput'),
     'Result histories': ('tsmiCreateResultHistoryOutput_Click', 'EditResultHistoryOutput'),
+    # Child-window forms (C11)
+    'Materials': ('tsmiCreateMaterial_Click', 'EditMaterial'),
+    'Surface interactions': ('tsmiCreateSurfaceInteraction_Click', 'EditSurfaceInteraction'),
+    'Solution controls': (None, 'EditStepControls'),
+    'Jobs': ('tsmiCreateAnalysis_Click', 'EditAnalysis'),
 }
 TOOL_ENTRIES = {
     'Split solid': ('CreateSplitSolid', None), 'Split shell': ('CreateSplitShell', None),
@@ -118,10 +123,19 @@ class OriginalFormHostWorkbench:
         h.CaptureViewportHandler = self.form_capture
         self.form_output = Action[String](lambda text: self.write_output(str(text)))
         h.OutputHandler = self.form_output
+        self.form_animation_menus_hook = Action[Boolean](self.form_animation_menus)
+        h.AnimationMenusHandler = self.form_animation_menus_hook
+        # FrmMain members the child-window forms call back that belong to the main window.
+        from System import Object
+        self.form_main_window = Func[String, Array[Object], Object](self.form_main_window_member)
+        h.MainWindowHandler = self.form_main_window
         # WindowsFormsSynchronizationContext equivalent: original async handlers resume on this thread.
         from PrePoMaxX.UI import UiSynchronizationContext
         self.ui_post = Action[Action](lambda action: self.dispatcher.pending.put((lambda: self.guard(action.Invoke), None, None)))
         self.ui_context = UiSynchronizationContext.Create(self.ui_post)
+        # Control.Invoke/BeginInvoke of the original forms marshal to this thread (WinForms message loop).
+        from System.Windows.Forms import Control
+        Control.SetUiThreadContext(self.ui_context)
         self.form_renderer = OriginalFormRenderer(self, h)
         self.sync_form_host_location()
 
@@ -136,6 +150,58 @@ class OriginalFormHostWorkbench:
             SynchronizationContext.SetSynchronizationContext(previous)
 
     # FrmMain hooks --------------------------------------------------------------------------------------------------------
+    def form_main_window_member(self, member, arguments):
+        """FrmMain members of the main window (viewport, results opening, settings/automation, annotations, tree)."""
+        member, args = str(member), list(arguments)
+        if member == 'Clear3DSelection':
+            self.scene.show_selection([])
+            self.render()
+        elif member == 'ResultsAnalysis':
+            # FrmMain.ResultsAnalysis: OpenResultsCommand (OpenAnalysisResults with CloseMonitorWindow), then the
+            # history postprocessing when the results were accepted.
+            def opened():
+                self.result_opened()
+                self.in_ui_context(lambda: self.form_host.Invoke('CloseMonitorWindow'))
+                if self.session.Presentation.LastOpenResultsAccepted:
+                    self.controller.RunHistoryPostprocessing(None)
+                    self.refresh()
+            self.run_operation(self.results.OpenJob(str(args[0])), opened)
+        elif member == 'UpdateSettings':
+            # FrmMain.UpdateSettings: the settings, then the automation server follows its port.
+            self.controller.Settings = args[0]
+            self.apply_preferences()
+            self.persist_preferences()
+            self.refresh()
+        elif member == 'SetAutomationAccessToken':
+            token = str(args[0] or '')
+            automation = self.application.Automation
+            running = bool(automation.IsRunning)
+            if running:
+                automation.Stop()
+            self.controller.SaveAutomationAccessToken(token)
+            if not token:
+                self.write_output('The access token of the automation server was cleared, so the server cannot run until a new one is generated.')
+                return None
+            self.write_output('The access token of the automation server was set.')
+            if running:
+                automation.Start()
+        elif member == 'GetRunningAutomationEndpointUrl':
+            automation = self.application.Automation
+            return String(str(automation.EndpointUrl or '') if automation.IsRunning else '')
+        elif member == 'tsbRemoveAnnotations_Click':
+            self.remove_annotations()
+        elif member == 'PythonPanelShowFind':
+            from System import Boolean
+            return Boolean(False)
+        elif member == 'IntersectSelectionWithList':
+            entities = list(args[0])
+            selected = [i.data(0, QtCore.Qt.ItemDataRole.UserRole) for i in self.tree.selectedItems()]
+            names = [str(e.Name) for e in selected if e is not None and not getattr(e, 'Group', False)]
+            return Array[String]([str(x.Name) for x in entities if str(x.Name) in names])
+        else:
+            raise NotImplementedError('FrmMain member not hosted: ' + member)
+        return None
+
     def form_state_working(self, text, show_cancel_button):
         """FrmMain.SetStateWorking: only from the ready state; the workbench's operation lock and status apply."""
         if getattr(self, 'operation_task', None) is not None:
@@ -168,6 +234,18 @@ class OriginalFormHostWorkbench:
         if active:
             QtCore.QTimer.singleShot(0, lambda: self.guard(self.refresh))
 
+    def form_animation_menus(self, active):
+        """FrmMain.SetMenuAndToolStripVisibilityByAnimation: tree and main-menu mouse, file/symbol/deformation/results
+        tool strips off while the original FrmAnimation runs."""
+        self.tree.setEnabled(bool(active))
+        self.menuBar().setEnabled(bool(active))
+        strips = getattr(self, 'original_strips', {})
+        for name in ('tsFile', 'tsSymbols', 'tsResultDeformation', 'tsResults'):
+            if name in strips:
+                strips[name].setEnabled(bool(active))
+        if active:
+            QtCore.QTimer.singleShot(0, lambda: self.guard(self.refresh))
+
     def form_highlight_from_tree(self):
         if hasattr(self, 'tree_selection_changed'):
             self.tree_selection_changed()
@@ -187,6 +265,10 @@ class OriginalFormHostWorkbench:
             self.form_host.UpdateHighlight()
         elif name == 'CloseAllForms':
             self.form_host.CloseAllForms()
+        elif name == 'UpdateAnalysisProgress':
+            # FrmMain.UpdateAnalysisProgress: the original FrmMonitor follows the job (and the nonpositive
+            # Jacobian element set of a failed job).
+            self.in_ui_context(lambda: self.form_host.Invoke('UpdateAnalysisProgress', str(arguments[0]), arguments[1]))
         self.form_renderer.sync_soon()
 
     # Entry points ---------------------------------------------------------------------------------------------------------
@@ -218,7 +300,8 @@ class OriginalFormHostWorkbench:
             family = 'Geometry parts'
         if family in FAMILY_ENTRIES:
             create, edit = FAMILY_ENTRIES[family]
-            method = edit if name is not None else create
+            # Solution controls are edited per step (FrmMain.EditStepControls(stepName)).
+            method = edit if name is not None or (family == 'Solution controls' and step is not None) else create
         elif family in TOOL_ENTRIES:
             method, operation = TOOL_ENTRIES[family]
         elif family in TRANSFORMS:

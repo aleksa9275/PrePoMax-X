@@ -39,14 +39,18 @@ Done on 10 November ([C6 report](reports/phase-c6-main-window.md)):
 Still open:
 2. **Beam element classes**: `LinearBeamElement`/`ParabolicBeamElement` need a CAD
    wire/shell or beam-results fixture (the original model import drops beams).
-3. **72 forms** — 43 compiled whole in [C9](reports/phase-c9-original-forms.md) and
-   [C10](reports/phase-c10-data-grid-forms.md) (42 C). Remaining 29 the same way:
-   PrePoMaxChildForm forms (Material, Surface interaction, Step controls, Analysis, Monitor, Animation,
-   Query, Find, view forms, Transformation, Settings, Keyword editor), plain dialogs
-   (Edit commands, Parameters, Material library, Regenerate, Get value/colour, Select
-   entity, Analyze geometry, Search contact pairs, View result history, Python stop,
-   Splash) and FrmMain itself. Renderer gaps: autocomplete popup look, owner-drawn paint
-   (TabPage.Paint: the grid forms select cell 0,0 there), light theme/HiDPI.
+3. **72 forms** — 68 compiled whole in [C9](reports/phase-c9-original-forms.md),
+   [C10](reports/phase-c10-data-grid-forms.md) and [C11](reports/phase-c11-child-forms.md)
+   (66 C). Remaining: FrmCalculixKeywordEditor and FrmEditCommands (FastColoredTextBox
+   editors), FrmPythonStop (its watchdog runs a second UI thread), FrmMain itself;
+   FrmSelectEntity is compiled and hosted but the main menu still uses the C6 entity
+   dialog (switch the menu selection and its probe to `SelectOneEntity`/
+   `SelectMultipleEntities`); FrmViewObjectProperties follows FrmEditCommands. Renderer
+   gaps: autocomplete popup look, owner-drawn paint (TabPage.Paint, CollapsableGroupBox
+   +/- glyph, CodersLabTreeView drop line), grid row drag-and-drop (DoDragDrop),
+   ZedGraph zoom/pan and context menu, light theme/HiDPI. The C5 toolkit dialogs the
+   original forms replaced are no longer reachable from the UI; retire them with their
+   application-probe checks.
 4. **Matrices**: all analysis types, Mmg/QuadWild/sweep/transfinite/shell/compound
    meshing, section/cap/picking, glyph variants, animation extrema,
    plots/annotations, exports, large projects.

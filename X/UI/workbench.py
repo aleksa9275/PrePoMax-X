@@ -226,7 +226,7 @@ else:
         def ui_present(self,name,arguments):
             if name=='SetSelectionDistance':
                 self.selection_distance=max(1,int(arguments[0]))
-            if name in ('SelectionChanged','UpdateHighlight','CloseAllForms'):
+            if name in ('SelectionChanged','UpdateHighlight','CloseAllForms','UpdateAnalysisProgress'):
                 self.form_presentation(name,arguments)
             if name in ['WriteDataToOutput','WriteErrorToOutput']:
                 self.write_output(arguments[0],name=='WriteErrorToOutput')
@@ -244,6 +244,19 @@ else:
                 camera.Roll(float(arguments[2]))
                 self.renderer.ResetCameraClippingRange()
                 self.render()
+            elif name in ('CreateSectionView','UpdateSectionView','RemoveSectionView','AddSymmetry','AddLinearPattern',
+                          'AddCircularPattern','ApplyTransformations','HideTransformedActors','PreviewExplodedView',
+                          'RemovePreviewedExplodedView'):
+                # The original viewport draws these at once (vtkControl); the scene follows the captured commands.
+                self.scene_update_soon()
+            elif name=='SetAnimationFrameData':
+                # New animation data (Controller.Draw*Animation): the scene rebuilds its animated actors.
+                self.animation_scene_stale=True
+            elif name=='SetAnimationFrame':
+                # FrmMain.SetAnimationFrame (the original FrmAnimation's timer/frame controls).
+                self.show_original_animation_frame(int(arguments[0]),bool(arguments[1]))
+            elif name in ('SaveAnimationAsImages','SaveAnimationAsAVI'):
+                self.save_original_animation(name,arguments)
             elif name=='UpdateArrowWidgetAnimationData':
                 self.scene.presentation.update_annotation(*arguments)
             elif name=='ApplyFollowerView':
@@ -340,6 +353,14 @@ else:
             vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,0,0,0,p1)
             vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,pixels,0,0,p2)
             self.selection_precision=sum((p1[i]-p2[i])**2 for i in range(3))**.5
+
+        def scene_update_soon(self):
+            if getattr(self,'scene_update_pending',False):return
+            self.scene_update_pending=True
+            def update():
+                self.scene_update_pending=False
+                self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands);self.render()
+            QtCore.QTimer.singleShot(0,lambda:self.guard(update))
 
         def render(self):
             self.update_selection_precision()

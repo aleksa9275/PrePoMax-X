@@ -44,6 +44,7 @@ namespace System.Windows.Forms
         public int X {get;}
         public int Y {get;}
         public int Delta {get;}
+        public System.Drawing.Point Location => new System.Drawing.Point(X, Y);
         public MouseEventArgs(MouseButtons button,int clicks,int x,int y,int delta) {Button=button;Clicks=clicks;X=x;Y=y;Delta=delta;}
     }
 }

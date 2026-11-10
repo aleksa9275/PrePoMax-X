@@ -5,8 +5,8 @@
     {
       "form": "FrmAmplitude",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -128,10 +128,10 @@
     },
     {
       "form": "FrmAnalysis",
-      "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmAnalysis.Designer.cs",
@@ -265,10 +265,10 @@
     },
     {
       "form": "FrmAnalyzeGeometry",
-      "adapter": "X/UI/geometry_workbench.py",
-      "reuse": "X/UI/Workbench/GeometrySession.cs",
-      "remaining": "Representative measurement/highlight workflow available; full original control/input matrix pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/03_AnalyzeGeometry/FrmAnalyzeGeometry.Designer.cs",
@@ -439,10 +439,10 @@
     },
     {
       "form": "FrmAnimation",
-      "adapter": "X/UI/results_workbench.py",
-      "reuse": "PrePoMax/Forms/64_CaptureViewport/CaptureViewportProperties.cs",
-      "remaining": "PNG/clipboard/magnification and portable AVI/OGV paths connected; Windows codec-chooser and full capture/video option/layout equivalence pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/81_Animation/FrmAnimation.Designer.cs",
@@ -1069,8 +1069,8 @@
     {
       "form": "FrmBC",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -1257,8 +1257,8 @@
     {
       "form": "FrmBoundaryLayer",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -1990,8 +1990,8 @@
     {
       "form": "FrmCaptureViewport",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -2039,8 +2039,8 @@
     {
       "form": "FrmConstraint",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -2346,8 +2346,8 @@
     {
       "form": "FrmContactPair",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -2506,8 +2506,8 @@
     {
       "form": "FrmCoordinateSystem",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -2788,8 +2788,8 @@
     {
       "form": "FrmDefinedField",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -2949,8 +2949,8 @@
     {
       "form": "FrmDistribution",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -3596,8 +3596,8 @@
     {
       "form": "FrmElementQuality",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -3681,8 +3681,8 @@
     {
       "form": "FrmElementSet",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -3789,10 +3789,10 @@
     },
     {
       "form": "FrmEquationParameters",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
-      "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [],
       "declaredDesignerFields": [],
       "eventSubscriptions": [],
@@ -3802,10 +3802,10 @@
     },
     {
       "form": "FrmExplodedView",
-      "adapter": "X/UI/presentation_widgets.py",
-      "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmExplodedView.Designer.cs",
@@ -4016,8 +4016,8 @@
     {
       "form": "FrmExportFileWithProperties",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -4060,8 +4060,8 @@
     {
       "form": "FrmFieldOutput",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -4127,10 +4127,10 @@
     },
     {
       "form": "FrmFind",
-      "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
-      "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/63_Find/FrmFind.Designer.cs",
@@ -4342,10 +4342,10 @@
     },
     {
       "form": "FrmFollowerView",
-      "adapter": "X/UI/application_widgets.py; X/UI/application_workbench.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalFollowerCamera.g.cs",
-      "remaining": "Original parameter/camera rules reused; full frame/input/lifecycle comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmFollowerView.Designer.cs",
@@ -4527,10 +4527,10 @@
     },
     {
       "form": "FrmGetColor",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetColor.Designer.cs",
@@ -4616,10 +4616,10 @@
     },
     {
       "form": "FrmGetEnvVars",
-      "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
-      "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmGetEnvVars.Designer.cs",
@@ -4731,10 +4731,10 @@
     },
     {
       "form": "FrmGetValue",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetValue.Designer.cs",
@@ -4825,8 +4825,8 @@
     {
       "form": "FrmHistoryOutput",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -4996,8 +4996,8 @@
     {
       "form": "FrmInitialCondition",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -5189,8 +5189,8 @@
     {
       "form": "FrmLoad",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -18457,10 +18457,10 @@
     },
     {
       "form": "FrmMaterial",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
-      "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterial.Designer.cs",
@@ -18903,10 +18903,10 @@
     },
     {
       "form": "FrmMaterialLibrary",
-      "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
-      "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterialLibrary.Designer.cs",
@@ -19449,8 +19449,8 @@
     {
       "form": "FrmMergeCoincidentNodes",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -19573,8 +19573,8 @@
     {
       "form": "FrmMeshSetupItem",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -19811,8 +19811,8 @@
     {
       "form": "FrmMirror",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -19917,8 +19917,8 @@
     {
       "form": "FrmModelProperties",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -19964,10 +19964,10 @@
     },
     {
       "form": "FrmMonitor",
-      "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmMonitor.Designer.cs",
@@ -20205,8 +20205,8 @@
     {
       "form": "FrmNewModel",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -20314,8 +20314,8 @@
     {
       "form": "FrmNodeSet",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -20423,8 +20423,8 @@
     {
       "form": "FrmOffsetFace",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -20565,8 +20565,8 @@
     {
       "form": "FrmPartProperties",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -20729,10 +20729,10 @@
     },
     {
       "form": "FrmQuery",
-      "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
-      "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/62_Query/FrmQuery.Designer.cs",
@@ -21153,8 +21153,8 @@
     {
       "form": "FrmReferencePoint",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -21404,10 +21404,10 @@
     },
     {
       "form": "FrmRegenerate",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmRegenerate.Designer.cs",
@@ -21488,8 +21488,8 @@
     {
       "form": "FrmRemeshingParameters",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -21645,8 +21645,8 @@
     {
       "form": "FrmRepairGeometry",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -21797,8 +21797,8 @@
     {
       "form": "FrmResultFieldOutput",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -21957,8 +21957,8 @@
     {
       "form": "FrmResultHistoryOutput",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -22364,8 +22364,8 @@
     {
       "form": "FrmRotate",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -22469,8 +22469,8 @@
     {
       "form": "FrmScale",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -22568,10 +22568,10 @@
     },
     {
       "form": "FrmSearchContactPairs",
-      "adapter": "X/UI/application_workbench.py; X/UI/application_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/ContactSearchSession.cs",
-      "remaining": "Original query calculations/search classes reused. Original query calculations, search, merge/highlight and rectangle/angle pickers connected; full subtype/input comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/45_SearchContactPairs/FrmSearchContactPairs.Designer.cs",
@@ -22961,8 +22961,8 @@
     {
       "form": "FrmSection",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -23149,10 +23149,10 @@
     },
     {
       "form": "FrmSectionView",
-      "adapter": "X/UI/presentation_widgets.py",
-      "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmSectionView.Designer.cs",
@@ -23473,10 +23473,10 @@
     },
     {
       "form": "FrmSelectEntity",
-      "adapter": "X/UI/application_workbench.py; X/UI/authoring_widgets.py; X/UI/geometry_widgets.py",
-      "reuse": "Original converters, PropertyDescriptors, Controller and Selection graph",
-      "remaining": "Common Qt dialogs provide core actions. Box/angle/ID selection, nested original property inspection and regeneration options connected; exhaustive filters/input/focus comparison remains pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectEntity.Designer.cs",
@@ -23669,8 +23669,8 @@
     {
       "form": "FrmSelectItemSet",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -24132,10 +24132,10 @@
     },
     {
       "form": "FrmSettings",
-      "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
-      "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmSettings.Designer.cs",
@@ -24363,10 +24363,10 @@
     },
     {
       "form": "FrmSplash",
-      "adapter": "X/UI/workbench.py",
-      "reuse": "Original engineering assemblies",
-      "remaining": "Original splash artwork and native startup/about/home/sponsor links connected; full timing/layout/input comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/FrmSplash.Designer.cs",
@@ -24515,8 +24515,8 @@
     {
       "form": "FrmSplitPartMeshUsingSurface",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -24705,8 +24705,8 @@
     {
       "form": "FrmSplitPeriodicFaces",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -24821,8 +24821,8 @@
     {
       "form": "FrmSplitShell",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -24854,8 +24854,8 @@
     {
       "form": "FrmSplitSolid",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -25135,8 +25135,8 @@
     {
       "form": "FrmStep",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -25262,10 +25262,10 @@
     },
     {
       "form": "FrmStepControls",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
-      "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/51_Step/Controls/FrmStepControls.Designer.cs",
@@ -25593,8 +25593,8 @@
     {
       "form": "FrmSurface",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -25746,10 +25746,10 @@
     },
     {
       "form": "FrmSurfaceInteraction",
-      "adapter": "X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/MaterialEditSession.cs; X/UI/Workbench/InteractionEditSession.cs",
-      "remaining": "Core original properties and tables available; complete preview/simple-editor, curve-grid, property-menu and keyboard/focus comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/44_SurfaceInteraction/FrmSurfaceInteraction.Designer.cs",
@@ -26085,8 +26085,8 @@
     {
       "form": "FrmSurfaceOperation",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -26203,8 +26203,8 @@
     {
       "form": "FrmThickenShellMesh",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -26322,10 +26322,10 @@
     },
     {
       "form": "FrmTransformation",
-      "adapter": "X/UI/presentation_widgets.py",
-      "reuse": "X/UI/Workbench/PresentationEditSession.cs; X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original property rules available; complete preview/selection/animation/control comparison and section/picking matrices pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/84_Transformation/FrmTransformation.Designer.cs",
@@ -26596,8 +26596,8 @@
     {
       "form": "FrmTranslate",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -26710,10 +26710,10 @@
     },
     {
       "form": "FrmUserVew",
-      "adapter": "X/UI/application_widgets.py; X/UI/application_workbench.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalFollowerCamera.g.cs",
-      "remaining": "Original parameter/camera rules reused; full frame/input/lifecycle comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmUserVew.Designer.cs",
@@ -26986,8 +26986,8 @@
     {
       "form": "FrmViewObjectProperties",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
-      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
-      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
       "compiledWhole": true,
       "originalSources": [
         {
@@ -27008,10 +27008,10 @@
     },
     {
       "form": "FrmViewResultHistoryOutput",
-      "adapter": "X/UI/results_widgets.py; X/UI/history_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalResultsRules.g.cs",
-      "remaining": "Original jobs/derived tools/data paths available; full complex/all-analysis/per-component matrix and original grid/plot interaction acceptance pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmViewResultHistoryOutput.Designer.cs",
@@ -27123,6 +27123,6 @@
     "designerFields": 993,
     "eventSubscriptions": 796,
     "fullFormsAccepted": 0,
-    "compiledWhole": 43
+    "compiledWhole": 68
   }
 }

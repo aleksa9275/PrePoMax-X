@@ -34,10 +34,17 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   DataGridView/BindingSource model. 43 classes compiled whole; 42 forms ABC. Export → History
   Output now opens the original export form (the port showed a viewer).
   [C10 report](reports/phase-c10-data-grid-forms.md).
+- **C11 child-window forms and dialogs compiled whole.** 25 more original forms (material,
+  surface interaction, step controls, analysis, monitor, animation, query, find, the view forms,
+  transformation, settings, parameters, material library, value/colour/regenerate dialogs, ...) with
+  the original CodersLabTreeView, CollapsableGroupBox and AnalysisProgressView, on new TreeView,
+  timer/scroll-bar/table-layout and ZedGraph-scaling models. Menus, tree and toolbars open them
+  through their FrmMain members; the C5 toolkit dialogs they replace are no longer reachable.
+  68 classes compiled whole; 66 forms ABC. [C11 report](reports/phase-c11-child-forms.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Full UI parity is not accepted.** Forms 42/72 C, 0 V. Inventory: model/mesh
+- **Full UI parity is not accepted.** Forms 66/72 C, 0 V. Inventory: model/mesh
   108 AB / 106 C (beam element classes need a CAD wire/shell or beam-results
   fixture); Commands
   237 A / 236 B / 230 C (six are compatibility-only with no original UI path);
@@ -63,16 +70,16 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C8 | Tree remainder, output links, model/mesh UI evidence | implemented; Mac ARM64 checks pass |
 | C9 | Original form classes compiled whole (39), FrmMain form hosting | implemented; Mac ARM64 checks pass |
 | C10 | Data grid forms compiled whole (DataGridView model, plot window) | implemented; Mac ARM64 checks pass |
+| C11 | Child-window forms and dialogs compiled whole (TreeView, ZedGraph scaling) | implemented; Mac ARM64 checks pass |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-The remaining 29 forms the same way (C9/C10 approach): the PrePoMaxChildForm forms
-(Material, Surface interaction, Step controls, Analysis, Monitor, views, ...) and the plain
-dialogs; then beam
-element evidence from a CAD wire/shell fixture and packaging the X/UI app.
-After parity: the D061 correctness/warning sweep.
+The last four forms: FrmCalculixKeywordEditor and FrmEditCommands (a FastColoredTextBox model),
+FrmPythonStop and FrmMain itself, plus FrmSelectEntity in the main-menu selection; retire the C5
+toolkit dialogs the original forms replaced. Then beam element evidence from a CAD wire/shell
+fixture and packaging the X/UI app. After parity: the D061 correctness/warning sweep.
 
 ## Environment
 

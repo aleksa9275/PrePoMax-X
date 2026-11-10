@@ -1,4 +1,7 @@
 // Stand-ins for original UserControls types whose originals depend on Win32 internals.
+// AutoScrollTextBox: the original keeps the scroll position and selection while CalculiX output grows through
+// user32 scroll/redraw messages (UserControls/TextBoxes/AutoScrollTextBox.cs); its public members and text rules
+// are reproduced here and the renderer keeps the view (follows the end only when it was at the end).
 // TabEnabledPropertyGrid: the original reaches the WinForms grid view through private reflection
 // (label ratio, edit-control autocomplete); its public behaviour is reproduced here from
 // UserControls/ProperyGrid/TabEnabledPropertyGrid.cs. ChildMouseWheelManagedForm only routes Win32
@@ -10,6 +13,45 @@ using System.Windows.Forms;
 
 namespace UserControls
 {
+    public class AutoScrollTextBox : TextBox
+    {
+        double _textCharWidth = -1;
+        public double TextCharWidth
+        {
+            get
+            {
+                if (_textCharWidth < 0) _textCharWidth = TextRenderer.MeasureText("AA", Font).Width - TextRenderer.MeasureText("A", Font).Width;
+                return _textCharWidth;
+            }
+        }
+        public void AutoScrollAppendText(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            UpdateText(text, true);
+        }
+        public void AutoScrollSetText(string text)
+        {
+            if (text == null) text = "";
+            string currentText = Text;
+            if (text.Equals(currentText, StringComparison.Ordinal)) return;
+            // Original: output files normally only grow, so the new suffix is appended.
+            if (text.Length > currentText.Length && text.StartsWith(currentText, StringComparison.Ordinal))
+                UpdateText(text.Substring(currentText.Length), true);
+            else
+                UpdateText(text, false);
+        }
+        /// <summary>The renderer scrolls the view to the last line.</summary>
+        public void ScrollToEnd() => Notify("ScrollToEnd");
+        void UpdateText(string text, bool append)
+        {
+            int selectionStart = SelectionStart, selectionLength = SelectionLength;
+            if (append) AppendText(text); else Text = text;
+            int start = Math.Min(selectionStart, Text.Length);
+            Select(start, Math.Min(selectionLength, Text.Length - start));
+            Notify("AutoScroll");
+        }
+    }
+
     public class ChildMouseWheelManagedForm : Form, IMessageFilter
     {
         public ChildMouseWheelManagedForm() { }

@@ -106,58 +106,97 @@ namespace System.Windows.Forms
     public class DataGridViewCheckBoxColumn : DataGridViewColumn { }
     public class DataGridViewComboBoxColumn : DataGridViewColumn { public ArrayList Items { get; } = new ArrayList(); public object DataSource { get; set; } }
 
+    /// <summary>State a WinForms DataGridViewRow keeps (row and cell properties, unbound cell values); the grid keeps one
+    /// per row, in step with its rows.</summary>
+    internal sealed class RowState
+    {
+        public object[] Values = new object[0];
+        public object Tag;
+        public string ErrorText = "";
+        public bool ReadOnly, Visible = true;
+        public int Height = 22;
+        public DataGridViewRowHeaderCell HeaderCell = new DataGridViewRowHeaderCell();
+        public DataGridViewCellStyle DefaultCellStyle = new DataGridViewCellStyle();
+        public readonly Dictionary<int, CellState> Cells = new Dictionary<int, CellState>();
+        public CellState Cell(int column) { if (!Cells.TryGetValue(column, out var c)) Cells[column] = c = new CellState(); return c; }
+    }
+    internal sealed class CellState { public object Tag; public string ErrorText = "", ToolTipText = ""; public DataGridViewCellStyle Style = new DataGridViewCellStyle(); }
+
     public class DataGridViewCell
     {
+        readonly RowState _detached;
         internal DataGridViewCell(DataGridView owner, int column, int row) { DataGridView = owner; ColumnIndex = column; RowIndex = row; }
-        public DataGridViewCell() { }
+        internal DataGridViewCell(RowState detached, int column) { _detached = detached; ColumnIndex = column; RowIndex = -1; }
+        public DataGridViewCell() { RowIndex = -1; _detached = new RowState(); }
         public DataGridView DataGridView { get; }
         public int ColumnIndex { get; }
         public int RowIndex { get; }
+        CellState State => (_detached ?? DataGridView.StateOf(RowIndex)).Cell(ColumnIndex);
         public DataGridViewColumn OwningColumn => DataGridView?.Columns[ColumnIndex];
         public DataGridViewRow OwningRow => DataGridView?.Rows[RowIndex];
-        public object Value { get => DataGridView.GetCellValue(RowIndex, ColumnIndex); set => DataGridView.SetCellValue(RowIndex, ColumnIndex, value); }
+        public object Value
+        {
+            get => DataGridView != null ? DataGridView.GetCellValue(RowIndex, ColumnIndex) : (ColumnIndex < _detached.Values.Length ? _detached.Values[ColumnIndex] : null);
+            set { if (DataGridView != null) DataGridView.SetCellValue(RowIndex, ColumnIndex, value); else { if (_detached.Values.Length <= ColumnIndex) Array.Resize(ref _detached.Values, ColumnIndex + 1); _detached.Values[ColumnIndex] = value; } }
+        }
         public object FormattedValue => DataGridView.GetCellText(RowIndex, ColumnIndex);
         public bool Selected { get => DataGridView.IsSelected(RowIndex, ColumnIndex); set => DataGridView.SetSelected(RowIndex, ColumnIndex, value); }
-        public bool ReadOnly => DataGridView.ReadOnly || OwningColumn.ReadOnly;
+        public bool ReadOnly => DataGridView.ReadOnly || OwningColumn.ReadOnly || DataGridView.StateOf(RowIndex).ReadOnly;
         public bool Visible => OwningColumn.Visible;
         public bool IsInEditMode => DataGridView.IsCurrentCellInEditMode && DataGridView.CurrentCell?.Equals(this) == true;
-        public string ErrorText { get; set; } = "";
-        public string ToolTipText { get; set; } = "";
-        public object Tag { get; set; }
-        public DataGridViewCellStyle Style { get; set; } = new DataGridViewCellStyle();
+        public string ErrorText { get => State.ErrorText; set { State.ErrorText = value ?? ""; DataGridView?.GridChanged(); } }
+        public string ToolTipText { get => State.ToolTipText; set => State.ToolTipText = value ?? ""; }
+        public object Tag { get => State.Tag; set => State.Tag = value; }
+        public DataGridViewCellStyle Style { get => State.Style; set { State.Style = value ?? new DataGridViewCellStyle(); DataGridView?.GridChanged(); } }
         public Type ValueType => OwningColumn?.Property?.PropertyType ?? OwningColumn?.ValueType;
-        public override bool Equals(object obj) => obj is DataGridViewCell c && c.DataGridView == DataGridView && c.ColumnIndex == ColumnIndex && c.RowIndex == RowIndex;
+        public override bool Equals(object obj) => obj is DataGridViewCell c && c.DataGridView == DataGridView && c.ColumnIndex == ColumnIndex && c.RowIndex == RowIndex && c._detached == _detached;
         public override int GetHashCode() => (RowIndex * 397) ^ ColumnIndex;
         public override string ToString() => "DataGridViewCell { ColumnIndex=" + ColumnIndex + ", RowIndex=" + RowIndex + " }";
     }
-    public class DataGridViewTextBoxCell : DataGridViewCell { public DataGridViewTextBoxCell() { } internal DataGridViewTextBoxCell(DataGridView owner, int column, int row) : base(owner, column, row) { } }
+    public class DataGridViewTextBoxCell : DataGridViewCell { public DataGridViewTextBoxCell() { } internal DataGridViewTextBoxCell(DataGridView owner, int column, int row) : base(owner, column, row) { } internal DataGridViewTextBoxCell(RowState detached, int column) : base(detached, column) { } }
 
     public class DataGridViewRow
     {
+        internal readonly RowState Detached;
         internal DataGridViewRow(DataGridView owner, int index) { DataGridView = owner; Index = index; Cells = new DataGridViewCellCollection(this); }
-        public DataGridViewRow() { Index = -1; Cells = new DataGridViewCellCollection(this); }
+        /// <summary>A row not in a grid yet (Rows.Add/AddRange take it); CreateCells sizes it to a grid's columns.</summary>
+        public DataGridViewRow() { Index = -1; Detached = new RowState(); Cells = new DataGridViewCellCollection(this); }
         public DataGridView DataGridView { get; }
         public int Index { get; }
+        RowState State => Detached ?? DataGridView.StateOf(Index);
+        internal int DetachedColumns { get; private set; }
         public bool IsNewRow => DataGridView != null && DataGridView.IsNewRowIndex(Index);
         public DataGridViewCellCollection Cells { get; }
         public object DataBoundItem => DataGridView?.GetItem(Index);
         /// <summary>WinForms RowHeaderSelect: a row is selected through its header (or in code), not by selecting
         /// all of its cells.</summary>
-        public bool Selected { get => DataGridView.IsRowSelected(Index); set => DataGridView.SetRowSelected(Index, value); }
-        public bool ReadOnly { get; set; }
-        public bool Visible { get; set; } = true;
-        public int Height { get; set; } = 22;
-        public object Tag { get; set; }
-        public string ErrorText { get; set; } = "";
-        public DataGridViewRowHeaderCell HeaderCell { get; set; } = new DataGridViewRowHeaderCell();
-        public DataGridViewCellStyle DefaultCellStyle { get; set; } = new DataGridViewCellStyle();
+        public bool Selected { get => DataGridView != null && DataGridView.IsRowSelected(Index); set { if (DataGridView != null) DataGridView.SetRowSelected(Index, value); } }
+        public bool ReadOnly { get => State.ReadOnly; set { State.ReadOnly = value; DataGridView?.GridChanged(); } }
+        public bool Visible { get => State.Visible; set { State.Visible = value; DataGridView?.GridChanged(); } }
+        public int Height { get => State.Height; set { State.Height = value; DataGridView?.GridChanged(); } }
+        public object Tag { get => State.Tag; set => State.Tag = value; }
+        public string ErrorText { get => State.ErrorText; set { State.ErrorText = value ?? ""; DataGridView?.GridChanged(); } }
+        public DataGridViewRowHeaderCell HeaderCell { get => State.HeaderCell; set => State.HeaderCell = value; }
+        public DataGridViewCellStyle DefaultCellStyle { get => State.DefaultCellStyle; set { State.DefaultCellStyle = value; DataGridView?.GridChanged(); } }
+        /// <summary>WinForms: one cell per column of the grid (the row is not added), then the values in order.</summary>
+        public void CreateCells(DataGridView dataGridView) => CreateCells(dataGridView, new object[0]);
+        public void CreateCells(DataGridView dataGridView, params object[] values)
+        {
+            if (Detached == null) throw new InvalidOperationException("Cells can be created only for a row that is not in a DataGridView.");
+            if (values.Length > dataGridView.Columns.Count) throw new ArgumentException("The row has more values than the DataGridView has columns.");
+            DetachedColumns = dataGridView.Columns.Count;
+            Detached.Values = new object[DetachedColumns];
+            Array.Copy(values, Detached.Values, values.Length);
+            Detached.Cells.Clear();
+        }
+        public override string ToString() => "DataGridViewRow { Index=" + Index + " }";
     }
     public class DataGridViewCellCollection : IEnumerable
     {
         readonly DataGridViewRow row;
         internal DataGridViewCellCollection(DataGridViewRow row) { this.row = row; }
-        public int Count => row.DataGridView?.Columns.Count ?? 0;
-        public DataGridViewCell this[int index] => row.DataGridView[index, row.Index];
+        public int Count => row.DataGridView?.Columns.Count ?? row.DetachedColumns;
+        public DataGridViewCell this[int index] => row.DataGridView != null ? row.DataGridView[index, row.Index] : index >= 0 && index < Count ? new DataGridViewTextBoxCell(row.Detached, index) : throw new ArgumentOutOfRangeException(nameof(index));
         public DataGridViewCell this[string columnName] => row.DataGridView[row.DataGridView.Columns[columnName].Index, row.Index];
         public IEnumerator GetEnumerator() { for (int i = 0; i < Count; i++) yield return this[i]; }
     }
@@ -170,19 +209,19 @@ namespace System.Windows.Forms
         public int Count => columns.Count;
         public DataGridViewColumn this[int index] => columns[index];
         public DataGridViewColumn this[string name] => columns.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
-        public int Add(DataGridViewColumn column) { column.DataGridView = owner; columns.Add(column); owner.ColumnsChanged(); return columns.Count - 1; }
+        public int Add(DataGridViewColumn column) { column.DataGridView = owner; columns.Add(column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); return columns.Count - 1; }
         public int Add(string name, string headerText) => Add(new DataGridViewTextBoxColumn { Name = name, HeaderText = headerText });
         public void AddRange(params DataGridViewColumn[] values) { foreach (var c in values) Add(c); }
-        public void Insert(int index, DataGridViewColumn column) { column.DataGridView = owner; columns.Insert(index, column); owner.ColumnsChanged(); }
-        public void Remove(DataGridViewColumn column) { if (columns.Remove(column)) { column.DataGridView = null; owner.ColumnsChanged(); } }
+        public void Insert(int index, DataGridViewColumn column) { column.DataGridView = owner; columns.Insert(index, column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); }
+        public void Remove(DataGridViewColumn column) { if (columns.Remove(column)) { column.DataGridView = null; owner.ColumnsChanged(); owner.RaiseColumnRemoved(column); owner.ColumnsSyncRows(); } }
         public void Remove(string name) { var c = this[name]; if (c != null) Remove(c); }
         public void RemoveAt(int index) => Remove(columns[index]);
-        public void Clear() { foreach (var c in columns) c.DataGridView = null; columns.Clear(); owner.ColumnsChanged(); }
+        public void Clear() { foreach (var c in columns.ToArray()) Remove(c); }
         public bool Contains(string name) => this[name] != null;
         public bool Contains(DataGridViewColumn column) => columns.Contains(column);
         public int IndexOf(DataGridViewColumn column) => columns.IndexOf(column);
         public int GetColumnCount(DataGridViewElementStates states) => columns.Count(c => (states & DataGridViewElementStates.Visible) == 0 || c.Visible);
-        internal void RemoveWhere(Func<DataGridViewColumn, bool> predicate) { foreach (var c in columns.Where(predicate).ToArray()) { columns.Remove(c); c.DataGridView = null; } }
+        internal void RemoveWhere(Func<DataGridViewColumn, bool> predicate) { foreach (var c in columns.Where(predicate).ToArray()) { columns.Remove(c); c.DataGridView = null; owner.RaiseColumnRemoved(c); } }
         internal void AddSilently(DataGridViewColumn column) { column.DataGridView = owner; columns.Add(column); }
         public IEnumerator<DataGridViewColumn> GetEnumerator() => columns.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => columns.GetEnumerator();
@@ -209,6 +248,9 @@ namespace System.Windows.Forms
         /// <summary>Unbound grid: appends a row with the given cell values.</summary>
         public int Add(params object[] values) => owner.AddUnboundRow(values);
         public int Add() => owner.AddUnboundRow(new object[0]);
+        public int Add(DataGridViewRow row) => owner.AddUnboundRow(row);
+        public void AddRange(params DataGridViewRow[] rows) { foreach (DataGridViewRow row in rows) owner.AddUnboundRow(row, notify: false); owner.GridChanged(); }
+        public void Insert(int rowIndex, params object[] values) => owner.InsertUnboundRow(rowIndex, values);
         public int Add(int count) { int index = -1; for (int i = 0; i < count; i++) index = Add(); return index; }
         public void RemoveAt(int index) => owner.RemoveRow(index);
         public void Remove(DataGridViewRow row) => owner.RemoveRow(row.Index);
@@ -233,6 +275,17 @@ namespace System.Windows.Forms
         public IEnumerator GetEnumerator() => rows.GetEnumerator();
     }
 
+    public enum DataGridViewHitTestType { None = 0, Cell = 1, ColumnHeader = 2, RowHeader = 3, TopLeftHeader = 4, HorizontalScrollBar = 5, VerticalScrollBar = 6 }
+    public class DataGridViewCellValidatingEventArgs : CancelEventArgs { public int ColumnIndex { get; } public int RowIndex { get; } public object FormattedValue { get; } public DataGridViewCellValidatingEventArgs(int columnIndex, int rowIndex, object formattedValue) { ColumnIndex = columnIndex; RowIndex = rowIndex; FormattedValue = formattedValue; } }
+    public class DataGridViewRowsAddedEventArgs : EventArgs { public int RowIndex { get; } public int RowCount { get; } public DataGridViewRowsAddedEventArgs(int rowIndex, int rowCount) { RowIndex = rowIndex; RowCount = rowCount; } }
+    public class DataGridViewRowsRemovedEventArgs : EventArgs { public int RowIndex { get; } public int RowCount { get; } public DataGridViewRowsRemovedEventArgs(int rowIndex, int rowCount) { RowIndex = rowIndex; RowCount = rowCount; } }
+    public class DataGridViewColumnEventArgs : EventArgs { public DataGridViewColumn Column { get; } public DataGridViewColumnEventArgs(DataGridViewColumn column) { Column = column; } }
+    public class DataGridViewRowPrePaintEventArgs : HandledEventArgs { public int RowIndex { get; } public Rectangle RowBounds { get; } public DataGridViewRowPrePaintEventArgs(int rowIndex, Rectangle rowBounds) { RowIndex = rowIndex; RowBounds = rowBounds; } }
+    public delegate void DataGridViewCellValidatingEventHandler(object sender, DataGridViewCellValidatingEventArgs e);
+    public delegate void DataGridViewRowsAddedEventHandler(object sender, DataGridViewRowsAddedEventArgs e);
+    public delegate void DataGridViewRowsRemovedEventHandler(object sender, DataGridViewRowsRemovedEventArgs e);
+    public delegate void DataGridViewColumnEventHandler(object sender, DataGridViewColumnEventArgs e);
+    public delegate void DataGridViewRowPrePaintEventHandler(object sender, DataGridViewRowPrePaintEventArgs e);
     public class DataGridViewCellEventArgs : EventArgs { public int ColumnIndex { get; } public int RowIndex { get; } public DataGridViewCellEventArgs(int columnIndex, int rowIndex) { ColumnIndex = columnIndex; RowIndex = rowIndex; } }
     public class DataGridViewCellCancelEventArgs : CancelEventArgs { public int ColumnIndex { get; } public int RowIndex { get; } public DataGridViewCellCancelEventArgs(int columnIndex, int rowIndex) { ColumnIndex = columnIndex; RowIndex = rowIndex; } }
     public class DataGridViewCellMouseEventArgs : MouseEventArgs { public int ColumnIndex { get; } public int RowIndex { get; } public DataGridViewCellMouseEventArgs(int columnIndex, int rowIndex, int x, int y, MouseEventArgs e) : base(e.Button, e.Clicks, x, y, e.Delta) { ColumnIndex = columnIndex; RowIndex = rowIndex; } }
@@ -262,7 +315,8 @@ namespace System.Windows.Forms
         object _dataSource;
         IList _list;
         PropertyDescriptorCollection _properties;
-        readonly List<object[]> _unbound = new List<object[]>();
+        // One state per data row: unbound values or, for a bound list, the row/cell properties kept in step with it.
+        readonly List<RowState> _rows = new List<RowState>();
         readonly HashSet<(int Row, int Column)> _selection = new HashSet<(int, int)>();
         readonly HashSet<int> _selectedRows = new HashSet<int>();
         (int Row, int Column)? _current;
@@ -290,6 +344,76 @@ namespace System.Windows.Forms
         public bool ColumnHeadersVisible { get; set; } = true;
         public int RowHeadersWidth { get; set; } = 41;
         public int ColumnHeadersHeight { get; set; } = 23;
+        int _firstRow;
+        /// <summary>Topmost displayed row (the renderer reports its scroll position here).</summary>
+        public int FirstDisplayedScrollingRowIndex { get => RowCount == 0 ? -1 : Math.Min(_firstRow, RowCount - 1); set { _firstRow = Math.Max(0, value); Notify("Scroll"); } }
+        public int FirstDisplayedScrollingColumnIndex { get; set; }
+
+        // Geometry (96 DPI, borders 1 px): the original hit tests and drop indicators use these rectangles.
+        int ColumnLeft(int column)
+        {
+            int x = 1 + (RowHeadersVisible ? RowHeadersWidth : 0);
+            for (int i = 0; i < column; i++) if (Columns[i].Visible) x += Columns[i].Width;
+            return x;
+        }
+        int RowTop(int row)
+        {
+            int y = 1 + (ColumnHeadersVisible ? ColumnHeadersHeight : 0);
+            int first = Math.Max(0, FirstDisplayedScrollingRowIndex);
+            if (row >= first) { for (int i = first; i < row; i++) if (StateOf(i).Visible) y += StateOf(i).Height; }
+            else { for (int i = row; i < first; i++) if (StateOf(i).Visible) y -= StateOf(i).Height; }
+            return y;
+        }
+        int DataWidth { get { int w = 0; foreach (DataGridViewColumn c in Columns) if (c.Visible) w += c.Width; return w; } }
+        public Rectangle GetRowDisplayRectangle(int rowIndex, bool cutOverflow)
+        {
+            if (rowIndex < 0 || rowIndex >= RowCount) throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            if (rowIndex < Math.Max(0, FirstDisplayedScrollingRowIndex)) return Rectangle.Empty;
+            int top = RowTop(rowIndex);
+            if (top >= ClientSize.Height) return Rectangle.Empty;
+            var rect = new Rectangle(1, top, (RowHeadersVisible ? RowHeadersWidth : 0) + DataWidth, StateOf(rowIndex).Height);
+            if (cutOverflow) rect.Intersect(new Rectangle(1, 1, Math.Max(0, ClientSize.Width - 2), Math.Max(0, ClientSize.Height - 2)));
+            return rect;
+        }
+        public Rectangle GetCellDisplayRectangle(int columnIndex, int rowIndex, bool cutOverflow)
+        {
+            Rectangle row = rowIndex < 0 ? new Rectangle(1, 1, 0, ColumnHeadersHeight) : GetRowDisplayRectangle(rowIndex, false);
+            if (row.IsEmpty) return Rectangle.Empty;
+            var rect = columnIndex < 0 ? new Rectangle(1, row.Y, RowHeadersWidth, row.Height) : new Rectangle(ColumnLeft(columnIndex), row.Y, Columns[columnIndex].Width, row.Height);
+            if (cutOverflow) rect.Intersect(new Rectangle(1, 1, Math.Max(0, ClientSize.Width - 2), Math.Max(0, ClientSize.Height - 2)));
+            return rect;
+        }
+        public sealed class HitTestInfo
+        {
+            public static readonly HitTestInfo Nowhere = new HitTestInfo(-1, -1, DataGridViewHitTestType.None);
+            public int RowIndex { get; }
+            public int ColumnIndex { get; }
+            public DataGridViewHitTestType Type { get; }
+            internal HitTestInfo(int row, int column, DataGridViewHitTestType type) { RowIndex = row; ColumnIndex = column; Type = type; }
+        }
+        /// <summary>WinForms HitTest: header row/column, row header (ColumnIndex -1), cell or nowhere.</summary>
+        public HitTestInfo HitTest(int x, int y)
+        {
+            int headerHeight = ColumnHeadersVisible ? ColumnHeadersHeight : 0, headerWidth = RowHeadersVisible ? RowHeadersWidth : 0;
+            int column = -1;
+            if (x >= 1 + headerWidth)
+            {
+                for (int i = 0; i < Columns.Count; i++)
+                    if (Columns[i].Visible && x >= ColumnLeft(i) && x < ColumnLeft(i) + Columns[i].Width) { column = i; break; }
+                if (column < 0) return HitTestInfo.Nowhere;
+            }
+            else if (x < 1) return HitTestInfo.Nowhere;
+            if (y >= 1 && y < 1 + headerHeight)
+                return column < 0 ? new HitTestInfo(-1, -1, DataGridViewHitTestType.TopLeftHeader) : new HitTestInfo(-1, column, DataGridViewHitTestType.ColumnHeader);
+            for (int r = Math.Max(0, FirstDisplayedScrollingRowIndex); r < RowCount; r++)
+            {
+                int top = RowTop(r);
+                if (top >= ClientSize.Height) break;
+                if (StateOf(r).Visible && y >= top && y < top + StateOf(r).Height)
+                    return column < 0 ? new HitTestInfo(r, -1, DataGridViewHitTestType.RowHeader) : new HitTestInfo(r, column, DataGridViewHitTestType.Cell);
+            }
+            return HitTestInfo.Nowhere;
+        }
         public DataGridViewSelectionMode SelectionMode { get; set; } = DataGridViewSelectionMode.RowHeaderSelect;
         public DataGridViewEditMode EditMode { get; set; } = DataGridViewEditMode.EditOnKeystrokeOrF2;
         public DataGridViewClipboardCopyMode ClipboardCopyMode { get; set; } = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText;
@@ -324,6 +448,34 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler UserAddedRow, UserDeletedRow;
         public event DataGridViewRowCancelEventHandler UserDeletingRow;
         public event EventHandler SelectionChanged, CurrentCellChanged, DataSourceChanged;
+        public event DataGridViewCellValidatingEventHandler CellValidating;
+        public event DataGridViewCellEventHandler CellValidated;
+        public event DataGridViewRowsAddedEventHandler RowsAdded;
+        public event DataGridViewRowsRemovedEventHandler RowsRemoved;
+        public event DataGridViewColumnEventHandler ColumnAdded, ColumnRemoved;
+        /// <summary>Painting event; the renderer draws rows itself, so it is not raised.</summary>
+        public event DataGridViewRowPrePaintEventHandler RowPrePaint;
+        protected virtual void OnRowsAdded(DataGridViewRowsAddedEventArgs e) => RowsAdded?.Invoke(this, e);
+        protected virtual void OnRowsRemoved(DataGridViewRowsRemovedEventArgs e) => RowsRemoved?.Invoke(this, e);
+        protected virtual void OnColumnAdded(DataGridViewColumnEventArgs e) => ColumnAdded?.Invoke(this, e);
+        protected virtual void OnColumnRemoved(DataGridViewColumnEventArgs e) => ColumnRemoved?.Invoke(this, e);
+        internal void RaiseColumnAdded(DataGridViewColumn c) => OnColumnAdded(new DataGridViewColumnEventArgs(c));
+        internal void RaiseColumnRemoved(DataGridViewColumn c) => OnColumnRemoved(new DataGridViewColumnEventArgs(c));
+        int _shownRows;
+        /// <summary>WinForms raises RowsAdded/RowsRemoved as the row collection follows the list (binding, list
+        /// changes, the new row); the shown row count is compared after every change.</summary>
+        void SyncRowEvents(ListChangedEventArgs change = null)
+        {
+            int now = RowCount;
+            if (change != null && change.ListChangedType == ListChangedType.ItemDeleted && now < _shownRows)
+            { int removed = _shownRows - now; _shownRows = now; OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(change.NewIndex, removed)); return; }
+            if (change != null && change.ListChangedType == ListChangedType.ItemAdded && now > _shownRows)
+            { int added = now - _shownRows; _shownRows = now; OnRowsAdded(new DataGridViewRowsAddedEventArgs(change.NewIndex, added)); return; }
+            if (change != null && change.ListChangedType == ListChangedType.Reset && _shownRows > 0)
+            { int removed = _shownRows; _shownRows = 0; OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(0, removed)); }
+            if (now > _shownRows) { int at = _shownRows; _shownRows = now; OnRowsAdded(new DataGridViewRowsAddedEventArgs(at, now - at)); }
+            else if (now < _shownRows) { int removed = _shownRows - now; _shownRows = now; OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(now, removed)); }
+        }
 
         // Binding -----------------------------------------------------------------------------------------------------------------
         void Bind(object dataSource)
@@ -332,6 +484,7 @@ namespace System.Windows.Forms
             else if (_list is IBindingList oldList) oldList.ListChanged -= List_ListChanged;
             _dataSource = dataSource;
             _list = ResolveList(dataSource);
+            if (_list != null) _rows.Clear();
             _properties = null;
             _selection.Clear();
             _selectedRows.Clear();
@@ -361,6 +514,9 @@ namespace System.Windows.Forms
                 if (_dataSource is BindingSource source) source.ListChanged += List_ListChanged;
                 else if (_list is IBindingList bindingList) bindingList.ListChanged += List_ListChanged;
             }
+            foreach (DataGridViewColumn column in Columns) if (column.AutoGenerated) RaiseColumnAdded(column);
+            if (_shownRows > 0) { int removed = _shownRows; _shownRows = 0; OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(0, removed)); }
+            SyncRowEvents();
             if (RowCount > 0 && Columns.Count > 0) _current = (0, FirstVisibleColumn());
             if (_current.HasValue) _selection.Add(_current.Value);
             DataSourceChanged?.Invoke(this, EventArgs.Empty);
@@ -372,12 +528,32 @@ namespace System.Windows.Forms
             if (dataSource is IListSource listSource) return listSource.GetList();
             return dataSource as IList;
         }
-        void List_ListChanged(object sender, ListChangedEventArgs e) => GridChanged();
+        void List_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            switch (e.ListChangedType)
+            {
+                case ListChangedType.ItemAdded: if (e.NewIndex >= 0 && e.NewIndex <= _rows.Count) _rows.Insert(e.NewIndex, new RowState()); break;
+                case ListChangedType.ItemDeleted: if (e.NewIndex >= 0 && e.NewIndex < _rows.Count) _rows.RemoveAt(e.NewIndex); break;
+                case ListChangedType.ItemMoved: if (e.OldIndex >= 0 && e.OldIndex < _rows.Count) { var moved = _rows[e.OldIndex]; _rows.RemoveAt(e.OldIndex); _rows.Insert(Math.Min(e.NewIndex, _rows.Count), moved); } break;
+                case ListChangedType.Reset: _rows.Clear(); break;
+            }
+            if (_list != null && _rows.Count > _list.Count) _rows.RemoveRange(_list.Count, _rows.Count - _list.Count);
+            SyncRowEvents(e);
+            GridChanged();
+        }
         int FirstVisibleColumn() { foreach (DataGridViewColumn c in Columns) if (c.Visible) return c.Index; return 0; }
         internal void ColumnsChanged() => GridChanged("Columns");
-        internal void GridChanged(string what = "Grid") => Notify(what);
+        internal void ColumnsSyncRows() => SyncRowEvents();
+        internal void GridChanged(string what = "Grid") { SyncRowEvents(); Notify(what); }
         bool AllowsNew => _list == null || (_list is BindingSource bs ? bs.AllowNew : _list is IBindingList bl ? bl.AllowNew : !_list.IsFixedSize && !_list.IsReadOnly);
-        internal int DataRowCount => _list?.Count ?? _unbound.Count;
+        internal int DataRowCount => _list?.Count ?? _rows.Count;
+        internal RowState StateOf(int row)
+        {
+            if (_list != null) { while (_rows.Count < _list.Count) _rows.Add(new RowState()); }
+            if (row >= 0 && row < _rows.Count) return _rows[row];
+            return _newRowState;   // the new row (and indices past it) keep no committed state
+        }
+        RowState _newRowState = new RowState();
         public int RowCount => DataRowCount + (NewRowShown ? 1 : 0);
         bool NewRowShown => _allowUserToAddRows && !_readOnly && Columns.Count > 0 && AllowsNew;
         public int NewRowIndex => NewRowShown ? DataRowCount : -1;
@@ -401,7 +577,7 @@ namespace System.Windows.Forms
             if (IsNewRowIndex(row)) return null;
             DataGridViewColumn col = Columns[column];
             if (_list != null) return col.Property?.GetValue(_list[row]);
-            object[] values = _unbound[row];
+            object[] values = _rows[row].Values;
             return column < values.Length ? values[column] : null;
         }
         /// <summary>WinForms DataGridViewDataConnection.PushValue: a value of another type is parsed with the column
@@ -427,16 +603,16 @@ namespace System.Windows.Forms
             }
             else
             {
-                object[] values = _unbound[row];
-                if (values.Length <= column) { Array.Resize(ref values, Columns.Count); _unbound[row] = values; }
-                values[column] = value;
+                RowState state = _rows[row];
+                if (state.Values.Length <= column) Array.Resize(ref state.Values, Columns.Count);
+                state.Values[column] = value;
             }
             CellValueChanged?.Invoke(this, new DataGridViewCellEventArgs(column, row));
             GridChanged();
         }
         int AddNewRow()
         {
-            if (_list == null) { _unbound.Add(new object[Columns.Count]); UserAddedRow?.Invoke(this, new DataGridViewRowEventArgs(Rows[_unbound.Count - 1])); return _unbound.Count - 1; }
+            if (_list == null) { _rows.Add(new RowState { Values = new object[Columns.Count] }); UserAddedRow?.Invoke(this, new DataGridViewRowEventArgs(Rows[_rows.Count - 1])); return _rows.Count - 1; }
             object item = _list is BindingSource source ? source.AddNew() : _list is IBindingList bl ? bl.AddNew() : AddDefaultItem();
             // The new row is committed at once (WinForms commits it when the row is left).
             (item as IEditableObject)?.EndEdit();
@@ -453,17 +629,39 @@ namespace System.Windows.Forms
         }
         internal int AddUnboundRow(object[] values)
         {
-            if (_list != null) throw new InvalidOperationException("Rows cannot be added programmatically to a data-bound DataGridView.");
             object[] row = new object[Math.Max(Columns.Count, values.Length)];
             Array.Copy(values, row, values.Length);
-            _unbound.Add(row);
+            return AddUnboundRow(new RowState { Values = row });
+        }
+        internal int AddUnboundRow(DataGridViewRow row, bool notify = true)
+        {
+            if (row.DataGridView != null || row.Detached == null) throw new InvalidOperationException("Row provided already belongs to a DataGridView control.");
+            RowState state = row.Detached;
+            if (state.Values.Length < Columns.Count) Array.Resize(ref state.Values, Columns.Count);
+            return AddUnboundRow(state, notify);
+        }
+        int AddUnboundRow(RowState state, bool notify = true)
+        {
+            if (_list != null) throw new InvalidOperationException("Rows cannot be programmatically added to the DataGridView's rows collection when the control is data-bound.");
+            if (Columns.Count == 0) throw new InvalidOperationException("No row can be added to a DataGridView control that does not have columns. Columns must be added first.");
+            _rows.Add(state);
+            if (notify) GridChanged();
+            return _rows.Count - 1;
+        }
+        internal void InsertUnboundRow(int index, object[] values)
+        {
+            if (_list != null) throw new InvalidOperationException("Rows cannot be programmatically added to the DataGridView's rows collection when the control is data-bound.");
+            object[] row = new object[Math.Max(Columns.Count, values.Length)];
+            Array.Copy(values, row, values.Length);
+            _rows.Insert(index, new RowState { Values = row });
+            _shownRows++;
+            OnRowsAdded(new DataGridViewRowsAddedEventArgs(index, 1));
             GridChanged();
-            return _unbound.Count - 1;
         }
         internal void RemoveRow(int index)
         {
             if (IsNewRowIndex(index)) throw new InvalidOperationException("The uncommitted new row cannot be deleted.");
-            if (_list != null) _list.RemoveAt(index); else _unbound.RemoveAt(index);
+            if (_list != null) _list.RemoveAt(index); else { _rows.RemoveAt(index); _shownRows--; OnRowsRemoved(new DataGridViewRowsRemovedEventArgs(index, 1)); }
             _selection.Clear();
             _selectedRows.Clear();
             if (_current.HasValue && _current.Value.Row >= RowCount) _current = RowCount > 0 ? (RowCount - 1, _current.Value.Column) : ((int, int)?)null;
@@ -472,7 +670,7 @@ namespace System.Windows.Forms
         internal void ClearRows()
         {
             if (_list != null) throw new InvalidOperationException("Rows of a data-bound DataGridView cannot be cleared.");
-            _unbound.Clear(); _selection.Clear(); _selectedRows.Clear(); _current = null;
+            _rows.Clear(); _selection.Clear(); _selectedRows.Clear(); _current = null;
             GridChanged();
         }
 
@@ -567,6 +765,10 @@ namespace System.Windows.Forms
             if (!IsCurrentCellInEditMode) return true;
             var (row, column) = _current.Value;
             string text = _editingControl?.Text ?? "";
+            // WinForms: CellValidating (with the edited formatted value) precedes the push; Cancel keeps edit mode.
+            var validating = new DataGridViewCellValidatingEventArgs(column, row, text);
+            CellValidating?.Invoke(this, validating);
+            if (validating.Cancel) return false;
             if (text != GetCellText(row, column) || IsNewRowIndex(row))
             {
                 if (IsNewRowIndex(row) && text.Length == 0) { FinishEdit(row, column); return true; }
@@ -599,6 +801,7 @@ namespace System.Windows.Forms
         }
         void FinishEdit(int row, int column)
         {
+            CellValidated?.Invoke(this, new DataGridViewCellEventArgs(column, row));
             IsCurrentCellInEditMode = false;
             CellEndEdit?.Invoke(this, new DataGridViewCellEventArgs(column, row));
             _editingControl = null;

@@ -67,7 +67,6 @@ namespace System.Windows.Forms
     public enum PropertySort { NoSort = 0, Alphabetical = 1, Categorized = 2, CategorizedAlphabetical = 3 }
     public enum GridItemType { Property, Category, ArrayValue, Root }
     public enum ToolStripItemDisplayStyle { None, Text, Image, ImageAndText }
-    public enum ContentAlignment { TopLeft = 1, TopCenter = 2, TopRight = 4, MiddleLeft = 16, MiddleCenter = 32, MiddleRight = 64, BottomLeft = 256, BottomCenter = 512, BottomRight = 1024 }
     public enum ImeMode { Inherit = -1, NoControl = 0, On = 1, Off = 2, Disable = 3 }
     public enum RightToLeft { No, Yes, Inherit }
     public enum BorderStyle { None, FixedSingle, Fixed3D }
@@ -149,6 +148,8 @@ namespace System.Windows.Forms
     public delegate void FormClosingEventHandler(object sender, FormClosingEventArgs e);
     public delegate void FormClosedEventHandler(object sender, FormClosedEventArgs e);
     public delegate void PaintEventHandler(object sender, PaintEventArgs e);
+    public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);
+    public sealed class LayoutEventArgs : EventArgs { public Control AffectedControl { get; } public string AffectedProperty { get; } public LayoutEventArgs(Control affectedControl, string affectedProperty) { AffectedControl = affectedControl; AffectedProperty = affectedProperty; } }
     public delegate void ControlEventHandler(object sender, ControlEventArgs e);
     public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
     public delegate void ListViewItemSelectionChangedEventHandler(object sender, ListViewItemSelectionChangedEventArgs e);
@@ -174,7 +175,8 @@ namespace System.Windows.Forms
         int _layoutSuspended;
         Control _parent;
 
-        public Control() { Controls = new ControlCollection(this); }
+        public Control() { Controls = CreateControlsInstance(); }
+        protected virtual ControlCollection CreateControlsInstance() => new ControlCollection(this);
         public IntPtr Handle => IntPtr.Zero;
         public bool IsHandleCreated => true;
         public bool IsDisposed { get; private set; }
@@ -189,7 +191,8 @@ namespace System.Windows.Forms
             if (_size == value) return;
             _size = value;
             UpdateAnchorInfo();
-            if (_layoutSuspended == 0) LayoutChildren();
+            if (_layoutSuspended == 0) OnLayout(new LayoutEventArgs(this, "Bounds"));
+            if (_dock != DockStyle.None) RelayoutParentForDock();
             Notify(nameof(Size));
             OnSizeChanged(EventArgs.Empty);
             OnResize(EventArgs.Empty);
@@ -209,9 +212,25 @@ namespace System.Windows.Forms
         protected virtual void LayoutChildren()
         {
             Size client = ClientSize;
-            foreach (Control c in Controls.Cast<Control>().ToArray())
+            // WinForms DefaultLayout: docked controls in reverse z-order (last in Controls first) take their edge of
+            // the remaining client area (inside Padding); invisible controls take no space.
+            Control[] children = Controls.Cast<Control>().ToArray();
+            Rectangle remaining = new Rectangle(Padding.Left, Padding.Top, Math.Max(0, client.Width - Padding.Horizontal), Math.Max(0, client.Height - Padding.Vertical));
+            for (int i = children.Length - 1; i >= 0; i--)
             {
-                if (c.Dock == DockStyle.Fill) { c.Bounds = new Rectangle(Padding.Left, Padding.Top, client.Width - Padding.Horizontal, client.Height - Padding.Vertical); continue; }
+                Control c = children[i];
+                if (c.Dock == DockStyle.None || !c._visible) continue;
+                switch (c.Dock)
+                {
+                    case DockStyle.Top: c.Bounds = new Rectangle(remaining.X, remaining.Y, remaining.Width, c.Height); remaining.Y += c.Height; remaining.Height = Math.Max(0, remaining.Height - c.Height); break;
+                    case DockStyle.Bottom: c.Bounds = new Rectangle(remaining.X, remaining.Bottom - c.Height, remaining.Width, c.Height); remaining.Height = Math.Max(0, remaining.Height - c.Height); break;
+                    case DockStyle.Left: c.Bounds = new Rectangle(remaining.X, remaining.Y, c.Width, remaining.Height); remaining.X += c.Width; remaining.Width = Math.Max(0, remaining.Width - c.Width); break;
+                    case DockStyle.Right: c.Bounds = new Rectangle(remaining.Right - c.Width, remaining.Y, c.Width, remaining.Height); remaining.Width = Math.Max(0, remaining.Width - c.Width); break;
+                    case DockStyle.Fill: c.Bounds = remaining; break;
+                }
+            }
+            foreach (Control c in children)
+            {
                 if (c.Dock != DockStyle.None) continue;
                 int gapRight = c._gapRight, gapBottom = c._gapBottom;
                 int x = c.Left, y = c.Top, w = c.Width, h = c.Height;
@@ -237,7 +256,15 @@ namespace System.Windows.Forms
         public Size MinimumSize { get; set; }
         public Size MaximumSize { get; set; }
         public AnchorStyles Anchor { get; set; } = AnchorStyles.Top | AnchorStyles.Left;
-        public DockStyle Dock { get; set; }
+        DockStyle _dock;
+        bool _inParentLayout;
+        public DockStyle Dock { get => _dock; set { if (_dock == value) return; _dock = value; RelayoutParentForDock(); } }
+        void RelayoutParentForDock()
+        {
+            if (_parent == null || _parent._layoutSuspended != 0 || _parent._inParentLayout) return;
+            _parent._inParentLayout = true;
+            try { _parent.PerformLayout(); } finally { _parent._inParentLayout = false; }
+        }
         public Padding Margin { get; set; } = new Padding(3);
         public Padding Padding { get; set; }
         public int TabIndex { get; set; }
@@ -271,7 +298,7 @@ namespace System.Windows.Forms
         public bool Visible
         {
             get => _visible && (_parent == null || _parent.Visible);
-            set { if (_visible == value) return; _visible = value; Notify(nameof(Visible)); OnVisibleChanged(EventArgs.Empty); }
+            set { if (_visible == value) return; _visible = value; Notify(nameof(Visible)); if (_dock != DockStyle.None) RelayoutParentForDock(); OnVisibleChanged(EventArgs.Empty); }
         }
         internal bool VisibleCore => _visible;
         public bool Enabled
@@ -288,11 +315,13 @@ namespace System.Windows.Forms
             if (_layoutSuspended > 0 && --_layoutSuspended == 0)
             {
                 foreach (Control c in Controls) c.UpdateAnchorInfo();
-                if (performLayout) LayoutChildren();
+                if (performLayout) OnLayout(new LayoutEventArgs(this, null));
                 Notify("Layout");
             }
         }
-        public void PerformLayout() { LayoutChildren(); Notify("Layout"); }
+        public void PerformLayout() { OnLayout(new LayoutEventArgs(this, null)); Notify("Layout"); }
+        /// <summary>WinForms: OnLayout runs the layout engine (anchoring/docking), then raises Layout.</summary>
+        protected virtual void OnLayout(LayoutEventArgs levent) { LayoutChildren(); Layout?.Invoke(this, levent); }
         public void Show() => Visible = true;
         public void Hide() => Visible = false;
         public bool Focus() { Focused = true; Notify("Focus"); OnGotFocus(EventArgs.Empty); return true; }
@@ -301,25 +330,60 @@ namespace System.Windows.Forms
         public void Invalidate() => Notify("Refresh");
         public void Invalidate(bool invalidateChildren) => Notify("Refresh");
         public void Invalidate(Rectangle rectangle) => Notify("Refresh");
+        public void Invalidate(Rectangle rectangle, bool invalidateChildren) => Notify("Refresh");
         public void Update() { }
         public void BringToFront() => Notify("ZOrder");
         public void SendToBack() => Notify("ZOrder");
         public void CreateControl() { }
-        public object Invoke(Delegate method) => method.DynamicInvoke();
-        public object Invoke(Delegate method, params object[] args) => method.DynamicInvoke(args);
-        public IAsyncResult BeginInvoke(Delegate method) { method.DynamicInvoke(); return null; }
-        public IAsyncResult BeginInvoke(Delegate method, params object[] args) { method.DynamicInvoke(args); return null; }
-        public bool InvokeRequired => false;
+        // WinForms marshalling: Invoke runs on the UI thread and waits; BeginInvoke always queues to the UI thread's
+        // message loop (also when called on it). The host installs its UI context; without one calls run inline.
+        static System.Threading.SynchronizationContext _uiContext;
+        static int _uiThread;
+        public static void SetUiThreadContext(System.Threading.SynchronizationContext context) { _uiContext = context; _uiThread = Environment.CurrentManagedThreadId; }
+        public object Invoke(Delegate method) => Invoke(method, null);
+        public object Invoke(Delegate method, params object[] args)
+        {
+            if (!InvokeRequired) return method.DynamicInvoke(args);
+            object result = null;
+            _uiContext.Send(_ => result = method.DynamicInvoke(args), null);
+            return result;
+        }
+        public IAsyncResult BeginInvoke(Delegate method) => BeginInvoke(method, null);
+        public IAsyncResult BeginInvoke(Delegate method, params object[] args)
+        {
+            if (_uiContext == null) method.DynamicInvoke(args);
+            else _uiContext.Post(_ => method.DynamicInvoke(args), null);
+            return null;
+        }
+        public bool InvokeRequired => _uiContext != null && Environment.CurrentManagedThreadId != _uiThread;
         public Point PointToScreen(Point p) => p;
         public Point PointToClient(Point p) => p;
+        /// <summary>A focus rectangle an original control drew over itself (FocusSurface); the renderer draws it.</summary>
+        public Rectangle FocusRectangle { get; private set; }
+        public Color FocusRectangleColor { get; private set; }
+        internal void SetFocusRectangle(Color color, Rectangle rect) { FocusRectangle = rect; FocusRectangleColor = color; Notify("Refresh"); }
         public Graphics CreateGraphics() => throw new PlatformNotSupportedException("GDI+ drawing is not available; the renderer owns painting.");
         public void SetBounds(int x, int y, int width, int height) { Location = new Point(x, y); Size = new Size(width, height); }
         public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) => true;
         protected override void Dispose(bool disposing) { IsDisposed = true; base.Dispose(disposing); }
 
         public event EventHandler Click, DoubleClick, TextChanged, VisibleChanged, EnabledChanged, Resize, SizeChanged, LocationChanged, Move,
-            GotFocus, LostFocus, Enter, Leave, Validated, MouseEnter, MouseLeave, MouseHover, HandleCreated, Layout, ParentChanged, BackColorChanged, FontChanged;
+            GotFocus, LostFocus, Enter, Leave, Validated, MouseEnter, MouseLeave, MouseHover, HandleCreated, ParentChanged, BackColorChanged, FontChanged;
         public event CancelEventHandler Validating;
+        public event LayoutEventHandler Layout;
+        public event DragEventHandler DragDrop, DragEnter, DragOver;
+        public event EventHandler DragLeave;
+        protected virtual void OnDragDrop(DragEventArgs e) => DragDrop?.Invoke(this, e);
+        protected virtual void OnDragEnter(DragEventArgs e) => DragEnter?.Invoke(this, e);
+        protected virtual void OnDragOver(DragEventArgs e) => DragOver?.Invoke(this, e);
+        protected virtual void OnDragLeave(EventArgs e) => DragLeave?.Invoke(this, e);
+        /// <summary>Drag source: the renderer runs the toolkit drag; returns the effect the drop target chose.</summary>
+        public static Func<Control, object, DragDropEffects, DragDropEffects> DoDragDropHandler;
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) => DoDragDropHandler?.Invoke(this, data, allowedEffects) ?? DragDropEffects.None;
+        public void RaiseDragEnter(DragEventArgs e) => OnDragEnter(e);
+        public void RaiseDragOver(DragEventArgs e) => OnDragOver(e);
+        public void RaiseDragDrop(DragEventArgs e) => OnDragDrop(e);
+        public void RaiseDragLeave() => OnDragLeave(EventArgs.Empty);
         public event MouseEventHandler MouseDown, MouseUp, MouseMove, MouseClick, MouseDoubleClick, MouseWheel;
         public event KeyEventHandler KeyDown, KeyUp;
         public event KeyPressEventHandler KeyPress;
@@ -503,9 +567,22 @@ namespace System.Windows.Forms
         public ContentAlignment TextAlign { get; set; } = ContentAlignment.TopLeft;
         public BorderStyle BorderStyle { get; set; }
         public ImageResource Image { get; set; }
+        public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleCenter;
         public bool UseMnemonic { get; set; } = true;
     }
-    public class LinkLabel : Label { public event LinkLabelLinkClickedEventHandler LinkClicked; public void RaiseLinkClicked() => LinkClicked?.Invoke(this, new LinkLabelLinkClickedEventArgs()); }
+    /// <summary>WinForms LinkLabel is an IButtonControl: as a form's Accept/Cancel button it raises LinkClicked.</summary>
+    public class LinkLabel : Label, IButtonControl
+    {
+        public event LinkLabelLinkClickedEventHandler LinkClicked;
+        public Color LinkColor { get; set; } = Color.FromArgb(0, 0, 255);
+        public Color ActiveLinkColor { get; set; } = Color.Red;
+        public Color VisitedLinkColor { get; set; } = Color.FromArgb(128, 0, 128);
+        public bool LinkVisited { get; set; }
+        public DialogResult DialogResult { get; set; }
+        public void NotifyDefault(bool value) { }
+        public void PerformClick() => RaiseLinkClicked();
+        public void RaiseLinkClicked() => LinkClicked?.Invoke(this, new LinkLabelLinkClickedEventArgs());
+    }
     public class LinkLabelLinkClickedEventArgs : EventArgs { }
     public delegate void LinkLabelLinkClickedEventHandler(object sender, LinkLabelLinkClickedEventArgs e);
 
@@ -669,32 +746,100 @@ namespace System.Windows.Forms
         }
     }
     public enum ComboBoxStyle { Simple, DropDown, DropDownList }
-    public class NumericUpDown : Control
+    /// <summary>WinForms NumericUpDown: Minimum/Maximum keep Value in range; a Value outside it throws except during
+    /// designer initialization (BeginInit/EndInit), whose end constrains it. User input is constrained.</summary>
+    public class NumericUpDown : Control, ISupportInitialize
     {
-        decimal _value;
-        public decimal Minimum { get; set; }
-        public decimal Maximum { get; set; } = 100;
+        decimal _value, _min, _max = 100;
+        bool _initializing;
+        public decimal Minimum { get => _min; set { _min = value; if (_min > _max) _max = _min; if (!_initializing) Value = Constrain(_value); } }
+        public decimal Maximum { get => _max; set { _max = value; if (_min > _max) _min = _max; if (!_initializing) Value = Constrain(_value); } }
         public decimal Increment { get; set; } = 1;
         public int DecimalPlaces { get; set; }
+        public bool ThousandsSeparator { get; set; }
+        public bool Hexadecimal { get; set; }
+        public bool ReadOnly { get; set; }
+        public bool InterceptArrowKeys { get; set; } = true;
         public HorizontalAlignment TextAlign { get; set; }
-        public decimal Value { get => _value; set { if (_value == value) return; if (value < Minimum || value > Maximum) throw new ArgumentOutOfRangeException(nameof(value)); _value = value; Notify(nameof(Value)); ValueChanged?.Invoke(this, EventArgs.Empty); } }
+        public LeftRightAlignment UpDownAlign { get; set; } = LeftRightAlignment.Right;
+        public BorderStyle BorderStyle { get; set; } = BorderStyle.Fixed3D;
+        public decimal Value
+        {
+            get => _value;
+            set
+            {
+                if (!_initializing && (value < _min || value > _max))
+                    throw new ArgumentOutOfRangeException(nameof(Value), $"Value of '{value}' is not valid for 'Value'. 'Value' should be between 'Minimum' and 'Maximum'.");
+                if (_value == value) return;
+                _value = value;
+                base.Text = _value.ToString((ThousandsSeparator ? "N" : "F") + DecimalPlaces, System.Globalization.CultureInfo.CurrentCulture);
+                Notify(nameof(Value));
+                if (!_initializing) OnValueChanged(EventArgs.Empty);
+            }
+        }
+        decimal Constrain(decimal value) => Math.Max(_min, Math.Min(_max, value));
         public event EventHandler ValueChanged;
+        protected virtual void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
+        public void BeginInit() => _initializing = true;
+        public void EndInit() { _initializing = false; Value = Constrain(_value); }
+        public void UpButton() => Value = Constrain(_value + Increment);
+        public void DownButton() => Value = Constrain(_value - Increment);
+        /// <summary>User input (typed or spun): constrained to the range as WinForms does.</summary>
+        public void UserSetValue(decimal value) { if (Enabled && !ReadOnly) Value = Constrain(value); }
     }
-    public class TrackBar : Control
+    public enum LeftRightAlignment { Left, Right }
+    /// <summary>WinForms TrackBar: Value in [Minimum, Maximum] (code outside it throws); user input raises Scroll, then
+    /// ValueChanged.</summary>
+    public class TrackBar : Control, ISupportInitialize
     {
-        int _value;
-        public int Minimum { get; set; }
-        public int Maximum { get; set; } = 10;
+        int _value, _min, _max = 10;
+        bool _initializing;
+        public int Minimum { get => _min; set { _min = value; if (_min > _max) _max = _min; if (_value < _min) Value = _min; } }
+        public int Maximum { get => _max; set { _max = value; if (_min > _max) _min = _max; if (_value > _max) Value = _max; } }
         public int SmallChange { get; set; } = 1;
         public int LargeChange { get; set; } = 5;
         public int TickFrequency { get; set; } = 1;
-        public TickStyle TickStyle { get; set; }
+        public TickStyle TickStyle { get; set; } = TickStyle.BottomRight;
         public Orientation Orientation { get; set; }
-        public int Value { get => _value; set { if (_value == value) return; _value = value; Notify(nameof(Value)); ValueChanged?.Invoke(this, EventArgs.Empty); Scroll?.Invoke(this, EventArgs.Empty); } }
+        public int Value
+        {
+            get => _value;
+            set
+            {
+                if (!_initializing && (value < _min || value > _max))
+                    throw new ArgumentOutOfRangeException(nameof(Value), $"Value of '{value}' is not valid for 'Value'. 'Value' should be between 'Minimum' and 'Maximum'.");
+                if (_value == value) return;
+                _value = value;
+                Notify(nameof(Value));
+                OnValueChanged(EventArgs.Empty);
+            }
+        }
         public event EventHandler ValueChanged, Scroll;
+        protected virtual void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
+        protected virtual void OnScroll(EventArgs e) => Scroll?.Invoke(this, e);
+        public void BeginInit() => _initializing = true;
+        public void EndInit() { _initializing = false; Value = Math.Max(_min, Math.Min(_max, _value)); }
+        public void UserScroll(int value)
+        {
+            value = Math.Max(_min, Math.Min(_max, value));
+            if (value == _value) return;
+            OnScroll(EventArgs.Empty);
+            Value = value;
+        }
     }
     public enum TickStyle { None, TopLeft, BottomRight, Both }
-    public class ProgressBar : Control { public int Minimum { get; set; } public int Maximum { get; set; } = 100; public int Value { get; set; } public ProgressBarStyle Style { get; set; } }
+    public class ProgressBar : Control
+    {
+        int _value;
+        public int Minimum { get; set; }
+        public int Maximum { get; set; } = 100;
+        public int Value { get => _value; set { if (value < Minimum || value > Maximum) throw new ArgumentOutOfRangeException(nameof(Value)); if (_value == value) return; _value = value; Notify(nameof(Value)); } }
+        public int Step { get; set; } = 10;
+        public int MarqueeAnimationSpeed { get; set; } = 100;
+        public ProgressBarStyle Style { get; set; }
+        public void PerformStep() => Increment(Step);
+        public void Increment(int value) => Value = Math.Max(Minimum, Math.Min(Maximum, _value + value));
+    }
     public enum ProgressBarStyle { Blocks, Continuous, Marquee }
     public class PictureBox : Control { public ImageResource Image { get; set; } public PictureBoxSizeMode SizeMode { get; set; } public BorderStyle BorderStyle { get; set; } }
     public enum PictureBoxSizeMode { Normal, StretchImage, AutoSize, CenterImage, Zoom }

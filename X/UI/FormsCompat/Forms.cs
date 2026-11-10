@@ -47,6 +47,8 @@ namespace System.Windows.Forms
         public MenuStrip MainMenuStrip { get; set; }
         public static Form ActiveForm { get; private set; }
         protected virtual CreateParams CreateParams => new CreateParams();
+        protected virtual bool ShowWithoutActivation => false;
+        public Color TransparencyKey { get; set; } = Color.Empty;
 
         public event FormClosingEventHandler FormClosing;
         public event FormClosedEventHandler FormClosed;

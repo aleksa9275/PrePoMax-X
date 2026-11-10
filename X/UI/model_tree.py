@@ -635,6 +635,8 @@ class OriginalModelTreeWorkbench:
         if key in ('tsmiRun', 'tsmiCheckModel', 'tsmiMonitor', 'tsmiResults', 'tsmiKill'):
             name = {'tsmiRun': 'RunAnalysis', 'tsmiCheckModel': 'CheckModel', 'tsmiMonitor': 'MonitorAnalysis',
                     'tsmiResults': 'ResultsAnalysis', 'tsmiKill': 'KillAnalysis'}[key]
+            if name in self.ORIGINAL_TARGETS:
+                return self.run_original_entry(name, name=str(entry.Name))
             return self.custom_targets()[name](str(entry.Name), None)
         simple = {'tsmiCompoundPart': 'CreateAndImportCompoundPart', 'tsmiSwapPartGeometries': 'SwapPartGeometries',
                   'tsmiPreviewEdgeMesh': 'PreviewEdgeMesh', 'tsmiCopyGeometryToResults': 'CopyGeometryPartsToResults',

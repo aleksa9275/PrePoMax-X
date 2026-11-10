@@ -92,6 +92,11 @@ class MainMenuWorkbench:
         'ElementQuality': ('geometry', 'Element quality'),
     }
     TRANSFORMS = {'Translate', 'Rotate', 'Mirror', 'Scale'}
+    # Selection targets that are FrmMain members compiled with their original forms (C11).
+    ORIGINAL_TARGETS = {'SetColorForGeometryParts', 'SetColorForModelParts', 'SetColorForResultParts',
+                        'SetTransparencyForGeometryParts', 'SetTransparencyForModelParts', 'SetTransparencyForResultParts',
+                        'FindEdgesByAngleForGeometryParts', 'FindEdgesByAngleForModelParts', 'AnalyzeGeometry',
+                        'MonitorAnalysis', 'EditMaterial', 'EditSurfaceInteraction', 'EditStepControls', 'EditAnalysis'}
     # Original Create handlers without entity selection → family
     CREATE = {
         'tsmiCreateNodeSet_Click': 'Node sets', 'tsmiCreateElementSet_Click': 'Element sets',
@@ -264,7 +269,7 @@ class MainMenuWorkbench:
             return False
         action = (select.get('inStep') or select).get('action') or {}
         target = (select.get('inStep') or select)['target']
-        return bool(action) or target in self.custom_targets()
+        return bool(action) or target in self.custom_targets() or target in self.ORIGINAL_TARGETS
 
     def run_original_item(self, node):
         handler = node['handler']
@@ -375,6 +380,11 @@ class MainMenuWorkbench:
                 getattr(self.controller, hide)(Array[String](others))
             getattr(self.controller, show)(Array[String](names))
             return self.refresh()
+        if target in self.ORIGINAL_TARGETS:
+            # The original FrmMain member (FrmGetColor/FrmGetValue/FrmAnalyzeGeometry/FrmMonitor ...).
+            if isinstance(names, list):
+                return self.run_original_entry(target, step=step, parts=names)
+            return self.run_original_entry(target, step=step, name=names)
         if target.startswith('SetColorFor'):
             from System.Drawing import Color
             color = QtWidgets.QColorDialog.getColor(parent=self)
@@ -475,15 +485,15 @@ class MainMenuWorkbench:
             'tsmiPythonScriptEditor_Click': r(lambda: self.toggle_dock(self.script_dock)),
             'tsmiXYPlotPanel_Click': r(lambda: self.toggle_dock(self.plot_dock)),
             'tsmiAdvisor_Click': r(lambda: self.toggle_dock(self.advisor_dock)),
-            'tsmiEditUserViews_Click': r(lambda: self.show_editor(__import__('application_widgets').UserViewsDialog(self), 'User views')),
+            'tsmiEditUserViews_Click': r(lambda: self.run_original_entry('tsmiEditUserViews_Click')),
             'tsmiZoomToFit_Click': r(self.fit), 'tsmiBoxZoom_Click': r(self.start_box_zoom),
             'tsmiShowWireframeEdges_Click': r(lambda: self.set_edge_mode('Wireframe')),
             'tsmiShowElementEdges_Click': r(lambda: self.set_edge_mode('Element edges')),
             'tsmiShowModelEdges_Click': r(lambda: self.set_edge_mode('Model edges')),
             'tsmiShowNoEdges_Click': r(lambda: self.set_edge_mode('No edges')),
-            'tsmiSectionView_Click': r(lambda: self.presentation_dialog('Section view')),
-            'tsmiExplodedView_Click': r(lambda: self.presentation_dialog('Exploded view')),
-            'tsmiFollowerView_Click': r(self.follower_dialog),
+            'tsmiSectionView_Click': r(lambda: self.run_original_entry('tsmiSectionView_Click')),
+            'tsmiExplodedView_Click': r(lambda: self.run_original_entry('tsmiExplodedView_Click')),
+            'tsmiFollowerView_Click': r(lambda: self.run_original_entry('tsmiFollowerView_Click')),
             'tsmiShowAllParts_Click': r(lambda: self.visible_parts('Show')),
             'tsmiHideAllParts_Click': r(lambda: self.visible_parts('Hide')),
             'tsmiInvertVisibleParts_Click': r(lambda: self.visible_parts('Invert')),
@@ -503,8 +513,8 @@ class MainMenuWorkbench:
             'tsmiSplitPartMeshUsingSurface_Click': r(lambda: self.model_tool('Split mesh using surface')),
             'tsmiMergeCoincidentNodes_Click': r(lambda: self.model_tool('Merge coincident nodes')),
             'tsmiUpdateNodalCoordinatesFromFile_Click': r(self.update_coordinates),
-            'tsmiRenumberAllNodes_Click': r(lambda: self.renumber(True)),
-            'tsmiRenumberAllElements_Click': r(lambda: self.renumber(False)),
+            'tsmiRenumberAllNodes_Click': r(lambda: self.run_original_entry('tsmiRenumberAllNodes_Click')),
+            'tsmiRenumberAllElements_Click': r(lambda: self.run_original_entry('tsmiRenumberAllElements_Click')),
             'tsmiSplitShell_Click': r(lambda: self.geometry_tool('Split shell')),
             'tsmiSplitSolid_Click': r(lambda: self.geometry_tool('Split solid')),
             'tsmiSplitPeriodicFaces_Click': r(lambda: self.geometry_tool('Split periodic faces')),
@@ -515,21 +525,21 @@ class MainMenuWorkbench:
             'tsmiRepairGeometry_Click': r(lambda: self.geometry_tool('Repair geometry')),
             'tsmiFlipFaceNormalCAD_Click': r(lambda: self.geometry_tool('FlipNormal')),
             'tsmiDeleteStlPartFaces_Click': r(lambda: self.geometry_tool('DeleteStlFaces')),
-            'tsmiMaterialLibrary_Click': r(lambda: self.show_editor(__import__('application_widgets').LibraryDialog(self), 'Library')),
+            'tsmiMaterialLibrary_Click': r(lambda: self.run_original_entry('tsmiMaterialLibrary_Click')),
             'tsmiImportMaterial_Click': r(self.import_materials),
-            'tsmiSearchContactPairs_Click': r(self.contact_search_dialog),
-            'tsmiCreateAnalysis_Click': r(lambda: None if c.Model.Mesh is None else self.edit_results('Jobs')),
+            'tsmiSearchContactPairs_Click': r(lambda: self.run_original_entry('tsmiSearchContactPairs_Click')),
+            'tsmiCreateAnalysis_Click': r(lambda: self.run_original_entry('tsmiCreateAnalysis_Click')),
             'tsmiCreateResultReferencePoint_Click': r(lambda: self.edit_results('Result reference points')),
             'tsmiCreateResultCoordinateSystem_Click': r(lambda: self.edit_results('Result coordinate systems')),
             'tsmiCreateResultFieldOutput_Click': r(lambda: self.edit_results('Result fields')),
             'tsmiCreateResultHistoryOutput_Click': r(lambda: self.edit_results('Result histories')),
-            'tsmiTransformation_Click': r(self.transformations_dialog),
+            'tsmiTransformation_Click': r(lambda: self.run_original_entry('tsmiTransformation_Click')),
             'tsmiAppendResults_Click': r(lambda: self.open_result_file(True)),
-            'tsmiSettings_Click': r(self.settings_dialog),
-            'tsmiEditParameters_Click': r(lambda: self.edit_definition('Parameters')),
+            'tsmiSettings_Click': r(lambda: self.run_original_entry('tsmiSettings_Click')),
+            'tsmiEditParameters_Click': r(lambda: self.run_original_entry('tsmiEditParameters_Click')),
             'tsmiExportParameters_Click': r(lambda: self.parameters_file(False)),
             'tsmiImportParameters_Click': r(lambda: self.parameters_file(True)),
-            'tsmiQuery_Click': r(self.query_dialog), 'tsmiFind_Click': r(self.find_dialog),
+            'tsmiQuery_Click': r(lambda: self.run_original_entry('tsmiQuery_Click')), 'tsmiFind_Click': r(lambda: self.run_original_entry('tsmiFind_Click')),
             'tsmiArrangeAnnotations_Click': r(self.arrange_annotations),
             'tsmiRemoveAnnotations_Click': r(self.remove_annotations),
             'tsmiCaptureViewport_Click': r(self.capture_now),
@@ -538,7 +548,7 @@ class MainMenuWorkbench:
             'tsmiBidirectionalMeshConverter_Click': r(self.bidirectional_mesh_converter),
             'tsmiAutomationServer_Click': r(self.toggle_automation),
             'tsmiHomePage_Click': r(lambda: QtGui.QDesktopServices.openUrl(QtCore.QUrl(HOME_PAGE))),
-            'tsmiAbout_Click': r(self.about_dialog),
+            'tsmiAbout_Click': r(lambda: self.run_original_entry('tsmiAbout_Click')),
         })
         for key in ['FaceOrientations', 'MeshTypes', 'Parts', 'Materials', 'Sections', 'SectionThicknesses',
                     'ReferencePoints', 'Constraints', 'ContactPairs', 'InitialConditions', 'BCs', 'Loads']:
@@ -560,16 +570,12 @@ class MainMenuWorkbench:
             'CropGeometryPartWithCube': lambda name, step: c.CropGeometryPartWithCube(name),
             'GroupSplitCells': lambda names, step: self.compound_operation('Group split cells'),
             'FuseBodies': lambda names, step: self.compound_operation('Fuse bodies'),
-            'AnalyzeGeometry': lambda names, step: (self.ensure_view(ViewGeometryModelResults.Geometry), self.select_tree('Geometry parts', names), self.analyze_geometry()),
             'PreviewEdgeMesh': lambda names, step: self.run_operation(self.geometry.Execute('Preview edge mesh', Array[String](names))),
             'CreatePartMeshes': lambda names, step: self.execute_geometry('Create mesh', Array[String](names)),
-            'FindEdgesByAngleForGeometryParts': lambda names, step: self.find_edges_for(names),
-            'FindEdgesByAngleForModelParts': lambda names, step: self.find_edges_for(names),
             'SwapPartGeometries': lambda names, step: c.SwapPartGeometriesCommand(names[0], names[1]),
             'CreateAndImportCompoundPart': lambda names, step: self.run_operation(self.geometry.Execute('Create compound', Array[String](names))),
             'RunAnalysis': lambda name, step: self.run_job(False, name=name),
             'CheckModel': lambda name, step: self.run_job(True, name=name),
-            'MonitorAnalysis': lambda name, step: self.monitor_job(name),
             'ResultsAnalysis': lambda name, step: self.open_job(name),
             'KillAnalysis': lambda name, step: self.confirm('OK to kill selected analysis?', [name]) and c.KillJob(name),
             'ResultRepresentationOffResultPart': lambda names, step: c.SetResultRepresentationForResultPartsCommand(Array[String](names), False),
@@ -631,12 +637,12 @@ class MainMenuWorkbench:
         self.refresh()
 
     def regenerate_original(self, other_files, remeshing):
-        scope = 'All'
-        if self.controller.IsRegenerateTypeUsed():
-            scope, ok = QtWidgets.QInputDialog.getItem(self, 'Regenerate', 'Regenerate', ['All', 'PreProcess', 'Analysis', 'PostProcess'], editable=False)
-            if not ok:
-                return
-        self.run_operation(self.application.Regenerate(other_files, remeshing, scope))
+        # FrmMain.TryGetRegenerateType: the original FrmRegenerate when the history uses regeneration types.
+        scope = self.in_ui_context(lambda: self.form_host.SelectRegenerateType(self.controller.IsRegenerateTypeUsed()))
+        self.form_renderer.flush()
+        if scope is None:
+            return
+        self.run_operation(self.application.Regenerate(other_files, remeshing, str(scope)))
 
     def results_view(self, view, undeformed):
         from CaeResults import UndeformedModelTypeEnum

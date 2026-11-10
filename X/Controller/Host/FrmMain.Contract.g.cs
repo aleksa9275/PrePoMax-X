@@ -1491,6 +1491,14 @@ public void SelectStepAndIncrement(int stepId, int incrementId)
     };
     InvokePresentation("SelectStepAndIncrement", args);
 }
+public void SetAnimationAcceleration(bool animationAcceleration)
+{
+    var args = new object[]
+    {
+        animationAcceleration
+    };
+    InvokePresentation("SetAnimationAcceleration", args);
+}
 public void SetAnimationFrameData(float[] time, int[] stepId, int[] stepIncrementId, int[] modeNumber, int[] nodalDiameter, float[] scale, double[] allFramesScalarRange, vtkMaxAnimationType animationType)
 {
     var args = new object[]
@@ -1505,6 +1513,41 @@ public void SetAnimationFrameData(float[] time, int[] stepId, int[] stepIncremen
         animationType
     };
     InvokePresentation("SetAnimationFrameData", args);
+}
+public void SetAnimationFrame(int frameNum, bool scalarRangeFromAllFrames)
+{
+    var args = new object[]
+    {
+        frameNum,
+        scalarRangeFromAllFrames
+    };
+    InvokePresentation("SetAnimationFrame", args);
+}
+public void SaveAnimationAsAVI(string fileName, int[] firstLastFrame, int step, int fps, bool scalarRangeFromAllFrames, bool swing, bool encoderOptions)
+{
+    var args = new object[]
+    {
+        fileName,
+        firstLastFrame,
+        step,
+        fps,
+        scalarRangeFromAllFrames,
+        swing,
+        encoderOptions
+    };
+    InvokePresentation("SaveAnimationAsAVI", args);
+}
+public void SaveAnimationAsImages(string fileName, int[] firstLastFrame, int step, bool scalarRangeFromAllFrames, bool swing)
+{
+    var args = new object[]
+    {
+        fileName,
+        firstLastFrame,
+        step,
+        scalarRangeFromAllFrames,
+        swing
+    };
+    InvokePresentation("SaveAnimationAsImages", args);
 }
 public void AddArrowWidget(string name, string text, string numberFormat, double[] anchorPoint, bool drawBackground, bool drawBorder, bool visible)
 {
