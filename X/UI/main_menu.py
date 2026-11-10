@@ -140,6 +140,9 @@ class MainMenuWorkbench:
                 self._fill(sub, node.get('children', []))
                 continue
             action = menu.addAction(node['text'])
+            if node.get('image'):
+                from main_toolbars import original_icon
+                action.setIcon(original_icon(node['image']))
             self.original_actions[node['id']] = action
             if node.get('shortcut'):
                 action.setShortcut(QtGui.QKeySequence(node['shortcut'].replace('Alt+F4', 'Alt+F4')))
@@ -226,6 +229,7 @@ class MainMenuWorkbench:
         empty = (view in (ViewGeometryModelResults.Geometry, ViewGeometryModelResults.Model) and not c.ModelInitialized) or \
                 (view == ViewGeometryModelResults.Results and not c.ResultsInitialized)
         if empty:
+            self.update_original_toolbar_state()
             return
         if view == ViewGeometryModelResults.Geometry:
             enabled = ['tsmiView', 'tsmiGeometry', 'tsmiMesh']
@@ -240,6 +244,7 @@ class MainMenuWorkbench:
         for key in enabled:
             if key in top:
                 top[key].setEnabled(True)
+        self.update_original_toolbar_state()
 
     def _enable(self, key, value):
         action = self.original_actions.get(key)
@@ -527,7 +532,7 @@ class MainMenuWorkbench:
             'tsmiQuery_Click': r(self.query_dialog), 'tsmiFind_Click': r(self.find_dialog),
             'tsmiArrangeAnnotations_Click': r(self.arrange_annotations),
             'tsmiRemoveAnnotations_Click': r(self.remove_annotations),
-            'tsmiCaptureViewport_Click': r(lambda: self.capture_dialog()),
+            'tsmiCaptureViewport_Click': r(self.capture_now),
             'tsmiCaptureViewportAs_Click': r(lambda: self.capture_dialog()),
             'tsmiConvertOdbToFrd_Click': r(self.convert_odb),
             'tsmiBidirectionalMeshConverter_Click': r(self.bidirectional_mesh_converter),

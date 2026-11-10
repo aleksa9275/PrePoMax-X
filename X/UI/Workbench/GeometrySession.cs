@@ -33,10 +33,52 @@ public sealed class GeometrySession(Controller controller)
         _=>throw new NotSupportedException("Unknown original geometry/mesh editor: "+family)
     };
     public ModelTreeEntry[] Tree=>[
-        new(){Family="Geometry parts",Name="Geometry",Group=true,Children=Entries("Geometry parts",controller.Model.Geometry?.Parts.Values.Cast<NamedClass>()??[])},
+        new(){Family="Geometry parts",Name="Geometry",Group=true,Children=GeometryParts()},
         new(){Family="Mesh setup",Name="Mesh setup",Group=true,Children=Entries("Mesh setup",controller.Model.Geometry?.MeshSetupItems.Values.Cast<NamedClass>()??[])}
     ];
-    static ModelTreeEntry[] Entries(string family,IEnumerable<NamedClass> items)=>items.Select(i=>new ModelTreeEntry {Family=family,Name=i.Name,Type=i.GetType().Name}).ToArray();
+    ModelTreeEntry[] Entries(string family,IEnumerable<NamedClass> items)=>items.Where(i=>!i.Internal).Select(i=>OriginalModelTree.Annotate(new ModelTreeEntry {Family=family,Name=i.Name,Type=i.GetType().Name},i,OriginalModelTree.Geometry,controller)).ToArray();
+    /// <summary>ModelTree.AddObjectsToNode/AddOrderedDictionaryLayoutNodes for geometry parts: folders, and the
+    /// cells of a compound gathered under the part they were cut from.</summary>
+    ModelTreeEntry[] GeometryParts()
+    {
+        var parts=controller.Model.Geometry?.Parts;
+        if(parts==null)return [];
+        var subParts=new HashSet<string>(parts.Values.OfType<CompoundGeometryPart>().SelectMany(p=>p.SubPartNames),StringComparer.OrdinalIgnoreCase);
+        ModelTreeEntry Part(BasePart part,bool subPart=false)
+        {
+            if(part is not CompoundGeometryPart compound)return OriginalModelTree.Annotate(new ModelTreeEntry{Family="Geometry parts",Name=part.Name,Type=part.GetType().Name},part,OriginalModelTree.Geometry,controller,subPart);
+            string single=compound.GetSingleSplitSubPartName();
+            var order=new List<int>();
+            foreach(string split in compound.GetSplitSubPartNames())
+                for(int i=0;i<compound.SubPartNames.Length;i++)if(compound.CellSubPartNames[i]==split)order.Add(i);
+            for(int i=0;i<compound.SubPartNames.Length;i++)if(compound.CellSubPartNames?[i]==null)order.Add(i);
+            var children=new List<ModelTreeEntry>();var groups=new Dictionary<string,List<ModelTreeEntry>>();
+            foreach(int i in order)
+            {
+                if(!parts.TryGetValue(compound.SubPartNames[i],out var cell)||cell.Internal)continue;
+                var node=Part(cell,true);
+                string split=compound.CellSubPartNames?[i];
+                if(split!=null&&single==null&&compound.GetCellNames(split).Length>1)
+                {
+                    if(!groups.TryGetValue(split,out var list)){list=[];groups[split]=list;children.Add(new ModelTreeEntry{Family="Split sub parts",Step=compound.Name,Name=split,Group=true});}
+                    list.Add(node);
+                }
+                else children.Add(node);
+            }
+            var resolved=children.Select(c=>c.Family=="Split sub parts"?new ModelTreeEntry{Family=c.Family,Step=c.Step,Name=c.Name,Group=true,Children=groups[c.Name].ToArray()}:c).ToArray();
+            foreach(var split in resolved.Where(c=>c.Family=="Split sub parts"))OriginalModelTree.SplitSubPartStatus(split,controller);
+            var entry=new ModelTreeEntry{Family="Geometry parts",Name=part.Name,Type=part.GetType().Name,Children=resolved,Text=single};
+            return OriginalModelTree.Annotate(entry,part,OriginalModelTree.Geometry,controller,subPart);
+        }
+        if(parts is IOrderedDictionaryItemLayout<string> layout)
+        {
+            ModelTreeEntry[] Build(IEnumerable<OrderedDictionaryItemNode<string>> nodes)=>nodes.SelectMany(n=>n.IsGroup
+                ?new[]{new ModelTreeEntry{Family="Geometry parts",Name=n.Name,Group=true,FolderId=n.Id.ToString(),Children=Build(n.Children),Icon="Folder.ico"}}
+                :!subParts.Contains(n.Key)&&parts.TryGetValue(n.Key,out var part)&&!part.Internal?new[]{Part(part)}:Array.Empty<ModelTreeEntry>()).ToArray();
+            return Build(layout.GetItemLayoutSnapshot().Nodes);
+        }
+        return parts.Values.Where(p=>!p.Internal&&!subParts.Contains(p.Name)).Select(p=>Part(p)).ToArray();
+    }
     public Task Import(string path)=>Task.Run(()=>controller.ImportFileCommand(Path.GetFullPath(path),false));
     public Task Execute(string operation,string[] names)=>Task.Run(()=>ExecuteNow(operation,names));
     public void ExecuteNow(string operation,string[] names)

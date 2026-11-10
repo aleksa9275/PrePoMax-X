@@ -1,4 +1,4 @@
-using CaeGlobals;using CaeResults;using CaeJob;using PrePoMax;using PrePoMaxX.UI.OriginalForms;
+using CaeGlobals;using CaeMesh;using CaeResults;using CaeJob;using PrePoMax;using PrePoMaxX.UI.OriginalForms;
 namespace PrePoMaxX.UI;
 // Typed presentation facade. All engineering and history live in the original Controller.
 public sealed class ResultsSession(HeadlessSession session)
@@ -70,12 +70,31 @@ public sealed class ResultsSession(HeadlessSession session)
  public void Color(string[] names,int red,int green,int blue)=>controller.SetColorForResultPartsCommand(names,System.Drawing.Color.FromArgb(red,green,blue));
  public void Transparency(string[] names,byte alpha)=>controller.SetTransparencyForResultPartsCommand(names,alpha);
  public void Contours(string[] names,bool visible)=>controller.SetResultRepresentationForResultPartsCommand(names,visible);
- public ModelTreeEntry[] Tree=>[
-  new(){Family="Result reference points",Name="Reference points",Group=true,Children=(controller.CurrentResult==null?[]:controller.GetResultReferencePointNames()).Select(n=>new ModelTreeEntry{Family="Result reference points",Name=n,Type="FeReferencePoint"}).ToArray()},
-  new(){Family="Result coordinate systems",Name="Coordinate systems",Group=true,Children=(controller.CurrentResult==null?[]:controller.GetResultCoordinateSystemNames()).Select(n=>new ModelTreeEntry{Family="Result coordinate systems",Name=n,Type="CoordinateSystem"}).ToArray()},
-  new(){Family="Result parts",Name="Parts",Group=true,Children=(controller.CurrentResult?.Mesh?.Parts.Values??[]).Select(p=>new ModelTreeEntry{Family="Result parts",Name=p.Name,Type=p.GetType().Name}).ToArray()},
-  new(){Family="Result fields",Name="Field outputs",Group=true,Children=controller.CurrentResult==null?[]:controller.GetResultFieldOutputNames().Select(n=>new ModelTreeEntry{Family="Result fields",Name=n,Type=controller.GetResultFieldOutputs().FirstOrDefault(f=>f.Name==n)?.GetType().Name??"Field",Children=Components(n).Select(comp=>new ModelTreeEntry{Family="Result field components",Step=n,Name=comp,Type="Component"}).ToArray()}).ToArray()},
-  new(){Family="Result histories",Name="History outputs",Group=true,Children=controller.CurrentResult==null?[]:controller.GetHistoryResultSetNames().Select(n=>new ModelTreeEntry{Family="Result histories",Name=n,Type="HistoryResultSet",Children=controller.CurrentResult.GetHistory().Sets[n].Fields.Values.Select(historyField=>new ModelTreeEntry{Family="Result history fields",Step=n,Name=historyField.Name,Type="HistoryResultField",Children=historyField.Components.Values.Select(comp=>new ModelTreeEntry{Family="Result history components",Step=n+"|"+historyField.Name,Name=comp.Name,Type="HistoryResultComponent"}).ToArray()}).ToArray()}).ToArray()}
- ];
- public ModelTreeEntry Jobs=>new(){Family="Jobs",Name="Analyses",Group=true,Children=controller.GetAllJobs().Select(j=>new ModelTreeEntry{Family="Jobs",Name=j.Name,Type=j.JobStatus.ToString()}).ToArray()};
+ public ModelTreeEntry[] Tree
+ {
+  get
+  {
+   var result=controller.CurrentResult;var mesh=result?.Mesh;const string view=OriginalModelTree.Results;
+   ModelTreeEntry Item(string family,NamedClass item,string step=null,ModelTreeEntry[] children=null,string name=null)=>OriginalModelTree.Annotate(new ModelTreeEntry{Family=family,Step=step,Name=name??item.Name,Type=item.GetType().Name,Children=children??[]},item,view,controller);
+   ModelTreeEntry Group(string family,string name,IEnumerable<ModelTreeEntry> children)=>new(){Family=family,Name=name,Group=true,Children=children.ToArray()};
+   var fieldOutputs=result==null?[]:controller.GetResultFieldOutputs();
+   var historyOutputs=result==null?[]:controller.GetResultHistoryOutputs();
+   return [
+    Group("Result reference points","Reference points",mesh==null?[]:mesh.ReferencePoints.Values.Where(i=>!i.Internal).Select(i=>Item("Result reference points",i))),
+    Group("Result coordinate systems","Coordinate systems",mesh==null?[]:mesh.CoordinateSystems.Values.Where(i=>!i.Internal).Select(i=>Item("Result coordinate systems",i))),
+    Group("Result parts","Parts",mesh==null?[]:mesh.Parts.Values.Where(i=>!i.Internal).Select(p=>Item("Result parts",p))),
+    Group("Result node sets","Node sets",mesh==null?[]:mesh.NodeSets.Values.Where(i=>!i.Internal).Select(i=>Item("Result node sets",i))),
+    Group("Result element sets","Element sets",mesh==null?[]:mesh.ElementSets.Values.Where(i=>!i.Internal).Select(i=>Item("Result element sets",i))),
+    Group("Result surfaces","Surfaces",mesh==null?[]:mesh.Surfaces.Values.Where(i=>!i.Internal).Select(i=>Item("Result surfaces",i))),
+    // CreateOverwriteFieldOutputNodes: Field (or the ResultFieldOutput) with FieldData components.
+    Group("Result fields","Field outputs",result==null?[]:controller.GetResultFieldOutputNames().Select(n=>Item("Result fields",(NamedClass)fieldOutputs.FirstOrDefault(f=>f.Name==n)??new Field(n),null,
+      Components(n).Select(comp=>Item("Result field components",new FieldData(comp),n)).ToArray()))),
+    // CreateOverwriteHistoryOutputNodes: HistoryResultSet (or ResultHistoryOutput), fields, HistoryResultData.
+    Group("Result histories","History outputs",result==null?[]:controller.GetHistoryResultSetNames().Select(n=>Item("Result histories",(NamedClass)historyOutputs.FirstOrDefault(h=>h.Name==n)??result.GetHistory().Sets[n],null,
+      result.GetHistory().Sets[n].Fields.Values.Select(historyField=>Item("Result history fields",historyField,n,
+        historyField.Components.Values.Select(comp=>Item("Result history components",new HistoryResultData(n,historyField.Name,comp.Name),n+"|"+historyField.Name,null,comp.Name)).ToArray())).ToArray())))
+   ];
+  }
+ }
+ public ModelTreeEntry Jobs=>new(){Family="Jobs",Name="Analyses",Group=true,Children=controller.GetAllJobs().Select(j=>OriginalModelTree.Annotate(new ModelTreeEntry{Family="Jobs",Name=j.Name,Type=j.JobStatus.ToString()},j,OriginalModelTree.Model,controller)).ToArray()};
 }

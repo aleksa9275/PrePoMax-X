@@ -32,10 +32,12 @@ class ResultsWorkbench:
         self.addToolBarBreak();self.result_toolbar=self.addToolBar('Results')
         self.result_boxes={}
         for label in ['Result','Field','Component','Step','Increment','View']:
-            box=QtWidgets.QComboBox();box.setMinimumContentsLength(6);box.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon);box.setMaximumWidth(240);box.setToolTip(label);self.result_toolbar.addWidget(box);self.result_boxes[label]=box
+            box=QtWidgets.QComboBox();box.setMinimumContentsLength(6);box.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon);box.setMaximumWidth(240);box.setToolTip(label);self.result_boxes[label]=box
+            # The result name box sits in the original tsResultDeformation strip (main_toolbars.py).
+            if label!='Result':self.result_toolbar.addWidget(box)
             box.currentTextChanged.connect(lambda value,key=label:self.guard(lambda:self.result_changed(key,value)))
-        self.symbols=QtWidgets.QComboBox();self.symbols.setToolTip('Original symbols / step');self.viewport_toolbar.addWidget(self.symbols)
-        self.symbols.currentTextChanged.connect(lambda value:self.guard(lambda:self.change_symbols(value)))
+        # Original tsSymbols combo; placed and driven by main_toolbars.py (FrmMain.UpdateSymbolsList).
+        self.symbols=QtWidgets.QComboBox()
         for family in ['Legend','Postprocessing','Annotations','Status block','Number format','Section view','Exploded view']:
             view.addAction(family+'…',lambda checked=False,f=family:self.guard(lambda:self.presentation_dialog(f)))
         view.addAction('Remove section view',lambda:self.guard(self.remove_section))
@@ -51,16 +53,15 @@ class ResultsWorkbench:
         self.animation_options={'fps':20,'style':'Loop','step':1,'first':0,'last':None,'all_frames':True,'backward':False}
         self.animation_toolbar.addAction('Options…',lambda:self.guard(self.animation_options_dialog))
         self.animation_toolbar.addAction('Play',lambda:self.guard(self.play_animation));self.animation_toolbar.addAction('Stop',self.stop_animation)
+        self.animation_toolbar.addAction('Close',lambda:self.guard(self.close_animation))
         self.frame_slider=QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal);self.frame_slider.setMaximumWidth(130);self.animation_toolbar.addWidget(self.frame_slider)
         self.frame_slider.valueChanged.connect(lambda frame:self.guard(lambda:self.show_frame(frame)))
         self.result_toolbar.hide();self.animation_toolbar.hide()
         self.view.addItem('Results')
 
     def update_results_ui(self):
-        if hasattr(self,'symbols'):
-            self.symbols.blockSignals(True);self.symbols.clear();self.symbols.addItems(['None','Model','Result']+list(self.controller.GetStepNames()));self.symbols.setCurrentText(self.controller.GetDrawSymbolsForStep() or 'None');self.symbols.blockSignals(False)
+        # Tool strip visibility/enabling: main_toolbars.update_original_toolbar_state.
         active=self.controller.CurrentView==ViewGeometryModelResults.Results and self.controller.ResultsInitialized
-        self.result_toolbar.setVisible(active);self.animation_toolbar.setVisible(active)
         if not active:return
         field=self.controller.CurrentFieldData
         values={'Result':list(self.results.ResultNames),'Field':list(self.results.Fields),'Component':list(self.results.Components(field.Name)),'Step':[str(v) for v in self.results.Steps],'Increment':[str(v) for v in self.results.Increments(field.StepId)]}
@@ -260,19 +261,35 @@ class ResultsWorkbench:
         from PrePoMax.Forms import ViewCaptureViewportProperties
         from PrePoMaxX.UI import PropertySheet
         from application_widgets import SheetDialog
-        properties=getattr(self,'capture_properties',None) or CaptureViewportProperties(self.controller.GetWorkDirectory(),'Viewport')
+        properties=self.current_capture_properties()
         def capture():
-            import tempfile
-            path=properties.GetFileName() if properties.SaveToFile else None
-            if path is None:
-                with tempfile.TemporaryDirectory(prefix='prepomaxx-capture-') as folder:
-                    target=str(Path(folder)/'viewport.png');self.capture(target,properties.TransparentBackground,properties.Magnification)
-                    if properties.CopyToClipboard:QtWidgets.QApplication.clipboard().setImage(__import__('PyQt6.QtGui',fromlist=['QImage']).QImage(target))
-            else:
-                self.capture(path,properties.TransparentBackground,properties.Magnification)
-                if properties.CopyToClipboard:QtWidgets.QApplication.clipboard().setImage(__import__('PyQt6.QtGui',fromlist=['QImage']).QImage(path))
-            self.capture_properties=properties
+            if self.capture_viewport(properties):self.capture_properties=properties
         SheetDialog(self,'Capture viewport',PropertySheet(ViewCaptureViewportProperties(properties)),capture).exec()
+    def current_capture_properties(self):
+        from PrePoMax import CaptureViewportProperties
+        return getattr(self,'capture_properties',None) or CaptureViewportProperties(self.controller.GetWorkDirectory(),'Viewport')
+    def capture_now(self):
+        """tsmiCaptureViewport: capture with the current Capture Viewport properties, no form."""
+        self.capture_viewport(self.current_capture_properties())
+    def capture_viewport(self,properties):
+        """FrmMain.CaptureViewport."""
+        import tempfile
+        from CaeGlobals import CaeException
+        if not properties.SaveToFile and not properties.CopyToClipboard:
+            raise CaeException('Select to save the picture to a file, to copy it to the clipboard or both.')
+        QImage=__import__('PyQt6.QtGui',fromlist=['QImage']).QImage
+        if properties.SaveToFile:
+            path=str(properties.GetFileName())
+            if Path(path).exists() and QtWidgets.QMessageBox.warning(self,'Warning',"The file '"+path+"' already exists. Replace it?",QtWidgets.QMessageBox.StandardButton.Yes|QtWidgets.QMessageBox.StandardButton.No)!=QtWidgets.QMessageBox.StandardButton.Yes:return False
+            self.capture(path,properties.TransparentBackground,properties.Magnification)
+            if properties.CopyToClipboard:QtWidgets.QApplication.clipboard().setImage(QImage(path))
+            self.output.appendPlainText('Viewport captured into: '+path)
+        else:
+            with tempfile.TemporaryDirectory(prefix='prepomaxx-capture-') as folder:
+                target=str(Path(folder)/'viewport.png');self.capture(target,properties.TransparentBackground,properties.Magnification)
+                QtWidgets.QApplication.clipboard().setImage(QImage(target))
+        if properties.CopyToClipboard:self.output.appendPlainText('Viewport captured to the clipboard.')
+        return True
     def export_animation(self,path,fps=20,swing=False):
         if self.animation_count<1 or self.animation_frame is None:raise ValueError('Prepare an animation with Play first.')
         self.animation_timer.stop();first=min(self.animation_options['first'],self.animation_count-1);last=min(self.animation_count-1,self.animation_options['last'] if self.animation_options['last'] is not None else self.animation_count-1);indices=list(range(first,last+1,max(1,self.animation_options['step'])))

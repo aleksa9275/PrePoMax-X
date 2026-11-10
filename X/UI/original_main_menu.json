@@ -1,7 +1,8 @@
 {
  "source": {
   "PrePoMax/Forms/FrmMain.Designer.cs": "ac5ce48bf504113a493b38ee90ad96ad5410abf462153adad6c9972cbd1df0e7",
-  "PrePoMax/Forms/FrmMain.cs": "615be6b02b18de7a026b38c7d688817c6a5f67535a7eee678b16acdca5507efe"
+  "PrePoMax/Forms/FrmMain.cs": "615be6b02b18de7a026b38c7d688817c6a5f67535a7eee678b16acdca5507efe",
+  "PrePoMax/Properties/Resources.resx": "1c942cc402b63f99902f6408902c3c8c39962acc90487c879cb92ea0539db70a"
  },
  "menus": [
   {
@@ -12,12 +13,14 @@
      "id": "tsmiNew",
      "text": "New",
      "handler": "tsmiNew_Click",
+     "image": "PrePoMax/Icons/File/New.ico",
      "shortcut": "Ctrl+N"
     },
     {
      "id": "tsmiOpen",
      "text": "Open",
      "handler": "tsmiOpen_Click",
+     "image": "PrePoMax/Icons/File/Open.ico",
      "shortcut": "Ctrl+O"
     },
     {
@@ -33,6 +36,7 @@
      "id": "tsmiImportFile",
      "text": "Import",
      "handler": "tsmiImportFile_Click",
+     "image": "PrePoMax/Icons/File/Import.ico",
      "shortcut": "Ctrl+I"
     },
     {
@@ -43,12 +47,14 @@
      "id": "tsmiSave",
      "text": "Save",
      "handler": "tsmiSave_Click",
+     "image": "PrePoMax/Icons/File/Save.ico",
      "shortcut": "Ctrl+S"
     },
     {
      "id": "tsmiSaveAs",
      "text": "Save As",
-     "handler": "tsmiSaveAs_Click"
+     "handler": "tsmiSaveAs_Click",
+     "image": "PrePoMax/Icons/File/Save_as.ico"
     },
     {
      "id": "tsmiDividerFile2",
@@ -57,6 +63,7 @@
     {
      "id": "tsmiExport",
      "text": "Export",
+     "image": "PrePoMax/Icons/File/Export.ico",
      "children": [
       {
        "id": "tsmiExportGeometry",
@@ -179,12 +186,14 @@
     {
      "id": "tsmiUndo",
      "text": "Undo",
-     "handler": "tsmiUndo_Click"
+     "handler": "tsmiUndo_Click",
+     "image": "PrePoMax/Icons/Edit/Undo.ico"
     },
     {
      "id": "tsmiRedo",
      "text": "Redo",
-     "handler": "tsmiRedo_Click"
+     "handler": "tsmiRedo_Click",
+     "image": "PrePoMax/Icons/Edit/Redo.ico"
     },
     {
      "id": "tsmiDividerEdit1",
@@ -252,47 +261,56 @@
       {
        "id": "tsmiFrontView",
        "text": "Front View",
-       "handler": "tsmiFrontView_Click"
+       "handler": "tsmiFrontView_Click",
+       "image": "PrePoMax/Icons/View/Front.ico"
       },
       {
        "id": "tsmiBackView",
        "text": "Back View",
-       "handler": "tsmiBackView_Click"
+       "handler": "tsmiBackView_Click",
+       "image": "PrePoMax/Icons/View/Back.ico"
       },
       {
        "id": "tsmiTopView",
        "text": "Top View",
-       "handler": "tsmiTopView_Click"
+       "handler": "tsmiTopView_Click",
+       "image": "PrePoMax/Icons/View/Top.ico"
       },
       {
        "id": "tsmiBottomView",
        "text": "Bottom View",
-       "handler": "tsmiBottomView_Click"
+       "handler": "tsmiBottomView_Click",
+       "image": "PrePoMax/Icons/View/Bottom.ico"
       },
       {
        "id": "tsmiLeftView",
        "text": "Left View",
-       "handler": "tsmiLeftView_Click"
+       "handler": "tsmiLeftView_Click",
+       "image": "PrePoMax/Icons/View/Left.ico"
       },
       {
        "id": "tsmiRightView",
        "text": "Right View",
-       "handler": "tsmiRightView_Click"
+       "handler": "tsmiRightView_Click",
+       "image": "PrePoMax/Icons/View/Right.ico"
       },
       {
        "id": "tsmiNormalView",
        "text": "Normal View",
-       "handler": "tsmiNormalView_Click"
+       "handler": "tsmiNormalView_Click",
+       "image": "PrePoMax/Icons/View/Normal.ico"
       },
       {
        "id": "tsmiVerticalView",
        "text": "Vertical View",
-       "handler": "tsmiVerticalView_Click"
+       "handler": "tsmiVerticalView_Click",
+       "image": "PrePoMax/Icons/View/Vertical.ico"
       },
       {
        "id": "tsmiIsometricView",
        "text": "Isometric View",
-       "handler": "tsmiIsometricView_Click"
+       "handler": "tsmiIsometricView_Click",
+       "image": "PrePoMax/Icons/View/Isometric.ico"
       }
      ]
     },
@@ -310,12 +328,14 @@
     {
      "id": "tsmiZoomToFit",
      "text": "Zoom to Fit",
-     "handler": "tsmiZoomToFit_Click"
+     "handler": "tsmiZoomToFit_Click",
+     "image": "PrePoMax/Icons/View/ZoomToFit.ico"
     },
     {
      "id": "tsmiBoxZoom",
      "text": "Box Zoom",
-     "handler": "tsmiBoxZoom_Click"
+     "handler": "tsmiBoxZoom_Click",
+     "image": "PrePoMax/Icons/View/BoxZoom.ico"
     },
     {
      "id": "tsmiDividerView1",
@@ -324,22 +344,26 @@
     {
      "id": "tsmiShowWireframeEdges",
      "text": "Wireframe",
-     "handler": "tsmiShowWireframeEdges_Click"
+     "handler": "tsmiShowWireframeEdges_Click",
+     "image": "PrePoMax/Icons/View/Wireframe.ico"
     },
     {
      "id": "tsmiShowElementEdges",
      "text": "Show Element Edges",
-     "handler": "tsmiShowElementEdges_Click"
+     "handler": "tsmiShowElementEdges_Click",
+     "image": "PrePoMax/Icons/View/ElementEdges.ico"
     },
     {
      "id": "tsmiShowModelEdges",
      "text": "Show Model Edges",
-     "handler": "tsmiShowModelEdges_Click"
+     "handler": "tsmiShowModelEdges_Click",
+     "image": "PrePoMax/Icons/View/ModelEdges.ico"
     },
     {
      "id": "tsmiShowNoEdges",
      "text": "No Edges",
-     "handler": "tsmiShowNoEdges_Click"
+     "handler": "tsmiShowNoEdges_Click",
+     "image": "PrePoMax/Icons/View/NoEdges.ico"
     },
     {
      "id": "tsmiDividerView2",
@@ -348,17 +372,20 @@
     {
      "id": "tsmiSectionView",
      "text": "Section View",
-     "handler": "tsmiSectionView_Click"
+     "handler": "tsmiSectionView_Click",
+     "image": "PrePoMax/Icons/View/SectionView.ico"
     },
     {
      "id": "tsmiExplodedView",
      "text": "Exploded View",
-     "handler": "tsmiExplodedView_Click"
+     "handler": "tsmiExplodedView_Click",
+     "image": "PrePoMax/Icons/View/Explode.ico"
     },
     {
      "id": "tsmiFollowerView",
      "text": "Follower View",
-     "handler": "tsmiFollowerView_Click"
+     "handler": "tsmiFollowerView_Click",
+     "image": "PrePoMax/Icons/View/FollowerView.ico"
     },
     {
      "id": "tsmiDividerView3",
@@ -367,17 +394,20 @@
     {
      "id": "tsmiShowAllParts",
      "text": "Show All",
-     "handler": "tsmiShowAllParts_Click"
+     "handler": "tsmiShowAllParts_Click",
+     "image": "PrePoMax/Icons/Common/Show.ico"
     },
     {
      "id": "tsmiHideAllParts",
      "text": "Hide All",
-     "handler": "tsmiHideAllParts_Click"
+     "handler": "tsmiHideAllParts_Click",
+     "image": "PrePoMax/Icons/Common/Hide.ico"
     },
     {
      "id": "tsmiInvertVisibleParts",
      "text": "Invert Visible Parts",
-     "handler": "tsmiInvertVisibleParts_Click"
+     "handler": "tsmiInvertVisibleParts_Click",
+     "image": "PrePoMax/Icons/Common/InvertHideShow.ico"
     },
     {
      "id": "tsmiDividerView4",
@@ -386,22 +416,26 @@
     {
      "id": "tsmiResultsUndeformed",
      "text": "Undeformed",
-     "handler": "tsmiResultsUndeformed_Click"
+     "handler": "tsmiResultsUndeformed_Click",
+     "image": "PrePoMax/Icons/Results/Undeformed.ico"
     },
     {
      "id": "tsmiResultsDeformed",
      "text": "Deformed",
-     "handler": "tsmiResultsDeformed_Click"
+     "handler": "tsmiResultsDeformed_Click",
+     "image": "PrePoMax/Icons/Results/Deformed.ico"
     },
     {
      "id": "tsmiResultsColorContours",
      "text": "Color Contours",
-     "handler": "tsmiResultsColorContours_Click"
+     "handler": "tsmiResultsColorContours_Click",
+     "image": "PrePoMax/Icons/Results/Color_contours.ico"
     },
     {
      "id": "tsmiResultsVectorPlot",
      "text": "Vector Plot",
-     "handler": "tsmiResultsVectorPlot_Click"
+     "handler": "tsmiResultsVectorPlot_Click",
+     "image": "PrePoMax/Icons/Results/Vector_plot.ico"
     },
     {
      "id": "tsmiDividerView5",
@@ -410,12 +444,14 @@
     {
      "id": "tsmiResultsUndeformedWireframe",
      "text": "Undeformed Wireframe Model",
-     "handler": "tsmiResultsUndeformedWireframe_Click"
+     "handler": "tsmiResultsUndeformedWireframe_Click",
+     "image": "PrePoMax/Icons/Results/Undeformed_Wireframe.ico"
     },
     {
      "id": "tsmiResultsUndeformedSolid",
      "text": "Undeformed Solid Model",
-     "handler": "tsmiResultsUndeformedSolid_Click"
+     "handler": "tsmiResultsUndeformedSolid_Click",
+     "image": "PrePoMax/Icons/Results/Undeformed_Solid.ico"
     },
     {
      "id": "tsmiDividerView6",
@@ -696,7 +732,8 @@
           "HideGeometryPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowGeometryParts",
@@ -713,7 +750,8 @@
           "ShowGeometryPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiShowOnlyGeometryParts",
@@ -731,7 +769,8 @@
           "ShowGeometryPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerGeomPart3",
@@ -808,7 +847,8 @@
           "RemoveGeometryPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
@@ -882,7 +922,8 @@
       {
        "id": "tsmiDeleteFacesCAD",
        "text": "Delete Faces",
-       "handler": "tsmiDeleteFacesCAD_Click"
+       "handler": "tsmiDeleteFacesCAD_Click",
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       },
       {
        "id": "tsmiDividerCAD2",
@@ -962,7 +1003,8 @@
       {
        "id": "tsmiDeleteStlPartFaces",
        "text": "Delete Part Faces",
-       "handler": "tsmiDeleteStlPartFaces_Click"
+       "handler": "tsmiDeleteStlPartFaces_Click",
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       },
       {
        "id": "tsmiCropStlPartWithCylinder",
@@ -1012,7 +1054,8 @@
         "CreateAndImportCompoundPartCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Compound.ico"
     },
     {
      "id": "tsmiRegenerateCompoundPart",
@@ -1100,6 +1143,7 @@
     {
      "id": "tsmiMeshSetupItem",
      "text": "Mesh Setup Item",
+     "image": "PrePoMax/Icons/Geometry/Mesh_refinement.ico",
      "children": [
       {
        "id": "tsmiCreateMeshSetupItem",
@@ -1161,7 +1205,8 @@
           "RemoveMeshSetupItemsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
@@ -1198,7 +1243,8 @@
         "HighlightInvertedElements"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Mesh/Part.ico"
     }
    ]
   },
@@ -1316,6 +1362,7 @@
     {
      "id": "tsmiPart",
      "text": "Part",
+     "image": "PrePoMax/Icons/Mesh/Part.ico",
      "children": [
       {
        "id": "tsmiEditModelPart",
@@ -1563,13 +1610,15 @@
           "RemoveModelPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiNodeSet",
      "text": "Node set",
+     "image": "PrePoMax/Icons/Mesh/Node_set.ico",
      "children": [
       {
        "id": "tsmiCreateNodeSet",
@@ -1631,13 +1680,15 @@
           "RemoveNodeSetsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiElementSet",
      "text": "Element set",
+     "image": "PrePoMax/Icons/Mesh/Element_set.ico",
      "children": [
       {
        "id": "tsmiCreateElementSet",
@@ -1716,13 +1767,15 @@
           "RemoveElementSetsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiSurface",
      "text": "Surface",
+     "image": "PrePoMax/Icons/Mesh/Surface.ico",
      "children": [
       {
        "id": "tsmiCreateSurface",
@@ -1784,17 +1837,20 @@
           "RemoveSurfacesCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiModelFeatures",
      "text": "Features",
+     "image": "PrePoMax/Icons/Mesh/Feature.ico",
      "children": [
       {
        "id": "tsmiModelReferencePointTool",
        "text": "Reference point",
+       "image": "PrePoMax/Icons/Mesh/Reference_point.ico",
        "children": [
         {
          "id": "tsmiCreateModelReferencePoint",
@@ -1855,7 +1911,8 @@
             "HideModelReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Hide.ico"
         },
         {
          "id": "tsmiShowModelReferencePoint",
@@ -1872,7 +1929,8 @@
             "ShowModelReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiShowOnlyModelReferencePoint",
@@ -1891,7 +1949,8 @@
             "ShowModelReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiModelRP2",
@@ -1913,13 +1972,15 @@
             "RemoveModelReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       },
       {
        "id": "tsmiModelCoordinateSystem",
        "text": "Coordinate System",
+       "image": "PrePoMax/Icons/Mesh/CoordinateSystem.ico",
        "children": [
         {
          "id": "tsmiCreateModelCoordinateSystem",
@@ -1980,7 +2041,8 @@
             "HideModelCoordinateSystemsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Hide.ico"
         },
         {
          "id": "tsmiShowModelCoordinateSystem",
@@ -1997,7 +2059,8 @@
             "ShowModelCoordinateSystemsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiShowOnlyModelCoordinateSystem",
@@ -2015,7 +2078,8 @@
             "ShowModelCoordinateSystemsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiDividerModelCoordinateSystem2",
@@ -2037,7 +2101,8 @@
             "RemoveModelCoordinateSystemsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       }
@@ -2052,6 +2117,7 @@
     {
      "id": "tsmiMaterial",
      "text": "Material",
+     "image": "PrePoMax/Icons/Material/Material.ico",
      "children": [
       {
        "id": "tsmiCreateMaterial",
@@ -2139,18 +2205,21 @@
           "RemoveMaterialsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiMaterialLibrary",
      "text": "Material Library",
-     "handler": "tsmiMaterialLibrary_Click"
+     "handler": "tsmiMaterialLibrary_Click",
+     "image": "PrePoMax/Icons/Material/Library.ico"
     },
     {
      "id": "tsmiSection",
      "text": "Section",
+     "image": "PrePoMax/Icons/Section/Section.ico",
      "children": [
       {
        "id": "tsmiCreateSection",
@@ -2212,7 +2281,8 @@
           "RemoveSectionsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     }
@@ -2225,6 +2295,7 @@
     {
      "id": "tsmiConstraint",
      "text": "Constraint",
+     "image": "PrePoMax/Icons/Constraints/Constraints.ico",
      "children": [
       {
        "id": "tsmiCreateConstraint",
@@ -2323,7 +2394,8 @@
           "HideConstraintsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowConstraint",
@@ -2340,7 +2412,8 @@
           "ShowConstraintsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerConstraint3",
@@ -2362,17 +2435,20 @@
           "RemoveConstraintsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiContact",
      "text": "Contact",
+     "image": "PrePoMax/Icons/Contact/Contact.ico",
      "children": [
       {
        "id": "tsmiSurfaceInteraction",
        "text": "Surface Interaction",
+       "image": "PrePoMax/Icons/Contact/SurfaceInteraction.ico",
        "children": [
         {
          "id": "tsmiCreateSurfaceInteraction",
@@ -2434,13 +2510,15 @@
             "RemoveSurfaceInteractionsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       },
       {
        "id": "contactPairToolStripMenuItem",
        "text": "Contact Pair",
+       "image": "PrePoMax/Icons/Contact/ContactPair.ico",
        "children": [
         {
          "id": "tsmiCreateContactPair",
@@ -2539,7 +2617,8 @@
             "HideContactPairsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Hide.ico"
         },
         {
          "id": "tsmiShowContactPair",
@@ -2556,7 +2635,8 @@
             "ShowContactPairsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiDividerContactPair3",
@@ -2578,7 +2658,8 @@
             "RemoveContactPairsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       }
@@ -2659,7 +2740,8 @@
         "RemoveDistributionsCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Delete.ico"
     }
    ]
   },
@@ -2727,7 +2809,8 @@
         "RemoveAmplitudesCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Delete.ico"
     }
    ]
   },
@@ -2790,7 +2873,8 @@
         "PreviewInitialCondition"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Initial conditions/Preview_initial_condition.ico"
     },
     {
      "id": "tsmiDividerInitialCondition1",
@@ -2811,7 +2895,8 @@
         "HideInitialConditionsCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Hide.ico"
     },
     {
      "id": "tsmiShowInitialCondition",
@@ -2828,7 +2913,8 @@
         "ShowInitialConditionsCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Show.ico"
     },
     {
      "id": "tsmiDividerInitialCondition2",
@@ -2850,7 +2936,8 @@
         "RemoveInitialConditionsCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Delete.ico"
     }
    ]
   },
@@ -2861,6 +2948,7 @@
     {
      "id": "tsmiStep",
      "text": "Step",
+     "image": "PrePoMax/Icons/Step/Step.ico",
      "children": [
       {
        "id": "tsmiCreateStep",
@@ -2940,7 +3028,8 @@
           "RemoveStepsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
@@ -2951,6 +3040,7 @@
     {
      "id": "tsmiHistoryOutput",
      "text": "History Output",
+     "image": "PrePoMax/Icons/Step/History_output.ico",
      "children": [
       {
        "id": "tsmiCreateHistoryOutput",
@@ -3066,7 +3156,8 @@
           "GetAllHistoryOutputs"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Propagate.ico"
       },
       {
        "id": "tsmiHistoryOutputDivider1",
@@ -3103,13 +3194,15 @@
           "GetAllHistoryOutputs"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiFieldOutput",
      "text": "Field Output",
+     "image": "PrePoMax/Icons/Step/Field_output.ico",
      "children": [
       {
        "id": "tsmiCreateFieldOutput",
@@ -3225,7 +3318,8 @@
           "GetAllFieldOutputs"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Propagate.ico"
       },
       {
        "id": "tsmiDividerFieldOutput1",
@@ -3262,13 +3356,15 @@
           "GetAllFieldOutputs"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiBC",
      "text": "BC",
+     "image": "PrePoMax/Icons/Step/Bc.ico",
      "children": [
       {
        "id": "tsmiCreateBC",
@@ -3384,7 +3480,8 @@
           "GetStepBoundaryConditions"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Propagate.ico"
       },
       {
        "id": "tsmiPreviewBC",
@@ -3416,7 +3513,8 @@
           "GetStepBoundaryConditions"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Preview_boundary_condition.ico"
       },
       {
        "id": "tsmiDividerBC1",
@@ -3452,7 +3550,8 @@
           "GetStepBoundaryConditions"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowBC",
@@ -3484,7 +3583,8 @@
           "GetStepBoundaryConditions"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerBC2",
@@ -3521,13 +3621,15 @@
           "GetStepBoundaryConditions"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiLoad",
      "text": "Load",
+     "image": "PrePoMax/Icons/Step/Load.ico",
      "children": [
       {
        "id": "tsmiCreateLoad",
@@ -3643,7 +3745,8 @@
           "GetStepLoads"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Propagate.ico"
       },
       {
        "id": "tsmiPreviewLoad",
@@ -3675,7 +3778,8 @@
           "GetStepLoads"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Preview_load.ico"
       },
       {
        "id": "tsmiDividerLoad1",
@@ -3711,7 +3815,8 @@
           "GetStepLoads"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowLoad",
@@ -3743,7 +3848,8 @@
           "GetStepLoads"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerLoad2",
@@ -3780,13 +3886,15 @@
           "GetStepLoads"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiDefinedField",
      "text": "Defined Field",
+     "image": "PrePoMax/Icons/Step/Defined_field.ico",
      "children": [
       {
        "id": "tsmiCreateDefinedField",
@@ -3902,7 +4010,8 @@
           "GetStepDefinedFields"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Propagate.ico"
       },
       {
        "id": "tsmiPreviewDefinedField",
@@ -3934,7 +4043,8 @@
           "GetStepDefinedFields"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Step/Preview_defined_field.ico"
       },
       {
        "id": "tsmiDividerDefinedField1",
@@ -3970,7 +4080,8 @@
           "GetStepDefinedFields"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowDefinedField",
@@ -4002,7 +4113,8 @@
           "GetStepDefinedFields"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerDefinedField2",
@@ -4039,7 +4151,8 @@
           "GetStepDefinedFields"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     }
@@ -4103,7 +4216,8 @@
       "getter": "GetAllJobs",
       "target": "RunAnalysis",
       "minimum": 1
-     }
+     },
+     "image": "PrePoMax/Icons/Analysis/Run.ico"
     },
     {
      "id": "tsmiCheckModel",
@@ -4185,7 +4299,8 @@
         "RemoveJobsCommand"
        ]
       }
-     }
+     },
+     "image": "PrePoMax/Icons/Common/Delete.ico"
     }
    ]
   },
@@ -4196,6 +4311,7 @@
     {
      "id": "tsmiResultPart",
      "text": "Part",
+     "image": "PrePoMax/Icons/Mesh/Part.ico",
      "children": [
       {
        "id": "tsmiEditResultPart",
@@ -4253,7 +4369,8 @@
           "HideResultPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Hide.ico"
       },
       {
        "id": "tsmiShowResultParts",
@@ -4270,7 +4387,8 @@
           "ShowResultPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiShowOnlyResultParts",
@@ -4288,7 +4406,8 @@
           "HideResultPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Show.ico"
       },
       {
        "id": "tsmiDividerResultPart3",
@@ -4359,7 +4478,8 @@
         "getter": "GetResultParts<ResultPart>",
         "target": "ResultRepresentationOffResultPart",
         "minimum": 1
-       }
+       },
+       "image": "PrePoMax/Icons/Results/Deformed.ico"
       },
       {
        "id": "tsmiColorContoursOn",
@@ -4376,7 +4496,8 @@
           "SetResultRepresentationForResultPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Results/Color_contours.ico"
       },
       {
        "id": "tsmiDividerResultPart4",
@@ -4398,17 +4519,20 @@
           "RemoveResultPartsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiResultFeatures",
      "text": "Features",
+     "image": "PrePoMax/Icons/Mesh/Feature.ico",
      "children": [
       {
        "id": "tsmiResultReferencePoints",
        "text": "Reference Points",
+       "image": "PrePoMax/Icons/Mesh/Reference_point.ico",
        "children": [
         {
          "id": "tsmiCreateResultReferencePoint",
@@ -4469,7 +4593,8 @@
             "HideResultReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Hide.ico"
         },
         {
          "id": "tsmiShowResultReferencePoint",
@@ -4486,7 +4611,8 @@
             "ShowResultReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiShowOnlyResultReferencePoint",
@@ -4505,7 +4631,8 @@
             "ShowResultReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Show.ico"
         },
         {
          "id": "tsmiDividerResultReferencePoints2",
@@ -4527,13 +4654,15 @@
             "RemoveResultReferencePointsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       },
       {
        "id": "tsmiResultCoordinateSystems",
        "text": "Coordinate Systems",
+       "image": "PrePoMax/Icons/Mesh/CoordinateSystem.ico",
        "children": [
         {
          "id": "tsmiCreateResultCoordinateSystem",
@@ -4651,7 +4780,8 @@
             "RemoveResultCoordinateSystemsCommand"
            ]
           }
-         }
+         },
+         "image": "PrePoMax/Icons/Common/Delete.ico"
         }
        ]
       }
@@ -4664,6 +4794,7 @@
     {
      "id": "tsmiResultFieldOutput",
      "text": "Field Output",
+     "image": "PrePoMax/Icons/Step/Field_output.ico",
      "children": [
       {
        "id": "tsmiCreateResultFieldOutput",
@@ -4717,13 +4848,15 @@
           "RemoveResultFieldOutputsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
     {
      "id": "tsmiResultHistoryOutput",
      "text": "History Output",
+     "image": "PrePoMax/Icons/Step/History_output.ico",
      "children": [
       {
        "id": "tsmiCreateResultHistoryOutput",
@@ -4777,7 +4910,8 @@
           "RemoveResultHistoryOutputsCommand"
          ]
         }
-       }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
       }
      ]
     },
@@ -4788,7 +4922,8 @@
     {
      "id": "tsmiTransformation",
      "text": "Transformation",
-     "handler": "tsmiTransformation_Click"
+     "handler": "tsmiTransformation_Click",
+     "image": "PrePoMax/Icons/Results/Transformations.ico"
     },
     {
      "id": "tsmiDividerResults3",
@@ -4846,27 +4981,32 @@
     {
      "id": "tsmiQuery",
      "text": "Query",
-     "handler": "tsmiQuery_Click"
+     "handler": "tsmiQuery_Click",
+     "image": "PrePoMax/Icons/Tools/Query.ico"
     },
     {
      "id": "tsmiArrangeAnnotations",
      "text": "Arrange Annotations",
-     "handler": "tsmiArrangeAnnotations_Click"
+     "handler": "tsmiArrangeAnnotations_Click",
+     "image": "PrePoMax/Icons/Tools/Arrange_annotations.ico"
     },
     {
      "id": "tsmiRemoveAnnotations",
      "text": "Remove Annotations",
-     "handler": "tsmiRemoveAnnotations_Click"
+     "handler": "tsmiRemoveAnnotations_Click",
+     "image": "PrePoMax/Icons/Tools/Remove_annotations.ico"
     },
     {
      "id": "tsmiFind",
      "text": "Find",
-     "handler": "tsmiFind_Click"
+     "handler": "tsmiFind_Click",
+     "image": "PrePoMax/Icons/Common/Search.ico"
     },
     {
      "id": "tsmiCaptureViewport",
      "text": "Capture Viewport",
      "handler": "tsmiCaptureViewport_Click",
+     "image": "PrePoMax/Icons/Tools/Capture.ico",
      "shortcut": "Ctrl+P"
     },
     {
@@ -4930,5 +5070,528 @@
     }
    ]
   }
- ]
+ ],
+ "toolstrips": {
+  "rows": [
+   [
+    "tsFile",
+    "tsViews",
+    "tsSymbols"
+   ],
+   [
+    "tsResultDeformation",
+    "tsResults"
+   ]
+  ],
+  "strips": {
+   "tsFile": {
+    "text": "File",
+    "items": [
+     {
+      "id": "tsbNew",
+      "kind": "Button",
+      "text": "New model",
+      "image": "PrePoMax/Icons/File/New.ico",
+      "handler": "tsbNew_Click",
+      "left": "tsmiNew_Click"
+     },
+     {
+      "id": "tsbOpen",
+      "kind": "Button",
+      "text": "Open file",
+      "image": "PrePoMax/Icons/File/Open.ico",
+      "handler": "tsbOpen_Click",
+      "left": "tsmiOpen_Click"
+     },
+     {
+      "id": "tsbImport",
+      "kind": "Button",
+      "text": "Import file",
+      "toolTip": "Import file",
+      "image": "PrePoMax/Icons/File/Import.ico",
+      "handler": "tsbImport_Click",
+      "left": "tsmiImportFile_Click"
+     },
+     {
+      "id": "tsbSave",
+      "kind": "Button",
+      "text": "Save to file",
+      "image": "PrePoMax/Icons/File/Save.ico",
+      "handler": "tsbSave_Click",
+      "left": "tsmiSave_Click"
+     }
+    ]
+   },
+   "tsViews": {
+    "text": "Views",
+    "items": [
+     {
+      "id": "tsbZoomToFit",
+      "kind": "Button",
+      "text": "Zoom to fit",
+      "image": "PrePoMax/Icons/View/ZoomToFit.ico",
+      "handler": "tsbZoomToFit_Click",
+      "left": "tsmiZoomToFit_Click"
+     },
+     {
+      "id": "tsbBoxZoom",
+      "kind": "Button",
+      "text": "Box zoom",
+      "image": "PrePoMax/Icons/View/BoxZoom.ico",
+      "handler": "tsbBoxZoom_Click",
+      "left": "tsmiBoxZoom_Click"
+     },
+     {
+      "id": "toolStripViewSeparator1",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbFrontView",
+      "kind": "Button",
+      "text": "Front view",
+      "image": "PrePoMax/Icons/View/Front.ico",
+      "handler": "tsbFrontView_Click",
+      "left": "tsmiFrontView_Click"
+     },
+     {
+      "id": "tsbBackView",
+      "kind": "Button",
+      "text": "Back view",
+      "image": "PrePoMax/Icons/View/Back.ico",
+      "handler": "tsbBackView_Click",
+      "left": "tsmiBackView_Click"
+     },
+     {
+      "id": "tsbTopView",
+      "kind": "Button",
+      "text": "Top view",
+      "image": "PrePoMax/Icons/View/Top.ico",
+      "handler": "tsbTopView_Click",
+      "left": "tsmiTopView_Click"
+     },
+     {
+      "id": "tsbBottomView",
+      "kind": "Button",
+      "text": "Bottom view",
+      "image": "PrePoMax/Icons/View/Bottom.ico",
+      "handler": "tsbBottomView_Click",
+      "left": "tsmiBottomView_Click"
+     },
+     {
+      "id": "tsbLeftView",
+      "kind": "Button",
+      "text": "Left view",
+      "image": "PrePoMax/Icons/View/Left.ico",
+      "handler": "tsbLeftView_Click",
+      "left": "tsmiLeftView_Click"
+     },
+     {
+      "id": "tsbRightView",
+      "kind": "Button",
+      "text": "Right view",
+      "image": "PrePoMax/Icons/View/Right.ico",
+      "handler": "tsbRightView_Click",
+      "left": "tsmiRightView_Click"
+     },
+     {
+      "id": "tsbNormalView",
+      "kind": "Button",
+      "text": "Normal view",
+      "image": "PrePoMax/Icons/View/Normal.ico",
+      "handler": "tsbNormalView_Click",
+      "left": "tsmiNormalView_Click"
+     },
+     {
+      "id": "tsbVerticalView",
+      "kind": "Button",
+      "text": "Vertical view",
+      "image": "PrePoMax/Icons/View/Vertical.ico",
+      "handler": "tsbVerticalView_Click",
+      "left": "tsmiVerticalView_Click"
+     },
+     {
+      "id": "tsbIsometric",
+      "kind": "Button",
+      "text": "Isometric view",
+      "image": "PrePoMax/Icons/View/Isometric.ico",
+      "handler": "tsbIsometric_Click",
+      "left": "tsmiIsometricView_Click"
+     },
+     {
+      "id": "toolStripViewSeparator2",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbShowWireframeEdges",
+      "kind": "Button",
+      "text": "Wireframe",
+      "image": "PrePoMax/Icons/View/Wireframe.ico",
+      "handler": "tsbShowWireframeEdges_Click",
+      "left": "tsmiShowWireframeEdges_Click"
+     },
+     {
+      "id": "tsbShowElementEdges",
+      "kind": "Button",
+      "text": "Show element edges",
+      "image": "PrePoMax/Icons/View/ElementEdges.ico",
+      "handler": "tsbShowElementEdges_Click",
+      "left": "tsmiShowElementEdges_Click"
+     },
+     {
+      "id": "tsbShowModelEdges",
+      "kind": "Button",
+      "text": "Show model edges",
+      "image": "PrePoMax/Icons/View/ModelEdges.ico",
+      "handler": "tsbShowModelEdges_Click",
+      "left": "tsmiShowModelEdges_Click"
+     },
+     {
+      "id": "tsbShowNoEdges",
+      "kind": "Button",
+      "text": "No edges",
+      "image": "PrePoMax/Icons/View/NoEdges.ico",
+      "handler": "tsbShowNoEdges_Click",
+      "left": "tsmiShowNoEdges_Click"
+     },
+     {
+      "id": "toolStripSeparator1",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbSectionView",
+      "kind": "Button",
+      "text": "Section view",
+      "toolTip": "Section view\nRight click for settings",
+      "image": "PrePoMax/Icons/View/SectionView.ico",
+      "handler": "tsbSectionView_MouseUp",
+      "left": "TurnSectionViewOnOff",
+      "right": "tsmiSectionView_Click"
+     },
+     {
+      "id": "tsbExplodedView",
+      "kind": "Button",
+      "text": "Exploded view",
+      "toolTip": "Exploded view\nRight click for settings",
+      "image": "PrePoMax/Icons/View/Explode.ico",
+      "handler": "tsbExplodedView_MouseUp",
+      "left": "TurnExplodedViewOnOff",
+      "right": "tsmiExplodedView_Click"
+     },
+     {
+      "id": "tsbFollowerView",
+      "kind": "Button",
+      "text": "Follower view",
+      "image": "PrePoMax/Icons/View/FollowerView.ico",
+      "handler": "tsbFollowerView_MouseUp",
+      "left": "tsmiFollowerView_Click"
+     },
+     {
+      "id": "toolStripViewSeparator3",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbQuery",
+      "kind": "Button",
+      "text": "Query",
+      "image": "PrePoMax/Icons/Tools/Query.ico",
+      "handler": "tsbQuery_Click",
+      "left": "tsmiQuery_Click"
+     },
+     {
+      "id": "tsbArrangeAnnotations",
+      "kind": "Button",
+      "text": "Arrange annotations",
+      "image": "PrePoMax/Icons/Tools/Arrange_annotations.ico",
+      "handler": "tsbArrangeAnnotations_Click",
+      "left": "tsmiArrangeAnnotations_Click"
+     },
+     {
+      "id": "tsbRemoveAnnotations",
+      "kind": "Button",
+      "text": "Remove annotations",
+      "image": "PrePoMax/Icons/Tools/Remove_annotations.ico",
+      "handler": "tsbRemoveAnnotations_Click",
+      "left": "tsmiRemoveAnnotations_Click"
+     },
+     {
+      "id": "toolStripViewSeparator4",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbShowAllParts",
+      "kind": "Button",
+      "text": "Show all parts",
+      "image": "PrePoMax/Icons/Common/Show.ico",
+      "handler": "tsbShowAllParts_Click",
+      "left": "tsmiShowAllParts_Click"
+     },
+     {
+      "id": "tsbHideAllParts",
+      "kind": "Button",
+      "text": "Hide all parts",
+      "image": "PrePoMax/Icons/Common/Hide.ico",
+      "handler": "tsbHideAllParts_Click",
+      "left": "tsmiHideAllParts_Click"
+     },
+     {
+      "id": "tsbInvertVisibleParts",
+      "kind": "Button",
+      "text": "Invert visible parts",
+      "image": "PrePoMax/Icons/Common/InvertHideShow.ico",
+      "handler": "tsbInvertVisibleParts_Click",
+      "left": "tsmiInvertVisibleParts_Click"
+     },
+     {
+      "id": "toolStripSeparator4",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbCapture",
+      "kind": "Button",
+      "text": "Capture viewport",
+      "toolTip": "Capture viewport\nRight click for settings",
+      "image": "PrePoMax/Icons/Tools/Capture.ico",
+      "handler": "tsbCapture_Click",
+      "left": "tsmiCaptureViewport_Click",
+      "right": "tsmiCaptureViewportAs_Click"
+     }
+    ]
+   },
+   "tsSymbols": {
+    "text": "",
+    "items": [
+     {
+      "id": "tslColorBy",
+      "kind": "Label",
+      "text": "Color by"
+     },
+     {
+      "id": "tscbColorBy",
+      "kind": "ComboBox",
+      "toolTip": "Select how the model is colored.",
+      "items": [
+       "None",
+       "Face Orientations",
+       "Mesh Types",
+       "Parts",
+       "Materials",
+       "Sections",
+       "Section Thicknesses"
+      ]
+     },
+     {
+      "id": "tslSymbols",
+      "kind": "Label",
+      "text": "Symbols"
+     },
+     {
+      "id": "tscbSymbols",
+      "kind": "ComboBox",
+      "toolTip": "Select how symbols are displayed.",
+      "items": [
+       "None"
+      ]
+     }
+    ]
+   },
+   "tsResultDeformation": {
+    "text": "",
+    "items": [
+     {
+      "id": "tslResultName",
+      "kind": "Label",
+      "text": "Result"
+     },
+     {
+      "id": "tscbResultNames",
+      "kind": "ComboBox",
+      "changed": "tscbResultNames_SelectedIndexChanged"
+     },
+     {
+      "id": "tslDeformationVariable",
+      "kind": "Label",
+      "text": "Variable"
+     },
+     {
+      "id": "tscbDeformationVariable",
+      "kind": "ComboBox",
+      "toolTip": "Select the deformation variable",
+      "changed": "tscbDeformationVariable_SelectedIndexChanged"
+     },
+     {
+      "id": "tslDeformationType",
+      "kind": "Label",
+      "text": "Type"
+     },
+     {
+      "id": "tscbDeformationType",
+      "kind": "ComboBox",
+      "toolTip": "Select the deformation type",
+      "changed": "tscbDeformationType_SelectedIndexChanged"
+     },
+     {
+      "id": "tslDeformationFactor",
+      "kind": "Label",
+      "text": "Factor"
+     },
+     {
+      "id": "tstbDeformationFactor",
+      "kind": "TextBox",
+      "text": "10",
+      "toolTip": "Enter the deformation scale factor",
+      "keyDown": "tstbDeformationFactor_KeyDown"
+     },
+     {
+      "id": "toolStripSeparator3",
+      "kind": "Separator"
+     },
+     {
+      "id": "tslComplex",
+      "kind": "Label",
+      "text": "Complex"
+     },
+     {
+      "id": "tscbComplex",
+      "kind": "ComboBox",
+      "changed": "tscbComplex_SelectedIndexChanged"
+     },
+     {
+      "id": "tslAngle",
+      "kind": "Label",
+      "text": "Angle"
+     },
+     {
+      "id": "tstbAngle",
+      "kind": "TextBox",
+      "text": "0 °",
+      "keyDown": "tstbAngle_KeyDown"
+     }
+    ]
+   },
+   "tsResults": {
+    "text": "Results",
+    "items": [
+     {
+      "id": "tsbResultsUndeformed",
+      "kind": "Button",
+      "text": "Undeformed",
+      "image": "PrePoMax/Icons/Results/Undeformed.ico",
+      "handler": "tsbResultsUndeformed_Click",
+      "left": "tsmiResultsUndeformed_Click"
+     },
+     {
+      "id": "tsbResultsDeformed",
+      "kind": "Button",
+      "text": "Deformed",
+      "image": "PrePoMax/Icons/Results/Deformed.ico",
+      "handler": "tsbResultsDeformed_Click",
+      "left": "tsmiResultsDeformed_Click"
+     },
+     {
+      "id": "tsbResultsColorContours",
+      "kind": "Button",
+      "text": "Color contours",
+      "image": "PrePoMax/Icons/Results/Color_contours.ico",
+      "handler": "tsbResultsColorContours_Click",
+      "left": "tsmiResultsColorContours_Click"
+     },
+     {
+      "id": "tsbResultsVectorPlot",
+      "kind": "Button",
+      "text": "Vector plot",
+      "image": "PrePoMax/Icons/Results/Vector_plot.ico",
+      "handler": "tsbResultsVectorPlot_Click",
+      "left": "tsmiResultsVectorPlot_Click"
+     },
+     {
+      "id": "toolStripResultsSeparator1",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbResultsUndeformedWireframe",
+      "kind": "Button",
+      "text": "Show undeformed wireframe model",
+      "image": "PrePoMax/Icons/Results/Undeformed_Wireframe.ico",
+      "handler": "tsbResultsUndeformedWireframe_Click",
+      "left": "tsmiResultsUndeformedWireframe_Click"
+     },
+     {
+      "id": "tsbResultsUndeformedSolid",
+      "kind": "Button",
+      "text": "Show undeformed solid model",
+      "image": "PrePoMax/Icons/Results/Undeformed_Solid.ico",
+      "handler": "tsbResultsUndeformedSolid_Click",
+      "left": "tsmiResultsUndeformedSolid_Click"
+     },
+     {
+      "id": "toolStripResultsSeparator2",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbTransformation",
+      "kind": "Button",
+      "text": "Transformation",
+      "image": "PrePoMax/Icons/Results/Transformations.ico",
+      "handler": "tsbTransformation_Click",
+      "left": "tsmiTransformation_Click"
+     },
+     {
+      "id": "toolStripResultsSeparator3",
+      "kind": "Separator"
+     },
+     {
+      "id": "tsbFirstStepIncrement",
+      "kind": "Button",
+      "text": "First increment",
+      "image": "PrePoMax/Icons/Results/First.ico",
+      "handler": "tsbFirstStepIncrement_Click"
+     },
+     {
+      "id": "tsbPreviousStepIncrement",
+      "kind": "Button",
+      "text": "Previous increment",
+      "toolTip": "Previous increment",
+      "image": "PrePoMax/Icons/Results/Previous.ico",
+      "handler": "tsbPreviousStepIncrement_Click"
+     },
+     {
+      "id": "tslStepIncrement",
+      "kind": "Label",
+      "text": "Step, Increment"
+     },
+     {
+      "id": "tscbStepAndIncrement",
+      "kind": "ComboBox",
+      "toolTip": "Select increment"
+     },
+     {
+      "id": "tsbNextStepIncrement",
+      "kind": "Button",
+      "text": "Next increment",
+      "toolTip": "Next increment",
+      "image": "PrePoMax/Icons/Results/Next.ico",
+      "handler": "tsbNextStepIncrement_Click"
+     },
+     {
+      "id": "tsbLastStepIncrement",
+      "kind": "Button",
+      "text": "Last increment",
+      "image": "PrePoMax/Icons/Results/Last.ico",
+      "handler": "tsbLastStepIncrement_Click"
+     },
+     {
+      "id": "tsbAnimate",
+      "kind": "Button",
+      "text": "Animate",
+      "image": "PrePoMax/Icons/Results/Animate.ico",
+      "handler": "tsbAnimate_Click"
+     },
+     {
+      "id": "toolStripSeparator2",
+      "kind": "Separator"
+     }
+    ]
+   }
+  }
+ }
 }

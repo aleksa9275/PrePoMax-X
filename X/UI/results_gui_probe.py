@@ -37,7 +37,7 @@ def start(app,window,output):
         QtCore.QTimer.singleShot(50,choose_units);window.session.Presentation.SelectResultsUnitSystem()
         check('unknown result units use interactive original policy',window.controller.CurrentResult.UnitSystem.UnitSystemType==UnitSystemType.MM_TON_S_C)
         check('results view and scalar surface visible',window.controller.CurrentView==ViewGeometryModelResults.Results and len(window.scene.actors)>0)
-        check('field controls contain original data',window.result_boxes['Field'].count()>=3 and window.result_toolbar.isVisible())
+        check('field controls contain original data',window.result_boxes['Field'].count()>=3 and window.original_strips['tsResults'].isEnabled() and window.tool_tscbStepAndIncrement.count()>0)
         window.result_boxes['Field'].setCurrentText('DISP');window.result_boxes['Component'].setCurrentText('U1');app.processEvents()
         check('field control changes original current field',window.controller.CurrentFieldData.Name=='DISP' and window.controller.CurrentFieldData.Component=='U1')
         check('native scalar mapper active',bool(window.scene.presentation.scalar_mappers) and all(m.GetScalarVisibility()==1 for m in window.scene.presentation.scalar_mappers))

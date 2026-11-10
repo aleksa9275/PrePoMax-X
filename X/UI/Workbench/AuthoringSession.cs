@@ -15,6 +15,13 @@ public sealed class ModelTreeEntry
     public bool Group {get;init;}
     public string FolderId {get;init;}
     public ModelTreeEntry[] Children {get;init;}=[];
+    // Original ModelTree node state (OriginalModelTree): displayed text, image key, colours, menu fields.
+    public string Text {get;set;}
+    public string Icon {get;set;}
+    public bool Gray {get;set;}
+    public bool Invalid {get;set;}
+    public string[] Menu {get;set;}=[];
+    public NamedClass Item {get;set;}
 }
 public sealed class AuthoringSession(Controller controller)
 {
@@ -35,8 +42,8 @@ public sealed class AuthoringSession(Controller controller)
             return rows.ToArray();
         }
     }
-    ModelTreeEntry Entry(string family,string step,NamedClass item)=>new() {Family=family,Step=step,Name=item.Name,Type=item.GetType().Name,
-        Children=item is Step analysis?StepFamilies.Select(f=>new ModelTreeEntry {Family=f,Step=item.Name,Name=f,Group=true,Children=Children(f,item.Name)}).Append(new ModelTreeEntry {Family="Solution controls",Step=item.Name,Name="Solution controls",Type="Controls"}).ToArray():[]};
+    ModelTreeEntry Entry(string family,string step,NamedClass item)=>OriginalModelTree.Annotate(new() {Family=family,Step=step,Name=item.Name,Type=item.GetType().Name,
+        Children=item is Step analysis?StepFamilies.Select(f=>new ModelTreeEntry {Family=f,Step=item.Name,Name=f,Group=true,Children=Children(f,item.Name)}).Append(new ModelTreeEntry {Family="Solution controls",Step=item.Name,Name="Solution controls",Type="Controls"}).ToArray():[]},item,OriginalModelTree.Model,controller);
     IEnumerable<NamedClass> Items(string family,string step)
     {
         var model=controller.Model;var mesh=model.Mesh;
@@ -75,7 +82,7 @@ public sealed class AuthoringSession(Controller controller)
         var items=Items(family,step).ToDictionary(i=>i.Name,StringComparer.OrdinalIgnoreCase);
         var layout=Layout(family,step);
         if(layout==null)return items.Values.Select(i=>Entry(family,step,i)).ToArray();
-        ModelTreeEntry[] Build(IEnumerable<OrderedDictionaryItemNode<string>> nodes)=>nodes.SelectMany(n=>n.IsGroup?new[]{new ModelTreeEntry {Family=family,Step=step,Name=n.Name,Group=true,FolderId=n.Id.ToString(),Children=Build(n.Children)}}:items.TryGetValue(n.Key,out var item)?new[]{Entry(family,step,item)}:Array.Empty<ModelTreeEntry>()).ToArray();
+        ModelTreeEntry[] Build(IEnumerable<OrderedDictionaryItemNode<string>> nodes)=>nodes.SelectMany(n=>n.IsGroup?new[]{new ModelTreeEntry {Family=family,Step=step,Name=n.Name,Group=true,FolderId=n.Id.ToString(),Children=Build(n.Children),Icon="Folder.ico"}}:items.TryGetValue(n.Key,out var item)?new[]{Entry(family,step,item)}:Array.Empty<ModelTreeEntry>()).ToArray();
         return Build(layout.GetItemLayoutSnapshot().Nodes);
     }
     Type CollectionType(string family,string step)

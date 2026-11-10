@@ -174,6 +174,131 @@ def start(app, w, output, model, results):
             n = cam.GetViewPlaneNormal()
             check('original isometric view', all(abs(abs(v) - 3 ** -.5) < 1e-6 for v in n))
 
+            # Original FrmMain tool strips: layout, icons, delegation to the menu handlers.
+            strips = MENU['toolstrips']
+            check('original tool strip rows', [[b for b in row] for row in strips['rows']] ==
+                  [['tsFile', 'tsViews', 'tsSymbols'], ['tsResultDeformation', 'tsResults']]
+                  and all(w.toolBarArea(w.original_strips[n]) == QtCore.Qt.ToolBarArea.TopToolBarArea for row in strips['rows'] for n in row))
+            buttons = [i for s in strips['strips'].values() for i in s['items'] if i['kind'] == 'Button']
+            report['toolButtons'] = len(buttons)
+            check('every original tool button has its original icon', all(not w.original_tools[i['id']].icon().isNull() for i in buttons))
+            check('every original tool button is mapped', all(i.get('left') in w.original_menu_nodes or i.get('left') in
+                  ('TurnSectionViewOnOff', 'TurnExplodedViewOnOff') or i['handler'] in w.STEP_BUTTONS or i['handler'] == 'tsbAnimate_Click'
+                  for i in buttons))
+            check('original menu icons', not w.original_actions['tsmiSave'].icon().isNull() and not w.original_actions['tsmiFrontView'].icon().isNull())
+            check('model view tool strip enabling', w.original_tools['tsbSave'].isEnabled() and w.original_tools['tsbImport'].isEnabled()
+                  and w.original_tools['tscbSymbols'].isEnabled() and not w.original_strips['tsResults'].isEnabled()
+                  and not w.original_tools['tsbFollowerView'].isEnabled())
+            symbols = [w.symbols.itemText(i) for i in range(w.symbols.count())]
+            check('model view symbols list (UpdateSymbolsList)', symbols[:2] == ['None', 'Model'] and symbols[2:] == [s.Name for s in c.GetAllSteps()])
+            w.original_tools['tsbTopView'].trigger(); app.processEvents()
+            cam = w.renderer.GetActiveCamera()
+            check('tool strip Top view runs the original menu view', abs(cam.GetViewPlaneNormal()[1] - 1) < 1e-9)
+            w.symbols.setCurrentIndex(0); app.processEvents()
+            check('symbols combo draws None', str(c.GetDrawSymbolsForStep()) == 'None')
+            w.symbols.setCurrentIndex(w.symbols.count() - 1); app.processEvents()
+            check('symbols combo draws the step', str(c.GetDrawSymbolsForStep()) == symbols[-1])
+            w.tool_tscbColorBy.setCurrentText('Parts'); app.processEvents()
+            check('Color by combo uses the original annotation', str(c.AnnotateWithColor) == 'Parts'
+                  and w.original_actions['tsmiAnnotateParts'].isChecked())
+            w.tool_tscbColorBy.setCurrentText('None'); app.processEvents()
+            check('Color by None clears the annotation', str(c.AnnotateWithColor) == 'None')
+            w.original_actions['tsmiAnnotateMaterials'].trigger(); app.processEvents()
+            check('Color by follows the menu (UpdateColorByComboBox)', w.tool_tscbColorBy.currentText() == 'Materials')
+            w.original_actions['tsmiAnnotateMaterials'].trigger(); app.processEvents()
+            capture = Path(output) / 'capture'
+            capture.mkdir(exist_ok=True)
+            properties = w.current_capture_properties()
+            properties.SaveToFile = True
+            properties.CopyToClipboard = False
+            properties.Folder = str(capture)
+            properties.AutoIncrement = True
+            w.capture_properties = properties
+            exec_calls = []
+            original_dialog_exec = QtWidgets.QDialog.exec
+            QtWidgets.QDialog.exec = lambda self: exec_calls.append(self) or QtWidgets.QDialog.DialogCode.Rejected
+            try:
+                before = set(Path(str(properties.GetFileName())).parent.glob('*.png'))
+                w.original_tools['tsbCapture'].trigger(); app.processEvents()
+                after = set(Path(str(properties.GetFileName())).parent.glob('*.png'))
+            finally:
+                QtWidgets.QDialog.exec = original_dialog_exec
+            check('Capture viewport captures without the form', not exec_calls and len(after - before) == 1)
+            for f in after - before:
+                f.unlink()
+
+            # Original ModelTree: tabs, layout, counts, images, context menu rules and actions.
+            import model_tree
+            check('original tree tabs', [w.tree_tabs.tabText(i) for i in range(w.tree_tabs.count())] == ['Geometry', 'FE Model', 'Results']
+                  and w.tree_tabs.currentIndex() == 1)
+            top = [w.tree.topLevelItem(i) for i in range(w.tree.topLevelItemCount())]
+            check('FE Model top nodes Model and Analyses', [t.text(0).split(' (')[0] for t in top] == ['Model', 'Analyses'])
+            model_node = top[0]
+            names = [model_node.child(i).text(0).split(' (')[0] for i in range(model_node.childCount())]
+            report['modelTreeNodes'] = names
+            check('original Model children order', names == ['Mesh', 'Features', 'Materials', 'Sections', 'Constraints', 'Contacts',
+                                                             'Distributions', 'Amplitudes', 'Initial Conditions', 'Steps'])
+            def find(text, parent=None):
+                stack = [parent] if parent else [w.tree.topLevelItem(i) for i in range(w.tree.topLevelItemCount())]
+                while stack:
+                    node = stack.pop(0)
+                    if node.text(0) == text or node.text(0).split(' (')[0] == text:
+                        return node
+                    stack += [node.child(i) for i in range(node.childCount())]
+            materials_node = find('Materials')
+            count = len([m for m in c.GetAllMaterials()])
+            check('group text with original count', materials_node.text(0) == f'Materials ({count})')
+            check('static node icons', not materials_node.icon(0).isNull() and not find('Steps').icon(0).isNull())
+            step_node = find('Steps').child(0)
+            check('step sub nodes in AddStep order', [step_node.child(i).text(0).split(' (')[0] for i in range(step_node.childCount())]
+                  == ['History Outputs', 'Field Outputs', 'BCs', 'Loads', 'Defined Fields'] and step_node.data(0, model_tree.KEY)[0] == 'Steps')
+            part_node = find('Parts', find('Mesh')).child(0)
+            part = str(part_node.data(0, model_tree.ROLE).Name)
+            check('part status icon (SetNodeStatus)', part_node.data(0, QtCore.Qt.ItemDataRole.UserRole + 2) in
+                  ('Solid.ico', 'Shell.ico', 'Wire.ico', 'Compound.ico', 'Solid_transparent.ico'))
+            material_item = materials_node.child(0)
+            w.tree.clearSelection(); material_item.setSelected(True)
+            visible, enabled = w.prepare_tree_menu([material_item])
+            shown = [k for k in visible if visible[k]]
+            report['materialMenu'] = shown
+            check('material context menu (PrepareToolStripItem)', {'tsmiEdit', 'tsmiDuplicate', 'tsmiDeactivate', 'tsmiDelete',
+                  'tsmiExpandAll', 'tsmiCollapseAll'} <= set(shown) and 'tsmiHide' not in shown and 'tsmiCreate' not in shown)
+            visible, _ = w.prepare_tree_menu([materials_node])
+            check('materials node menu: Create and Material Library', visible['tsmiCreate'] and visible['tsmiMaterialLibrary']
+                  and not visible['tsmiDelete'])
+            visible, _ = w.prepare_tree_menu([model_node])
+            check('Model node menu: Edit and Edit CalculiX Keywords', visible['tsmiEdit'] and visible['tsmiEditCalculiXKeywords'])
+            visible, _ = w.prepare_tree_menu([part_node])
+            check('part menu: Hide/Show, colour, Query', visible['tsmiHide'] and visible['tsmiSetColor'] and visible['tsmiQuery'])
+            before = len(list(c.GetAllMaterials()))
+            w.tree_action('tsmiDuplicate', [material_item]); app.processEvents()
+            check('tree Duplicate runs the original command', len(list(c.GetAllMaterials())) == before + 1)
+            duplicate = [m.Name for m in c.GetAllMaterials()][-1]
+            node = find(duplicate, find('Materials'))
+            w.tree_action('tsmiDelete', [node]); app.processEvents()
+            check('tree Delete with original confirmation', len(list(c.GetAllMaterials())) == before)
+            w.tree_action('tsmiHide', [find('Parts', find('Mesh')).child(0)]); app.processEvents()
+            hidden = find(part, find('Parts', find('Mesh')))
+            check('tree Hide and gray hidden icon', not c.Model.Mesh.Parts[part].Visible
+                  and hidden.data(0, QtCore.Qt.ItemDataRole.UserRole + 2) == 'Hide.ico')
+            w.tree_action('tsmiShow', [hidden]); app.processEvents()
+            check('tree Show', c.Model.Mesh.Parts[part].Visible)
+            w.tree_search.setText(part); app.processEvents()
+            leaves_left = []
+            stack = [w.tree.topLevelItem(i) for i in range(w.tree.topLevelItemCount())]
+            while stack:
+                node = stack.pop()
+                if node.childCount() == 0:
+                    leaves_left.append(node.text(0))
+                stack += [node.child(i) for i in range(node.childCount())]
+            check('search box filters leaves (FilterTree)', leaves_left and all(part.upper() in t.upper() for t in leaves_left))
+            w.tree_search.setText(''); app.processEvents()
+            w.tree_tabs.setCurrentIndex(0); app.processEvents()
+            check('Geometry tab switches the view', str(c.CurrentView) == 'Geometry'
+                  and [w.tree.topLevelItem(i).text(0).split(' (')[0] for i in range(w.tree.topLevelItemCount())] == ['Parts', 'Mesh Setup'])
+            w.tree_tabs.setCurrentIndex(1); app.processEvents()
+            check('FE Model tab switches back', str(c.CurrentView) == 'Model' and w.tree_tabs.currentIndex() == 1)
+
             # Property > Material: Duplicate then Delete through original selection and commands.
             materials = [m.Name for m in c.GetAllMaterials()]
             chosen['Materials'] = [materials[0]]
@@ -244,6 +369,71 @@ def start(app, w, output, model, results):
                 check('Undeformed wireframe toggles', str(c.GetUndeformedModelType()) == 'WireframeBody')
                 trigger('tsmiResultsUndeformedWireframe')
                 check('Undeformed wireframe toggles off', str(c.GetUndeformedModelType()) == 'None')
+                top = [w.tree.topLevelItem(i).text(0).split(' (')[0] for i in range(w.tree.topLevelItemCount())]
+                check('Results tab and tree', w.tree_tabs.currentIndex() == 2 and top == ['Model', 'Results'])
+                results_node = w.tree.topLevelItem(1)
+                check('Results children', [results_node.child(i).text(0).split(' (')[0] for i in range(results_node.childCount())]
+                      == ['Field Outputs', 'History Outputs'])
+                field = results_node.child(0).child(0)
+                visible, _ = w.prepare_tree_menu([field])
+                check('raw field node menu: no Edit, Delete allowed', not visible['tsmiEdit'] and visible['tsmiDelete'])
+                # Result tool strips.
+                tools = w.original_tools
+                check('results view tool strip enabling', w.original_strips['tsResults'].isEnabled()
+                      and w.original_strips['tsResultDeformation'].isEnabled() and tools['tsbFollowerView'].isEnabled())
+                check('results symbols list', [w.symbols.itemText(i) for i in range(w.symbols.count())] == ['None', 'Result'])
+                tools['tsbResultsDeformed'].trigger(); app.processEvents()
+                check('tool strip Deformed + checked state', str(c.ViewResultsType) == 'Deformed' and tools['tsbResultsDeformed'].isChecked()
+                      and not tools['tsbResultsColorContours'].isChecked())
+                tools['tsbResultsColorContours'].trigger(); app.processEvents()
+                check('tool strip Color contours', str(c.ViewResultsType) == 'ColorContours' and tools['tsbResultsColorContours'].isChecked())
+                box = w.tool_tscbStepAndIncrement
+                items = [box.itemText(i) for i in range(box.count())]
+                ids = c.CurrentResult.GetAllExistingIncrementIds()
+                expected = [f'{k}, {i}' for k, v in (ids.items() if isinstance(ids, dict) else ((k, ids[k]) for k in ids.Keys)) for i in v]
+                report['stepIncrements'] = items
+                check('step, increment list (SetAllStepAndIncrementIds)', items == expected and
+                      box.currentText() == f'{c.CurrentFieldData.StepId}, {c.CurrentFieldData.StepIncrementId}')
+                tools['tsbFirstStepIncrement'].trigger(); app.processEvents()
+                first = (c.CurrentFieldData.StepId, c.CurrentFieldData.StepIncrementId)
+                check('First increment', box.currentIndex() == 0 and f'{first[0]}, {first[1]}' == items[0])
+                tools['tsbLastStepIncrement'].trigger(); app.processEvents()
+                check('Last increment', box.currentIndex() == len(items) - 1
+                      and f'{c.CurrentFieldData.StepId}, {c.CurrentFieldData.StepIncrementId}' == items[-1])
+                if len(items) > 1:
+                    tools['tsbPreviousStepIncrement'].trigger(); app.processEvents()
+                    check('Previous increment', box.currentIndex() == len(items) - 2)
+                    tools['tsbNextStepIncrement'].trigger(); app.processEvents()
+                    check('Next increment', box.currentIndex() == len(items) - 1)
+                check('Factor box disabled unless user defined (UpdateScaleFactorTextBoxState)',
+                      w.tool_tscbDeformationType.currentText() != 'User defined' and not w.tool_tstbDeformationFactor.isEnabled())
+                user = next(t for t, v in w.deformation_types.items() if str(v) == 'UserDefined')
+                w.tool_tscbDeformationType.setCurrentText(user); app.processEvents()
+                w.tool_tstbDeformationFactor.setText('7'); w.tool_tstbDeformationFactor.returnPressed.emit(); app.processEvents()
+                check('user-defined deformation factor applied', w.tool_tstbDeformationFactor.isEnabled()
+                      and str(w.session.Presentation.GetDeformationType()) == 'UserDefined'
+                      and abs(float(w.session.Presentation.GetDeformationFactor()) - 7) < 1e-6)
+                automatic = next(t for t, v in w.deformation_types.items() if str(v) == 'Automatic')
+                w.tool_tscbDeformationType.setCurrentText(automatic); app.processEvents()
+                check('complex controls hidden without complex results', not tools['tscbComplex'].isVisible()
+                      and not c.ContainsComplexResults)
+                tools['tsbAnimate'].trigger(); app.processEvents()
+                check('Animate opens the animation controls', w.animation_toolbar.isVisible() and not tools['tsbAnimate'].isEnabled())
+                w.close_animation(); app.processEvents()
+                check('closing the animation restores Animate', not w.animation_toolbar.isVisible() and tools['tsbAnimate'].isEnabled())
+                exploded = c.IsExplodedViewActive()
+                several = c.DisplayedMesh is not None and c.DisplayedMesh.Parts.Count > 1
+                tools['tsbExplodedView'].trigger(); app.processEvents()
+                # Controller.TurnExplodedViewOnOff explodes only a mesh with more than one part.
+                check('Exploded view button follows the original rule', c.IsExplodedViewActive() == (several != exploded)
+                      and tools['tsbExplodedView'].isChecked() == bool(c.IsExplodedViewActive()))
+                if several:
+                    tools['tsbExplodedView'].trigger(); app.processEvents()
+                    check('Exploded view button toggles back', c.IsExplodedViewActive() == exploded)
+                tools['tsbSectionView'].trigger(); app.processEvents()
+                check('Section view button turns the original section view on', c.IsSectionViewActive() and tools['tsbSectionView'].isChecked())
+                tools['tsbSectionView'].trigger(); app.processEvents()
+                check('Section view button turns it off', not c.IsSectionViewActive())
             else:
                 report.setdefault('pending', []).append('results fixture not supplied')
             smoke(results)

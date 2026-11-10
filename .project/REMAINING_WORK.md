@@ -10,7 +10,7 @@ each item is in the phase reports, `.project/bugs/` and the
 |---|---|
 | A — domain libraries | **Done.** All checks pass (`python3 X/Checks/check.py`, 7 areas, 95 s, re-run 9 Nov). |
 | B — Controller/Commands/PMX headless | **Done as a code path.** 236/237 commands structurally reachable; restricted NRBF PMX reader with allowlist, size/depth limits; bidirectional PMX with original 3.0.0 (CrossOver) on representative files only. |
-| C — UI | **Implemented, not complete.** C6 (10 Nov) adds the full original main menu and fixes the visible defects. Still 0/72 original forms accepted, icon toolbars/tree tabs not original, 20 model/mesh entries without executed UI evidence, no installable app. |
+| C — UI | **Implemented, not complete.** C6 (10 Nov) adds the full original main menu and fixes the visible defects. Still 0/72 original forms accepted, 20 model/mesh entries without executed UI evidence, no installable app. |
 | V — verified vs original | 0 items in every inventory section. |
 
 ## What I (Claude) can do
@@ -27,11 +27,14 @@ Done on 10 November ([C6 report](reports/phase-c6-main-window.md)):
 - ~~PMX size caps~~: limits now scale with the file; AVI 2 GiB matches the
   original's AVI 1.0 writer.
 
+- ~~Tool strips and tree~~ ([C7](reports/phase-c7-toolbars-tree.md)): the five
+  original tool strips with original icons, the three-tab ModelTree with original
+  layout, images, search and context-menu rules. The two pointer probes now pass.
+
 Still open:
-1. **Main window remainder**: original icon toolbars (File, Views, Model, Results,
-   deformation/animation strips, Color by, Symbols) with the original icons, and the
-   original model tree's three tabs (Geometry / FE Model / Results) with its context
-   menus compared item-by-item.
+1. **Main window remainder**: tree in-place rename, drag and drop, mouse-over
+   highlight, Group Cells / Fuse Bodies in the tree menu, Model node keyword counts,
+   `BasePart.ico` (only in the ModelTree.resx image stream).
 2. **Model entries**: `MassSection`, `Damping` and the element classes still need
    executed UI evidence before C.
 3. **72 forms**: close the C5 audit per form (993 designer fields, 796 event

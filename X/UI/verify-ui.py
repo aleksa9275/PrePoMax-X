@@ -62,6 +62,7 @@ try:
     run('ui-audit',[sys.executable,HERE/'audit-ui.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
     run('original-main-menu',[sys.executable,HERE/'generate-main-menu.py','--check'])
+    run('original-model-tree',[sys.executable,HERE/'generate-model-tree.py','--check'])
     run('build',build)
     binary=folder/'build/bin/Workbench/release/PrePoMaxX.Workbench.dll'
     if a.python_profile:

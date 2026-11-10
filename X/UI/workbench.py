@@ -81,8 +81,10 @@ else:
     from results_workbench import ResultsWorkbench
     from application_workbench import ApplicationWorkbench
     from main_menu import MainMenuWorkbench
+    from main_toolbars import OriginalToolbarsWorkbench
+    from model_tree import OriginalModelTreeWorkbench
 
-    class Workbench(MainMenuWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
+    class Workbench(MainMenuWorkbench,OriginalToolbarsWorkbench,OriginalModelTreeWorkbench,ApplicationWorkbench,ResultsWorkbench,GeometryWorkbench,QtWidgets.QMainWindow):
         def __init__(self):
             super().__init__()
             self.setWindowTitle('PrePoMax-X')
@@ -167,6 +169,8 @@ else:
             self.preferences_path=args.settings.resolve() if args.settings else None
             self.build_application_ui()
             self.build_original_menus()
+            self.build_original_toolbars()
+            self.build_original_tree()
             if self.preferences_path and self.preferences_path.is_file():self.application.LoadPreferences(str(self.preferences_path));self.apply_preferences()
             self.screenshot_delegate=Action[String,Boolean,Int32](lambda path,transparent,scale:self.dispatcher.call(lambda:self.capture(path,transparent,scale)))
             session.Presentation.Screenshot=self.screenshot_delegate
@@ -293,18 +297,9 @@ else:
             selected_keys={i.data(0,QtCore.Qt.ItemDataRole.UserRole+1) for i in self.tree.selectedItems()}
             self.tree.blockSignals(True)
             self.tree.clear()
-            def add(parent,entry):
-                item=QtWidgets.QTreeWidgetItem(parent,[entry.Name])
-                key=(entry.Family,entry.Step or '',entry.FolderId or entry.Name)
-                item.setData(0,QtCore.Qt.ItemDataRole.UserRole,entry)
-                item.setData(0,QtCore.Qt.ItemDataRole.UserRole+1,key)
-                item.setToolTip(0,entry.Type or entry.Family)
-                for child in entry.Children:add(item,child)
-                item.setExpanded(expanded.get(key,entry.Group))
-                item.setSelected(key in selected_keys)
-            entries=self.geometry.Tree if controller.CurrentView==ViewGeometryModelResults.Geometry else self.results.Tree if controller.CurrentView==ViewGeometryModelResults.Results else list(self.authoring.Tree)+[self.results.Jobs]
-            for entry in entries:add(self.tree,entry)
-            self.tree.setHeaderLabel(str(controller.CurrentView))
+            # Original ModelTree tabs, layout, images (model_tree.py).
+            self.populate_original_tree(expanded,selected_keys)
+            self.sync_tree_tab()
             self.tree.blockSignals(False)
             self.selected = []
             self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView!=ViewGeometryModelResults.Geometry

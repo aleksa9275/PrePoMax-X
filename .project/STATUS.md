@@ -12,11 +12,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   The original scale bar, unit-system label, invariant number format and result
   selector sizing replace the visible review defects. PMX size caps now scale with
   the file, so large original projects load. [C6 report](reports/phase-c6-main-window.md).
+- **C7 original tool strips and model tree.** The five FrmMain tool strips with the
+  original icons, and the ModelTree's Geometry / FE Model / Results tabs with the
+  original layout, counts, node images, search box and context-menu rules, generated
+  from the original sources. [C7 report](reports/phase-c7-toolbars-tree.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Full UI parity is not accepted.** Forms 0/72 accepted; original icon toolbars
-  and tree tabs are not yet ported. Inventory: model/mesh 108 AB / 88 C; Commands
+- **Full UI parity is not accepted.** Forms 0/72 accepted; tree rename, drag and
+  drop and Group Cells/Fuse Bodies tree items are not yet ported. Inventory: model/mesh 108 AB / 88 C; Commands
   237 A / 236 B / 230 C (six are compatibility-only with no original UI path);
   V remains zero. [Inventory](PARITY_INVENTORY.md).
 - B011's analytical stress diagnostic remains **failed** (199.99200439453125 vs
@@ -35,14 +39,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C3 | Core geometry/meshing | implemented; representative ARM64/reference checks passed |
 | C4 | Core jobs/results and viewport | implemented; representative ARM64/reference checks passed |
 | C5 | Application/automation and UI audit | application tools implemented; full parity audit findings remain open |
-| C6 | Original main menu, viewport defects, size limits | implemented; Mac ARM64 checks pass except two synthetic pointer probes (see report) |
+| C6 | Original main menu, viewport defects, size limits | implemented; Mac ARM64 checks pass |
+| C7 | Original tool strips and three-tab model tree | implemented; Mac ARM64 checks pass |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-Original icon toolbars and the three-tab model tree (REMAINING_WORK §1.1), then the
-per-form behavioural comparisons of the C5 audit, then packaging the X/UI app.
+Executed UI evidence for MassSection, Damping and the element classes
+(REMAINING_WORK §1.2), then the per-form behavioural comparisons of the C5 audit, then packaging the X/UI app.
 After parity: the D061 correctness/warning sweep.
 
 ## Environment

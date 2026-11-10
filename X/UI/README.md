@@ -235,3 +235,18 @@ selection/confirmation flows, parameter commands through the script panel, and a
 smoke pass that runs every reachable item in Geometry, Model and Results views.
 `scale_widget.py` ports the original `vtkMaxScaleWidget`.
 [C6 report](../../.project/reports/phase-c6-main-window.md).
+
+### C7 original tool strips and model tree
+
+`generate-main-menu.py` also writes the five original `FrmMain` tool strips
+(layout rows, icons, tool tips, combo items, delegated menu handlers);
+`main_toolbars.py` builds them and ports the FrmMain toolbar code (symbols, colour
+by, deformation, complex, step/increment, check states, per-view enabling).
+`generate-model-tree.py` writes `original_model_tree.json` from
+`UserControls/ModelTree` (tabs, static nodes, step nodes, context menu, icons);
+`Workbench/OriginalModelTree.cs` ports the ModelTree item rules and node status;
+`model_tree.py` builds the Geometry / FE Model / Results tabs, search box and the
+original context menu, whose actions reuse the C6 FrmMain helper mapping. Icons are
+read from the repository's original `.ico` files (`PrePoMax/Icons`,
+`UserControls/Resources`) or an `Icons` folder next to the UI.
+[C7 report](../../.project/reports/phase-c7-toolbars-tree.md).

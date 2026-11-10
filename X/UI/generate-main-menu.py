@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Extract the original FrmMain main menu (order, text, shortcuts, checkability,
-click handlers) and each handler's original entity-selection logic.
+click handlers, icons) and each handler's original entity-selection logic, plus the
+original FrmMain tool strips (layout rows, items, icons, tool tips, combo items and the
+menu handler each button delegates to).
 
 Output: X/UI/original_main_menu.json, consumed by main_menu.py. `--check` fails
 when the checked-in file no longer matches the original sources.
@@ -17,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DESIGNER = ROOT / "PrePoMax/Forms/FrmMain.Designer.cs"
 FORM = ROOT / "PrePoMax/Forms/FrmMain.cs"
+RESOURCES = ROOT / "PrePoMax/Properties/Resources.resx"
 OUT = Path(__file__).with_name("original_main_menu.json")
 SELECT = re.compile(r'(SelectOneEntity|SelectMultipleEntities|SelectOneEntityInStep|SelectMultipleEntitiesInStep)\(\s*"([^"]+)"\s*,\s*'
                     r'_controller\.(\w+(?:<\w+>)?)\(([^)]*)\)\s*,\s*(?:stepName\s*,\s*)?(?:_controller\.)?(\w+)(?:\s*,\s*(\d+))?(?:\s*,\s*(\d+))?')
@@ -77,14 +80,96 @@ def helper(source: str, name: str) -> dict | None:
     return action or None
 
 
+def resource_icons() -> dict[str, str]:
+    """Resources.resx name -> repository-relative icon file."""
+    text = RESOURCES.read_text(encoding="utf-8-sig")
+    icons = {}
+    for name, value in re.findall(r'<data name="(\w+)" type="System\.Resources\.ResXFileRef[^"]*">\s*<value>([^;<]+);', text):
+        path = (RESOURCES.parent / value.replace("\\", "/")).resolve()
+        if path.exists():
+            icons[name] = path.relative_to(ROOT).as_posix()
+    return icons
+
+
+def unescape(text: str) -> str:
+    return text.replace("\\r\\n", "\n").replace('\\"', '"')
+
+
+def toolstrips(designer: str, form: str, text: dict, click: dict, kind: dict, images: dict) -> dict:
+    tips = {k: unescape(v) for k, v in re.findall(r'this\.(\w+)\.ToolTipText = "((?:[^"\\]|\\.)*)";', designer)}
+    mouse_up = dict(re.findall(r"this\.(\w+)\.MouseUp \+= new System\.Windows\.Forms\.MouseEventHandler\(this\.(\w+)\);", designer))
+    changed = dict(re.findall(r"this\.(\w+)\.SelectedIndexChanged \+= new System\.EventHandler\(this\.(\w+)\);", designer))
+    key_down = dict(re.findall(r"this\.(\w+)\.KeyDown \+= new System\.Windows\.Forms\.KeyEventHandler\(this\.(\w+)\);", designer))
+    combo_items = {m[1]: re.findall(r'"((?:[^"\\]|\\.)*)"', m[2]) for m in re.finditer(
+        r"this\.(\w+)\.Items\.AddRange\(new object\[\] \{(.*?)\}\);", designer, re.S)}
+
+    def delegate(handler: str | None) -> dict:
+        """The FrmMain menu handlers a tool strip handler calls (left/right mouse button)."""
+        body = method_body(form, handler) if handler else None
+        if not body:
+            return {}
+        result = {}
+        left = re.search(r"MouseButtons\.Left\)\s*(\w+)\(", body)
+        right = re.search(r"MouseButtons\.Right\)\s*(\w+)\(", body)
+        if left or right:
+            if left:
+                result["left"] = left[1]
+            if right:
+                result["right"] = right[1]
+            return result
+        calls = re.findall(r"\b(tsmi\w+_Click)\(", body)
+        if len(calls) == 1 and len(re.findall(r";", body)) == 1:
+            result["left"] = calls[0]
+        return result
+
+    strips = {}
+    for strip, names in re.findall(r"this\.(ts[A-Z]\w*)\.Items\.AddRange\(new System\.Windows\.Forms\.ToolStripItem\[\] \{(.*?)\}\);", designer, re.S):
+        items = []
+        for name in re.findall(r"this\.(\w+)", names):
+            item = {"id": name, "kind": kind.get(name, "").replace("ToolStrip", "").replace("UnitAware", "") or "Unknown"}
+            if item["kind"] == "Separator":
+                items.append(item)
+                continue
+            if name in text:
+                item["text"] = unescape(text[name]).strip()
+            if name in tips:
+                item["toolTip"] = tips[name]
+            if name in images:
+                item["image"] = images[name]
+            handler = click.get(name) or mouse_up.get(name)
+            if handler:
+                item["handler"] = handler
+                item.update(delegate(handler))
+            if name in click and name in mouse_up:
+                right = delegate(mouse_up[name]).get("right")
+                if right:
+                    item["right"] = right
+            for event, table in (("changed", changed), ("keyDown", key_down)):
+                if name in table:
+                    item[event] = table[name]
+            if name in combo_items:
+                item["items"] = combo_items[name]
+            items.append(item)
+        strips[strip] = {"text": text.get(strip, ""), "items": items}
+    # FrmMain constructor: first row File, Views, Symbols; second row Result deformation, Results.
+    layout = re.findall(r"(ts[A-Z]\w*)\.Location = new Point\(([^;]*)\);", form)
+    rows: list[list[str]] = [[], []]
+    for strip, point in layout:
+        if strip in strips:
+            rows[0 if point.rstrip().endswith(" 0)") or point.strip().endswith(", 0") else 1].append(strip)
+    return {"rows": rows, "strips": strips}
+
+
 def extract() -> dict:
     designer = DESIGNER.read_text(encoding="utf-8-sig")
     form = FORM.read_text(encoding="utf-8-sig")
+    icons = resource_icons()
+    images = {k: icons[v] for k, v in re.findall(r"this\.(\w+)\.Image = global::PrePoMax\.Properties\.Resources\.(\w+);", designer) if v in icons}
     children = {m[1]: re.findall(r"this\.(\w+)", m[2]) for m in re.finditer(
         r"this\.(\w+)\.DropDownItems\.AddRange\(new System\.Windows\.Forms\.ToolStripItem\[\] \{(.*?)\}\);", designer, re.S)}
     text = dict(re.findall(r'this\.(\w+)\.Text = "((?:[^"\\]|\\.)*)";', designer))
     click = dict(re.findall(r"this\.(\w+)\.Click \+= new System\.EventHandler\(this\.(\w+)\);", designer))
-    kind = dict(re.findall(r"this\.(\w+) = new System\.Windows\.Forms\.(\w+)\(\);", designer))
+    kind = dict(re.findall(r"this\.(\w+) = new (?:System\.Windows\.Forms|UserControls)\.(\w+)\(\);", designer))
     visible = {k: v == "true" for k, v in re.findall(r"this\.(\w+)\.Visible = (true|false);", designer)}
     # Release builds hide the items listed under `#if !DEBUG` in the FrmMain constructor.
     release = re.search(r"#if !DEBUG(.*?)#endif", form, re.S)
@@ -106,6 +191,8 @@ def extract() -> dict:
             chosen = selection(form, click[name])
             if chosen:
                 item["select"] = chosen
+        if name in images:
+            item["image"] = images[name]
         if name in keys:
             item["shortcut"] = keys[name]
         if name in checkable:
@@ -117,8 +204,9 @@ def extract() -> dict:
         return item
 
     return {
-        "source": {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in (DESIGNER, FORM)},
+        "source": {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in (DESIGNER, FORM, RESOURCES)},
         "menus": [node(t) for t in top],
+        "toolstrips": toolstrips(designer, form, text, click, kind, images),
     }
 
 
