@@ -433,3 +433,408 @@ class ToolkitServices:
             if isinstance(box, QtWidgets.QMessageBox):
                 box.reject()
         self.renderer.main_window.dispatcher.post(close)
+
+
+# Code editor (C12): FastColoredTextBox drawn from the model --------------------------------------------------------------
+QT_KEYS = None
+
+
+def full_winforms_keys(event):
+    """Every Qt key the code editor routes -> WinForms Keys (key code | modifiers); unknown keys give only the
+    modifiers (their character still arrives as WM_CHAR)."""
+    global QT_KEYS
+    K, Q = Keys, QtCore.Qt.Key
+    if QT_KEYS is None:
+        QT_KEYS = {Q.Key_Up: K.Up, Q.Key_Down: K.Down, Q.Key_Left: K.Left, Q.Key_Right: K.Right, Q.Key_Home: K.Home,
+                   Q.Key_End: K.End, Q.Key_PageUp: K.PageUp, Q.Key_PageDown: K.PageDown, Q.Key_Delete: K.Delete,
+                   Q.Key_Insert: K.Insert, Q.Key_Backspace: K.Back, Q.Key_Return: K.Enter, Q.Key_Enter: K.Enter,
+                   Q.Key_Escape: K.Escape, Q.Key_Space: K.Space, Q.Key_Tab: K.Tab, Q.Key_Backtab: K.Tab,
+                   Q.Key_Period: K.OemPeriod, Q.Key_Comma: K.Oemcomma, Q.Key_Minus: K.OemMinus, Q.Key_Plus: K.Oemplus,
+                   Q.Key_Equal: K.Oemplus, Q.Key_Slash: K.OemQuestion, Q.Key_Question: K.OemQuestion,
+                   Q.Key_Semicolon: K.OemSemicolon, Q.Key_Colon: K.OemSemicolon, Q.Key_BracketLeft: K.OemOpenBrackets,
+                   Q.Key_BracketRight: K.OemCloseBrackets, Q.Key_Backslash: K.OemPipe, Q.Key_Apostrophe: K.OemQuotes,
+                   Q.Key_QuoteDbl: K.OemQuotes, Q.Key_QuoteLeft: K.Oemtilde, Q.Key_ParenLeft: K.D9, Q.Key_ParenRight: K.D0,
+                   Q.Key_Underscore: K.OemMinus, Q.Key_Shift: K.ShiftKey, Q.Key_Control: K.ControlKey,
+                   Q.Key_Meta: K.ControlKey, Q.Key_Alt: K.Menu}
+        for i in range(1, 13):
+            QT_KEYS[getattr(Q, f'Key_F{i}')] = getattr(K, f'F{i}')
+    key = event.key()
+    code = QT_KEYS.get(key)
+    if code is None and Q.Key_A <= key <= Q.Key_Z:
+        code = getattr(K, chr(key))
+    if code is None and Q.Key_0 <= key <= Q.Key_9:
+        code = getattr(K, f'D{chr(key)}')
+    if code is None:
+        code = getattr(K, 'None')
+    modifiers = event.modifiers()
+    if modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier or key == Q.Key_Backtab:
+        code = code | K.Shift
+    if modifiers & (QtCore.Qt.KeyboardModifier.ControlModifier | QtCore.Qt.KeyboardModifier.MetaModifier):
+        code = code | K.Control
+    if modifiers & QtCore.Qt.KeyboardModifier.AltModifier:
+        code = code | K.Alt
+    return code
+
+
+def editor_font(font):
+    """The editor's monospace font (Consolas/Courier New on Windows; the platform fixed font when missing)."""
+    qfont = QtGui.QFont(str(font.Name))
+    if not QtGui.QFontInfo(qfont).fixedPitch():
+        qfont = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.SystemFont.FixedFont)
+    qfont.setPixelSize(max(1, round(float(font.Size) * 96 / 72)))
+    return qfont
+
+
+class CodeEditor(QtWidgets.QAbstractScrollArea):
+    """FastColoredTextBox: the model's lines with their style runs, selection, caret, current line, line numbers
+    and bookmarks; keys go to the model as WM_KEYDOWN/WM_CHAR and mouse positions as places."""
+
+    def __init__(self, window, control, parent):
+        super().__init__(parent)
+        self.window, self.control = window, control
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
+        self.viewport().setCursor(QtCore.Qt.CursorShape.IBeamCursor)
+        self.setFrameShape(QtWidgets.QFrame.Shape.Box if int(control.BorderStyle) != 0 else QtWidgets.QFrame.Shape.NoFrame)
+        self.verticalScrollBar().valueChanged.connect(self.scrolled)
+        self.horizontalScrollBar().valueChanged.connect(self.scrolled)
+        self.font_key = None
+        self.caret_on = True
+        self.blink = QtCore.QTimer(self)
+        self.blink.timeout.connect(self.toggle_caret)
+        self.blink.start(500)
+        self.update_metrics()
+
+    def update_metrics(self):
+        font = self.control.Font
+        key = (str(font.Name), float(font.Size), int(self.control.Zoom))
+        if key == self.font_key:
+            return
+        self.font_key = key
+        self.qfont = editor_font(font)
+        if int(self.control.Zoom) != 100:
+            self.qfont.setPixelSize(max(1, round(self.qfont.pixelSize() * int(self.control.Zoom) / 100)))
+        self.metrics = QtGui.QFontMetrics(self.qfont)
+        self.char_width = max(1, self.metrics.horizontalAdvance('W'))
+        self.char_height = max(1, self.metrics.height())
+
+    def gutter_width(self):
+        if not self.control.ShowLineNumbers:
+            return 0
+        digits = max(int(self.control.ReservedCountOfLineNumberChars), len(str(int(self.control.LinesCount))))
+        return digits * self.char_width + 12
+
+    def report_geometry(self):
+        c = self.control
+        c.CharWidth, c.CharHeight = self.char_width, self.char_height
+        c.LeftIndent = self.gutter_width() + 3
+        c.VerticalScrollValue = self.verticalScrollBar().value()
+        c.HorizontalScrollValue = self.horizontalScrollBar().value()
+
+    def rebuild(self):
+        self.update_metrics()
+        c = self.control
+        lines = int(c.LinesCount)
+        line_height = self.char_height + int(c.LineInterval)
+        bar = self.verticalScrollBar()
+        bar.setRange(0, max(0, lines * line_height - self.viewport().height() + line_height))
+        bar.setSingleStep(line_height)
+        bar.setPageStep(max(line_height, self.viewport().height()))
+        longest = max((len(str(c.GetLineText(i))) for i in range(lines)), default=0) if lines < 20000 else 400
+        hbar = self.horizontalScrollBar()
+        hbar.setRange(0, max(0, self.gutter_width() + longest * self.char_width + 40 - self.viewport().width()))
+        hbar.setPageStep(self.viewport().width())
+        self.report_geometry()
+        self.viewport().update()
+
+    def scroll_to_caret(self):
+        self.update_metrics()
+        caret = self.control.Selection.Start
+        line_height = self.char_height + int(self.control.LineInterval)
+        top = caret.iLine * line_height
+        bar = self.verticalScrollBar()
+        if top < bar.value():
+            bar.setValue(top)
+        elif top + line_height > bar.value() + self.viewport().height():
+            bar.setValue(top + line_height - self.viewport().height())
+        x = self.gutter_width() + caret.iChar * self.char_width
+        hbar = self.horizontalScrollBar()
+        if x < hbar.value() + self.gutter_width():
+            hbar.setValue(max(0, x - self.gutter_width() - 20))
+        elif x > hbar.value() + self.viewport().width() - 10:
+            hbar.setValue(x - self.viewport().width() + 40)
+        self.report_geometry()
+
+    def scrolled(self, _value):
+        self.report_geometry()
+        self.viewport().update()
+        self.window.renderer.input(self.control.RaiseScroll)
+
+    def toggle_caret(self):
+        self.caret_on = not self.caret_on
+        if self.hasFocus():
+            self.viewport().update()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.rebuild()
+
+    def paintEvent(self, event):
+        c = self.control
+        painter = QtGui.QPainter(self.viewport())
+        painter.setFont(self.qfont)
+        back = QtGui.QColor(c.BackColor.R, c.BackColor.G, c.BackColor.B) if not c.BackColor.IsEmpty else QtGui.QColor('white')
+        if not c.Enabled:
+            back = back.darker(105)
+        painter.fillRect(self.viewport().rect(), back)
+        line_height = self.char_height + int(c.LineInterval)
+        top = self.verticalScrollBar().value()
+        left = self.gutter_width() + 3 - self.horizontalScrollBar().value()
+        first = max(0, top // line_height)
+        last = min(int(c.LinesCount) - 1, (top + self.viewport().height()) // line_height + 1)
+        selection = c.Selection
+        start, end = selection.Start, selection.End
+        if (start.iLine, start.iChar) > (end.iLine, end.iChar):
+            start, end = end, start
+        fore_default = QtGui.QColor(c.ForeColor.R, c.ForeColor.G, c.ForeColor.B)
+        current_line = qcolor(c.CurrentLineColor)
+        selection_color = qcolor(c.SelectionColor) or QtGui.QColor(0, 0, 255, 60)
+        if selection_color.alpha() == 255:
+            selection_color.setAlpha(60)
+        bookmarks = {int(b.LineIndex) for b in c.Bookmarks}
+        for i in range(first, last + 1):
+            y = i * line_height - top
+            if current_line is not None and current_line.alpha() > 0 and i == c.Selection.Start.iLine and selection.IsEmpty:
+                painter.fillRect(QtCore.QRect(0, y, self.viewport().width(), line_height), current_line)
+            text = str(c.GetLineText(i))
+            runs = list(c.GetLineRuns(i))
+            for k in range(0, len(runs), 6):
+                s, n, fore, bg, style, marker = runs[k:k + 6]
+                x = left + s * self.char_width
+                rect = QtCore.QRect(x, y, n * self.char_width, line_height)
+                if bg:
+                    painter.fillRect(rect, QtGui.QColor.fromRgba(bg & 0xffffffff))
+                if marker:
+                    painter.setPen(QtCore.Qt.PenStyle.NoPen)
+                    painter.setBrush(QtGui.QColor.fromRgba(marker & 0xffffffff))
+                    painter.drawRoundedRect(QtCore.QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5), 3, 3)
+                    painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+                font = QtGui.QFont(self.qfont)
+                font.setBold(bool(style & 1))
+                font.setItalic(bool(style & 2))
+                font.setUnderline(bool(style & 4))
+                painter.setFont(font)
+                painter.setPen(QtGui.QColor.fromRgba(fore & 0xffffffff) if fore else fore_default)
+                for j, ch in enumerate(text[s:s + n]):
+                    painter.drawText(QtCore.QRect(x + j * self.char_width, y, self.char_width, line_height),
+                                     QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter, ch)
+            painter.setFont(self.qfont)
+            if start != end and start.iLine <= i <= end.iLine:
+                a = start.iChar if i == start.iLine else 0
+                b = end.iChar if i == end.iLine else len(text) + 1
+                painter.fillRect(QtCore.QRect(left + a * self.char_width, y, max(0, b - a) * self.char_width, line_height), selection_color)
+        # Gutter: line numbers and bookmarks
+        gutter = self.gutter_width()
+        if gutter:
+            painter.fillRect(QtCore.QRect(0, 0, gutter, self.viewport().height()), back)
+            painter.setPen(qcolor(c.LineNumberColor) or QtGui.QColor('teal'))
+            for i in range(first, last + 1):
+                y = i * line_height - top
+                if i in bookmarks:
+                    painter.fillRect(QtCore.QRect(1, y + 1, 6, line_height - 2), qcolor(c.BookmarkColor) or QtGui.QColor('powderblue'))
+                painter.drawText(QtCore.QRect(0, y, gutter - 6, line_height),
+                                 QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignVCenter, str(i + 1))
+            painter.setPen(qcolor(c.ServiceLinesColor) or QtGui.QColor('silver'))
+            painter.drawLine(gutter, 0, gutter, self.viewport().height())
+        # Caret
+        if self.hasFocus() and self.caret_on and c.CaretVisible:
+            caret = c.Selection.Start
+            x = left + caret.iChar * self.char_width
+            y = caret.iLine * line_height - top
+            painter.fillRect(QtCore.QRect(x, y, 2 if c.IsReplaceMode is False else self.char_width, line_height), qcolor(c.CaretColor) or QtGui.QColor('black'))
+        painter.end()
+
+    # Input --------------------------------------------------------------------------------------------------------------
+    def focusNextPrevChild(self, next_):
+        return False if self.control.AcceptsTab else super().focusNextPrevChild(next_)
+
+    def event(self, event):
+        # Every key goes to the editor's form first (WinForms ProcessCmdKey runs in the focused control's form);
+        # the main window's menu shortcuts do not take keys from an original form.
+        if event.type() == QtCore.QEvent.Type.ShortcutOverride:
+            event.accept()
+            return True
+        # Tab and Backtab are editor keys (AcceptsTab), not focus moves.
+        if event.type() == QtCore.QEvent.Type.KeyPress and event.key() in (QtCore.Qt.Key.Key_Tab, QtCore.Qt.Key.Key_Backtab) and self.control.AcceptsTab:
+            self.keyPressEvent(event)
+            return True
+        return super().event(event)
+
+    def keyPressEvent(self, event):
+        keys = full_winforms_keys(event)
+        set_modifier_keys(event)
+        text = event.text()
+        if event.key() == QtCore.Qt.Key.Key_Backtab:
+            text = ''
+        if event.modifiers() & (QtCore.Qt.KeyboardModifier.ControlModifier | QtCore.Qt.KeyboardModifier.MetaModifier):
+            text = ''  # Ctrl+key: no character (WinForms delivers a control character the editor ignores)
+        from System.Windows.Forms import KeyboardLayout
+        self.caret_on = True
+        self.window.renderer.input(lambda: (KeyboardLayout.SetCurrent(keys, text), self.control.RaiseKeyInput(keys, text)))
+        self.window.renderer.flush()
+        self.scroll_to_caret()
+        self.viewport().update()
+
+    def place_args(self, event):
+        position = event.position().toPoint()
+        return position.x(), position.y()
+
+    def mousePressEvent(self, event):
+        set_modifier_keys(event)
+        if not self.hasFocus():
+            self.setFocus()
+        x, y = self.place_args(event)
+        button = mouse_button(event.button())
+        self.report_geometry()
+        self.window.renderer.input(lambda: self.control.RaiseMouse('down', button, 1, x, y))
+        self.viewport().update()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() & QtCore.Qt.MouseButton.LeftButton:
+            x, y = self.place_args(event)
+            self.window.renderer.input(lambda: self.control.RaiseMouse('move', MouseButtons.Left, 0, x, y))
+            self.viewport().update()
+
+    def mouseReleaseEvent(self, event):
+        x, y = self.place_args(event)
+        button = mouse_button(event.button())
+        self.window.renderer.input(lambda: (self.control.RaiseMouse('up', button, 1, x, y), self.control.RaiseMouse('click', button, 1, x, y)))
+        if event.button() == QtCore.Qt.MouseButton.RightButton and self.control.ContextMenuStrip is not None:
+            self.window.renderer.show_context_menu(self.control.ContextMenuStrip, event.globalPosition().toPoint(), self.control)
+        self.viewport().update()
+
+    def mouseDoubleClickEvent(self, event):
+        x, y = self.place_args(event)
+        self.window.renderer.input(lambda: self.control.RaiseMouse('doubleclick', MouseButtons.Left, 2, x, y))
+        self.viewport().update()
+
+    def wheelEvent(self, event):
+        super().wheelEvent(event)
+
+    def focusInEvent(self, event):
+        super().focusInEvent(event)
+        self.window.renderer.input(self.control.RaiseEnter)
+
+    def focusOutEvent(self, event):
+        super().focusOutEvent(event)
+        popup = AUTOCOMPLETE.popup
+        if popup is not None and popup.isVisible() and popup.menu.TextBox == self.control:
+            return
+        self.window.renderer.input(self.control.RaiseLeave)
+
+
+class AutocompletePopup(QtWidgets.QListWidget):
+    """FCTB AutocompleteMenu: the visible items under the fragment; the focussed item is the model's."""
+
+    def __init__(self, editor, menu):
+        super().__init__(editor.window)
+        self.editor, self.menu = editor, menu
+        self.setWindowFlags(QtCore.Qt.WindowType.ToolTip)
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.itemClicked.connect(lambda item: self.click(item, False))
+        self.itemDoubleClicked.connect(lambda item: self.click(item, True))
+
+    def click(self, item, double):
+        index = self.row(item)
+        self.editor.window.renderer.input(lambda: self.menu.Items.UserClickItem(index, double))
+        self.editor.setFocus()
+
+    def sync(self):
+        items = [str(i) for i in self.menu.Items.VisibleItems]
+        if [self.item(i).text() for i in range(self.count())] != items:
+            self.clear()
+            self.addItems(items)
+        self.setFont(editor_font(self.menu.Font))
+        index = int(self.menu.Items.FocussedItemIndex)
+        if 0 <= index < self.count():
+            self.setCurrentRow(index)
+            selected = qcolor(self.menu.Items.SelectedColor)
+            if selected is not None:
+                self.setStyleSheet(f'QListWidget::item:selected {{ background: {selected.name()}; color: white; }}')
+        row_height = max(18, self.sizeHintForRow(0) if self.count() else 18)
+        maximum, minimum = self.menu.MaximumSize, self.menu.MinimumSize
+        width = max(minimum.Width, min(maximum.Width or 500, max(self.sizeHintForColumn(0) + 24, 120)))
+        height = min(maximum.Height or 180, row_height * max(1, self.count()) + 4)
+        self.resize(width, height)
+        location = self.menu.Location
+        editor = self.editor
+        point = editor.viewport().mapToGlobal(QtCore.QPoint(location.X, location.Y + editor.char_height + 2))
+        self.move(point)
+
+
+class AutocompleteHost:
+    """Shows the popup of whichever AutocompleteMenu the model opens."""
+
+    def __init__(self):
+        self.popup = None
+        self.editors = {}
+        self.handler = None
+
+    def install(self):
+        if self.handler is None:
+            from FastColoredTextBoxNS import AutocompleteMenu
+            self.handler = System.Action[AutocompleteMenu, System.String](self.changed)
+            AutocompleteMenu.Changed += self.handler
+
+    def changed(self, menu, kind):
+        editor = self.editors.get(menu.TextBox)
+        if editor is None:
+            return
+        if kind == 'Close':
+            if self.popup is not None and self.popup.menu == menu:
+                self.popup.hide()
+            return
+        if self.popup is None or self.popup.menu != menu:
+            if self.popup is not None:
+                self.popup.hide()
+            self.popup = AutocompletePopup(editor, menu)
+        self.popup.sync()
+        self.popup.show()
+
+
+AUTOCOMPLETE = AutocompleteHost()
+
+
+class SplitFrame(QtWidgets.QFrame):
+    """SplitContainer: the model lays out its panels; dragging the splitter moves it in the model."""
+
+    def __init__(self, window, control, parent):
+        super().__init__(parent)
+        self.window, self.control = window, control
+        self.dragging = False
+        self.setMouseTracking(True)
+
+    def splitter_hit(self, position):
+        r = self.control.SplitterRectangle
+        return QtCore.QRect(r.X, r.Y, r.Width, r.Height).adjusted(-1, -1, 1, 1).contains(position)
+
+    def mousePressEvent(self, event):
+        if not self.control.IsSplitterFixed and self.splitter_hit(event.position().toPoint()):
+            self.dragging = True
+            return
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        from System.Windows.Forms import Orientation
+        vertical = self.control.Orientation == Orientation.Vertical
+        position = event.position().toPoint()
+        if self.dragging:
+            distance = position.x() if vertical else position.y()
+            self.window.renderer.input(lambda: self.control.UserMoveSplitter(int(distance)))
+            return
+        hit = self.splitter_hit(position)
+        self.setCursor(QtCore.Qt.CursorShape.SplitHCursor if hit and vertical else QtCore.Qt.CursorShape.SplitVCursor if hit else QtCore.Qt.CursorShape.ArrowCursor)
+
+    def mouseReleaseEvent(self, event):
+        self.dragging = False
+        super().mouseReleaseEvent(event)

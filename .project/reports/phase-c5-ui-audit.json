@@ -1375,10 +1375,10 @@
     },
     {
       "form": "FrmCalculixKeywordEditor",
-      "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
-      "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmCalculixKeywordEditor.Designer.cs",
@@ -3100,10 +3100,10 @@
     },
     {
       "form": "FrmEditCommands",
-      "adapter": "X/UI/application_widgets.py; X/UI/authoring_widgets.py",
-      "reuse": "X/UI/Workbench/OriginalApplicationRules.g.cs; X/UI/Workbench/OriginalKeywordRules.g.cs",
-      "remaining": "Original state/formats/rules reused with toolkit-neutral adapters; exhaustive row/context/clipboard/focus and cross-platform original-app comparison pending.",
-      "compiledWhole": false,
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
       "originalSources": [
         {
           "path": "PrePoMax/Forms/01_Edit/FrmEditCommands.Designer.cs",
@@ -27123,6 +27123,6 @@
     "designerFields": 993,
     "eventSubscriptions": 796,
     "fullFormsAccepted": 0,
-    "compiledWhole": 68
+    "compiledWhole": 70
   }
 }

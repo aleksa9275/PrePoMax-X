@@ -442,7 +442,7 @@ namespace System.Windows.Forms
 
         public event DataGridViewCellEventHandler CellEndEdit, CellValueChanged, CellClick, CellDoubleClick, CellEnter, CellLeave;
         public event DataGridViewCellCancelEventHandler CellBeginEdit;
-        public event DataGridViewCellMouseEventHandler CellMouseDown, CellMouseClick;
+        public event DataGridViewCellMouseEventHandler CellMouseDown, CellMouseClick, CellMouseDoubleClick;
         public event DataGridViewEditingControlShowingEventHandler EditingControlShowing;
         public event DataGridViewDataErrorEventHandler DataError;
         public event DataGridViewRowEventHandler UserAddedRow, UserDeletedRow;
@@ -555,6 +555,7 @@ namespace System.Windows.Forms
         }
         RowState _newRowState = new RowState();
         public int RowCount => DataRowCount + (NewRowShown ? 1 : 0);
+        bool AllowsRemove => _list == null || (_list is IBindingList bl ? bl.AllowRemove : !_list.IsFixedSize && !_list.IsReadOnly);
         bool NewRowShown => _allowUserToAddRows && !_readOnly && Columns.Count > 0 && AllowsNew;
         public int NewRowIndex => NewRowShown ? DataRowCount : -1;
         internal bool IsNewRowIndex(int row) => NewRowShown && row == DataRowCount;
@@ -828,10 +829,11 @@ namespace System.Windows.Forms
             else if (displayErrorDialogIfNoHandler) CaeGlobals.MessageBoxes.ShowError("The following exception occurred in the DataGridView:\n\n" + e.Exception);
         }
         protected virtual void OnCellMouseDown(DataGridViewCellMouseEventArgs e) => CellMouseDown?.Invoke(this, e);
-        /// <summary>WinForms DataGridView key handling after KeyDown: Delete removes fully selected rows (when allowed).</summary>
+        /// <summary>WinForms DataGridView key handling after KeyDown: Delete removes fully selected rows when
+        /// AllowUserToDeleteRows and the data connection allows removing (ReadOnly only blocks cell edits).</summary>
         protected virtual bool ProcessDataGridViewKey(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete && !IsCurrentCellInEditMode && AllowUserToDeleteRows && !_readOnly)
+            if (e.KeyCode == Keys.Delete && !IsCurrentCellInEditMode && AllowUserToDeleteRows && AllowsRemove)
             {
                 int[] rows = SelectedRows.Cast<DataGridViewRow>().Where(r => !r.IsNewRow).Select(r => r.Index).OrderByDescending(i => i).ToArray();
                 if (rows.Length == 0) return false;
@@ -916,6 +918,12 @@ namespace System.Windows.Forms
         }
         public void RaiseCellMouseDown(int row, int column, MouseButtons button, int x, int y)
             => OnCellMouseDown(new DataGridViewCellMouseEventArgs(column, row, x, y, new MouseEventArgs(button, 1, x, y, 0)));
+        /// <summary>A double click on a cell (WinForms: CellMouseDoubleClick, then CellDoubleClick).</summary>
+        public void RaiseCellDoubleClick(int row, int column, int x, int y)
+        {
+            CellMouseDoubleClick?.Invoke(this, new DataGridViewCellMouseEventArgs(column, row, x, y, new MouseEventArgs(MouseButtons.Left, 2, x, y, 0)));
+            CellDoubleClick?.Invoke(this, new DataGridViewCellEventArgs(column, row));
+        }
     }
 
     /// <summary>WinForms BindingSource over a list, an IListSource (DataTable -> DataView) or an IBindingList.</summary>

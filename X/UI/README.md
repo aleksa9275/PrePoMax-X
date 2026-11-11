@@ -305,3 +305,13 @@ dialogs, drag events and MessageBox, `FormsCompat/ZedGraph.cs` ZedGraph's axis a
 (linear/log, Y2, zoom states). `original_controls.py` draws the new controls and installs the
 toolkit services; menus, tree and toolbars open these forms through their FrmMain members.
 [C11 report](../../.project/reports/phase-c11-child-forms.md).
+
+### C12 code editor forms
+
+FrmCalculixKeywordEditor and FrmEditCommands (with FrmViewObjectProperties) compile whole with the
+original `CalculixInpTextBox` and `PythonEditorTextBox`. `FormsCompat/FastColoredTextBox.cs` models
+FastColoredTextBox 2.16.24 (lines with style layers, ranges, undo groups, hotkeys, typed characters,
+autocomplete menu, find/replace); `original_controls.CodeEditor` draws it and sends keys as
+WM_KEYDOWN/WM_CHAR. `SplitContainer` lays out its panels in the model. The probe steps are in
+`forms_gui_probe_editor.py`; beam element evidence is in `geometry_gui_probe.py`.
+[C12 report](../../.project/reports/phase-c12-editor-forms.md).

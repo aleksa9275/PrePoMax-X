@@ -299,3 +299,23 @@ namespace System.Windows.Forms
         public static void DrawImage(this Graphics g, ImageResource image, Rectangle rect) => throw new PlatformNotSupportedException("GDI+ painting: the renderer draws images.");
     }
 }
+
+namespace System.Windows.Forms
+{
+    /// <summary>The platform keyboard layout for code that maps keys to characters itself (user32 ToUnicode):
+    /// the renderer reports the key it is delivering and the text the platform produced for it.</summary>
+    public static class KeyboardLayout
+    {
+        static Keys currentKey;
+        static string currentText;
+        public static void SetCurrent(Keys keyCode, string text) { currentKey = keyCode & Keys.KeyCode; currentText = text; }
+        public static bool GetKeyboardState(byte[] keyState) => keyState != null;
+        public static uint MapVirtualKey(uint code, uint mapType) => code;
+        public static int ToUnicode(uint virtualKeyCode, byte[] keyState, System.Text.StringBuilder buffer)
+        {
+            if ((Keys)virtualKeyCode != currentKey || string.IsNullOrEmpty(currentText)) return 0;
+            buffer.Append(currentText);
+            return currentText.Length;
+        }
+    }
+}

@@ -16,7 +16,8 @@ from System.Windows.Forms import (Control, Form, GroupBox, ButtonBase, Button, C
                                   ControlNotifications, GridItemType, Keys, MouseButtons, OrderedNameComparer, Screen,
                                   DataGridView, DataGridViewContentAlignment, DataGridViewAutoSizeColumnMode,
                                   ToolStripSeparator, Clipboard, TreeView, TrackBar, ScrollBar, ProgressBar, LinkLabel,
-                                  PictureBox)
+                                  PictureBox, SplitContainer)
+from FastColoredTextBoxNS import FastColoredTextBox
 from ZedGraph import ZedGraphControl, LegendPos
 import original_controls as oc
 from AutocompleteMenuNS import AutocompleteMenu
@@ -406,6 +407,15 @@ class DataGridWidget(QtWidgets.QTableWidget):
         self.customContextMenuRequested.connect(self.context_menu)
         self.rebuild()
 
+    def mouseDoubleClickEvent(self, event):
+        # WinForms CellMouseDoubleClick / CellDoubleClick (a read-only grid opens the original handler's form)
+        index = self.indexAt(event.position().toPoint())
+        if index.isValid():
+            rect = self.visualRect(index)
+            x, y = int(event.position().x()) - rect.x(), int(event.position().y()) - rect.y()
+            QtCore.QTimer.singleShot(0, lambda r=index.row(), c=index.column(): self.window.renderer.input(lambda: self.grid.RaiseCellDoubleClick(r, c, x, y)))
+        super().mouseDoubleClickEvent(event)
+
     def reopen_editor(self):
         if self.reopen is None:
             return
@@ -745,7 +755,7 @@ class FormWindow(QtWidgets.QDialog):
                 continue
             self.widgets[child] = widget
             container = widget.page_container if hasattr(widget, 'page_container') else widget
-            if not isinstance(child, (ListView, PropertyGrid, TabControl, DataGridView, ZedGraphControl, TreeView, TextBoxBase)):
+            if not isinstance(child, (ListView, PropertyGrid, TabControl, DataGridView, ZedGraphControl, TreeView, TextBoxBase, FastColoredTextBox)):
                 self.build(child, container)
 
     def create(self, control, parent):
@@ -760,6 +770,13 @@ class FormWindow(QtWidgets.QDialog):
             return GraphWidget(self, control, parent)
         if isinstance(control, TreeView):
             return oc.TreeWidget(self, control, parent)
+        if isinstance(control, FastColoredTextBox):
+            widget = oc.CodeEditor(self, control, parent)
+            oc.AUTOCOMPLETE.install()
+            oc.AUTOCOMPLETE.editors[control] = widget
+            return widget
+        if isinstance(control, SplitContainer):
+            return oc.SplitFrame(self, control, parent)
         if isinstance(control, TrackBar):
             return oc.Slider(self, control, parent)
         if isinstance(control, ScrollBar):
@@ -945,6 +962,8 @@ class FormWindow(QtWidgets.QDialog):
             widget.rebuild()
         elif isinstance(widget, oc.OutputText):
             widget.sync(scroll_to_end=True)
+        elif isinstance(widget, oc.CodeEditor):
+            widget.rebuild()
 
     # Window events --------------------------------------------------------------------------------------------------------
     def resizeEvent(self, event):
@@ -1038,6 +1057,13 @@ class OriginalFormRenderer:
             self.refresh.add(control)
         if isinstance(control, DataGridView) and prop == 'Layout':
             self.refresh.add(control)
+        if isinstance(control, FastColoredTextBox):
+            if prop in ('Text', 'Selection', 'Refresh', 'Layout'):
+                self.refresh.add(control)
+            if prop == 'ScrollToCaret':
+                self.refresh.add(('caret', control))
+            self.sync_soon()
+            return
         if prop in ('SelectedGridItem', 'Selection'):
             self.refresh.add(('select', control))
         self.sync_soon()
@@ -1077,6 +1103,10 @@ class OriginalFormRenderer:
                 control = item[1]
                 window = self.windows.get(control.FindForm())
                 widget = window.widgets.get(control) if window else None
+                if isinstance(widget, oc.CodeEditor):
+                    widget.scroll_to_caret()
+                    widget.viewport().update()
+                    continue
                 if isinstance(widget, DataGridWidget):
                     if control not in refresh:
                         widget.select_current()

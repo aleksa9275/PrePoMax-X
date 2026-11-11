@@ -27,6 +27,8 @@ namespace System.Windows.Forms
         public FontSpec(string name, float size, FontStyle style, GraphicsUnit unit, byte charSet) : this(name, size, style) { }
         public FontSpec(FontSpec prototype, FontStyle style) : this(prototype?.Name ?? "Segoe UI", prototype?.Size ?? 9F, style) { }
         public static FontSpec Default { get; } = new FontSpec("Segoe UI", 9F);
+        /// <summary>System.Drawing.Font is IDisposable; a description holds nothing.</summary>
+        public void Dispose() { }
     }
 
     /// <summary>An original embedded image (Properties.Resources entry) by name and repository file.</summary>
@@ -271,7 +273,8 @@ namespace System.Windows.Forms
         public bool TabStop { get; set; } = true;
         public bool AutoSize { get; set; }
         public AutoSizeMode AutoSizeMode { get; set; }
-        public FontSpec Font { get; set; } = FontSpec.Default;
+        FontSpec _font = FontSpec.Default;
+        public virtual FontSpec Font { get => _font; set => _font = value; }
         public Color BackColor { get; set; } = SystemColors.Control;
         public ImageLayout BackgroundImageLayout { get; set; }
         public Color ForeColor { get; set; } = SystemColors.ControlText;
@@ -422,7 +425,8 @@ namespace System.Windows.Forms
         protected virtual void OnValidated(EventArgs e) => Validated?.Invoke(this, e);
         protected virtual void OnControlAdded(ControlEventArgs e) => ControlAdded?.Invoke(this, e);
         protected virtual void OnControlRemoved(ControlEventArgs e) => ControlRemoved?.Invoke(this, e);
-        protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) => false;
+        // WinForms: a command key goes to the focused control first and bubbles up through its parents to the form.
+        protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) => _parent != null && _parent.ProcessCmdKey(ref msg, keyData);
         protected virtual void WndProc(ref Message m) { }
         protected virtual void DefWndProc(ref Message m) { }
         protected void SetStyle(ControlStyles flag, bool value) { }
@@ -452,15 +456,22 @@ namespace System.Windows.Forms
                 case "move": OnMouseMove(e); break;
             }
         }
-        public bool RaiseKeyDown(Keys keyData)
+        public bool RaiseKeyDown(Keys keyData) => RaiseKeyInput(keyData, null);
+        /// <summary>A key press: WM_KEYDOWN (command keys, KeyDown) and, unless the KeyDown suppressed it, the
+        /// character the keyboard layout produced (WM_CHAR, KeyPress). Returns whether the key was handled.</summary>
+        public bool RaiseKeyInput(Keys keyData, string text)
         {
             var message = new Message();
-            if (FindForm() is Form form && form.ProcessCmdKeyInternal(ref message, keyData)) return true;
+            if (ProcessCmdKey(ref message, keyData)) return true;
             var e = new KeyEventArgs(keyData);
             if (FindForm() is Form f && f.KeyPreview && f != this) f.OnKeyDownInternal(e);
             if (!e.Handled) OnKeyDown(e);
-            return e.Handled;
+            if (!e.SuppressKeyPress && !string.IsNullOrEmpty(text))
+                foreach (char c in text) ProcessCharInput(c, keyData & Keys.Modifiers);
+            return e.Handled || e.SuppressKeyPress;
         }
+        /// <summary>WM_CHAR: ProcessKeyMessage, then KeyPress.</summary>
+        protected virtual void ProcessCharInput(char c, Keys modifiers) => OnKeyPress(new KeyPressEventArgs(c));
         public void RaiseKeyUp(Keys keyData) => OnKeyUp(new KeyEventArgs(keyData));
         public void RaiseEnter() { Focused = true; OnEnter(EventArgs.Empty); OnGotFocus(EventArgs.Empty); }
         public void RaiseLeave() { Focused = false; OnLeave(EventArgs.Empty); OnLostFocus(EventArgs.Empty); }
@@ -524,7 +535,7 @@ namespace System.Windows.Forms
     }
 
     public class Cursor { public static Point Position { get; set; } }
-    public static class Cursors { public static readonly Cursor Default = new Cursor(), WaitCursor = new Cursor(), Hand = new Cursor(), Arrow = new Cursor(), SizeAll = new Cursor(); }
+    public static class Cursors { public static readonly Cursor Default = new Cursor(), WaitCursor = new Cursor(), Hand = new Cursor(), Arrow = new Cursor(), SizeAll = new Cursor(), IBeam = new Cursor(), SizeWE = new Cursor(), SizeNS = new Cursor(), No = new Cursor(), Cross = new Cursor(); }
     public class BindingContext
     {
         public BindingManagerBase this[object dataSource] => new BindingManagerBase();
@@ -550,16 +561,107 @@ namespace System.Windows.Forms
     public class UserControl : ContainerControl { public BorderStyle BorderStyle { get; set; } }
     public class Panel : ScrollableControl { public BorderStyle BorderStyle { get; set; } }
     public class FlowLayoutPanel : Panel { }
-    public class SplitContainer : ContainerControl
+    /// <summary>WinForms SplitContainer: two panels side by side (Vertical) or stacked (Horizontal) around a
+    /// splitter at SplitterDistance; a fixed panel keeps its size when the container resizes, otherwise the
+    /// splitter keeps its proportion; a collapsed panel hides and the other fills the container.</summary>
+    public class SplitContainer : ContainerControl, ISupportInitialize
     {
+        int _distance = 50, _width = 4, _panel1Min = 25, _panel2Min = 25, _init;
+        bool _p1Collapsed, _p2Collapsed;
+        Orientation _orientation = Orientation.Vertical;
+        Size _lastSize;
         public SplitterPanel Panel1 { get; } = new SplitterPanel();
         public SplitterPanel Panel2 { get; } = new SplitterPanel();
-        public int SplitterDistance { get; set; }
-        public Orientation Orientation { get; set; }
+        public event SplitterEventHandler SplitterMoved;
+        public event SplitterCancelEventHandler SplitterMoving;
         public SplitContainer() { Controls.Add(Panel1); Controls.Add(Panel2); }
+        public Orientation Orientation { get => _orientation; set { _orientation = value; LayoutPanels(); } }
+        public FixedPanel FixedPanel { get; set; }
+        public bool IsSplitterFixed { get; set; }
+        public int SplitterIncrement { get; set; } = 1;
+        public int SplitterWidth { get => _width; set { _width = Math.Max(1, value); LayoutPanels(); } }
+        public int Panel1MinSize { get => _panel1Min; set { _panel1Min = value; LayoutPanels(); } }
+        public int Panel2MinSize { get => _panel2Min; set { _panel2Min = value; LayoutPanels(); } }
+        public bool Panel1Collapsed { get => _p1Collapsed; set { if (_p1Collapsed == value) return; _p1Collapsed = value; Panel1.Visible = !value; LayoutPanels(); } }
+        public bool Panel2Collapsed { get => _p2Collapsed; set { if (_p2Collapsed == value) return; _p2Collapsed = value; Panel2.Visible = !value; LayoutPanels(); } }
+        int Extent => _orientation == Orientation.Vertical ? Width : Height;
+        public Rectangle SplitterRectangle => _orientation == Orientation.Vertical ? new Rectangle(_distance, 0, _width, Height) : new Rectangle(0, _distance, Width, _width);
+        public int SplitterDistance
+        {
+            get => _distance;
+            set
+            {
+                if (_init == 0 && Extent > 0)
+                {
+                    if (value < _panel1Min || value + _width > Extent - _panel2Min)
+                        throw new InvalidOperationException("SplitterDistance must be between Panel1MinSize and Width - Panel2MinSize.");
+                }
+                if (_distance == value) return;
+                _distance = value;
+                LayoutPanels();
+                SplitterMoved?.Invoke(this, new SplitterEventArgs(0, 0, _distance, 0));
+            }
+        }
+        public void BeginInit() => _init++;
+        public void EndInit() { if (_init > 0) _init--; LayoutPanels(); }
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            Size size = Size;
+            if (_lastSize != Size.Empty && size != _lastSize && _init == 0)
+            {
+                int oldExtent = _orientation == Orientation.Vertical ? _lastSize.Width : _lastSize.Height;
+                int newExtent = Extent;
+                if (FixedPanel == FixedPanel.Panel2) _distance += newExtent - oldExtent;
+                else if (FixedPanel == FixedPanel.None && oldExtent > 0) _distance = (int)Math.Round(_distance * (double)newExtent / oldExtent);
+                _distance = Math.Max(_panel1Min, Math.Min(_distance, newExtent - _panel2Min - _width));
+            }
+            _lastSize = size;
+            LayoutPanels();
+            base.OnLayout(levent);
+        }
+        void LayoutPanels()
+        {
+            int w = Width, h = Height;
+            if (_p1Collapsed) { Panel2.Bounds = new Rectangle(0, 0, w, h); Notify("Layout"); return; }
+            if (_p2Collapsed) { Panel1.Bounds = new Rectangle(0, 0, w, h); Notify("Layout"); return; }
+            if (_orientation == Orientation.Vertical)
+            {
+                Panel1.Bounds = new Rectangle(0, 0, Math.Max(0, _distance), h);
+                Panel2.Bounds = new Rectangle(_distance + _width, 0, Math.Max(0, w - _distance - _width), h);
+            }
+            else
+            {
+                Panel1.Bounds = new Rectangle(0, 0, w, Math.Max(0, _distance));
+                Panel2.Bounds = new Rectangle(0, _distance + _width, w, Math.Max(0, h - _distance - _width));
+            }
+            Notify("Layout");
+        }
+        /// <summary>The user dragged the splitter to distance (renderer input; clamped to the minimum sizes).</summary>
+        public void UserMoveSplitter(int distance)
+        {
+            if (IsSplitterFixed) return;
+            int clamped = Math.Max(_panel1Min, Math.Min(distance, Extent - _panel2Min - _width));
+            var moving = new SplitterCancelEventArgs(0, 0, clamped, 0);
+            SplitterMoving?.Invoke(this, moving);
+            if (moving.Cancel) return;
+            SplitterDistance = clamped;
+        }
     }
     public enum Orientation { Horizontal, Vertical }
+    public enum FixedPanel { None, Panel1, Panel2 }
     public sealed class SplitterPanel : Panel { }
+    public class SplitterEventArgs : EventArgs
+    {
+        public int X { get; } public int Y { get; } public int SplitX { get; set; } public int SplitY { get; set; }
+        public SplitterEventArgs(int x, int y, int splitX, int splitY) { X = x; Y = y; SplitX = splitX; SplitY = splitY; }
+    }
+    public class SplitterCancelEventArgs : CancelEventArgs
+    {
+        public int MouseCursorX { get; } public int MouseCursorY { get; } public int SplitX { get; set; } public int SplitY { get; set; }
+        public SplitterCancelEventArgs(int mouseCursorX, int mouseCursorY, int splitX, int splitY) { MouseCursorX = mouseCursorX; MouseCursorY = mouseCursorY; SplitX = splitX; SplitY = splitY; }
+    }
+    public delegate void SplitterEventHandler(object sender, SplitterEventArgs e);
+    public delegate void SplitterCancelEventHandler(object sender, SplitterCancelEventArgs e);
 
     public class GroupBox : Control { public FlatStyle FlatStyle { get; set; } }
     public class Label : Control

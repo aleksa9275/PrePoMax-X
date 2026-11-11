@@ -25,10 +25,10 @@ def start(app,window,output,fixture=None):
         f=field(dialog,name);widget=dialog.entries[name][1]
         widget.setCurrentText(next(v for v in f.Choices if text in v))
         dialog.panel.commit_field(f,widget);app.processEvents()
-    def click_part():
+    def click_part(world=(10,5,5)):
         camera=window.renderer.GetActiveCamera();camera.SetPosition(35,5,5);camera.SetFocalPoint(5,5,5);camera.SetViewUp(0,0,1);window.fit()
         window.raise_();window.activateWindow();QtTest.QTest.qWait(100)
-        window.renderer.SetWorldPoint(10,5,5,1);window.renderer.WorldToDisplay();x,y,_=window.renderer.GetDisplayPoint()
+        window.renderer.SetWorldPoint(*world,1);window.renderer.WorldToDisplay();x,y,_=window.renderer.GetDisplayPoint()
         scale=window.viewport.devicePixelRatioF();qx,qy=x/scale,window.viewport.height()-y/scale
         if __import__('sys').platform=='darwin':
             from viewport_probe import CocoaEvents
@@ -165,12 +165,95 @@ def start(app,window,output,fixture=None):
         parts=[p for p in c.Model.Geometry.Parts.Values if not p.Internal]
         report['fusedParts']=[str(p.Name)+':'+type(p).__name__ for p in parts]
         check('tree Fuse Bodies runs FuseBodiesCommand',not any(type(p).__name__=='CompoundGeometryPart' and len(p.SubPartNames)>1 for p in parts))
+    # Beam elements (C12): the free edges of a CAD shell are LinearBeamElements (VisFileReader); a second-order
+    # Netgen mesh of the shell converts its edge segments to ParabolicBeamElements (FeMesh.LinearToParabolic);
+    # both become the part's edges (FeMesh.ConvertLineFeElementsToEdges), 2- and 3-node edge cells.
+    def element_types(mesh,part):
+        import collections
+        return dict(collections.Counter(type(mesh.Elements[i]).__name__ for i in part.Labels))
+    def beam_import():
+        from CaeModel import ModelSpaceEnum
+        from CaeGlobals import UnitSystemType
+        c=window.controller
+        c.New();c.SetNewModelPropertiesCommand(ModelSpaceEnum.ThreeD,UnitSystemType.MM_TON_S_C);window.refresh()
+        window.import_path(str(fixture.resolve()),True)
+    def beam_delete_face():
+        if not wait():return False
+        from form_driver import FormDriver
+        c=window.controller
+        part=next(iter(c.Model.Geometry.Parts.Values));state['beamPart']=str(part.Name)
+        report['beamSolid']={'partType':str(part.PartType),'elements':element_types(c.Model.Geometry,part)}
+        forms=FormDriver(window);state['forms']=forms
+        window.geometry_tool('DeleteCadFaces')
+        check('Delete Faces opens the original FrmSurfaceOperation',type(forms.form).__name__=='FrmSurfaceOperation' and str(forms.form.Text)=='Delete Faces')
+        click_part((10,5,5))
+        report['beamFacePick']={'selected':list(window.selected),'item':str(c.Selection.SelectItem)}
+        check('the +X face of the cube picked for deletion',len(window.selected)==1)
+        state['promptsStart']=len(forms.prompts)
+        forms.ok()
+        report['beamDeleteForm']={'visible':forms.form is not None,'prompts':list(forms.prompts)[state['promptsStart']:],'task':window.operation_task is not None}
+    def beam_deleted():
+        if not wait():return False
+        # The original OnApplyAsync awaits SurfaceOperationCommandAsync and then hides the form.
+        form=state['forms'].form
+        if form is not None and form.Visible:return False
+        c=window.controller
+        part=c.Model.Geometry.Parts[state['beamPart']]
+        types=element_types(c.Model.Geometry,part)
+        cells=[len(e) for e in part.Visualization.EdgeCells]
+        report['beamDeleteOutput']=window.output.toPlainText()[-600:]
+        report['beamShell']={'partType':str(part.PartType),'elements':types,'edgeCellNodes':sorted(set(cells)),'edgeCells':len(cells)}
+        check('Delete Faces leaves an open CAD shell (DeleteCadFaces)',str(part.PartType)=='Shell')
+        # VisFileReader makes a LinearBeamElement of every free triangle side on a CAD edge; FeMesh turns the 1D
+        # elements into the part's edge cells and drops them (ConvertLineFeElementsToEdges), so the free edges are
+        # the evidence: edge cells bounded by a single triangle exist only through those beam elements.
+        sides={}
+        for i in part.Labels:
+            n=list(c.Model.Geometry.Elements[i].NodeIds)
+            for a,b in ((n[0],n[1]),(n[1],n[2]),(n[2],n[0])):sides[frozenset((a,b))]=sides.get(frozenset((a,b)),0)+1
+        free=[e for e in part.Visualization.EdgeCells if sides.get(frozenset(list(e)),0)==1]
+        report['beamShell'].update(freeEdgeCells=len(free))
+        check('the shell boundary is drawn from LinearBeamElements: 2-node free edge cells (VisFileReader, ConvertLineFeElementsToEdges)',
+              len(free)>=4 and set(cells)=={2})
+        forms=state['forms']
+        # The Netgen mesher for the shell (Netgen Mesh) and its second-order parameters (Meshing Parameters)
+        window.edit_geometry('Mesh setup')
+        forms.select_type('Netgen Mesh')
+        forms.set('Name','GUI_NetgenShell')
+        click_part((0,5,5))
+        check('the shell picked as the Netgen mesh region',forms.form.MeshSetupItem.CreationIds is not None and len(forms.form.MeshSetupItem.CreationIds)==1)
+        forms.ok()
+        window.edit_geometry('Mesh setup')
+        forms.select_type('Meshing Parameters')
+        forms.set_choice('AdvancedView','Advanced')
+        forms.set_choice('SecondOrder','Yes');forms.set_choice('MidsideNodesOnGeometry','No')
+        forms.set('Name','GUI_SecondOrderShell')
+        click_part((0,5,5))
+        check('the shell picked as the mesh setup region',forms.form.MeshSetupItem.CreationIds is not None and len(forms.form.MeshSetupItem.CreationIds)==1)
+        forms.ok()
+        item=c.GetMeshSetupItem('GUI_SecondOrderShell')
+        check('second order with midside nodes off geometry (Controller converts the Netgen mesh)',item is not None and item.SecondOrder and not item.MidsideNodesOnGeometry)
+        state['outputStart']=len(window.output.toPlainText())
+        window.run_operation(window.geometry.Execute('Create mesh',Array[String]([state['beamPart']])),lambda:window.view.setCurrentText('Model'))
+    def beam_meshed():
+        if not wait():return False
+        c=window.controller
+        part=next(iter(c.Model.Mesh.Parts.Values))
+        types=element_types(c.Model.Mesh,part)
+        cells=[len(e) for e in part.Visualization.EdgeCells]
+        text=window.output.toPlainText()[state['outputStart']:]
+        report['beamMesh']={'partType':str(part.PartType),'elements':types,'edgeCellNodes':sorted(set(cells)),'edgeCells':len(cells),
+                            'converted':'Converting mesh to second order' in text}
+        check('the shell mesh is second order (ParabolicTriangleElement)',types.get('ParabolicTriangleElement',0)>0)
+        check('the Netgen mesh was converted to second order by PrePoMax',report['beamMesh']['converted'])
+        check('its edges are ParabolicBeamElement edges: 3-node edge cells (LinearToParabolic, ConvertLineFeElementsToEdges)',cells and set(cells)=={3})
         report.update(success=True)
-    steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone,compound_tree]);current=[None]
+    steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone,compound_tree,
+                beam_import,beam_delete_face,beam_deleted,beam_meshed]);current=[None]
     timer=QtCore.QTimer(window)
     def tick():
         try:
-            if time.monotonic()-started>120:raise TimeoutError('GUI native operation timed out')
+            if time.monotonic()-started>240:raise TimeoutError('GUI native operation timed out')
             if current[0] is None:current[0]=next(steps)
             if current[0]() is not False:current[0]=None
         except StopIteration:

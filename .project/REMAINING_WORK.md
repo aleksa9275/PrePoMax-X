@@ -37,20 +37,18 @@ Done on 10 November ([C6 report](reports/phase-c6-main-window.md)):
   entries.
 
 Still open:
-2. **Beam element classes**: `LinearBeamElement`/`ParabolicBeamElement` need a CAD
-   wire/shell or beam-results fixture (the original model import drops beams).
-3. **72 forms** — 68 compiled whole in [C9](reports/phase-c9-original-forms.md),
-   [C10](reports/phase-c10-data-grid-forms.md) and [C11](reports/phase-c11-child-forms.md)
-   (66 C). Remaining: FrmCalculixKeywordEditor and FrmEditCommands (FastColoredTextBox
-   editors), FrmPythonStop (its watchdog runs a second UI thread), FrmMain itself;
-   FrmSelectEntity is compiled and hosted but the main menu still uses the C6 entity
-   dialog (switch the menu selection and its probe to `SelectOneEntity`/
-   `SelectMultipleEntities`); FrmViewObjectProperties follows FrmEditCommands. Renderer
-   gaps: autocomplete popup look, owner-drawn paint (TabPage.Paint, CollapsableGroupBox
-   +/- glyph, CodersLabTreeView drop line), grid row drag-and-drop (DoDragDrop),
-   ZedGraph zoom/pan and context menu, light theme/HiDPI. The C5 toolkit dialogs the
-   original forms replaced are no longer reachable from the UI; retire them with their
-   application-probe checks.
+2. ~~Beam element classes~~ ([C12](reports/phase-c12-editor-forms.md)): CAD shell free edges and a
+   second-order Netgen shell mesh through the original UI.
+3. **72 forms** — 70 compiled whole in [C9](reports/phase-c9-original-forms.md)–
+   [C12](reports/phase-c12-editor-forms.md) (69 C). Remaining (maintainer, 11 Nov: after packaging):
+   FrmMain whole — the original ModelTree, side panels (Advisor, Python with
+   PythonConsoleTextBox, XY plot), a vtkControl adapter (165 members), menus/tool strips from
+   the designer; with it FrmPythonStop (second UI thread) and FrmSelectEntity (the original
+   handlers that call it and their ~210 FrmMain targets). Renderer gaps: autocomplete popup
+   look, owner-drawn paint (TabPage.Paint, CollapsableGroupBox +/- glyph, CodersLabTreeView
+   drop line), grid row drag-and-drop (DoDragDrop), ZedGraph zoom/pan and context menu,
+   FCTB folding/column selection/word wrap, light theme/HiDPI. The C1–C5 toolkit dialogs and
+   legacy menus the originals replaced are unreachable; retire them in the clean-organization pass.
 4. **Matrices**: all analysis types, Mmg/QuadWild/sweep/transfinite/shell/compound
    meshing, section/cap/picking, glyph variants, animation extrema,
    plots/annotations, exports, large projects.
@@ -58,6 +56,8 @@ Still open:
    compare against the original's DPI behaviour on Windows.
 
 ### 2. Make it shippable
+6. **lp_solve 5.5.2.11 for macOS/Linux**: GmshCaller's interval assignment (default
+   shell meshing, sweep of compounds) loads `lpsolve55.dll`, vendored for Windows only.
 7. **Packaging still builds the old app.** `X/Build/build.py` packages the
    reimplemented `X/Desktop` preview, not `X/UI`. Build Mac DMG / Linux
    archives (and Windows layout) for the X/UI app bundling .NET 10, CPython

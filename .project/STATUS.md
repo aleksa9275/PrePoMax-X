@@ -2,7 +2,7 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (10 November 2026)
+## Where we are (11 November 2026)
 
 - **C6 original main window.** The menu bar is now the original `FrmMain` menu:
   16 menus, 313 release-visible items, generated from FrmMain with the original
@@ -41,14 +41,18 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   timer/scroll-bar/table-layout and ZedGraph-scaling models. Menus, tree and toolbars open them
   through their FrmMain members; the C5 toolkit dialogs they replace are no longer reachable.
   68 classes compiled whole; 66 forms ABC. [C11 report](reports/phase-c11-child-forms.md).
+- **C12 code editor forms, beams, Command base.** FrmCalculixKeywordEditor and FrmEditCommands (with
+  FrmViewObjectProperties) compiled whole with the original CalculixInpTextBox/PythonEditorTextBox on a
+  FastColoredTextBox model; Edit History and CalculiX Keywords open the originals. Beam element classes have
+  executed UI evidence (CAD shell free edges, second-order Netgen shell mesh). 70 classes compiled whole; 69
+  forms ABC. lp_solve (GmshCaller interval assignment) is missing on macOS/Linux.
+  [C12 report](reports/phase-c12-editor-forms.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Full UI parity is not accepted.** Forms 66/72 C, 0 V. Inventory: model/mesh
-  108 AB / 106 C (beam element classes need a CAD wire/shell or beam-results
-  fixture); Commands
-  237 A / 236 B / 230 C (six are compatibility-only with no original UI path);
-  V remains zero. [Inventory](PARITY_INVENTORY.md).
+- **Full UI parity is not accepted.** Forms 69/72 C, 0 V (FrmMain, FrmPythonStop open; FrmSelectEntity AB).
+  Inventory: model/mesh 108/108 C; Commands 237 A / 237 B / 231 C (six are compatibility-only with no
+  original UI path); V remains zero. [Inventory](PARITY_INVENTORY.md).
 - B011's analytical stress diagnostic remains **failed** (199.99200439453125 vs
   200, absolute .001). D029, B006–B012 and the other D061 findings remain open.
 - Patched Gmsh 4.13.0, CalculiX 2.22 and lib3mf 2.4.1 remain explicit/pinned.
@@ -71,15 +75,18 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C9 | Original form classes compiled whole (39), FrmMain form hosting | implemented; Mac ARM64 checks pass |
 | C10 | Data grid forms compiled whole (DataGridView model, plot window) | implemented; Mac ARM64 checks pass |
 | C11 | Child-window forms and dialogs compiled whole (TreeView, ZedGraph scaling) | implemented; Mac ARM64 checks pass |
+| C12 | Code editor forms (FastColoredTextBox model), beam elements, Command base | implemented; Mac ARM64 checks pass |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-The last four forms: FrmCalculixKeywordEditor and FrmEditCommands (a FastColoredTextBox model),
-FrmPythonStop and FrmMain itself, plus FrmSelectEntity in the main-menu selection; retire the C5
-toolkit dialogs the original forms replaced. Then beam element evidence from a CAD wire/shell
-fixture and packaging the X/UI app. After parity: the D061 correctness/warning sweep.
+Maintainer decision (11 November): package first, then FrmMain whole. Rebuildable Python/native profiles
+(incl. lp_solve 5.5.2.11 for macOS/Linux), the X/UI app packaged for macOS (app/DMG), Linux (archive,
+checked in Podman ARM64) and a Windows layout; temporary files cleaned; then manual testing on the targets.
+After that: FrmMain whole (ModelTree, side panels, Python console/stop, vtkControl adapter, FrmSelectEntity
+handlers), the clean-organization pass (retire the C1–C5 toolkit dialogs/legacy menus and old hosts), the
+D061 correctness/warning sweep, then the move to GitHub and an upstream PR.
 
 ## Environment
 

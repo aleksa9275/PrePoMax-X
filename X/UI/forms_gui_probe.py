@@ -436,6 +436,11 @@ def start(app, window, output):
         probe.settings()
         probe.regenerate()
         probe.about()
+        # C12: code editor forms (forms_gui_probe_editor.py)
+        from forms_gui_probe_editor import EditorFormsProbe
+        editors = EditorFormsProbe(app, window, check, report, snapshot)
+        editors.keyword_editor()
+        editors.edit_commands()
 
     steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, child_forms, geometry_catalogue, geometry_ready])
     current = [None]

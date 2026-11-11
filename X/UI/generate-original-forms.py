@@ -41,6 +41,17 @@ BASE = [
     'PrePoMax/Forms/00_Common/ViewDoubleValue.cs', 'PrePoMax/Forms/00_Common/ViewColor.cs',
     'PrePoMax/Forms/01_Edit/DataGridViewExtension.cs', 'PrePoMax/Forms/44_SurfaceInteraction/ListViewItemComparer.cs',
     'UserControls/MessageBoxes/AutoClosingMessageBox.cs', 'PrePoMax/Forms/61_Settings/EnvVarsUIEditor.cs',
+    # Code editor forms (C12): the original text boxes on the FastColoredTextBox model
+    'UserControls/TextBoxes/CalculixKeywordTextBox/CalculixInpTextBox.cs',
+    'UserControls/TextBoxes/CalculixKeywordTextBox/ICalculixInpTextBox.cs',
+    'UserControls/TextBoxes/PythonEditorTextBox/PythonEditorFastTextBox.cs',
+    'UserControls/TextBoxes/PythonEditorTextBox/PythonEditorTextBox.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxCompletionHelper.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxAutocompleteEventArgs.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxCommandEventArgs.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxAutocompleteMenuHelper.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxScriptAnalyzer.cs',
+    'UserControls/TextBoxes/PythonTextBox/PythonTextBoxSyntaxHighlighter.cs',
 ]
 # Forms derived from FrmProperties / FrmPropertyListView / FrmPropertyDataListView.
 FORMS = '''FrmBoundaryLayer FrmCaptureViewport FrmContactPair FrmElementSet FrmMergeCoincidentNodes FrmMirror
@@ -50,7 +61,8 @@ FrmFieldOutput FrmHistoryOutput FrmInitialCondition FrmLoad FrmMeshSetupItem Frm
 FrmSplitShell FrmCoordinateSystem FrmElementQuality FrmExportFileWithProperties FrmReferencePoint
 FrmSplitPartMeshUsingSurface FrmViewObjectProperties
 FrmAmplitude FrmDistribution FrmResultFieldOutput FrmResultHistoryOutput
-FrmGetColor FrmGetValue FrmRegenerate FrmSelectEntity FrmEquationParameters FrmExplodedView FrmFollowerView FrmSectionView FrmUserVew FrmAnalyzeGeometry FrmMaterial FrmMaterialLibrary FrmSurfaceInteraction FrmSearchContactPairs FrmStepControls FrmGetEnvVars FrmSettings FrmQuery FrmFind FrmAnalysis FrmMonitor FrmAnimation FrmViewResultHistoryOutput FrmTransformation FrmSplash'''.split()
+FrmGetColor FrmGetValue FrmRegenerate FrmSelectEntity FrmEquationParameters FrmExplodedView FrmFollowerView FrmSectionView FrmUserVew FrmAnalyzeGeometry FrmMaterial FrmMaterialLibrary FrmSurfaceInteraction FrmSearchContactPairs FrmStepControls FrmGetEnvVars FrmSettings FrmQuery FrmFind FrmAnalysis FrmMonitor FrmAnimation FrmViewResultHistoryOutput FrmTransformation FrmSplash
+FrmCalculixKeywordEditor FrmEditCommands'''.split()
 
 # (pattern, replacement, reason). Applied in order to every file.
 REWRITES = [
@@ -86,6 +98,31 @@ REWRITES = [
      'CodersLabTreeView draws its focus rectangle with GDI+; the renderer draws the focus the model records.'),
     (r'g\.DrawRectangle\(new Pen\(new SolidBrush\((\w+)\), 1\), ', r'g.DrawRectangle(\1, ',
      'CodersLabTreeView focus rectangle: the colour instead of a GDI+ pen.'),
+    # Code editor text boxes (C12): FastColoredTextBox styles take brushes and the control a font
+    (r'(?<![\w.])Brushes\.(\w+)', lambda path: r'new FastColoredTextBoxNS.StyleBrush(System.Drawing.Color.\1)' if path.startswith('UserControls/TextBoxes/') else None,
+     'System.Drawing.Brushes needs GDI+ (Windows only on .NET 10); a FastColoredTextBox style brush is its colour.'),
+    (r'new SolidBrush\(', lambda path: 'new FastColoredTextBoxNS.StyleBrush(' if path.startswith('UserControls/TextBoxes/') else None,
+     'SolidBrush needs GDI+; a FastColoredTextBox style brush is its colour.'),
+    (r'new Font\(', lambda path: 'new System.Windows.Forms.FontSpec(' if path.startswith('UserControls/TextBoxes/') or 'FrmCalculixKeywordEditor' in path else None,
+     'System.Drawing.Font needs GDI+; fonts are font descriptions.'),
+    (r'(?m)^using FastColoredTextBoxNS;$', lambda path: 'using FastColoredTextBoxNS; using Range = FastColoredTextBoxNS.Range;' if path.startswith('UserControls/') else None,
+     '.NET adds System.Range (net48 has none); FastColoredTextBoxNS.Range is named by an alias on the same line.'),
+    (r'(?m)^(\s*(?:private )?)Font (\w+(?: =|;))', lambda path: r'\1System.Windows.Forms.FontSpec \2' if 'FrmCalculixKeywordEditor' in path else None,
+     'System.Drawing.Font needs GDI+; the keyword tree\'s emphasized node font is a font description.'),
+    (r'\[System\.Runtime\.InteropServices\.DllImport\("user32\.dll"\)\]\n(\s*)public static extern bool LockWindowUpdate\(IntPtr hWndLock\);',
+     r'// user32 LockWindowUpdate (rewritten, see header)\n\1public static bool LockWindowUpdate(IntPtr hWndLock) => true; // user32: suspends painting only; the renderer paints after the handler',
+     'FrmCalculixKeywordEditor suspends window painting through user32 while it adds a node; the renderer repaints once the handler returns.'),
+    (r'public override Font Font', 'public override System.Windows.Forms.FontSpec Font',
+     'Control.Font is a font description (System.Drawing.Font needs GDI+).'),
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool GetKeyboardState\(byte\[\] keyState\);',
+     r'// user32 GetKeyboardState (rewritten, see header)\n\1private static bool GetKeyboardState(byte[] keyState) => System.Windows.Forms.KeyboardLayout.GetKeyboardState(keyState);',
+     'PythonTextBoxAutocompleteMenuHelper maps a key to its character through user32; the renderer reports the character the platform keyboard layout produced.'),
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern uint MapVirtualKey\(uint code, uint mapType\);',
+     r'// user32 MapVirtualKey (rewritten, see header)\n\1private static uint MapVirtualKey(uint code, uint mapType) => System.Windows.Forms.KeyboardLayout.MapVirtualKey(code, mapType);',
+     'PythonTextBoxAutocompleteMenuHelper: user32 scan code lookup (the platform keyboard layout).'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Unicode\)\]\n(\s*)private static extern int ToUnicode\(uint virtualKeyCode, uint scanCode, byte\[\] keyState,\n\s*\[Out, MarshalAs\(UnmanagedType\.LPWStr\)\] StringBuilder receivingBuffer,\n\s*int bufferSize, uint flags\);',
+     r'// user32 ToUnicode (rewritten, see header)\n\1//\n\1//\n\1private static int ToUnicode(uint virtualKeyCode, uint scanCode, byte[] keyState, StringBuilder receivingBuffer, int bufferSize, uint flags) => System.Windows.Forms.KeyboardLayout.ToUnicode(virtualKeyCode, keyState, receivingBuffer);',
+     'PythonTextBoxAutocompleteMenuHelper: user32 ToUnicode (the character of the current key in the platform keyboard layout).'),
 ]
 
 
@@ -116,7 +153,15 @@ def render(path, output):
     applied = []
     for pattern, replacement, reason in REWRITES:
         before = text
-        text, count = re.subn(pattern, (lambda m, r=replacement: r(path)) if callable(replacement) else replacement, text)
+        if callable(replacement):
+            if not re.search(pattern, text):
+                continue
+            value = replacement(path)
+            if value is None:
+                continue
+            text, count = re.subn(pattern, value, text) if '\\' in value else re.subn(pattern, lambda m, v=value: v, text)
+        else:
+            text, count = re.subn(pattern, replacement, text)
         if count and text != before:
             applied.append(f'// Rewrite x{count}: {reason}')
     header = [f'// Generated by X/UI/generate-original-forms.py from {path}; do not edit.',
@@ -179,7 +224,9 @@ HOST_METHODS = ['AddFormToAllForms', 'CloseAllForms', 'SetFormLocation', 'ShowFo
                 'ViewResultHistoryOutputData', 'tsmiAbout_Click', 'SelectOneEntity', 'SelectOneEntityInStep',
                 'SelectMultipleEntities', 'SelectMultipleEntitiesInStep', 'tsbAnimate_Click', 'ClearSelection',
                 'AddNonpositiveJacobianElementSet', 'GetMeshIdentityOrNull', 'tsmiMaterialLibrary_Click',
-                'tsmiSearchContactPairs_Click']
+                'tsmiSearchContactPairs_Click',
+                # Code editor forms (C12)
+                'tsmiEditHistory_Click', 'tsmiEditCalculiXKeywords_Click', 'EditCalculiXKeywords', 'CheckValidity']
 # FrmMain fields the members above use (declarations copied verbatim).
 HOST_FIELDS = ['_nonpositiveJacobianSetsAwaited', '_isNonpositiveJacobianSetAwaited']
 HOST_REWRITES = [

@@ -38,9 +38,9 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 108 | 108 | 108 | 106 | 0 |
-| Commands | 237 | 237 | 236 | 230 | 0 |
-| Forms | 72 | 67 | 67 | 66 | 0 |
+| Model and mesh features | 108 | 108 | 108 | 108 | 0 |
+| Commands | 237 | 237 | 237 | 231 | 0 |
+| Forms | 72 | 70 | 70 | 69 | 0 |
 
 ## Model and mesh features
 
@@ -204,7 +204,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|
 | ElementTypeCount | ABC |
 | InvertedElements | ABC |
-| LinearBeamElement | AB |
+| LinearBeamElement | ABC |
 | LinearGapElement | ABC |
 | LinearHexaElement | ABC |
 | LinearPyramidElement | ABC |
@@ -214,7 +214,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | LinearTriangleElement | ABC |
 | LinearWedgeElement | ABC |
 | MassElement | ABC |
-| ParabolicBeamElement | AB |
+| ParabolicBeamElement | ABC |
 | ParabolicHexaElement | ABC |
 | ParabolicPyramidElement | ABC |
 | ParabolicQuadrilateralElement | ABC |
@@ -537,7 +537,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| Command | A |
+| Command | ABC (abstract base of every command; its name, date, time span, history text, PMX fields and Python journal fallback run with each command) |
 
 ### Analysis
 
@@ -604,7 +604,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | FrmRegenerate | ABC |
 | FrmSelectEntity | AB |
 | FrmSelectItemSet | ABC |
-| FrmViewObjectProperties | - |
+| FrmViewObjectProperties | ABC |
 
 ### Parameters
 
@@ -616,7 +616,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmEditCommands | - |
+| FrmEditCommands | ABC |
 
 ### View
 
@@ -655,7 +655,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | FrmBoundaryLayer | ABC |
-| FrmCalculixKeywordEditor | - |
+| FrmCalculixKeywordEditor | ABC |
 | FrmModelProperties | ABC |
 | FrmRemeshingParameters | ABC |
 | FrmSplitPartMeshUsingSurface | ABC |
