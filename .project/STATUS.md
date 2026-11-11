@@ -47,6 +47,12 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   executed UI evidence (CAD shell free edges, second-order Netgen shell mesh). 70 classes compiled whole; 69
   forms ABC. lp_solve (GmshCaller interval assignment) is missing on macOS/Linux.
   [C12 report](reports/phase-c12-editor-forms.md).
+- **P1 desktop packages.** `X/Build/build_ui.py` builds every native input from its pinned recipe (new:
+  lp_solve 5.5.2.11, Mmg 5.5.2/5.7.0, CPython 3.12.14 lock, hash-pinned UI wheels) and packages the X/UI
+  app: macOS ARM64 DMG and Linux ARM64 tar.gz (self-checks pass: real solve, CAD, all meshers incl. the
+  lp_solve shell mesh; Linux on a clean Ubuntu 24.04), Windows x64 zip (cross-packaged, not run; Gmsh and
+  CalculiX missing). QuadWild has no macOS/Linux build (fork source). Manual testing guide:
+  [MANUAL_TESTING.md](MANUAL_TESTING.md). [P1 report](reports/phase-p1-desktop-packages.md).
 - C1–C5 remain as verified on 9 November ([C5 report](reports/phase-c5-application-tools.md)).
   Full remaining-work list, split into manual and agent work:
   [REMAINING_WORK.md](REMAINING_WORK.md).
@@ -76,23 +82,25 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C10 | Data grid forms compiled whole (DataGridView model, plot window) | implemented; Mac ARM64 checks pass |
 | C11 | Child-window forms and dialogs compiled whole (TreeView, ZedGraph scaling) | implemented; Mac ARM64 checks pass |
 | C12 | Code editor forms (FastColoredTextBox model), beam elements, Command base | implemented; Mac ARM64 checks pass |
+| P1 | Desktop packages (macOS DMG, Linux tar.gz, Windows zip), rebuildable runtime profiles | Mac and Linux ARM64 packages self-checked; Windows not run |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-Maintainer decision (11 November): package first, then FrmMain whole. Rebuildable Python/native profiles
-(incl. lp_solve 5.5.2.11 for macOS/Linux), the X/UI app packaged for macOS (app/DMG), Linux (archive,
-checked in Podman ARM64) and a Windows layout; temporary files cleaned; then manual testing on the targets.
-After that: FrmMain whole (ModelTree, side panels, Python console/stop, vtkControl adapter, FrmSelectEntity
-handlers), the clean-organization pass (retire the C1–C5 toolkit dialogs/legacy menus and old hosts), the
-D061 correctness/warning sweep, then the move to GitHub and an upstream PR.
+Maintainer's manual testing round ([MANUAL_TESTING.md](MANUAL_TESTING.md)): the macOS and Linux ARM64
+packages, the Windows zip, a Linux x64 package built with `build_ui.py` in Podman on Windows, the original
+net48 build in Visual Studio. Then FrmMain whole (ModelTree, side panels, Python console/stop, vtkControl
+adapter, FrmSelectEntity handlers), the clean-organization pass (retire the C1–C5 toolkit dialogs/legacy
+menus and old hosts), the D061 correctness/warning sweep, then the move to GitHub and an upstream PR.
 
 ## Environment
 
 - .NET 10: Mac SDK 10.0.403; Linux verification SDK 10.0.402.
 - VTK 9.5.2, PyQt6 6.10.0, Qt 6.10.2, Python.NET 3.1.0; explicit CPython 3.12.
-- Native profiles for the GUI verifier: `/private/tmp/prepomaxx-c5`, `-phase-b`,
-  `-phase-a-closeout` (temporary; see REMAINING_WORK §2.8).
-- Podman stopped after verification; keep one preview candidate.
+- Runtime for the GUI verifier: a package (`python3 X/UI/verify-ui.py --output <dir>/verify.json --package
+  X/Build/artifacts/ui-packages/PrePoMax-X.app --gui`); packages from `X/Build/build_ui.py`.
+- Retained candidate (git-ignored): `X/Build/artifacts/ui-packages/` (macOS DMG + extracted app, Linux
+  ARM64 tar.gz, Windows zip); native inputs for repackaging in `X/Build/artifacts/ui-inputs/`.
+- Podman stopped after verification.
 - Hosted CI hold D058: `[skip ci]` / `git push -o ci.skip`.

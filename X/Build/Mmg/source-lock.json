@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "note": "The releases of the shipped Windows executables (ThirdParty/mmg): mmgs 5.5.2 and mmg3d 5.7.0",
+  "sources": {
+    "mmgs": {"version": "5.5.2", "archive": "mmg-5.5.2.tar.gz",
+             "url": "https://github.com/MmgTools/mmg/archive/refs/tags/v5.5.2.tar.gz",
+             "sha256": "58e3b866101e6f0686758e16bcf9fb5fb06c85184533fc5054ef1c8adfd4be73"},
+    "mmg3d": {"version": "5.7.0", "archive": "mmg-5.7.0.tar.gz",
+              "url": "https://github.com/MmgTools/mmg/archive/refs/tags/v5.7.0.tar.gz",
+              "sha256": "6265a347e5e1148b0515f73c6f30c8e37763195e5483ab7d691cd59f70cfe7fb"}
+  },
+  "license": "LGPL-3.0-or-later (Licenses/mmg/)"
+}

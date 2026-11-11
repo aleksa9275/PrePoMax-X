@@ -27,10 +27,18 @@ p.add_argument('--solver-registry',type=Path)
 p.add_argument('--solver-id')
 p.add_argument('--solver-directory',type=Path)
 p.add_argument('--gui',action='store_true',help='Requires a display (Xvfb is supplemental Linux evidence)')
+p.add_argument('--package',type=Path,help='A PrePoMax-X package (folder, or macOS .app): its Python, native tools and solver profiles (X/Build/package_ui.py)')
 a=p.parse_args()
 out=a.output.resolve()
 folder=out.with_suffix('')
 folder.mkdir(parents=True,exist_ok=True)
+if a.package:
+    payload=a.package/'Contents/Resources' if a.package.suffix=='.app' else a.package
+    package=json.loads((payload/'package.json').read_text())
+    profiles=folder/'package-profiles'
+    subprocess.run([str(payload/package['components']['python']['interpreter']),'-I',str(payload/'launch.py'),'--profiles',str(profiles)],check=True,capture_output=True)
+    extra=json.loads((profiles/'verify-arguments.json').read_text())
+    a=p.parse_args(sys.argv[1:]+[x for x in extra])
 host={'os':platform.system(),'architecture':{'arm64':'Arm64','aarch64':'Arm64','x86_64':'X64','amd64':'X64'}.get(platform.machine().lower())}
 report={'success':False,'recordedAtUtc':datetime.now(timezone.utc).isoformat(),'host':host,'steps':[],'pending':[]}
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "version": "3.12.14",
+  "release": "python-build-standalone 20260929",
+  "baseUrl": "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/",
+  "license": "PSF-2.0 (CPython) and the bundled libraries' licenses, in python/share or python/LICENSE*",
+  "targets": {
+    "osx-arm64": {"archive": "cpython-3.12.14+20260929-aarch64-apple-darwin-install_only.tar.gz",
+                  "sha256": "de6b8f94fa765639b423ea353ab340669704c7186f96ee3cab389dcfde770c3c",
+                  "interpreter": "bin/python3", "library": "lib/libpython3.12.dylib",
+                  "moduleDirectories": ["lib/python3.12/site-packages"]},
+    "linux-arm64": {"archive": "cpython-3.12.14+20260929-aarch64-unknown-linux-gnu-install_only.tar.gz",
+                    "sha256": "9c797cf657f6dced51d3e74eeabd7c1ca742d5bf10f66080a290e424ced8edaf",
+                    "interpreter": "bin/python3", "library": "lib/libpython3.12.so.1.0",
+                    "moduleDirectories": ["lib/python3.12/site-packages"]},
+    "linux-x64": {"archive": "cpython-3.12.14+20260929-x86_64-unknown-linux-gnu-install_only.tar.gz",
+                  "sha256": "06c90b93f419b63371c18f20fed0558a1a901f6518c3c24f755077e048447e7f",
+                  "interpreter": "bin/python3", "library": "lib/libpython3.12.so.1.0",
+                  "moduleDirectories": ["lib/python3.12/site-packages"]},
+    "win-x64": {"archive": "cpython-3.12.14+20260929-x86_64-pc-windows-msvc-install_only.tar.gz",
+                "sha256": "28728baf30b65e263f0b25c5a85be8226e7ab0d212fbadd6a8f0f796139fa804",
+                "interpreter": "python.exe", "library": "python312.dll",
+                "moduleDirectories": ["Lib", "DLLs", "Lib/site-packages"]}
+  }
+}

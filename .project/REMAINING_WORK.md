@@ -56,17 +56,12 @@ Still open:
    compare against the original's DPI behaviour on Windows.
 
 ### 2. Make it shippable
-6. **lp_solve 5.5.2.11 for macOS/Linux**: GmshCaller's interval assignment (default
-   shell meshing, sweep of compounds) loads `lpsolve55.dll`, vendored for Windows only.
-7. **Packaging still builds the old app.** `X/Build/build.py` packages the
-   reimplemented `X/Desktop` preview, not `X/UI`. Build Mac DMG / Linux
-   archives (and Windows layout) for the X/UI app bundling .NET 10, CPython
-   3.12, PyQt6/Qt, VTK 9.5.2, Python.NET, Gmsh 4.13 (patched), Netgen,
-   CalculiX 2.22, lib3mf 2.4.1, with notices and corresponding sources.
-8. **Reproducible profiles.** UI/native checks only run with Python/tool/
-   solver profiles that live in `/private/tmp` (they disappear). Add a script
-   that builds them from the repo so `check.py` can run the UI and native
-   workflows by default instead of reporting them pending.
+6. ~~lp_solve for macOS/Linux~~, 7. ~~packaging the X/UI app~~, 8. ~~reproducible
+   profiles~~ ([P1](reports/phase-p1-desktop-packages.md)): `X/Build/build_ui.py` builds every native
+   input from its recipe and packages macOS (DMG), Linux (tar.gz) and Windows (zip); `verify-ui.py
+   --package` uses a package's runtime. Still open: Linux x64 build (maintainer, Podman on Windows),
+   Windows execution, the MSVC Gmsh build and the Windows CalculiX build, QuadWild for macOS/Linux
+   (fork source), a full from-scratch `build_ui.py` run per target, distribution notices/signing.
 9. **Retire duplicates**: `X/Desktop` (old Qt app), the older `X/Core`,
    `X/Analysis`, `X/Results`, `X/Execution` hosts and `X/Feasibility` once
    their checks are covered by Controller/UI checks; update READMEs.

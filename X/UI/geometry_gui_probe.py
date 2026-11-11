@@ -247,9 +247,21 @@ def start(app,window,output,fixture=None):
         check('the shell mesh is second order (ParabolicTriangleElement)',types.get('ParabolicTriangleElement',0)>0)
         check('the Netgen mesh was converted to second order by PrePoMax',report['beamMesh']['converted'])
         check('its edges are ParabolicBeamElement edges: 3-node edge cells (LinearToParabolic, ConvertLineFeElementsToEdges)',cells and set(cells)=={3})
+        # The default shell mesher (Meshing Parameters only) runs GmshCaller's interval assignment with lp_solve
+        c.RemoveMeshSetupItemsCommand(Array[String](['GUI_NetgenShell']))
+        state['outputStart']=len(window.output.toPlainText())
+        window.run_operation(window.geometry.Execute('Create mesh',Array[String]([state['beamPart']])),lambda:window.view.setCurrentText('Model'))
+    def shell_default_mesh():
+        if not wait():return False
+        c=window.controller
+        text=window.output.toPlainText()[state['outputStart']:]
+        part=next(iter(c.Model.Mesh.Parts.Values))
+        report['shellDefaultMesh']={'elements':element_types(c.Model.Mesh,part),'lpSolveError':'lp_solve' in text and 'could not be loaded' in text}
+        check('the default shell mesh runs GmshCaller with lp_solve (interval assignment)',not report['shellDefaultMesh']['lpSolveError'] and 'Mesh generation failed' not in text)
+        check('and meshes the shell',sum(report['shellDefaultMesh']['elements'].values())>0)
         report.update(success=True)
     steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone,compound_tree,
-                beam_import,beam_delete_face,beam_deleted,beam_meshed]);current=[None]
+                beam_import,beam_delete_face,beam_deleted,beam_meshed,shell_default_mesh]);current=[None]
     timer=QtCore.QTimer(window)
     def tick():
         try:
