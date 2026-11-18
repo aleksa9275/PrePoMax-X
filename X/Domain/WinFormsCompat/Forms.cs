@@ -30,6 +30,19 @@ namespace System.Windows.Forms
         public static string ProductVersion => System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "3.0.0.0";
         public static bool MessageLoop => DoEventsHandler != null;
         public static void DoEvents() => DoEventsHandler?.Invoke();
+        // Message filters and the idle event: a filter sees no Win32 message here; the UI raises Idle after it has
+        // processed its pending events
+        static readonly System.Collections.Generic.List<IMessageFilter> filters = new System.Collections.Generic.List<IMessageFilter>();
+        public static event EventHandler Idle;
+        public static void AddMessageFilter(IMessageFilter filter) { lock (filters) filters.Add(filter); }
+        public static void RemoveMessageFilter(IMessageFilter filter) { lock (filters) filters.Remove(filter); }
+        public static void RaiseIdle() => Idle?.Invoke(null, EventArgs.Empty);
+    }
+    public interface IMessageFilter { bool PreFilterMessage(ref Message m); }
+    public struct Message
+    {
+        public IntPtr HWnd; public int Msg; public IntPtr WParam; public IntPtr LParam; public IntPtr Result;
+        public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) => new Message { HWnd = hWnd, Msg = msg, WParam = wparam, LParam = lparam };
     }
 }
 namespace System.Windows.Forms

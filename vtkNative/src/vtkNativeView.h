@@ -73,6 +73,7 @@ namespace vtkn
         }
 
         void SetParentWindow(void* parentWindow);
+        void ProcessEvents();
         void SetSize(int width, int height);
         void GetSize(int& width, int& height);
         void SetEventCallback(vtkn_event_callback callback, void* userData);

@@ -42,7 +42,7 @@ class ApplicationWorkbench:
         add(automation,'Generate access token',self.generate_token);add(automation,'Clear access token',self.clear_token);add(automation,'Connection details…',self.automation_details)
         view=self.menuBar().addMenu('Camera');self.geometry_menus.append(view)
         for name,direction,up in [('Front',(0,-1,0),(0,0,1)),('Back',(0,1,0),(0,0,1)),('Top',(0,0,1),(0,1,0)),('Bottom',(0,0,-1),(0,-1,0)),('Left',(-1,0,0),(0,0,1)),('Right',(1,0,0),(0,0,1)),('Isometric',(1,-1,1),(0,0,1))]:add(view,name,lambda d=direction,u=up:self.camera_view(d,u))
-        add(view,'Parallel projection',lambda:self.projection(True));add(view,'Perspective projection',lambda:self.projection(False));add(view,'User views…',lambda:self.show_editor(UserViewsDialog(self),'User views'));add(view,'Follower view…',self.follower_dialog);add(view,'Disable follower view',lambda:self.controller.RemoveCurrentFollowerView())
+        add(view,'User views…',lambda:self.show_editor(UserViewsDialog(self),'User views'));add(view,'Follower view…',self.follower_dialog);add(view,'Disable follower view',lambda:self.controller.RemoveCurrentFollowerView())
         for mode in ['Model edges','Element edges','Wireframe','No edges']:add(view,mode,lambda m=mode:self.set_edge_mode(m))
         add(view,'Show all parts',lambda:self.visible_parts('Show'));add(view,'Hide all parts',lambda:self.visible_parts('Hide'));add(view,'Invert visible parts',lambda:self.visible_parts('Invert'))
         for operation in ['Color','Transparency','Reset color']:add(view,'Part '+operation.lower()+'…',lambda op=operation:self.part_appearance(op))
@@ -77,11 +77,9 @@ class ApplicationWorkbench:
         if self.preferences_path:self.application.SavePreferences(str(self.preferences_path))
     def apply_preferences(self):
         settings=self.controller.Settings;graphics=settings.Graphics
-        top,bottom=graphics.TopColor,graphics.BottomColor;self.renderer.SetBackground(bottom.R/255,bottom.G/255,bottom.B/255);self.renderer.SetBackground2(top.R/255,top.G/255,top.B/255);self.renderer.SetGradientBackground(str(graphics.BackgroundType)=='Gradient')
-        window=self.viewport.GetRenderWindow();window.SetPointSmoothing(graphics.PointSmoothing);window.SetLineSmoothing(graphics.LineSmoothing)
-        interactor=window.GetInteractor();style=interactor.GetInteractorStyle()
-        if hasattr(style,'SetMotionFactor'):style.SetMotionFactor(10*settings.Navigation.RotateSensitivity)
-        if hasattr(style,'SetMouseWheelMotionFactor'):style.SetMouseWheelMotionFactor(settings.Navigation.ZoomSensitivity*(-1 if settings.Navigation.InvertZoom else 1))
+        # Controller.ApplySettings: background, lighting, smoothing, widgets, highlight colours and navigation go
+        # to vtkControl through the original FrmMain view members
+        self.controller.ApplySettings()
         self.apply_view_widgets();self.render()
     def rebuild_recent(self):
         self.recent_menu.clear()
@@ -116,15 +114,9 @@ class ApplicationWorkbench:
             if SheetDialog(self,'3MF export',PropertySheet(ViewExport3mfFileProperties(props))).exec():
                 self.update_export_view();self.application.Export3mf(props)
     def update_export_view(self):
-        p=self.session.Presentation;up=self.renderer.GetActiveCamera().GetViewUp();axis=max(range(3),key=lambda i:abs(up[i]));closest=[0.,0.,0.];closest[axis]=1 if up[axis]>0 else -1 if up[axis]<0 else 0;p.ExportUpDirection=Array[Double](closest)
-        if hasattr(self.scene,'presentation'):
-            from vtkControl import vtkMaxLookupTable
-            lookup=vtkMaxLookupTable();table=self.scene.presentation.table;colors=[]
-            from System.Drawing import Color
-            for i in range(table.GetNumberOfTableValues()):
-                c=table.GetTableValue(i);colors.append(Color.FromArgb(round(c[3]*255),round(c[0]*255),round(c[1]*255),round(c[2]*255)))
-            lookup.SetExportData(*table.GetTableRange(),Array[Color](colors),str(self.scene.presentation.spectrum.Mode)=='Smooth')
-            p.ExportLookupTable=lookup
+        """The 3MF export reads the scene, the colour table and the up direction from vtkControl (GetVtkMaxActorData,
+        GetLookupTable, GetClosestUpView of the original view members)."""
+        return
     def close_results(self):self.controller.ClearResultsCommand();self.view.setCurrentText('Model');self.refresh()
     def check_model(self):QtWidgets.QMessageBox.information(self,'Model validity','\n'.join(self.application.CheckModel()) or 'No invalid model items found.')
     def start_automation(self):self.application.Automation.Start();self.output.appendPlainText('Automation listening at '+self.application.Automation.EndpointUrl)
@@ -182,22 +174,25 @@ class ApplicationWorkbench:
         ids=[]
         for item in text.split(','):
             parts=item.strip().split('-');ids.extend(range(int(parts[0]),int(parts[1])+1) if len(parts)==2 else [int(parts[0])])
-        selection=Selection();selection.CurrentView=int(self.controller.CurrentView);selection.SelectItem=Enum.Parse(vtkSelectItem,kind);selection.Add(SelectionNodeIds(getattr(vtkSelectOperation,'None'),False,Array[Int32](ids),kind.startswith('Geometry')));self.selected=list(self.controller.GetIdsFromSelection(selection));self.controller.Selection=selection;self.controller.HighlightSelection();self.scene.show_selection(self.session.Presentation.SelectionActors);self.render()
-    def clear_selection(self):self.controller.ClearSelectionHistoryAndCallSelectionChanged();self.selected=[];self.scene.show_selection([]);self.render()
+        selection=Selection();selection.CurrentView=int(self.controller.CurrentView);selection.SelectItem=Enum.Parse(vtkSelectItem,kind);selection.Add(SelectionNodeIds(getattr(vtkSelectOperation,'None'),False,Array[Int32](ids),kind.startswith('Geometry')));self.selected=list(self.controller.GetIdsFromSelection(selection));self.controller.Selection=selection;self.controller.HighlightSelection();self.render()
+    def clear_selection(self):self.controller.ClearSelectionHistoryAndCallSelectionChanged();self.selected=[];self.render()
     def find_dialog(self):
         dialog=QtWidgets.QDialog(self);dialog.setWindowTitle('Find');layout=QtWidgets.QFormLayout(dialog);kind=QtWidgets.QComboBox();kind.addItems(['Node','Element','Edge','Surface','Part']);id=QtWidgets.QSpinBox();id.setRange(1,2147483647);annotate=QtWidgets.QCheckBox('Add annotation');layout.addRow('Type',kind);layout.addRow('ID',id);layout.addRow(annotate);find=QtWidgets.QPushButton('Find')
-        def run():self.application.Find(kind.currentText(),id.value(),annotate.isChecked());self.scene.update(self.session.Presentation.SceneActors,self.session.Presentation.RenderCommands);self.scene.show_selection(self.session.Presentation.SelectionActors);self.render()
+        def run():self.application.Find(kind.currentText(),id.value(),annotate.isChecked());self.render()
         find.clicked.connect(lambda:self.guard(run));layout.addRow(find);dialog.show();self.find_window=dialog
     def camera_view(self,direction,up):
-        camera=self.renderer.GetActiveCamera();focus=camera.GetFocalPoint();distance=camera.GetDistance();length=sum(d*d for d in direction)**.5;camera.SetPosition(*(focus[i]+direction[i]/length*distance for i in range(3)));camera.SetViewUp(*up);self.fit()
-    def projection(self,parallel):self.renderer.GetActiveCamera().SetParallelProjection(parallel);self.fit()
+        """Camera menu: looks along the direction with the up vector, at the current focal point and scale
+        (vtkControl.GetViewParameters / SetViewParameters)."""
+        from System import Double
+        position,focal,_,scale=self.vtk.GetViewParameters(None,None,None,Double(0))
+        distance=sum((position[i]-focal[i])**2 for i in range(3))**.5 or 1.0;length=sum(d*d for d in direction)**.5
+        self.vtk.SetViewParameters(True,Array[Double]([focal[i]+direction[i]/length*distance for i in range(3)]),focal,Array[Double](list(up)),scale);self.fit()
     def set_edge_mode(self,mode):
-        self.edge_mode=mode;self.element_edges.setChecked(mode=='Element edges');self.refresh()
-    def apply_edge_mode(self):
-        mode=getattr(self,'edge_mode','Model edges')
-        for actor in self.scene.element_edge_actors:actor.SetVisibility(mode in ['Model edges','Element edges'])
-        for actor in self.scene.actors:
-            if mode=='Wireframe':actor.GetProperty().SetRepresentationToWireframe()
+        """tsmiShow*Edges_Click: Controller.CurrentEdgesVisibility (vtkControl.EdgesVisibility)."""
+        from vtkControl import vtkEdgesVisibility
+        self.edge_mode=mode;self.element_edges.blockSignals(True);self.element_edges.setChecked(mode=='Element edges');self.element_edges.blockSignals(False)
+        self.controller.CurrentEdgesVisibility={'Model edges':vtkEdgesVisibility.ModelEdges,'Element edges':vtkEdgesVisibility.ElementEdges,'Wireframe':vtkEdgesVisibility.Wireframe,'No edges':vtkEdgesVisibility.NoEdges}[mode]
+        self.refresh()
     def visible_parts(self,operation):
         mesh=self.controller.DisplayedMesh
         if mesh is None:return
@@ -232,7 +227,7 @@ class ApplicationWorkbench:
                 getter={'Parts':'GetModelPart','Geometry parts':'GetGeometryPart','Result parts':'GetResultPart','Node sets':'GetNodeSet','Element sets':'GetElementSet','Surfaces':'GetSurface','Materials':'GetMaterial','Sections':'GetSection','Constraints':'GetConstraint','Loads':'GetLoad','Boundary conditions':'GetBoundaryCondition'}.get(e.Family)
                 if getter:items.append(getattr(self.controller,getter)(e.Step,e.Name) if e.Step else getattr(self.controller,getter)(e.Name))
             except Exception as error:self.output.appendPlainText(str(error))
-        if items:self.controller.Highlight3DObjects(Array[__import__('System').Object](items));self.scene.show_selection(self.session.Presentation.SelectionActors);self.render()
+        if items:self.controller.Highlight3DObjects(Array[__import__('System').Object](items));self.render()
     def rename_selected(self):
         items=self.tree.selectedItems()
         if len(items)==1 and not items[0].data(0,QtCore.Qt.ItemDataRole.UserRole).Group:items[0].setFlags(items[0].flags()|QtCore.Qt.ItemFlag.ItemIsEditable);self.tree.editItem(items[0],0)
@@ -281,7 +276,7 @@ class ApplicationWorkbench:
         def run():
             values=[int(i.strip()) for i in ids.text().split(',')] if ids.text().strip() else self.selected;needed={'Assembly':0,'Bounding box':0,'Distance':2,'Angle':3,'Circle':3}.get(kind.currentText(),1)
             if len(values)<needed:raise ValueError('Select or enter '+str(needed)+' IDs.')
-            result=rule.Run(kind.currentText(),Array[Int32](values));output.appendPlainText(result);self.output.appendPlainText(result);self.scene.update(self.session.Presentation.SceneActors,self.session.Presentation.RenderCommands);self.scene.show_selection(self.session.Presentation.SelectionActors);self.render()
+            result=rule.Run(kind.currentText(),Array[Int32](values));output.appendPlainText(result);self.output.appendPlainText(result);self.render()
         row=QtWidgets.QHBoxLayout()
         for title,callback in [('Query',run),('Clear annotations',lambda:self.controller.Annotations.RemoveCurrentArrowAnnotations()),('Close',dialog.accept)]:
             button=QtWidgets.QPushButton(title);button.clicked.connect(lambda checked=False,cb=callback:self.guard(cb));row.addWidget(button)
@@ -290,21 +285,6 @@ class ApplicationWorkbench:
         from application_widgets import ContactSearchDialog
         if self.controller.Model.Mesh is None:raise ValueError('Create or import a mesh first.')
         self.show_editor(ContactSearchDialog(self),'Contact search')
-    def apply_follower(self,parts,ids):
-        from PrePoMaxX.UI import FollowerCameraSession
-        self.follower_nodes=(list(parts),list(ids));self.follower_math=FollowerCameraSession();self.update_follower()
-    def update_follower(self):
-        if not getattr(self,'follower_nodes',None):return
-        points=[]
-        for name,id in zip(*self.follower_nodes):
-            found=False
-            for original,actor in zip(self.scene.drawn,self.scene.actors):
-                if original.Data.Name!=name:continue
-                labels=list(original.Data.Geometry.Nodes.Ids or [])
-                if int(id) not in labels:continue
-                points.append(actor.GetMapper().GetInput().GetPoint(labels.index(int(id))));found=True;break
-            if not found:return
-        camera=self.renderer.GetActiveCamera();data=self.follower_math.Step(Array[Array[Double]]([Array[Double](p) for p in points]),Array[Double](camera.GetPosition()),Array[Double](camera.GetFocalPoint()),Array[Double](camera.GetViewUp()));camera.SetPosition(*data.Position);camera.SetFocalPoint(*data.FocalPoint);camera.SetViewUp(*data.Up);self.renderer.ResetCameraClippingRange();self.render()
     def build_advisor(self):
         from PrePoMaxX.UI import AdvisorPages
         from UserControls import PanelItemLinkLabel
@@ -363,20 +343,7 @@ class ApplicationWorkbench:
         else:getattr(self.controller,'ResetColorFor'+suffix+'Command')(names)
         self.refresh()
     def apply_view_widgets(self):
-        from vtkmodules.vtkRenderingAnnotation import vtkAxesActor
-        from vtkmodules.vtkInteractionWidgets import vtkOrientationMarkerWidget
-        graphics=self.controller.Settings.Graphics
-        if not hasattr(self,'orientation_widget'):
-            self.orientation_widget=vtkOrientationMarkerWidget();axes=vtkAxesActor()
-            for caption in [axes.GetXAxisCaptionActor2D(),axes.GetYAxisCaptionActor2D(),axes.GetZAxisCaptionActor2D()]:caption.GetCaptionTextProperty().SetColor(.1,.1,.1);caption.GetCaptionTextProperty().ShadowOff()
-            self.orientation_widget.SetOrientationMarker(axes);self.orientation_widget.SetInteractor(self.viewport.GetRenderWindow().GetInteractor());self.orientation_widget.SetViewport(0,0,.18,.18)
-        self.orientation_widget.SetEnabled(graphics.CoorSysVisibility)
-        if graphics.CoorSysVisibility:self.orientation_widget.SetInteractive(graphics.WidgetHighlightEnabled)
-        if not hasattr(self,'scale_actor'):
-            from scale_widget import OriginalScaleWidget
-            self.scale_actor=OriginalScaleWidget(self.renderer);self.scene.overlays.extend(self.scale_actor.actors())
-        self.scale_actor.set_visibility(graphics.ScaleWidgetVisibility)
-        self.scale_actor.attach()  # scene updates remove view props; re-adding is idempotent
+        """The triad and the scale bar are the widgets of vtkControl (Controller.ApplySettings shows them)."""
         self.update_unit_system()
     def update_unit_system(self):
         """FrmMain.UpdateUnitSystem: status-bar unit system and scale-bar length unit."""
@@ -385,31 +352,13 @@ class ApplicationWorkbench:
         system=c.CurrentResult.UnitSystem if str(c.CurrentView)=='Results' and c.CurrentResult is not None and c.CurrentResult.UnitSystem is not None else (c.Model.UnitSystem if c.Model is not None else None)
         if not hasattr(self,'unit_system_label'):
             self.unit_system_label=QtWidgets.QLabel();self.statusBar().addPermanentWidget(self.unit_system_label)
-        if system is None:self.unit_system_label.setText('');self.scale_actor.set_unit('');return
+        # FrmMain.SetScaleWidgetUnit: the length unit of the scale bar, none for an undefined unit system
+        self.vtk.SetScaleWidgetUnit('' if system is None or system.UnitSystemType==UnitSystemType.Undefined else str(system.LengthUnitAbbreviation))
+        if system is None:self.unit_system_label.setText('');return
         from CaeGlobals import ExtensionMethods
         try:description=str(ExtensionMethods.GetDescription[UnitSystemType](system.UnitSystemType))
         except Exception:description=str(system.UnitSystemType)
         self.unit_system_label.setText('Unit system: '+description)
-        self.scale_actor.set_unit('' if system.UnitSystemType==UnitSystemType.Undefined else str(system.LengthUnitAbbreviation))
-    def area_pick(self,x0,y0,x1,y1):
-        from vtkmodules.vtkRenderingCore import vtkAreaPicker
-        from vtkmodules.vtkCommonDataModel import vtkPlane
-        from CaeGlobals import SelectionNodeMouse,vtkSelectBy
-        picker=vtkAreaPicker();picker.AreaPick(min(x0,x1),min(y0,y1),max(x0,x1),max(y0,y1),self.renderer);frustum=picker.GetFrustum();planes=[]
-        for i in range(frustum.GetNumberOfPlanes()):
-            plane=vtkPlane();frustum.GetPlane(i,plane);planes.append(Array[Double](list(plane.GetOrigin())+list(plane.GetNormal())))
-        if self.original_form_open():
-            modifiers=QtWidgets.QApplication.keyboardModifiers();shift=bool(modifiers&QtCore.Qt.KeyboardModifier.ShiftModifier);control=bool(modifiers&(QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier))
-            operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
-            visible=[str(p.Name) for p in (self.controller.DisplayedMesh.Parts.values() if isinstance(self.controller.DisplayedMesh.Parts,dict) else self.controller.DisplayedMesh.Parts.Values) if p.Visible]
-            # FrmMain._vtk_SelectPointOrArea with the frustum planes (completely inside: left-to-right drag).
-            return self.original_pick(None,self.renderer.GetActiveCamera().GetDirectionOfProjection(),[list(p) for p in planes],x1>=x0,operation,visible)
-        index=self.pick_mode.currentIndex();kinds=[vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface]
-        mode=vtkSelectBy.Geometry if index in [5,6,7,8,9,13,14] else vtkSelectBy.Node if kinds[index]==vtkSelectItem.Node else vtkSelectBy.Surface if kinds[index]==vtkSelectItem.Surface else vtkSelectBy.Part if kinds[index]==vtkSelectItem.Part else vtkSelectBy.Element
-        modifiers=QtWidgets.QApplication.keyboardModifiers();shift=bool(modifiers&QtCore.Qt.KeyboardModifier.ShiftModifier);control=bool(modifiers&(QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier));operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
-        selection=self.controller.Selection.DeepCopy(True,False) if (shift or control) and self.controller.Selection.SelectItem==kinds[index] else Selection();selection.CurrentView=int(self.controller.CurrentView);selection.SelectItem=kinds[index]
-        selection.Add(SelectionNodeMouse(None,Array[Double](self.renderer.GetActiveCamera().GetDirectionOfProjection()),Array[Array[Double]](planes),x1>=x0,operation,self.controller.DisplayedMesh.GetVisiblePartIds(),None,mode,self.selection_angle.value()));self.selected=list(self.controller.GetIdsFromSelection(selection));self.controller.Selection=selection;self.controller.HighlightSelection();self.scene.show_selection(self.session.Presentation.SelectionActors);self.render();self.statusBar().showMessage('Selected IDs: '+', '.join(map(str,self.selected)))
-
     def about_dialog(self):
         dialog=QtWidgets.QDialog(self);dialog.setWindowTitle('About PrePoMax-X');layout=QtWidgets.QVBoxLayout(dialog)
         original=Path(__file__).resolve().parents[2]/'PrePoMax/Resources/Splash_01.png'

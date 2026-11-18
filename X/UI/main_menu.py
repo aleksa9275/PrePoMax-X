@@ -167,9 +167,7 @@ class MainMenuWorkbench:
         view = self.original_top['tsmiView']
         view.addSeparator()
         extra = view.addMenu('PrePoMax-X')
-        for title, callback in [('Parallel projection', lambda: self.projection(True)),
-                                ('Perspective projection', lambda: self.projection(False)),
-                                ('Disable follower view', lambda: self.controller.RemoveCurrentFollowerView()),
+        for title, callback in [('Disable follower view', lambda: self.controller.RemoveCurrentFollowerView()),
                                 ('Edit annotation text…', self.edit_annotation),
                                 ('Expand tree', self.tree.expandAll), ('Collapse tree', self.tree.collapseAll)]:
             extra.addAction(title).triggered.connect(lambda checked=False, cb=callback: self.guard(cb))
@@ -762,9 +760,8 @@ class MainMenuWorkbench:
         self.refresh()
 
     def arrange_annotations(self):
-        if hasattr(self.scene, 'presentation') and hasattr(self.scene.presentation, 'arrange_annotations'):
-            self.scene.presentation.arrange_annotations()
-            self.render()
+        """tsmiArrangeAnnotations_Click: FrmMain.ArrangeVisibleArrowWidgets (vtkControl)."""
+        self.viewport.host.ArrangeVisibleArrowWidgets()
 
     def convert_odb(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Convert .odb to .frd', '', 'Abaqus result files (*.odb)')
@@ -794,76 +791,20 @@ class MainMenuWorkbench:
             self.start_automation()
 
     def start_box_zoom(self):
-        self.box_zoom_pending = True
+        """tsmiBoxZoom_Click: FrmMain.StartBoxZoom -> vtkControl.StartBoxZoom (the native view drags the box)."""
+        self.vtk.StartBoxZoom()
         self.statusBar().showMessage('Drag a rectangle in the viewport to zoom.')
 
-    # ------------------------------------------------- original camera views
-    def _finish_camera(self):
-        self.fit()
-
+    # ------------------------------------------------- original camera views (FrmMain tsmi*View_Click)
     def original_view(self, axis, positive):
         """vtkControl.SetFrontBackView / SetTopBottomView / SetLeftRightView."""
-        camera = self.renderer.GetActiveCamera()
-        f = camera.GetFocalPoint()
-        if axis == 'front':
-            d = 1 if positive else -1
-            camera.SetPosition(f[0], f[1], f[2] + d)
-            camera.SetViewUp(0, 1, 0)
-        elif axis == 'top':
-            d = 1 if positive else -1
-            camera.SetPosition(f[0], f[1] + d, f[2])
-            camera.SetViewUp(0, 0, -d)
-        else:
-            d = -1 if positive else 1
-            camera.SetPosition(f[0] + d, f[1], f[2])
-            camera.SetViewUp(0, 1, 0)
-        self._finish_camera()
-
-    def _closest_up(self):
-        up = self.renderer.GetActiveCamera().GetViewUp()
-        a = [abs(v) for v in up]
-        m = max(a)
-        sign = lambda v: (v > 0) - (v < 0)
-        if m == a[0]:
-            return (sign(up[0]), 0, 0)
-        if m == a[1]:
-            return (0, sign(up[1]), 0)
-        return (0, 0, sign(up[2]))
+        {'front': self.vtk.SetFrontBackView, 'top': self.vtk.SetTopBottomView, 'left': self.vtk.SetLeftRightView}[axis](True, positive)
 
     def original_isometric(self, positive=True):
-        """vtkControl.SetIsometricView (closest of the eight octant directions)."""
-        import math
-        camera = self.renderer.GetActiveCamera()
-        d = 1 if positive else -1
-        camera.SetViewUp(*self._closest_up())
-        f = camera.GetFocalPoint()
-        normal = camera.GetViewPlaneNormal()
-        octants = [(1, 1, 1), (-1, 1, 1), (-1, -1, 1), (1, -1, 1), (1, 1, -1), (-1, 1, -1), (-1, -1, -1), (1, -1, -1)]
-
-        def angle(v):
-            dot = sum(a * b for a, b in zip(normal, v)) / (math.sqrt(3) * math.sqrt(sum(a * a for a in normal)))
-            return math.acos(max(-1, min(1, dot)))
-        o = octants[min(range(4), key=lambda i: angle(octants[i]))]  # original compares quadrants I-IV
-        camera.SetPosition(f[0] + d * o[0], f[1] + d * o[1], f[2] + d * o[2])
-        camera.OrthogonalizeViewUp()
-        up = camera.GetViewUp()
-        i = max(range(3), key=lambda k: abs(up[k]))
-        camera.SetViewUp(*[(1 if up[k] > 0 else -1) if k == i else 0 for k in range(3)])
-        self._finish_camera()
+        self.vtk.SetIsometricView(True, positive)
 
     def original_normal_view(self):
-        """vtkControl.SetNormalView: look along the dominant axis of the view direction."""
-        camera = self.renderer.GetActiveCamera()
-        direction = camera.GetViewPlaneNormal()
-        i = max(range(3), key=lambda k: abs(direction[k]))
-        delta = [0.0, 0.0, 0.0]
-        sign = 1 if direction[i] > 0 else -1
-        delta[i] = -sign if abs(direction[i]) == 1 else sign
-        f = camera.GetFocalPoint()
-        camera.SetPosition(f[0] + delta[0], f[1] + delta[1], f[2] + delta[2])
-        self._finish_camera()
+        self.vtk.SetNormalView(True)
 
     def original_vertical_view(self):
-        camera = self.renderer.GetActiveCamera()
-        camera.SetViewUp(*self._closest_up())
-        self._finish_camera()
+        self.vtk.SetVerticalView(True, True)

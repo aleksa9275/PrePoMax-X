@@ -1,4 +1,4 @@
-// Original topology conversion, shared unchanged with the headless data sink.
+// Original topology conversion of the ActiViz-era vtkMaxActor (3.0.0), kept for the headless spatial queries.
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using CaeGlobals;
 using Kitware.VTK;
 namespace vtkControl
 {
-    public partial class vtkMaxActor
+    public static partial class LegacyPolyTopology
     {
         private static void AddCellDataToPoly(PartExchangeData data, ref vtkPolyData polyActor, ref vtkPolyData polyEdges,
                                               out int[] numOfCellPolys, bool extractEdges)

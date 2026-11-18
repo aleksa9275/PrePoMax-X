@@ -25,16 +25,12 @@ def start(app,window,output,fixture=None):
         f=field(dialog,name);widget=dialog.entries[name][1]
         widget.setCurrentText(next(v for v in f.Choices if text in v))
         dialog.panel.commit_field(f,widget);app.processEvents()
+    from view_probe import ViewProbe
+    view=ViewProbe(app,window)
     def click_part(world=(10,5,5)):
-        camera=window.renderer.GetActiveCamera();camera.SetPosition(35,5,5);camera.SetFocalPoint(5,5,5);camera.SetViewUp(0,0,1);window.fit()
+        view.look((35,5,5),(5,5,5),(0,0,1))
         window.raise_();window.activateWindow();QtTest.QTest.qWait(100)
-        window.renderer.SetWorldPoint(*world,1);window.renderer.WorldToDisplay();x,y,_=window.renderer.GetDisplayPoint()
-        scale=window.viewport.devicePixelRatioF();qx,qy=x/scale,window.viewport.height()-y/scale
-        if __import__('sys').platform=='darwin':
-            from viewport_probe import CocoaEvents
-            events=CocoaEvents(window.viewport);events.height=window.viewport.height();events.send(1,qx,qy);events.send(2,qx,qy)
-        else:QtTest.QTest.mouseClick(window.viewport,QtCore.Qt.MouseButton.LeftButton,pos=QtCore.QPoint(round(qx),round(qy)))
-        app.processEvents()
+        view.click(*view.to_widget(world))
     def import_cad():
         from CaeModel import ModelSpaceEnum
         from CaeGlobals import UnitSystemType
@@ -51,13 +47,17 @@ def start(app,window,output,fixture=None):
         check('CAD import redo stays asynchronous with empty geometry',window.operation_task is not None and not window.tree.isEnabled())
     def sizing():
         if not wait():return False
-        check('native CAD imported into geometry tree',window.controller.CurrentView==ViewGeometryModelResults.Geometry and len(window.scene.actors)>0 and any(i.data(0,QtCore.Qt.ItemDataRole.UserRole).Family=='Geometry parts' and not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group for i in window.walk_tree()))
+        check('native CAD imported into geometry tree',window.controller.CurrentView==ViewGeometryModelResults.Geometry and len(view.actor_names())>0 and any(i.data(0,QtCore.Qt.ItemDataRole.UserRole).Family=='Geometry parts' and not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group for i in window.walk_tree()))
         from System import Array,Double
         from System.Drawing import Color
+        # Looking at the cut from the removed side: the cap of the closed CAD part fills the section
+        view.look((35,5,5),(5,5,5),(0,0,1))
+        whole=view.colored_pixels(output/'cad-whole.png')
         window.controller.CreateSectionView(Array[Double]([5,5,5]),Array[Double]([1,0,0]),True,Color.Empty,False,True);window.refresh()
-        report['cadCapData']=[{'name':str(a.Data.Name),'representation':str(a.Data.ActorRepresentation),'volumeCells':bool(a.Data.HasVolumeCells),'section':bool(a.Data.SectionViewPossible)} for a in window.session.Presentation.SceneActors]
-        report['cadCuts']=[{'cells':a.GetMapper().GetInput().GetNumberOfCells(),'type':a.GetMapper().GetInput().GetClassName()} for a in window.scene.presentation.features.cuts]
-        check('closed CAD section cap rendered without volume cells',any(a.GetMapper().GetInput().GetNumberOfCells()>0 and a.GetMapper().GetInput().GetCell(0).GetCellDimension()==2 for a in window.scene.presentation.features.cuts))
+        report['cadSection']={'names':view.actor_names(),'pixels':[whole,view.colored_pixels(output/'cad-section.png')],
+                              'pictureChanged':(output/'cad-whole.png').read_bytes()!=(output/'cad-section.png').read_bytes()}
+        check('closed CAD section cap rendered without volume cells',window.viewport.host.SectionViewChecked and report['cadSection']['pictureChanged']
+              and report['cadSection']['pixels'][1]>0.5*whole)
         window.controller.RemoveSectionView(False);window.refresh()
         # Original FrmMeshSetupItem compiled whole (C9), opened through FrmMain.CreateMeshSetupItem.
         from form_driver import FormDriver
@@ -90,11 +90,13 @@ def start(app,window,output,fixture=None):
     def mesh_done():
         if not wait():return False
         c=window.controller
-        check('generated solid mesh displayed in model view',len(c.Model.Mesh.Elements)>0 and c.CurrentView==ViewGeometryModelResults.Model and len(window.scene.actors)>0)
+        check('generated solid mesh displayed in model view',len(c.Model.Mesh.Elements)>0 and c.CurrentView==ViewGeometryModelResults.Model and len(view.actor_names())>0)
         check('native mesher output reaches output panel','elements' in window.output.toPlainText().lower())
         check('operation completion restores controls',window.tree.isEnabled() and window.actions['Open…'].isEnabled())
+        window.set_edge_mode('Model edges');window.fit();model_edges=view.dark_pixels(output/'mesh-model-edges.png')
         window.element_edges.setChecked(True);app.processEvents()
-        check('original element face edges rendered',len(window.scene.element_edge_actors)>0 and window.scene.element_edge_actors[0].GetMapper().GetInput().GetNumberOfCells()>12)
+        report['meshEdges']=[model_edges,view.dark_pixels(output/'mesh-element-edges.png')]
+        check('original element face edges rendered',str(window.vtk.EdgesVisibility)=='ElementEdges' and report['meshEdges'][1]>report['meshEdges'][0])
         state['elements']=len(c.Model.Mesh.Elements)
         part=next(iter(c.Model.Mesh.Parts.Values));state['part']=part.Name;state['minx']=part.BoundingBox.MinX
         item=next(i for i in window.walk_tree() if i.data(0,QtCore.Qt.ItemDataRole.UserRole).Family=='Parts' and not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group)
@@ -262,11 +264,17 @@ def start(app,window,output,fixture=None):
         report.update(success=True)
     steps=iter([import_cad,import_ready,import_undone,sizing,tetra,mesh,mesh_done,moved,undone,redone,compound_tree,
                 beam_import,beam_delete_face,beam_deleted,beam_meshed,shell_default_mesh]);current=[None]
+    # A hang can be inspected: kill -USR1 writes the Python stacks to faults.log
+    import faulthandler,signal
+    state['faults']=open(output/'faults.log','w');faulthandler.register(signal.SIGUSR1,file=state['faults'],all_threads=True)
     timer=QtCore.QTimer(window)
     def tick():
         try:
             if time.monotonic()-started>240:raise TimeoutError('GUI native operation timed out')
-            if current[0] is None:current[0]=next(steps)
+            if current[0] is None:
+                current[0]=next(steps)
+                # Which step runs, written as it starts (a hang leaves the step it is in)
+                with open(output/'progress.log','a') as log:log.write(current[0].__name__+'\n')
             if current[0]() is not False:current[0]=None
         except StopIteration:
             timer.stop();finish()

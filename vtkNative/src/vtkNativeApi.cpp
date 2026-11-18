@@ -82,6 +82,14 @@ extern "C"
         });
     }
 
+    vtkn_status VTKN_CALL vtkn_view_process_events(vtkn_view view)
+    {
+        return GuardVtk([&]() {
+            View::FromHandle(view)->ProcessEvents();
+            return VTKN_OK;
+        });
+    }
+
     vtkn_status VTKN_CALL vtkn_view_set_size(vtkn_view view, int32_t width, int32_t height)
     {
         return GuardVtk([&]() {

@@ -26,6 +26,7 @@ p.add_argument('--three-mf-library',type=Path,help='Explicit lib3mf 2.4.1 profil
 p.add_argument('--solver-registry',type=Path)
 p.add_argument('--solver-id')
 p.add_argument('--solver-directory',type=Path)
+p.add_argument('--vtk-native',type=Path,help='vtkNative runtime folder (X/Build/Vtk/build.py) for the 3D view')
 p.add_argument('--gui',action='store_true',help='Requires a display (Xvfb is supplemental Linux evidence)')
 p.add_argument('--package',type=Path,help='A PrePoMax-X package (folder, or macOS .app): its Python, native tools and solver profiles (X/Build/package_ui.py)')
 a=p.parse_args()
@@ -51,11 +52,13 @@ def run(name,command,environment=None):
 try:
     if (a.expect_os and a.expect_os!=host['os']) or (a.expect_architecture and a.expect_architecture!=host['architecture']):raise ValueError('Unexpected host')
     if a.gui and not a.python_profile:raise ValueError('--gui requires --python-profile')
+    if a.gui and not a.vtk_native:raise ValueError('--gui requires --vtk-native (the 3D view is vtkControl on vtkNative)')
     for source in HERE.glob('*.py'):ast.parse(source.read_text(),str(source))
     run('sources',[sys.executable,ROOT/'X/Domain/domain_sources.py','--check'])
     build=['dotnet','build',HERE/'Workbench/Workbench.csproj','-c','Release','--disable-build-servers','-m:1',
            '-p:UseSharedCompilation=false','--artifacts-path',folder/'build','-p:NativePreviewLockRoot='+str(folder/'locks'),'-v:q']
     if a.feed:build += ['-p:RestoreSources='+str(a.feed.resolve())]
+    if a.vtk_native:build += ['-p:VtkNativeRuntime='+str(a.vtk_native.resolve())]
     extractor_build=build.copy()
     extractor_build[2]=HERE/'FormSourceGen/FormSourceGen.csproj'
     run('form-extractor-build',extractor_build)
@@ -66,9 +69,8 @@ try:
     run('original-keyword-editor',[sys.executable,HERE/'generate-keyword-editor.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('original-automation',[sys.executable,ROOT/'X/Controller/generate-automation.py','--check'])
     run('original-advisor',[sys.executable,HERE/'generate-advisor.py','--check'])
-    run('original-follower',[sys.executable,HERE/'generate-presentation-rules.py','--check'])
+    run('original-view-host',[sys.executable,HERE/'generate-view-host.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
     run('ui-audit',[sys.executable,HERE/'audit-ui.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])
-    run('original-colormaps',[sys.executable,HERE/'generate-colormaps.py','--check'])
     run('original-main-menu',[sys.executable,HERE/'generate-main-menu.py','--check'])
     run('original-model-tree',[sys.executable,HERE/'generate-model-tree.py','--check'])
     run('original-form-classes',[sys.executable,HERE/'generate-original-forms.py','--check','--extractor',folder/'build/bin/FormSourceGen/release/FormSourceGen.dll'])

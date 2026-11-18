@@ -117,7 +117,7 @@ class GeometryWorkbench:
         self.operation_timer.timeout.connect(poll);self.operation_timer.start(20)
 
     def show_preview(self):
-        self.scene.show_selection(self.controller.Host.SelectionActors);self.render()
+        self.render()
 
     def geometry_tree_menu(self,entry,position):
         menu=QtWidgets.QMenu(self);actions={}

@@ -195,7 +195,7 @@ public FaceOffset FaceOffset
             }
         }
 
-public override void Preview()=>_controller.PreviewOffsetFaceAsync(FaceOffset.DeepClone()).GetAwaiter().GetResult();
+public override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewOffsetFaceAsync(FaceOffset.DeepClone()));
 public override object Item=>FaceOffset;
 protected override void OnSelect(object value) { _viewFaceOffset=(ViewFaceOffset)value; }
 public override string[] SelectionPrefixes=>[""];
@@ -243,7 +243,7 @@ public GeometryRepair GeometryRepair
                 ; /* Toolkit presentation. */
             }
         }
-protected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();
+protected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));
 private string[] GetPartNames(GeometryRepair geometryRepair)
         {
             string[] partNames = _controller.DisplayedMesh.GetPartNamesFromGeometryIds(geometryRepair.CreationIds);
@@ -258,7 +258,7 @@ private double GetInitialTolerance()
                                         (box.MaxZ - box.MinZ) * (box.MaxZ - box.MinZ));
             return diagonal > 0 && !double.IsInfinity(diagonal) ? 1E-4 * diagonal : 1E-7;
         }
-public override void Preview()=>_controller.PreviewRepairGeometryAsync(GetPartNames(GeometryRepair),GeometryRepair.DeepClone()).GetAwaiter().GetResult();
+public override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewRepairGeometryAsync(GetPartNames(GeometryRepair),GeometryRepair.DeepClone()));
 public override object Item=>GeometryRepair;
 protected override void OnSelect(object value) { _viewGeometryRepair=(ViewGeometryRepair)value; }
 public override string[] SelectionPrefixes=>[""];
@@ -305,7 +305,7 @@ public PeriodicFaceSplit PeriodicFaceSplit
                 ; /* Toolkit presentation. */
             }
         }
-protected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();
+protected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));
 private string[] GetPartNames(PeriodicFaceSplit periodicFaceSplit)
         {
             string[] partNames = _controller.DisplayedMesh.GetPartNamesFromGeometryIds(periodicFaceSplit.CreationIds);
@@ -359,7 +359,7 @@ public GeometrySelection GeometrySelection
                 ; /* Toolkit presentation. */
             }
         }
-protected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();
+protected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));
 
 public override object Item=>GeometrySelection;
 protected override void OnSelect(object value) { _viewSurfaceOperation=(ViewSurfaceOperation)value; }
@@ -416,7 +416,7 @@ public GeometryFeature GeometryFeature
                 ; /* Toolkit presentation. */
             }
         }
-protected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();
+protected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));
 private void ThrowIfGeometryFeatureCannotSplit(GeometryFeature geometryFeature)
         {
             if (geometryFeature == null) throw new CaeException("No geometry feature was selected.");
@@ -439,7 +439,7 @@ public override void SetSelection(int[] ids,Selection source=null,string prefix=
  _viewGeometryFeature.UpdateVisibility();_propertyItemChanged=true;
 }
 public override string[] SelectionPrefixes=>GeometryFeature is SplitByExtrudedEdges?["","Splitter","Direction"]:["","Splitter"];
-public override void Preview()=>_controller.PreviewSplitGeometryAsync(GeometryFeature.DeepClone()).GetAwaiter().GetResult();
+public override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewSplitGeometryAsync(GeometryFeature.DeepClone()));
 
 public override object Item=>GeometryFeature;
 protected override void OnSelect(object value) { _viewGeometryFeature=(ViewGeometryFeature)value; }

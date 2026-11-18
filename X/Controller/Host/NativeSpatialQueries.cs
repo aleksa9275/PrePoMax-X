@@ -21,14 +21,14 @@ namespace PrePoMax
         {
             if(surface)
             {
-                var topology=vtkMaxActor.GetSurfaceTopology(data);
+                var topology=LegacyPolyTopology.GetSurfaceTopology(data);
                 return new {coordinates=data.Nodes.Coor,nodeIds=data.Nodes.Ids,cells=topology.Cells,types=topology.Types,cellIds=topology.GlobalCellIds};
             }
             return new {coordinates=data.Nodes.Coor,nodeIds=data.Nodes.Ids,cells=data.Cells.CellNodeIds,types=data.Cells.Types,cellIds=data.Cells.Ids};
         }
         JsonElement QueryNative(string operation,double[] point,string[] names,double[][] planes=null)
         {
-            var actors=actorSource().Where(a=>a.Data.Pickable && a.Data.Geometry.Cells.CellNodeIds!=null).Select(a=>new {name=a.Data.Name,visible=a.Visible,surface=Grid(a.Data.Geometry,true),volume=operation=="frustum" && a.Data.VolumeGridAvailable?Grid(controller.GetVolumeGridData(a.Data.Name,-1),false):null}).ToArray();
+            var actors=actorSource().Where(a=>a.Data.Pickable && a.Data.Geometry.Cells.CellNodeIds!=null).Select(a=>new {name=a.Data.Name,visible=a.VtkMaxActorVisible,surface=Grid(a.Data.Geometry,true),volume=operation=="frustum" && a.Data.VolumeGridAvailable?Grid(controller.GetVolumeGridData(a.Data.Name,-1),false):null}).ToArray();
             string payload=JsonSerializer.Serialize(new {operation,point,names,planes,actors});
             return CallNative(payload);
         }

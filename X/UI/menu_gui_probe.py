@@ -170,26 +170,40 @@ def start(app, w, output, model, results):
             # Original vtkMaxScaleWidget: drawn with model length unit, clear of the status block.
             w.render()
             app.processEvents()
-            scale = w.scale_actor
-            props = w.renderer.GetViewProps()
-            present = all(props.IsItemPresent(a) for a in scale.actors())
-            report['scaleBar'] = {'present': present, 'visible': scale.visible, 'labels': [l.GetInput() for l in scale.labels],
-                                  'position': list(scale.position), 'barWidth': scale.bar_width,
-                                  'setting': bool(c.Settings.Graphics.ScaleWidgetVisibility)}
-            check('original scale bar drawn with length unit', present and scale.visible and scale.labels[-1].GetInput().endswith(' mm'))
-            check('scale bar starts right of the status block', scale.position[0] >= 300)
+            scale = w.vtk.GetNativeMirrorWidget('ScaleBar')
+            status = w.vtk.GetNativeMirrorWidget('StatusBlock')
+            values, visible = scale.GetPositionAndSize(False)
+            labels = [str(l) for l in scale.GetScaleBarLabels()]
+            report['scaleBar'] = {'visible': bool(visible), 'labels': labels, 'positionAndSize': list(values),
+                                  'statusBlock': str(status.GetRectangle()), 'setting': bool(c.Settings.Graphics.ScaleWidgetVisibility)}
+            check('original scale bar drawn with length unit', visible and labels and labels[-1].endswith(' mm'))
+            check('scale bar starts right of the status block', scale.GetRectangle().Left >= status.GetRectangle().Right)
 
             # RuntimeInitialization: invariant culture for displayed numbers.
             check('invariant decimal separator in numeric widgets', w.selection_angle.text().startswith('30.00'))
 
             # Original camera conventions (vtkControl): front looks along -Z with +Y up.
+            # The views animate (ViewAnimationEnabled): the probe waits for the camera to settle
+            from view_probe import ViewProbe
+            view = ViewProbe(app, w)
+            def normal_and_up():
+                previous = None
+                for _ in range(100):
+                    QtTest.QTest.qWait(30)
+                    camera = view.camera()
+                    if camera == previous: break
+                    previous = camera
+                position, focal, up = previous[0], previous[1], previous[2]
+                d = [position[i] - focal[i] for i in range(3)]; length = sum(v * v for v in d) ** .5
+                return [v / length for v in d], up
             trigger('tsmiFrontView')
-            cam = w.renderer.GetActiveCamera()
-            check('original front view', abs(cam.GetViewPlaneNormal()[2] - 1) < 1e-9 and abs(cam.GetViewUp()[1] - 1) < 1e-9)
+            n, up = normal_and_up()
+            check('original front view', abs(n[2] - 1) < 1e-6 and abs(up[1] - 1) < 1e-6)
             trigger('tsmiTopView')
-            check('original top view', abs(cam.GetViewPlaneNormal()[1] - 1) < 1e-9 and abs(cam.GetViewUp()[2] + 1) < 1e-9)
+            n, up = normal_and_up()
+            check('original top view', abs(n[1] - 1) < 1e-6 and abs(up[2] + 1) < 1e-6)
             trigger('tsmiIsometricView')
-            n = cam.GetViewPlaneNormal()
+            n, up = normal_and_up()
             check('original isometric view', all(abs(abs(v) - 3 ** -.5) < 1e-6 for v in n))
 
             # Original FrmMain tool strips: layout, icons, delegation to the menu handlers.
@@ -209,9 +223,10 @@ def start(app, w, output, model, results):
                   and not w.original_tools['tsbFollowerView'].isEnabled())
             symbols = [w.symbols.itemText(i) for i in range(w.symbols.count())]
             check('model view symbols list (UpdateSymbolsList)', symbols[:2] == ['None', 'Model'] and symbols[2:] == [s.Name for s in c.GetAllSteps()])
+            w.original_tools['tsbFrontView'].trigger(); app.processEvents(); normal_and_up()
             w.original_tools['tsbTopView'].trigger(); app.processEvents()
-            cam = w.renderer.GetActiveCamera()
-            check('tool strip Top view runs the original menu view', abs(cam.GetViewPlaneNormal()[1] - 1) < 1e-9)
+            n, up = normal_and_up()
+            check('tool strip Top view runs the original menu view', abs(n[1] - 1) < 1e-6)
             w.symbols.setCurrentIndex(0); app.processEvents()
             check('symbols combo draws None', str(c.GetDrawSymbolsForStep()) == 'None')
             w.symbols.setCurrentIndex(w.symbols.count() - 1); app.processEvents()
@@ -410,10 +425,16 @@ def start(app, w, output, model, results):
             w.invert_hide_show_or_activate(); app.processEvents()
             check('Space shows it again', c.Model.Mesh.Parts[part].Visible)
             w.tree.clearSelection()
+            # The mouse-over highlight is drawn by vtkControl: the picture changes and goes back on leaving
+            def picture(name):
+                image = view.png(output / name)
+                return image.bits().asstring(image.sizeInBytes())
+            plain = picture('hover-before.png')
             w.tree_mouse_over(find(part, find('Parts', find('Mesh')))); QtTest.QTest.qWait(250); app.processEvents()
-            check('mouse over highlights the part (timerMouseMove_Tick)', len(w.session.Presentation.SelectionActors) > 0)
+            highlighted = picture('hover.png')
+            check('mouse over highlights the part (timerMouseMove_Tick)', highlighted != plain)
             w.tree_mouse_over(None); QtTest.QTest.qWait(250); app.processEvents()
-            check('mouse leave clears the highlight', len(w.session.Presentation.SelectionActors) == 0)
+            check('mouse leave clears the highlight', picture('hover-after.png') == plain)
 
             # Property > Material: Duplicate then Delete through original selection and commands.
             materials = [m.Name for m in c.GetAllMaterials()]
@@ -565,7 +586,7 @@ def start(app, w, output, model, results):
             w.dirty = False
             c.ModelChanged = False
             (output / 'menu-gui.json').write_text(json.dumps(report, indent=2) + '\n')
-            w.viewport.Finalize()
+            w.viewport.detach()
             app.quit()
 
     QtCore.QTimer.singleShot(200, run)

@@ -24,7 +24,7 @@ class GeometryDialog(PropertyDialog):
         self.rule.PrepareSelection(prefix)
         self.parent_window.pick_mode.setCurrentText(self.target(prefix))
         self.parent_window.selected=[]
-        self.parent_window.scene.show_selection([]);self.parent_window.render()
+        self.parent_window.render()
         self.error.setText('Pick in the viewport, then use the picked selection for '+(prefix or 'Region')+'.')
 
     def done(self,result):

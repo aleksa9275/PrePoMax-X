@@ -18,7 +18,9 @@ def start(app,w,output,check_three_mf=False):
     def run():
         try:
             c=w.controller;baseline=output.parent/'service/application.pmx';w.open(str(baseline));app.processEvents()
-            check('C5 menus and native viewport',all(n in w.application_actions for n in ['Settings…','Material library…','Edit commands…','CalculiX keywords…','Run Python file…']) and len(w.scene.actors)>0)
+            from view_probe import ViewProbe
+            view=ViewProbe(app,w)
+            check('C5 menus and native viewport',all(n in w.application_actions for n in ['Settings…','Material library…','Edit commands…','CalculiX keywords…','Run Python file…']) and len(view.actor_names())>0)
             dialog=SettingsDialog(w);check('all original settings pages presented',dialog.pages.count()==13)
             dialog.pages.setCurrentText('Graphics') if hasattr(dialog.pages,'setCurrentText') else dialog.pages.setCurrentRow(list(dialog.rule.Pages).index('Graphics'))
             app.processEvents();check('original graphics property widget', 'AmbientComponent' in dialog.panel.entries);dialog.panel.entries['AmbientComponent'][1].setText('0.6');dialog.apply();check('settings GUI applies original values',abs(c.Settings.Graphics.AmbientComponent-.6)<1e-6);dialog.reject()
@@ -26,15 +28,15 @@ def start(app,w,output,check_three_mf=False):
             keywords=KeywordDialog(w);check('original keyword tree and preview',keywords.tree.topLevelItem(0).childCount()>0 and '*NODE' in keywords.preview.toPlainText().upper());keywords.reject()
             library=LibraryDialog(w);library.rule.Open(str(output.parent/'service/materials.lib'));library.rebuild();check('material library graph is visible',library.tree.topLevelItem(0).child(0).child(0).text(0)=='XSTEEL');library.reject()
             views=UserViewsDialog(w);views.add();views.rebuild();check('user view captures original camera',len(views.rule.Names)==1);views.rule.Apply();views.reject()
-            c.SetUserView(c.GetUserViewParameters()[0].Name);app.processEvents();check('original saved view controls native camera',w.renderer.GetActiveCamera().GetParallelScale()>0)
+            c.SetUserView(c.GetUserViewParameters()[0].Name);app.processEvents();check('original saved view controls native camera',view.camera()[3]>0)
             check('original advisor pages visible',len(w.advisor_pages)==9 and w.advisor_index.count()==9)
             from PrePoMaxX.UI import QuerySession
             check('original query calculations available from UI','Bounding box' in QuerySession(c).Run('Bounding box',__import__('System').Array[__import__('System').Int32]([])))
-            w.application.Find('Node',1,True);w.refresh();w.scene.show_selection(w.session.Presentation.SelectionActors);check('original Find highlight and annotation',w.scene.highlight_actor is not None and len(c.Annotations.GetCurrentAnnotationNames())>0)
-            w.set_edge_mode('No edges');check('no-edge mode controls native actors',all(not a.GetVisibility() for a in w.scene.element_edge_actors));w.set_edge_mode('Model edges')
-            w.pick_mode.setCurrentIndex(0);w.box_select.setChecked(True);QtTest.QTest.mousePress(w.viewport,QtCore.Qt.MouseButton.LeftButton,pos=QtCore.QPoint(2,2));QtTest.QTest.mouseMove(w.viewport,QtCore.QPoint(w.viewport.width()-2,w.viewport.height()-2));QtTest.QTest.mouseRelease(w.viewport,QtCore.Qt.MouseButton.LeftButton,pos=QtCore.QPoint(w.viewport.width()-2,w.viewport.height()-2));app.processEvents();check('rectangle gesture resolves original frustum element IDs',w.selected==[1]);w.box_select.setChecked(False);w.clear_selection()
-            check('native orientation and scale preference widgets',hasattr(w,'orientation_widget') and hasattr(w,'scale_actor'))
-            w.capture(str(output/'transparent.png'),True,2);image=QtGui.QImage(str(output/'transparent.png'));check('magnified RGBA capture',image.hasAlphaChannel() and image.width()==w.viewport.GetRenderWindow().GetSize()[0]*2);check('transparent capture background',image.pixelColor(0,0).alpha()==0)
+            w.application.Find('Node',1,True);w.refresh();report['findHighlightPixels']=view.highlighted_pixels(output/'find.png');check('original Find highlight and annotation',report['findHighlightPixels']>0 and len(c.Annotations.GetCurrentAnnotationNames())>0)
+            dark=lambda name:view.count_pixels(output/name,lambda q:q.red()<90 and q.green()<90 and q.blue()<90);w.clear_selection();edges=dark('edges.png');w.set_edge_mode('No edges');report['darkPixels']=[edges,dark('no-edges.png')];check('no-edge mode controls native actors',str(w.vtk.EdgesVisibility)=='NoEdges' and report['darkPixels'][1]<report['darkPixels'][0]);w.set_edge_mode('Model edges')
+            w.pick_mode.setCurrentIndex(0);w.apply_pick_mode();view.drag(4,4,w.viewport.width()-8,w.viewport.height()-8);check('rectangle gesture resolves original frustum element IDs',w.selected==[1]);w.clear_selection()
+            report['viewWidgets']=[str(n) for n in w.vtk.GetNativeMirrorWidgetNames()];check('native orientation and scale preference widgets',len(report['viewWidgets'])>=2)
+            w.capture(str(output/'transparent.png'),True,2);image=QtGui.QImage(str(output/'transparent.png'));check('magnified RGBA capture',image.hasAlphaChannel() and image.width()==view.size()[0]*2);check('transparent capture background',image.pixelColor(0,0).alpha()==0)
             w.script_dock.show();w.script_edit.setPlainText('print("C5", 7*6)');w.script_record.setChecked(True);w.execute_script();check('script task locks document menus',not w.tree.isEnabled());wait(lambda:w.operation_task is None);check('original Python output in panel','C5 42' in w.script_output.toPlainText());check('script task unlocks document',w.tree.isEnabled())
             from PrePoMax.Python import PythonEngineManager
             w.script_edit.setPlainText('while True:\n    pass');w.execute_script();wait(lambda:PythonEngineManager.IsExecuting);w.interrupt_script();wait(lambda:w.operation_task is None);check('original Python Stop interrupts active script','KeyboardInterrupt' in w.script_output.toPlainText());w.script_edit.setPlainText('print("C5", 7*6)')
@@ -101,5 +103,5 @@ def start(app,w,output,check_three_mf=False):
             except Exception:pass
             if w.active_editor is not None:w.active_editor.reject()
             w.dirty=False;c.ModelChanged=False
-            (output/'application-gui.json').write_text(json.dumps(report,indent=2)+'\n');w.viewport.Finalize();app.quit()
+            (output/'application-gui.json').write_text(json.dumps(report,indent=2)+'\n');w.viewport.detach();app.quit()
     QtCore.QTimer.singleShot(400,run)

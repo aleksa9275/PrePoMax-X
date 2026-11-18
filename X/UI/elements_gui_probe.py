@@ -89,14 +89,22 @@ def start(app, window, output):
             classes = sorted({type(e).__name__ for e in values(mesh.Elements)})
             report['elementClasses'][name] = classes
             check(name + ': original element classes imported', expected <= set(classes))
-            drawn = {str(o.Data.Name) for o in window.scene.drawn}
+            from view_probe import ViewProbe
+            view = ViewProbe(app, window)
+            window.fit()
+            drawn = set(view.actor_names())
             parts = [str(p.Name) for p in values(mesh.Parts)]
             check(name + ': every mesh part drawn', set(parts) <= drawn)
-            check(name + ': drawn cells', all(a.GetMapper().GetInput().GetNumberOfCells() > 0 for a in window.scene.actors))
+            window.set_edge_mode('Model edges')
+            check(name + ': drawn cells', view.colored_pixels(output / (name + '-model.png')) > 100)
+            model_edges = view.dark_pixels(output / (name + '-model.png'))
             window.element_edges.setChecked(True)
             app.processEvents()
-            report.setdefault('elementEdges', {})[name] = len(window.scene.element_edge_actors)
-            check(name + ': element edges drawn', len(window.scene.element_edge_actors) > 0)
+            element_edges = view.dark_pixels(output / (name + '-elements.png'))
+            # Element edges are thin lines inside the faces: the pixels they darken against the model-edge picture
+            added = view.darkened_pixels(output / (name + '-model.png'), output / (name + '-elements.png'))
+            report.setdefault('elementEdges', {})[name] = {'darkPixels': [model_edges, element_edges], 'addedLinePixels': added}
+            check(name + ': element edges drawn', str(window.vtk.EdgesVisibility) == 'ElementEdges' and added > 0)
             window.element_edges.setChecked(False)
             app.processEvents()
             # The tree lists the parts with their part-type icons.
@@ -138,11 +146,14 @@ def start(app, window, output):
         window.output.ensureCursorVisible()
         point = window.output.cursorRect(cursor).center()
         c.ClearAllSelection()
-        window.scene.show_selection(window.session.Presentation.SelectionActors)
+        from view_probe import ViewProbe
+        view = ViewProbe(app, window)
+        before = view.highlighted_pixels(output / 'inverted-before.png')
         QtTest.QTest.mouseClick(window.output.viewport(), QtCore.Qt.MouseButton.LeftButton, pos=point)
         app.processEvents()
+        report['invertedHighlight'] = [before, view.highlighted_pixels(output / 'inverted-after.png')]
         check('clicking the link highlights the inverted elements (HighlightInvertedElementsNamedAt)',
-              len(window.session.Presentation.SelectionActors) > 0 and len(window.scene.selection_actors) > 0
+              report['invertedHighlight'][1] > report['invertedHighlight'][0]
               and 'has no inverted' not in window.output.toPlainText())
 
     def mass_and_damping():

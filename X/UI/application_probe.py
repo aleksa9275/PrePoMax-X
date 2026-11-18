@@ -54,11 +54,10 @@ def run(session,output):
         result=application.Execute('print(6 * 7)',True,None,Array[String]([]));result.Wait();check('original Python execution output',not result.Result.Error and '42' in result.Result.Output)
         check('script recorded as original command',c.GetActiveCommands()[c.GetActiveCommandCount()-1].GetType().Name=='CRunPythonScript')
         check('automation starts disabled',not application.Automation.IsRunning and not c.AutomationSettings.AccessToken)
-        from PrePoMaxX.UI import QuerySession,FollowerCameraSession,AdvisorPages,ContactSearchSession
+        from PrePoMaxX.UI import QuerySession,AdvisorPages,ContactSearchSession
         from System import Int32,Action
         query=QuerySession(c);check('original node and assembly query calculations','Node' in query.Run('Node',Array[Int32]([1])) and 'Assembly' in query.Run('Assembly',Array[Int32]([])))
         check('original distance and angle query outputs','Distance' in query.Run('Distance',Array[Int32]([1,2])) and 'Angle' in query.Run('Angle',Array[Int32]([1,2,3])))
-        follower=FollowerCameraSession();matrix=lambda rows:Array[Array[Double]]([Array[Double](row) for row in rows]);follower.Step(matrix([[0,0,0]]),Array[Double]([0,-4,0]),Array[Double]([0,0,0]),Array[Double]([0,0,1]));view=follower.Step(matrix([[1,0,0]]),Array[Double]([0,-4,0]),Array[Double]([0,0,0]),Array[Double]([0,0,1]));check('original follower point camera projection',view.Position[0]==1 and view.FocalPoint[0]==1 and view.Position[1]==-4)
         actions=[];callback=Action[String,Int32](lambda name,index:actions.append((str(name),int(index))));pages=AdvisorPages.Create(callback);pages[0].Items[1].Activate();check('original advisor pages and action arguments',len(pages)==9 and actions==[('tsmiNew_Click',-1)])
         from CaeMesh.ContactSearchNamespace import GeometryFilterEnum
         search=ContactSearchSession(c);task=search.Search(.01,10,'ByParts','Tie','','Surface to surface',False,GeometryFilterEnum.Solid);task.Wait();check('original contact search runs on live model',not task.IsFaulted)

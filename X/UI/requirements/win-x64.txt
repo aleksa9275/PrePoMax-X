@@ -1,6 +1,5 @@
 # X/UI runtime wheels for win-x64 (CPython 3.12), hash-pinned from PyPI. The UI imports only these;
 # install with: pip install --require-hashes --only-binary=:all: --no-deps -r <this file>
-vtk==9.5.2 --hash=sha256:5357bccdf8629373195cab871e45c50383d052d316192aa48f45bd9f87bafccb
 PyQt6==6.10.0 --hash=sha256:8b5e4ea573733017a76bd12ea1b53351fd7f6dc57f8abf4329c4a41fea6dde04
 PyQt6-Qt6==6.10.2 --hash=sha256:c4b7f7d66cc58bddf1bc1ca28dfcf7a45f58cfcb11d81d13a0510409dd4957ac
 PyQt6-sip==13.13.0 --hash=sha256:c6b67d301ef64e13d313c728020616315c952473abb27029b2e5857b44a7b3e6

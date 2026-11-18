@@ -96,5 +96,4 @@ class OutputLinksWorkbench:
         self.view.setCurrentText(str(c.CurrentView))
         self.view.blockSignals(False)
         self.refresh()
-        self.scene.show_selection(self.session.Presentation.SelectionActors)
         self.render()

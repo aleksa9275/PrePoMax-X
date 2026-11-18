@@ -89,12 +89,12 @@ for n,view,item,initial,helpers in [
  async_apply=any(m['name']=='OnApplyAsync' for m in forms[n]['methods'])
  code=clean(method(n,'OnApplyAsync' if async_apply else 'OnApply'))
  code=code.replace('protected override async Task OnApplyAsync','protected override async System.Threading.Tasks.Task ApplyAsync')
- if async_apply:code+='\nprotected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();'
+ if async_apply:code+='\nprotected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));'
  fields=typename+' '+view+';bool _applying;'+('SurfaceOperationEnum _operation;' if n=='FrmSurfaceOperation' else '')
  ctor=(' _operation=Enum.Parse<SurfaceOperationEnum>(name);' if n=='FrmSurfaceOperation' else '')+view+'='+initial+';SelectedObject='+view+';'
  members=clean(prop(n,item))+code+'\n'+'\n'.join(method(n,m) for m in helpers)
- if n=='FrmOffsetFace':members+='\npublic override void Preview()=>_controller.PreviewOffsetFaceAsync(FaceOffset.DeepClone()).GetAwaiter().GetResult();'
- if n=='FrmRepairGeometry':members+='\npublic override void Preview()=>_controller.PreviewRepairGeometryAsync(GetPartNames(GeometryRepair),GeometryRepair.DeepClone()).GetAwaiter().GetResult();'
+ if n=='FrmOffsetFace':members+='\npublic override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewOffsetFaceAsync(FaceOffset.DeepClone()));'
+ if n=='FrmRepairGeometry':members+='\npublic override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewRepairGeometryAsync(GetPartNames(GeometryRepair),GeometryRepair.DeepClone()));'
  add(n,fields,ctor,members,item,view+'=('+typename+')value;', [''])
 
 n='FrmSplitSolid'
@@ -105,7 +105,7 @@ public SplitTypeEnum SplitType {get;private set;}
 public bool RegionPicksParts=>SplitType==SplitTypeEnum.Solid;''',
 '''SplitType=name=="Split shell"?SplitTypeEnum.Shell:SplitTypeEnum.Solid;
 for(int i=0;i<GeometryFeatureTypes.Count(SplitType);i++) {var view=GeometryFeatureTypes.CreateDefaultView(SplitType,i);view.GetBase().SplitType=SplitType;choices.Add(new EditorChoice(GeometryFeatureTypes.GetDisplayName(SplitType,i)){Tag=view});}Select(0);''',
-clean(prop(n,'GeometryFeature'))+code+'\nprotected override void OnApply(bool addNew)=>ApplyAsync(addNew).GetAwaiter().GetResult();\n'+method(n,'ThrowIfGeometryFeatureCannotSplit')+'''
+clean(prop(n,'GeometryFeature'))+code+'\nprotected override void OnApply(bool addNew)=>OriginalViewHost.WaitFor(ApplyAsync(addNew));\n'+method(n,'ThrowIfGeometryFeatureCannotSplit')+'''
 public override void SetSelection(int[] ids,Selection source=null,string prefix="") {
  ValidateSelection(source,prefix);
  var target=prefix=="Direction"?FeatureSelectionTargetEnum.Direction:prefix=="Splitter"?FeatureSelectionTargetEnum.Splitter:FeatureSelectionTargetEnum.Region;
@@ -117,7 +117,7 @@ public override void SetSelection(int[] ids,Selection source=null,string prefix=
  _viewGeometryFeature.UpdateVisibility();_propertyItemChanged=true;
 }
 public override string[] SelectionPrefixes=>GeometryFeature is SplitByExtrudedEdges?["","Splitter","Direction"]:["","Splitter"];
-public override void Preview()=>_controller.PreviewSplitGeometryAsync(GeometryFeature.DeepClone()).GetAwaiter().GetResult();
+public override void Preview()=>OriginalViewHost.WaitFor(_controller.PreviewSplitGeometryAsync(GeometryFeature.DeepClone()));
 ''','GeometryFeature','_viewGeometryFeature=(ViewGeometryFeature)value;')
 
 n='FrmPartProperties'

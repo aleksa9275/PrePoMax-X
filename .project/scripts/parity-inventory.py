@@ -119,6 +119,8 @@ def main() -> None:
         "C8 completes the ModelTree (rename, drag and drop, groups, cells, keys, mouse over) and adds executed UI evidence for",
         "the solid/shell element classes, mass/spring/gap elements, InvertedElements, MassSection and Damping; beam element",
         "classes stay AB (created only from CAD edges and beam results); see [C8](reports/phase-c8-tree-elements.md).",
+        "Since M1 the C evidence of the 3D view runs on the original vtkControl (upstream vtkNative, VTK 9.7.1) on macOS and",
+        "Linux ARM64, not on a reimplemented renderer; see [M1](reports/phase-m1-original-vtkcontrol.md).",
         "Commands marked 'compatibility only' are never constructed by the original UI (old-history types or controller-inserted).",
         "See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).",
         "The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.",

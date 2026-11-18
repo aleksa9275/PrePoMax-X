@@ -3,5 +3,8 @@
   <Import Project="Sources.g.props" />
   <ItemGroup>
     <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+    <ProjectReference Include="../CaeMesh/CaeMesh.csproj" />
+    <!-- The whole control is a WinForms UserControl: the headless control model of the X UI (no native code) -->
+    <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
   </ItemGroup>
 </Project>

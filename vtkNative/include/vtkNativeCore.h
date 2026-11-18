@@ -116,6 +116,9 @@ VTKN_API vtkn_status VTKN_CALL vtkn_set_log_callback(vtkn_log_callback callback,
 VTKN_API vtkn_status VTKN_CALL vtkn_view_create(int32_t off_screen, vtkn_view* view);
 VTKN_API vtkn_status VTKN_CALL vtkn_view_destroy(vtkn_view view);
 VTKN_API vtkn_status VTKN_CALL vtkn_view_set_parent_window(vtkn_view view, void* parent_window);
+/* X11: an embedded view leaves the mouse and the keys to its parent (vtkn_view_handle_input) and the host calls this
+   from its event loop for the view's exposure, size and timer events; nothing to do on Win32 and Cocoa */
+VTKN_API vtkn_status VTKN_CALL vtkn_view_process_events(vtkn_view view);
 VTKN_API vtkn_status VTKN_CALL vtkn_view_set_size(vtkn_view view, int32_t width, int32_t height);
 VTKN_API vtkn_status VTKN_CALL vtkn_view_get_size(vtkn_view view, int32_t* width, int32_t* height);
 VTKN_API vtkn_status VTKN_CALL vtkn_view_set_event_callback(vtkn_view view, vtkn_event_callback callback,

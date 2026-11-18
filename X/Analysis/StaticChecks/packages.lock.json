@@ -91,6 +91,12 @@
       "gmshcommon": {
         "type": "Project"
       },
+      "PrePoMaxX.FormsCompat": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )"
+        }
+      },
       "PrePoMaxX.MeasureMesh": {
         "type": "Project",
         "dependencies": {
@@ -125,7 +131,9 @@
       "vtkcontrol": {
         "type": "Project",
         "dependencies": {
-          "CaeGlobals": "[1.0.0, )"
+          "CaeGlobals": "[1.0.0, )",
+          "CaeMesh": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
         }
       }
     }

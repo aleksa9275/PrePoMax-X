@@ -65,37 +65,52 @@ def start(app,window,output):
             dialog=QtWidgets.QApplication.activeModalWidget();dialog.findChild(QtWidgets.QComboBox).setCurrentText('MM_TON_S_C');dialog.accept()
         QtCore.QTimer.singleShot(50,choose_units);window.session.Presentation.SelectResultsUnitSystem()
         check('unknown result units use interactive original policy',window.controller.CurrentResult.UnitSystem.UnitSystemType==UnitSystemType.MM_TON_S_C)
-        check('results view and scalar surface visible',window.controller.CurrentView==ViewGeometryModelResults.Results and len(window.scene.actors)>0)
+        from view_probe import ViewProbe
+        view=ViewProbe(app,window);state['view']=view
+        check('results view and scalar surface visible',window.controller.CurrentView==ViewGeometryModelResults.Results and len(view.actor_names())>0)
         check('field controls contain original data',window.result_boxes['Field'].count()>=3 and window.original_strips['tsResults'].isEnabled() and window.tool_tscbStepAndIncrement.count()>0)
         window.result_boxes['Field'].setCurrentText('DISP');window.result_boxes['Component'].setCurrentText('U1');app.processEvents()
         check('field control changes original current field',window.controller.CurrentFieldData.Name=='DISP' and window.controller.CurrentFieldData.Component=='U1')
-        check('native scalar mapper active',bool(window.scene.presentation.scalar_mappers) and all(m.GetScalarVisibility()==1 for m in window.scene.presentation.scalar_mappers))
-        check('original legend colors and status rendered',window.scene.presentation.scalar_bar is not None and window.scene.presentation.status is not None and window.scene.presentation.table.GetNumberOfTableValues()==9)
+        exported=list(window.vtk.GetVtkMaxActorData());report['scalarRange']=list(view.scalar_range())
+        check('native scalar mapper active',any(d.ColorContours and d.Geometry is not None and d.Geometry.Nodes.Values is not None for d in exported) and report['scalarRange'][0]<report['scalarRange'][1])
+        report['widgets']=view.widget_names();table=window.vtk.GetLookupTable()
+        check('original legend colors and status rendered',window.vtk.NativeMirrorScalarBar is not None and 'StatusBlock' in report['widgets'] and len(table.GetColors() if hasattr(table,'GetColors') else table.Colors)==9)
         window.results.Deformation('DISP','TrueScale',Single(1));window.refresh();check('deformation uses original scale',window.controller.GetScale()==1)
-        window.result_boxes['View'].setCurrentText('VectorPlot');app.processEvents();check('native vector plot rendered',len(window.scene.presentation.plot_commands)>0)
+        # The original draws a vector or tensor plot as the part's actor itself (vtkMaxActorData named after the part):
+        # the actor names stay, the picture changes from the contour surface to the glyphs
+        contours=set(view.actor_names());image=view.png(output/'plot-contours.png');pictures={'contours':image.bits().asstring(image.sizeInBytes())}
+        window.result_boxes['View'].setCurrentText('VectorPlot');app.processEvents()
+        vector=view.png(output/'vector-plot.png');pictures['vector']=vector.bits().asstring(vector.sizeInBytes())
+        report['vectorPlot']={'actors':view.actor_names(),'pictureChanged':pictures['vector']!=pictures['contours']}
+        check('native vector plot rendered',any(v.Name=='AddVectorFieldActor' for v in window.session.Presentation.RenderCommands) and contours<=set(report['vectorPlot']['actors']) and report['vectorPlot']['pictureChanged'])
         window.result_boxes['Field'].setCurrentText('STRESS');window.result_boxes['Component'].setCurrentText('S11');app.processEvents();window.results.Representation('TensorPlot');window.refresh()
-        check('native tensor plot rendered',any('Tensor' in name for name,_,_ in window.scene.presentation.plot_commands))
+        tensor=view.png(output/'tensor-plot.png');pictures['tensor']=tensor.bits().asstring(tensor.sizeInBytes())
+        report['tensorPlot']={'actors':view.actor_names(),'pictureChanged':pictures['tensor'] not in (pictures['contours'],pictures['vector'])}
+        check('native tensor plot rendered',any(v.Name=='AddTensorFieldActor' for v in window.session.Presentation.RenderCommands) and contours<=set(report['tensorPlot']['actors']) and report['tensorPlot']['pictureChanged'])
         window.result_boxes['Field'].setCurrentText('DISP');window.result_boxes['Component'].setCurrentText('U1');window.result_boxes['View'].setCurrentText('ColorContours');app.processEvents()
+        widgets=set(view.widget_names())
         window.controller.Annotations.AddNodeAnnotation(2);window.controller.Annotations.AddDistanceAnnotation(1,2);window.refresh()
-        check('original annotations rendered',any(v.Name=='AddArrowWidget' for v in window.session.Presentation.RenderCommands) and len(window.scene.presentation.props)>2)
+        report['annotationWidgets']=sorted(set(view.widget_names())-widgets)
+        check('original annotations rendered',any(v.Name=='AddArrowWidget' for v in window.session.Presentation.RenderCommands) and len(report['annotationWidgets'])>=2)
         window.animation_type.setCurrentText('Scale factor');window.frames.setValue(5);window.play_animation();window.animation_timer.stop()
-        window.show_frame(0);state['first']=window.scene.presentation.animated[0][1].GetMapper().GetInput().GetPoint(1);window.show_frame(4);state['last']=window.scene.presentation.animated[0][1].GetMapper().GetInput().GetPoint(1)
-        check('original frame data moves native points',state['first']!=state['last']);check('animation slider supports all frames',window.frame_slider.maximum()==4)
+        window.show_frame(0);state['first']=view.node_position(2);window.show_frame(4);state['last']=view.node_position(2)
+        check('original frame data moves native points',state['first'] is not None and state['last'] is not None and state['first']!=state['last']);check('animation slider supports all frames',window.frame_slider.maximum()==4)
         window.export_animation(str(output/'frames.png'));check('animation PNG sequence exported',len(list(output.glob('*_frames.png')))==5)
-        window.export_animation(str(output/'animation.ogv'));check('native Ogg Theora animation exported',(output/'animation.ogv').stat().st_size>1000)
+        window.export_animation(str(output/'animation.avi'));check('original AVI animation exported (vtkControl.SaveAnimationAsAVI)',(output/'animation.avi').stat().st_size>1000)
         window.stop_animation();window.fit();window.capture(str(output/'contours.png'))
         check('native PNG capture',(output/'contours.png').stat().st_size>2000)
         window.session.Presentation.SaveAutomationScreenshot(str(output/'automation.png'),False,1)
         check('original automation screenshot reaches rendered viewport',(output/'automation.png').stat().st_size>2000)
         from presentation_widgets import PresentationDialog,TransformationsDialog
         dialog=PresentationDialog(window,'Legend');check('original legend view descriptors',len(dialog.rule.Properties.Fields)>5);dialog.reject()
-        dialog=PresentationDialog(window,'Section view');dialog.rule.Properties.Set('X','0.5');dialog.rule.Apply();window.refresh();check('native section plane and cap rendered',len(window.scene.presentation.features.cuts)>0);window.controller.RemoveSectionView(False);window.refresh();dialog.reject()
-        dialog=TransformationsDialog(window);dialog.rule.Add(3);dialog.rule.ApplyTransformation();window.refresh();check('original linear pattern rendered',len(window.scene.presentation.features.copies)>0);window.controller.RemoveCurrentTransformations(True);window.refresh();dialog.reject()
+        dialog=PresentationDialog(window,'Section view');dialog.rule.Properties.Set('X','0.5');dialog.rule.Apply();window.refresh();check('native section plane and cap rendered',window.viewport.host.SectionViewChecked and view.colored_pixels(output/'section.png')>100);window.controller.RemoveSectionView(False);window.refresh();dialog.reject()
+        single=len(window.vtk.GetVtkMaxActorData())
+        dialog=TransformationsDialog(window);dialog.rule.Add(3);dialog.rule.ApplyTransformation();window.refresh();report['patternExport']=[single,len(window.vtk.GetVtkMaxActorData())];check('original linear pattern rendered',any(v.Name=='AddLinearPattern' for v in window.session.Presentation.RenderCommands) and report['patternExport'][1]>single);window.controller.RemoveCurrentTransformations(True);window.refresh();dialog.reject()
         from CaeResults import Transformation,CircularPattern
         from System.Collections.Generic import List
         from System import Array,Double
         window.results.Field('STRESS','S11',1,1);patterns=List[Transformation]();patterns.Add(CircularPattern('Quarter_turn',Array[Double]([0,0,0]),Array[Double]([0,0,1]),90,2));window.controller.SetTransformations(patterns);window.refresh()
-        bounds=window.scene.presentation.table.GetTableRange();check('rotated tensor component included in scalar range',bounds[0]<1 and bounds[1]>90)
+        bounds=view.scalar_range();report['rotatedRange']=list(bounds);check('rotated tensor component included in scalar range',bounds[0]<1 and bounds[1]>90)
         window.controller.RemoveCurrentTransformations(True);window.results.Field('DISP','U1',1,1);window.refresh()
         from results_widgets import ResultsDialog
         for family,name in [('Result coordinate systems','GUI_CS'),('Result reference points','GUI_RP')]:
@@ -158,7 +173,7 @@ def start(app,window,output):
         positions=[]
         for frame in (1,frames):
             r.guard(lambda f=frame:c['numCurrFrame'].UserSetValue(System.Decimal(f)));settle(200)
-            positions.append(tuple(window.scene.presentation.animated[0][1].GetMapper().GetInput().GetPoint(1)))
+            positions.append(state['view'].node_position(2))
         forms['FrmAnimation']={'frames':frames,'current':int(System.Decimal.ToDouble(c['numCurrFrame'].Value)),'workbenchFrame':window.animation_frame}
         check('original frame controls move the rendered points (FrmMain.SetAnimationFrame)',positions[0]!=positions[1] and window.animation_frame==frames-1)
         r.guard(c['btnClose'].RaiseClick);settle()
@@ -168,10 +183,10 @@ def start(app,window,output):
         form=visible('FrmSectionView');check('Section View opens the original FrmSectionView',form is not None)
         c=named(form);bar=c['hsbPosition']
         from System.Windows.Forms import ScrollEventType;r.guard(lambda:bar.UserScroll(ScrollEventType.ThumbPosition,(bar.Minimum+bar.Maximum)//2));settle(500)
-        forms['FrmSectionView']={'scroll':[bar.Minimum,bar.Maximum,bar.Value],'cuts':len(window.scene.presentation.features.cuts)}
-        check('the position scroll bar draws the section (original preview)',len(window.scene.presentation.features.cuts)>0)
+        forms['FrmSectionView']={'scroll':[bar.Minimum,bar.Maximum,bar.Value],'section':bool(window.viewport.host.SectionViewChecked)}
+        check('the position scroll bar draws the section (original preview)',window.viewport.host.SectionViewChecked)
         r.guard(c['btnCancel'].RaiseClick);settle()
-        check('Cancel removes the section',not form.Visible and len(window.scene.presentation.features.cuts)==0)
+        check('Cancel removes the section',not form.Visible and not window.viewport.host.SectionViewChecked)
         # Transformation
         window.run_original_entry('tsmiTransformation_Click');settle()
         form=visible('FrmTransformation');check('Transformation opens the original FrmTransformation',form is not None)
@@ -182,10 +197,12 @@ def start(app,window,output):
         texts=[str(n.Text) for n in nodes(tree.Nodes)];forms['FrmTransformation']={'types':texts}
         node=[n for n in nodes(tree.Nodes) if 'Linear' in str(n.Text)]
         check('the original transformation tree lists a linear pattern',bool(node));node=node[0];node.EnsureVisible();r.flush()
+        single=len(window.vtk.GetVtkMaxActorData())
         helper.tree_click(tree_widget,node);r.guard(c['btnAdd'].RaiseClick);r.guard(c['bntApply'].RaiseClick);settle()
-        check('a linear pattern added in the original tree is rendered',len(window.scene.presentation.features.copies)>0)
+        patterned=len(window.vtk.GetVtkMaxActorData());forms['FrmTransformation']['export']=[single,patterned]
+        check('a linear pattern added in the original tree is rendered',patterned>single)
         r.guard(c['btnCancel'].RaiseClick);settle()
-        check('Cancel hides the form and keeps the applied pattern (original btnCancel_Click)',not form.Visible and len(window.scene.presentation.features.copies)>0)
+        check('Cancel hides the form and keeps the applied pattern (original btnCancel_Click)',not form.Visible and len(window.vtk.GetVtkMaxActorData())==patterned)
         window.controller.RemoveCurrentTransformations(True);window.refresh()
         # Follower view
         window.run_original_entry('tsmiFollowerView_Click');settle()
@@ -207,7 +224,15 @@ def start(app,window,output):
         check('GUI PMX preserves results/tools',window.controller.ResultsInitialized and window.controller.GetResultFieldOutput('GUI_Double') is not None)
         window.view.setCurrentText('Model');window.controller.DrawSymbols(list(window.controller.GetStepNames())[0],False);window.refresh()
         check('original BC/load symbols captured',any(v.Name.startswith('AddOriented') for v in window.session.Presentation.RenderCommands))
-        check('native BC/load symbols rendered',len(window.scene.presentation.props)>0)
+        # The symbols are overlay and symbol actors of the native view (vtkControl.AddNativeSymbol), which its name
+        # lists do not include: the step's symbols must change the picture against no symbols (Globals.SymbolNone)
+        step=list(window.controller.GetStepNames())[0];window.fit()
+        shown=state['view'].png(output/'symbols.png');shown=shown.bits().asstring(shown.sizeInBytes());colored=[state['view'].colored_pixels(output/'symbols.png')]
+        from PrePoMax import Globals
+        window.controller.DrawSymbols(Globals.SymbolNone,False);window.refresh();hidden=state['view'].png(output/'no-symbols.png');hidden=hidden.bits().asstring(hidden.sizeInBytes());colored.append(state['view'].colored_pixels(output/'no-symbols.png'))
+        window.controller.DrawSymbols(step,False);window.refresh()
+        report['symbols']={'pictureChanged':shown!=hidden,'coloredPixels':colored}
+        check('native BC/load symbols rendered',report['symbols']['pictureChanged'] and colored[0]>colored[1])
         window.view.setCurrentText('Results');window.fit();QtTest.QTest.qWait(100)
         check('results window captured',window.screen().grabWindow(0,window.x(),window.y(),window.width(),window.height()).save(str(output/'workbench.png')))
         report.update(success=True,project=window.path,frames={'first':state['first'],'last':state['last']})

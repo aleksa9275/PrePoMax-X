@@ -50,6 +50,8 @@ add_library(vtkNative SHARED
     src/vtkNativeView.cpp
     src/vtkNativeView.h
     src/vtkNativeViewCamera.cpp
+    src/vtkNativeX11.cpp
+    src/vtkNativeX11.h
     src/Geometry/vtkNativeActorBatches.cpp
     src/Geometry/vtkNativeActorBatches.h
     src/Geometry/vtkNativeAmbientOcclusion.cpp
@@ -108,6 +110,12 @@ add_library(vtkNative SHARED
 target_include_directories(vtkNative PRIVATE include src src/Geometry src/Selection src/Widgets)
 target_compile_definitions(vtkNative PRIVATE VTKNATIVE_EXPORTS)
 target_link_libraries(vtkNative PRIVATE ${VTK_LIBRARIES})
+# An embedded view on X11 leaves its input to the parent window (src/vtkNativeX11.cpp)
+if(UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+    target_compile_definitions(vtkNative PRIVATE VTKNATIVE_X11)
+    target_link_libraries(vtkNative PRIVATE X11::X11)
+endif()
 if(MSVC)
     target_compile_options(vtkNative PRIVATE /W4 /permissive- /utf-8)
 endif()

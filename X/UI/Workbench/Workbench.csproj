@@ -12,4 +12,10 @@
     <Compile Include="../../../PrePoMax/Forms/11_MeshSetup/Base/MeshSetupItemTypes.cs" Link="Original/MeshSetupItemTypes.cs" />
     <Compile Include="../../../PrePoMax/Forms/04_GeometryFeature/GeometryFeatureTypes.cs" Link="Original/GeometryFeatureTypes.cs" />
   </ItemGroup>
+  <!-- The 3D view (M1): libvtkNative and the VTK libraries it loads (X/Build/Vtk/build.py runtime folder) go
+       beside vtkControl.dll, as the original post-build copies vtkNative.dll and VTK into its lib folder -->
+  <ItemGroup Condition="'$(VtkNativeRuntime)' != ''">
+    <None Include="$(VtkNativeRuntime)/libvtk*;$(VtkNativeRuntime)/vtk*.dll;$(VtkNativeRuntime)/vtk-build.json;$(VtkNativeRuntime)/VTK-Copyright.txt"
+          Exclude="$(VtkNativeRuntime)/vtkControl.*" LinkBase="." CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

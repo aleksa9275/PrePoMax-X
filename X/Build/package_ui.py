@@ -114,8 +114,8 @@ def ui_files():
     for path in ui.iterdir():
         if path.is_file() and path.suffix in ('.py', '.json') and not path.name.startswith(('generate-', 'verify-', 'audit-')):
             files.add(path)
-    # The macOS native viewport and its probe helper live with the earlier desktop (imported by X/UI)
-    files.update(ROOT / 'X/Desktop' / name for name in ('native_cocoa.py', 'viewport_probe.py'))
+    # The Cocoa event helper of the view probes lives with the earlier desktop (imported by X/UI/view_probe.py)
+    files.add(ROOT / 'X/Desktop/viewport_probe.py')
     # The GUI probes ship as self-checks (workbench.py --forms-probe DIR etc.) with their small public fixtures
     files.update(p for p in (ROOT / 'X/Analysis/StaticDeck').glob('*') if p.suffix in ('.inp', '.json'))
     files.add(ROOT / '.project/reports/windows-reference/fixtures/definitions.inp')
@@ -148,6 +148,7 @@ def main():
     p.add_argument('--target', required=True, choices=sorted(CATALOG['targets']))
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--cache', type=Path, required=True, help='download cache (CPython archive)')
+    p.add_argument('--vtk-native', type=Path, help='vtkNative runtime folder from X/Build/Vtk (the 3D view; Windows: vtkNative build runtime)')
     p.add_argument('--netgen', type=Path, help='NativeCad runtime folder (bin/NetGenMesher, lib/)')
     p.add_argument('--gmsh-library', type=Path, help='patched Gmsh 4.13.0 library with gmsh-build.json beside it')
     p.add_argument('--lib3mf', type=Path, help='lib3mf 2.4.1 library')
@@ -180,6 +181,17 @@ def main():
     exe = '.exe' if windows else ''
     manifest['components']['dotnet'] = {'runtime': CATALOG['runtimeFrameworkVersion'], 'host': 'app/PrePoMaxX.Workbench' + exe}
     tools = {'\\lib\\GmshCaller.exe': f'tools/GmshCaller/GmshCaller{exe}'}
+
+    # The 3D view: libvtkNative and VTK 9.7.1 beside vtkControl.dll (the original lib folder practice)
+    if a.vtk_native:
+        receipt = json.loads((a.vtk_native / 'vtk-build.json').read_text())
+        copied = [f for f in sorted(a.vtk_native.iterdir()) if f.is_file()]
+        for f in copied:
+            shutil.copy2(f, stage / 'app' / f.name, follow_symlinks=False)
+        manifest['components']['vtkNative'] = {'vtk': receipt['vtk']['version'], 'files': len(copied),
+                                               'receipt': 'app/vtk-build.json', 'receiptSha256': sha(a.vtk_native / 'vtk-build.json')}
+    else:
+        manifest['missing']['vtkNative'] = 'not supplied: the 3D view (vtkControl on vtkNative) cannot start'
 
     # lp_solve next to GmshCaller and the application assemblies (CaeMesh)
     lpsolve = a.lpsolve or (ROOT / 'ThirdParty/lpsolve/lpsolve55.dll' if windows else None)

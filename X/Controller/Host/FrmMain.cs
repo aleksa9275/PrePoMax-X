@@ -46,6 +46,10 @@ namespace PrePoMax
             renderCommands[key]=new RenderCommand(name,args);
         }
         public Action<string, object[]> Presentation { get; set; }
+        /// <summary>The view half of the original FrmMain while a viewport exists (X/UI OriginalViewHost): it
+        /// takes the calls that drive vtkControl and answers their queries; Presentation still sees every call.</summary>
+        public delegate bool ViewHostCall(string name, object[] arguments, out object result);
+        public ViewHostCall ViewHost { get; set; }
         public Func<string, object[], object> Query { get; set; }
         // Explicit export view data. Contour lookup tables belong to the renderer;
         // a non-contour export uses the original empty-table default.
@@ -72,6 +76,7 @@ namespace PrePoMax
         public void Invalidate() => InvokePresentation("Invalidate", Array.Empty<object>());
         private void InvokePresentation(string name, object[] arguments)
         {
+            if(ViewHost!=null && ViewHost(name,arguments,out _)){CaptureRenderCommand(name,arguments);Presentation?.Invoke(name,arguments);return;}
             CaptureRenderCommand(name,arguments);
             switch(name)
             {
@@ -132,7 +137,7 @@ namespace PrePoMax
                 case "HighlightActor":
                     // vtkControl.HighlightActor/GetCopyOfModelEdgesActor: a copy of the part's model edges in the
                     // selection layer, drawn in the primary highlight colour.
-                    if(actors.TryGetValue((string)arguments[0],out var highlighted)&&highlighted.Visible)
+                    if(actors.TryGetValue((string)arguments[0],out var highlighted)&&highlighted.VtkMaxActorVisible)
                     {
                         var edges=highlighted.Data.ModelEdges;
                         bool hasEdges=edges?.Nodes.Coor!=null&&edges.Nodes.Coor.Length>0&&edges.Cells.CellNodeIds!=null&&edges.Cells.CellNodeIds.Length>0;
@@ -154,7 +159,7 @@ namespace PrePoMax
                     if(actors.TryGetValue((string)arguments[0],out var scalarActor)){scalarActor.Data.Geometry.Nodes.Values=(float[])arguments[1];scalarActor.Data.Geometry.ExtremeNodes=(NodesExchangeData)arguments[2];scalarActor.Data.Geometry.Nodes.ResultField=(ResultFieldExchangeData)arguments[3];}break;
                 case "UpdateActorColorContoursVisibility":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var contourActor))contourActor.Data.ColorContours=(bool)arguments[1];break;
                 case "UpdateActor":if(actors.Remove((string)arguments[0],out var renamed)){renamed.Data.Name=(string)arguments[1];renamed.Color=(System.Drawing.Color)arguments[2];actors[renamed.Data.Name]=renamed;}break;
-                case "HideActors":case "ShowActors":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var hidden))hidden.Visible=name=="ShowActors";break;
+                case "HideActors":case "ShowActors":foreach(string item in (string[])arguments[0])if(actors.TryGetValue(item,out var hidden))hidden.VtkMaxActorVisible=name=="ShowActors";break;
                 case "AddActor":var actor=(vtkMaxActor)arguments[0];if(actor.Data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);else actors[actor.Data.Name]=actor;break;
                 case "Add3DCells":foreach(var data in (vtkMaxActorData[])arguments[0])actors[data.Name]=new vtkMaxActor(data);break;
                 case "CropPartWithCylinder":case "CropPartWithCube":case "SmoothPart":
@@ -169,12 +174,13 @@ namespace PrePoMax
         private T QueryPresentation<T>(string name, object[] arguments)
         {
             object result;
+            if(ViewHost!=null && ViewHost(name,arguments,out result))return (T)result;
             switch(name)
             {
                 case "TryGetAnimationNodeData":
                     arguments[1]=null;arguments[2]=0f;result=false;
                     foreach(var candidate in actors.Values){
-                        if(!candidate.Visible)continue;
+                        if(!candidate.VtkMaxActorVisible)continue;
                         var frames=candidate.Data.Geometry.NodesAnimation;
                         if(frames==null || AnimationFrame<0 || AnimationFrame>=frames.Length)continue;
                         var nodes=frames[AnimationFrame];int index=Array.IndexOf(nodes.Ids??candidate.Data.Geometry.Nodes.Ids??Array.Empty<int>(),(int)arguments[0]);
@@ -197,9 +203,9 @@ namespace PrePoMax
                 case "IsStateOpening":result=workingState==Globals.OpeningText;break;
                 case "SetStateWorking":workingState=(string)arguments[0];result=true;break;
                 case "Add3DNodes":case "Add3DCells":
-                    var data=(vtkMaxActorData)arguments[0];var actor=new vtkMaxActor(data,name=="Add3DNodes");if(data.Layer==vtkRendererLayer.Base)actors[data.Name??Guid.NewGuid().ToString()]=actor;else if(data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);result=actor;break;
+                    var data=(vtkMaxActorData)arguments[0];var actor=new vtkMaxActor(data,false,name=="Add3DNodes");if(data.Layer==vtkRendererLayer.Base)actors[data.Name??Guid.NewGuid().ToString()]=actor;else if(data.Layer==vtkRendererLayer.Selection)selectionActors.Add(actor);result=actor;break;
                 case "ContainsActor":result=actors.ContainsKey((string)arguments[0]);break;
-                case "GetVtkMaxActorData":result=System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(actors.Values,a=>a.GetExportData(edgeVisibility)));break;
+                case "GetVtkMaxActorData":result=System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(actors.Values,a=>HeadlessExport.GetExportData(a,edgeVisibility)));break;
                 case "GetLookupTable":
                     if(ExportLookupTable==null && System.Linq.Enumerable.Any(actors.Values,a=>a.Data.ColorContours))
                         throw new InvalidOperationException("Supply the renderer lookup table for a contour 3MF export.");

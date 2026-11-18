@@ -4,12 +4,14 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Where we are (18 November 2026)
 
-- **M0 upstream 3.0.1 + vtkNative, GitHub home** (D063, D064). The repository now lives at
-  github.com/aleksa9275/PrePoMax-X, a fork of github.com/PrePoMax/PrePoMax; our 146 commits sit on
-  upstream's own history and upstream `1e2f83f2` (3.0.1 plus the native VTK port) is merged. Domain,
-  Controller and UI build and verify on the new base; FrmMaterialOrientation compiles whole; 24 reviewed
-  3.0.1 types joined the PMX allowlist. The viewport is still the interim Python VTK renderer (3.0.0 rules)
-  until M1. [M0 report](reports/phase-m0-upstream-3.0.1.md).
+- **M1 original vtkControl on vtkNative** (D063). The 3D view of X/UI is the original `vtkControl`, compiled
+  whole, drawing through upstream's `vtkNative` on VTK 9.7.1 (pinned recipe `X/Build/Vtk`), embedded in a Qt
+  widget on macOS (Cocoa) and Linux (X11); the 137 view members of the original FrmMain run unchanged in
+  `OriginalViewHost`. The interim Python VTK renderer and its wheel are removed (one VTK per package). vtkNative needed two small portable changes
+  (Win32 files guarded; X11 input to the parent and an event pump). All eight GUI probes pass on macOS ARM64
+  and Linux ARM64 (Xvfb) with the M0 counts. [M1 report](reports/phase-m1-original-vtkcontrol.md).
+- M0: GitHub home (fork of github.com/PrePoMax/PrePoMax), upstream `1e2f83f2` (3.0.1 + vtkNative) merged.
+  [M0 report](reports/phase-m0-upstream-3.0.1.md).
 - Before M0 (3.0.0 base): C6–C12 put the original main menu, tool strips, model tree and 70 original form
   classes on a headless WinForms model drawn by Qt; P1 packaged macOS/Linux/Windows test builds
   ([P1](reports/phase-p1-desktop-packages.md), [manual testing](MANUAL_TESTING.md) — those packages are
@@ -40,17 +42,19 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | C12 | Code editor forms (FastColoredTextBox model), beam elements, Command base | implemented; Mac ARM64 checks pass |
 | P1 | Desktop packages (macOS DMG, Linux tar.gz, Windows zip), rebuildable runtime profiles | Mac and Linux ARM64 packages self-checked; Windows not run |
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
-| M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | next |
-| M2–M5 | 3.0.1 features and FrmMain whole; CI; original comparison; fixes, installers, release | planned |
+| M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
+| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | next |
+| M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-M1: a pinned VTK 9.7 recipe and `vtkNative` built for macOS ARM64 and Linux (its Win32 window embedding,
-interactor and widget input made portable), the original `vtkControl` compiled whole and embedded in a Qt
-widget, then the geometry and results GUI probes on the original renderer. In parallel when the maintainer
-agrees: GitHub Actions (M3).
+M2: the 3.0.1 features (composite sections with layers/layup, FrmMaterialOrientation in use, the new result
+outputs, property-grid missing values, a Qt-drawn Graphics/Paint layer), FrmMain compiled whole on the native
+vtkControl, Netgen re-pinned to the published NetgenMesher and QuadWild for macOS/Linux from the published
+fork. The retained macOS CalculiX build needs a rebuild (Homebrew libomp changed). In parallel when the
+maintainer agrees: GitHub Actions (M3).
 
 ## Environment
 
@@ -59,7 +63,11 @@ agrees: GitHub Actions (M3).
 - This Mac: .NET SDK 11.0.100 only (runtime 11.0.0); net10.0 projects build with it and checks run with
   `DOTNET_ROLL_FORWARD=Major`. Packages ship self-contained .NET 10.0.14. Homebrew Python 3.15.
 - UI runtime for verification: the P1 macOS app in the former GitLab working copy,
-  `~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages/PrePoMax-X.app` (git-ignored there):
-  `python3 X/UI/verify-ui.py --output <dir>/verify.json --package <that app> --gui`.
-- VTK 9.5.2 (Python wheel, interim renderer), PyQt6 6.10.0 / Qt 6.10.2, Python.NET 3.1.0, CPython 3.12.14 in
-  packages; patched Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned.
+  `~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages/PrePoMax-X.app` (git-ignored there), and the
+  vtkNative runtime `X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime` (`X/Build/Vtk/build.py`):
+  `python3 X/UI/verify-ui.py --output <dir>/verify.json --package <that app> --vtk-native <runtime> --gui`.
+  Linux ARM64: the same in Ubuntu 24.04 (Podman) with the P1 Linux tar.gz and
+  `X/Build/artifacts/vtk-linux-arm64/vtkNative/runtime`, under `xvfb-run` with `LIBGL_ALWAYS_SOFTWARE=1`.
+- VTK 9.7.1 (vtkNative), PyQt6 6.10.0 / Qt 6.10.2, Python.NET 3.1.0, CPython 3.12.14 in packages; patched
+  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned. Latest local candidate: `X/Build/artifacts/ui-m1` (macOS
+  app with vtkNative, CalculiX missing).

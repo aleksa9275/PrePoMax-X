@@ -1,7 +1,7 @@
 """C4 analysis/results UI: commands operate on the live original Controller."""
 from pathlib import Path
 from PyQt6 import QtCore,QtWidgets
-from System import Array,String,Single,Enum
+from System import Array,String,Single,Enum,Int32
 from PrePoMax import ViewGeometryModelResults,ViewResultsTypeEnum
 from CaeResults import DeformationScaleFactorTypeEnum
 from CaeResults import FeResults,ComplexResultTypeEnum
@@ -240,43 +240,23 @@ class ResultsWorkbench:
         self.frame_slider.blockSignals(True);self.frame_slider.setValue(value);self.frame_slider.blockSignals(False);self.show_frame(value)
     def show_frame(self,frame):
         if self.animation_frame is None:return
-        self.animation_frame=frame;self.scene.set_frame(frame);self.scene.presentation.rescale_frame(frame,self.animation_options['all_frames']);self.results.AnimationFrame(frame);self.update_follower();self.render()
+        if getattr(self,'animation_scene_stale',False):self.animation_scene_stale=False
+        # FrmMain.SetAnimationFrame -> vtkControl.SetAnimationFrame (the original FrmAnimation's frame)
+        self.animation_frame=frame;self.viewport.host.SetAnimationFrame(frame,self.animation_options['all_frames']);self.results.AnimationFrame(frame)
     def show_original_animation_frame(self,frame,all_frames):
-        """FrmMain.SetAnimationFrame: the frame the original FrmAnimation selected (vtkControl.SetAnimationFrame)."""
-        if getattr(self,'animation_scene_stale',False) or not self.scene.presentation.animated:
-            self.animation_scene_stale=False;self.refresh()
-        self.animation_frame=frame;self.scene.set_frame(frame);self.scene.presentation.rescale_frame(frame,all_frames)
-        self.results.AnimationFrame(frame);self.update_follower();self.render()
+        """FrmMain.SetAnimationFrame from the original FrmAnimation: the view already shows the frame
+        (OriginalViewHost); the toolkit follows the frame number."""
+        self.animation_frame=frame;self.results.AnimationFrame(frame)
     def save_original_animation(self,name,arguments):
-        """FrmMain.SaveAnimationAsImages/AsAVI from the original FrmAnimation: its file name, frame range, step,
-        (fps,) colour range and swing, written with the native exporters."""
-        path=str(arguments[0]);first,last=int(arguments[1][0]),int(arguments[1][1]);step=int(arguments[2])
-        if name=='SaveAnimationAsAVI':fps,all_frames,swing=int(arguments[3]),bool(arguments[4]),bool(arguments[5])
-        else:fps,all_frames,swing=20,bool(arguments[3]),bool(arguments[4])
-        saved=dict(self.animation_options);count=self.animation_count
-        try:
-            self.animation_options.update(first=first,last=last,step=max(1,step),all_frames=all_frames)
-            self.animation_count=max(self.animation_count,last+1)
-            if self.animation_frame is None:self.animation_frame=first
-            self.export_animation(path,fps=fps,swing=swing)
-        finally:self.animation_options=saved;self.animation_count=count
+        """FrmMain.SaveAnimationAsImages/AsAVI: OriginalViewHost writes them with vtkControl."""
+        return
     def stop_animation(self,redraw=True):
         self.animation_timer.stop();was=self.animation_frame is not None;self.animation_frame=None
         if was and redraw and self.controller.ResultsInitialized:self.controller.DrawResults(False);self.refresh()
 
     def capture(self,path,transparent=False,magnification=1):
-        from vtkmodules.vtkRenderingCore import vtkWindowToImageFilter
-        from vtkmodules.vtkIOImage import vtkPNGWriter
-        window=self.viewport.GetRenderWindow();old=window.GetAlphaBitPlanes();alpha=self.renderer.GetBackgroundAlpha();gradient=self.renderer.GetGradientBackground();window.SetAlphaBitPlanes(1)
-        try:
-            self.renderer.SetBackgroundAlpha(0 if transparent else 1)
-            if transparent:self.renderer.GradientBackgroundOff()
-            self.render();image=vtkWindowToImageFilter();image.SetInput(window);image.SetScale(magnification)
-            if transparent:image.SetInputBufferTypeToRGBA()
-            else:image.SetInputBufferTypeToRGB()
-            image.ReadFrontBufferOff();image.Update();writer=vtkPNGWriter();writer.SetFileName(str(path));writer.SetInputConnection(image.GetOutputPort());writer.Write()
-            if writer.GetErrorCode():raise RuntimeError('The viewport capture could not be written.')
-        finally:window.SetAlphaBitPlanes(old);self.renderer.SetBackgroundAlpha(alpha);self.renderer.SetGradientBackground(gradient);self.render()
+        """FrmMain.CaptureViewport / SaveAutomationScreenshot: vtkControl.RenderToPNG."""
+        self.vtk.RenderToPNG(str(path),bool(transparent),int(magnification))
     def capture_dialog(self):
         from PrePoMax import CaptureViewportProperties
         from PrePoMax.Forms import ViewCaptureViewportProperties
@@ -312,43 +292,16 @@ class ResultsWorkbench:
         if properties.CopyToClipboard:self.output.appendPlainText('Viewport captured to the clipboard.')
         return True
     def export_animation(self,path,fps=20,swing=False):
+        """The animation of the original FrmAnimation saved by vtkControl: PNG frames (SaveAnimationAsImages) or AVI
+        (SaveAnimationAsAVI; uncompressed off Windows, see X/Domain/vtkControl/AviWriter.Portable.cs)."""
         if self.animation_count<1 or self.animation_frame is None:raise ValueError('Prepare an animation with Play first.')
-        self.animation_timer.stop();first=min(self.animation_options['first'],self.animation_count-1);last=min(self.animation_count-1,self.animation_options['last'] if self.animation_options['last'] is not None else self.animation_count-1);indices=list(range(first,last+1,max(1,self.animation_options['step'])))
-        if swing:indices+=list(range(last,first-1,-max(1,self.animation_options['step'])))
-        path=Path(path);old=self.animation_frame
-        try:
-            if path.suffix.lower()=='.png':
-                for n,index in enumerate(indices):self.show_frame(index);self.capture(str(path.with_name(str(n+1).zfill(len(str(len(indices))))+'_'+path.name)))
-            else:
-                # VTK's original AVI writer is platform-specific. Try the native pinned
-                # VTK video modules explicitly; never install or select an encoder silently.
-                from vtkmodules.vtkRenderingCore import vtkWindowToImageFilter
-                if path.suffix.lower()=='.avi':
-                    import importlib.util
-                    if importlib.util.find_spec('vtkmodules.vtkIOAVI'):
-                        from vtkmodules.vtkIOAVI import vtkAVIWriter
-                        writer=vtkAVIWriter()
-                    else:
-                        from avi_writer import AviWriter
-                        self.render();image=vtkWindowToImageFilter();image.SetInput(self.viewport.GetRenderWindow());image.SetInputBufferTypeToRGB();image.ReadFrontBufferOff();image.Update();dimensions=image.GetOutput().GetDimensions();avi=AviWriter(path,dimensions[0],dimensions[1],fps,len(indices))
-                        try:
-                            for index in indices:self.show_frame(index);image.Modified();image.Update();avi.write(image.GetOutput())
-                            avi.finish()
-                        except BaseException:avi.abort();raise
-                        return
-                elif path.suffix.lower()=='.ogv':
-                    from vtkmodules.vtkIOOggTheora import vtkOggTheoraWriter
-                    writer=vtkOggTheoraWriter()
-                else:raise ValueError('Choose PNG frames, AVI or OGV.')
-                image=vtkWindowToImageFilter();image.SetInput(self.viewport.GetRenderWindow());image.SetInputBufferTypeToRGB();image.ReadFrontBufferOff();writer.SetInputConnection(image.GetOutputPort());writer.SetFileName(str(path));writer.SetRate(fps);writer.Start()
-                for index in indices:self.show_frame(index);image.Modified();writer.Write()
-                writer.End()
-                if not path.exists() or not path.stat().st_size:raise RuntimeError('The pinned VTK encoder did not create the animation.')
-        finally:self.show_frame(old)
+        self.animation_timer.stop();first=min(self.animation_options['first'],self.animation_count-1);last=min(self.animation_count-1,self.animation_options['last'] if self.animation_options['last'] is not None else self.animation_count-1)
+        step=max(1,self.animation_options['step']);frames=Array[Int32]([first,last]);path=Path(path)
+        if path.suffix.lower()=='.png':self.vtk.SaveAnimationAsImages(str(path),frames,step,bool(self.animation_options['all_frames']),bool(swing))
+        elif path.suffix.lower()=='.avi':self.vtk.SaveAnimationAsAVI(str(path),frames,step,int(fps),bool(self.animation_options['all_frames']),bool(swing),False)
+        else:raise ValueError('Choose PNG frames or AVI.')
     def export_animation_dialog(self):
-        import importlib.util
         formats=['PNG frames (*.png)','AVI (*.avi)']
-        if importlib.util.find_spec('vtkmodules.vtkIOOggTheora'):formats.append('Ogg Theora (*.ogv)')
         path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Export animation','',';;'.join(formats))
         if path:self.export_animation(path,self.animation_options['fps'],self.animation_options['style']=='Swing')
     def export_field(self):

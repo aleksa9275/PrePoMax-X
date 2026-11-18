@@ -49,6 +49,8 @@ def main():
         gmsh = package['components'].get('gmsh')
         if gmsh:
             arguments += ['--gmsh-library', str(HERE / gmsh['file'])]
+        if package['components'].get('vtkNative'):
+            arguments += ['--vtk-native', str(HERE / 'app')]
         if package.get('solver'):
             solver = package['solver']
             arguments += ['--solver-registry', str(HERE / solver['registry']), '--solver-id', solver['id'],

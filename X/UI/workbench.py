@@ -65,11 +65,11 @@ elif args.service_probe:
     run(session, args.service_probe)
 else:
     from PyQt6 import QtCore, QtGui, QtWidgets
-    from vtkmodules.vtkRenderingCore import vtkRenderer
-    from scene import Scene
-    from vtkmodules.vtkCommonCore import vtkVersion
-    if vtkVersion.GetVTKVersion() != '9.5.2' or QtCore.PYQT_VERSION_STR != '6.10.0' or QtCore.qVersion() != '6.10.2':
-        raise RuntimeError('C1 requires the existing VTK 9.5.2 / PyQt 6.10.0 / Qt 6.10.2 pins')
+    from vtkControl.Native import VtkNativeLibrary
+    # The view is the original vtkControl on vtkNative (M1); no Python VTK is loaded into this process: its Cocoa
+    # view classes would clash with those of VTK 9.7.1
+    if VtkNativeLibrary.GetVtkVersion() != '9.7.1' or QtCore.PYQT_VERSION_STR != '6.10.0' or QtCore.qVersion() != '6.10.2':
+        raise RuntimeError('The desktop requires vtkNative on VTK 9.7.1 and the PyQt 6.10.0 / Qt 6.10.2 pins')
 
     from authoring_widgets import MaterialDialog, PropertyDialog, MultiPropertyDialog, ParametersDialog
     from PrePoMaxX.UI import AuthoringSession, GeometrySession
@@ -119,13 +119,13 @@ else:
             self.viewport_toolbar=self.addToolBar('Viewport')
             self.viewport_toolbar.addWidget(self.pick_mode)
             self.selection_angle=QtWidgets.QDoubleSpinBox();self.selection_angle.setRange(0,180);self.selection_angle.setValue(30);self.selection_angle.setSuffix('°');self.selection_angle.setMaximumWidth(90);self.viewport_toolbar.addWidget(self.selection_angle)
-            self.box_select=QtWidgets.QCheckBox('Box select');self.box_select.toggled.connect(lambda value:setattr(self.viewport,'box_selection',value));self.viewport_toolbar.addWidget(self.box_select)
+            self.pick_mode.currentIndexChanged.connect(lambda index:self.guard(self.apply_pick_mode))
             self.view = QtWidgets.QComboBox()
             self.view.addItems(['Model', 'Geometry'])
             self.view.currentTextChanged.connect(lambda value: self.guard(lambda: self.change_view(value)))
             self.viewport_toolbar.addWidget(self.view)
             self.element_edges=QtWidgets.QCheckBox('Element edges')
-            self.element_edges.toggled.connect(lambda checked:self.refresh())
+            self.element_edges.toggled.connect(lambda checked:self.guard(lambda:self.set_edge_mode('Element edges' if checked else 'Model edges')))
             self.viewport_toolbar.addWidget(self.element_edges)
             splitter = QtWidgets.QSplitter()
             self.tree = QtWidgets.QTreeWidget()
@@ -135,26 +135,24 @@ else:
             self.tree.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
             self.tree.customContextMenuRequested.connect(self.tree_menu)
             splitter.addWidget(self.tree)
-            if sys.platform == 'darwin':
-                sys.path.insert(0, str(Path(ui_directory).parent / 'Desktop'))
-                from native_cocoa import NativeCocoaView
-                self.viewport = NativeCocoaView(self)
-                self.viewport.clicked.connect(self.pick)
-            else:
-                from qt_viewport import NativeQtView
-                self.viewport = NativeQtView(self)
-                self.viewport.clicked.connect(self.pick)
-            from area_selection import AreaSelectionFilter
-            self.area_selection_filter=AreaSelectionFilter(self.viewport)
-            self.viewport.area_selected.connect(lambda *rect:self.guard(lambda:self.area_pick(*rect)))
+            from original_viewport import OriginalViewport
+            self.viewport = OriginalViewport(self, self.dispatcher.post)
+            self.vtk = self.viewport.control
+            # FrmMain constructor: the view asks the controller for its data, the picks go to the selection
+            self.viewport.host.Attach(session.Presentation)
+            from System.Windows.Forms import MouseEventArgs, Keys
+            self.selection_delegate = Action[Array[Double], Array[Double], Array[Array[Double]], Boolean, vtkSelectOperation, Array[String]](
+                lambda *a: self.view_callback(lambda: self.vtk_select_point_or_area(*a)))
+            self.vtk.OnMouseLeftButtonUpSelection += self.selection_delegate
+            self.actors_picked_delegate = Action[MouseEventArgs, Keys, Array[String]](
+                lambda e, keys, names: self.view_callback(lambda: self.select_base_parts(e, keys, names)))
+            self.vtk.Controller_ActorsPicked = self.actors_picked_delegate
             splitter.addWidget(self.viewport)
             splitter.setSizes([270, 910])
             self.setCentralWidget(splitter)
-            self.renderer = vtkRenderer()
-            self.renderer.SetBackground(.93, .95, .98)
-            self.viewport.GetRenderWindow().AddRenderer(self.renderer)
-            self.scene = Scene(self.renderer)
-            self.scene.volume_provider=controller.GetVolumeGridData
+            # FrmMain adds vtkControl to its controls in the constructor; its window (and Load) exist before the
+            # settings are applied, so the native window is created here, not at the first show
+            self.viewport.attach()
             self.native_query = session.Presentation.Query
             self.previous_presentation = session.Presentation.Presentation
             self.query_delegate = Func[String, Array[Object], Object](self.query)
@@ -187,18 +185,11 @@ else:
             if controller.AutomationSettings.StartWithApplication:self.guard(self.start_automation)
 
         def query(self, name, arguments):
-            if name=='GetSelectionPrecision':
-                # Answered without waiting for the UI thread: the Controller also asks from background work
-                # while the UI thread waits for it. The value is recomputed on the UI thread at every render.
-                import threading
-                if threading.get_ident()==self.dispatcher.owner:self.update_selection_precision()
-                return Double(getattr(self,'selection_precision',0.0))
-            if name in ['GetViewParameters','GetViewPlaneNormal','GetFileNameToOpen','GetFileNameToSaveAs','EditMeshingParametersFromHistory']:
+            if name in ['GetFileNameToOpen','GetFileNameToSaveAs','EditMeshingParametersFromHistory']:
                 return self.dispatcher.call(lambda:self.ui_query(name,arguments))
             return self.native_query(name,arguments)
 
         def ui_query(self,name,arguments):
-            camera = self.renderer.GetActiveCamera()
             if name=='EditMeshingParametersFromHistory':
                 from PrePoMaxX.UI import MeshHistoryEditSession
                 from application_widgets import SheetDialog
@@ -208,15 +199,6 @@ else:
                 path,_=QtWidgets.QFileDialog.getOpenFileName(self,str(arguments[0]),'',filters);return path or None
             if name=='GetFileNameToSaveAs':
                 path,_=QtWidgets.QFileDialog.getSaveFileName(self,'Save project',self.path or '', 'PrePoMax (*.pmx)');return path or None
-            if name == 'GetViewParameters':
-                arguments[0] = Array[Double](camera.GetPosition())
-                arguments[1] = Array[Double](camera.GetFocalPoint())
-                arguments[2] = Array[Double](camera.GetViewUp())
-                arguments[3] = Double(camera.GetParallelScale())
-                return None
-            if name == 'GetViewPlaneNormal':
-                return Array[Double](camera.GetViewPlaneNormal())
-
             return self.native_query(name, arguments)
 
         def present(self, name, arguments):
@@ -224,58 +206,28 @@ else:
             self.dispatcher.post(lambda:self.ui_present(name,arguments))
 
         def ui_present(self,name,arguments):
-            if name=='SetSelectionDistance':
-                self.selection_distance=max(1,int(arguments[0]))
             if name in ('SelectionChanged','UpdateHighlight','CloseAllForms','UpdateAnalysisProgress'):
                 self.form_presentation(name,arguments)
             if name in ['WriteDataToOutput','WriteErrorToOutput']:
                 self.write_output(arguments[0],name=='WriteErrorToOutput')
-            camera = self.renderer.GetActiveCamera()
-            if name == 'SetViewParameters':
-                camera.SetPosition(*arguments[1])
-                camera.SetFocalPoint(*arguments[2])
-                camera.SetViewUp(*arguments[3])
-                camera.SetParallelScale(float(arguments[4]))
-                self.renderer.ResetCameraClippingRange()
-                self.render()
-            elif name == 'Rotate':
-                camera.Azimuth(float(arguments[0]))
-                camera.Elevation(float(arguments[1]))
-                camera.Roll(float(arguments[2]))
-                self.renderer.ResetCameraClippingRange()
-                self.render()
-            elif name in ('CreateSectionView','UpdateSectionView','RemoveSectionView','AddSymmetry','AddLinearPattern',
-                          'AddCircularPattern','ApplyTransformations','HideTransformedActors','PreviewExplodedView',
-                          'RemovePreviewedExplodedView'):
-                # The original viewport draws these at once (vtkControl); the scene follows the captured commands.
-                self.scene_update_soon()
-            elif name=='SetAnimationFrameData':
-                # New animation data (Controller.Draw*Animation): the scene rebuilds its animated actors.
+            # The view calls (camera, sections, patterns, animation frames, annotations, follower view, zoom) are
+            # the original FrmMain's, in OriginalViewHost; the toolkit mirrors only its own controls
+            if name=='SetAnimationFrameData':
                 self.animation_scene_stale=True
-            elif name=='SetAnimationFrame':
-                # FrmMain.SetAnimationFrame (the original FrmAnimation's timer/frame controls).
-                self.show_original_animation_frame(int(arguments[0]),bool(arguments[1]))
+            elif name=='UpdateUnitSystem' and hasattr(self,'update_unit_system'):
+                self.update_unit_system()
+            elif name=='SetAnimationFrame' and hasattr(self,'show_original_animation_frame'):
+                self.show_original_animation_frame(*arguments)
             elif name in ('SaveAnimationAsImages','SaveAnimationAsAVI'):
-                self.save_original_animation(name,arguments)
-            elif name=='UpdateArrowWidgetAnimationData':
-                self.scene.presentation.update_annotation(*arguments)
-            elif name=='ApplyFollowerView':
-                self.apply_follower(*arguments)
-            elif name=='UpdateFollowerView':
-                self.update_follower()
-            elif name=='RemoveFollowerView':
-                self.follower_nodes=None
-            elif name=='SetPendingSidePanelsState' and hasattr(self,'plot_panel'):
+                pass
+            elif name in ('ApplyFollowerView','UpdateFollowerView','RemoveFollowerView','CreateSectionView','UpdateSectionView','RemoveSectionView'):
+                self.update_view_buttons()
+            if name=='SetPendingSidePanelsState' and hasattr(self,'plot_panel'):
                 self.restore_panel_state(arguments[0])
             elif name=='SetStateWorking' and hasattr(self,'application'):
                 self.set_application_busy(True)
             elif name=='SetStateReady' and hasattr(self,'application'):
                 self.set_application_busy(False)
-            elif name == 'SetZoomToFit':
-                if self.operation_task is not None:
-                    self.pending_fit=True;return
-                self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
-                self.fit()
 
         def guard(self, callback):
             try:
@@ -284,6 +236,14 @@ else:
                 if args.probe or args.authoring_probe or args.geometry_probe or args.results_probe or args.application_probe or args.menu_probe or args.elements_probe or args.forms_probe:
                     raise
                 QtWidgets.QMessageBox.critical(self, 'PrePoMax-X', str(error))
+
+        def view_callback(self, callback):
+            """A vtkControl event handler. The native view's callback swallows an exception raised through it, so a
+            probe's error is kept here and raised again by the probe after the gesture (view_probe.py)."""
+            try:
+                self.guard(callback)
+            except Exception as error:
+                self.view_callback_errors = getattr(self, 'view_callback_errors', []) + [error]
 
         def confirm_discard(self):
             if not self.dirty:
@@ -332,9 +292,8 @@ else:
             self.sync_tree_tab()
             self.tree.blockSignals(False)
             self.selected = []
-            self.scene.element_edges=self.element_edges.isChecked() and controller.CurrentView!=ViewGeometryModelResults.Geometry
-            self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands)
-            self.apply_edge_mode()
+            # The edge buttons follow the edge visibility of the current view (Controller.CurrentEdgesVisibility)
+            self.element_edges.blockSignals(True);self.element_edges.setChecked(str(controller.CurrentEdgesVisibility)=='ElementEdges');self.element_edges.blockSignals(False)
             self.apply_view_widgets()
             if hasattr(self,'original_top'):self.update_original_menu_state()
             for name in ['Undo', 'Redo']:
@@ -344,35 +303,20 @@ else:
             self.render()
             self.setWindowTitle('PrePoMax-X — ' + (Path(self.path).name if self.path else 'New project') + (' *' if self.dirty else ''))
 
-        def update_selection_precision(self):
-            # vtkControl.GetSelectionPrecision: DisplayToWorldScale(renderer, selection distance) - the world
-            # length of the selection distance (Controller: 7 px; logical pixels on HiDPI displays).
-            from vtkmodules.vtkRenderingCore import vtkInteractorObserver
-            pixels=getattr(self,'selection_distance',7)*self.viewport.devicePixelRatioF()
-            p1=[0.0]*4;p2=[0.0]*4
-            vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,0,0,0,p1)
-            vtkInteractorObserver.ComputeDisplayToWorld(self.renderer,pixels,0,0,p2)
-            self.selection_precision=sum((p1[i]-p2[i])**2 for i in range(3))**.5
-
-        def scene_update_soon(self):
-            if getattr(self,'scene_update_pending',False):return
-            self.scene_update_pending=True
-            def update():
-                self.scene_update_pending=False
-                self.scene.update(session.Presentation.SceneActors,session.Presentation.RenderCommands);self.render()
-            QtCore.QTimer.singleShot(0,lambda:self.guard(update))
+        def update_view_buttons(self):
+            """The section view and follower view buttons the original view members check (tsbSectionView, tsbFollowerView)."""
+            host=self.viewport.host
+            for attribute,checked in (('section_view_action',host.SectionViewChecked),('follower_view_action',host.FollowerViewChecked)):
+                action=getattr(self,attribute,None)
+                if action is not None:action.setChecked(bool(checked))
 
         def render(self):
-            self.update_selection_precision()
-            if sys.platform == 'darwin':
-                self.viewport.render()
-            else:
-                self.viewport.GetRenderWindow().Render()
+            """Draws the scene of the original view now (vtkControl paints on Invalidate)."""
+            if self.viewport.attached:self.viewport.control.NativeHost.Refresh()
 
         def fit(self):
-            self.renderer.ResetCamera()
-            self.renderer.ResetCameraClippingRange()
-            self.render()
+            """tsmiZoomToFit_Click: vtkControl.SetZoomToFit."""
+            if self.viewport.attached:self.vtk.SetZoomToFit(False)
 
         def change_view(self, value):
             controller.CurrentView = getattr(ViewGeometryModelResults,value)
@@ -590,60 +534,44 @@ else:
             self.dirty = True
             self.refresh()
 
-        def pick(self, x, y):
-            self.guard(lambda: self._pick(x, y))
+        # Pick modes of the toolbar as the original selection modes (Controller.SelectBy / SelectItem): a pick in the
+        # view then selects through FrmMain._vtk_SelectPointOrArea, as the original forms make it select
+        PICK_MODES=[('Element','Element'),('Surface','Node'),('Node','Node'),('Surface','Surface'),('Part','Part'),
+                    ('Geometry','Geometry'),('GeometryVertex','Geometry'),('GeometryEdge','GeometryEdge'),
+                    ('GeometrySurface','GeometrySurface'),('GeometryPart','Part'),('Edge','Node'),('EdgeAngle','Node'),
+                    ('SurfaceAngle','Node'),('GeometryEdgeAngle','GeometryEdge'),('GeometrySurfaceAngle','GeometrySurface')]
 
-        def _pick(self, x, y):
-            hit = self.scene.pick(x, y)
-            if self.original_form_open():
-                modifiers=QtWidgets.QApplication.keyboardModifiers()
-                shift=bool(modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
-                control=bool(modifiers & (QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier))
-                operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
-                direction=self.renderer.GetActiveCamera().GetDirectionOfProjection()
-                if hit is None:
-                    return self.original_pick(None,direction,None,False,operation,None)
-                name, point, element = hit
-                self.last_pick_point=point
-                return self.original_pick(point,direction,None,False,operation,[name])
-            if hit is None:
-                self.selected = []
-                controller.ClearSelectionHistoryAndCallSelectionChanged()
-                self.scene.show_selection([])
-                self.render()
-                self.statusBar().showMessage('No mesh under the pointer')
+        def apply_pick_mode(self):
+            if self.original_form_open():return
+            by,item=self.PICK_MODES[self.pick_mode.currentIndex()]
+            controller.SelectBy=getattr(vtkSelectBy,by);controller.SelectItem=getattr(vtkSelectItem,item)
+            controller.SetSelectAngle(self.selection_angle.value())
+
+        def vtk_select_point_or_area(self, point, direction, planes, completely_inside, operation, part_names):
+            """vtkControl.OnMouseLeftButtonUpSelection -> FrmMain._vtk_SelectPointOrArea (original_form_host.py)."""
+            self.selection_events=getattr(self,'selection_events',0)+1
+            if point is not None:self.last_pick_point=list(point)
+            # An area pick has planes and no point or direction (vtkControl.OnMouseLeftButtonUpSelection)
+            self.original_pick(None if point is None else list(point), None if direction is None else list(direction),
+                               None if planes is None else [list(p) for p in planes], bool(completely_inside), operation,
+                               None if part_names is None else [str(n) for n in part_names])
+            self.statusBar().showMessage('Selected IDs: ' + ', '.join(map(str, self.selected)))
+
+        def select_base_parts(self, e, keys, names):
+            """vtkControl.Controller_ActorsPicked -> FrmMain.SelectBaseParts: a click on a part selects it in the tree
+            (double click on empty space zooms to fit, a click there clears the selection)."""
+            names=[str(n) for n in names] if names is not None else None
+            if not names or names[0] in (None,'None'):
+                if e.Clicks==2:self.fit()
+                elif not (int(keys) & (int(__import__('System.Windows.Forms',fromlist=['Keys']).Keys.Shift)|int(__import__('System.Windows.Forms',fromlist=['Keys']).Keys.Control))):
+                    controller.ClearAllSelection();self.tree.clearSelection()
                 return
-            name, point, element = hit
-            part_id = controller.DisplayedMesh.Parts[name].PartId
-            mode = self.pick_mode.currentIndex()
-            select_by = [vtkSelectBy.Element, vtkSelectBy.Surface, vtkSelectBy.Node, vtkSelectBy.Surface, vtkSelectBy.Part,vtkSelectBy.Geometry,vtkSelectBy.GeometryVertex,vtkSelectBy.GeometryEdge,vtkSelectBy.GeometrySurface,vtkSelectBy.GeometryPart,vtkSelectBy.Edge,vtkSelectBy.EdgeAngle,vtkSelectBy.SurfaceAngle,vtkSelectBy.GeometryEdgeAngle,vtkSelectBy.GeometrySurfaceAngle][mode]
-            select_item = [vtkSelectItem.Element,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Surface,vtkSelectItem.Part,vtkSelectItem.Geometry,vtkSelectItem.Geometry,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface,vtkSelectItem.Part,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.Node,vtkSelectItem.GeometryEdge,vtkSelectItem.GeometrySurface][mode]
-            self.last_pick_point=point
-            modifiers=QtWidgets.QApplication.keyboardModifiers()
-            shift=bool(modifiers & QtCore.Qt.KeyboardModifier.ShiftModifier)
-            control=bool(modifiers & (QtCore.Qt.KeyboardModifier.ControlModifier|QtCore.Qt.KeyboardModifier.MetaModifier))
-            operation=vtkSelectOperation.Intersect if shift and control else vtkSelectOperation.Add if shift else vtkSelectOperation.Subtract if control else getattr(vtkSelectOperation,'None')
-            direction = self.renderer.GetActiveCamera().GetDirectionOfProjection()
-            node = SelectionNodeMouse(Array[Double](point), Array[Double](direction), None, False,
-                operation, Array[Int32]([part_id]), None, select_by, self.selection_angle.value())
-            # Six display pixels converted into world distance at the picked depth.
-            self.renderer.SetWorldPoint(*point, 1)
-            self.renderer.WorldToDisplay()
-            display = self.renderer.GetDisplayPoint()
-            self.renderer.SetDisplayPoint(display[0] + 6, display[1], display[2])
-            self.renderer.DisplayToWorld()
-            world = self.renderer.GetWorldPoint()
-            node.Precision = sum((world[i] / world[3] - point[i])**2 for i in range(3))**.5
-            selection = controller.Selection.DeepCopy(True,False) if (shift or control) and controller.Selection.SelectItem==select_item else Selection()
-            selection.CurrentView = int(controller.CurrentView)
-            selection.SelectItem = select_item
-            selection.Add(node)
-            self.selected = list(controller.GetIdsFromSelection(selection))
-            controller.Selection = selection
-            controller.HighlightSelection()
-            self.scene.show_selection(session.Presentation.SelectionActors)
-            self.render()
-            self.statusBar().showMessage(f'{name}: {str(select_item)} IDs ' + ', '.join(map(str, self.selected)))
+            items=[i for i in self.walk_tree() if not i.data(0,QtCore.Qt.ItemDataRole.UserRole).Group and str(i.text(0)) in names]
+            if not items:return
+            additive=bool(int(keys) & int(__import__('System.Windows.Forms',fromlist=['Keys']).Keys.Shift))
+            if not additive:self.tree.clearSelection()
+            for item in items:item.setSelected(True)
+            self.tree.setCurrentItem(items[-1])
 
         def closeEvent(self, event):
             if self.operation_task is not None or (hasattr(self,'application') and self.application.Automation.GetDispatcher().GetRunningCall() is not None):
@@ -655,7 +583,7 @@ else:
             self.persist_preferences()
             self.application.Dispose()
             self.session.Presentation.IsDisposed=True
-            self.viewport.Finalize()
+            self.viewport.detach()
             super().closeEvent(event)
 
     application = QtWidgets.QApplication.instance() or QtWidgets.QApplication(['PrePoMax-X'])
@@ -669,8 +597,6 @@ else:
     window = Workbench()
     window.show()
     if splash:splash.finish(window)
-    if sys.platform != 'darwin':
-        window.viewport.Initialize()
     if args.project:
         QtCore.QTimer.singleShot(0, lambda: window.guard(lambda: window.open(args.project)))
     if args.probe:

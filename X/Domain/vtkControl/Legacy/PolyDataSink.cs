@@ -30,7 +30,7 @@ namespace vtkControl
         public int[][] Cells {get;set;}
         public int[] GlobalCellIds {get;set;}
     }
-    public partial class vtkMaxActor
+    public static partial class LegacyPolyTopology
     {
         public static SurfaceTopology GetSurfaceTopology(PartExchangeData data)
         {

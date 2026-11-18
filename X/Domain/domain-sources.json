@@ -67,36 +67,21 @@
     },
     "vtkControl": {
       "project": "vtkControl/vtkControl.csproj",
-      "_comment": "Data subset only (D062): the classes the domain assemblies use. The rendering control moves to vtkNative in M1 (D063).",
-      "include": [
-        "Properties/AssemblyInfo.cs",
-        "Enums/vtkRendererLayer.cs",
-        "vtkMax/Actor/vtkMaxActorData.cs",
-        "vtkMax/LookupTable/vtkMaxLookupTable.cs",
-        "Enums/vtkEdgesVisibility.cs",
-        "Enums/vtkColorSpectrumMinMaxType.cs",
-        "Enums/vtkAttributeType.cs",
-        "Enums/vtkJointSymbolEnum.cs",
-        "Enums/vtkColorSpectrum.cs",
-        "Enums/vtkResultWidgetContextMenuTypeEnum.cs",
-        "Enums/vtkFieldAssociations.cs",
-        "Enums/Selection/vtkSelectionContent.cs",
-        "Enums/Selection/vtkSelectionField.cs",
-        "vtkMax/ColorSpectrum/vtkMaxColorSpectrum.cs",
-        "vtkMax/Widget/DataFieldType.cs",
-        "vtkMax/Widget/AnimationType.cs",
-        "vtkMax/Animation/vtkMaxAnimationFrameData.cs",
-        "vtkMax/Widget/00_vtkMaxWidgetHighlight.cs"
-      ],
-      "exclude": {},
+      "_comment": "Whole original assembly (D062, M1): the view runs on vtkNative (D063) inside the headless WinForms model of X/UI/FormsCompat; the renderer gives its host a native Qt window.",
+      "exclude": {
+        "Native/VtkNativeHost.cs": "Win32 child window and focus messages; X/Domain/vtkControl/VtkNativeHost.Portable.cs takes the native window of a Qt widget",
+        "Native/VtkNativeLibrary.Windows.cs": "LoadLibraryEx of kernel32; X/Domain/vtkControl/VtkNativeLibrary.Portable.cs loads libvtkNative through NativeLibrary",
+        "vtkMax/LookupTable/vtkMaxLookupTable.Windows.cs": "System.Drawing.Bitmap is Windows only on .NET; X/Domain/vtkControl/TexturePng.cs writes the same texture",
+        "Tools/AviWriter.cs": "Video for Windows (avifil32); X/Domain/vtkControl/AviWriter.Portable.cs writes the same frames uncompressed"
+      },
       "add": {
-        "X/Domain/vtkControl/PresentationActor.cs": "Headless presentation geometry handle",
-        "X/Domain/vtkControl/PresentationServices.cs": "Explicit native rendering/export services",
-        "vtkControl/Enums/VtkCellType.cs": "Existing data enum mirrors the native VTK enum; original WinForms build keeps its native binding",
-        "X/Domain/vtkControl/PolyDataSink.cs": "Nonrendering data sink for the unchanged original cell topology conversion",
+        "X/Domain/vtkControl/VtkNativeHost.Portable.cs": "Native view host on the native window of a Qt widget (macOS NSView, X11 window)",
+        "X/Domain/vtkControl/VtkNativeLibrary.Portable.cs": "Loads libvtkNative.dylib/.so beside the assembly and binds the vtkNative.dll imports to it",
         "X/Domain/vtkControl/TexturePng.cs": "Portable PNG encoding with original texture row/color mapping",
-        "X/Domain/vtkControl/Legacy/vtkSelectionGeometry.cs": "Closest-edge picking of the ActiViz-era vtkControl (3.0.0), used by the headless spatial queries until the original vtkControl runs on vtkNative (M1)",
-        "X/Domain/vtkControl/Legacy/vtkMaxActor.PolyTopology.cs": "Cell topology conversion of the ActiViz-era vtkMaxActor (3.0.0), used by the Python renderer until the original vtkControl runs on vtkNative (M1)"
+        "X/Domain/vtkControl/Legacy/vtkSelectionGeometry.cs": "Closest-edge picking of the ActiViz-era vtkControl (3.0.0), used by the headless spatial queries (no view)",
+        "X/Domain/vtkControl/Legacy/LegacyPolyTopology.cs": "Cell topology conversion of the ActiViz-era vtkMaxActor (3.0.0), used by the headless spatial queries (no view)",
+        "X/Domain/vtkControl/Legacy/PolyDataSink.cs": "Nonrendering data sink for the ActiViz-era topology conversion of the headless spatial queries",
+        "X/Domain/vtkControl/AviWriter.Portable.cs": "AVI writer of vtkControl without Video for Windows (uncompressed 24-bit DIB frames)"
       }
     },
     "PrePoMax": {

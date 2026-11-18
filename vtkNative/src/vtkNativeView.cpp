@@ -2,6 +2,7 @@
 #include "vtkNativeView.h"
 #include "vtkNativeError.h"
 #include "vtkNativeRenderWindow.h"
+#include "vtkNativeX11.h"
 
 #include <vtkCamera.h>
 #include <vtkCellArray.h>
@@ -189,7 +190,13 @@ namespace vtkn
         Interactor->AddObserver(vtkCommand::MouseMoveEvent, WidgetCommand, 1.0f);
         // The host application pumps the messages, so the interactor is initialized and never started
         Interactor->Initialize();
+        X11LeaveInputToParent(RenderWindow);
         Embedded = true;
+    }
+
+    void View::ProcessEvents()
+    {
+        if (Embedded) X11ProcessEvents(Interactor);
     }
 
     void View::SetSize(int width, int height)

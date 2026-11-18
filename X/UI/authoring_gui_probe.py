@@ -75,13 +75,12 @@ def start(app,window,output):
             dialog=open_editor(find('Node sets'))
             check('original FrmNodeSet keeps viewport enabled, tree mouse off',type(forms.form).__name__=='FrmNodeSet' and window.viewport.isEnabled() and not window.tree.isEnabled())
             check('FrmSelectItemSet shown with the node set form',forms.host.SelectItemSetForm.Visible)
-            camera=window.renderer.GetActiveCamera();camera.SetPosition(4,.5,.5);camera.SetFocalPoint(.5,.5,.5);camera.SetViewUp(0,0,1);window.fit()
+            from view_probe import ViewProbe
+            view=ViewProbe(app,window);view.look((4,.5,.5),(.5,.5,.5),(0,0,1))
             # FrmSelectItemSet: mesh-based selection by surface.
             forms.click('rbSurface',forms.host.SelectItemSetForm)
-            window.renderer.SetWorldPoint(1,.5,.5,1);window.renderer.WorldToDisplay()
-            x,y,_=window.renderer.GetDisplayPoint()
-            window._pick(x,y)
-            report['pick']={'selected':list(window.selected),'selectBy':str(c.SelectBy),'item':str(c.Selection.SelectItem),'nodes':c.Selection.Nodes.Count,'hit':str(window.scene.pick(x,y))}
+            view.click(*view.to_widget((1,.5,.5)))
+            report['pick']={'selected':list(window.selected),'selectBy':str(c.SelectBy),'item':str(c.Selection.SelectItem),'nodes':c.Selection.Nodes.Count,'hit':view.hit_test(*view.to_widget((1,.5,.5))),'inputs':getattr(window.viewport,'inputs',[])}
             check('viewport selects while the original set form stays open',sorted(window.selected)==[2,3,6,7])
             forms.set('Name','FromDialog')
             forms.ok()

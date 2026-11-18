@@ -2,7 +2,7 @@
 
 The .NET 10 application owns the original Controller/model. Embedded
 Python.NET exposes those same live C# objects to a thin Qt/PyQt6 widget layer;
-native VTK renders original Controller actor data. There is no second model,
+the original `vtkControl` (on upstream's `vtkNative`, VTK 9.7.1) draws the 3D view. There is no second model,
 engineering implementation, deck writer or PMX format. The retained `X/Desktop`
 preview remains unchanged.
 
@@ -10,8 +10,9 @@ preview remains unchanged.
 
 Supply the explicit CPython 3.12 profile described in
 [the Controller README](../Controller/README.md), with the existing target-specific
-`X/Desktop/requirements-*.txt` wheels. Pins remain VTK 9.5.2, PyQt6 6.10.0,
-Qt 6.10.2 and Python.NET 3.1.0. No Python wheel is needed to load a second CLR;
+`X/Desktop/requirements-*.txt` wheels. Pins remain PyQt6 6.10.0, Qt 6.10.2 and
+Python.NET 3.1.0; the 3D view needs a vtkNative runtime from `X/Build/Vtk/build.py`
+(`verify-ui.py --vtk-native DIR`, `package_ui.py --vtk-native DIR`). No Python wheel is needed to load a second CLR;
 .NET already hosts it.
 
 ```sh
@@ -117,11 +118,18 @@ Use the generator without `--check` after reviewing an upstream change.
 
 ## Viewport and verification
 
-Mac reuses the VTK-owned native Cocoa child view. Windows/Linux use QVTK's native
-interactor with widget-level click/drag separation. C1 uses no framebuffer-copy
-bridge. Native VTK supplies hit coordinates; original selection resolves IDs.
-Original Controller highlight actors, topology and camera callbacks drive the
-scene. C4 connects original results and transient rendering commands.
+Since M1 the view is the original `vtkControl`, compiled whole
+(`X/Domain/vtkControl`), in `original_viewport.py`: a native Qt widget whose window
+(an NSView on macOS, an X11 window on Linux) becomes the parent of VTK's OpenGL view
+(`VtkNativeHost.Portable.cs`). VTK's Cocoa and X11 views leave the mouse and keys to
+the parent, so the widget hands them to the original interaction style
+(`vtkn_view_handle_input`); on X11 the widget also pumps VTK's display connection
+(`vtkn_view_process_events`, timers for click selection and smooth zoom). The view
+half of the original FrmMain, 137 IControllerHost members copied unchanged by
+`generate-view-host.py`, is `Workbench/OriginalViewHost`; the headless FrmMain routes
+the controller's view calls there. Its marshalled calls are queued for the UI thread,
+and a synchronous wait on a controller task there (`OriginalViewHost.WaitFor`) runs
+them, as the original forms await those tasks.
 
 ```sh
 python3 X/UI/verify-ui.py --output /absolute/check.json \
@@ -170,17 +178,18 @@ selection and deformation operate on the original live results. Unknown units
 use the original interactive/unattended policy. Original field/history factories,
 validation, filters, calculations, coordinate systems/reference points, part
 properties and exports remain C#. Tables/plots display original history data.
-`generate-results-forms.py --check` fingerprints the reused original rules;
-`generate-colormaps.py --check` checks all fourteen original color maps.
+`generate-results-forms.py --check` fingerprints the reused original rules; the
+color maps are vtkControl's own (`vtkMaxLookupTable`).
 
-Native VTK renders original scalar/frame data, colors/legends, symbols,
+vtkControl draws the original scalar/frame data, colors/legends, symbols,
 annotations/measurements, vector/tensor plots, section cuts/hatching, result
 patterns and undeformed copies. Camera/annotation callbacks stay on the UI thread;
 solver/native operations lock document edits and preserve output. Animation uses
-original scale/time/harmonic frame generation. PNG capture/frame sequences and
-native Ogg Theora export are available; AVI is offered only when the pinned VTK
-runtime provides its platform writer. Exact cross-platform AVI parity remains
-open. No encoder is installed/selected silently.
+original scale/time/harmonic frame generation. PNG capture/frame sequences and AVI
+are written by vtkControl (`SaveAnimationAsImages`, `SaveAnimationAsAVI`); off
+Windows its AVI writer stores uncompressed frames (`AviWriter.Portable.cs`), as the
+Video 1 compressor and its options dialog are Windows only. No encoder is
+installed/selected silently.
 
 C4 adds `--results-service-probe` and `--results-probe` to the workbench script.
 The independent stress diagnostic remains false in `engineeringChecks`; UI/service
@@ -207,10 +216,9 @@ session-discovery file. Do not put tokens in redistributable preferences.
 
 Capture supports original PNG naming/transparency/magnification/clipboard options.
 Animation offers first/last/step/FPS, direction, Once/Loop/Swing and current/all-frame
-scalar limits. AVI uses VTK on platforms that provide its writer and portable
-uncompressed BGR AVI otherwise; the latter refuses files above 2 GiB. Native Windows
-codec-option equivalence/OpenDML remains open. PNG sequence naming/Swing endpoints
-follow the original exporter. Ogg remains available through pinned VTK.
+scalar limits. AVI is uncompressed off Windows (see above); Windows codec options
+and OpenDML remain open. PNG sequence naming/Swing endpoints follow the original
+exporter. Ogg Theora export left with the interim Python VTK renderer (M1).
 
 Colored 3MF requires adding `lib3mf.dll` to the explicit `--native-tools` manifest,
 with the absolute library path and SHA256 for existing lib3mf **2.4.1**. The UI
@@ -233,7 +241,7 @@ an upstream change to `FrmMain` (`--check` runs in `verify-ui.py`). The GUI veri
 adds `--menu-probe`: structure, per-view enabling, original camera views,
 selection/confirmation flows, parameter commands through the script panel, and a
 smoke pass that runs every reachable item in Geometry, Model and Results views.
-`scale_widget.py` ports the original `vtkMaxScaleWidget`.
+The scale bar is the original `vtkMaxScaleWidget` in vtkControl (since M1).
 [C6 report](../../.project/reports/phase-c6-main-window.md).
 
 ### C7 original tool strips and model tree

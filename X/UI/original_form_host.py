@@ -2,7 +2,7 @@
 plus the main-window hooks it needs, the original picking path while a form is open, and the
 create/edit entry points the menus and the model tree call."""
 from PyQt6 import QtCore, QtWidgets
-from System import Array, Int32, Double, String, Boolean, Func, Action
+from System import Array, Int32, Double, String, Boolean, Func, Action, Object
 from System.Drawing import Point
 
 from original_forms import OriginalFormRenderer
@@ -154,9 +154,10 @@ class OriginalFormHostWorkbench:
     def form_main_window_member(self, member, arguments):
         """FrmMain members of the main window (viewport, results opening, settings/automation, annotations, tree)."""
         member, args = str(member), list(arguments)
-        if member == 'Clear3DSelection':
-            self.scene.show_selection([])
-            self.render()
+        if self.viewport.host.Handles(member):
+            # The view members of FrmMain (OriginalViewHost): Clear3DSelection, HighlightActor, the view calls
+            _, result = self.viewport.host.TryInvoke(member, Array[Object](args), None)
+            return result
         elif member == 'ResultsAnalysis':
             # FrmMain.ResultsAnalysis: OpenResultsCommand (OpenAnalysisResults with CloseMonitorWindow), then the
             # history postprocessing when the results were accepted.
@@ -326,13 +327,12 @@ class OriginalFormHostWorkbench:
     # Original picking (FrmMain._vtk_SelectPointOrArea) --------------------------------------------------------------------
     def original_pick(self, point, direction, planes, completely_inside, operation, part_names):
         c = self.controller
-        c.SelectPointOrArea(None if point is None else Array[Double](point), Array[Double](direction),
+        c.SelectPointOrArea(None if point is None else Array[Double](point), None if direction is None else Array[Double](direction),
                             None if planes is None else Array[Array[Double]]([Array[Double](p) for p in planes]),
                             bool(completely_inside), operation, None if part_names is None else Array[String](part_names))
         ids = c.GetSelectionIds()
         self.form_host.PickedIds(ids)
         self.form_host.SelectionChanged(ids)
         self.selected = list(ids) if ids is not None else []
-        self.scene.show_selection(self.session.Presentation.SelectionActors)
         self.render()
         self.form_renderer.flush()

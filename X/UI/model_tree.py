@@ -959,7 +959,6 @@ class OriginalModelTreeWorkbench:
         except RuntimeError:
             self.tree_hover_item = None
         self.controller.Highlight3DObjects(Array[Object](items), True)
-        self.scene.show_selection(self.session.Presentation.SelectionActors)
         self.render()
 
     def tree_selection_changed(self):
@@ -979,7 +978,6 @@ class OriginalModelTreeWorkbench:
             self.controller.Highlight3DObjects(Array[Object](items))
         else:
             self.controller.ClearAllSelection()
-        self.scene.show_selection(self.session.Presentation.SelectionActors)
         self.render()
 
     # -------------------------------------------------------------- keyboard

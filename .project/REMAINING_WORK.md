@@ -1,6 +1,6 @@
 # Remaining work to full completion (D060)
 
-Updated 18 November 2026 after M0 (upstream 3.0.1 + vtkNative merged, GitHub home; D063, D064). Replace,
+Updated 18 November 2026 after M1 (original vtkControl on vtkNative, macOS and Linux; D063). Replace,
 don't append. Evidence for each item is in the phase reports, `.project/bugs/` and the
 [backlog](reports/deferred-correctness-improvements.md).
 
@@ -9,8 +9,8 @@ don't append. Evidence for each item is in the phase reports, `.project/bugs/` a
 | | Milestone | Done when |
 |---|---|---|
 | M0 | ~~GitHub replay, merge upstream `1e2f83f2`, sources/allowlist/generators~~ ([M0](reports/phase-m0-upstream-3.0.1.md)) | checks and UI verification pass on the new base |
-| M1 | VTK 9.7 recipe; `vtkNative` for macOS/Linux (its three Win32 files); original `vtkControl` compiled whole and embedded in Qt | geometry/results GUI probes pass with the original renderer |
-| M2 | 3.0.1 features (composites: FrmSection Layers/layup, FrmMaterialOrientation, result outputs, property-grid missing values; a Graphics/Paint layer drawn by Qt), Netgen re-pin to the published NetgenMesher, QuadWild for macOS/Linux from the published fork; FrmMain whole on the native `vtkControl`; Python VTK retired | every form compiled whole; one VTK per package; upstream composite test scripts pass |
+| M1 | ~~VTK 9.7 recipe; `vtkNative` for macOS/Linux; original `vtkControl` compiled whole and embedded in Qt~~ ([M1](reports/phase-m1-original-vtkcontrol.md)) | all GUI probes pass with the original renderer (Mac, Linux ARM64) |
+| M2 | 3.0.1 features (composites: FrmSection Layers/layup, FrmMaterialOrientation, result outputs, property-grid missing values; a Graphics/Paint layer drawn by Qt), Netgen re-pin to the published NetgenMesher, QuadWild for macOS/Linux from the published fork; FrmMain whole on the native `vtkControl` | every form compiled whole; upstream composite test scripts pass (one VTK per package: done in M1) |
 | M3 | GitHub Actions for win-x64, linux-x64, linux-arm64, osx-arm64: `build_ui.py`, checks, GUI probes; Windows MSVC Gmsh and CalculiX | four packages built and tested in CI |
 | M4 | Original-app comparison through upstream's Python API test scripts (79) on the original (Windows runner) and on X; analysis/meshing matrices | V evidence |
 | M5 | D061 fixes and warnings, clean organization (discussed first), installers, signing, notices, maintainer sign-off, upstream PR(s) | release |

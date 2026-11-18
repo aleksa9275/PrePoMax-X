@@ -88,12 +88,6 @@ namespace System.Windows.Forms
         public static readonly Padding Empty = new Padding(0);
     }
 
-    public interface IMessageFilter { bool PreFilterMessage(ref Message m); }
-    public struct Message
-    {
-        public IntPtr HWnd; public int Msg; public IntPtr WParam; public IntPtr LParam; public IntPtr Result;
-        public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) => new Message { HWnd = hWnd, Msg = msg, WParam = wparam, LParam = lparam };
-    }
     [Flags] public enum ControlStyles { ContainerControl = 1, UserPaint = 2, Opaque = 4, ResizeRedraw = 16, FixedWidth = 32, FixedHeight = 64, StandardClick = 256, Selectable = 512, UserMouse = 1024, SupportsTransparentBackColor = 2048, StandardDoubleClick = 4096, AllPaintingInWmPaint = 8192, CacheText = 16384, EnableNotifyMessage = 32768, DoubleBuffer = 65536, OptimizedDoubleBuffer = 131072, UseTextForAccessibility = 262144 }
     /// <summary>Text clipboard; the renderer installs the platform clipboard.</summary>
     public static class Clipboard
@@ -179,7 +173,25 @@ namespace System.Windows.Forms
 
         public Control() { Controls = CreateControlsInstance(); }
         protected virtual ControlCollection CreateControlsInstance() => new ControlCollection(this);
-        public IntPtr Handle => IntPtr.Zero;
+        IntPtr _nativeWindow;
+        /// <summary>Zero, except for a control the renderer shows in a native window of its own (the 3D view).</summary>
+        public IntPtr Handle => _nativeWindow;
+        /// <summary>The renderer gives the control the native window it shows it in (a Qt widget's NSView or X11
+        /// window); the control then gets OnHandleCreated, as a WinForms control does when its window is created.</summary>
+        public void AttachNativeWindow(IntPtr window)
+        {
+            if (window == IntPtr.Zero) throw new ArgumentException("A native window is required.", nameof(window));
+            if (_nativeWindow != IntPtr.Zero) throw new InvalidOperationException("The control already has a native window.");
+            _nativeWindow = window;
+            OnHandleCreated(EventArgs.Empty);
+        }
+        /// <summary>Before the renderer destroys the native window: OnHandleDestroyed, while the window still exists.</summary>
+        public void DetachNativeWindow()
+        {
+            if (_nativeWindow == IntPtr.Zero) return;
+            OnHandleDestroyed(EventArgs.Empty);
+            _nativeWindow = IntPtr.Zero;
+        }
         public bool IsHandleCreated => true;
         public bool IsDisposed { get; private set; }
         public bool Disposing => false;
@@ -371,7 +383,7 @@ namespace System.Windows.Forms
         protected override void Dispose(bool disposing) { IsDisposed = true; base.Dispose(disposing); }
 
         public event EventHandler Click, DoubleClick, TextChanged, VisibleChanged, EnabledChanged, Resize, SizeChanged, LocationChanged, Move,
-            GotFocus, LostFocus, Enter, Leave, Validated, MouseEnter, MouseLeave, MouseHover, HandleCreated, ParentChanged, BackColorChanged, FontChanged;
+            GotFocus, LostFocus, Enter, Leave, Validated, MouseEnter, MouseLeave, MouseHover, HandleCreated, HandleDestroyed, ParentChanged, BackColorChanged, FontChanged;
         public event CancelEventHandler Validating;
         public event LayoutEventHandler Layout;
         public event DragEventHandler DragDrop, DragEnter, DragOver;
@@ -421,6 +433,7 @@ namespace System.Windows.Forms
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) => PreviewKeyDown?.Invoke(this, e);
         protected virtual void OnPaint(PaintEventArgs e) => Paint?.Invoke(this, e);
         protected virtual void OnHandleCreated(EventArgs e) => HandleCreated?.Invoke(this, e);
+        protected virtual void OnHandleDestroyed(EventArgs e) => HandleDestroyed?.Invoke(this, e);
         protected virtual void OnValidating(CancelEventArgs e) => Validating?.Invoke(this, e);
         protected virtual void OnValidated(EventArgs e) => Validated?.Invoke(this, e);
         protected virtual void OnControlAdded(ControlEventArgs e) => ControlAdded?.Invoke(this, e);
@@ -558,7 +571,16 @@ namespace System.Windows.Forms
         public bool Validate() => true;
         public bool ValidateChildren() => true;
     }
-    public class UserControl : ContainerControl { public BorderStyle BorderStyle { get; set; } }
+    public class UserControl : ContainerControl
+    {
+        bool _loaded;
+        public BorderStyle BorderStyle { get; set; }
+        public event EventHandler Load;
+        protected virtual void OnLoad(EventArgs e) => Load?.Invoke(this, e);
+        /// <summary>WinForms raises Load once, when the control is first created for display, after its children
+        /// got their windows; the renderer calls this at that point.</summary>
+        public void RaiseLoad() { if (_loaded) return; _loaded = true; OnLoad(EventArgs.Empty); }
+    }
     public class Panel : ScrollableControl { public BorderStyle BorderStyle { get; set; } }
     public class FlowLayoutPanel : Panel { }
     /// <summary>WinForms Splitter: a docked bar that resizes the control docked before it; MinSize and MinExtra
@@ -1011,9 +1033,26 @@ namespace System.Windows.Forms
         public static Screen FromPoint(Point point) => AllScreens.FirstOrDefault(s => s.Bounds.Contains(point)) ?? PrimaryScreen;
     }
 }
+namespace System.Windows.Forms
+{
+    /// <summary>ActiveX host; named by a using static directive of the original vtkControl.cs, never created.</summary>
+    public abstract class AxHost : Control { protected AxHost(string clsid) { } }
+}
 namespace System.Windows.Forms.VisualStyles
 {
-    public static class VisualStyleElement { public static class TaskbarClock { } }
+    public static class VisualStyleElement
+    {
+        public static class TaskbarClock { }
+        // Named by using static directives of the original vtkControl.cs; nothing of them is used
+        public static class ProgressBar { }
+        public static class TreeView { }
+        public static class Window { }
+    }
+}
+namespace System.Management.Instrumentation
+{
+    /// <summary>Keeps the namespace of a using directive of the original vtkControl.cs (nothing of it is used).</summary>
+    public static class NamespacePlaceholder { }
 }
 namespace AutocompleteMenuNS
 {
