@@ -92,7 +92,7 @@ original unattended-thread refusal remains in effect.
 ## Shared source
 
 Original property/data classes compile under their original assembly names and
-paths. `MaterialEditor` and `SurfaceInteractionEditor` hold original form
+paths. `SurfaceInteractionEditor` holds original form
 construction/validation shared with the Windows forms. The unused Windows parent
 argument of `ViewNodeSet` stays available in its original project's small Windows
 partial. Original C# remains net48/C# 7.3 compatible.

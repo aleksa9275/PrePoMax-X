@@ -1,5 +1,30 @@
 # Decision register
 
+D064 — GitHub as the project home, 2026-11-18: upstream moved to
+github.com/PrePoMax/PrePoMax (the GitLab project is archived; its history was
+rewritten before archiving). The maintainer forked it as
+github.com/aleksa9275/PrePoMax-X and moved the working copy there. The 146
+PrePoMax-X commits were replayed unchanged onto upstream's own history at
+`eb6aff0c` (the content our GitLab base `de8f7303` already had; trees identical
+before and after), so the fork shares Matej Borovinšek's history and a later pull
+request shows only PrePoMax-X work. The GitLab fork stays as a read-only archive
+(`gitlab` remote, branch `research/native-feasibility` at `e08df83f`).
+CI moves to GitHub Actions (M3); D058's GitLab quota hold no longer applies.
+Pull requests or issues upstream need explicit maintainer instruction.
+
+D063 — Target 3.0.1 with upstream's native VTK port, 2026-11-17: PrePoMax 3.0.1
+(15 Nov) supersedes 3.0.0 as the parity target, and upstream's post-3.0.1
+`vtkNative` (a flat C API over VTK 9.7, called through P/Invoke, ActiViz removed)
+is adopted now rather than after release. The code base is upstream `master`
+pinned per sync — first `1e2f83f2` (3.0.1 + vtkNative + `Dev/` reorganization);
+the 3.0.1 release is the behavioural reference. Consequences: the original
+`vtkControl` is to run on vtkNative built for macOS/Linux (its Windows-only
+window embedding/input made portable — a candidate upstream contribution)
+instead of the planned 165-member adapter; the interim Python VTK renderer and its
+VTK 9.5.2 wheel are retired once the original viewport runs, so a package ships
+one VTK. Each later upstream sync pins an exact commit. D060's scope now reads
+"identical PrePoMax functionality" at the pinned upstream revision.
+
 D062 — Whole-code reuse strategy and simplified process, 2026-11-08: the
 maintainer accepts the assessment that slice-porting plus a reimplemented Python
 application layer fragmented progress. Direction: **maximum reuse of existing

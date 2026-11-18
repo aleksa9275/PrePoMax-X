@@ -14,6 +14,7 @@ FAMILY_ENTRIES = {
     'Surfaces': ('tsmiCreateSurface_Click', 'EditSurface'),
     'Reference points': ('tsmiCreateModelReferencePoint_Click', 'EditModelReferencePoint'),
     'Coordinate systems': ('tsmiCreateModelCoordinateSystem_Click', 'EditModelCoordinateSystem'),
+    'Material orientations': ('CreateMaterialOrientation', 'EditMaterialOrientation'),
     'Sections': ('CreateSection', 'EditSection'),
     'Constraints': ('tsmiCreateConstraint_Click', 'EditConstraint'),
     'Contact pairs': ('tsmiCreateContactPair_Click', 'EditContactPair'),

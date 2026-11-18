@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -125,6 +125,8 @@ namespace PrePoMax.Python
                                                  string.Join(" ", _controller.GetErrors()).Replace(Environment.NewLine, " "));
                 }
             }
+            // As File - Import leaves it: the camera of an empty model would show none of the imported parts
+            if (_controller.Form != null && CountModelParts() > numOfParts) _controller.Form.SetFrontBackView(false, true);
         }
         private int CountModelParts()
         {
@@ -294,6 +296,7 @@ namespace PrePoMax.Python
             if (IsItemType(itemType, "coordinate_systems")) return typeof(CaeMesh.CoordinateSystem);
             if (IsItemType(itemType, "materials")) return typeof(Material);
             if (IsItemType(itemType, "sections")) return typeof(Section);
+            if (IsItemType(itemType, "material_orientations")) return typeof(MaterialOrientation);
             if (IsItemType(itemType, "constraints")) return typeof(CaeModel.Constraint);
             if (IsItemType(itemType, "surface_interactions")) return typeof(SurfaceInteraction);
             if (IsItemType(itemType, "contact_pairs")) return typeof(ContactPair);
@@ -323,6 +326,7 @@ namespace PrePoMax.Python
             if (itemType == typeof(CaeMesh.CoordinateSystem)) return "coordinate_systems";
             if (itemType == typeof(Material)) return "materials";
             if (itemType == typeof(Section)) return "sections";
+            if (itemType == typeof(MaterialOrientation)) return "material_orientations";
             if (itemType == typeof(CaeModel.Constraint)) return "constraints";
             if (itemType == typeof(SurfaceInteraction)) return "surface_interactions";
             if (itemType == typeof(ContactPair)) return "contact_pairs";
@@ -478,6 +482,23 @@ namespace PrePoMax.Python
         {
             _controller.RemoveSectionsCommand(sectionNames);
         }
+        // Material orientations
+        public void AddMaterialOrientation(MaterialOrientation materialOrientation)
+        {
+            _controller.AddMaterialOrientationCommand(materialOrientation);
+        }
+        public void ReplaceMaterialOrientation(string oldMaterialOrientationName, MaterialOrientation materialOrientation)
+        {
+            _controller.ReplaceMaterialOrientationCommand(oldMaterialOrientationName, materialOrientation);
+        }
+        public void DuplicateMaterialOrientations(string[] materialOrientationNames)
+        {
+            _controller.DuplicateMaterialOrientationsCommand(materialOrientationNames);
+        }
+        public void RemoveMaterialOrientations(string[] materialOrientationNames)
+        {
+            _controller.RemoveMaterialOrientationsCommand(materialOrientationNames);
+        }
         // Node sets
         // Constraints
         public void AddConstraint(Constraint constraint)
@@ -561,6 +582,19 @@ namespace PrePoMax.Python
         public void ShowContactPairs(string[] contactPairNames)
         {
             _controller.ShowContactPairsCommand(contactPairNames);
+        }
+        public List<MasterSlaveItem> SearchContactPairs(double distance, double angleDeg,
+                                                        CaeMesh.ContactSearchNamespace.GeometryFilterEnum filter,
+                                                        GroupContactPairsByEnum groupBy, bool tryToResolve)
+        {
+            return _controller.SearchContactPairs(distance, angleDeg, filter, groupBy, tryToResolve);
+        }
+        public string[] AddSearchedContactPairs(List<MasterSlaveItem> masterSlaveItems, bool tie, bool adjust,
+                                                double distance, string surfaceInteractionName, ContactPairMethod method)
+        {
+            return _controller.AddSearchedContactPairsCommand(
+                _controller.CreateSearchContactPairRows(masterSlaveItems, tie, adjust, distance, surfaceInteractionName,
+                                                        method));
         }
         //
         public void AddNodeSet(FeNodeSet nodeSet)

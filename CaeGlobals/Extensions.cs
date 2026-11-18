@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -167,12 +167,17 @@ namespace CaeGlobals
         }
         public static int FindFreeIntervalOfKeys<T>(this Dictionary<int, T> dic, int numOfKeys, int maxKey)
         {
+            return dic.FindFreeIntervalOfKeys(numOfKeys, maxKey, null);
+        }
+        public static int FindFreeIntervalOfKeys<T>(this Dictionary<int, T> dic, int numOfKeys, int maxKey,
+                                                    HashSet<int> reservedKeys)
+        {
             int count = 0;
             int firstId = 1;                    // start at 1
             //
             for (int i = 1; i <= maxKey; i++)   // start at 1
             {
-                if (dic.ContainsKey(i))
+                if (dic.ContainsKey(i) || (reservedKeys != null && reservedKeys.Contains(i)))
                 {
                     count = 0;
                     firstId = i + 1;

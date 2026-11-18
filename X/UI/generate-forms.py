@@ -21,7 +21,7 @@ CONFIG=[
  ('Surfaces','FrmSurface','Surface','_viewSurface','surface','Surfaces',False,[]),
  ('Reference points','FrmReferencePoint','ReferencePoint','_viewReferencePoint','referencePoint','ReferencePoints',False,['AddReferencePointCommand','ReplaceReferencePointCommand','ResetNumberOfSelectionItemIds']),
  ('Coordinate systems','FrmCoordinateSystem','CoordinateSystem','_viewCoordinateSystem','coordinateSystem','CoordinateSystems',False,['AddCoordinateSystemCommand','ReplaceCoordinateSystemCommand','ResetNumberOfSelectionItemIds']),
- ('Sections','FrmSection','Section','_viewSection','section','Sections',False,['CheckSectionElementTypes']),
+ ('Sections','FrmSection','Section','_viewSection','section','Sections',False,['CheckSectionElementTypes','GetPartNamesToSetCompositeShellElementTypes','SetCompositeShellElementTypes','GetRegionElementIds','GetPartNamesText']),
  ('Constraints','FrmConstraint','Constraint','_viewConstraint','constraint','Constraints',False,[]),
  ('Contact pairs','FrmContactPair','ContactPair','_viewContactPair','contactPair','ContactPairs',False,[]),
  ('Distributions','FrmDistribution','Distribution','_viewDistribution','distribution','Distributions',False,[]),

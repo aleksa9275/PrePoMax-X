@@ -21,6 +21,13 @@ public void SetCurrentEdgesVisibilities(vtkControl.vtkEdgesVisibility edgesVisib
 public bool ScreenUpdating {get; set;}
 public bool RenderingOn {get; set;}
 public bool LastOpenResultsAccepted {get; set;}
+public void SetMenuAndToolStripVisibility()
+{
+    var args = new object[]
+    {
+    };
+    InvokePresentation("SetMenuAndToolStripVisibility", args);
+}
 public void Open(string fileName, Action<string, string> ActionOnFile, bool resetCamera = true, string parameters = null)
 {
     var args = new object[]
@@ -556,6 +563,20 @@ public void AdjustCameraDistanceAndClipping()
     };
     InvokePresentation("AdjustCameraDistanceAndClipping", args);
 }
+public void SuspendCameraAdjustment()
+{
+    var args = new object[]
+    {
+    };
+    InvokePresentation("SuspendCameraAdjustment", args);
+}
+public void ResumeCameraAdjustment()
+{
+    var args = new object[]
+    {
+    };
+    InvokePresentation("ResumeCameraAdjustment", args);
+}
 public void UpdateScalarsAndRedraw()
 {
     var args = new object[]
@@ -877,6 +898,17 @@ public void AddCoordinateSystemSymbol(double[] origin, double[][] axisDirections
         layer
     };
     InvokePresentation("AddCoordinateSystemSymbol", args);
+}
+public void AddMaterialAxesSymbol(double[] origin, double[][] axisDirections, string[] labels, double symbolSize)
+{
+    var args = new object[]
+    {
+        origin,
+        axisDirections,
+        labels,
+        symbolSize
+    };
+    InvokePresentation("AddMaterialAxesSymbol", args);
 }
 public void AddCaptionActor(string name, string caption, Color color, double[] position, double[] offsetVector, double fontScaleFactor, vtkRendererLayer layer)
 {
@@ -1340,6 +1372,17 @@ public void SetLighting(double ambient, double diffuse, bool redraw)
     };
     InvokePresentation("SetLighting", args);
 }
+public void SetAmbientOcclusion(bool enabled, double relativeRadius, int kernelSize, bool redraw)
+{
+    var args = new object[]
+    {
+        enabled,
+        relativeRadius,
+        kernelSize,
+        redraw
+    };
+    InvokePresentation("SetAmbientOcclusion", args);
+}
 public void SetNavigationSensitivity(double rotateSensitivity, double zoomSensitivity, bool invertZoom, bool smoothZoom)
 {
     var args = new object[]
@@ -1623,6 +1666,20 @@ public void RegenerateTree(bool remeshing = false)
         remeshing
     };
     InvokePresentation("RegenerateTree", args);
+}
+public void BeginTreeUpdateBatch()
+{
+    var args = new object[]
+    {
+    };
+    InvokePresentation("BeginTreeUpdateBatch", args);
+}
+public void EndTreeUpdateBatch()
+{
+    var args = new object[]
+    {
+    };
+    InvokePresentation("EndTreeUpdateBatch", args);
 }
 public void AddTreeNode(ViewGeometryModelResults view, NamedClass item, string parentName)
 {

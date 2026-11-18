@@ -1,8 +1,23 @@
 # Remaining work to full completion (D060)
 
-Review of 9 November 2026 at `303b43c8`, updated 10 November after C9. Replace, don't append. Evidence for
-each item is in the phase reports, `.project/bugs/` and the
+Updated 18 November 2026 after M0 (upstream 3.0.1 + vtkNative merged, GitHub home; D063, D064). Replace,
+don't append. Evidence for each item is in the phase reports, `.project/bugs/` and the
 [backlog](reports/deferred-correctness-improvements.md).
+
+## Plan to release (maintainer, 17 November 2026)
+
+| | Milestone | Done when |
+|---|---|---|
+| M0 | ~~GitHub replay, merge upstream `1e2f83f2`, sources/allowlist/generators~~ ([M0](reports/phase-m0-upstream-3.0.1.md)) | checks and UI verification pass on the new base |
+| M1 | VTK 9.7 recipe; `vtkNative` for macOS/Linux (its three Win32 files); original `vtkControl` compiled whole and embedded in Qt | geometry/results GUI probes pass with the original renderer |
+| M2 | 3.0.1 features (composites: FrmSection Layers/layup, FrmMaterialOrientation, result outputs, property-grid missing values; a Graphics/Paint layer drawn by Qt), Netgen re-pin to the published NetgenMesher, QuadWild for macOS/Linux from the published fork; FrmMain whole on the native `vtkControl`; Python VTK retired | every form compiled whole; one VTK per package; upstream composite test scripts pass |
+| M3 | GitHub Actions for win-x64, linux-x64, linux-arm64, osx-arm64: `build_ui.py`, checks, GUI probes; Windows MSVC Gmsh and CalculiX | four packages built and tested in CI |
+| M4 | Original-app comparison through upstream's Python API test scripts (79) on the original (Windows runner) and on X; analysis/meshing matrices | V evidence |
+| M5 | D061 fixes and warnings, clean organization (discussed first), installers, signing, notices, maintainer sign-off, upstream PR(s) | release |
+
+Answered by 3.0.1: the modified QuadWild source (github.com/PrePoMax/QuadWild), NetgenMesher with its
+Netgen 5.3.1/OCCT 8.0.1 port (github.com/PrePoMax/NetgenMesher, LGPL-2.1) and the Gmsh fork
+(github.com/PrePoMax/Gmsh) are published; Q-Morph was removed upstream.
 
 ## Review verdict
 
@@ -102,14 +117,15 @@ mostly CS0168, NU1701, CA1416, CA2022, CS0649/CS0414/CS0612), including
    the original app. I can automate comparisons; the sign-off is yours.
 4. **Original PMX corpus**: provide real projects (kept outside Git) for
    compatibility testing.
-5. **Upstream**: ask Matej Borovinšek for the Q-Morph `QuadMesher` source and
-   license, and the exact source revision of the stable 3.0.0 binary.
+5. **Upstream**: the QuadWild, NetgenMesher and Gmsh sources are now published and Q-Morph is gone
+   (3.0.1). Still worth asking: the exact source revisions behind the shipped 3.0.1 binaries
+   (`nglib.dll`, QuadWild, Gmsh), and whether a portable `vtkNative` contribution is welcome.
 6. **Signing and publishing**: Apple Developer ID + notarization credentials,
-   Windows code-signing certificate, Homebrew tap repository, GitLab release,
+   Windows code-signing certificate, Homebrew tap repository, GitHub release,
    creating/protecting `x/release`.
 7. **Decisions**:
    - must the main window match the original layout exactly (menus, icon
      toolbars, tree tabs), or is the Qt shell with the same commands enough?
    - adopt Gmsh 4.15.2 or stay on 4.13.0;
    - retire `X/Desktop` now;
-   - resume hosted CI (D058 quota hold).
+   - ~~resume hosted CI~~: GitHub Actions in M3 (D064).

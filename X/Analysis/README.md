@@ -134,8 +134,8 @@ ignored, not committed. Original source attribution and root GPLv3 remain.
 The post-RC2 replay uses exact reviewed upstream Material/ElasticLamina changes
 and the new original CompositeStrength type in an isolated source overlay.
 Tests deliberately distinguish the tightened lamina stability check and the
-new strength-equation capability. These bytes are not silently applied to the
-baseline branch; original algorithms are exercised as pinned. Both earlier
+new strength-equation capability. Since M0 (3.0.1, D063) the
+baseline contains these changes and `verify-analysis.py` runs the post-RC2 mode. Both earlier
 element correctness failures and the quadratic-tetrahedron measurement gate
 remain. Native solve/results, persistence/UI/CAD and actual native installers remain
 subsequent accepted work. See .project/RELEASE.md.

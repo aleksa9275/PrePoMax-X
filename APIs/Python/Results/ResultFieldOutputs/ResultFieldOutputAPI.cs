@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -21,7 +21,10 @@ namespace APIs.Python
             { typeof(ResultFieldOutputLimit), "limit" },
             { typeof(ResultFieldOutputEnvelope), "envelope" },
             { typeof(ResultFieldOutputEquation), "equation" },
-            { typeof(ResultFieldOutputCoordinateSystemTransform), "coordinate_system_transform" }
+            { typeof(ResultFieldOutputCoordinateSystemTransform), "coordinate_system_transform" },
+            { typeof(ResultFieldOutputMaterialAxes), "material_axes" },
+            { typeof(ResultFieldOutputShellPlaneStress), "shell_in_plane_state" },
+            { typeof(ResultFieldOutputCompositeFailure), "composite_failure" }
         };
         protected readonly string _resultName;
         protected readonly string _fieldOutputName;

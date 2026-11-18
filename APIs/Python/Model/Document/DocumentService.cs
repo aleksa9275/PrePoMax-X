@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -557,7 +557,8 @@ namespace APIs.Python.Model
         private static bool HasContent(FeModel model)
         {
             return HasNodes(model.Geometry) || HasNodes(model.Mesh) || model.Materials.Count > 0 ||
-                   model.Sections.Count > 0 || model.Constraints.Count > 0 || model.SurfaceInteractions.Count > 0 ||
+                   model.Sections.Count > 0 || model.MaterialOrientations.Count > 0 || model.Constraints.Count > 0 ||
+                   model.SurfaceInteractions.Count > 0 ||
                    model.ContactPairs.Count > 0 || model.Distributions.Count > 0 || model.Amplitudes.Count > 0 ||
                    model.InitialConditions.Count > 0 || model.StepCollection.StepsList.Count > 0;
         }

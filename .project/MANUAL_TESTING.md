@@ -3,6 +3,10 @@
 State of 11 November 2026 (after C12 and the first desktop packages). This is what you install, what to
 look at, and how to report. Automated evidence is in the phase reports; this round is yours.
 
+> 18 November: the target is now 3.0.1 with upstream's native VTK port (D063). These packages are the
+> 3.0.0-based P1 builds; findings still carry over. The next packages (after M2) are 3.0.1-based with
+> the original viewport; they live in the former GitLab working copy's `X/Build/artifacts/ui-packages/`.
+
 ## Packages
 
 Local test builds (not signed for distribution, no installer), retained in

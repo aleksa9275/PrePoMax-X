@@ -13,7 +13,7 @@ some entries are data/helper classes. Model/mesh abstract bases and unused files
 are excluded; Commands lists source entries, including its base. Results tools,
 utilities, automation, dependencies and installers need separate acceptance. B records
 structural reachability, not execution of every feature. V requires full item coverage.
-The dormant Q-Morph wrapper is not exposed. B coverage is documented in the Phase B report;
+Upstream 3.0.1 removed the dormant Q-Morph wrapper. B coverage is documented in the Phase B report;
 bounded original-app interoperability does not mark whole feature families V.
 C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing
 and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).
@@ -38,9 +38,9 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 108 | 108 | 108 | 108 | 0 |
-| Commands | 237 | 237 | 237 | 231 | 0 |
-| Forms | 72 | 70 | 70 | 69 | 0 |
+| Model and mesh features | 111 | 111 | 108 | 108 | 0 |
+| Commands | 242 | 242 | 237 | 231 | 0 |
+| Forms | 73 | 71 | 70 | 69 | 0 |
 
 ## Model and mesh features
 
@@ -65,6 +65,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
+| CompositeStrength | A |
 | Density | ABC |
 | Elastic | ABC |
 | ElasticEngineeringConstants | ABC |
@@ -80,6 +81,8 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
+| CompositeLayer | A |
+| CompositeShellSection | A |
 | DistributedMassSection | ABC |
 | MassSection | ABC |
 | MembraneSection | ABC |
@@ -382,6 +385,15 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | CRemoveMaterials | ABC |
 | CReplaceMaterial | ABC |
 
+### MaterialOrientation
+
+| Item | Status |
+|---|---|
+| CAddMaterialOrientation | A |
+| CDuplicateMaterialOrientations | A |
+| CRemoveMaterialOrientations | A |
+| CReplaceMaterialOrientation | A |
+
 ### Section
 
 | Item | Status |
@@ -418,6 +430,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | CAddContactPair | ABC |
+| CAddSearchedContactPairs | A |
 | CDuplicateContactPairs | ABC |
 | CHideContactPairs | ABC |
 | CMergeByMasterSlaveContactPairs | ABC |
@@ -719,6 +732,12 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|
 | FrmMaterial | ABC |
 | FrmMaterialLibrary | ABC |
+
+### MaterialOrientation
+
+| Item | Status |
+|---|---|
+| FrmMaterialOrientation | A |
 
 ### Section
 

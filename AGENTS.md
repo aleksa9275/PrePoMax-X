@@ -1,14 +1,18 @@
 # PrePoMax-X — contributor and agent instructions
 
-PrePoMax-X ports PrePoMax 3.0.0 to native Windows x64, macOS ARM64 (Apple
+PrePoMax-X ports PrePoMax 3.0.1 to native Windows x64, macOS ARM64 (Apple
 Silicon), Linux x64 and Linux ARM64. Start every session with
 [`.project/STATUS.md`](.project/STATUS.md) (current phase, next step) and
-[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D062. History before
+[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D064. History before
 8 November 2026 lives in `.project/history/`; it is reference, not instructions.
 
 ## Goal and strategy
 
-- **Final scope (D060):** identical PrePoMax 3.0.0 functionality — every mesh
+- **Target (D063):** upstream `master` pinned per sync (now `1e2f83f2`: release
+  3.0.1 plus upstream's native VTK port `vtkNative`); the 3.0.1 release is the
+  behavioural reference. The viewport moves to the original `vtkControl` on
+  `vtkNative` (M1).
+- **Final scope (D060):** identical PrePoMax functionality — every mesh
   type, mesher, calculation, model feature, result tool, PMX round-trip and
   automation surface — on all four targets with installers. The unavailable
   Intel/PARDISO solver is the only exception.
@@ -36,14 +40,15 @@ Silicon), Linux x64 and Linux ARM64. Start every session with
 
 ## Git and publication
 
-- `origin` = maintainer's fork, `upstream` = gitlab.com/MatejB/PrePoMax.
-  `master` mirrors upstream (fast-forward only). Work goes on
-  `research/native-feasibility`; `x/main`, `feature/*`, `integration/*` per
-  `.project/UPSTREAM_SYNC.md`.
+- GitHub (D064): `origin` = github.com/aleksa9275/PrePoMax-X (fork of
+  github.com/PrePoMax/PrePoMax), `upstream` = github.com/PrePoMax/PrePoMax,
+  `gitlab` = the archived GitLab fork (read-only; old history). `master` mirrors
+  upstream (fast-forward only). Work goes on `research/native-feasibility`;
+  `x/main`, `feature/*`, `integration/*` per `.project/UPSTREAM_SYNC.md`.
 - Committing and normal pushes to `origin/research/native-feasibility` are
-  authorized. Use `[skip ci]` and `git push -o ci.skip` (hosted CI quota hold,
-  D058) and verify the remote SHA. No force push, no writes to master/x/main/
-  upstream/release branches without explicit instruction.
+  authorized; verify the remote SHA. Until CI exists (M3) use `[skip ci]`.
+  No force push, no writes to master/x/main/upstream/release branches, no
+  pull requests or issues upstream without explicit instruction.
 - Do not touch the untracked Finder `.DS_Store` files.
 
 ## Verification

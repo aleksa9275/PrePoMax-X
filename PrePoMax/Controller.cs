@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -66,6 +66,10 @@ namespace PrePoMax
         [NonSerialized] protected int _updateBatchCount;
         [NonSerialized] protected UpdateType _batchedModelUpdateType;
         [NonSerialized] protected UpdateType _batchedResultsUpdateType;
+        [NonSerialized] protected int _scriptViewUpdateDeferralCount;
+        [NonSerialized] protected bool _scriptModelSymbolsRedrawPending;
+        [NonSerialized] protected Stopwatch _scriptViewUpdateStopwatch;
+        [NonSerialized] protected long _scriptViewUpdateIntervalMs;
         // View
         [NonSerialized] protected ViewGeometryModelResults _currentView;
         [NonSerialized] protected Dictionary<string, double[]> _viewNameRotationCenter;
@@ -686,12 +690,14 @@ namespace PrePoMax
             PythonEngineResult result = null;
             List<string> messages;
             BeginKeywordStateNotificationBatch();
+            BeginScriptViewUpdateDeferral();
             try
             {
                 result = execute();
             }
             finally
             {
+                EndScriptViewUpdateDeferral();
                 messages = EndKeywordStateNotificationBatch();
                 if (result == null) ShowOrDeferKeywordStateMessages(messages);
             }
@@ -1131,6 +1137,8 @@ namespace PrePoMax
                                             "setup item, which revolves the parts it meshes.");
                 }
             }
+            // Compatibility v3.0.0
+            if (_model != null) _model.AssignMissingReferencePointNodeIds();
         }
         /// <summary>
         /// Meshes a part the user defined no mesh setup item for by Netgen tetrahedra, whatever mesh its
@@ -1700,6 +1708,8 @@ namespace PrePoMax
                                                 "have their nodes; its element sets were.");
                 }
                 //
+                SetShellResultData(_allResults.CurrentResult);
+                //
                 WriteResultPartMappingToOutput(mappedPartNames, nodeCoordinatesChanged);
                 //
                 bool fromFileOpenMenu = parameters != null && parameters.Contains(Globals.FromFileOpenMenu);
@@ -1748,17 +1758,318 @@ namespace PrePoMax
             // Regenerate tree
             _form.RegenerateTree();
         }
+        // The material axes of every result element of a shell, and of every layer of a composite shell, which the
+        // results need for the outputs in material axes and for the composite failure criteria
+        private void SetShellResultData(FeResults results)
+        {
+            string message;
+            results.ShellResultData = GetShellResultData(results.Mesh, out message);
+            if (message != null) _form.WriteDataToOutput(message);
+        }
+        private ShellResultData GetShellResultData(FeMesh resultMesh, out string message)
+        {
+            message = null;
+            Dictionary<int, int> elementIdSectionId;
+            List<Section> sections;
+            _model.GetSectionAssignments(out elementIdSectionId, out sections);
+            Dictionary<int, MaterialOrientation> elementOrientations = _model.GetElementMaterialOrientations();
+            //
+            ShellResultData data = new ShellResultData();
+            PlyStiffness stiffness;
+            foreach (var entry in _model.Materials)
+            {
+                if (TryGetPlyStiffness(entry.Value, out stiffness)) data.PlyStiffnesses[entry.Key] = stiffness;
+                //
+                CompositeStrength strength = entry.Value.GetProperty<CompositeStrength>() as CompositeStrength;
+                if (strength == null) continue;
+                //
+                try
+                {
+                    data.PlyStrengths[entry.Key] = new PlyStrength(strength.TensileStrength1.Value,
+                                                                   strength.CompressiveStrength1.Value,
+                                                                   strength.TensileStrength2.Value,
+                                                                   strength.CompressiveStrength2.Value,
+                                                                   strength.ShearStrength12.Value,
+                                                                   strength.ShearStrength23.Value,
+                                                                   strength.TsaiWuCoefficient.Value);
+                }
+                catch { }
+            }
+            //
+            int numOfCompositeLayers = 0;
+            FeElement shellElement;
+            Section section;
+            List<int> compositeShellElementIds = new List<int>();
+            foreach (var entry in elementIdSectionId.OrderBy(pair => pair.Key))
+            {
+                if (entry.Value < 0) continue;
+                section = sections[entry.Value];
+                if (!(section is ShellSection) || !_model.Mesh.Elements.TryGetValue(entry.Key, out shellElement) ||
+                    !MaterialOrientationCalculator.IsShellElement(shellElement)) continue;
+                //
+                if (section is CompositeShellSection css)
+                {
+                    compositeShellElementIds.Add(entry.Key);
+                    numOfCompositeLayers += css.GetSolverLayers().Count;
+                }
+                // An expanded shell keeps the number of its shell element
+                else if (resultMesh.Elements.ContainsKey(entry.Key))
+                    AddShellResultElement(data, entry.Key, entry.Key, section, 0, section.MaterialName, 0,
+                                          elementOrientations);
+            }
+            if (compositeShellElementIds.Count == 0) return data;
+            // CalculiX numbers the layers of the composite shells after all elements of the solver input, in the order
+            // of the shell elements and from layer 1 up
+            List<int> newIds = resultMesh.Elements.Keys.Where(id => !_model.Mesh.Elements.ContainsKey(id)).ToList();
+            newIds.Sort();
+            if (newIds.Count < numOfCompositeLayers ||
+                newIds[newIds.Count - 1] - newIds[newIds.Count - numOfCompositeLayers] != numOfCompositeLayers - 1)
+            {
+                message = "Composite shell results: the result elements of the layers were not found, so the outputs " +
+                          "in material axes and the composite failure criteria cannot be computed.";
+                return data;
+            }
+            int resultElementId = newIds[newIds.Count - numOfCompositeLayers];
+            List<CompositeLayer> layers;
+            Dictionary<string, List<int>> layerElementIds = new Dictionary<string, List<int>>();
+            string layerSetName;
+            foreach (int shellElementId in compositeShellElementIds)
+            {
+                CompositeShellSection css = (CompositeShellSection)sections[elementIdSectionId[shellElementId]];
+                layers = css.GetSolverLayers();
+                for (int i = 0; i < layers.Count; i++)
+                {
+                    if (!IsLayerOfShellElement(resultMesh, resultElementId, shellElementId, css))
+                    {
+                        message = "Composite shell results: the result element " + resultElementId + " does not lie " +
+                                  "on the shell element " + shellElementId + ", so the layers cannot be mapped.";
+                        foreach (var id in data.Elements.Keys.Where(id => data.Elements[id].LayerNumber > 0).ToArray())
+                            data.Elements.Remove(id);
+                        return data;
+                    }
+                    AddShellResultElement(data, resultElementId, shellElementId, css, i + 1, layers[i].MaterialName,
+                                          layers[i].Angle.Value, elementOrientations);
+                    layerSetName = css.Name + "_LAYER-" + (i + 1);
+                    if (!layerElementIds.ContainsKey(layerSetName)) layerElementIds.Add(layerSetName, new List<int>());
+                    layerElementIds[layerSetName].Add(resultElementId);
+                    resultElementId++;
+                }
+            }
+            // An element set per layer shows a layer on its own
+            foreach (var entry in layerElementIds)
+            {
+                string name = resultMesh.ElementSets.GetNextNumberedKey(entry.Key);
+                if (!resultMesh.ElementSets.ContainsKey(entry.Key)) name = entry.Key;
+                resultMesh.AddElementSet(new FeElementSet(name, entry.Value.ToArray()));
+            }
+            GroupCompositeLayerResultParts(resultMesh, data);
+            return data;
+        }
+        // The in-plane elastic constants of the first temperature of the elastic property of a material
+        private bool TryGetPlyStiffness(Material material, out PlyStiffness stiffness)
+        {
+            stiffness = null;
+            try
+            {
+                foreach (MaterialProperty property in material.Properties)
+                {
+                    if (property is ElasticLamina ela)
+                    {
+                        EquationContainer[] row = ela.LaminaConstantsTemp[0];
+                        stiffness = new PlyStiffness(row[ElasticLamina.YoungsModulus1Id].Value,
+                                                     row[ElasticLamina.YoungsModulus2Id].Value,
+                                                     row[ElasticLamina.PoissonsRatio12Id].Value,
+                                                     row[ElasticLamina.ShearModulus12Id].Value);
+                    }
+                    else if (property is ElasticEngineeringConstants eec)
+                    {
+                        EquationContainer[] row = eec.EngineeringConstantsTemp[0];
+                        stiffness = new PlyStiffness(row[ElasticEngineeringConstants.YoungsModulus1Id].Value,
+                                                     row[ElasticEngineeringConstants.YoungsModulus2Id].Value,
+                                                     row[ElasticEngineeringConstants.PoissonsRatio12Id].Value,
+                                                     row[ElasticEngineeringConstants.ShearModulus12Id].Value);
+                    }
+                    else if (property is Elastic el)
+                    {
+                        double youngsModulus = el.YoungsPoissonsTemp[0][0].Value;
+                        double poissonsRatio = el.YoungsPoissonsTemp[0][1].Value;
+                        stiffness = new PlyStiffness(youngsModulus, youngsModulus, poissonsRatio,
+                                                     youngsModulus / (2 * (1 + poissonsRatio)));
+                    }
+                    else if (property is ElasticWithDensity ewd)
+                    {
+                        double youngsModulus = ewd.YoungsModulus.Value;
+                        double poissonsRatio = ewd.PoissonsRatio.Value;
+                        stiffness = new PlyStiffness(youngsModulus, youngsModulus, poissonsRatio,
+                                                     youngsModulus / (2 * (1 + poissonsRatio)));
+                    }
+                    if (stiffness != null) return true;
+                }
+            }
+            catch { stiffness = null; }
+            return false;
+        }
+        // The layers of a composite shell have their own nodes, so each one is a result part of its own. A result part
+        // that is one layer of one model part is named after the model part and the layer, and the layers of a model
+        // part are gathered in a tree group named after it
+        private void GroupCompositeLayerResultParts(FeMesh resultMesh, ShellResultData data)
+        {
+            Dictionary<int, string> modelPartNames = new Dictionary<int, string>();
+            Dictionary<string, List<Tuple<string, string, int>>> modelPartLayerParts =
+                new Dictionary<string, List<Tuple<string, string, int>>>();
+            ShellResultElement layer;
+            string modelPartName;
+            string layerKey;
+            string partLayerKey;
+            BasePart modelPart;
+            FeElement shellElement;
+            foreach (BasePart part in resultMesh.Parts.Values.ToArray())
+            {
+                if (!(part is ResultPart) || part.Labels == null || part.Labels.Length == 0) continue;
+                //
+                partLayerKey = null;
+                modelPartName = null;
+                layer = null;
+                foreach (int elementId in part.Labels)
+                {
+                    if (!data.Elements.TryGetValue(elementId, out layer) || layer.LayerNumber <= 0)
+                    {
+                        partLayerKey = null;
+                        break;
+                    }
+                    if (!modelPartNames.TryGetValue(layer.ShellElementId, out modelPartName))
+                    {
+                        modelPartName = null;
+                        if (_model.Mesh.Elements.TryGetValue(layer.ShellElementId, out shellElement))
+                        {
+                            modelPart = _model.Mesh.GetPartFromId(shellElement.PartId);
+                            if (modelPart != null) modelPartName = modelPart.Name;
+                        }
+                        modelPartNames.Add(layer.ShellElementId, modelPartName);
+                    }
+                    if (modelPartName == null)
+                    {
+                        partLayerKey = null;
+                        break;
+                    }
+                    layerKey = modelPartName + "|" + layer.SectionName + "|" + layer.LayerNumber;
+                    if (partLayerKey == null) partLayerKey = layerKey;
+                    else if (partLayerKey != layerKey)
+                    {
+                        partLayerKey = null;
+                        break;
+                    }
+                }
+                if (partLayerKey == null) continue;
+                //
+                if (!modelPartLayerParts.ContainsKey(modelPartName))
+                    modelPartLayerParts.Add(modelPartName, new List<Tuple<string, string, int>>());
+                modelPartLayerParts[modelPartName].Add(new Tuple<string, string, int>(part.Name, layer.SectionName,
+                                                                                      layer.LayerNumber));
+            }
+            //
+            foreach (var entry in modelPartLayerParts)
+            {
+                bool oneSection = entry.Value.Select(layerPart => layerPart.Item2).Distinct().Count() == 1;
+                List<string> layerPartNames = new List<string>();
+                foreach (var layerPart in entry.Value.OrderBy(layerPart => layerPart.Item2).ThenBy(layerPart => layerPart.Item3))
+                {
+                    string name = entry.Key + (oneSection ? "" : "_" + layerPart.Item2) + "_Layer-" + layerPart.Item3;
+                    if (!resultMesh.Parts.Comparer.Equals(name, layerPart.Item1))
+                    {
+                        if (resultMesh.Parts.ContainsKey(name)) name = resultMesh.Parts.GetNextNumberedKey(name);
+                        BasePart part = resultMesh.Parts[layerPart.Item1];
+                        part.Name = name;
+                        resultMesh.Parts.Replace(layerPart.Item1, name, part);
+                    }
+                    layerPartNames.Add(name);
+                }
+                // The group takes the place of the first layer, and the name of its model part when no result part has it
+                string groupName = resultMesh.Parts.ContainsKey(entry.Key) ? entry.Key + "_Layers" : entry.Key;
+                OrderedDictionaryItemLayout<string> layout = resultMesh.Parts.GetItemLayoutSnapshot();
+                int index = 0;
+                HashSet<string> names = new HashSet<string>(layerPartNames, resultMesh.Parts.Comparer);
+                for (int i = 0; i < layout.Nodes.Count; i++)
+                {
+                    if (layout.Nodes[i].IsItem && names.Contains(layout.Nodes[i].Key))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+                Guid groupId = resultMesh.Parts.CreateGroup(groupName, null, index);
+                MoveOrderedDictionaryItemsToGroup(resultMesh.Parts, layerPartNames, groupId);
+            }
+        }
+        private void AddShellResultElement(ShellResultData data, int resultElementId, int shellElementId, Section section,
+                                           int layerNumber, string materialName, double layerAngle,
+                                           Dictionary<int, MaterialOrientation> elementOrientations)
+        {
+            MaterialOrientation orientation;
+            if (!elementOrientations.TryGetValue(shellElementId, out orientation))
+                orientation = new MaterialOrientation(section.Name, null, RegionTypeEnum.None);
+            if (orientation.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName &&
+                !_model.Mesh.CoordinateSystems.ContainsKey(orientation.CoordinateSystemName)) return;
+            //
+            bool fallbackUsed;
+            double[][] axes = orientation.GetElementAxes(_model.Mesh, _model.Mesh.Elements[shellElementId], layerAngle,
+                                                         out fallbackUsed);
+            if (axes == null) return;
+            data.Elements[resultElementId] = new ShellResultElement(shellElementId, section.Name, layerNumber, materialName,
+                                                                    axes[0], axes[1], axes[2]);
+        }
+        // A layer lies within the size of its shell element and the thickness of the section from the shell element
+        private bool IsLayerOfShellElement(FeMesh resultMesh, int resultElementId, int shellElementId,
+                                           CompositeShellSection section)
+        {
+            FeElement resultElement;
+            if (!resultMesh.Elements.TryGetValue(resultElementId, out resultElement)) return false;
+            //
+            double shellSize;
+            double resultSize;
+            double[] shellCenter = _model.Mesh.Elements[shellElementId].GetCG(_model.Mesh.Nodes, out shellSize);
+            double[] resultCenter = resultElement.GetCG(resultMesh.Nodes, out resultSize);
+            double distance = Math.Sqrt(Math.Pow(shellCenter[0] - resultCenter[0], 2) +
+                                        Math.Pow(shellCenter[1] - resultCenter[1], 2) +
+                                        Math.Pow(shellCenter[2] - resultCenter[2], 2));
+            double thickness = section.GetTotalThickness() * (1 + 2 * Math.Abs(section.Offset.Value));
+            return distance <= shellSize + thickness;
+        }
+        private HashSet<string> GetCompositeLayerModelPartNames(ShellResultData data)
+        {
+            HashSet<string> modelPartNames = new HashSet<string>();
+            if (data == null) return modelPartNames;
+            //
+            HashSet<int> partIds = new HashSet<int>();
+            FeElement shellElement;
+            foreach (ShellResultElement element in data.Elements.Values)
+            {
+                if (element.LayerNumber > 0 && _model.Mesh.Elements.TryGetValue(element.ShellElementId, out shellElement))
+                    partIds.Add(shellElement.PartId);
+            }
+            BasePart modelPart;
+            foreach (int partId in partIds)
+            {
+                modelPart = _model.Mesh.GetPartFromId(partId);
+                if (modelPart != null) modelPartNames.Add(modelPart.Name);
+            }
+            return modelPartNames;
+        }
         private void WriteResultPartMappingToOutput(string[] mappedPartNames, bool nodeCoordinatesChanged)
         {
             HashSet<string> mappedNames = new HashSet<string>(mappedPartNames);
+            // The layers of a composite shell take the place of its model part in the result mesh
+            HashSet<string> layeredNames = GetCompositeLayerModelPartNames(_allResults.CurrentResult.ShellResultData);
+            layeredNames.ExceptWith(mappedNames);
+            int numOfPartsToMap = _model.Mesh.Parts.Count - layeredNames.Count;
             //
-            if (mappedNames.Count < _model.Mesh.Parts.Count)
+            if (mappedNames.Count < numOfPartsToMap)
             {
                 _form.WriteDataToOutput("Result parts: the model mesh properties were applied to " + mappedNames.Count +
-                                        " of " + _model.Mesh.Parts.Count + " model parts.");
+                                        " of " + numOfPartsToMap + " model parts.");
                 foreach (var entry in _model.Mesh.Parts)
                 {
-                    if (!mappedNames.Contains(entry.Key))
+                    if (!mappedNames.Contains(entry.Key) && !layeredNames.Contains(entry.Key))
                         _form.WriteDataToOutput("Result parts: the model part " + entry.Key +
                                                 " was not found in the result mesh.");
                 }
@@ -7536,21 +7847,9 @@ namespace PrePoMax
                     GetSplitGeometryPickNodes(pointAndNormal.SplitterData);
                 foreach (int id in ids)
                 {
-                    GeometryType geometryType = (GeometryType)FeMesh.GetItemTypePartIdsFromGeometryId(id)[1];
-                    // An edge can mean either the point on it or the direction it runs in, and where the
-                    // user clicked is what decides
-                    if (geometryType.IsEdge())
-                    {
-                        bool nearPoint = IsSplitGeometryPickOnThePoint(id, pickNodes, pointAndNormal);
-                        if (nearPoint && TryGetSplitGeometryPoint(id, out point)) pointAndNormal.Point = point;
-                        else if (TryGetSplitGeometryDirection(id, out direction))
-                            pointAndNormal.Normal = direction;
-                    }
-                    else
-                    {
-                        if (TryGetSplitGeometryPoint(id, out point)) pointAndNormal.Point = point;
-                        if (TryGetSplitGeometryDirection(id, out direction)) pointAndNormal.Normal = direction;
-                    }
+                    GetSplitGeometryPickPointAndNormal(id, pickNodes, pointAndNormal, out point, out direction);
+                    if (point != null) pointAndNormal.Point = point;
+                    if (direction != null) pointAndNormal.Normal = direction;
                 }
             }
             else if (geometryFeature is SplitByExtendedFace extendedFace)
@@ -7564,6 +7863,93 @@ namespace PrePoMax
             else if (geometryFeature is SplitByExtrudedEdges extrudedEdges)
             {
                 UpdateSplitGeometryExtrusionDirection(extrudedEdges);
+            }
+        }
+        /// <summary>
+        /// What one splitter pick gives a plane by point and normal; a value the pick does not give is null.
+        /// </summary>
+        private void GetSplitGeometryPickPointAndNormal(int geometryId, Dictionary<int, SelectionNodeMouse> pickNodes,
+                                                        SplitByPointAndNormal pointAndNormal, out double[] point,
+                                                        out double[] normal)
+        {
+            GeometryType geometryType = (GeometryType)FeMesh.GetItemTypePartIdsFromGeometryId(geometryId)[1];
+            // An edge can mean either the point on it or the direction it runs in, and where the user clicked
+            // is what decides
+            if (geometryType.IsEdge())
+            {
+                bool nearPoint = IsSplitGeometryPickOnThePoint(geometryId, pickNodes, pointAndNormal);
+                if (nearPoint && TryGetSplitGeometryPoint(geometryId, out point)) { normal = null; return; }
+                point = null;
+                if (!TryGetSplitGeometryDirection(geometryId, out normal)) normal = null;
+            }
+            else
+            {
+                if (!TryGetSplitGeometryPoint(geometryId, out point)) point = null;
+                if (!TryGetSplitGeometryDirection(geometryId, out normal)) normal = null;
+            }
+        }
+        /// <summary>
+        /// Takes back the splitter picks that give the point or the normal the user has just typed. The split
+        /// reads both out of the picks again when it is applied, which would put the picked value back in
+        /// place of the typed one, so a typed value and a pick that gives it cannot stand together, as they
+        /// cannot in the Python API. The values a dropped pick gave stay as numbers.
+        /// </summary>
+        public void DropSplitGeometryPicksOfTypedValue(SplitByPointAndNormal pointAndNormal, bool pointTyped,
+                                                       bool normalTyped)
+        {
+            int[] ids = pointAndNormal.SplitterIds;
+            Selection splitterData = pointAndNormal.SplitterData;
+            if (ids == null || splitterData == null) return;
+            //
+            Dictionary<int, SelectionNodeMouse> pickNodes = GetSplitGeometryPickNodes(splitterData);
+            HashSet<int> droppedIds = new HashSet<int>();
+            double[] point;
+            double[] normal;
+            foreach (int id in ids)
+            {
+                GetSplitGeometryPickPointAndNormal(id, pickNodes, pointAndNormal, out point, out normal);
+                if ((pointTyped && point != null) || (normalTyped && normal != null)) droppedIds.Add(id);
+            }
+            if (droppedIds.Count == 0) return;
+            // A pick by location is a node of its own, while a pick by id lists the ids it took
+            List<SelectionNode> nodes = new List<SelectionNode>();
+            foreach (SelectionNode node in splitterData.Nodes)
+            {
+                if (node is SelectionNodeMouse mouseNode && pickNodes.Any(pair => pair.Value == mouseNode &&
+                                                                                  droppedIds.Contains(pair.Key)))
+                    continue;
+                //
+                if (node is SelectionNodeIds idsNode && idsNode.IsGeometryBased && idsNode.ItemIds != null &&
+                    idsNode.ItemIds.Any(droppedIds.Contains))
+                {
+                    int[] keptIds = idsNode.ItemIds.Where(id => !droppedIds.Contains(id)).ToArray();
+                    if (keptIds.Length > 0)
+                        nodes.Add(new SelectionNodeIds(idsNode.SelectOperation, false, keptIds, true,
+                                                       idsNode.GeometrySelectMode));
+                    continue;
+                }
+                //
+                nodes.Add(node);
+            }
+            if (nodes.Count == 0)
+            {
+                pointAndNormal.SplitterIds = null;
+                pointAndNormal.SplitterData = null;
+                return;
+            }
+            //
+            Selection keptData = new Selection(splitterData, false, false);
+            foreach (SelectionNode node in nodes) keptData.Add(node);
+            pointAndNormal.SplitterData = keptData;
+            // Resolving a selection replaces and then clears the live one, so it is put back afterwards
+            Selection liveSelection = _selection;
+            try
+            {
+                pointAndNormal.SplitterIds = GetIdsFromSelection(keptData);
+            }
+            finally
+            {
+                _selection = liveSelection;
             }
         }
         /// <summary>
@@ -7640,7 +8026,8 @@ namespace PrePoMax
             // the selection of whichever target is armed is highlighted here. An entity that was taken as
             // a point is left out: the point marker is what stands for it, and highlighting the edge as
             // well would say the edge was selected.
-            if (_geometryFeaturePointPicking == GeometryFeaturePointPickingEnum.None) HighlightSelection();
+            if (_geometryFeaturePointPicking == GeometryFeaturePointPickingEnum.None)
+                HighlightSelection(true, !AreSplitGeometryIdsOnShellPart(GetSelectionIds(false)));
             else HighlightGeometryFeatureSelectionWithoutPoints(geometryFeature);
             //
             double[] extent = GetSplitGeometryRegionExtent(partNames);
@@ -9161,7 +9548,22 @@ namespace PrePoMax
             foreach (int id in ids)
                 if (!IsSplitGeometryPickOnThePoint(id, pickNodes, geometryFeature)) idsToHighlight.Add(id);
             //
-            if (idsToHighlight.Count > 0) HighlightItemsByGeometryIds(idsToHighlight.ToArray(), true, false);
+            if (idsToHighlight.Count > 0)
+                HighlightItemsByGeometryIds(idsToHighlight.ToArray(), !AreSplitGeometryIdsOnShellPart(idsToHighlight),
+                                            false);
+        }
+        // A face of a shell is split whichever of its sides was picked, so it is highlighted on both of them
+        private bool AreSplitGeometryIdsOnShellPart(IEnumerable<int> ids)
+        {
+            if (_selection.SelectItem != vtkSelectItem.Geometry &&
+                _selection.SelectItem != vtkSelectItem.GeometrySurface) return false;
+            //
+            foreach (int id in ids)
+            {
+                BasePart part = _model.Geometry.GetPartFromId(FeMesh.GetPartIdFromGeometryId(id));
+                if (part != null && part.PartType == PartType.Shell) return true;
+            }
+            return false;
         }
         private void DrawSplitGeometryPointSymbols(GeometryFeature geometryFeature)
         {
@@ -9935,15 +10337,14 @@ namespace PrePoMax
                         kernelFaceIds = new List<int>();
                         kernelFaceIdsBySolid.Add(solidNumber, kernelFaceIds);
                     }
-                    faceId = itemTypePartIds[0] + 1;
+                    faceId = GetSplitGeometryKernelId(id);
                     if (!kernelFaceIds.Contains(faceId)) kernelFaceIds.Add(faceId);
                 }
                 // Solid surface
                 else if (part != null && part is GeometryPart gp1 && gp1.IsCADPart &&
                          (part.PartType == PartType.Solid || part.PartType == PartType.SolidAsShell))
                 {
-                    // One-based CAD face numbering
-                    faceId = itemTypePartIds[0] + 1;
+                    faceId = GetSplitGeometryKernelId(id);
                     if (partIdFaceIds.TryGetValue(partId, out faceIds)) faceIds.Add(faceId);
                     else partIdFaceIds.Add(partId, new HashSet<int>() { faceId });
                 }
@@ -11231,13 +11632,13 @@ namespace PrePoMax
             MeshingParameters defaultMeshingParameters = GetDefaultMeshingParameters("Default");
             double factorMax = defaultMeshingParameters.FactorMax;
             double factorMin = defaultMeshingParameters.FactorMin;
-            BoundingBox boundingBox = part.BoundingBox;
+            BoundingBox boundingBox = GetPartNodesBoundingBox(part);
             string[] sizePartNames = GetMeshingSizePartNames(partName);
             if (sizePartNames.Length > 1)
             {
                 boundingBox = new BoundingBox();
                 foreach (string sizePartName in sizePartNames)
-                    boundingBox.IncludeBox(_model.Geometry.Parts[sizePartName].BoundingBox);
+                    boundingBox.IncludeBox(GetPartNodesBoundingBox(_model.Geometry.Parts[sizePartName]));
             }
             double diagonal = boundingBox.GetDiagonal();
             //
@@ -11245,6 +11646,31 @@ namespace PrePoMax
             defaultMeshingParameters.MinH = Tools.RoundToSignificantDigits(diagonal * factorMin, 2);
             //
             return defaultMeshingParameters;
+        }
+        /// <summary>
+        /// The box of the nodes a part is drawn with, without the offset an exploded view puts on it. The box a CAD part
+        /// carries is the one the CAD kernel gives its faces, which round a B-spline face spans its whole control net and
+        /// can be far larger than the part, so a default element size taken from it comes out too large.
+        /// </summary>
+        private BoundingBox GetPartNodesBoundingBox(BasePart part)
+        {
+            Dictionary<int, FeNode> nodes = part is GeometryPart ? _model.Geometry?.Nodes : _model.Mesh?.Nodes;
+            BasePart[] boxedParts = part is CompoundGeometryPart compoundPart
+                                    ? compoundPart.SubPartNames.Select(name => _model.Geometry.Parts[name]).ToArray()
+                                    : new BasePart[] { part };
+            BoundingBox boundingBox = new BoundingBox();
+            FeNode node;
+            foreach (var boxedPart in boxedParts)
+            {
+                if (nodes == null || boxedPart.NodeLabels == null) continue;
+                double[] offset = boxedPart.Offset != null ? boxedPart.Offset : new double[3];
+                foreach (var nodeId in boxedPart.NodeLabels)
+                {
+                    if (!nodes.TryGetValue(nodeId, out node)) continue;
+                    boundingBox.IncludeCoor(new double[] { node.X - offset[0], node.Y - offset[1], node.Z - offset[2] });
+                }
+            }
+            return boundingBox.MinX <= boundingBox.MaxX ? boundingBox : part.BoundingBox;
         }
         private string[] GetMeshingSizePartNames(string partName)
         {
@@ -15270,6 +15696,9 @@ namespace PrePoMax
         // COMMANDS ********************************************************************************
         public void AddModelReferencePointCommand(FeReferencePoint referencePoint)
         {
+            if (!referencePoint.HasNodeIds) _model.Mesh.SetFreeReferencePointNodeIds(referencePoint);
+            _model.Mesh.CheckReferencePointNodeIds(referencePoint, null);
+            //
             CAddModelReferencePoint comm = new CAddModelReferencePoint(referencePoint);
             _commands.AddAndExecute(comm);
         }
@@ -15285,6 +15714,14 @@ namespace PrePoMax
         }
         public void ReplaceModelReferencePointCommand(string oldReferencePointName, FeReferencePoint newReferencePoint)
         {
+            if (!newReferencePoint.HasNodeIds)
+            {
+                FeReferencePoint oldReferencePoint = _model.Mesh.ReferencePoints[oldReferencePointName];
+                newReferencePoint.RefNodeId = oldReferencePoint.RefNodeId;
+                newReferencePoint.RotNodeId = oldReferencePoint.RotNodeId;
+            }
+            _model.Mesh.CheckReferencePointNodeIds(newReferencePoint, oldReferencePointName);
+            //
             CReplaceModelReferencePoint comm = new CReplaceModelReferencePoint(oldReferencePointName, newReferencePoint);
             _commands.AddAndExecute(comm);
         }
@@ -15307,12 +15744,14 @@ namespace PrePoMax
         public void AddModelReferencePoint(FeReferencePoint referencePoint)
         {
             ReselectModelReferencePoint(referencePoint); // in order for the Regenerate history to work perform the selection
+            // Compatibility v3.0.0
+            if (!referencePoint.HasNodeIds) _model.Mesh.SetFreeReferencePointNodeIds(referencePoint);
             //
             _model.Mesh.ReferencePoints.Add(referencePoint.Name, referencePoint);
             //
             _form.AddTreeNode(ViewGeometryModelResults.Model, referencePoint, null);
             //
-            FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
+            FeModelUpdate(FreeModelReferencePointNodeIds(referencePoint) | UpdateType.Check | UpdateType.RedrawSymbols);
         }
         public FeReferencePoint GetModelReferencePoint(string referencePointName)
         {
@@ -15352,11 +15791,21 @@ namespace PrePoMax
         {
             ReselectModelReferencePoint(newReferencePoint); // in order for the Regenerate history to work perform the selection
             //
+            // Compatibility v3.0.0
+            if (!newReferencePoint.HasNodeIds)
+            {
+                FeReferencePoint oldReferencePoint = _model.Mesh.ReferencePoints[oldReferencePointName];
+                newReferencePoint.RefNodeId = oldReferencePoint.RefNodeId;
+                newReferencePoint.RotNodeId = oldReferencePoint.RotNodeId;
+            }
+            //
             _model.Mesh.ReferencePoints.Replace(oldReferencePointName, newReferencePoint.Name, newReferencePoint);
             //
             _form.UpdateTreeNode(ViewGeometryModelResults.Model, oldReferencePointName, newReferencePoint, null);
             //
-            if (feModelUpdate) FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
+            UpdateType updateType = FreeModelReferencePointNodeIds(newReferencePoint);
+            if (feModelUpdate) FeModelUpdate(updateType | UpdateType.Check | UpdateType.RedrawSymbols);
+            else if (updateType != UpdateType.None) FeModelUpdate(updateType);
         }
         public void RenameModelReferencePoint(string oldReferencePointName, string newReferencePointName)
         {
@@ -15375,6 +15824,7 @@ namespace PrePoMax
                     newReferencePoint = _model.Mesh.ReferencePoints[name].DeepClone();
                     newReferencePoint.Name = NamedClass.GetNameWithoutLastValue(newReferencePoint.Name);
                     newReferencePoint.Name = _model.Mesh.ReferencePoints.GetNextNumberedKey(newReferencePoint.Name);
+                    _model.Mesh.SetFreeReferencePointNodeIds(newReferencePoint);
                     AddModelReferencePoint(newReferencePoint);
                     PlaceDuplicatedOrderedDictionaryItem(_model.Mesh.ReferencePoints, name, newReferencePoint,
                                                          ViewGeometryModelResults.Model);
@@ -15395,6 +15845,16 @@ namespace PrePoMax
             FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
         }
         // Update
+        private UpdateType FreeModelReferencePointNodeIds(FeReferencePoint referencePoint)
+        {
+            // Regenerate may build a different mesh before it adds a reference point with fixed node ids
+            if (!_model.Mesh.IsReferencePointNodeIdUsedByMesh(referencePoint)) return UpdateType.None;
+            //
+            _model.Mesh.RenumberNodes(1);
+            _form.WriteDataToOutput("The mesh nodes were renumbered to free the node ids of the reference point " +
+                                    referencePoint.Name + ".");
+            return UpdateType.DrawModel;
+        }
         private void ReselectModelReferencePoint(FeReferencePoint referencePoint)
         {
             if (referencePoint.CreationData != null)
@@ -15994,6 +16454,164 @@ namespace PrePoMax
 
         #endregion #################################################################################################################
 
+        #region Material orientation menu   ########################################################################################
+        // COMMANDS ********************************************************************************
+        public void AddMaterialOrientationCommand(MaterialOrientation materialOrientation)
+        {
+            CAddMaterialOrientation comm = new CAddMaterialOrientation(materialOrientation);
+            _commands.AddAndExecute(comm);
+        }
+        public void ReplaceMaterialOrientationCommand(string oldMaterialOrientationName, MaterialOrientation newMaterialOrientation)
+        {
+            CReplaceMaterialOrientation comm = new CReplaceMaterialOrientation(oldMaterialOrientationName,
+                                                                               newMaterialOrientation);
+            _commands.AddAndExecute(comm);
+        }
+        public void DuplicateMaterialOrientationsCommand(string[] materialOrientationNames)
+        {
+            CDuplicateMaterialOrientations comm = new CDuplicateMaterialOrientations(materialOrientationNames);
+            _commands.AddAndExecute(comm);
+        }
+        public void RemoveMaterialOrientationsCommand(string[] materialOrientationNames)
+        {
+            CRemoveMaterialOrientations comm = new CRemoveMaterialOrientations(materialOrientationNames);
+            _commands.AddAndExecute(comm);
+        }
+        //******************************************************************************************
+        public string[] GetMaterialOrientationNames()
+        {
+            return _model.MaterialOrientations.Keys.ToArray();
+        }
+        public void AddMaterialOrientation(MaterialOrientation materialOrientation)
+        {
+            BeginUpdateBatch();
+            try
+            {
+                ConvertSelectionBasedMaterialOrientation(materialOrientation);
+                //
+                _model.MaterialOrientations.Add(materialOrientation.Name, materialOrientation);
+                _form.AddTreeNode(ViewGeometryModelResults.Model, materialOrientation, null);
+                //
+                FeModelUpdate(UpdateType.Check);
+            }
+            finally
+            {
+                EndUpdateBatch();
+            }
+        }
+        public MaterialOrientation GetMaterialOrientation(string materialOrientationName)
+        {
+            return _model.MaterialOrientations[materialOrientationName];
+        }
+        public MaterialOrientation[] GetAllMaterialOrientations()
+        {
+            return _model.MaterialOrientations.Values.ToArray();
+        }
+        public void ReplaceMaterialOrientation(string oldMaterialOrientationName, MaterialOrientation materialOrientation)
+        {
+            BeginUpdateBatch();
+            try
+            {
+                DeleteSelectionBasedMaterialOrientationSets(oldMaterialOrientationName);
+                ConvertSelectionBasedMaterialOrientation(materialOrientation);
+                //
+                if (_model.MaterialOrientations.Replace(oldMaterialOrientationName, materialOrientation.Name,
+                                                        materialOrientation))
+                {
+                    _form.UpdateTreeNode(ViewGeometryModelResults.Model, oldMaterialOrientationName, materialOrientation,
+                                         null);
+                    FeModelUpdate(UpdateType.Check);
+                }
+            }
+            finally
+            {
+                EndUpdateBatch();
+            }
+        }
+        public void RenameMaterialOrientation(string oldMaterialOrientationName, string newMaterialOrientationName)
+        {
+            MaterialOrientation materialOrientation = _model.MaterialOrientations[oldMaterialOrientationName];
+            materialOrientation.Name = newMaterialOrientationName;
+            ReplaceMaterialOrientation(oldMaterialOrientationName, materialOrientation);
+        }
+        public void DuplicateMaterialOrientations(string[] materialOrientationNames)
+        {
+            BeginUpdateBatch();
+            try
+            {
+                MaterialOrientation newMaterialOrientation;
+                foreach (var name in materialOrientationNames)
+                {
+                    newMaterialOrientation = _model.MaterialOrientations[name].DeepClone();
+                    newMaterialOrientation.Name = NamedClass.GetNameWithoutLastValue(newMaterialOrientation.Name);
+                    newMaterialOrientation.Name = _model.MaterialOrientations.GetNextNumberedKey(newMaterialOrientation.Name);
+                    if (newMaterialOrientation.CreationData != null)
+                        newMaterialOrientation.RegionType = RegionTypeEnum.Selection;
+                    AddMaterialOrientation(newMaterialOrientation);
+                    PlaceDuplicatedOrderedDictionaryItem(_model.MaterialOrientations, name, newMaterialOrientation,
+                                                         ViewGeometryModelResults.Model);
+                }
+            }
+            finally
+            {
+                EndUpdateBatch();
+            }
+        }
+        public void RemoveMaterialOrientations(string[] materialOrientationNames)
+        {
+            foreach (var name in materialOrientationNames)
+            {
+                DeleteSelectionBasedMaterialOrientationSets(name);
+                _model.MaterialOrientations.Remove(name);
+                _form.RemoveTreeNode<MaterialOrientation>(ViewGeometryModelResults.Model, name, null);
+            }
+            //
+            FeModelUpdate(UpdateType.Check);
+        }
+        public void ActivateDeactivateMaterialOrientation(string materialOrientationName, bool active)
+        {
+            MaterialOrientation materialOrientation = _model.MaterialOrientations[materialOrientationName];
+            materialOrientation.Active = active;
+            //
+            _form.UpdateTreeNode(ViewGeometryModelResults.Model, materialOrientationName, materialOrientation, null);
+            //
+            FeModelUpdate(UpdateType.Check);
+        }
+        //
+        private void ConvertSelectionBasedMaterialOrientation(MaterialOrientation materialOrientation)
+        {
+            // Create a named set and convert a selection to a named set
+            if (materialOrientation.RegionType == RegionTypeEnum.Selection)
+            {
+                string name = FeMesh.GetNextFreeSelectionName(_model.Mesh.ElementSets, materialOrientation.Name);
+                bool createdByPart = materialOrientation.CreationData != null &&
+                                     materialOrientation.CreationData.SelectItem == vtkSelectItem.Part;
+                FeElementSet elementSet = new FeElementSet(name, materialOrientation.CreationIds, createdByPart);
+                elementSet.CreationData = materialOrientation.CreationData.DeepCopy(true, false);
+                elementSet.Internal = true;
+                elementSet.ParentMultiRegion = materialOrientation;
+                AddElementSet(elementSet);
+                //
+                materialOrientation.RegionName = name;
+                materialOrientation.RegionType = RegionTypeEnum.ElementSetName;
+            }
+            // Clear the creation data if not used
+            else
+            {
+                materialOrientation.CreationData = null;
+                materialOrientation.CreationIds = null;
+            }
+        }
+        private void DeleteSelectionBasedMaterialOrientationSets(string oldMaterialOrientationName)
+        {
+            // Delete previously created sets
+            MaterialOrientation materialOrientation = GetMaterialOrientation(oldMaterialOrientationName);
+            if (materialOrientation.CreationData != null && materialOrientation.RegionName != null)
+                RemoveElementSets(new string[] { materialOrientation.RegionName }, false);
+        }
+
+        #endregion #################################################################################################################
+
         #region Constraint menu   ##################################################################################################
         // COMMANDS ********************************************************************************
         public void AddConstraintCommand(Constraint constraint, bool update = true)
@@ -16438,8 +17056,9 @@ namespace PrePoMax
                     if (cyclicSymmetry.CreationData == null ||
                         cyclicSymmetry.CreationIds == null ||
                         cyclicSymmetry.CreationIds.Length == 0)
-                        throw new CaeException("The cyclic symmetry result expansion region selection must contain " +
-                                               "at least one item.");
+                        throw new CaeException("Displayed sectors is larger than 1, so the result expansion region " +
+                                               "must be defined. Select the region in the Result expansion region " +
+                                               "category or set Displayed sectors to 1.");
                     //
                     name = FeMesh.GetNextFreeSelectionName(_model.Mesh.ElementSets,
                                                            constraint.Name + "_Ngraph");
@@ -16559,13 +17178,16 @@ namespace PrePoMax
         }
 
         // Auto create
-        public void AutoCreateTiedPairs(List<Forms.SearchContactPair> contactPairs)
+        // The names are reserved as the items are made, because none of them is in the model before all are added
+        private void CreateSearchedTieItems(List<Forms.SearchContactPair> contactPairs, List<NamedClass> items)
         {
             if (contactPairs != null)
             {
                 string name;
                 Tie tie;
                 bool adjust;
+                HashSet<string> surfaceNames = new HashSet<string>(_model.Mesh.Surfaces.Keys, _model.Mesh.Surfaces.Comparer);
+                HashSet<string> constraintNames = new HashSet<string>(_model.Constraints.Keys, _model.Constraints.Comparer);
                 Dictionary<string, int> nameCounter = new Dictionary<string, int>();
                 foreach (var contactPair in contactPairs)
                 {
@@ -16577,8 +17199,8 @@ namespace PrePoMax
                     if (contactPair.MasterSlaveItem.Unresolved)
                     {
                         name = contactPair.Name;
-                        if (nameCounter[name] > 1 || _model.Mesh.Surfaces.ContainsKey(name))
-                            name = _model.Mesh.Surfaces.GetNextNumberedKey(name);
+                        if (nameCounter[name] > 1 || surfaceNames.Contains(name)) name = surfaceNames.GetNextNumberedKey(name);
+                        surfaceNames.Add(name);
                         //
                         FeSurface surface = new FeSurface(name);
                         surface.CreationData = new Selection();
@@ -16588,13 +17210,14 @@ namespace PrePoMax
                                                                       true));
                         surface.CreationData = GetMouseSelectionFromSelectionNodeIds(surface.CreationData);
                         //
-                        AddSurfaceCommand(surface, false);
+                        items.Add(surface);
                     }
                     else
                     {
                         name = contactPair.Name;
-                        if (nameCounter[name] > 1 || _model.Constraints.ContainsKey(name))
-                            name = _model.Constraints.GetNextNumberedKey(name);
+                        if (nameCounter[name] > 1 || constraintNames.Contains(name))
+                            name = constraintNames.GetNextNumberedKey(name);
+                        constraintNames.Add(name);
                         //
                         adjust = contactPair.Adjust == Forms.SearchContactPairAdjust.Yes;
                         bool twoD = _model.Properties.ModelSpace.IsTwoD();
@@ -16619,11 +17242,9 @@ namespace PrePoMax
                         tie.SlaveCreationData = GetMouseSelectionFromSelectionNodeIds(tie.SlaveCreationData);
                         tie.SlaveCreationIds = new int[] { 1 };
                         //
-                        AddConstraintCommand(tie, false);
+                        items.Add(tie);
                     }
                 }
-                //
-                FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
             }
         }
 
@@ -16761,6 +17382,30 @@ namespace PrePoMax
         {
             Commands.CRemoveContactPairs comm = new Commands.CRemoveContactPairs(contactPairNames);
             _commands.AddAndExecute(comm);
+        }
+        // Everything one OK of the Search Contact Pairs dialog adds is one command, so the history is written once
+        public string[] AddSearchedContactPairsCommand(List<SearchContactPair> contactPairs)
+        {
+            List<SearchContactPair> tiedContactPairs = new List<SearchContactPair>();
+            List<SearchContactPair> contactContactPairs = new List<SearchContactPair>();
+            foreach (SearchContactPair contactPair in contactPairs)
+            {
+                if (contactPair.Type == SearchContactPairType.Tie) tiedContactPairs.Add(contactPair);
+                else if (contactPair.Type == SearchContactPairType.Contact) contactContactPairs.Add(contactPair);
+                else throw new NotSupportedException();
+            }
+            //
+            List<NamedClass> items = new List<NamedClass>();
+            CreateSearchedTieItems(tiedContactPairs, items);
+            CreateSearchedContactPairItems(contactContactPairs, items);
+            if (items.Count == 0) return new string[0];
+            //
+            CAddSearchedContactPairs comm = new CAddSearchedContactPairs(items.ToArray());
+            _commands.AddAndExecute(comm);
+            //
+            string[] names = new string[items.Count];
+            for (int i = 0; i < names.Length; i++) names[i] = items[i].Name;
+            return names;
         }
         //******************************************************************************************
         public string[] GetContactPairNames()
@@ -17075,7 +17720,44 @@ namespace PrePoMax
                 RemoveSurfaces(new string[] { contactPair.SlaveRegionName }, false);
         }
         // Auto create
-        public void AutoCreateContactPairs(List<SearchContactPair> contactPairs)
+        public void AddSearchedContactPairs(NamedClass[] items)
+        {
+            // A pick that no longer finds its face after a geometry change fails one item, not the ones after it
+            List<string> errors = new List<string>();
+            BeginUpdateBatch();
+            try
+            {
+                _form.BeginTreeUpdateBatch();
+                try
+                {
+                    foreach (NamedClass item in items)
+                    {
+                        try
+                        {
+                            if (item is FeSurface surface) AddSurface(surface, false);
+                            else if (item is CaeModel.Constraint constraint) AddConstraint(constraint, false);
+                            else if (item is ContactPair contactPair) AddContactPair(contactPair, false);
+                            else throw new NotSupportedException();
+                        }
+                        catch (Exception ex)
+                        {
+                            errors.Add(item.Name + ": " + ex.Message);
+                        }
+                    }
+                }
+                finally
+                {
+                    _form.EndTreeUpdateBatch();
+                }
+                FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
+            }
+            finally
+            {
+                EndUpdateBatch();
+            }
+            foreach (string error in errors) _form.WriteErrorToOutput("Add searched contact pairs: " + error);
+        }
+        private void CreateSearchedContactPairItems(List<SearchContactPair> contactPairs, List<NamedClass> items)
         {
             if (contactPairs != null)
             {
@@ -17083,6 +17765,7 @@ namespace PrePoMax
                 bool adjust;
                 CaeModel.ContactPairMethod method;
                 ContactPair contactPairToAdd;
+                HashSet<string> contactPairNames = new HashSet<string>(_model.ContactPairs.Keys, _model.ContactPairs.Comparer);
                 Dictionary<string, int> nameCounter = new Dictionary<string, int>();
                 foreach (var contactPair in contactPairs)
                 {
@@ -17092,8 +17775,9 @@ namespace PrePoMax
                 foreach (var contactPair in contactPairs)
                 {
                     name = contactPair.Name;
-                    if (nameCounter[name] > 1 || _model.ContactPairs.ContainsKey(name))
-                        name = _model.ContactPairs.GetNextNumberedKey(name);
+                    if (nameCounter[name] > 1 || contactPairNames.Contains(name))
+                        name = contactPairNames.GetNextNumberedKey(name);
+                    contactPairNames.Add(name);
                     //
                     adjust = contactPair.Adjust == SearchContactPairAdjust.Yes;
                     if (contactPair.ContactPairMethod == FrmSearchContactPairs.ContactPairMethodNames[0])
@@ -17122,11 +17806,45 @@ namespace PrePoMax
                     contactPairToAdd.SlaveCreationData = GetMouseSelectionFromSelectionNodeIds(contactPairToAdd.SlaveCreationData);
                     contactPairToAdd.SlaveCreationIds = new int[] { 1 };
                     //
-                    AddContactPairCommand(contactPairToAdd, false);
+                    items.Add(contactPairToAdd);
                 }
-                //
-                FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
             }
+        }
+        public List<MasterSlaveItem> SearchContactPairs(double distance, double angleDeg,
+                                                        CaeMesh.ContactSearchNamespace.GeometryFilterEnum filter,
+                                                        GroupContactPairsByEnum groupBy, bool tryToResolve)
+        {
+            SuppressExplodedView();
+            try
+            {
+                ContactSearch contactSearch = new ContactSearch(_model.Mesh, _model.Geometry);
+                contactSearch.GroupContactPairsBy = groupBy;
+                return contactSearch.FindContactPairs(distance, angleDeg, filter, tryToResolve);
+            }
+            finally
+            {
+                ResumeExplodedViews(false);
+            }
+        }
+        // The rows the search dialog shows, all with the same settings, so a script adds what OK of the dialog adds
+        public List<SearchContactPair> CreateSearchContactPairRows(List<MasterSlaveItem> masterSlaveItems, bool tie,
+                                                                   bool adjust, double distance,
+                                                                   string surfaceInteractionName, ContactPairMethod method)
+        {
+            string methodName = method == ContactPairMethod.NodeToSurface ? FrmSearchContactPairs.ContactPairMethodNames[0]
+                                                                          : FrmSearchContactPairs.ContactPairMethodNames[1];
+            SearchContactPair contactPair;
+            List<SearchContactPair> contactPairs = new List<SearchContactPair>();
+            foreach (MasterSlaveItem masterSlaveItem in masterSlaveItems)
+            {
+                contactPair = new SearchContactPair(masterSlaveItem.Name, adjust, distance);
+                contactPair.Type = tie ? SearchContactPairType.Tie : SearchContactPairType.Contact;
+                contactPair.SurfaceInteractionName = surfaceInteractionName;
+                contactPair.ContactPairMethod = methodName;
+                contactPair.MasterSlaveItem = masterSlaveItem;
+                contactPairs.Add(contactPair);
+            }
+            return contactPairs;
         }
 
         #endregion #################################################################################################################
@@ -18589,7 +19307,7 @@ namespace PrePoMax
             FeModelUpdate(UpdateType.Check | UpdateType.RedrawSymbols);
         }
         //
-        private void ConvertSelectionBasedLoad(Load load)
+        private void ConvertSelectionBasedLoad(Load load, bool update = true)
         {
             // Create a named set and convert a selection to a named set
             if (load.RegionType == RegionTypeEnum.Selection)
@@ -18630,7 +19348,7 @@ namespace PrePoMax
                     FeSurface surface = new FeSurface(name, load.CreationIds, load.CreationData.DeepCopy(true, false));
                     surface.Internal = true;
                     surface.ParentMultiRegion = load;
-                    AddSurface(surface);
+                    AddSurface(surface, update);
                     //
                     load.RegionName = name;
                     load.RegionType = RegionTypeEnum.SurfaceName;
@@ -19014,6 +19732,8 @@ namespace PrePoMax
             _form.SetSelectionDistance(_selectionDistanceInPixels);
             _form.SetLighting(gs.AmbientComponent, gs.DiffuseComponent, false);
             _form.SetSmoothing(gs.PointSmoothing, gs.LineSmoothing, false);
+            _form.SetAmbientOcclusion(gs.AmbientOcclusion, gs.AmbientOcclusionRadius, gs.AmbientOcclusionKernelSize,
+                                      false);
             // Navigation settings
             NavigationSettings ns = _settings.Navigation;
             _form.SetNavigationSensitivity(ns.RotateSensitivity, ns.ZoomSensitivity, ns.InvertZoom, ns.SmoothZoom);
@@ -20157,7 +20877,22 @@ namespace PrePoMax
         #endregion #################################################################################################################
 
         #region Results  ###########################################################################################################
+        // The commands of a script are recorded only as the script, after it ends, so a model the script built in a
+        // session started without one counts as initialized only then, and the viewport hidden for the empty view is
+        // shown then
         public PythonEngineResult RunPythonScriptCommand(string script, string fileName = null, string[] arguments = null)
+        {
+            bool modelInitialized = ModelInitialized;
+            try
+            {
+                return RecordAndRunPythonScript(script, fileName, arguments);
+            }
+            finally
+            {
+                if (!modelInitialized && ModelInitialized) _form.SetMenuAndToolStripVisibility();
+            }
+        }
+        private PythonEngineResult RecordAndRunPythonScript(string script, string fileName, string[] arguments)
         {
             CRunPythonScript comm = new CRunPythonScript(script, fileName, arguments);
             int numOfCommandsBefore = _commands.NumOfCommandsExecutedWithoutRecording;
@@ -21649,6 +22384,7 @@ namespace PrePoMax
                 else if (typeof(CoordinateSystem).IsAssignableFrom(itemType)) dictionary = _model.Mesh.CoordinateSystems;
                 else if (typeof(Material).IsAssignableFrom(itemType)) dictionary = _model.Materials;
                 else if (typeof(Section).IsAssignableFrom(itemType)) dictionary = _model.Sections;
+                else if (typeof(MaterialOrientation).IsAssignableFrom(itemType)) dictionary = _model.MaterialOrientations;
                 else if (typeof(CaeModel.Constraint).IsAssignableFrom(itemType)) dictionary = _model.Constraints;
                 else if (typeof(SurfaceInteraction).IsAssignableFrom(itemType)) dictionary = _model.SurfaceInteractions;
                 else if (typeof(ContactPair).IsAssignableFrom(itemType)) dictionary = _model.ContactPairs;
@@ -21764,6 +22500,7 @@ namespace PrePoMax
             if (item is MeshSetupItem msi) ActivateDeactivateMeshSetupItem(msi.Name, activate);
             else if (item is MeshPart mp) ActivateDeactivateModelPart(mp.Name, activate);
             else if (item is Material ma) ActivateDeactivateMaterials(ma.Name, activate);
+            else if (item is MaterialOrientation mo) ActivateDeactivateMaterialOrientation(mo.Name, activate);
             else if (item is Constraint co) ActivateDeactivateConstraint(co.Name, activate);
             else if (item is ContactPair cp) ActivateDeactivateContactPair(cp.Name, activate);
             else if (item is InitialCondition ic) ActivateDeactivateInitialCondition(ic.Name, activate);
@@ -21832,6 +22569,8 @@ namespace PrePoMax
                     return CheckName(item.Name, newName, GetMaterialNames(), "material");
                 else if (item is Section)
                     return CheckName(item.Name, newName, GetSectionNames(), "section");
+                else if (item is MaterialOrientation)
+                    return CheckName(item.Name, newName, GetMaterialOrientationNames(), "material orientation");
                 else if (item is Constraint)
                     return CheckName(item.Name, newName, GetConstraintNames(), "constraint");
                 else if (item is SurfaceInteraction)
@@ -21909,6 +22648,7 @@ namespace PrePoMax
                 else if (itemType == typeof(CoordinateSystem)) RenameModelCoordinateSystem(itemName, newName);
                 else if (itemType == typeof(Material)) RenameMaterial(itemName, newName);
                 else if (typeof(Section).IsAssignableFrom(itemType)) RenameSection(itemName, newName);
+                else if (itemType == typeof(MaterialOrientation)) RenameMaterialOrientation(itemName, newName);
                 else if (typeof(Constraint).IsAssignableFrom(itemType)) RenameConstraint(itemName, newName);
                 else if (itemType == typeof(SurfaceInteraction)) RenameSurfaceInteraction(itemName, newName);
                 else if (itemType == typeof(ContactPair)) RenameContactPair(itemName, newName);
@@ -24204,14 +24944,85 @@ namespace PrePoMax
             if (modelUpdateType != UpdateType.None) FeModelUpdate(modelUpdateType);
             if (resultsUpdateType != UpdateType.None) FeResultsUpdate(resultsUpdateType);
         }
+        // A script that adds items one call at a time would redraw every symbol and repaint the tree after each of
+        // them, which makes a loop of a few thousand calls take many minutes. While a script runs, the model is still
+        // checked after every call, so validity reads stay correct, but the symbols and the tree are brought up to
+        // date only every so often, at least four times the time an update takes apart, and once at the end
+        public void BeginScriptViewUpdateDeferral()
+        {
+            if (_scriptViewUpdateDeferralCount == 0)
+            {
+                _scriptModelSymbolsRedrawPending = false;
+                _scriptViewUpdateIntervalMs = 1000;
+                _scriptViewUpdateStopwatch = Stopwatch.StartNew();
+                _form.BeginTreeUpdateBatch();
+            }
+            _scriptViewUpdateDeferralCount++;
+        }
+        public void EndScriptViewUpdateDeferral()
+        {
+            if (_scriptViewUpdateDeferralCount <= 0)
+                throw new InvalidOperationException("The script view update deferral is not active.");
+            //
+            _scriptViewUpdateDeferralCount--;
+            if (_scriptViewUpdateDeferralCount > 0) return;
+            //
+            try
+            {
+                RedrawPendingScriptModelSymbols();
+            }
+            finally
+            {
+                _scriptViewUpdateStopwatch = null;
+                _form.EndTreeUpdateBatch();
+            }
+        }
+        // An image of the view shows what the script has done so far
+        public void UpdateDeferredScriptView()
+        {
+            if (_scriptViewUpdateDeferralCount == 0) return;
+            //
+            RedrawPendingScriptModelSymbols();
+            _form.EndTreeUpdateBatch();
+            _form.BeginTreeUpdateBatch();
+        }
+        private void UpdateDeferredScriptViewWhenDue()
+        {
+            if (_scriptViewUpdateStopwatch.ElapsedMilliseconds < _scriptViewUpdateIntervalMs) return;
+            //
+            Stopwatch updateStopwatch = Stopwatch.StartNew();
+            UpdateDeferredScriptView();
+            _scriptViewUpdateIntervalMs = Math.Max(1000, 4 * updateStopwatch.ElapsedMilliseconds);
+            _scriptViewUpdateStopwatch.Restart();
+        }
+        private void RedrawPendingScriptModelSymbols()
+        {
+            if (!_scriptModelSymbolsRedrawPending) return;
+            //
+            _scriptModelSymbolsRedrawPending = false;
+            if (_updateBatchCount > 0) _batchedModelUpdateType |= UpdateType.RedrawSymbols;
+            else RedrawModelSymbols();
+        }
         // Update model
         public void FeModelUpdate(UpdateType updateType)
         {
             if (_updateBatchCount > 0) { _batchedModelUpdateType |= updateType; return; }
             // First check the validity to correctly draw the symbols
             if (updateType.HasFlag(UpdateType.Check)) CheckAndUpdateModelValidity();
-            if (updateType.HasFlag(UpdateType.DrawModel)) DrawModel(updateType.HasFlag(UpdateType.ResetCamera));
-            if (updateType.HasFlag(UpdateType.RedrawSymbols)) RedrawModelSymbols();
+            if (updateType.HasFlag(UpdateType.DrawModel))
+            {
+                DrawModel(updateType.HasFlag(UpdateType.ResetCamera));
+                _scriptModelSymbolsRedrawPending = false;
+            }
+            if (updateType.HasFlag(UpdateType.RedrawSymbols))
+            {
+                if (_scriptViewUpdateDeferralCount > 0)
+                {
+                    _scriptModelSymbolsRedrawPending = true;
+                    UpdateDeferredScriptViewWhenDue();
+                }
+                else RedrawModelSymbols();
+            }
         }
         public void FeResultsUpdate(UpdateType updateType)
         {
@@ -25390,6 +26201,7 @@ namespace PrePoMax
                 //
                 _form.ClearButKeepParts();
                 //
+                _form.SuspendCameraAdjustment();
                 try
                 {
                     // Must be inside to continue screen update
@@ -25399,6 +26211,10 @@ namespace PrePoMax
                     ResetSectionView();
                 }
                 catch { }
+                finally
+                {
+                    _form.ResumeCameraAdjustment();
+                }
                 //
                 if (updateHighlights) UpdateTreeSelection();
                 _form.AdjustCameraDistanceAndClipping();
@@ -25465,7 +26281,7 @@ namespace PrePoMax
                           false, false);
                 // Draw the smaller circle
                 if (layer != vtkRendererLayer.Selection)
-                    DrawNodes(referencePoint.Name, coor, color, layer, nodeSize - 3, false, false);
+                    DrawNodes(referencePoint.Name, coor, color, layer, nodeSize - 4, false, false);
                 // Name
                 if (referencePoint.NameVisible)
                 {
@@ -27623,6 +28439,7 @@ namespace PrePoMax
                 p = dLoad.GetPressureForPoint(_model, allCoor[distributedElementIds[i]]);
                 if (Math.Abs(p) > maxPressure) maxPressure = Math.Abs(p);
             }
+            if (maxPressure == 0) return;
             // Reduce all coordinates to only visible
             if (onlyVisible)
                 distributedElementIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(allCoor.ToArray(), 6, elementVisibilities.ToArray());
@@ -27705,6 +28522,7 @@ namespace PrePoMax
                 p = hpLoad.GetPressureForPoint(_model, allCoor[distributedElementIds[i]]);
                 if (Math.Abs(p) > maxPressure) maxPressure = Math.Abs(p);
             }
+            if (maxPressure == 0) return;
             // Reduce all coordinates to only visible
             if (onlyVisible)
                 distributedElementIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(allCoor.ToArray(), 6, elementVisibilities.ToArray());
@@ -27790,6 +28608,7 @@ namespace PrePoMax
                 p = ipLoad.GetPressureForPoint(_model, allCoor[distributedElementIds[i]]);
                 if (Math.Abs(p) > maxPressure) maxPressure = Math.Abs(p);
             }
+            if (maxPressure == 0) return;
             // Reduce all coordinates to only visible
             if (onlyVisible)
                 distributedElementIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(allCoor.ToArray(), 6, elementVisibilities.ToArray());
@@ -27927,6 +28746,7 @@ namespace PrePoMax
                 forceMagnitude = Math.Sqrt(Math.Pow(force[0], 2) + Math.Pow(force[1], 2) + Math.Pow(force[2], 2));
                 if (Math.Abs(forceMagnitude) > maxForceMagnitude) maxForceMagnitude = forceMagnitude;
             }
+            if (maxForceMagnitude == 0) return;
             // Reduce all coordinates to only visible
             if (onlyVisible)
                 distributedElementIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(allCoor.ToArray(), 6, elementVisibilities.ToArray());
@@ -28011,6 +28831,7 @@ namespace PrePoMax
                 forceMagnitude = Math.Sqrt(Math.Pow(force[0], 2) + Math.Pow(force[1], 2) + Math.Pow(force[2], 2));
                 if (Math.Abs(forceMagnitude) > maxForceMagnitude) maxForceMagnitude = forceMagnitude;
             }
+            if (maxForceMagnitude == 0) return;
             // Reduce all coordinates to only visible
             if (onlyVisible)
                 distributedElementIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(allCoor.ToArray(), 6, elementVisibilities.ToArray());
@@ -29265,6 +30086,10 @@ namespace PrePoMax
                             HighlightReferencePoint(sec.RegionName);
                         else throw new NotSupportedException();
                     }
+                    else if (obj is MaterialOrientation mo)
+                    {
+                        HighlightMaterialOrientation(mo);
+                    }
                     else if (obj is Constraint c)
                     {
                         HighlightConstraint(c.Name);
@@ -29884,6 +30709,180 @@ namespace PrePoMax
         {
             DrawCoordinateSystem(coordinateSystem, vtkRendererLayer.Selection);
         }
+        // Highlights the outline of the region of the material orientation and draws the material axes 1, 2 and 3 at
+        // the shell elements as coordinate system symbols that keep the colors of their axes
+        public void HighlightMaterialOrientation(MaterialOrientation materialOrientation)
+        {
+            int[] elementIds = GetMultiRegionElementIds(materialOrientation);
+            if (elementIds == null || elementIds.Length == 0) return;
+            //
+            DrawElementOutline(materialOrientation.Name + Globals.NameSeparator + "Outline", elementIds,
+                               _settings.Pre.PrimaryHighlightColor, vtkRendererLayer.Selection);
+            DrawMaterialAxes(elementIds, element => materialOrientation, 0, materialOrientation.SymbolDensity);
+        }
+        // Highlights the outline of the region of the composite shell section and draws the material axes of the layer,
+        // turned by its angle from the orientation of each element, or from the solver default where none applies
+        public void HighlightCompositeLayer(CompositeShellSection section, int layerIndex)
+        {
+            int[] elementIds = GetMultiRegionElementIds(section);
+            if (elementIds == null || elementIds.Length == 0) return;
+            if (layerIndex < 0 || layerIndex >= section.Layers.Count) return;
+            //
+            DrawElementOutline(section.Name + Globals.NameSeparator + "Outline", elementIds,
+                               _settings.Pre.PrimaryHighlightColor, vtkRendererLayer.Selection);
+            double angle;
+            try { angle = section.Layers[layerIndex].Angle.Value; }
+            catch { return; }
+            Dictionary<int, MaterialOrientation> elementOrientations = _model.GetElementMaterialOrientations();
+            MaterialOrientation defaultOrientation = new MaterialOrientation(section.Name, null, RegionTypeEnum.None);
+            MaterialOrientation orientation;
+            DrawMaterialAxes(elementIds, element => elementOrientations.TryGetValue(element.Id, out orientation) ?
+                                                    orientation : defaultOrientation,
+                             angle, MaterialOrientation.DefaultSymbolDensity);
+        }
+        // A selection made by picking parts carries geometry ids, any other one element ids
+        private int[] GetMultiRegionElementIds(IMultiRegion region)
+        {
+            if (region.RegionType == RegionTypeEnum.Selection)
+            {
+                if (region.CreationIds == null) return null;
+                if (region.CreationData == null || region.CreationData.SelectItem != vtkSelectItem.Part)
+                    return region.CreationIds;
+                //
+                List<int> partElementIds = new List<int>();
+                BasePart part;
+                foreach (int geometryId in region.CreationIds)
+                {
+                    part = _model.Mesh.GetPartFromId(FeMesh.GetItemTypePartIdsFromGeometryId(geometryId)[2]);
+                    if (part != null) partElementIds.AddRange(part.Labels);
+                }
+                return partElementIds.ToArray();
+            }
+            else if ((region.RegionType == RegionTypeEnum.PartName && _model.Mesh.Parts.ContainsKey(region.RegionName)) ||
+                     (region.RegionType == RegionTypeEnum.ElementSetName &&
+                      _model.Mesh.ElementSets.ContainsKey(region.RegionName)))
+                return _model.GetElementIdsOfRegion(region);
+            else return null;
+        }
+        private void DrawElementOutline(string name, int[] elementIds, Color color, vtkRendererLayer layer)
+        {
+            List<int[]> edgeCells = new List<int[]>();
+            foreach (BasePart part in _model.Mesh.CreateBasePartsByTypeFromElementIds(elementIds, false))
+            {
+                foreach (var freeEdgeId in part.Visualization.GetFreeEdgeIds())
+                {
+                    foreach (var edgeCellId in part.Visualization.EdgeCellIdsByEdge[freeEdgeId])
+                        edgeCells.Add(part.Visualization.EdgeCells[edgeCellId]);
+                }
+            }
+            if (edgeCells.Count == 0) return;
+            //
+            vtkMaxActorData data = new vtkMaxActorData();
+            _model.Mesh.GetNodesAndCellsForEdges(edgeCells.ToArray(), out data.Geometry.Nodes.Ids,
+                                                 out data.Geometry.Nodes.Coor, out data.Geometry.Cells.CellNodeIds,
+                                                 out data.Geometry.Cells.Types);
+            data.Name = name;
+            data.Color = color;
+            data.Layer = layer;
+            data.CanHaveElementEdges = true;
+            data.Pickable = false;
+            //
+            ApplyLighting(data);
+            _form.Add3DCells(data);
+        }
+        // Draws the material axes of the visible shell elements as coordinate system symbols labeled 1, 2 and 3, and
+        // 1* where the reference axis was too close to the normal and was replaced
+        private void DrawMaterialAxes(int[] elementIds, Func<FeElement, MaterialOrientation> getOrientation,
+                                      double additionalAngleDeg, int symbolDensity)
+        {
+            HashSet<int> visiblePartIds = new HashSet<int>();
+            foreach (var entry in _model.Mesh.Parts)
+            {
+                if (entry.Value.Active && entry.Value.Visible) visiblePartIds.Add(entry.Value.PartId);
+            }
+            //
+            bool fallbackUsed;
+            double[] point;
+            double[] normal;
+            double[][] axes;
+            FeElement element;
+            MaterialOrientation orientation;
+            List<double[]> points = new List<double[]>();
+            List<double[][]> allAxes = new List<double[][]>();
+            List<bool> fallbacks = new List<bool>();
+            foreach (int elementId in elementIds)
+            {
+                if (!_model.Mesh.Elements.TryGetValue(elementId, out element)) continue;
+                if (!visiblePartIds.Contains(element.PartId)) continue;
+                if (!MaterialOrientationCalculator.TryGetShellPointAndNormal(_model.Mesh, element, out point, out normal))
+                    continue;
+                orientation = getOrientation(element);
+                if (orientation.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName &&
+                    !_model.Mesh.CoordinateSystems.ContainsKey(orientation.CoordinateSystemName)) continue;
+                axes = orientation.GetElementAxes(_model.Mesh, element, additionalAngleDeg, out fallbackUsed);
+                points.Add(point);
+                allAxes.Add(axes);
+                fallbacks.Add(fallbackUsed);
+            }
+            // The full density shows the symbols of a spatial resolution that does not depend on the mesh size, and a
+            // lower one an evenly distributed share of them
+            int[] fullIds = SpatialPointSampler.GetSampleIndicesBySpatialResolution(points.ToArray(), 6, null);
+            double[][] fullPoints = new double[fullIds.Length][];
+            for (int i = 0; i < fullIds.Length; i++) fullPoints[i] = points[fullIds[i]];
+            int targetCount = (int)Math.Ceiling(fullIds.Length * symbolDensity / 100.0);
+            int[] sampleIds = SpatialPointSampler.GetSampleIndicesByCount(fullPoints, targetCount, null);
+            //
+            string[] labels = new string[] { "1", "2", "3" };
+            string[] replacedLabels = new string[] { "1*", "2", "3" };
+            int symbolSize = _settings.Pre.SymbolSize;
+            int id;
+            for (int i = 0; i < sampleIds.Length; i++)
+            {
+                id = fullIds[sampleIds[i]];
+                _form.AddMaterialAxesSymbol(points[id], allAxes[id], fallbacks[id] ? replacedLabels : labels, symbolSize);
+            }
+        }
+        public void HighlightEditedConstraint(Constraint constraint)
+        {
+            // A constraint edited in a form is not in the model and its selection is not a named region yet
+            // A tie and a joint have two regions and highlight the one being edited themselves
+            IMultiRegion region = constraint as IMultiRegion;
+            if (region == null || constraint is Tie || constraint is Joint) return;
+            //
+            Selection selection = _selection;
+            string masterRegionName = constraint.MasterRegionName;
+            RegionTypeEnum masterRegionType = constraint.MasterRegionType;
+            string slaveRegionName = constraint.SlaveRegionName;
+            RegionTypeEnum slaveRegionType = constraint.SlaveRegionType;
+            bool converted = false;
+            try
+            {
+                if (region.RegionType == RegionTypeEnum.Selection)
+                {
+                    if (region.CreationData == null || region.CreationIds == null || region.CreationIds.Length == 0) return;
+                    ConvertSelectionBasedConstraint(constraint, false);
+                    converted = true;
+                }
+                DrawConstraint(constraint, Color.Red, Color.Red, _settings.Pre.SymbolSize,
+                               _settings.Pre.HighlightNodeSymbolSize, vtkRendererLayer.Selection, false);
+            }
+            catch { }
+            finally
+            {
+                if (converted)
+                {
+                    if (region.RegionType == RegionTypeEnum.NodeSetName)
+                        RemoveNodeSets(new string[] { region.RegionName }, false);
+                    else if (region.RegionType == RegionTypeEnum.SurfaceName)
+                        RemoveSurfaces(new string[] { region.RegionName }, false);
+                }
+                constraint.MasterRegionName = masterRegionName;
+                constraint.MasterRegionType = masterRegionType;
+                constraint.SlaveRegionName = slaveRegionName;
+                constraint.SlaveRegionType = slaveRegionType;
+                _selection = selection;
+            }
+        }
         public void HighlightConstraint(string constraintName)
         {
             Constraint constraint;
@@ -30008,6 +31007,124 @@ namespace PrePoMax
             int symbolSize = _settings.Pre.SymbolSize;
             int nodeSize = _settings.Pre.HighlightNodeSymbolSize;
             DrawLoad("Highlight", load, Color.Red, symbolSize, nodeSize, vtkRendererLayer.Selection, false);
+        }
+        public void HighlightEditedInitialCondition(InitialCondition initialCondition)
+        {
+            // An initial condition edited in a form is not in the model and its selection is not a named region yet
+            Selection selection = _selection;
+            string regionName = initialCondition.RegionName;
+            RegionTypeEnum regionType = initialCondition.RegionType;
+            bool converted = false;
+            try
+            {
+                if (regionType == RegionTypeEnum.Selection)
+                {
+                    if (initialCondition.CreationData == null || initialCondition.CreationIds == null ||
+                        initialCondition.CreationIds.Length == 0) return;
+                    ConvertSelectionBasedInitialCondition(initialCondition);
+                    converted = true;
+                }
+                DrawInitialCondition(initialCondition, Color.Red, _settings.Pre.SymbolSize,
+                                     _settings.Pre.HighlightNodeSymbolSize, vtkRendererLayer.Selection, false);
+            }
+            catch { }
+            finally
+            {
+                if (converted) RemoveNodeSets(new string[] { initialCondition.RegionName }, false);
+                initialCondition.RegionName = regionName;
+                initialCondition.RegionType = regionType;
+                _selection = selection;
+            }
+        }
+        public void HighlightEditedDefinedField(DefinedField definedField)
+        {
+            // A defined field edited in a form is not in the model and its selection is not a named region yet
+            Selection selection = _selection;
+            string regionName = definedField.RegionName;
+            RegionTypeEnum regionType = definedField.RegionType;
+            bool converted = false;
+            try
+            {
+                if (regionType == RegionTypeEnum.Selection)
+                {
+                    if (definedField.CreationData == null || definedField.CreationIds == null ||
+                        definedField.CreationIds.Length == 0) return;
+                    ConvertSelectionBasedDefinedField(definedField);
+                    // A defined field from a file has no region
+                    converted = definedField.RegionType != RegionTypeEnum.Selection;
+                    if (!converted) return;
+                }
+                HighlightDefinedField(definedField, true);
+            }
+            catch { }
+            finally
+            {
+                if (converted) RemoveNodeSets(new string[] { definedField.RegionName }, false);
+                definedField.RegionName = regionName;
+                definedField.RegionType = regionType;
+                _selection = selection;
+            }
+        }
+        public void HighlightEditedBoundaryCondition(BoundaryCondition boundaryCondition)
+        {
+            // A boundary condition edited in a form is not in the model and its selection is not a named region yet
+            Selection selection = _selection;
+            string regionName = boundaryCondition.RegionName;
+            RegionTypeEnum regionType = boundaryCondition.RegionType;
+            bool converted = false;
+            try
+            {
+                if (regionType == RegionTypeEnum.Selection)
+                {
+                    if (boundaryCondition.CreationData == null || boundaryCondition.CreationIds == null ||
+                        boundaryCondition.CreationIds.Length == 0) return;
+                    ConvertSelectionBasedBoundaryCondition(boundaryCondition);
+                    converted = true;
+                }
+                HighlightBoundaryCondition(boundaryCondition, true);
+            }
+            catch { }
+            finally
+            {
+                if (converted) RemoveNodeSets(new string[] { boundaryCondition.RegionName }, false);
+                boundaryCondition.RegionName = regionName;
+                boundaryCondition.RegionType = regionType;
+                _selection = selection;
+            }
+        }
+        public void HighlightEditedLoad(Load load)
+        {
+            // A load edited in a form is not in the model and its selection is not a named region yet
+            Selection selection = _selection;
+            string regionName = load.RegionName;
+            RegionTypeEnum regionType = load.RegionType;
+            bool converted = false;
+            try
+            {
+                if (regionType == RegionTypeEnum.Selection)
+                {
+                    if (load.CreationData == null || load.CreationIds == null || load.CreationIds.Length == 0) return;
+                    ConvertSelectionBasedLoad(load, false);
+                    converted = true;
+                }
+                HighlightLoad(load, true);
+            }
+            catch { }
+            finally
+            {
+                if (converted)
+                {
+                    if (load.RegionType == RegionTypeEnum.NodeSetName)
+                        RemoveNodeSets(new string[] { load.RegionName }, false);
+                    else if (load.RegionType == RegionTypeEnum.ElementSetName)
+                        RemoveElementSets(new string[] { load.RegionName }, false);
+                    else if (load.RegionType == RegionTypeEnum.SurfaceName)
+                        RemoveSurfaces(new string[] { load.RegionName }, false);
+                }
+                load.RegionName = regionName;
+                load.RegionType = regionType;
+                _selection = selection;
+            }
         }
         public void HighlightDefinedField(DefinedField definedField, bool mouseOver = false)
         {
@@ -30855,11 +31972,9 @@ namespace PrePoMax
         }
         private void DrawTensorPlot(FieldData fieldData)
         {
+            // A shell plane stress is no tensor field but has the directions of its components in the material axes
             Field field = _allResults.CurrentResult.GetField(fieldData);
-            DataTypeEnum dataType = field != null ? field.DataType :
-                                    _allResults.CurrentResult.GetFieldDataType(fieldData.Name);
-            if (dataType != DataTypeEnum.Tensor ||
-                !_allResults.CurrentResult.IsTensorPlotComponent(fieldData)) return;
+            if (!_allResults.CurrentResult.IsTensorPlotComponent(fieldData)) return;
             if (field != null && field.Complex)
             {
                 ComplexResultTypeEnum complexType = _form.GetComplexResultType();
@@ -31981,7 +33096,9 @@ namespace PrePoMax
         public void UpdatePartsScalarFields()
         {
             if (_allResults.CurrentResult == null || _allResults.CurrentResult.Mesh == null) return;
-            // Settings                                                              
+            // The actors shown in another view are not the result parts; the results view draws the current field
+            if (_currentView != ViewGeometryModelResults.Results) return;
+            // Settings
             SetPostLegendAndStatusBlockSettings();
             //
             Octree.Plane plane = _sectionViews.GetCurrentSectionViewPlane();

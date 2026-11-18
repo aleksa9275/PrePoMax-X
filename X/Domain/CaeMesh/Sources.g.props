@@ -14,6 +14,7 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/ContactSearch/ContactSurface.cs" Link="ContactSearch/ContactSurface.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/ContactSearch/MasterSlaveItem.cs" Link="ContactSearch/MasterSlaveItem.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/CoordinateSystem.cs" Link="CoordinateSystem.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/MaterialOrientationCalculator.cs" Link="MaterialOrientationCalculator.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/0D/FeElement0D.cs" Link="Elements/0D/FeElement0D.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/0D/MassElement.cs" Link="Elements/0D/MassElement.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/1D/LinearGapElement.cs" Link="Elements/1D/LinearGapElement.cs" />
@@ -23,6 +24,7 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/ElementTypeCount.cs" Link="Elements/ElementTypeCount.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Elements/VtkCellType.cs" Link="Elements/VtkCellType.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Enums/ConvertPyramidsToEnum.cs" Link="Enums/ConvertPyramidsToEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Enums/MaterialOrientationAxisEnum.cs" Link="Enums/MaterialOrientationAxisEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Enums/GeomCurveType.cs" Link="Enums/GeomCurveType.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Enums/FrontBackBothFaceSideEnum.cs" Link="Enums/FrontBackBothFaceSideEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Enums/GeomFaceType.cs" Link="Enums/GeomFaceType.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshThreeBlockMesher.cs" Link="Meshing/Gmsh/GmshThreeBlockMesher.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshThreeBlockPrism.cs" Link="Meshing/Gmsh/GmshThreeBlockPrism.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/MeshTypeEnum.cs" Link="Meshing/MeshTypeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Netgen/NetgenKernelIds.cs" Link="Meshing/Netgen/NetgenKernelIds.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Netgen/NetgenTransfiniteFile.cs" Link="Meshing/Netgen/NetgenTransfiniteFile.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/TransfiniteEdgeCountBalancer.cs" Link="Meshing/Transfinite/TransfiniteEdgeCountBalancer.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/TransfiniteFace.cs" Link="Meshing/Transfinite/TransfiniteFace.cs" />

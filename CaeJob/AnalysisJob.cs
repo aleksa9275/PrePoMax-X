@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -192,7 +192,7 @@ namespace CaeJob
 
         // Constructor                                                                                                              
         public AnalysisJob(string name, string executable, string argument, string workDirectory)
-            : base(name)
+            : base(name, GetAdditionalNameCharacters())
         {
             _executable = executable;
             _argument = argument;
@@ -268,6 +268,9 @@ namespace CaeJob
                         break;
                 }
             }
+            // Compatibility v 3.0.0
+            _additionalCharacters = GetAdditionalNameCharacters();
+            //
             _energyOutputParser = new CalculixEnergyOutputParser();
         }
 
@@ -278,7 +281,14 @@ namespace CaeJob
         }
 
 
-        // Methods                                                                                                                  
+        // Static methods
+        public static HashSet<char> GetAdditionalNameCharacters()
+        {
+            return new HashSet<char>() { '+' };
+        }
+
+
+        // Methods
         public void Submit(int numOfRunSteps, int numOfRunIncrements, bool useBackgroundWorker = true,
                            int timeoutMilliseconds = 0)
         {
@@ -565,7 +575,7 @@ namespace CaeJob
                 // after Kill() _jobStatus is Killed
                 // A kill or a time out has already decided the outcome and must not be overwritten here
                 if (_jobStatus != JobStatus.Killed && _jobStatus != JobStatus.TimedOut)
-                    _jobStatus = GetCompletedStatus(_exe.ExitCode);
+                    _jobStatus = GetCompletedStatus(_exe.ExitCode, false);
             }
             else
             {
@@ -578,14 +588,29 @@ namespace CaeJob
         }
         // A solver that crashed - a segmentation fault ends CalculiX without an error message and without the
         // steps after it - exits with a code other than zero, as one that stopped on an error does. A model check,
-        // which runs the steps without an analysis, ends with an exit code other than zero as well
-        private JobStatus GetCompletedStatus(int exitCode)
+        // which runs the steps without an analysis, ends with an exit code other than zero as well.
+        // CalculiX also stops with the exit code zero on some failures, such as a solution containing NaN, so when
+        // its output is captured a run counts as completed only if it reached the end of the analysis
+        private JobStatus GetCompletedStatus(int exitCode, bool outputCaptured)
         {
-            if (exitCode == 0) return JobStatus.OK;
             if (ContainsNoAnalysis(_sbOutput.ToString()) || ContainsNoAnalysis(_sbAllOutput.ToString())) return JobStatus.OK;
             //
-            AppendDataToOutput(" The solver ended with the exit code " + exitCode + ".");
-            return JobStatus.Failed;
+            if (exitCode != 0)
+            {
+                AppendDataToOutput(" The solver ended with the exit code " + exitCode + ".");
+                return JobStatus.Failed;
+            }
+            if (outputCaptured && !ContainsAnalysisEnd(_sbOutput.ToString()) && !ContainsAnalysisEnd(_sbAllOutput.ToString()))
+            {
+                AppendDataToOutput(" The solver ended before the end of the analysis.");
+                return JobStatus.Failed;
+            }
+            return JobStatus.OK;
+        }
+        private bool ContainsAnalysisEnd(string text)
+        {
+            if (_femSolver == FEMSolverEnum.Calculix) return text.Contains("Job finished");
+            else return true;
         }
         private void Run_Win10()
         {
@@ -648,7 +673,7 @@ namespace CaeJob
                     // after Kill() _jobStatus is Killed
                     // A kill or a time out has already decided the outcome and must not be overwritten here
                     if (_jobStatus != JobStatus.Killed && _jobStatus != JobStatus.TimedOut)
-                        _jobStatus = GetCompletedStatus(_exe.ExitCode);
+                        _jobStatus = GetCompletedStatus(_exe.ExitCode, true);
                 }
                 else
                 {

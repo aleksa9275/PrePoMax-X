@@ -1,7 +1,7 @@
 {
  "source": {
-  "UserControls/ModelTree.Designer.cs": "f36b34c8b5abbd837f776b5b9a5ed1fef9ce05c8297ae7e8f4b082fbfd82dbe8",
-  "UserControls/ModelTree.cs": "93ed94983ce46dc9fdbb67c9e2acc99dc45d70400583878c6fa68f377f3304a1",
+  "UserControls/ModelTree.Designer.cs": "8912f41e21ff79b27a033295a19b99950f38e15fbb6df4fcafa28f8513e55b1d",
+  "UserControls/ModelTree.cs": "b378689e022e6812bb4041880dcf4c8fa7cfc6cd98dae70d56adb2194f6dba61",
   "UserControls/Properties/Resources.resx": "e21ace4678b71141c46a853940229660fa0b784ca711143aa85576ec64c8cf23",
   "UserControls/ModelTree.resx": "4b9526ebe592ca1a0dc6abe6fba501bcb30b07ecb89e7a76bc43c22392d2cdc5"
  },
@@ -89,6 +89,11 @@
       "name": "Materials",
       "text": "Materials",
       "image": "Material.ico"
+     },
+     {
+      "name": "Material Orientations",
+      "text": "Material Orientations",
+      "image": "CoordinateSystem.ico"
      },
      {
       "name": "Sections",
@@ -229,6 +234,7 @@
   "modelReferencePointsName": "Reference Points",
   "modelCoordinateSystemsName": "Coordinate Systems",
   "materialsName": "Materials",
+  "materialOrientationsName": "Material Orientations",
   "sectionsName": "Sections",
   "constraintsName": "Constraints",
   "contactsName": "Contacts",

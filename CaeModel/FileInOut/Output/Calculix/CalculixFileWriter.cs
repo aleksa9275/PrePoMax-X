@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -174,7 +174,7 @@ namespace FileInOut.Output
             {
                 // Only keywords from the model, not user keywords
                 // Always add a title keyword to get all possible keyword types to the keyword editor
-                int maxNodeId = model.Mesh.MaxNodeId;
+                int maxNodeId = model.Mesh.GetMaxNodeIdWithReferencePoints();
                 int maxElementId = model.Mesh.MaxElementId;
                 List<FeNode> additionalNodes = new List<FeNode>();
                 List<FeNodeSet> additionalNodeSets = new List<FeNodeSet>();
@@ -367,40 +367,44 @@ namespace FileInOut.Output
                 }
                 // Fill reference point nodes
                 int id = maxNodeId;
+                int refNodeId;
+                int rotNodeId;
                 FeReferencePoint rp;
                 foreach (var entry in model.Mesh.ReferencePoints)
                 {
                     rp = entry.Value;
                     bool usedByRigidBody = rigidBodyReferencePointNames.Contains(rp.Name);
                     bool usedByCoupling = couplingReferencePointNames.Contains(rp.Name);
+                    if (rp.HasNodeIds) model.Mesh.CheckReferencePointNodeIds(rp, rp.Name);
+                    // A reference point without node ids is numbered as before the node ids were stored
+                    refNodeId = rp.RefNodeId > 0 ? rp.RefNodeId : ++id;
                     // Check name
-                    rp.RefNodeSetName = GetReferencePointNodeSetName(rp.Name, FeReferencePoint.RefName + id + 1);
+                    rp.RefNodeSetName = GetReferencePointNodeSetName(rp.Name, FeReferencePoint.RefName + refNodeId);
                     if (allNodeSetNames.Contains(rp.RefNodeSetName))
                         rp.RefNodeSetName = allNodeSetNames.GetNextNumberedKey(rp.RefNodeSetName);
-                    rpNodeSet = new FeNodeSet(rp.RefNodeSetName, new int[] { id + 1 });
+                    rpNodeSet = new FeNodeSet(rp.RefNodeSetName, new int[] { refNodeId });
                     additionalNodeSets.Add(rpNodeSet);
                     allNodeSetNames.Add(rpNodeSet.Name);
                     //
                     CalReferencePoint calReferencePoint = new CalReferencePoint
                     {
-                        ReferenceNodeId = id + 1,
+                        ReferenceNodeId = refNodeId,
                         ReferenceNodeSetName = rp.RefNodeSetName,
                         UsedByRigidBody = usedByRigidBody,
                         UsedByCoupling = usedByCoupling
                     };
-                    id++;
                     // Only a rigid body needs the auxiliary CalculiX rotation node.
                     if (usedByRigidBody)
                     {
-                        rp.RotNodeSetName = GetReferencePointNodeSetName(rp.Name, FeReferencePoint.RotName + id + 1);
+                        rotNodeId = rp.RotNodeId > 0 ? rp.RotNodeId : ++id;
+                        rp.RotNodeSetName = GetReferencePointNodeSetName(rp.Name, FeReferencePoint.RotName + rotNodeId);
                         if (allNodeSetNames.Contains(rp.RotNodeSetName))
                             rp.RotNodeSetName = allNodeSetNames.GetNextNumberedKey(rp.RotNodeSetName);
-                        rpNodeSet = new FeNodeSet(rp.RotNodeSetName, new int[] { id + 1 });
+                        rpNodeSet = new FeNodeSet(rp.RotNodeSetName, new int[] { rotNodeId });
                         additionalNodeSets.Add(rpNodeSet);
                         allNodeSetNames.Add(rpNodeSet.Name);
-                        calReferencePoint.RotationNodeId = id + 1;
+                        calReferencePoint.RotationNodeId = rotNodeId;
                         calReferencePoint.RotationNodeSetName = rp.RotNodeSetName;
-                        id++;
                     }
                     else rp.RotNodeSetName = null;
                     referencePoints.Add(entry.Key, calReferencePoint);
@@ -1995,6 +1999,10 @@ namespace FileInOut.Output
                         {
                             calMaterial.AddKeyword(new CalSpecificHeat(sh, material.TemperatureDependent));
                         }
+                        else if (property is CompositeStrength)
+                        {
+                            // Evaluated by the composite failure results, not by the solver
+                        }
                         else throw new NotImplementedException();
                     }
                 }
@@ -2006,23 +2014,118 @@ namespace FileInOut.Output
         {
             if (model.Mesh != null)
             {
-                foreach (var entry in model.Sections) AppendSection(entry.Value, parent);
+                Dictionary<int, MaterialOrientation> elementOrientations = model.GetElementMaterialOrientations();
+                foreach (var entry in model.Sections) AppendSection(model, entry.Value, elementOrientations, parent);
                 //
                 AppendAdditionalSections(additionalSectionData, parent);
             }
         }
-        static private void AppendSection(Section section, CalculixKeyword parent)
+        static private void AppendSection(FeModel model, Section section,
+                                          Dictionary<int, MaterialOrientation> elementOrientations, CalculixKeyword parent)
         {
             if (section.Active)
             {
                 if (section is SolidSection ss) parent.AddKeyword(new CalSolidSection(ss));
-                else if (section is ShellSection shs) parent.AddKeyword(new CalShellSection(shs));
+                else if (section is CompositeShellSection css)
+                    AppendCompositeShellSection(model, css, elementOrientations, parent);
+                else if (section is ShellSection shs) AppendShellSection(model, shs, elementOrientations, parent);
                 else if (section is MembraneSection ms) parent.AddKeyword(new CalMembraneSection(ms));
                 else if (section is PointMassSection pms) { }
                 else if (section is DistributedMassSection dms) { }
                 else throw new NotSupportedException();
             }
             else parent.AddKeyword(new CalDeactivated(section.Name));
+        }
+        static private void AppendShellSection(FeModel model, ShellSection section,
+                                               Dictionary<int, MaterialOrientation> elementOrientations,
+                                               CalculixKeyword parent)
+        {
+            List<int> unorientedElementIds = null;
+            List<ShellOrientationGroup> groups = null;
+            if (elementOrientations.Count > 0)
+                groups = ShellOrientationGroup.Create(model, model.GetElementIdsOfRegion(section), elementOrientations,
+                                                      null, out unorientedElementIds);
+            //
+            if (groups == null || groups.Count == 0)
+            {
+                parent.AddKeyword(new CalShellSection(section));
+                return;
+            }
+            //
+            HashSet<string> usedNames = new HashSet<string>(model.Mesh.ElementSets.Keys, StringComparer.OrdinalIgnoreCase);
+            usedNames.UnionWith(model.Mesh.Parts.Keys);
+            string name;
+            double[][] axes;
+            for (int i = 0; i < groups.Count; i++)
+            {
+                name = GetUniqueName(section.Name + "_Orientation-" + (i + 1), usedNames);
+                axes = groups[i].GetAxes(0);
+                parent.AddKeyword(new CalElementSet(new FeElementSet(name, groups[i].ElementIds.ToArray())));
+                parent.AddKeyword(new CalOrientation(name, axes[0], axes[1]));
+                parent.AddKeyword(new CalShellSection(section, name, name));
+            }
+            if (unorientedElementIds.Count > 0)
+            {
+                name = GetUniqueName(section.Name + "_No_Orientation", usedNames);
+                parent.AddKeyword(new CalElementSet(new FeElementSet(name, unorientedElementIds.ToArray())));
+                parent.AddKeyword(new CalShellSection(section, name, null));
+            }
+        }
+        // Each group of elements whose axes agree gets an orientation per distinct layer angle, turned about the shell
+        // normal; an element no orientation covers starts from the solver default, the projected global x axis
+        static private void AppendCompositeShellSection(FeModel model, CompositeShellSection section,
+                                                        Dictionary<int, MaterialOrientation> elementOrientations,
+                                                        CalculixKeyword parent)
+        {
+            MaterialOrientation defaultOrientation = new MaterialOrientation(section.Name, null, RegionTypeEnum.None);
+            List<int> unorientedElementIds;
+            List<ShellOrientationGroup> groups = ShellOrientationGroup.Create(model, model.GetElementIdsOfRegion(section),
+                                                                              elementOrientations, defaultOrientation,
+                                                                              out unorientedElementIds);
+            List<CompositeLayer> layers = section.GetSolverLayers();
+            double[] angles = new double[layers.Count];
+            for (int i = 0; i < layers.Count; i++) angles[i] = layers[i].Angle.Value;
+            //
+            HashSet<string> usedNames = new HashSet<string>(model.Mesh.ElementSets.Keys, StringComparer.OrdinalIgnoreCase);
+            usedNames.UnionWith(model.Mesh.Parts.Keys);
+            string name;
+            string orientationName;
+            string[] layerOrientationNames;
+            double[][] axes;
+            Dictionary<double, string> angleOrientationNames;
+            for (int i = 0; i < groups.Count; i++)
+            {
+                name = GetUniqueName(section.Name + "_Orientation-" + (i + 1), usedNames);
+                parent.AddKeyword(new CalElementSet(new FeElementSet(name, groups[i].ElementIds.ToArray())));
+                //
+                layerOrientationNames = new string[layers.Count];
+                angleOrientationNames = new Dictionary<double, string>();
+                for (int j = 0; j < layers.Count; j++)
+                {
+                    if (!angleOrientationNames.TryGetValue(angles[j], out orientationName))
+                    {
+                        orientationName = name + "_Angle-" + (angleOrientationNames.Count + 1);
+                        angleOrientationNames.Add(angles[j], orientationName);
+                        axes = groups[i].GetAxes(angles[j]);
+                        parent.AddKeyword(new CalOrientation(orientationName, axes[0], axes[1]));
+                    }
+                    layerOrientationNames[j] = orientationName;
+                }
+                parent.AddKeyword(new CalCompositeShellSection(section, name, layerOrientationNames));
+            }
+            if (unorientedElementIds.Count > 0)
+            {
+                name = GetUniqueName(section.Name + "_No_Orientation", usedNames);
+                parent.AddKeyword(new CalElementSet(new FeElementSet(name, unorientedElementIds.ToArray())));
+                parent.AddKeyword(new CalCompositeShellSection(section, name, null));
+            }
+        }
+        static private string GetUniqueName(string name, HashSet<string> usedNames)
+        {
+            string uniqueName = name;
+            for (int i = 2; usedNames.Contains(uniqueName); i++) uniqueName = name + "_" + i;
+            usedNames.Add(uniqueName);
+            return uniqueName;
         }
         static private void AppendAdditionalSections(List<SectionData> additionalSectionData, CalculixKeyword parent)
         {

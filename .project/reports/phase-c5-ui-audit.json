@@ -10,8 +10,8 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/47_Amplitude/FrmAmplitude.cs",
-          "sha256": "9108d5659f804a56bb755f0323655aaf9b9e3e9c7825d01c044b258236d6b7d7"
+          "path": "PrePoMax/Forms/48_Amplitude/FrmAmplitude.cs",
+          "sha256": "2dab40f1bbaa4a4ec92053fbea65da5851e90a9cd675cf130b4479be9192b050"
         }
       ],
       "declaredDesignerFields": [],
@@ -135,11 +135,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmAnalysis.Designer.cs",
-          "sha256": "3d1261a026307c01924f641b6987f8aad0908a14d34d7933526b6f4368353141"
+          "sha256": "388f1a863883ce478a1610f39d682db867b8d971e6a75ef5e7f8c84c118494db"
         },
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmAnalysis.cs",
-          "sha256": "9893d96748e64c63cd65dbdf3acb4e8d408a31695c8d83f2966032a0aeba4815"
+          "sha256": "12f65c10af03997cfd6049c3dbf7d0ab413fd429462efad505ea9650e0833702"
         }
       ],
       "declaredDesignerFields": [
@@ -272,11 +272,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/03_AnalyzeGeometry/FrmAnalyzeGeometry.Designer.cs",
-          "sha256": "cb8476b7ba2aa670734b39374c11cc982c2056e2654bab02bd75db2a7e573471"
+          "sha256": "0d3612ac478f82eb8a4edfeed4223c0672580a3737a1145cffcec22e7d34d475"
         },
         {
           "path": "PrePoMax/Forms/03_AnalyzeGeometry/FrmAnalyzeGeometry.cs",
-          "sha256": "1fea9be55dcc9aa6e3bfe5e5d2f0fd1cb377616b023d0d2af66d340a5a1ec8d1"
+          "sha256": "b9fdf874dad6dfffbab4cc3c9573d46150c937fa3732e7fcae90f114db8a71a2"
         }
       ],
       "declaredDesignerFields": [
@@ -446,11 +446,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/81_Animation/FrmAnimation.Designer.cs",
-          "sha256": "67e663b719d3e77c55272d9cdff6df53a829c89c12f68d7cf62bb2b19d924c70"
+          "sha256": "8e9f37be9da37eea4f0a9ce285f3617e66a4238eeebbb6c95cfaf5ddb47ca87d"
         },
         {
           "path": "PrePoMax/Forms/81_Animation/FrmAnimation.cs",
-          "sha256": "24baf3998430b27f0d229c83c319485d5f2411ecb9829690dcca5e41c5f9c418"
+          "sha256": "aeb2ad793972f4118ffe25ea2ba63e93d4a4caa437db83f5ba846f1345f293e9"
         }
       ],
       "declaredDesignerFields": [
@@ -1075,7 +1075,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/54_BoundaryConditions/FrmBC.cs",
-          "sha256": "8d96e6af83b727e2cd6697dcf7b26837e428c72ed76e7d503704d4dae42bfda5"
+          "sha256": "03ef2a87237d1b735d8915f4059d119dd62272f2e61a04dabc6e8e3778cc9553"
         }
       ],
       "declaredDesignerFields": [],
@@ -1199,7 +1199,8 @@
             "SetSelectItem",
             "bc.CreationData.DeepCopy",
             "_controller.HighlightSelection",
-            "_controller.HighlightCoordinateSystem"
+            "_controller.HighlightCoordinateSystem",
+            "_controller.HighlightEditedBoundaryCondition"
           ]
         },
         {
@@ -1228,7 +1229,8 @@
           "name": "SelectionChanged",
           "calls": [
             "_controller.Selection.DeepCopy",
-            "propertyGrid.Refresh"
+            "propertyGrid.Refresh",
+            "Highlight"
           ]
         },
         {
@@ -1263,7 +1265,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmBoundaryLayer.cs",
-          "sha256": "f1e9b5a2ad1eb4e2cf30cf8904d4b305fd3553e16f649f836de3f2540d241b3f"
+          "sha256": "5fbf9ae64d365eee87c5b929bd19218da28a72113a3b2910815b2325a85ad25b"
         }
       ],
       "declaredDesignerFields": [],
@@ -1382,11 +1384,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmCalculixKeywordEditor.Designer.cs",
-          "sha256": "7a9459fa1aeb7e8e36d5139b13dea49ec1408ed93631c4ea8d43cd672b3b032f"
+          "sha256": "2824af2ccb660bad173894143c73d7377e6300fd33b615b03a119a377646a069"
         },
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmCalculixKeywordEditor.cs",
-          "sha256": "62d5c7d43b770a0d54893a18b5aa24961084dc220248f533fa0d47af2520beff"
+          "sha256": "06cb6b8b536211103ee899272f8a19f2193f46e5a4955ec65a7c8a15018c0139"
         }
       ],
       "declaredDesignerFields": [
@@ -1996,7 +1998,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/64_CaptureViewport/FrmCaptureViewport.cs",
-          "sha256": "46eea3d15f94006a7b813f78de2b4689a6eabdf524619147174644dd8efe21ea"
+          "sha256": "048f7ece58fd01010b311042d8ca1ecb9ca301d0c208616a740f8df85072ef8b"
         }
       ],
       "declaredDesignerFields": [],
@@ -2044,8 +2046,8 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/43_Constraint/FrmConstraint.cs",
-          "sha256": "61d6c794f7b256c1cf6ee48086fa817412e8423727bbee8f3294c826db436a51"
+          "path": "PrePoMax/Forms/44_Constraint/FrmConstraint.cs",
+          "sha256": "3e9513fded958105cddd282010eed9816c0483560b261180de51c86a8f3f4b5b"
         }
       ],
       "declaredDesignerFields": [],
@@ -2164,13 +2166,13 @@
             "vss.PopulateDropDownLists",
             "vrb.PopulateDropDownLists",
             "vc.PopulateDropDownLists",
+            "RegionTypeEnum.PartName.ToFriendlyString",
+            "RegionTypeEnum.ElementSetName.ToFriendlyString",
+            "vcs.PopulateDropDownLists",
             "vt.PopulateDropDownLists",
             "vj.PopulateDropDownLists",
             "_controller.Model.UpdateJointAutoValues",
             "vj.GetBase",
-            "RegionTypeEnum.PartName.ToFriendlyString",
-            "RegionTypeEnum.ElementSetName.ToFriendlyString",
-            "vcs.PopulateDropDownLists",
             "ShowHideSelectionForm",
             "propertyGrid.BuildAutocompleteMenu",
             "_controller.GetAllParameterNames"
@@ -2232,7 +2234,8 @@
             "_controller.HighlightReferencePoint",
             "nameof",
             "_controller.HighlightJointSymbol",
-            "_controller.HighlightCyclicSymmetryAxis"
+            "_controller.HighlightCyclicSymmetryAxis",
+            "_controller.HighlightEditedConstraint"
           ]
         },
         {
@@ -2295,7 +2298,8 @@
             "vj.GetBase",
             "_controller.Selection.DeepCopy",
             "_controller.Model.UpdateJointAutoValues",
-            "propertyGrid.Refresh"
+            "propertyGrid.Refresh",
+            "Highlight"
           ]
         },
         {
@@ -2351,8 +2355,8 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/45_ContactPair/FrmContactPair.cs",
-          "sha256": "c0a2ad9c408cad29ca38bfe003acacf45a013e75a7d9728975e2d81e69d3693d"
+          "path": "PrePoMax/Forms/46_ContactPair/FrmContactPair.cs",
+          "sha256": "872b7002aef370da5dea0aa8bbb6f30b18a78f087c3ea69038fbe6c205f80915"
         }
       ],
       "declaredDesignerFields": [],
@@ -2512,7 +2516,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/32_CoordinateSystems/FrmCoordinateSystem.cs",
-          "sha256": "8e2c70719ec67fd32736d866b983351cac8c82ba779134bb29d9d79cf0892986"
+          "sha256": "9a17147a179321b1bbfa524bd253901b105069bbb9c95bef69b02bff17420ba1"
         }
       ],
       "declaredDesignerFields": [],
@@ -2794,7 +2798,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/56_DefinedField/FrmDefinedField.cs",
-          "sha256": "de47392a069ef2d1e86cf4c47608c858a2de92bf9fdfa0a9299517c986805fef"
+          "sha256": "2ad2418d1eb42a0bf11ecb95e955d21e3f62b25a424a0a9403a9c62c39c743c1"
         }
       ],
       "declaredDesignerFields": [],
@@ -2898,7 +2902,8 @@
             "_controller.Highlight3DObjects",
             "SetSelectItem",
             "DefinedField.CreationData.DeepCopy",
-            "_controller.HighlightSelection"
+            "_controller.HighlightSelection",
+            "_controller.HighlightEditedDefinedField"
           ]
         },
         {
@@ -2920,7 +2925,8 @@
           "name": "SelectionChanged",
           "calls": [
             "_controller.Selection.DeepCopy",
-            "propertyGrid.Refresh"
+            "propertyGrid.Refresh",
+            "Highlight"
           ]
         },
         {
@@ -2954,8 +2960,8 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/46_Distribution/FrmDistribution.cs",
-          "sha256": "fc3cfd52440b3c3f88ca5f8803b37d89098aed998791e4d8e73ddb64f1ab26dc"
+          "path": "PrePoMax/Forms/47_Distribution/FrmDistribution.cs",
+          "sha256": "d433fb4a7d5af61619b2007e30ba162b51740137aa4af7a04f7814ac63004d62"
         }
       ],
       "declaredDesignerFields": [],
@@ -3107,11 +3113,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/01_Edit/FrmEditCommands.Designer.cs",
-          "sha256": "04721560097be2f6b163796b5d84b1f1b49dfce42e6ccd742dd4c02b60b8806f"
+          "sha256": "237d1b455cf907dcf8569f3214f4307ccda6d9242691b00927c30b0810f81699"
         },
         {
           "path": "PrePoMax/Forms/01_Edit/FrmEditCommands.cs",
-          "sha256": "544033e8156f30e2c248d056c4fa1edc45f213e8fcefe695fda092b7d85c1af7"
+          "sha256": "094b49069119f11aee6864cd3f93ed1e7684eaab62efb421a948eb15e603885d"
         }
       ],
       "declaredDesignerFields": [
@@ -3602,7 +3608,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/23_Element/FrmElementQuality.cs",
-          "sha256": "7d3cf7be626188d5031c3fbb09a13195715880c539a283a4e454f2f7349a7071"
+          "sha256": "09e1506278252e003038ca5cac2b3bfe3d7ffd16142a38b357995d05d709b033"
         }
       ],
       "declaredDesignerFields": [],
@@ -3687,7 +3693,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/26_ElementSet/FrmElementSet.cs",
-          "sha256": "ce65515f0b67920448e93e0b8d237f7c2fca41aa06b015356ed7c2856db1f148"
+          "sha256": "b2de54037b78aa025f06ef990eb7c0e6c8c6051625bb5ed43529cf77b4cb3702"
         }
       ],
       "declaredDesignerFields": [],
@@ -3809,11 +3815,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmExplodedView.Designer.cs",
-          "sha256": "89bacf317deee509ea7b29c0d33e3a748eb6435782b5d3d1c4974164ecd149e7"
+          "sha256": "6a8c9138a5993eae3ab9b0c2965c1fb624990311678b48bfe25b134cb4372305"
         },
         {
           "path": "PrePoMax/Forms/02_View/FrmExplodedView.cs",
-          "sha256": "35576e1e17f67cb0f8e0dc2756ecbbb1a74d404c82af23a9731216718e0ff4f3"
+          "sha256": "16fd2e8e1827234a128408f5982a1bc7e3b5634a36dc05a5238f291bde6e468b"
         }
       ],
       "declaredDesignerFields": [
@@ -4022,7 +4028,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FileExporter/FrmExportFileWithProperties.cs",
-          "sha256": "5ac4236d425f049ef13f13cd411ec2f0732b828656dfd4549cd1484410fbad67"
+          "sha256": "aec879e59e90b0525b1d2eed9190752205b17a75644379ed6eb3c81994ed71c6"
         }
       ],
       "declaredDesignerFields": [],
@@ -4066,7 +4072,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/53_FieldOutput/FrmFieldOutput.cs",
-          "sha256": "e31b0cb4cdaa2953ca9e0b356612a6f9613769bdb791ce6ad16714d76453d822"
+          "sha256": "c0ae08143d70ef614fedaa4481d6ad6b94f64ab2c1808c843ca63592729a9cdd"
         }
       ],
       "declaredDesignerFields": [],
@@ -4134,11 +4140,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/63_Find/FrmFind.Designer.cs",
-          "sha256": "a51ee0b44252cd60b04e5c4f3e2d07d532125c2b15425b6e569cb5c547ee4950"
+          "sha256": "a26015a6bee5592ca360a123e1408205f22eea4fee7d59eb3e131b66bc6396e9"
         },
         {
           "path": "PrePoMax/Forms/63_Find/FrmFind.cs",
-          "sha256": "2682ea67f17b1a7473e51351636ba538a7185c1ff56d1484f2cad75f0ee6baea"
+          "sha256": "d7209e2fea4a9e7a61aa3549b651c0edc86dab959a616b54f34c246ae4c8d5fe"
         }
       ],
       "declaredDesignerFields": [
@@ -4349,11 +4355,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmFollowerView.Designer.cs",
-          "sha256": "dd5e0928ba536158aaff0f489523adc05ed4ed08eebd910ea9b85f24256fd4b3"
+          "sha256": "afceb7d1423e8b29aff3d20e0bf6b25a3cedc5e61a585ae80884b36270a6c2a5"
         },
         {
           "path": "PrePoMax/Forms/02_View/FrmFollowerView.cs",
-          "sha256": "1ad47b28541b2658d7c56a4c9df382b17ebe4d56adaeecf8d977b54df6aa113e"
+          "sha256": "c1d6559eca7e36d7513b2fe85476762084a17be7eb984b12785cf7744ba019b2"
         }
       ],
       "declaredDesignerFields": [
@@ -4534,11 +4540,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetColor.Designer.cs",
-          "sha256": "7c4ce4e0023f73f3ad06ef660397e60e32a73c51ce8ee1a1271d28f4f64ed666"
+          "sha256": "91ef39b5bb91ef2d5b4daa93c66e03eecb67ee516bc96f4b1db0fd3a8e03e413"
         },
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetColor.cs",
-          "sha256": "5f15f3d549d644fb2fc8a31638af6af1d2ad8e357b14d360afab50757492d24f"
+          "sha256": "0e53bc5b9fa4a7ba62eea0e5c8235f160d349f752ad246dba221cf1dfa79537c"
         }
       ],
       "declaredDesignerFields": [
@@ -4623,11 +4629,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmGetEnvVars.Designer.cs",
-          "sha256": "4b04b8422845fa79ee64b138438173fb7779794af050ee310bdf38a5318f242c"
+          "sha256": "3085847a821d4922ab14d73a2cb58518d38b157e985e2c3b8809b7aaf089b278"
         },
         {
           "path": "PrePoMax/Forms/61_Settings/FrmGetEnvVars.cs",
-          "sha256": "77c56da0f9c3ff51c2c13d22742fdb56753a973d25e004bbaa4889513e97802a"
+          "sha256": "b5af9a1805ddaf086f139cdbb6a3750ec283e45fb0ecc4f3dc5ab08beb7c5b97"
         }
       ],
       "declaredDesignerFields": [
@@ -4738,11 +4744,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetValue.Designer.cs",
-          "sha256": "0788ac8be3f4bdb48feb2ba960681155b38979ebd22bbe4791f86b55191b5577"
+          "sha256": "71ced20e03ff464299671738890662490b8e2c2c913ff58468c9141b6fc0aef1"
         },
         {
           "path": "PrePoMax/Forms/00_Common/FrmGetValue.cs",
-          "sha256": "79cfd9a0cb59528331c9c9a3ced0f9e8513af9b715af3e3cf0a31c7b5ac2f02d"
+          "sha256": "d273becdee21094d8c1cf31cd9391451f584b0ec1e69261a287885b119edaac3"
         }
       ],
       "declaredDesignerFields": [
@@ -4831,7 +4837,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/52_HistoryOutput/FrmHistoryOutput.cs",
-          "sha256": "5cef8937677e234b4946e216d31a65920ffaf9c218d938d14cc1fef9f95a082e"
+          "sha256": "1cb35c5529f660fcda8f0ce110c5b4f94b4e53ee2348ca79a580e97213e96928"
         }
       ],
       "declaredDesignerFields": [],
@@ -5001,8 +5007,8 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/48_InitialConditions/FrmInitialCondition.cs",
-          "sha256": "2c7b527cc9fcbfb6fbc9a7824d2b16bfc2b5fceccf2548556e92658a42cbe848"
+          "path": "PrePoMax/Forms/49_InitialConditions/FrmInitialCondition.cs",
+          "sha256": "ddeca26e0b3f987765fc0defd258abd2221c9daf57953fede51db4664e7bc42d"
         }
       ],
       "declaredDesignerFields": [],
@@ -5126,7 +5132,8 @@
             "SetSelectItem",
             "InitialCondition.CreationData.DeepCopy",
             "_controller.HighlightSelection",
-            "_controller.HighlightNodes"
+            "_controller.HighlightNodes",
+            "_controller.HighlightEditedInitialCondition"
           ]
         },
         {
@@ -5195,7 +5202,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/55_Load/FrmLoad.cs",
-          "sha256": "292183e6d20989d1e8790396b7552fb5de1338ae8f621673ef8dd34c77192070"
+          "sha256": "a63416497cc9d9c761c096bcf8af3ba142a72e2ec2729456b5a4761fd6b52d73"
         }
       ],
       "declaredDesignerFields": [],
@@ -5394,6 +5401,7 @@
             "_controller.HighlightNodes",
             "nameof",
             "istl.ImportLoad",
+            "_controller.HighlightEditedLoad",
             "_controller.HighlightCoordinateSystem"
           ]
         },
@@ -5472,7 +5480,7 @@
         },
         {
           "path": "PrePoMax/Forms/FrmMain.Designer.cs",
-          "sha256": "ac5ce48bf504113a493b38ee90ad96ad5410abf462153adad6c9972cbd1df0e7"
+          "sha256": "4d74fd387a224dbae86603e43c2d99aeaa665aa5684faf88f0028ebddcd6d9e6"
         },
         {
           "path": "PrePoMax/Forms/FrmMain.Plotting.cs",
@@ -5480,7 +5488,7 @@
         },
         {
           "path": "PrePoMax/Forms/FrmMain.cs",
-          "sha256": "615be6b02b18de7a026b38c7d688817c6a5f67535a7eee678b16acdca5507efe"
+          "sha256": "525cea761cc434ff492f126d67093945e401251ebae38788d5971c9044db078d"
         }
       ],
       "declaredDesignerFields": [
@@ -5782,6 +5790,30 @@
         },
         {
           "name": "tsmiDelete",
+          "type": "System.Windows.Forms.ToolStripMenuItem"
+        },
+        {
+          "name": "tsmiMaterialOrientation",
+          "type": "System.Windows.Forms.ToolStripMenuItem"
+        },
+        {
+          "name": "tsmiCreateMaterialOrientation",
+          "type": "System.Windows.Forms.ToolStripMenuItem"
+        },
+        {
+          "name": "tsmiEditMaterialOrientation",
+          "type": "System.Windows.Forms.ToolStripMenuItem"
+        },
+        {
+          "name": "tsmiDuplicateMaterialOrientation",
+          "type": "System.Windows.Forms.ToolStripMenuItem"
+        },
+        {
+          "name": "tsmiDividerMaterialOrientation1",
+          "type": "System.Windows.Forms.ToolStripSeparator"
+        },
+        {
+          "name": "tsmiDeleteMaterialOrientation",
           "type": "System.Windows.Forms.ToolStripMenuItem"
         },
         {
@@ -8695,6 +8727,22 @@
           "handler": "new System.EventHandler(this.tsmiDelete_Click)"
         },
         {
+          "source": "this.tsmiCreateMaterialOrientation.Click",
+          "handler": "new System.EventHandler(this.tsmiCreateMaterialOrientation_Click)"
+        },
+        {
+          "source": "this.tsmiEditMaterialOrientation.Click",
+          "handler": "new System.EventHandler(this.tsmiEditMaterialOrientation_Click)"
+        },
+        {
+          "source": "this.tsmiDuplicateMaterialOrientation.Click",
+          "handler": "new System.EventHandler(this.tsmiDuplicateMaterialOrientation_Click)"
+        },
+        {
+          "source": "this.tsmiDeleteMaterialOrientation.Click",
+          "handler": "new System.EventHandler(this.tsmiDeleteMaterialOrientation_Click)"
+        },
+        {
           "source": "this.tsmiCreateConstraint.Click",
           "handler": "new System.EventHandler(this.tsmiCreateConstraint_Click)"
         },
@@ -9686,6 +9734,7 @@
             "this.tsmiProperty.DropDownItems.AddRange",
             "this.tsmiMaterial.DropDownItems.AddRange",
             "this.tsmiSection.DropDownItems.AddRange",
+            "this.tsmiMaterialOrientation.DropDownItems.AddRange",
             "this.tsmiInteraction.DropDownItems.AddRange",
             "this.tsmiConstraint.DropDownItems.AddRange",
             "this.tsmiContact.DropDownItems.AddRange",
@@ -9965,6 +10014,7 @@
           "name": "RunBatchScriptAsync",
           "calls": [
             "WriteDataToOutput",
+            "_controller.New",
             "_cmdOptions.ScriptArguments.Split",
             "PythonEngineManager.SetScriptArguments",
             "File.ReadAllText",
@@ -10050,6 +10100,7 @@
             "CancelViewportEdit",
             "CloseAllForms",
             "FindFocusedControl",
+            "BeginInvoke",
             "_modelTree.cltv_KeyDown",
             "_vtk.Focus"
           ]
@@ -10100,6 +10151,7 @@
             "tsmiCreateModelCoordinateSystem_Click",
             "tsmiCreateMaterial_Click",
             "tsmiCreateSection_Click",
+            "tsmiCreateMaterialOrientation_Click",
             "tsmiCreateConstraint_Click",
             "tsmiCreateSurfaceInteraction_Click",
             "tsmiCreateContactPair_Click",
@@ -10134,6 +10186,7 @@
             "EditModelCoordinateSystem",
             "EditMaterial",
             "EditSection",
+            "EditMaterialOrientation",
             "EditConstraint",
             "EditSurfaceInteraction",
             "EditContactPair",
@@ -10197,6 +10250,7 @@
             "ApplyActionOnItems<CoordinateSystem>",
             "ApplyActionOnItems<Material>",
             "ApplyActionOnItems<Section>",
+            "ApplyActionOnItems<MaterialOrientation>",
             "ApplyActionOnItems<CaeModel.Constraint>",
             "ApplyActionOnItems<SurfaceInteraction>",
             "ApplyActionOnItems<ContactPair>",
@@ -10308,6 +10362,7 @@
             "ApplyActionOnItems<CoordinateSystem>",
             "ApplyActionOnItems<Material>",
             "ApplyActionOnItems<Section>",
+            "ApplyActionOnItems<MaterialOrientation>",
             "ApplyActionOnItems<CaeModel.Constraint>",
             "ApplyActionOnItems<SurfaceInteraction>",
             "ApplyActionOnItems<ContactPair>",
@@ -13225,6 +13280,65 @@
             "MessageBoxes.ShowWarningQuestionOKCancel",
             "sectionNames.ToRows",
             "_controller.RemoveSectionsCommand"
+          ]
+        },
+        {
+          "name": "tsmiCreateMaterialOrientation_Click",
+          "calls": [
+            "CreateMaterialOrientation",
+            "ExceptionTools.Show"
+          ]
+        },
+        {
+          "name": "tsmiEditMaterialOrientation_Click",
+          "calls": [
+            "SelectOneEntity",
+            "_controller.GetAllMaterialOrientations",
+            "ExceptionTools.Show"
+          ]
+        },
+        {
+          "name": "tsmiDuplicateMaterialOrientation_Click",
+          "calls": [
+            "SelectMultipleEntities",
+            "_controller.GetAllMaterialOrientations",
+            "ExceptionTools.Show"
+          ]
+        },
+        {
+          "name": "tsmiDeleteMaterialOrientation_Click",
+          "calls": [
+            "SelectMultipleEntities",
+            "_controller.GetAllMaterialOrientations",
+            "ExceptionTools.Show"
+          ]
+        },
+        {
+          "name": "CreateMaterialOrientation",
+          "calls": [
+            "ItemSetDataEditor.SetForms",
+            "ShowForm"
+          ]
+        },
+        {
+          "name": "EditMaterialOrientation",
+          "calls": [
+            "ItemSetDataEditor.SetForms",
+            "ShowForm"
+          ]
+        },
+        {
+          "name": "DuplicateMaterialOrientations",
+          "calls": [
+            "_controller.DuplicateMaterialOrientationsCommand"
+          ]
+        },
+        {
+          "name": "DeleteMaterialOrientations",
+          "calls": [
+            "MessageBoxes.ShowWarningQuestionOKCancel",
+            "materialOrientationNames.ToRows",
+            "_controller.RemoveMaterialOrientationsCommand"
           ]
         },
         {
@@ -16210,6 +16324,7 @@
             "_frmReferencePoint.SelectionChanged",
             "_frmCoordinateSystem.SelectionChanged",
             "_frmSection.SelectionChanged",
+            "_frmMaterialOrientation.SelectionChanged",
             "_frmConstraint.SelectionChanged",
             "_frmContactPair.SelectionChanged",
             "_frmInitialCondition.SelectionChanged",
@@ -16302,7 +16417,9 @@
         {
           "name": "SetFormLocation",
           "calls": [
-            "screenBounds.IntersectsWith"
+            "Screen.AllScreens.Any",
+            "screen.Bounds.Contains",
+            "form.SetLocationInsideWorkingArea"
           ]
         },
         {
@@ -17148,6 +17265,18 @@
           ]
         },
         {
+          "name": "SuspendCameraAdjustment",
+          "calls": [
+            "InvokeIfRequired"
+          ]
+        },
+        {
+          "name": "ResumeCameraAdjustment",
+          "calls": [
+            "InvokeIfRequired"
+          ]
+        },
+        {
           "name": "UpdateScalarsAndRedraw",
           "calls": [
             "InvokeIfRequired"
@@ -17372,6 +17501,12 @@
         },
         {
           "name": "AddCoordinateSystemSymbol",
+          "calls": [
+            "InvokeIfRequired"
+          ]
+        },
+        {
+          "name": "AddMaterialAxesSymbol",
           "calls": [
             "InvokeIfRequired"
           ]
@@ -17682,6 +17817,13 @@
           ]
         },
         {
+          "name": "SetAmbientOcclusion",
+          "calls": [
+            "InvokeIfRequired",
+            "_vtk.SetAmbientOcclusion"
+          ]
+        },
+        {
           "name": "SetNavigationSensitivity",
           "calls": [
             "InvokeIfRequired",
@@ -17934,6 +18076,18 @@
         },
         {
           "name": "RegenerateTree",
+          "calls": [
+            "InvokeIfRequired"
+          ]
+        },
+        {
+          "name": "BeginTreeUpdateBatch",
+          "calls": [
+            "InvokeIfRequired"
+          ]
+        },
+        {
+          "name": "EndTreeUpdateBatch",
           "calls": [
             "InvokeIfRequired"
           ]
@@ -18464,11 +18618,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterial.Designer.cs",
-          "sha256": "a1ce1ed711a2ca5aa358e2183555ec14b885e9f3e287254134d969d30bc10cf7"
+          "sha256": "43ed25d17c616211b70f0feb04bad3e2322008bc74a67ed6500ffcb9b5f9556d"
         },
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterial.cs",
-          "sha256": "df426bfa30ec4a22ae5d8699a66cb1df530c4868bc46b37289df6c786b704228"
+          "sha256": "74442cd5ac14431bc31762e18d5009edb759e214b86c9b70055f65ef4aba2924"
         }
       ],
       "declaredDesignerFields": [
@@ -18725,6 +18879,7 @@
             "te.DeepClone",
             "tc.DeepClone",
             "sh.DeepClone",
+            "cs.DeepClone",
             "lvAddedProperties.Items.Add",
             "lvAddedProperties.Items.IndexOf",
             "lvAddedProperties.Select",
@@ -18809,7 +18964,6 @@
             "ClearControls",
             "SetControlStates",
             "_controller.GetMaterialNames",
-            "MaterialEditor.PropertyTemplates",
             "tvProperties.Nodes.Find",
             "tvProperties.ExpandAll",
             "GetMaterialName",
@@ -18828,7 +18982,6 @@
           "name": "ShowMaterial",
           "calls": [
             "lvAddedProperties.Items.Clear",
-            "MaterialEditor.CreateViews",
             "lvAddedProperties.Items.Add",
             "lvAddedProperties.Select"
           ]
@@ -18857,9 +19010,16 @@
           "name": "Add",
           "calls": [
             "UserControls.FrmProperties.CheckName",
-            "MaterialEditor.Build",
-            "lvAddedProperties.Items.Cast<ListViewItem>()\n                                              .Select",
-            "lvAddedProperties.Items.Cast<ListViewItem>",
+            "property.GetBase",
+            "materialProperty.CheckEquations",
+            "ve.GetYoungsModulusValue",
+            "((ElasticEngineeringConstants)materialProperty).CheckTemperatures",
+            "((ElasticLamina)materialProperty).CheckTemperatures",
+            "ewd.GetYoungsModulusValue",
+            "ewd.GetDensityValue",
+            "vsw.GetHardnessValue",
+            "vsw.GetWearCoefficientValue",
+            "_material.AddProperty",
             "_controller.AddMaterialCommand",
             "_controller.ReplaceMaterialCommand"
           ]
@@ -18910,11 +19070,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterialLibrary.Designer.cs",
-          "sha256": "c78859b441a9442c87029c7d66dfc445c4fe72e6fb65f230f8111ee68d309bd1"
+          "sha256": "faed505223b75b0df9063b055d80715575f8ee47e2eee3cd07f405d5b3803092"
         },
         {
           "path": "PrePoMax/Forms/41_Material/FrmMaterialLibrary.cs",
-          "sha256": "b6dcb1ad2638d1348885b06321ced3eafd016673985a2f63ed0d0cb261ad8eba"
+          "sha256": "156f0b09f087ded9316531d21d712122b94bce334814a876ab787fdb32805fff"
         }
       ],
       "declaredDesignerFields": [
@@ -19322,6 +19482,7 @@
         {
           "name": "cbPreview_CheckedChanged",
           "calls": [
+            "_frmMaterial.SetLocationInsideWorkingArea",
             "_frmMaterial.Show",
             "_frmMaterial.Hide"
           ]
@@ -19447,6 +19608,155 @@
       "controlComparison": "pending"
     },
     {
+      "form": "FrmMaterialOrientation",
+      "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
+      "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
+      "remaining": "Original class, designer and handlers run unchanged (data-grid forms with the original DataGridViewCopyPaste and FrmDiagramView); forms_gui_probe opens every FrmMain entry point at the designer geometry and runs edit/OK - New/Cancel rules and the amplitude grid edit/copy/paste/plot/delete workflow; results_gui_probe drives the result field/history forms and the original FrmAnalysis/FrmMonitor with a real solve; the C11 child-window forms and dialogs open through their FrmMain entry points (CodersLabTreeView, modal value/colour/parameter/library dialogs) (Mac ARM64). Side-by-side comparison with the original application, Linux/Windows runs, the autocomplete popup look and owner-drawn paint handlers remain pending.",
+      "compiledWhole": true,
+      "originalSources": [
+        {
+          "path": "PrePoMax/Forms/42_MaterialOrientation/FrmMaterialOrientation.cs",
+          "sha256": "0c1695e8fd8b4e62333bb5f7d41ab4db90b8453f2941d0579f8ba6e5df9580ca"
+        }
+      ],
+      "declaredDesignerFields": [],
+      "eventSubscriptions": [],
+      "methods": [
+        {
+          "name": "InitializeComponent",
+          "calls": [
+            "this.gbProperties.SuspendLayout",
+            "this.SuspendLayout",
+            "this.gbProperties.ResumeLayout",
+            "this.ResumeLayout"
+          ]
+        },
+        {
+          "name": "OnVisibleChanged",
+          "calls": [
+            "ShowHideSelectionForm",
+            "base.OnVisibleChanged"
+          ]
+        },
+        {
+          "name": "OnPropertyGridPropertyValueChanged",
+          "calls": [
+            "nameof",
+            "ShowHideSelectionForm",
+            "HighlightMaterialOrientation",
+            "base.OnPropertyGridPropertyValueChanged"
+          ]
+        },
+        {
+          "name": "OnApply",
+          "calls": [
+            "CheckName",
+            "materialOrientation.CheckEquations",
+            "AreRegionElementsShellElements",
+            "_controller.AddMaterialOrientationCommand",
+            "_controller.ReplaceMaterialOrientationCommand",
+            "ItemSetDataEditor.SelectionForm.Hide"
+          ]
+        },
+        {
+          "name": "OnHideOrClose",
+          "calls": [
+            "ItemSetDataEditor.SelectionForm.Hide",
+            "base.OnHideOrClose"
+          ]
+        },
+        {
+          "name": "OnPrepareForm",
+          "calls": [
+            "_controller.GetMaterialOrientationNames",
+            "shellPartNames.Add",
+            "shellPartNames.ToArray",
+            "_controller.GetUserElementSetNames",
+            "_controller.GetModelCoordinateSystemNames",
+            "GetMaterialOrientationName",
+            "_controller.GetMaterialOrientation",
+            "_controller.Model.IsMaterialOrientationRegionValid",
+            "_controller.Model.RegionValid",
+            "RegionTypeEnum.Selection.ToFriendlyString",
+            "RegionTypeEnum.PartName.ToFriendlyString",
+            "CheckMissingValueRef",
+            "RegionTypeEnum.ElementSetName.ToFriendlyString",
+            "_viewMaterialOrientation.PopulateDropDownLists",
+            "ShowHideSelectionForm",
+            "HighlightMaterialOrientation",
+            "propertyGrid.BuildAutocompleteMenu",
+            "_controller.GetAllParameterNames"
+          ]
+        },
+        {
+          "name": "GetMaterialOrientationName",
+          "calls": [
+            "_materialOrientationNames.GetNextNumberedKey"
+          ]
+        },
+        {
+          "name": "AreRegionElementsShellElements",
+          "calls": [
+            "_controller.AreElementsAllShellElements",
+            "_controller.Model.GetElementIdsOfRegion"
+          ]
+        },
+        {
+          "name": "HighlightMaterialOrientation",
+          "calls": [
+            "_controller.ClearSelectionHistory",
+            "SetSelectItem",
+            "materialOrientation.CreationData.DeepCopy",
+            "_controller.HighlightMaterialOrientation"
+          ]
+        },
+        {
+          "name": "ShowHideSelectionForm",
+          "calls": [
+            "ItemSetDataEditor.SelectionForm.ShowIfHidden",
+            "ItemSetDataEditor.SelectionForm.Hide",
+            "SetSelectItem"
+          ]
+        },
+        {
+          "name": "SetSelectItem",
+          "calls": [
+            "_controller.SetSelectItemToElement",
+            "_controller.SetSelectByToOff"
+          ]
+        },
+        {
+          "name": "SelectionChanged",
+          "calls": [
+            "_controller.Selection.DeepCopy",
+            "propertyGrid.Refresh",
+            "HighlightMaterialOrientation"
+          ]
+        },
+        {
+          "name": "Highlight",
+          "calls": [
+            "HighlightMaterialOrientation"
+          ]
+        },
+        {
+          "name": "IsSelectionGeometryBased",
+          "calls": [
+            "materialOrientation.CreationData.IsGeometryBased"
+          ]
+        },
+        {
+          "name": "IsGeometrySelectionIdBased",
+          "calls": [
+            "IsSelectionGeometryBased",
+            "materialOrientation.CreationData.IsGeometryIdBased"
+          ]
+        }
+      ],
+      "fullFormAccepted": false,
+      "controlComparison": "pending"
+    },
+    {
       "form": "FrmMergeCoincidentNodes",
       "adapter": "X/UI/Workbench/OriginalForms (original form class compiled whole: X/UI/generate-original-forms.py); X/UI/original_forms.py renderer",
       "reuse": "X/UI/FormsCompat (headless WinForms control model incl. DataGridView/BindingSource, TreeView, ZedGraph panes); X/UI/Workbench/OriginalForms/OriginalFormHost.g.cs (FrmMain form hosting)",
@@ -19455,7 +19765,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/22_Node/FrmMergeCoincidentNodes.cs",
-          "sha256": "8be94ff828763d9848d1f75d9e0963f457d47194f699d2db1b5370a446a02907"
+          "sha256": "f49d9a8c447825c9bade6388e97e680421d6739f2e84d49129b9a1f2e7ef39c6"
         }
       ],
       "declaredDesignerFields": [],
@@ -19579,7 +19889,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/11_MeshSetup/FrmMeshSetupItem.cs",
-          "sha256": "479392a4df211bd90d99a3cfcfe03aaf9c519b5955430357d45312ccd54fb57b"
+          "sha256": "8411e7dfd8b7f5b093de746a4aded1ce559e6ae5ec793803c224a5a46c431708"
         }
       ],
       "declaredDesignerFields": [],
@@ -19817,7 +20127,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmMirror.cs",
-          "sha256": "218a0098d93272ff4e6e28633ec618b7d7c5998daeb45b629faaca0f88231523"
+          "sha256": "9719d4b6a5ae35289369d1addc6fafffe219e492a8235d74d2e1f58b5e091067"
         }
       ],
       "declaredDesignerFields": [],
@@ -19923,7 +20233,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmModelProperties.cs",
-          "sha256": "a6d1f1367f12a4a979261fe18bfe01bc05413d4a4b590e92c9bbf71efa1178de"
+          "sha256": "35a64b13c49373afc22adfcc0d6098620acc181b1f6b53eddd186e96a16d5a8e"
         }
       ],
       "declaredDesignerFields": [],
@@ -19971,11 +20281,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmMonitor.Designer.cs",
-          "sha256": "0c2087e1276831093fef627e1c97129094d158ac86b87117cce315c43b4c1c11"
+          "sha256": "f0e32f07595074bc40ab3a08050b6cc278f83ebe845b86b9c34bc05e22d292bb"
         },
         {
           "path": "PrePoMax/Forms/71_Analysis/FrmMonitor.cs",
-          "sha256": "556db6dd1584b15f3d268212faa30eaa805be79c554a9a6bd2a19819a385435f"
+          "sha256": "36d269a52829d6c774e9f48507b6454fcec420d31b7f8bc54c9d05975fa25d0e"
         }
       ],
       "declaredDesignerFields": [
@@ -20211,7 +20521,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmNewModel.cs",
-          "sha256": "266326d6a6147ad3b755e33b96043d9f26dd1c4dfe7c9188fdd05400f40ca16c"
+          "sha256": "6dec382531cc28498049f2fcc93a1e4432304e6902a6b2c963de6be88c3728f6"
         }
       ],
       "declaredDesignerFields": [],
@@ -20320,7 +20630,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/25_NodeSet/FrmNodeSet.cs",
-          "sha256": "eb13e2f204eef115ad72b188171fe1bdc4d50808d72f8015e783cd43c90bf583"
+          "sha256": "d63fb174cec31648e6c8a24779a7668dc46a1c5a3374df336418d1aa80901f2f"
         }
       ],
       "declaredDesignerFields": [],
@@ -20429,7 +20739,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmOffsetFace.cs",
-          "sha256": "1f1371df8a818757cec75a35d7bed8da36d2c1885433e9bbc5a009cda497e3db"
+          "sha256": "0fae0cd19bfa7d5de60122a7344d1e7c6b01e19788259f1655a7eb87211be95b"
         }
       ],
       "declaredDesignerFields": [],
@@ -20571,7 +20881,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmPartProperties.cs",
-          "sha256": "984960fa89aa08f779ee510d9c750ac226ac631f11877a05baf0166b084ac0ef"
+          "sha256": "363dddb81149aacd7f59926a0641614e3b3862ddf44d4a806760aa9b806d1629"
         }
       ],
       "declaredDesignerFields": [],
@@ -20638,7 +20948,7 @@
         },
         {
           "path": "PrePoMax/Forms/FrmPythonStop.cs",
-          "sha256": "34800e116d838c7da35c3d18490ce561b60cc96a0e10d7554e5bf1d909a7fb44"
+          "sha256": "c10f2940c375de8a3ee257e8beb35808a023eebef925bcccccc54ade1002ccbb"
         }
       ],
       "declaredDesignerFields": [
@@ -20736,11 +21046,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/62_Query/FrmQuery.Designer.cs",
-          "sha256": "8a73784ab5decb8b170258dc53c691c314f24e54b1a6fdc578e3948d62f74d2a"
+          "sha256": "022cd1cb7462062f43a4765192c3f81d81315cd638542ccaf373de2c8a6c5746"
         },
         {
           "path": "PrePoMax/Forms/62_Query/FrmQuery.cs",
-          "sha256": "12a71e4c8926489f8d85c9c71c5ac17245ff0cd5d35dfb86026633263d59d9d2"
+          "sha256": "ca2ed5f6b4a471fb18cb293d327afc1702bdb4ddc4fa6feb8362dd983839e12f"
         }
       ],
       "declaredDesignerFields": [
@@ -21159,7 +21469,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/31_ReferencePoint/FrmReferencePoint.cs",
-          "sha256": "90421d91e86ea23f3b80c6556695c5d1ba4b1fc140a9893bf1ca0bb07c685cd5"
+          "sha256": "fc2db57e5f6b6c6cb3813b8386b07a30f83650d34a5394f449b82ef4ffc23a17"
         }
       ],
       "declaredDesignerFields": [],
@@ -21237,6 +21547,7 @@
             "GetSurfaceNames",
             "_controller.Model.Properties.ModelSpace.IsTwoD",
             "GetReferencePointName",
+            "_controller.Model.Mesh.SetFreeReferencePointNodeIds",
             "GetReferencePoint",
             "ReferencePointInternal",
             "RegionTypeEnum.NodeSetName.ToFriendlyString",
@@ -21244,6 +21555,7 @@
             "RegionTypeEnum.SurfaceName.ToFriendlyString",
             "UpdateReferencePoint",
             "_viewReferencePoint.PopulateDropDownLists",
+            "_viewReferencePoint.SetNodeIdsBrowsable",
             "SetSelectItem",
             "HighlightReferencePoint",
             "propertyGrid.BuildAutocompleteMenu",
@@ -21411,11 +21723,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmRegenerate.Designer.cs",
-          "sha256": "b049551d3d7a4f7e986a897e211283bca7fc9dff274ea3f17de584a7b23c9713"
+          "sha256": "33942f1d2a403f12ff5df5e6cddfb2f3201e5335fd2f83da8e387109600e191e"
         },
         {
           "path": "PrePoMax/Forms/00_Common/FrmRegenerate.cs",
-          "sha256": "781e306601b1fa4e4c7bba8ae1f32a9508c0c104c3905af6d136fcb46312ec42"
+          "sha256": "81ca4610c828ca4c079c8d03d579593fedf72d12943529888fdb0997edcec1e9"
         }
       ],
       "declaredDesignerFields": [
@@ -21494,7 +21806,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmRemeshingParameters.cs",
-          "sha256": "c6f1e484cb3369bfd81b66a56c8819eb6be032440fd659af3dbc783a7afedb3c"
+          "sha256": "9b9b30aa0e369f5e63e4e5fa42a262e4e90e08255236ae1969d188f312e7a680"
         }
       ],
       "declaredDesignerFields": [],
@@ -21651,7 +21963,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmRepairGeometry.cs",
-          "sha256": "4a19952fc1358f1c207ab74b79bf7aabf39db05db7d85506a9e9f89890c235d6"
+          "sha256": "7a009d87030b8e00d629cb9f42f388c784ad794aa75e1017d61bf94ca4c0b154"
         }
       ],
       "declaredDesignerFields": [],
@@ -21803,7 +22115,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/82_ResultFieldOutput/FrmResultFieldOutput.cs",
-          "sha256": "0749e5c10fae01cbd94c176e5946bbe6d38d9654db6032ff61721ad4d32344e1"
+          "sha256": "906f271ffb6daf3aeeb757156cbf9c46717c9488a64a9c30ef86937d3ab629d4"
         }
       ],
       "declaredDesignerFields": [],
@@ -21857,6 +22169,7 @@
           "calls": [
             "nameof",
             "SetTabPages",
+            "UpdateShellFieldNames",
             "base.OnPropertyGridPropertyValueChanged"
           ]
         },
@@ -21877,6 +22190,9 @@
             "_controller.CurrentResult.AreResultFieldOutputsInCyclicDependance",
             "_controller.CurrentResult.GetFieldDataType",
             "_controller.CurrentResult.DoesFieldContainsAllNecessaryComponents",
+            "GetShellSourceFieldNames().Contains",
+            "GetShellSourceFieldNames",
+            "_controller.CurrentResult.IsShellQuantityValid",
             "_controller.AddResultFieldOutputCommand",
             "_controller.ReplaceResultFieldOutputCommand"
           ]
@@ -21901,6 +22217,10 @@
             "vrfol.PopulateDropDownLists",
             "vrfoen.PopulateDropDownLists",
             "vrfcst.PopulateDropDownLists",
+            "GetShellSourceFieldNames",
+            "vrfoma.PopulateDropDownLists",
+            "vrfosips.PopulateDropDownLists",
+            "vrfocf.PopulateDropDownLists",
             "_controller.SetSelectByToOff",
             "propertyGrid.BuildAutocompleteMenu",
             "_controller.GetAllParameterAndFieldNames"
@@ -21914,7 +22234,43 @@
             "lvTypes.Items.Add",
             "vrfoe.PopulateDropDownLists",
             "filedNameComponentNames.First",
-            "vrfocst.PopulateDropDownLists"
+            "vrfocst.PopulateDropDownLists",
+            "GetShellSourceFieldNames",
+            "shellFieldNames.Contains",
+            "shellFieldNames.FirstOrDefault",
+            "_controller.CurrentResult.HasShellResultData",
+            "vrfoma.PopulateDropDownLists",
+            "GetPreferredShellFieldName",
+            "vrfosips.PopulateDropDownLists",
+            "vrfocf.PopulateDropDownLists"
+          ]
+        },
+        {
+          "name": "UpdateShellFieldNames",
+          "calls": [
+            "GetShellSourceFieldNames",
+            "populateFieldNames",
+            "fieldNames.Contains",
+            "GetPreferredShellFieldName",
+            "setFieldName",
+            "propertyGrid.Refresh"
+          ]
+        },
+        {
+          "name": "GetShellSourceFieldNames",
+          "calls": [
+            "results.GetAllVisibleFiledNameComponentNames().Keys.Where(name => name != _resultFieldOutputToEditName &&\n                results.IsShellSourceField(name) &&\n                (!quantity.HasValue || results.IsShellQuantityValid(name, quantity.Value))).ToArray",
+            "results.GetAllVisibleFiledNameComponentNames().Keys.Where",
+            "results.GetAllVisibleFiledNameComponentNames",
+            "results.IsShellSourceField",
+            "results.IsShellQuantityValid"
+          ]
+        },
+        {
+          "name": "GetPreferredShellFieldName",
+          "calls": [
+            "fieldNames.Contains",
+            "fieldNames.FirstOrDefault"
           ]
         },
         {
@@ -21963,7 +22319,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmResultHistoryOutput.cs",
-          "sha256": "e9aab73ff7766261da306915e4f4a5abee7bbc267328f159a079aeeabfdeaee5"
+          "sha256": "261601f134e7c8f982e7e68826aecf0e53225a6c4ef7c6e88120851f83a6baed"
         }
       ],
       "declaredDesignerFields": [],
@@ -22370,7 +22726,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmRotate.cs",
-          "sha256": "c33dc48e03df937f8a18967ac8ca3761b242bbd0101a9a1e16f4315d0f222d9d"
+          "sha256": "8ea2b9f8de1136307b6d74f5cd2ccc140dc7e6f0f14a97d9ca405b24e46c01d7"
         }
       ],
       "declaredDesignerFields": [],
@@ -22475,7 +22831,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmScale.cs",
-          "sha256": "2e5971ce4f2ef14f65692d9e227d56d821bc7b6be9b77d24d0f105fb16378efb"
+          "sha256": "be9195a5f2ce5505081fcb7e477aba11dfdc3cc779d7aa1cbf1587e1b413ba0c"
         }
       ],
       "declaredDesignerFields": [],
@@ -22574,12 +22930,12 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/45_SearchContactPairs/FrmSearchContactPairs.Designer.cs",
-          "sha256": "6cf59275ac24f5740fcd28a26af60388eb401aefce366a07d9f79073369e9425"
+          "path": "PrePoMax/Forms/46_SearchContactPairs/FrmSearchContactPairs.Designer.cs",
+          "sha256": "f0bba715b9934257665ed7996cedf2e753339b9435143a0227d0b963bafd3dd6"
         },
         {
-          "path": "PrePoMax/Forms/45_SearchContactPairs/FrmSearchContactPairs.cs",
-          "sha256": "08770b642155eaab65317210b18dc825566ed9361bb8fa89fe18986ce3a2144b"
+          "path": "PrePoMax/Forms/46_SearchContactPairs/FrmSearchContactPairs.cs",
+          "sha256": "4dde94536f2b0e4b3278b3d966478625119fa65e558c08545cea6b793d009844"
         }
       ],
       "declaredDesignerFields": [
@@ -22842,10 +23198,7 @@
         {
           "name": "btnOK_Click",
           "calls": [
-            "tiedContactPairs.Add",
-            "contactContactPairs.Add",
-            "_controller.AutoCreateTiedPairs",
-            "_controller.AutoCreateContactPairs",
+            "_controller.AddSearchedContactPairsCommand",
             "btnCancel_Click",
             "ExceptionTools.Show"
           ]
@@ -22966,22 +23319,122 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/42_Section/FrmSection.cs",
-          "sha256": "a5e85e43d13351ff55ee329ffb98a5675f6656a85a1309d89b5755642fdbe72f"
+          "path": "PrePoMax/Forms/43_Section/FrmSection.cs",
+          "sha256": "6725d426aa336a7cd456cbcc0ef8215b2747546eb74f1210ea05c6526dda6c4b"
         }
       ],
       "declaredDesignerFields": [],
-      "eventSubscriptions": [],
+      "eventSubscriptions": [
+        {
+          "source": "this.cbSymmetric.CheckedChanged",
+          "handler": "new System.EventHandler(this.cbSymmetric_CheckedChanged)"
+        },
+        {
+          "source": "this.pnlLayup.Paint",
+          "handler": "new System.Windows.Forms.PaintEventHandler(this.pnlLayup_Paint)"
+        },
+        {
+          "source": "this.pnlLayup.Resize",
+          "handler": "new System.EventHandler(this.pnlLayup_Resize)"
+        },
+        {
+          "source": "this.pnlLayup.MouseClick",
+          "handler": "new System.Windows.Forms.MouseEventHandler(this.pnlLayup_MouseClick)"
+        },
+        {
+          "source": "this.tcProperties.SelectedIndexChanged",
+          "handler": "new System.EventHandler(this.tcProperties_SelectedIndexChanged)"
+        },
+        {
+          "source": "this.dgvData.SelectionChanged",
+          "handler": "new System.EventHandler(this.dgvData_SelectionChanged)"
+        },
+        {
+          "source": "this.dgvData.CellFormatting",
+          "handler": "new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvData_CellFormatting)"
+        },
+        {
+          "source": "binding.AddingNew",
+          "handler": "Binding_AddingNew"
+        },
+        {
+          "source": "binding.ListChanged",
+          "handler": "Binding_ListChanged"
+        }
+      ],
       "methods": [
         {
           "name": "InitializeComponent",
           "calls": [
             "this.gbType.SuspendLayout",
             "this.gbProperties.SuspendLayout",
+            "this.tpDataPoints.SuspendLayout",
             "this.SuspendLayout",
+            "this.tpDataPoints.Controls.Add",
             "this.gbType.ResumeLayout",
             "this.gbProperties.ResumeLayout",
+            "this.tpDataPoints.ResumeLayout",
             "this.ResumeLayout"
+          ]
+        },
+        {
+          "name": "tcProperties_SelectedIndexChanged",
+          "calls": [
+            "HighlightSection"
+          ]
+        },
+        {
+          "name": "dgvData_SelectionChanged",
+          "calls": [
+            "HighlightSection",
+            "pnlLayup.Invalidate"
+          ]
+        },
+        {
+          "name": "dgvData_CellFormatting",
+          "calls": []
+        },
+        {
+          "name": "Binding_ListChanged",
+          "calls": [
+            "vcss.UpdateLayupProperties",
+            "propertyGrid.Refresh",
+            "dgvData.Invalidate",
+            "pnlLayup.Invalidate"
+          ]
+        },
+        {
+          "name": "cbSymmetric_CheckedChanged",
+          "calls": [
+            "propertyGrid.Refresh",
+            "HighlightSection",
+            "pnlLayup.Invalidate"
+          ]
+        },
+        {
+          "name": "pnlLayup_Resize",
+          "calls": [
+            "pnlLayup.Invalidate"
+          ]
+        },
+        {
+          "name": "pnlLayup_MouseClick",
+          "calls": [
+            "GetLayupRowAt",
+            "dgvData.Focus"
+          ]
+        },
+        {
+          "name": "pnlLayup_Paint",
+          "calls": [
+            "DrawLayup"
+          ]
+        },
+        {
+          "name": "Binding_AddingNew",
+          "calls": [
+            "vcss.Layers[vcss.Layers.Count - 1].GetLayer().DeepClone",
+            "vcss.Layers[vcss.Layers.Count - 1].GetLayer"
           ]
         },
         {
@@ -22994,6 +23447,10 @@
         {
           "name": "OnListViewTypeSelectedIndexChanged",
           "calls": [
+            "tcProperties.TabPages.Clear",
+            "tcProperties.TabPages.Add",
+            "dgvData.Columns.Clear",
+            "SetLayersBinding",
             "ShowHideSelectionForm",
             "HighlightSection"
           ]
@@ -23003,7 +23460,10 @@
           "calls": [
             "nameof",
             "ShowHideSelectionForm",
+            "binding.ResetBindings",
+            "UpdateSymmetricCheckBox",
             "HighlightSection",
+            "pnlLayup.Invalidate",
             "base.OnPropertyGridPropertyValueChanged"
           ]
         },
@@ -23014,6 +23474,9 @@
             "_viewSection.GetBase().CheckEquations",
             "_viewSection.GetBase",
             "CheckSectionElementTypes",
+            "_materialNames.Contains",
+            "GetPartNamesToSetCompositeShellElementTypes",
+            "SetCompositeShellElementTypes",
             "_controller.AddSectionCommand",
             "_controller.ReplaceSectionCommand",
             "ItemSetDataEditor.SelectionForm.Hide"
@@ -23030,6 +23493,9 @@
           "name": "OnPrepareForm",
           "calls": [
             "lvTypes.Items.Clear",
+            "tcProperties.TabPages.Clear",
+            "tcProperties.TabPages.Add",
+            "dgvData.Columns.Clear",
             "_controller.GetSectionNames",
             "_controller.GetMaterialNames",
             "_controller.GetModelPartNames",
@@ -23046,6 +23512,7 @@
             "RegionTypeEnum.PartName.ToFriendlyString",
             "RegionTypeEnum.ElementSetName.ToFriendlyString",
             "vss.PopulateDropDownLists",
+            "vcss.PopulateDropDownLists",
             "vshs.PopulateDropDownLists",
             "vms.PopulateDropDownLists",
             "RegionTypeEnum.NodeSetName.ToFriendlyString",
@@ -23065,6 +23532,7 @@
             "GetSectionName",
             "vss.PopulateDropDownLists",
             "lvTypes.Items.Add",
+            "vcss.PopulateDropDownLists",
             "vms.PopulateDropDownLists",
             "vpms.PopulateDropDownLists",
             "vdms.PopulateDropDownLists"
@@ -23092,10 +23560,129 @@
           "name": "HighlightSection",
           "calls": [
             "_controller.ClearSelectionHistory",
-            "_controller.Highlight3DObjects",
             "SetSelectItem",
+            "css.CreationData.DeepCopy",
+            "_controller.HighlightCompositeLayer",
+            "_controller.Highlight3DObjects",
             "Section.CreationData.DeepCopy",
             "_controller.HighlightSelection"
+          ]
+        },
+        {
+          "name": "SetLayersBinding",
+          "calls": [
+            "nameof",
+            "materialNames.Add",
+            "materialColumn.Items.AddRange",
+            "materialNames.ToArray",
+            "dgvData.Columns.RemoveAt",
+            "dgvData.Columns.Insert",
+            "SetGridViewUnit",
+            "StringAngleDegConverter.GetUnitAbbreviation",
+            "dgvData.BuildAutocompleteMenu",
+            "_controller.GetAllParameterNames",
+            "UpdateSymmetricCheckBox"
+          ]
+        },
+        {
+          "name": "UpdateSymmetricCheckBox",
+          "calls": []
+        },
+        {
+          "name": "DrawLayup",
+          "calls": [
+            "GetLayupBars",
+            "GetLayupRow",
+            "Color.FromArgb",
+            "graphics.FillRectangle",
+            "DrawLayerHatch",
+            "graphics.DrawRectangle",
+            "graphics.DrawLine",
+            "TextRenderer.DrawText",
+            "TextRenderer.MeasureText",
+            "DrawLayerMarker"
+          ]
+        },
+        {
+          "name": "DrawLayerMarker",
+          "calls": [
+            "graphics.DrawPolygon",
+            "graphics.FillPolygon"
+          ]
+        },
+        {
+          "name": "GetLayupBars",
+          "calls": [
+            "area.Inflate",
+            "double.IsNaN",
+            "double.IsInfinity",
+            "Math.Min",
+            "Math.Max",
+            "Math.Round",
+            "section.GetSolverLayers",
+            "TextRenderer.MeasureText"
+          ]
+        },
+        {
+          "name": "GetLayupRow",
+          "calls": []
+        },
+        {
+          "name": "GetLayupRowAt",
+          "calls": [
+            "GetLayupBars",
+            "GetLayupRow"
+          ]
+        },
+        {
+          "name": "DrawLayerHatch",
+          "calls": [
+            "double.IsNaN",
+            "Math.Ceiling",
+            "graphics.Save",
+            "graphics.SetClip",
+            "graphics.DrawLine",
+            "graphics.Restore"
+          ]
+        },
+        {
+          "name": "SetGridViewUnit",
+          "calls": [
+            "column.HeaderText.Replace"
+          ]
+        },
+        {
+          "name": "GetPartNamesToSetCompositeShellElementTypes",
+          "calls": [
+            "_controller.Model.GetCompositeShellElementTypeParts",
+            "GetRegionElementIds",
+            "GetPartNamesText",
+            "MessageBoxes.ShowWarningQuestionOKCancel",
+            "MessageBoxes.ShowWarningQuestionYesNoCancel"
+          ]
+        },
+        {
+          "name": "GetPartNamesText",
+          "calls": [
+            "string.Join"
+          ]
+        },
+        {
+          "name": "SetCompositeShellElementTypes",
+          "calls": [
+            "_controller.GetModelPart(partName).GetProperties",
+            "_controller.GetModelPart",
+            "_controller.ReplaceModelPartPropertiesCommand"
+          ]
+        },
+        {
+          "name": "GetRegionElementIds",
+          "calls": [
+            "_controller.Model.Mesh.GetPartFromId",
+            "FeMesh.GetItemTypePartIdsFromGeometryId",
+            "elementIds.AddRange",
+            "elementIds.ToArray",
+            "_controller.Model.GetElementIdsOfRegion"
           ]
         },
         {
@@ -23156,11 +23743,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmSectionView.Designer.cs",
-          "sha256": "06e6b70b5521a4c3a37862d701715d69ff0398abc3bf9eadac1de13bf5dedbf8"
+          "sha256": "eee31d1c55535c95d8be2f2796f5d7edded05340fa5eecea2a1a85ac8898827e"
         },
         {
           "path": "PrePoMax/Forms/02_View/FrmSectionView.cs",
-          "sha256": "641f6f27ea70af0fff075a1fbd877811d13c5f2f0bc0d82e092aecf8047a18e5"
+          "sha256": "07be12f36691e965bad6fe676511a02a68180deea4595f097fb4a4d7a7589835"
         }
       ],
       "declaredDesignerFields": [
@@ -23480,11 +24067,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectEntity.Designer.cs",
-          "sha256": "61f33744721da01dab245de3e449db8738be1dbd144f0fe019a1b45f3fc615c5"
+          "sha256": "1d0efd9d5e41989af3c1486a73a659477f13195e26d5723e8137361a25cc14ce"
         },
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectEntity.cs",
-          "sha256": "86885ae320a31ffd332fb3c19d4e8b21fc976c7e76dced7669a4e08e2376bb87"
+          "sha256": "5a0dbeab13d71f89b8dbab1decf5c47b3f1b2624c8bd409bbd4da301a4385166"
         }
       ],
       "declaredDesignerFields": [
@@ -23675,11 +24262,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectItemSet.Designer.cs",
-          "sha256": "f390c02fcbd6a437e29ee28ae350f69d1977a8f8248ca7fa1e883067d0029698"
+          "sha256": "85fb68dd2a746259f1d9059d33b30126f395dd7355d35b937e11e48d5d41619d"
         },
         {
           "path": "PrePoMax/Forms/00_Common/FrmSelectItemSet.cs",
-          "sha256": "9487cdba51f7780bcf83d33fe28e780f16ff29cf1da5c4941dfc4e6985882f65"
+          "sha256": "5f7ca196ad8bbb9a74101d4c664c257a3ddf42534559e1c8e1f3f2c117f13958"
         }
       ],
       "declaredDesignerFields": [
@@ -24139,11 +24726,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/61_Settings/FrmSettings.Designer.cs",
-          "sha256": "babb1d3f83c4adb11a63932fc365b1c57b9f2743a4eaa11b93f5c316dcafc3dc"
+          "sha256": "cc7c0c9bea9e3f98eb8517c124bd1f4e1e23b88762ec62adb816fc95c61a43cb"
         },
         {
           "path": "PrePoMax/Forms/61_Settings/FrmSettings.cs",
-          "sha256": "e082bc774f2eb016e67a92110dd7821b4d070f95b1178212eaff5af9affa5d20"
+          "sha256": "4a2d5dbb84a1a0b7f2b241fc6f51a0440e73ca54d2ecbdc91cf1d73ec0ff5edd"
         }
       ],
       "declaredDesignerFields": [
@@ -24374,7 +24961,7 @@
         },
         {
           "path": "PrePoMax/Forms/FrmSplash.cs",
-          "sha256": "386a3ac8b4c57ae1b1d70c8132b9acce0729f885e9bab574bfe0de9d9214d367"
+          "sha256": "5dac10de1f8d8fcaed77e79eea38e197d8fffded3c087d028470ea47dcb8b0cc"
         }
       ],
       "declaredDesignerFields": [
@@ -24521,7 +25108,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmSplitPartMeshUsingSurface.cs",
-          "sha256": "cd0efdafaedb2e331a207abca933b9b6d06e506e14ca0e311ee6a4e4afcc4a25"
+          "sha256": "f6d815aab6cb3a99da0cde358788887e6cc62defec08eb3bcbdb15a1d3e1b2b1"
         }
       ],
       "declaredDesignerFields": [],
@@ -24711,7 +25298,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitPeriodicFaces.cs",
-          "sha256": "2c1313861f739bbbc7aaa1a039d126a11c4ea67a6cbd873024b6c6efd22441a3"
+          "sha256": "fff4cc42a1b5bf42c59257803f07f75ed0113733d64afc2dacfac8b43590bdea"
         }
       ],
       "declaredDesignerFields": [],
@@ -24827,7 +25414,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitShell.cs",
-          "sha256": "51ea1e19b66c0e512b6413142cad08ef69603d37b4751dd42566be52b0049c7b"
+          "sha256": "8e0e7a4a73da8fe85f1676ee8baf0708e9f750aba91ba2fe236dbdb6d04a8a64"
         }
       ],
       "declaredDesignerFields": [],
@@ -24860,7 +25447,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSplitSolid.cs",
-          "sha256": "28a7edd98ae996179fb9e5c5297568e554ff015ddb9014268d299e14fe3b0fe0"
+          "sha256": "a7e18df3e6f87b8db5c51479a5b07d71c50ca2f41341be0de3c798598ab1266f"
         }
       ],
       "declaredDesignerFields": [],
@@ -24962,6 +25549,7 @@
         {
           "name": "OnPropertyGridPropertyValueChanged",
           "calls": [
+            "DropPicksOfTypedValue",
             "_viewGeometryFeature.UpdateVisibility",
             "HighlightGeometryFeature",
             "base.OnPropertyGridPropertyValueChanged"
@@ -25004,6 +25592,17 @@
             "UpdateAnnotateMeshTypesButton",
             "propertyGrid.BuildAutocompleteMenu",
             "_controller.GetAllParameterNames"
+          ]
+        },
+        {
+          "name": "DropPicksOfTypedValue",
+          "calls": [
+            "nameof",
+            "_controller.DropSplitGeometryPicksOfTypedValue",
+            "_controller.ClearSelectionHistory",
+            "pointAndNormal.SplitterData.DeepCopy",
+            "GetTargetIds",
+            "propertyGrid.Refresh"
           ]
         },
         {
@@ -25141,7 +25740,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/51_Step/FrmStep.cs",
-          "sha256": "f7f18a8fc15716e09d27a3f0398e379a30e2917c42c2cd0100b9795f3359d033"
+          "sha256": "63c322c99c849b32f8f61b161baf7d75c514d167638eda0fbf505cae3b440b2a"
         }
       ],
       "declaredDesignerFields": [],
@@ -25269,11 +25868,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/51_Step/Controls/FrmStepControls.Designer.cs",
-          "sha256": "bb169add05da1be3d07b4bc8e65dde033cedab276aa3fd996b5d7dfd91966afc"
+          "sha256": "d9a83b3a5947e22d37187d1b9ee2bb990bc6bf6983766064927429eeb0d75bbd"
         },
         {
           "path": "PrePoMax/Forms/51_Step/Controls/FrmStepControls.cs",
-          "sha256": "4308cb4a2f800f6169d99fefa46bc5d4ab7153c266d38c4e550173329562a686"
+          "sha256": "c00f9f1eb0f914fc98f801a9fd6b6c744e673e7aca8739da3fe1cb795565bed5"
         }
       ],
       "declaredDesignerFields": [
@@ -25599,7 +26198,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/27_Surface/FrmSurface.cs",
-          "sha256": "bfaf091c9c42a4e56dadbf428c570ea70c14c34d09c0dd06bde131b20b22f4ae"
+          "sha256": "42a13d1cf24043f991df001fd3f7ee43c4326d701fdc5b6c44df57f6d45ccd7b"
         }
       ],
       "declaredDesignerFields": [],
@@ -25752,12 +26351,12 @@
       "compiledWhole": true,
       "originalSources": [
         {
-          "path": "PrePoMax/Forms/44_SurfaceInteraction/FrmSurfaceInteraction.Designer.cs",
-          "sha256": "f7ed2589f36682a6a5f486e0748d8e9f7378a092e31bfd76a1959d05a9c038c4"
+          "path": "PrePoMax/Forms/45_SurfaceInteraction/FrmSurfaceInteraction.Designer.cs",
+          "sha256": "703dc8f4fdea2f3df6e0fe3f75ea3b7fe1b6f925268373645858dd0da6d28786"
         },
         {
-          "path": "PrePoMax/Forms/44_SurfaceInteraction/FrmSurfaceInteraction.cs",
-          "sha256": "defa912cdc5975b65c3d2b3a29f9b7e870d934092e4a92393fa59393b4334bef"
+          "path": "PrePoMax/Forms/45_SurfaceInteraction/FrmSurfaceInteraction.cs",
+          "sha256": "85bf2f2a2358664ec469bfb7c7454fb91cc3c5ee660113d738c98797b11e61a6"
         }
       ],
       "declaredDesignerFields": [
@@ -26091,7 +26690,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/04_GeometryFeature/FrmSurfaceOperation.cs",
-          "sha256": "1459ce4833a92149bed997ca9850b8177804ba2a9db954e7a7ccb4596d6bb702"
+          "sha256": "0f0857d0a1e756568ae6af9ff5c3de646f2dd339ba2887a0c070aac10b447f57"
         }
       ],
       "declaredDesignerFields": [],
@@ -26209,7 +26808,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/21_FEModel/FrmThickenShellMesh.cs",
-          "sha256": "b754a7f89954f90afed9274ccafc9254ca093c21d6a43ec951b9f000bae4c306"
+          "sha256": "9e7e4b7e6437dcca28c4849e7c431e3a6fe5c9c0bc0235508b54e07791f62362"
         }
       ],
       "declaredDesignerFields": [],
@@ -26329,11 +26928,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/84_Transformation/FrmTransformation.Designer.cs",
-          "sha256": "817d24544b9aaa9013ba9532b1adf7ec996a7f001ddaf463433db635fa5af52d"
+          "sha256": "66ff68b6864192ce675a40779cc5d0cf6236ee7cc436f96f9fa7fb6e04e077f8"
         },
         {
           "path": "PrePoMax/Forms/84_Transformation/FrmTransformation.cs",
-          "sha256": "dba6737c5776dbf6814a4c7538561a95a94b9171297f169ebb44f698e9f4e29c"
+          "sha256": "f480f770dc2b93abce3257a15045d3c90249eacbacdebdb717973087233ace92"
         }
       ],
       "declaredDesignerFields": [
@@ -26602,7 +27201,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/24_Part/FrmTranslate.cs",
-          "sha256": "2932daf41f585e17986d0dc0756034ae077082f9e593c353b57da0593a2dbf4c"
+          "sha256": "2b74e6b0c9187b4f8f99256ed7b68f7c9fef3c757b331faee14d47a78ab0ebce"
         }
       ],
       "declaredDesignerFields": [],
@@ -26717,11 +27316,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/02_View/FrmUserVew.Designer.cs",
-          "sha256": "88009ae6bcf90ff5f7285858eb0ba3dce47f63ec643884c6aba5a32ec9f98036"
+          "sha256": "190a69d9ab0517b11bec658793bdf6bc4ffe302b67cb4d34a86e7c0577321937"
         },
         {
           "path": "PrePoMax/Forms/02_View/FrmUserVew.cs",
-          "sha256": "2afc219aee6234f6c56f4bc793d7abde37301c5f4fdedc6e9e01c723f1774994"
+          "sha256": "79ad975cef9ae4d4dc3a7a31e71ac22c220789ddb45f1bfaa8d742912d0adab9"
         }
       ],
       "declaredDesignerFields": [
@@ -26992,7 +27591,7 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/00_Common/FrmViewObjectProperties.cs",
-          "sha256": "5934b3919e02885eda281b5377c498e587a7e1a56830c6d6a0b70bbdf49d629f"
+          "sha256": "4c1b1a18227dca44b344f6e1965435730a0162cc5abf308e9ccd456cbc29db0b"
         }
       ],
       "declaredDesignerFields": [],
@@ -27015,11 +27614,11 @@
       "originalSources": [
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmViewResultHistoryOutput.Designer.cs",
-          "sha256": "bebf595053b563348eea79a845d2a143ec55991f2a0465db9cbeb11a4716f20b"
+          "sha256": "c72c84dbf810e6853532c0cc4fcbefb078c8d241a89a0a9813b70d0447f7882c"
         },
         {
           "path": "PrePoMax/Forms/83_ResultHistoryOutput/FrmViewResultHistoryOutput.cs",
-          "sha256": "bdc35882fcda42cd4c1eee4228802457b3e14f66a84b5ddf25a551e839db2d76"
+          "sha256": "0f589ea8fea1b2a1e1fa980a7eab055dd27a11d8793feefc38b8cd4739971c82"
         }
       ],
       "declaredDesignerFields": [
@@ -27119,10 +27718,10 @@
     }
   ],
   "counts": {
-    "forms": 72,
-    "designerFields": 993,
-    "eventSubscriptions": 796,
+    "forms": 73,
+    "designerFields": 999,
+    "eventSubscriptions": 809,
     "fullFormsAccepted": 0,
-    "compiledWhole": 70
+    "compiledWhole": 71
   }
 }

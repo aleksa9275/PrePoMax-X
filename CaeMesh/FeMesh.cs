@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -921,6 +921,65 @@ namespace CaeMesh
             foreach (var entry in _elements)
             {
                 if (entry.Value.Id > _maxElementId) _maxElementId = entry.Value.Id;
+            }
+        }
+        // Reference point node ids
+        public HashSet<int> GetReferencePointNodeIds()
+        {
+            return GetReferencePointNodeIds(null);
+        }
+        private HashSet<int> GetReferencePointNodeIds(string excludedReferencePointName)
+        {
+            HashSet<int> nodeIds = new HashSet<int>();
+            if (_referencePoints == null) return nodeIds;
+            //
+            foreach (var entry in _referencePoints)
+            {
+                if (excludedReferencePointName != null &&
+                    string.Equals(entry.Key, excludedReferencePointName, StringComparison.OrdinalIgnoreCase)) continue;
+                //
+                if (entry.Value.RefNodeId > 0) nodeIds.Add(entry.Value.RefNodeId);
+                if (entry.Value.RotNodeId > 0) nodeIds.Add(entry.Value.RotNodeId);
+            }
+            return nodeIds;
+        }
+        public int GetMaxNodeIdWithReferencePoints()
+        {
+            int maxNodeId = _maxNodeId;
+            foreach (int nodeId in GetReferencePointNodeIds())
+            {
+                if (nodeId > maxNodeId) maxNodeId = nodeId;
+            }
+            return maxNodeId;
+        }
+        public void SetFreeReferencePointNodeIds(FeReferencePoint referencePoint)
+        {
+            int maxNodeId = GetMaxNodeIdWithReferencePoints();
+            referencePoint.RefNodeId = maxNodeId + 1;
+            referencePoint.RotNodeId = maxNodeId + 2;
+        }
+        public bool IsReferencePointNodeIdUsedByMesh(FeReferencePoint referencePoint)
+        {
+            return _nodes.ContainsKey(referencePoint.RefNodeId) || _nodes.ContainsKey(referencePoint.RotNodeId);
+        }
+        public void CheckReferencePointNodeIds(FeReferencePoint referencePoint, string referencePointToReplaceName)
+        {
+            string name = referencePoint.Name;
+            if (referencePoint.RefNodeId <= 0 || referencePoint.RotNodeId <= 0)
+                throw new CaeException("The node ids of the reference point '" + name + "' must be positive.");
+            if (referencePoint.RefNodeId == referencePoint.RotNodeId)
+                throw new CaeException("The reference node id and the rotation node id of the reference point '" + name +
+                                       "' must differ.");
+            //
+            HashSet<int> otherReferencePointNodeIds = GetReferencePointNodeIds(referencePointToReplaceName);
+            foreach (int nodeId in new int[] { referencePoint.RefNodeId, referencePoint.RotNodeId })
+            {
+                if (_nodes.ContainsKey(nodeId))
+                    throw new CaeException("The node id " + nodeId + " of the reference point '" + name +
+                                           "' is used by a mesh node.");
+                if (otherReferencePointNodeIds.Contains(nodeId))
+                    throw new CaeException("The node id " + nodeId + " of the reference point '" + name +
+                                           "' is used by another reference point.");
             }
         }
         // NodeId-ElementIds
@@ -5178,12 +5237,14 @@ namespace CaeMesh
             int oldId;
             int newId = startId;
             FeNode newNode;
+            HashSet<int> referencePointNodeIds = GetReferencePointNodeIds();
             // Renumber nodes and fill the lookup map oldIds
             foreach (FeNode node in _nodes.Values)
             {
                 newNode = node;
                 oldId = node.Id;
                 //
+                while (referencePointNodeIds.Contains(newId)) newId++;
                 oldIdNewId.Add(oldId, newId);
                 newNode.Id = newId;
                 renNodes.Add(newId, newNode);
@@ -8556,11 +8617,14 @@ namespace CaeMesh
         {
             int numOfNodes = mesh.Nodes.Count;
             int numOfElements = mesh.Elements.Count;
-            int firstNodeId = _nodes.FindFreeIntervalOfKeys(numOfNodes, _maxNodeId);
+            HashSet<int> referencePointNodeIds = GetReferencePointNodeIds();
+            int firstNodeId = _nodes.FindFreeIntervalOfKeys(numOfNodes, GetMaxNodeIdWithReferencePoints(),
+                                                            referencePointNodeIds);
             int firstElementId = _elements.FindFreeIntervalOfKeys(numOfElements, _maxElementId);
             //
             if (!renumberNodesAndElements &&
-                (_nodes.Keys.Intersect(mesh.Nodes.Keys).Count() > 0 || _elements.Keys.Intersect(mesh.Elements.Keys).Count() > 0))
+                (_nodes.Keys.Intersect(mesh.Nodes.Keys).Count() > 0 || _elements.Keys.Intersect(mesh.Elements.Keys).Count() > 0 ||
+                 referencePointNodeIds.Overlaps(mesh.Nodes.Keys)))
             {
                 renumberNodesAndElements = true;
             }
@@ -11450,6 +11514,8 @@ namespace CaeMesh
                                                      out FeNode[] inPressedNodes)
         {
             inPressedNodes = null;
+            // The new nodes are numbered above the node ids of the reference points
+            _maxNodeId = GetMaxNodeIdWithReferencePoints();
             // GeometryId = itemId * 100000 + typeId * 10000 + partId
             List<string> errors = new List<string>();
             int cellId;

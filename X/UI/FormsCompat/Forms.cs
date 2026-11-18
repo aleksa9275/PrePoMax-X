@@ -1022,3 +1022,28 @@ namespace System.Windows.Forms
         }
     }
 }
+namespace CaeGlobals
+{
+    /// <summary>The WinForms-only extension methods of the original CaeGlobals/Extensions.WinForms.cs, which the
+    /// portable CaeGlobals leaves out, for the original forms on this model (same bodies as the original).</summary>
+    public static class WinFormsExtensionMethods
+    {
+        public static void SetLocationInsideWorkingArea(this System.Windows.Forms.Form form, System.Drawing.Point location)
+        {
+            System.Drawing.Rectangle workingArea = System.Windows.Forms.Screen.FromPoint(location).WorkingArea;
+            System.Drawing.Size size = new System.Drawing.Size(System.Math.Min(form.Width, workingArea.Width), System.Math.Min(form.Height, workingArea.Height));
+            //
+            if (size != form.Size)
+            {
+                form.MinimumSize = new System.Drawing.Size(System.Math.Min(form.MinimumSize.Width, size.Width),
+                                                           System.Math.Min(form.MinimumSize.Height, size.Height));
+                form.Size = size;
+            }
+            //
+            location.X = System.Math.Max(workingArea.Left, System.Math.Min(location.X, workingArea.Right - form.Width));
+            location.Y = System.Math.Max(workingArea.Top, System.Math.Min(location.Y, workingArea.Bottom - form.Height));
+            //
+            if (form.Location != location) form.Location = location;
+        }
+    }
+}

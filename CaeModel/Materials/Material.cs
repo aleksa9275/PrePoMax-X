@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -87,6 +87,16 @@ namespace CaeModel
                     // Check
                     if (sw.Hardness.IsEquation()) return true;
                     if (sw.WearCoefficient.IsEquation()) return true;
+                }
+                else if (property is CompositeStrength cs)
+                {
+                    if (cs.TensileStrength1.IsEquation()) return true;
+                    if (cs.CompressiveStrength1.IsEquation()) return true;
+                    if (cs.TensileStrength2.IsEquation()) return true;
+                    if (cs.CompressiveStrength2.IsEquation()) return true;
+                    if (cs.ShearStrength12.IsEquation()) return true;
+                    if (cs.ShearStrength23.IsEquation()) return true;
+                    if (cs.TsaiWuCoefficient.IsEquation()) return true;
                 }
                 else if (property is Elastic el)
                 {

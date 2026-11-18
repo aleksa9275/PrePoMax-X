@@ -115,9 +115,7 @@
     <Compile Include="DynamicTypeDescriptor\DynamicTypeDescriptor.cs" />
     <Compile Include="DynamicTypeDescriptor\DynamicTypeDescriptor.WinForms.cs" />
     <Compile Include="DynamicTypeDescriptor\StandardValueAttribute.cs" />
-    <Compile Include="DynamicTypeDescriptor\StandardValueEditorUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="DynamicTypeDescriptor\StandardValueEditorUI.cs" />
     <Compile Include="DynamicTypeDescriptor\StandardValueEditorUI.designer.cs">
       <DependentUpon>StandardValueEditorUI.cs</DependentUpon>
     </Compile>
@@ -200,6 +198,8 @@
     <Compile Include="UnitSystem\EquationToString\EquationLengthFixedDOFConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationMomentConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationHeatTransferCoefficientConverter.cs" />
+    <Compile Include="UnitSystem\EquationToString\EquationAngleDegFromConverter.cs" />
+    <Compile Include="UnitSystem\EquationToString\EquationLengthFromConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationPressureFromConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationTemperatureFromConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationTemperatureConverter.cs" />
@@ -211,6 +211,7 @@
     <Compile Include="UnitSystem\EquationToString\EquationLengthConverter.cs" />
     <Compile Include="UnitSystem\EquationToString\EquationPowerPerVolumeConverter.cs" />
     <Compile Include="NCalc\EquationParameterResolver.cs" />
+    <Compile Include="NCalc\IntegerToDoubleVisitor.cs" />
     <Compile Include="NCalc\MyNCalc.cs" />
     <Compile Include="UnitSystem\MyUnit.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringAreaDefaultConverter.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="UnitSystem\StringToDouble\StringLengthDOFConverter.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringLengthFixedDOFConverter.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringLengthFromConverter.cs" />
+    <Compile Include="UnitSystem\StringToDouble\StringAngleDegFromConverter.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringMomentConverter.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringLengthPixelConverter.cs" />
     <Compile Include="UnitSystem\StringToDouble\StringPressureConverter.cs" />

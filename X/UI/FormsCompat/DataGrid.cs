@@ -104,7 +104,14 @@ namespace System.Windows.Forms
     }
     public class DataGridViewTextBoxColumn : DataGridViewColumn { public int MaxInputLength { get; set; } = 32767; }
     public class DataGridViewCheckBoxColumn : DataGridViewColumn { }
-    public class DataGridViewComboBoxColumn : DataGridViewColumn { public ArrayList Items { get; } = new ArrayList(); public object DataSource { get; set; } }
+    public enum DataGridViewComboBoxDisplayStyle { ComboBox, DropDownButton, Nothing }
+    public class DataGridViewComboBoxColumn : DataGridViewColumn
+    {
+        public ArrayList Items { get; } = new ArrayList(); public object DataSource { get; set; }
+        /// <summary>WinForms: how the cell looks when it is not being edited (the renderer draws Nothing as plain text).</summary>
+        public DataGridViewComboBoxDisplayStyle DisplayStyle { get; set; } = DataGridViewComboBoxDisplayStyle.DropDownButton;
+        public FlatStyle FlatStyle { get; set; } = FlatStyle.Standard;
+    }
 
     /// <summary>State a WinForms DataGridViewRow keeps (row and cell properties, unbound cell values); the grid keeps one
     /// per row, in step with its rows.</summary>
@@ -300,6 +307,17 @@ namespace System.Windows.Forms
     public class DataGridViewRowEventArgs : EventArgs { public DataGridViewRow Row { get; } public DataGridViewRowEventArgs(DataGridViewRow row) { Row = row; } }
     public class DataGridViewRowCancelEventArgs : CancelEventArgs { public DataGridViewRow Row { get; } public DataGridViewRowCancelEventArgs(DataGridViewRow row) { Row = row; } }
     public delegate void DataGridViewCellEventHandler(object sender, DataGridViewCellEventArgs e);
+    /// <summary>WinForms ConvertEventArgs/DataGridViewCellFormattingEventArgs: a handler may replace Value and set
+    /// FormattingApplied to supply the display value itself.</summary>
+    public class DataGridViewCellFormattingEventArgs : EventArgs
+    {
+        public int ColumnIndex { get; } public int RowIndex { get; }
+        public object Value { get; set; } public Type DesiredType { get; }
+        public DataGridViewCellStyle CellStyle { get; set; } public bool FormattingApplied { get; set; }
+        public DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object value, Type desiredType, DataGridViewCellStyle cellStyle)
+        { ColumnIndex = columnIndex; RowIndex = rowIndex; Value = value; DesiredType = desiredType; CellStyle = cellStyle; }
+    }
+    public delegate void DataGridViewCellFormattingEventHandler(object sender, DataGridViewCellFormattingEventArgs e);
     public delegate void DataGridViewCellCancelEventHandler(object sender, DataGridViewCellCancelEventArgs e);
     public delegate void DataGridViewCellMouseEventHandler(object sender, DataGridViewCellMouseEventArgs e);
     public delegate void DataGridViewEditingControlShowingEventHandler(object sender, DataGridViewEditingControlShowingEventArgs e);
@@ -449,6 +467,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowCancelEventHandler UserDeletingRow;
         public event EventHandler SelectionChanged, CurrentCellChanged, DataSourceChanged;
         public event DataGridViewCellValidatingEventHandler CellValidating;
+        public event DataGridViewCellFormattingEventHandler CellFormatting;
         public event DataGridViewCellEventHandler CellValidated;
         public event DataGridViewRowsAddedEventHandler RowsAdded;
         public event DataGridViewRowsRemovedEventHandler RowsRemoved;
@@ -679,6 +698,14 @@ namespace System.Windows.Forms
         public string GetCellText(int row, int column)
         {
             object value = GetCellValue(row, column);
+            // WinForms GetFormattedValue: CellFormatting first; a handler that applies the formatting supplies the text
+            if (CellFormatting != null)
+            {
+                var e = new DataGridViewCellFormattingEventArgs(column, row, value, typeof(string), Columns[column].DefaultCellStyle);
+                CellFormatting(this, e);
+                if (e.FormattingApplied) return Convert.ToString(e.Value, CultureInfo.CurrentCulture) ?? "";
+                value = e.Value;
+            }
             if (value == null || value == DBNull.Value) return Convert.ToString(Columns[column].DefaultCellStyle.NullValue ?? DefaultCellStyle.NullValue ?? "", CultureInfo.CurrentCulture);
             TypeConverter converter = Columns[column].BoundColumnConverter ?? TypeDescriptor.GetConverter(value.GetType());
             try

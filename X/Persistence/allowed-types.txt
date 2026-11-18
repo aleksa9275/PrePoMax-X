@@ -27,6 +27,7 @@ PrePoMax|PrePoMax.Commands.CAddInitialCondition
 PrePoMax|PrePoMax.Commands.CAddJob
 PrePoMax|PrePoMax.Commands.CAddLoad
 PrePoMax|PrePoMax.Commands.CAddMaterial
+PrePoMax|PrePoMax.Commands.CAddMaterialOrientation
 PrePoMax|PrePoMax.Commands.CAddMeshRefinement
 PrePoMax|PrePoMax.Commands.CAddMeshSetupItem
 PrePoMax|PrePoMax.Commands.CAddMeshingParameters
@@ -40,6 +41,7 @@ PrePoMax|PrePoMax.Commands.CAddResultCoordinateSystem
 PrePoMax|PrePoMax.Commands.CAddResultFieldOutput
 PrePoMax|PrePoMax.Commands.CAddResultHistoryOutput
 PrePoMax|PrePoMax.Commands.CAddResultReferencePoint
+PrePoMax|PrePoMax.Commands.CAddSearchedContactPairs
 PrePoMax|PrePoMax.Commands.CAddSection
 PrePoMax|PrePoMax.Commands.CAddStep
 PrePoMax|PrePoMax.Commands.CAddSurface
@@ -70,6 +72,7 @@ PrePoMax|PrePoMax.Commands.CDuplicateInitialConditions
 PrePoMax|PrePoMax.Commands.CDuplicateJobs
 PrePoMax|PrePoMax.Commands.CDuplicateLoads
 PrePoMax|PrePoMax.Commands.CDuplicateMaterial
+PrePoMax|PrePoMax.Commands.CDuplicateMaterialOrientations
 PrePoMax|PrePoMax.Commands.CDuplicateMaterials
 PrePoMax|PrePoMax.Commands.CDuplicateMeshRefinements
 PrePoMax|PrePoMax.Commands.CDuplicateMeshSetupItems
@@ -160,6 +163,7 @@ PrePoMax|PrePoMax.Commands.CRemoveHistoryOutputs
 PrePoMax|PrePoMax.Commands.CRemoveInitialConditions
 PrePoMax|PrePoMax.Commands.CRemoveJobs
 PrePoMax|PrePoMax.Commands.CRemoveLoads
+PrePoMax|PrePoMax.Commands.CRemoveMaterialOrientations
 PrePoMax|PrePoMax.Commands.CRemoveMaterials
 PrePoMax|PrePoMax.Commands.CRemoveMeshRefinements
 PrePoMax|PrePoMax.Commands.CRemoveMeshSetupItems
@@ -203,6 +207,7 @@ PrePoMax|PrePoMax.Commands.CReplaceInitialCondition
 PrePoMax|PrePoMax.Commands.CReplaceJob
 PrePoMax|PrePoMax.Commands.CReplaceLoad
 PrePoMax|PrePoMax.Commands.CReplaceMaterial
+PrePoMax|PrePoMax.Commands.CReplaceMaterialOrientation
 PrePoMax|PrePoMax.Commands.CReplaceMeshRefinement
 PrePoMax|PrePoMax.Commands.CReplaceMeshSetupItem
 PrePoMax|PrePoMax.Commands.CReplaceMeshingParameters
@@ -371,6 +376,9 @@ CaeModel|CaeModel.CFlux
 CaeModel|CaeModel.CLoad
 CaeModel|CaeModel.CentrifLoad
 CaeModel|CaeModel.ComplexFrequencyStep
+CaeModel|CaeModel.CompositeLayer
+CaeModel|CaeModel.CompositeShellSection
+CaeModel|CaeModel.CompositeStrength
 CaeModel|CaeModel.CompressionOnly
 CaeModel|CaeModel.Constraint
 CaeModel|CaeModel.ContactFieldOutput
@@ -449,6 +457,7 @@ CaeModel|CaeModel.MappedDistribution
 CaeModel|CaeModel.MassSection
 CaeModel|CaeModel.MassSectionData
 CaeModel|CaeModel.Material
+CaeModel|CaeModel.MaterialOrientation
 CaeModel|CaeModel.MaterialProperty
 CaeModel|CaeModel.MembraneSection
 CaeModel|CaeModel.ModalDamping
@@ -536,6 +545,7 @@ CaeModel|FileInOut.Output.Calculix.CalCFlux
 CaeModel|FileInOut.Output.Calculix.CalCLoad
 CaeModel|FileInOut.Output.Calculix.CalCentrifLoad
 CaeModel|FileInOut.Output.Calculix.CalComplexFrequencyStep
+CaeModel|FileInOut.Output.Calculix.CalCompositeShellSection
 CaeModel|FileInOut.Output.Calculix.CalContactFile
 CaeModel|FileInOut.Output.Calculix.CalContactPair
 CaeModel|FileInOut.Output.Calculix.CalContactParameter
@@ -592,6 +602,7 @@ CaeModel|FileInOut.Output.Calculix.CalNodeFile
 CaeModel|FileInOut.Output.Calculix.CalNodePrint
 CaeModel|FileInOut.Output.Calculix.CalNodeSet
 CaeModel|FileInOut.Output.Calculix.CalOpParameter
+CaeModel|FileInOut.Output.Calculix.CalOrientation
 CaeModel|FileInOut.Output.Calculix.CalOutputFrequency
 CaeModel|FileInOut.Output.Calculix.CalPhysicalConstants
 CaeModel|FileInOut.Output.Calculix.CalPlastic
@@ -739,6 +750,7 @@ CaeMesh|CaeMesh.LinearWedgeElement
 CaeMesh|CaeMesh.LocalMeshSize
 CaeMesh|CaeMesh.LocalMeshSizeTypeEnum
 CaeMesh|CaeMesh.MassElement
+CaeMesh|CaeMesh.MaterialOrientationAxisEnum
 CaeMesh|CaeMesh.MergeCoincidentNodes
 CaeMesh|CaeMesh.MeshPart
 CaeMesh|CaeMesh.MeshRepresentation
@@ -804,6 +816,7 @@ CaeResults|CaeResults.ClosestPointTypeEnum
 CaeResults|CaeResults.CloudInterpolatorEnum
 CaeResults|CaeResults.CloudPointReader
 CaeResults|CaeResults.ComplexResultTypeEnum
+CaeResults|CaeResults.CompositeFailureCriterionEnum
 CaeResults|CaeResults.DatFileReader
 CaeResults|CaeResults.DataStateEnum
 CaeResults|CaeResults.DataTypeEnum
@@ -837,11 +850,16 @@ CaeResults|CaeResults.LinearPattern
 CaeResults|CaeResults.OpenFoamFieldType
 CaeResults|CaeResults.OpenFoamFormatType
 CaeResults|CaeResults.OutputNodeCoordinatesEnum
+CaeResults|CaeResults.PlyStiffness
+CaeResults|CaeResults.PlyStrength
 CaeResults|CaeResults.ResultFieldOutput
+CaeResults|CaeResults.ResultFieldOutputCompositeFailure
 CaeResults|CaeResults.ResultFieldOutputCoordinateSystemTransform
 CaeResults|CaeResults.ResultFieldOutputEnvelope
 CaeResults|CaeResults.ResultFieldOutputEquation
 CaeResults|CaeResults.ResultFieldOutputLimit
+CaeResults|CaeResults.ResultFieldOutputMaterialAxes
+CaeResults|CaeResults.ResultFieldOutputShellPlaneStress
 CaeResults|CaeResults.ResultHistoryOutput
 CaeResults|CaeResults.ResultHistoryOutputFromAffineFit
 CaeResults|CaeResults.ResultHistoryOutputFromElementSize
@@ -853,6 +871,9 @@ CaeResults|CaeResults.ResultHistoryOutputFromMergedHistories
 CaeResults|CaeResults.ResultHistoryOutputFromTable
 CaeResults|CaeResults.ResultHistoryOutputXY
 CaeResults|CaeResults.ResultsCollection
+CaeResults|CaeResults.ShellInPlaneQuantityEnum
+CaeResults|CaeResults.ShellResultData
+CaeResults|CaeResults.ShellResultElement
 CaeResults|CaeResults.SlipWearResultsEnum
 CaeResults|CaeResults.StepTypeEnum
 CaeResults|CaeResults.Symmetry
@@ -964,11 +985,14 @@ PrePoMaxX.WinFormsCompat|System.Windows.Forms.MouseButtons
 @CaeModel|CaeModel.IDistribution
 @CaeModel|CaeModel.IPreviewable
 @CaeMesh|CaeMesh.IStoreAsNameInCommands
+@CaeGlobals|CaeGlobals.EquationAngleDegFromConverter
+@CaeGlobals|CaeGlobals.EquationLengthFromConverter
 @CaeGlobals|CaeGlobals.IBinaryObjectSerializer
 @CaeGlobals|CaeGlobals.IContainsEquations
 @CaeGlobals|CaeGlobals.IMasterSlaveMultiRegion
 @CaeGlobals|CaeGlobals.IMultiRegion
 @CaeGlobals|CaeGlobals.IOrderedDictionaryItemLayout`1
+@CaeGlobals|CaeGlobals.StringAngleDegFromConverter
 @CaeGlobals|DynamicTypeDescriptor.IResourceAttribute
 @CaeGlobals|Octree.IIntersect
 @UserControls|UserControls.IXYPlotSettings

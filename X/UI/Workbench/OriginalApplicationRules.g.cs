@@ -4,7 +4,7 @@ using CaeResults;using UserControls;using CaeGlobals;using CaeModel;using CaeMes
 using PrePoMax.Commands;using PrePoMax.Python.Journal;using System.Windows.Forms;
 namespace PrePoMaxX.UI;
 
-// Original PrePoMax/Forms/61_Settings/FrmSettings.cs SHA256 e082bc774f2eb016e67a92110dd7821b4d070f95b1178212eaff5af9affa5d20
+// Original PrePoMax/Forms/61_Settings/FrmSettings.cs SHA256 4a2d5dbb84a1a0b7f2b241fc6f51a0440e73ca54d2ecbdc91cf1d73ec0ff5edd
 
 public sealed class SettingsEditSession {
  readonly Controller controller;readonly Func<string> _getRunningAutomationEndpointUrl;
@@ -67,7 +67,7 @@ public Dictionary<string, ISettings> Settings
         }
 }
 
-// Original PrePoMax/Forms/01_Edit/FrmEditCommands.cs SHA256 544033e8156f30e2c248d056c4fa1edc45f213e8fcefe695fda092b7d85c1af7
+// Original PrePoMax/Forms/01_Edit/FrmEditCommands.cs SHA256 094b49069119f11aee6864cd3f93ed1e7684eaab62efb421a948eb15e603885d
 
 public sealed class CommandEditSession {
  readonly Controller _controller;List<ViewCommand> _viewCommands;List<Command> _preparedCommands;int _preparedActiveCommandCount;
@@ -136,7 +136,7 @@ private int GetNumOfShownUndoneCommands()
 public void Reorganize(){_viewCommands=PrePoMax.OriginalCommandTools.Reorganize(Commands).Select((c,i)=>new ViewCommand(i+1,c)).ToList();}
 }
 
-// Original PrePoMax/Forms/02_View/FrmFollowerView.cs SHA256 1ad47b28541b2658d7c56a4c9df382b17ebe4d56adaeecf8d977b54df6aa113e
+// Original PrePoMax/Forms/02_View/FrmFollowerView.cs SHA256 c1d6559eca7e36d7513b2fe85476762084a17be7eb984b12785cf7744ba019b2
 
 public sealed class FollowerEditSession {
  readonly Controller _controller;readonly ViewFollowerViewParameters _viewFollowerViewParameters;
@@ -239,7 +239,7 @@ private string[] GetColumnNameRows(string columnName)
             return rowsToKeep.ToArray();
         }
 }
-// Original PrePoMax/Forms/62_Query/FrmQuery.cs SHA256 12a71e4c8926489f8d85c9c71c5ac17245ff0cd5d35dfb86026633263d59d9d2
+// Original PrePoMax/Forms/62_Query/FrmQuery.cs SHA256 ca2ed5f6b4a471fb18cb293d327afc1702bdb4ddc4fa6feb8362dd983839e12f
 
 public sealed class QuerySession {
  readonly Controller _controller;string _queryNumberFormat;int _numOfNodesToSelect=1;double[][] _coorNodesToDraw;readonly List<string> lines=[];Action<string> Form_WriteDataToOutput;
@@ -817,7 +817,7 @@ public void Highlight()
             if (_coorNodesToDraw != null) _controller.HighlightNodes(_coorNodesToDraw);
         }
 }
-// Original PrePoMax/Forms/45_SearchContactPairs/FrmSearchContactPairs.cs SHA256 08770b642155eaab65317210b18dc825566ed9361bb8fa89fe18986ce3a2144b
+// Original PrePoMax/Forms/46_SearchContactPairs/FrmSearchContactPairs.cs SHA256 4dde94536f2b0e4b3278b3d966478625119fa65e558c08545cea6b793d009844
 
 public sealed partial class ContactSearchSession {
 private void HighlightContactPairs()

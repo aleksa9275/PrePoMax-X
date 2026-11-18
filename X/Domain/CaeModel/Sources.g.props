@@ -45,6 +45,7 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Abaqus/Keywords/Step/Load/AbqShellEdgeLoad.cs" Link="FileInOut/Output/Abaqus/Keywords/Step/Load/AbqShellEdgeLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Abaqus/Keywords/Step/Load/Imported/AbqImportedPressureLoad.cs" Link="FileInOut/Output/Abaqus/Keywords/Step/Load/Imported/AbqImportedPressureLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalTransform.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalTransform.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalOrientation.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalOrientation.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAmplitude.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAmplitude.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalPhysicalConstants.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalPhysicalConstants.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAdditional.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalAdditional.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalDeactivated.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalDeactivated.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/CalContactPair.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/CalContactPair.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalShellSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalShellSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalCompositeShellSection.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Section/CalCompositeShellSection.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalSpecificHeat.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalSpecificHeat.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalConductivity.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalConductivity.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalThermalExpansion.cs" />
@@ -138,6 +140,9 @@
     <Compile Include="$(RepositoryRoot)CaeModel/Sections/LinearSpringSectionData.cs" Link="Sections/LinearSpringSectionData.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Sections/SectionData.cs" Link="Sections/SectionData.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Sections/ShellSection.cs" Link="Sections/ShellSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/CompositeLayer.cs" Link="Sections/CompositeLayer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Sections/CompositeShellSection.cs" Link="Sections/CompositeShellSection.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Orientations/MaterialOrientation.cs" Link="Orientations/MaterialOrientation.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Constraints/PointSpring.cs" Link="Constraints/PointSpring.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Constraints/CompressionOnly.cs" Link="Constraints/CompressionOnly.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Sections/DistributedMassSection.cs" Link="Sections/DistributedMassSection.cs" />
@@ -218,6 +223,7 @@
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalSTLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalSTLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalMomentLoad.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/CalculixFileWriter.cs" Link="FileInOut/Output/Calculix/CalculixFileWriter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/ShellOrientationGroup.cs" Link="FileInOut/Output/Calculix/ShellOrientationGroup.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" Link="FileInOut/Output/Calculix/Keywords/ModelDefinition/Material/CalDensity.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.Legacy.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.Legacy.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.cs" Link="FileInOut/Output/Calculix/Keywords/Step/Load/CalCLoad.cs" />
@@ -280,6 +286,7 @@
     <Compile Include="$(RepositoryRoot)CaeModel/Materials/Elastic.cs" Link="Materials/Elastic.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Materials/ElasticEngineeringConstants.cs" Link="Materials/ElasticEngineeringConstants.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Materials/ElasticLamina.cs" Link="Materials/ElasticLamina.cs" />
+    <Compile Include="$(RepositoryRoot)CaeModel/Materials/CompositeStrength.cs" Link="Materials/CompositeStrength.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Materials/MaterialProperty.cs" Link="Materials/MaterialProperty.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Materials/Material.cs" Link="Materials/Material.cs" />
     <Compile Include="$(RepositoryRoot)CaeModel/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />

@@ -267,6 +267,7 @@ Tests/
 AGENTS.md
 CLAUDE.md
 .claude/
-/_Codex/
-/Notes/
+/Dev/_Codex/
+/Dev/Notes/
 /CaeMesh/Meshing/Gmsh/Sweep/Roadmap.md
+/Dev/Plans/Vtk/Vtk_Native_Pilot_Plan.md

@@ -16,13 +16,14 @@ only when that mesher's binary is actually present in the base folder.
 | Gmsh 4.13, patched | `lib\gmsh-4.13.dll`, vendored in `ThirdParty/gmsh-4.13.0-Windows64-sdk/` | GPL-2.0-or-later, with an exception permitting combination with Netgen, METIS, OpenCASCADE and ParaView | `share/doc/gmsh/LICENSE.txt` in the vendored SDK under `ThirdParty/` |
 | OpenCASCADE 7.7.0 | statically linked into `lib\gmsh-4.13.dll` | LGPL-2.1 with the Open CASCADE exception | github.com/Open-Cascade-SAS/OCCT |
 | Mmg | `Meshers\Mmg\mmgs.exe` (5.5.2), `Meshers\Mmg\mmg3d.exe` (5.7.0), vendored in `ThirdParty/mmg/` | LGPL-3.0-or-later | `LICENSE` at github.com/MmgTools/mmg |
-| QuadWild-BiMDF 0.0.2, modified | `Meshers\QuadWild\quadwild.exe`, `Meshers\QuadWild\quad_from_patches.exe`, vendored in `ThirdParty/quadwild-bimdf/` | GPL-3.0 | `LICENSE` at github.com/cgg-bern/quadwild-bimdf |
-| NetGenMesher | `Meshers\Netgen\NetGenMesher.exe`, vendored in `ThirdParty/netgen/` | GPL-3.0 (own build, same license as PrePoMax) | the author |
-| Netgen 5.3.1 | `Meshers\Netgen\nglib.dll` | LGPL-2.1 | `LICENSE` at github.com/NGSolve/netgen |
+| QuadWild-BiMDF 0.0.2, modified | `Meshers\QuadWild\quadwild.exe`, `Meshers\QuadWild\quad_from_patches.exe`, vendored in `ThirdParty/quadwild-bimdf/` | GPL-3.0 | `LICENSE` at github.com/cgg-bern/quadwild-bimdf; source of the modified build at github.com/PrePoMax/QuadWild |
+| NetGenMesher | `Meshers\Netgen\NetGenMesher.exe`, vendored in `ThirdParty/netgen/` | LGPL-2.1 (own build, published with its Netgen port) | `LICENSE` at github.com/PrePoMax/NetgenMesher |
+| Netgen 5.3.1, ported to OpenCASCADE 8.0.1 | `Meshers\Netgen\nglib.dll` | LGPL-2.1 | `LICENSE` at github.com/NGSolve/netgen |
 | OpenCASCADE 8.0.1 | `Meshers\Netgen\TK*.dll` | LGPL-2.1 with the Open CASCADE exception | github.com/Open-Cascade-SAS/OCCT |
 | pthreads-win32 2.9.1 | `Meshers\Netgen\pthreadVC2.dll` | LGPL-2.1 | `COPYING.LIB` in the prebuilt package used for the build |
 | zlib 1.2.11 | `Meshers\Netgen\zlib.dll` | zlib License | license notice in the vendored `zlib.h` |
 | lp_solve 5.5.2.11 | `lib\lpsolve55.dll`, vendored in `ThirdParty/lpsolve/` | LGPL-2.1 | `README.txt` of the lp_solve 5.5 sources, sourceforge.net/projects/lpsolve |
+| VTK 9.7.1, patched | `lib\vtk*-9.7.dll`, built from vtk.org sources; `lib\vtkNative.dll` is built from `vtkNative/` in this repository | BSD-3-Clause; the libraries bundled in VTK under their own permissive licenses | `Copyright.txt` and `ThirdParty/*/vtk*/` licenses of the VTK 9.7.1 sources; see [vtk/NOTICE.md](vtk/NOTICE.md) |
 
 Gmsh, Mmg and QuadWild are all GPL/LGPL v3-compatible with PrePoMax's own GPL-3.0, so bundling them
 raises no license-compatibility question. Mmg's own LICENSE requires that both `COPYING.LESSER`
@@ -31,7 +32,7 @@ raises no license-compatibility question. Mmg's own LICENSE requires that both `
 ## Gmsh build
 
 `lib\gmsh-4.13.dll` is no longer the binary from the upstream Gmsh SDK. It is built from patched
-Gmsh sources, published at `gitlab.com/MatejB/gmsh` on the branch `prepomax-quadqs-transfinite`, so
+Gmsh sources, published at `github.com/PrePoMax/Gmsh` on the branch `prepomax-quadqs-transfinite`, so
 that the quasi-structured quad algorithm leaves alone the element counts a swept mesh pins on its
 curves, a quadrangle is never split into triangles that fold over each other, and a curve is sized by
 the curvature of its faces in its own direction rather than by their largest curvature, which made a
@@ -45,10 +46,20 @@ framework, neither of which PrePoMax calls, and links OpenCASCADE statically, so
 cannot compile Gmsh's OpenMP directives, so the parallel tetrahedral mesher runs on one thread
 where the upstream binary used several.
 
+## VTK build
+
+The 3D view is `lib\vtkNative.dll`, built by CMake from `vtkNative/` against VTK 9.7.1. The VTK libraries are a
+shared x64 Release build of the VTK 9.7.1 release with one patch, `vtkNative/patches/vtk-9.7.1-ssao-background.patch`
+(the ambient occlusion keeps the background), and the build copies only the VTK DLLs `vtkNative.dll` loads.
+[vtk/NOTICE.md](vtk/NOTICE.md) lists them with the libraries VTK bundles; the post-build event copies the folder to
+`lib\vtk-licenses`. VTK and all of these are under permissive licenses (BSD, MIT, zlib, Apache-2.0 and the like),
+compatible with PrePoMax's GPL-3.0. The patched source file is the corresponding source of the one change.
+
 ## Netgen runtime set
 
-`NetGenMesher.exe` is the author's own build and is GPL-3, and the libraries it links are covered
-above. OpenCASCADE 8.0.1 was built locally with its optional image, video, visualization and
+`NetGenMesher.exe` and `nglib.dll` are the author's own build from `github.com/PrePoMax/NetgenMesher`,
+which publishes NetGenMesher together with its port of Netgen 5.3.1 to OpenCASCADE 8.0.1 under
+Netgen's LGPL-2.1, and the libraries they link are covered above. OpenCASCADE 8.0.1 was built locally with its optional image, video, visualization and
 parallel-runtime dependencies disabled, so the former FreeImage, FFmpeg, FreeType, jemalloc,
 OpenVR and TBB dlls no longer ship. See [netgen/NOTICE.md](netgen/NOTICE.md).
 
@@ -58,6 +69,8 @@ GPL-3 section 6 and LGPL-3 require a route to the source for the binaries that a
 component above, record the exact upstream version shipped and keep the matching source archive, or
 publish a written offer with the release. The versions currently shipped are listed in the table.
 
-Gmsh is the one component shipped as a modified binary, so its corresponding source is the branch
-named under "Gmsh build" above rather than an upstream release, and that branch has to stay
-published for as long as the binary is conveyed.
+Gmsh, Netgen and QuadWild are shipped as modified binaries, so their corresponding source is not an
+upstream release: for Gmsh it is the branch named under "Gmsh build" above, for Netgen and
+NetGenMesher the repository named under "Netgen runtime set", and for QuadWild
+`github.com/PrePoMax/QuadWild`. All of them have to stay published for as long as the binaries are
+conveyed.

@@ -14,7 +14,7 @@ using PrePoMax.Forms;
 using PrePoMax.PropertyViews;
 namespace PrePoMaxX.UI.OriginalForms;
 
-// Source PrePoMax/Forms/25_NodeSet/FrmNodeSet.cs SHA256 eb13e2f204eef115ad72b188171fe1bdc4d50808d72f8015e783cd43c90bf583
+// Source PrePoMax/Forms/25_NodeSet/FrmNodeSet.cs SHA256 d63fb174cec31648e6c8a24779a7668dc46a1c5a3374df336418d1aa80901f2f
 public sealed class FrmNodeSetRule : FormRule {
 private HashSet<string> _nodeSetNames;
 private string _nodeSetToEditName;
@@ -73,7 +73,7 @@ private string GetNodeSetName()
         }
 }
 
-// Source PrePoMax/Forms/26_ElementSet/FrmElementSet.cs SHA256 ce65515f0b67920448e93e0b8d237f7c2fca41aa06b015356ed7c2856db1f148
+// Source PrePoMax/Forms/26_ElementSet/FrmElementSet.cs SHA256 b2de54037b78aa025f06ef990eb7c0e6c8c6051625bb5ed43529cf77b4cb3702
 public sealed class FrmElementSetRule : FormRule {
 private HashSet<string> _elementSetNames;
 private string _elementSetToEditName;
@@ -133,7 +133,7 @@ private string GetElementSetName()
         }
 }
 
-// Source PrePoMax/Forms/27_Surface/FrmSurface.cs SHA256 bfaf091c9c42a4e56dadbf428c570ea70c14c34d09c0dd06bde131b20b22f4ae
+// Source PrePoMax/Forms/27_Surface/FrmSurface.cs SHA256 42a13d1cf24043f991df001fd3f7ee43c4326d701fdc5b6c44df57f6d45ccd7b
 public sealed class FrmSurfaceRule : FormRule {
 private HashSet<string> _surfaceNames;
 private string _surfaceToEditName;
@@ -197,7 +197,7 @@ private string GetSurfaceName()
         }
 }
 
-// Source PrePoMax/Forms/31_ReferencePoint/FrmReferencePoint.cs SHA256 90421d91e86ea23f3b80c6556695c5d1ba4b1fc140a9893bf1ca0bb07c685cd5
+// Source PrePoMax/Forms/31_ReferencePoint/FrmReferencePoint.cs SHA256 fc2db57e5f6b6c6cb3813b8386b07a30f83650d34a5394f449b82ef4ffc23a17
 public sealed class FrmReferencePointRule : FormRule {
 private HashSet<string> _referencePointNames;
 private string _referencePointToEditName;
@@ -300,7 +300,7 @@ private void ReplaceReferencePointCommand(string referencePointToEditName, FeRef
         }
 }
 
-// Source PrePoMax/Forms/32_CoordinateSystems/FrmCoordinateSystem.cs SHA256 8e2c70719ec67fd32736d866b983351cac8c82ba779134bb29d9d79cf0892986
+// Source PrePoMax/Forms/32_CoordinateSystems/FrmCoordinateSystem.cs SHA256 9a17147a179321b1bbfa524bd253901b105069bbb9c95bef69b02bff17420ba1
 public sealed class FrmCoordinateSystemRule : FormRule {
 private HashSet<string> _coordinateSystemNames;
 private string _coordinateSystemToEditName;
@@ -388,24 +388,36 @@ private void ReplaceCoordinateSystemCommand(string coordinateSystemToEditName, C
         }
 }
 
-// Source PrePoMax/Forms/42_Section/FrmSection.cs SHA256 a5e85e43d13351ff55ee329ffb98a5675f6656a85a1309d89b5755642fdbe72f
+// Source PrePoMax/Forms/43_Section/FrmSection.cs SHA256 6725d426aa336a7cd456cbcc0ef8215b2747546eb74f1210ea05c6526dda6c4b
 public sealed class FrmSectionRule : FormRule {
 private string[] _sectionNames;
+private string[] _materialNames;
 private string _sectionToEditName;
 private ViewSection _viewSection;
+private UserControls.DoubleBufferedPanel pnlLayup;
+private System.Windows.Forms.Splitter splLayup;
+private System.Windows.Forms.CheckBox cbSymmetric;
+private bool _updatingSymmetric;
+private const string _layerColumnName = "LayerName";
+private static readonly double[] _layupHatchSpacings = new double[] { 6, 9, 13 };
+private const int _layupMarkerWidth = 16;
+private const int _layupArrowWidth = 28;
+private const int _layupArrowLength = 30;
 protected override string[] Names(string key) { string[] materialNames = _controller.GetMaterialNames();
 string[] partNames = _controller.GetModelPartNames();
 string[] nodeSetNames = _controller.GetUserNodeSetNames();
 string[] elementSetNames = _controller.GetUserElementSetNames();
 string[] surfaceNames = _controller.GetUserSurfaceNames();
 string[] referencePointNames = _controller.GetModelReferencePointNames(); return key switch { "materialNames" => materialNames??Array.Empty<string>(),"partNames" => partNames??Array.Empty<string>(),"nodeSetNames" => nodeSetNames??Array.Empty<string>(),"elementSetNames" => elementSetNames??Array.Empty<string>(),"surfaceNames" => surfaceNames??Array.Empty<string>(),"referencePointNames" => referencePointNames??Array.Empty<string>(),_=>base.Names(key) }; }
-protected override void Configure(object view) { switch(view) {case ViewShellSection vss when view.GetType()==typeof(ViewShellSection): vss.PopulateDropDownLists(Names("materialNames"),Names("partNames"),null,Names("elementSetNames"),null,null);break;case ViewMembraneSection vms when view.GetType()==typeof(ViewMembraneSection): vms.PopulateDropDownLists(Names("materialNames"),Names("partNames"),null,Names("elementSetNames"),null,null);break;case ViewPointMassSection vpms when view.GetType()==typeof(ViewPointMassSection): vpms.PopulateDropDownLists(null,null,Names("nodeSetNames"),null,null,Names("referencePointNames"));break;case ViewDistributedMassSection vdms when view.GetType()==typeof(ViewDistributedMassSection): vdms.PopulateDropDownLists(null,null,null,null,Names("surfaceNames"),null);break;default:base.Configure(view);break;} }
+protected override void Configure(object view) { switch(view) {case ViewShellSection vss when view.GetType()==typeof(ViewShellSection): vss.PopulateDropDownLists(Names("materialNames"),Names("partNames"),null,Names("elementSetNames"),null,null);break;case ViewCompositeShellSection vcss when view.GetType()==typeof(ViewCompositeShellSection): vcss.PopulateDropDownLists(Names("materialNames"),Names("partNames"),null,Names("elementSetNames"),null,null);break;case ViewMembraneSection vms when view.GetType()==typeof(ViewMembraneSection): vms.PopulateDropDownLists(Names("materialNames"),Names("partNames"),null,Names("elementSetNames"),null,null);break;case ViewPointMassSection vpms when view.GetType()==typeof(ViewPointMassSection): vpms.PopulateDropDownLists(null,null,Names("nodeSetNames"),null,null,Names("referencePointNames"));break;case ViewDistributedMassSection vdms when view.GetType()==typeof(ViewDistributedMassSection): vdms.PopulateDropDownLists(null,null,null,null,Names("surfaceNames"),null);break;default:base.Configure(view);break;} }
 public Section Section
         {
             get { return _viewSection != null ? _viewSection.GetBase() : null; }
             set
             {
                 if (value is SolidSection sose) _viewSection = new ViewSolidSection(sose.DeepClone());
+                else if (value is CompositeShellSection csse)
+                    _viewSection = new ViewCompositeShellSection(csse.DeepClone());
                 else if (value is ShellSection shse) _viewSection = new ViewShellSection(shse.DeepClone());
                 else if (value is MembraneSection mese) _viewSection = new ViewMembraneSection(mese.DeepClone());
                 else if (value is PointMassSection pmse) _viewSection = new ViewPointMassSection(pmse.DeepClone());
@@ -438,6 +450,15 @@ protected override void OnApply(bool onOkAddNew)
             if (!CheckSectionElementTypes())
                 throw new CaeException("The section type and the section region are not compatible.");
             //
+            if (Section is CompositeShellSection css)
+            {
+                foreach (CompositeLayer layer in css.Layers)
+                {
+                    if (!_materialNames.Contains(layer.MaterialName))
+                        throw new CaeException("Every layer must name an existing material.");
+                }
+            }
+            //
             if ((Section is SolidSection sos && sos.TwoD && sos.Thickness.Value <= 0) ||
                 (Section is ShellSection ss && ss.Thickness.Value <= 0) ||
                 (Section is MembraneSection mes && mes.Thickness.Value <= 0))
@@ -445,6 +466,12 @@ protected override void OnApply(bool onOkAddNew)
             //
             if (Section is MassSection mas && mas.Mass.Value < 0)
                 throw new CaeException("The mass must be larger or equal to 0.");
+            //
+            if (Section is CompositeShellSection)
+            {
+                foreach (string partName in GetPartNamesToSetCompositeShellElementTypes())
+                    SetCompositeShellElementTypes(partName);
+            }
             // Create
             if (_sectionToEditName == null)
             {
@@ -488,6 +515,19 @@ private void PopulateListOfSections(string[] materialNames, string[] partNames, 
                 item.Tag = vss;
             }
             else item.Tag = new ViewError("There is no material defined for the shell section definition.");
+            choices.Add(item);
+            // Composite shell section
+            item = new EditorChoice("Composite Shell Section");
+            if (materialNames.Length > 0)
+            {
+                List<CompositeLayer> layers = new List<CompositeLayer>() { new CompositeLayer(materialNames[0], 1, 0) };
+                CompositeShellSection css = new CompositeShellSection(GetSectionName("Composite_Shell_Section"), "",
+                                                                      RegionTypeEnum.Selection, layers, twoD);
+                ViewCompositeShellSection vcss = new ViewCompositeShellSection(css);
+                vcss.PopulateDropDownLists(materialNames, partNames, null, elementSetNames, null, null);
+                item.Tag = vcss;
+            }
+            else item.Tag = new ViewError("There is no material defined for the composite shell section definition.");
             choices.Add(item);
             // Membrane section
             item = new EditorChoice("Membrane Section");
@@ -617,6 +657,10 @@ private bool CheckSectionElementTypes()
                             if (Section is SolidSection && partType == PartType.Shell) return true;
                             else return false;
                         }
+                        else if (Section.RegionType == RegionTypeEnum.NodeSetName)
+                        {
+                            return true;
+                        }
                         else if (Section.RegionType == RegionTypeEnum.ElementSetName)
                         {
                             FeElementSet elementSet = _controller.Model.Mesh.ElementSets[Section.RegionName];
@@ -628,9 +672,14 @@ private bool CheckSectionElementTypes()
                         {
                             return true;
                         }
+                        else if (Section.RegionType == RegionTypeEnum.ReferencePointName)
+                        {
+                            return true;
+                        }
                         else if (Section.RegionType == RegionTypeEnum.Selection)
                         {
-                            if (Section.CreationIds != null)
+                            if (Section is PointMassSection) return Section.CreationIds != null;
+                            else if (Section.CreationIds != null)
                             {
                                 int partId;
                                 BasePart part;
@@ -657,9 +706,75 @@ private bool CheckSectionElementTypes()
                 return false;
             }
         }
+private string[] GetPartNamesToSetCompositeShellElementTypes()
+        {
+            string[] partNamesToChangeElementType;
+            string[] partNamesToMesh;
+            _controller.Model.GetCompositeShellElementTypeParts(GetRegionElementIds(), out partNamesToChangeElementType,
+                                                                out partNamesToMesh);
+            string text = "A composite shell section takes S8R and S6 elements only.";
+            if (partNamesToMesh.Length > 0)
+            {
+                text += " Mesh " + GetPartNamesText(partNamesToMesh) + " with parabolic shell elements";
+                if (partNamesToChangeElementType.Length > 0)
+                    text += " and set the element type of " + GetPartNamesText(partNamesToChangeElementType) +
+                            " to S8R and S6";
+                text += "." + Environment.NewLine + Environment.NewLine +
+                        "OK - save the section, which stays invalid until then" + Environment.NewLine +
+                        "Cancel - return to the dialog";
+                if (MessageBoxes.ShowWarningQuestionOKCancel(text) == DialogResult.Cancel)
+                    throw new CaeException("BreakOnApply");
+            }
+            else if (partNamesToChangeElementType.Length > 0)
+            {
+                text += " Set the element type of " + GetPartNamesText(partNamesToChangeElementType) + " to S8R and " +
+                        "S6? The element type applies to all elements of a part." + Environment.NewLine +
+                        Environment.NewLine +
+                        "Yes - change the element type and save the section" + Environment.NewLine +
+                        "No - save the section, which stays invalid until the element type is changed" +
+                        Environment.NewLine +
+                        "Cancel - return to the dialog";
+                DialogResult result = MessageBoxes.ShowWarningQuestionYesNoCancel(text);
+                if (result == DialogResult.Cancel) throw new CaeException("BreakOnApply");
+                else if (result == DialogResult.Yes) return partNamesToChangeElementType;
+            }
+            return new string[0];
+        }
+private string GetPartNamesText(string[] partNames)
+        {
+            return (partNames.Length == 1 ? "the part " : "the parts ") + string.Join(", ", partNames);
+        }
+private void SetCompositeShellElementTypes(string partName)
+        {
+            PartProperties partProperties = _controller.GetModelPart(partName).GetProperties();
+            if (partProperties.ParabolicQuadType != FeElementTypeParabolicQuad.None)
+                partProperties.ParabolicQuadType = FeElementTypeParabolicQuad.S8R;
+            if (partProperties.ParabolicTriaType != FeElementTypeParabolicTria.None)
+                partProperties.ParabolicTriaType = FeElementTypeParabolicTria.S6;
+            _controller.ReplaceModelPartPropertiesCommand(partName, partProperties);
+        }
+private int[] GetRegionElementIds()
+        {
+            Section section = Section;
+            if (section.RegionType == RegionTypeEnum.Selection)
+            {
+                if (section.CreationIds == null) return new int[0];
+                if (section.CreationData == null || section.CreationData.SelectItem != vtkSelectItem.Part)
+                    return section.CreationIds;
+                //
+                List<int> elementIds = new List<int>();
+                foreach (int geometryId in section.CreationIds)
+                {
+                    BasePart part = _controller.Model.Mesh.GetPartFromId(FeMesh.GetItemTypePartIdsFromGeometryId(geometryId)[2]);
+                    if (part != null) elementIds.AddRange(part.Labels);
+                }
+                return elementIds.ToArray();
+            }
+            return _controller.Model.GetElementIdsOfRegion(section);
+        }
 }
 
-// Source PrePoMax/Forms/43_Constraint/FrmConstraint.cs SHA256 61d6c794f7b256c1cf6ee48086fa817412e8423727bbee8f3294c826db436a51
+// Source PrePoMax/Forms/44_Constraint/FrmConstraint.cs SHA256 3e9513fded958105cddd282010eed9816c0483560b261180de51c86a8f3f4b5b
 public sealed class FrmConstraintRule : FormRule {
 private string[] _constraintNames;
 private string _constraintToEditName;
@@ -793,8 +908,9 @@ protected override void OnApply(bool onOkAddNew)
                             if (cyclicSymmetry.CreationData == null ||
                                 cyclicSymmetry.CreationIds == null ||
                                 cyclicSymmetry.CreationIds.Length == 0)
-                                throw new CaeException("The cyclic symmetry result expansion region selection must " +
-                                                       "contain at least one item.");
+                                throw new CaeException("Displayed sectors is larger than 1, so the result expansion " +
+                                                       "region must be defined. Select the region in the Result " +
+                                                       "expansion region category or set Displayed sectors to 1.");
                         }
                         else if (cyclicSymmetry.RegionType == RegionTypeEnum.PartName ||
                                  cyclicSymmetry.RegionType == RegionTypeEnum.ElementSetName)
@@ -940,7 +1056,7 @@ private string GetConstraintName(string namePrefix)
         }
 }
 
-// Source PrePoMax/Forms/45_ContactPair/FrmContactPair.cs SHA256 c0a2ad9c408cad29ca38bfe003acacf45a013e75a7d9728975e2d81e69d3693d
+// Source PrePoMax/Forms/46_ContactPair/FrmContactPair.cs SHA256 872b7002aef370da5dea0aa8bbb6f30b18a78f087c3ea69038fbe6c205f80915
 public sealed class FrmContactPairRule : FormRule {
 private string[] _contactPairNames;
 private string _contactPairToEditName;
@@ -1006,7 +1122,7 @@ private string GetContactPairName()
         }
 }
 
-// Source PrePoMax/Forms/46_Distribution/FrmDistribution.cs SHA256 fc3cfd52440b3c3f88ca5f8803b37d89098aed998791e4d8e73ddb64f1ab26dc
+// Source PrePoMax/Forms/47_Distribution/FrmDistribution.cs SHA256 d433fb4a7d5af61619b2007e30ba162b51740137aa4af7a04f7814ac63004d62
 public sealed class FrmDistributionRule : FormRule {
 private string[] _distributionNames;
 private string _distributionToEditName;
@@ -1091,7 +1207,7 @@ private string GetDistributionName(string name)
         }
 }
 
-// Source PrePoMax/Forms/47_Amplitude/FrmAmplitude.cs SHA256 9108d5659f804a56bb755f0323655aaf9b9e3e9c7825d01c044b258236d6b7d7
+// Source PrePoMax/Forms/48_Amplitude/FrmAmplitude.cs SHA256 2dab40f1bbaa4a4ec92053fbea65da5851e90a9cd675cf130b4479be9192b050
 public sealed class FrmAmplitudeRule : FormRule {
 private string[] _amplitudeNames;
 private string _amplitudeToEditName;
@@ -1154,7 +1270,7 @@ private string GetAmplitudeName(string name)
         }
 }
 
-// Source PrePoMax/Forms/48_InitialConditions/FrmInitialCondition.cs SHA256 2c7b527cc9fcbfb6fbc9a7824d2b16bfc2b5fceccf2548556e92658a42cbe848
+// Source PrePoMax/Forms/49_InitialConditions/FrmInitialCondition.cs SHA256 ddeca26e0b3f987765fc0defd258abd2221c9daf57953fede51db4664e7bc42d
 public sealed class FrmInitialConditionRule : FormRule {
 private string[] _initialConditionNames;
 private string _initialConditionToEditName;
@@ -1274,7 +1390,7 @@ private string GetInitialConditionName(string name)
         }
 }
 
-// Source PrePoMax/Forms/51_Step/FrmStep.cs SHA256 f7f18a8fc15716e09d27a3f0398e379a30e2917c42c2cd0100b9795f3359d033
+// Source PrePoMax/Forms/51_Step/FrmStep.cs SHA256 63c322c99c849b32f8f61b161baf7d75c514d167638eda0fbf505cae3b440b2a
 public sealed class FrmStepRule : FormRule {
 private string[] _stepNames;
 private string _stepToEditName;
@@ -1659,7 +1775,7 @@ private string GetStepName()
         }
 }
 
-// Source PrePoMax/Forms/52_HistoryOutput/FrmHistoryOutput.cs SHA256 5cef8937677e234b4946e216d31a65920ffaf9c218d938d14cc1fef9f95a082e
+// Source PrePoMax/Forms/52_HistoryOutput/FrmHistoryOutput.cs SHA256 1cb35c5529f660fcda8f0ce110c5b4f94b4e53ee2348ca79a580e97213e96928
 public sealed class FrmHistoryOutputRule : FormRule {
 private string[] _historyOutputNames;
 private string _historyOutputToEditName;
@@ -1765,7 +1881,7 @@ private string GetHistoryOutputName(string prefix)
         }
 }
 
-// Source PrePoMax/Forms/53_FieldOutput/FrmFieldOutput.cs SHA256 e31b0cb4cdaa2953ca9e0b356612a6f9613769bdb791ce6ad16714d76453d822
+// Source PrePoMax/Forms/53_FieldOutput/FrmFieldOutput.cs SHA256 c0ae08143d70ef614fedaa4481d6ad6b94f64ab2c1808c843ca63592729a9cdd
 public sealed class FrmFieldOutputRule : FormRule {
 private string[] _fieldOutputNames;
 private string _fieldOutputToEditName;
@@ -1841,7 +1957,7 @@ private string GetFieldOutputName(string prefix)
         }
 }
 
-// Source PrePoMax/Forms/54_BoundaryConditions/FrmBC.cs SHA256 8d96e6af83b727e2cd6697dcf7b26837e428c72ed76e7d503704d4dae42bfda5
+// Source PrePoMax/Forms/54_BoundaryConditions/FrmBC.cs SHA256 03ef2a87237d1b735d8915f4059d119dd62272f2e61a04dabc6e8e3778cc9553
 public sealed class FrmBCRule : FormRule {
 private string[] _boundaryConditionNames;
 private string _boundaryConditionToEditName;
@@ -1999,7 +2115,7 @@ private string GetBoundaryConditionName(string baseName)
         }
 }
 
-// Source PrePoMax/Forms/55_Load/FrmLoad.cs SHA256 292183e6d20989d1e8790396b7552fb5de1338ae8f621673ef8dd34c77192070
+// Source PrePoMax/Forms/55_Load/FrmLoad.cs SHA256 a63416497cc9d9c761c096bcf8af3ba142a72e2ec2729456b5a4761fd6b52d73
 public sealed class FrmLoadRule : FormRule {
 private string[] _loadNames;
 private string _loadToEditName;
@@ -2443,7 +2559,7 @@ private string GetLoadName(string name)
         }
 }
 
-// Source PrePoMax/Forms/56_DefinedField/FrmDefinedField.cs SHA256 de47392a069ef2d1e86cf4c47608c858a2de92bf9fdfa0a9299517c986805fef
+// Source PrePoMax/Forms/56_DefinedField/FrmDefinedField.cs SHA256 2ad2418d1eb42a0bf11ecb95e955d21e3f62b25a424a0a9403a9c62c39c743c1
 public sealed class FrmDefinedFieldRule : FormRule {
 private string[] _definedFieldNames;
 private string _definedFieldToEditName;
@@ -2531,7 +2647,7 @@ private string GetDefinedFieldName(string name)
         }
 }
 
-// Source PrePoMax/Forms/21_FEModel/FrmModelProperties.cs SHA256 a6d1f1367f12a4a979261fe18bfe01bc05413d4a4b590e92c9bbf71efa1178de
+// Source PrePoMax/Forms/21_FEModel/FrmModelProperties.cs SHA256 35a64b13c49373afc22adfcc0d6098620acc181b1f6b53eddd186e96a16d5a8e
 public sealed class ModelPropertiesRule : FormRule {
  ViewModelProperties _viewModelProperties;
  public ModelPropertiesRule(Controller controller,string step,string name):base(controller,step,name) {
@@ -2576,7 +2692,7 @@ protected override void OnApply(bool onOkAddNew)
         }
 }
 
-// Source PrePoMax/Forms/00_Parameters/FrmEquationParameters.cs SHA256 026ed96143a2826c35a71c754d75599ee021662fc38cac5678f098e62477bd7d
+// Source PrePoMax/Forms/00_Parameters/FrmEquationParameters.cs SHA256 c3a9b3cc4b20f56701742c2c8dfd8323408be21b07e8ca3e6d1f2233b8bf5a34
 public sealed class ParameterEditSession {
  readonly Controller _controller;
  readonly List<ViewEquationParameter> _parameters=[];
@@ -2699,7 +2815,7 @@ private bool AreParametersChanged(List<EquationParameter> parameters)
         }
 }
 
-// Source PrePoMax/Forms/51_Step/Controls/FrmStepControls.cs SHA256 4308cb4a2f800f6169d99fefa46bc5d4ab7153c266d38c4e550173329562a686
+// Source PrePoMax/Forms/51_Step/Controls/FrmStepControls.cs SHA256 c00f9f1eb0f914fc98f801a9fd6b6c744e673e7aca8739da3fe1cb795565bed5
 public sealed class ControlsEditSession {
  readonly Controller _controller; readonly string _stepName;
  StepControls _stepControls; bool _propertyItemChanged; bool _showWarning;

@@ -63,7 +63,8 @@ The root object available in the Python console is `pmx`.
   name space of their own; the parts, sets, surfaces and reference points share one.
 - A name given to `add_*`, `replace_*` or `rename` is checked **before anything is recorded**, and is refused when
   it is empty, starts or ends with a space, contains a space or a character other than letters, digits and
-  `- _ ( )`, or contains no letter. Materials and element sets also take `@`; parameter names do not take `-`.
+  `- _ ( )`, or contains no letter. Materials and element sets also take `@`, analyses take `+`; parameter names do
+  not take `-`.
   The name an item already carries is not checked again, so an item named by an import can still be replaced.
 - A value the dialog takes as an expression takes a number or an equation string. A number is passed on as the
   shortest text that reads back as the same double, so nothing is lost on the way in; the model itself then keeps a
@@ -738,7 +739,7 @@ model item.
 | --- | --- |
 | `pmx.new_model(model_space, unit_system, discard_changes=False)` | Creates a new empty model. `Undefined` is refused for either argument, and so is the call while an analysis is running. In a session with a window a model with unsaved changes is refused unless `discard_changes=True`; a session without a window discards them. **Console only.** |
 | `pmx.open(file_name, discard_changes=False)` | Opens a .pmx or .pmh model file, which replaces the command history; a .pmh history is regenerated whole, as **File - Open** regenerates it. A result file is refused and named to `pmx.results.open`, and so is the call while an analysis is running. In a session with a window a model with unsaved changes is refused unless `discard_changes=True`; a session without a window discards them. **Console only.** |
-| `pmx.import_file(file_name, only_materials=False)` | Imports a geometry or mesh file into the current model. It takes the types the import dialog takes - `.stp`, `.step`, `.igs`, `.iges`, `.brep`, `.stl`, `.unv`, `.vol`, `.inp`, `.mesh`, `.obj` and `.pmp` - and refuses another naming `file_name`; `only_materials=True` imports the materials of an `.inp` file and is refused for another type. As the dialog does, it refuses with "There is no model to import into. First create a new model." while the model space or the unit system is undefined: create the model with `pmx.new_model`, or set `model_space` and `unit_system` first. A `.pmp` file is refused as `parameters.import_from_file` refuses it. |
+| `pmx.import_file(file_name, only_materials=False)` | Imports a geometry or mesh file into the current model. It takes the types the import dialog takes - `.stp`, `.step`, `.igs`, `.iges`, `.brep`, `.stl`, `.unv`, `.vol`, `.inp`, `.mesh`, `.obj` and `.pmp` - and refuses another naming `file_name`; `only_materials=True` imports the materials of an `.inp` file and is refused for another type. As the dialog does, it refuses with "There is no model to import into. First create a new model." while the model space or the unit system is undefined: create the model with `pmx.new_model`, or set `model_space` and `unit_system` first. A `.pmp` file is refused as `parameters.import_from_file` refuses it. An import that adds parts points the camera to the front view fitted to the model, as the dialog does, so a view the script set before it is replaced. |
 | `pmx.save(file_name)` | Saves the model to a .pmx file. |
 | `pmx.work_directory` | The session's work directory (the -w of a script or regeneration run or of a session without a window, otherwise the settings), read only; a replayed journal writes the files its session saved or exported here, and a relative file name given to the API is taken from here. A session without one raises, telling to pass `-w` or set it in Settings - Solver. |
 | `pmx.is_rerun` | True while a recorded script runs again rather than on the run that recorded it - Regenerate, Undo, Redo, OK of Edit History or a batch regeneration (`-r`) - so the script can accept what its first run left behind, as a journal's `_output` accepts the files that run wrote. False on the first run, in the console and in an automation call. Read only. |
@@ -832,6 +833,7 @@ Reached as `pmx.model`. It mirrors the application model tree, so `results`, `jo
 | `initial_conditions` | The initial conditions of the model. |
 | `materials` | The materials of the model. |
 | `sections` | The sections of the model. |
+| `material_orientations` | The material orientations of the shell elements of the model. |
 | `constraints` | The constraints of the model. |
 | `surface_interactions` | The surface interactions of the model. |
 | `contact_pairs` | The contact pairs of the model. |
@@ -941,8 +943,8 @@ operation on model or geometry parts refuses a part named twice in `part_names` 
 A collection is indexed **by name only**. Positional access is `list(collection)[index]` or
 `get_names()`, because two indexers cannot be resolved from the Python side. `duplicate`,
 `activate` and `deactivate` raise a clear error in the areas that have no such command - parameters
-cannot be duplicated, and only materials, initial conditions, constraints, contact pairs, mesh setup
-items, model parts, steps and the step content can be activated and deactivated. Each item of those
+cannot be duplicated, and only materials, material orientations, initial conditions, constraints, contact pairs,
+mesh setup items, model parts, steps and the step content can be activated and deactivated. Each item of those
 collections reads its state back as `active`.
 
 ### `Geometry`
@@ -1441,6 +1443,14 @@ elements rather than refusing the mesh: it writes `<part> has <n> inverted or de
 to the output window, where the line is a link that highlights them, and highlights them once
 meshing ends. `mesh.generate` reports such a part as meshed, so a script finds the elements here.
 
+`ModelPart` also adds `get_mass()`, the mass of the part as the Query dialog computes it from the densities of the
+materials of its sections, or `None` when no element has a section with a density. A shell element weighs its area
+times the section thickness, and a composite shell element the sum over its layers, a mirrored symmetric layup
+included, of each layer's thickness times the density of its material. `get_mass_warnings()` returns the warnings
+of that computation as a `list[str]`: elements without a section, without a density - for a composite shell, any
+layer material without one, which excludes its elements - or of an unsupported type are left out of the mass, and a
+temperature dependent density or a shell offset is approximated.
+
 #### `FaceData`, `EdgeData` and `VertexData`
 
 The topology of one part, read off the visualization the application keeps for picking. It is how a
@@ -1579,13 +1589,14 @@ pmx.model.initial_conditions.add_temperature('IC-1', nodes, 20)
 
 `Material` exposes `name`, `description`, `active`, `valid`, `temperature_dependent`, `property_count`, `get_properties()` and
 `get_property_types()`, which names every property after the `pmx.create` maker that makes it: `elastic`, `density`,
-`elastic_with_density`, `elastic_engineering_constants`, `elastic_lamina`, `plastic`, `slip_wear`, `specific_heat`,
-`thermal_conductivity` or `thermal_expansion`. `get_properties()` returns detached `MaterialProperty` copies as a plain Python list, and the
+`elastic_with_density`, `elastic_engineering_constants`, `elastic_lamina`, `plastic`, `slip_wear`,
+`composite_strength`, `specific_heat`, `thermal_conductivity` or `thermal_expansion`. `get_properties()` returns detached `MaterialProperty` copies as a plain Python list, and the
 list can be passed straight to `materials.replace`:
 `pmx.model.materials.replace('Steel', properties=pmx.model.materials['Steel'].get_properties())`.
 
 Every `pmx.create` property maker (`elastic`, `density`, `elastic_with_density`, `elastic_engineering_constants`,
-`elastic_lamina`, `plastic`, `slip_wear`, `specific_heat`, `thermal_conductivity`, `thermal_expansion`) returns a
+`elastic_lamina`, `plastic`, `slip_wear`, `composite_strength`, `specific_heat`, `thermal_conductivity`,
+`thermal_expansion`) returns a
 `MaterialProperty`:
 
 | Member | Description |
@@ -1627,11 +1638,13 @@ dependent with the rows the analysis uses.
 | --- | --- |
 | `add_solid(name, material_name, region, thickness=None)` | Solid section. The selection target is `elements` or `parts`, as the dialog picks them. The thickness is written only in a 2D model, where it is 1 when not given, so it is refused in a 3D one. |
 | `add_shell(name, material_name, region, thickness=1, offset=0)` | Shell section. The selection target is `elements` or `parts`. The offset of the mid surface from the selected geometry is given in shell thicknesses. |
+| `add_composite_shell(name, region, layers, offset=0, symmetric=False)` | Composite shell section. The selection target is `elements` or `parts`. Every row of `layers` is `[thickness, material_name, angle_deg]`, from layer 1, on the side opposite to the shell normal, up along the normal; a thickness must be larger than 0, and a thickness or an angle may be an equation string. The angle turns material axis 1 about the normal from the material orientation that covers the element, or from the solver default, the projected global x axis. A `symmetric` layup is completed by its mirror image. The offset is given in total thicknesses. CalculiX takes a composite shell of S8R and S6 elements only, so a region of other elements is refused, naming the part and the element type to set. |
 | `add_membrane(name, material_name, region, thickness=1, offset=0)` | Membrane section. The selection target is `elements` or `parts`. The offset is given in membrane thicknesses. |
 | `add_point_mass(name, region, mass)` | Point mass section. The selection target is `nodes`. |
 | `add_distributed_mass(name, region, mass)` | Distributed mass section. The region is a selection or a named region; the selection target is `surfaces`. |
 | `replace_solid(old_name, name=None, material_name=None, region=None, thickness=None)` | Replaces a solid section. A value that is not given is kept. |
 | `replace_shell(old_name, name=None, material_name=None, region=None, thickness=None, offset=None)` | Replaces a shell section. |
+| `replace_composite_shell(old_name, name=None, region=None, layers=None, offset=None, symmetric=None)` | Replaces a composite shell section. `layers` replaces all layers at once. |
 | `replace_membrane(old_name, name=None, material_name=None, region=None, thickness=None, offset=None)` | Replaces a membrane section. |
 | `replace_point_mass(old_name, name=None, region=None, mass=None)` | Replaces a point mass section. |
 | `replace_distributed_mass(old_name, name=None, region=None, mass=None)` | Replaces a distributed mass section. The region is a surface region, as on `add_distributed_mass`. |
@@ -1652,11 +1665,40 @@ invalid, and the values the replace changes apply. A new region or material that
 A replacement is typed: replacing a solid section as a shell section is refused rather than silently
 turning it into one, with `The section 'X' is made by add_solid, so replace_shell cannot replace it.`
 
-`Section` exposes `name`, `item_type` (`'solid'`, `'shell'`, `'membrane'`, `'point_mass'` or `'distributed_mass'`), `material_name`, `region_name`, `region_type`, `thickness`
+`Section` exposes `name`, `item_type` (`'solid'`, `'shell'`, `'composite_shell'`, `'membrane'`, `'point_mass'` or `'distributed_mass'`), `material_name` (of a composite shell section, the material of layer 1), `region_name`, `region_type`, `thickness` (of a composite shell section the total, read only),
+`layers` and `symmetric` (of a composite shell section, otherwise `None`; a layer value entered as an expression reads back as that expression),
 (of a shell or membrane section, or of a solid section in a 2D model, otherwise `None`, as the replace of the type takes it),
 `offset` (of a shell or membrane section, otherwise `None`), `mass` (of a mass section, otherwise `None`), `valid` and
 `get_equations()`, the expressions `thickness`, `offset` and `mass` were entered with, as a `dict[str, str]`; a value
 entered as a plain number is left out, and the property of the same name returns it.
+
+### `MaterialOrientations`
+
+The material axes of shell elements, which the solver uses for an orthotropic material. A shell section whose
+elements a material orientation covers is written with an `*ORIENTATION` per group of elements whose axes agree;
+an element no orientation covers keeps the solver default, the global x axis projected onto the shell.
+
+| Member | Description |
+| --- | --- |
+| `add(name, region, coordinate_system_name=None, reference_axis=None, rotation_angle_deg=0, symbol_density=50)` | Adds a material orientation. The region is a selection or a named region of shell parts or shell elements; the selection target is `elements` or `parts`. `reference_axis` is `X`, `Y` or `Z` and defaults to `X`; `coordinate_system_name` defaults to `Global`. `symbol_density` is the density of the material axes symbols shown when the orientation is highlighted, as a percentage of the full density, which does not depend on the mesh size; a whole number from 0 to 100. |
+| `replace(old_name, name=None, region=None, coordinate_system_name=None, reference_axis=None, rotation_angle_deg=None, symbol_density=None)` | Replaces a material orientation. A value that is not given is kept. |
+
+The reference axis of the coordinate system - at the point of the element for a cylindrical one - is projected
+onto every shell element at the point CalculiX uses, the centre of a quadrilateral and the first node of a
+triangle, and becomes the material axis 1; axis 3 is the shell normal given by the node order, and axis 2 completes
+the right-handed system. A reference axis closer than 0.1 degrees to the normal is replaced by the z axis of the
+coordinate system, or by its x axis when the reference axis is the z axis, as the solver does. `rotation_angle_deg`
+turns axis 1 about the normal.
+
+As the dialog does, a region that is not made of shell parts or shell elements is refused, on an add and on the
+orientation a replace ends with. Where regions overlap, an element takes the later active orientation, as a later
+section does, and overlapping makes no orientation invalid. A replace that keeps a named region or a coordinate system a rename or a remove took
+away - one it is not given, or one given by the name the orientation holds - is accepted: the orientation keeps the
+reference and stays invalid.
+
+`MaterialOrientation` exposes `name`, `region_name`, `region_type`, `coordinate_system_name`, `reference_axis`,
+`rotation_angle_deg`, `symbol_density`, `active`, `valid` and `get_equations()`, the expression `rotation_angle_deg` was entered with,
+as a `dict[str, str]`; a value entered as a plain number is left out, and the property of the same name returns it.
 
 ```python
 elements = pmx.create.selection_by_ids('femodel', 'elements', 'elements', [1, 2, 3])
@@ -1729,12 +1771,12 @@ and `get_face_ids()` (an `IntList`).
 
 | Member | Description |
 | --- | --- |
-| `add(name, coordinates, name_visible=None, color=None)` | Creates a reference point at `[x, y, z]`. In a 2D model the point is a 2D point, as the dialog makes it, and a non-zero `z` is refused. |
-| `add_from_selection(name, created_from, selection, name_visible=None, color=None)` | Creates a reference point whose coordinates the mesh computes from selected points. |
-| `add_from_region(name, created_from, region_type, region_name, name_visible=None, color=None)` | Creates a reference point whose coordinates the mesh computes from a named region. |
-| `replace(old_name, name=None, coordinates=None, name_visible=None, color=None)` | Replaces an existing reference point. Coordinates that are not given are kept, and giving them turns the point back into a coordinate point. |
-| `replace_from_selection(old_name, name=None, created_from=None, selection=None, name_visible=None, color=None)` | Replaces a reference point by selected mesh points. |
-| `replace_from_region(old_name, name=None, created_from=None, region_type=None, region_name=None, name_visible=None, color=None)` | Replaces a reference point by a named region. |
+| `add(name, coordinates, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Creates a reference point at `[x, y, z]`. In a 2D model the point is a 2D point, as the dialog makes it, and a non-zero `z` is refused. |
+| `add_from_selection(name, created_from, selection, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Creates a reference point whose coordinates the mesh computes from selected points. |
+| `add_from_region(name, created_from, region_type, region_name, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Creates a reference point whose coordinates the mesh computes from a named region. |
+| `replace(old_name, name=None, coordinates=None, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Replaces an existing reference point. Coordinates that are not given are kept, and giving them turns the point back into a coordinate point. |
+| `replace_from_selection(old_name, name=None, created_from=None, selection=None, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Replaces a reference point by selected mesh points. |
+| `replace_from_region(old_name, name=None, created_from=None, region_type=None, region_name=None, name_visible=None, color=None, node_id=None, rotation_node_id=None)` | Replaces a reference point by a named region. |
 | `hide(names)`, `show(names)` | Reference point visibility. |
 
 `created_from` decides which of the two add methods applies. The three point modes `OnPoint`,
@@ -1746,7 +1788,12 @@ type is `NodeSetName` or `SurfaceName`.
 `[red, green, blue]`, `[red, green, blue, alpha]` or a color name. Both are part of the stored definition and keep
 their defaults when they are not given.
 
-`ReferencePoint` exposes `name`, `created_from`, `name_visible`, `color`, `visible`, `valid`,
+`node_id` and `rotation_node_id` are the ids of the reference node and of the rotation node a rigid body uses in the
+input file. They are fixed, so user keywords can refer to them: an add takes the next free ids above the mesh and the
+other reference points for the ones it is not given, a replace keeps the stored ones, and the mesh never gives a node
+either id. An id a mesh node or another reference point holds is refused, as are two equal ids.
+
+`ReferencePoint` exposes `name`, `created_from`, `name_visible`, `color`, `node_id`, `rotation_node_id`, `visible`, `valid`,
 `get_coordinates()` (`[x, y, z]`), `get_equations()` (a `dict[str, list]` with the coordinates under
 `coordinates`, the argument of `add` and `replace`, when any of them was entered as an expression; its plain
 coordinates are numbers, and a point without an expression returns an empty `dict`) and `get_construction()` (a
@@ -1836,7 +1883,7 @@ returns the collections a view supports:
 | View | `item_type` |
 | --- | --- |
 | `geometry` | `parts`, `mesh_setup_items` |
-| `femodel` | `parts`, `node_sets`, `element_sets`, `surfaces`, `reference_points`, `coordinate_systems`, `materials`, `sections`, `constraints`, `surface_interactions`, `contact_pairs`, `distributions`, `amplitudes`, `initial_conditions`, `jobs`, and the step owned `history_outputs`, `field_outputs`, `boundary_conditions`, `loads`, `defined_fields` |
+| `femodel` | `parts`, `node_sets`, `element_sets`, `surfaces`, `reference_points`, `coordinate_systems`, `materials`, `sections`, `material_orientations`, `constraints`, `surface_interactions`, `contact_pairs`, `distributions`, `amplitudes`, `initial_conditions`, `jobs`, and the step owned `history_outputs`, `field_outputs`, `boundary_conditions`, `loads`, `defined_fields` |
 | `results` | `parts`, `node_sets`, `element_sets`, `surfaces`, `reference_points`, `coordinate_systems` |
 
 A step owned collection also takes `step_name`, the step that owns it; every other collection refuses
@@ -2030,6 +2077,7 @@ slave one; both are a `Selection` or a `Region`, and both name surfaces.
 | --- | --- |
 | `add(name, surface_interaction_name, master_region, slave_region, method=None, small_sliding=None, adjust=None, adjustment_size=None, master_color=None, slave_color=None)` | Adds a contact pair. `method` is `NodeToSurface`, `SurfaceToSurface`, `Mortar` or `Massless`. |
 | `replace(old_name, name=None, ...)` | Replaces a contact pair. A value that is not given keeps what the contact pair carries. A `method` other than `NodeToSurface` on a pair with small sliding is refused unless `small_sliding=False` is given too, because no other method supports it. |
+| `search(distance, angle_deg=35, pair_type='Tie', group_by='ByParts', solid=True, shell=True, shell_edges=True, ignore_hidden=True)` | Searches the mesh for touching faces of different parts, as **Interaction > Search Contact Pairs** does, and returns a `ContactSearchResult` without changing the model. See below. |
 | `swap_master_slave(names)` | Swaps the two sides. |
 | `merge_by_master_slave(names)` | Merges the contact pairs that share a master and a slave surface. |
 | `hide(names)`, `show(names)` | Symbol visibility. |
@@ -2053,6 +2101,95 @@ the `Default` size the dialog offers, is refused together with `adjust=False`, a
 The dialog hides the size while `adjust` is `False`, so it then reads back as `None` too, and the stored size comes
 back when the adjustment is turned on again. A replace that does not change the method keeps the small sliding the
 pair stores, even where the method does not write it; only a change of method clears it.
+
+#### Searching for contact pairs
+
+`search` finds the faces of different parts that lie within `distance` of each other and face each other within
+`angle_deg`, the way the **Search Contact Pairs** dialog does, and takes the dialog's settings as arguments, with
+the dialog's defaults. `distance` is in model units and larger than 0, and `angle_deg` lies between 0 and 180.
+`pair_type` is `Tie` or `Contact`. `group_by` is `None`, one pair for every two touching faces, `ByParts`, one pair
+for every two touching parts, or `ByContactGraph`, which merges the faces that share nodes so that a node is a slave
+node only once. `solid`, `shell` and `shell_edges` choose which faces are searched, and at least one of them must
+stay `True`; `ignore_hidden` leaves hidden parts out. The search needs the mesh, and it records nothing.
+
+**The result follows the mesh and the geometry.** A recorded script that searches runs the search again when it is
+regenerated, on the mesh the model has then, so a changed geometry, or a mesh fine or coarse enough to move a gap
+across `distance`, finds other pairs, and they are named and numbered as they are found. That is intended: the ties
+follow the model. A script that must add the same pairs every time writes their `master_geometry_ids` and
+`slave_geometry_ids` to a file once and adds them from there; the geometry IDs number the faces of the geometry, so
+they hold across a remesh but not across a change of the geometry.
+
+### `ContactSearchResult`
+
+What `contact_pairs.search` found, a list of `FoundContactPair` that `len()`, iteration and a position index
+read. Nothing is in the model until `add` is called.
+
+| Member | Description |
+| --- | --- |
+| `pair_type` | `'Tie'` or `'Contact'`, as searched. |
+| `count` | The number of pairs found. |
+| `add(adjust=False, surface_interaction_name=None, method='SurfaceToSurface')` | Adds every pair found using command history, as **OK** of the dialog adds them, and returns the names of what it added as a `StringList`. |
+
+`add` gives every pair the settings of the dialog's lower half:
+
+- A **tie** takes the search `distance` as its position tolerance. An `unresolved` pair, a tie whose sides the
+  search could not tell apart, is added as a surface holding all its faces, for the sides to be picked by hand, and
+  its name is returned among the others. `surface_interaction_name` and `method` are refused for ties.
+- A **contact pair** needs `surface_interaction_name`, and takes the search `distance` as its adjustment size.
+  `method` is `NodeToSurface` or `SurfaceToSurface`, the two the dialog offers; change it afterwards with
+  `contact_pairs.replace`.
+- Pairs that share a name, or whose name the model already holds, are numbered as they are added, and the tree
+  and the symbols are updated once, after the last one. Calling `add` again adds the pairs again, numbered.
+
+### `FoundContactPair`
+
+One pair of a `ContactSearchResult`. It is not a model item; its regions can be given to `constraints.add_tie` or
+`contact_pairs.add`, which is how a script adds only some of the pairs.
+
+| Member | Description |
+| --- | --- |
+| `name` | The name the pair is added under, before numbering: the master part, `_to_` and the slave part, or `Item` for a name that would be too long. |
+| `geometry_type` | The kind of the master and of the slave faces joined by a dash, such as `Solid-Solid` or `Shell-Edge`, each `Solid`, `Shell`, `Edge` for shell edge faces or `Mixed`. An unresolved pair names its one side. |
+| `unresolved` | `True` for a tie whose sides the search could not tell apart; all its faces are on the master side. |
+| `master_region` | The master faces, as a new `'femodel'` surface `Selection` of geometry IDs. |
+| `slave_region` | The slave faces the same way, or `None` for an unresolved pair. |
+| `master_geometry_ids` | The geometry IDs of the master faces, sorted, as an `IntList`. The `'geometry'` selection source takes them back. |
+| `slave_geometry_ids` | The geometry IDs of the slave faces the same way, or an empty list for an unresolved pair. |
+| `master_part_names` | The names of the parts of the master faces, sorted, as a `StringList`. |
+| `slave_part_names` | The names of the parts of the slave faces the same way, or an empty list for an unresolved pair. |
+
+The regions resolve to element faces, so `master_region.get_ids()` returns element face IDs; the geometry IDs a
+found pair is made of are read from `master_geometry_ids` and `slave_geometry_ids`.
+
+```python
+found = pmx.model.contact_pairs.search(0.01, angle_deg=35, pair_type='Tie', group_by='ByParts')
+print(len(found), 'pairs found')
+names = found.add()
+
+# Only the pairs between solids, one by one under names of the script's own
+for i, pair in enumerate(pmx.model.contact_pairs.search(0.01)):
+    if pair.geometry_type == 'Solid-Solid' and not pair.unresolved:
+        pmx.model.constraints.add_tie('Tie-%d' % (i + 1), pair.master_region, pair.slave_region,
+                                      position_tolerance=0.01)
+
+# Write the pairs to a file once, review it, and add the ties from it on every later run
+import json
+pairs = [{'name': pair.name,
+          'master_parts': list(pair.master_part_names), 'master_ids': list(pair.master_geometry_ids),
+          'slave_parts': list(pair.slave_part_names), 'slave_ids': list(pair.slave_geometry_ids)}
+         for pair in pmx.model.contact_pairs.search(0.01) if not pair.unresolved]
+with open('pairs.json', 'w') as f:
+    json.dump(pairs, f, indent=1)
+
+with open('pairs.json') as f:
+    for i, pair in enumerate(json.load(f)):
+        # A shell edge face needs the option the found regions carry
+        master = pmx.create.selection_by_ids('femodel', 'surfaces', 'geometry', pair['master_ids'])
+        slave = pmx.create.selection_by_ids('femodel', 'surfaces', 'geometry', pair['slave_ids'])
+        master.configure(enable_shell_edge_faces=True)
+        slave.configure(enable_shell_edge_faces=True)
+        pmx.model.constraints.add_tie('Tie-%d' % (i + 1), master, slave)
+```
 
 ## Steps and step content
 
@@ -2444,13 +2581,14 @@ only makes the detached **parts** that those methods take as arguments, and reco
 | `elastic(youngs_modulus, poissons_ratio=None)` | Elastic property. Two values, or a list of `[E, v, temperature]` rows; `poissons_ratio` is required with a single `youngs_modulus`. Any value of this and of every other material property maker may be an equation string. |
 | `elastic_with_density(youngs_modulus, poissons_ratio, density)` | Combined elastic and density property. |
 | `elastic_engineering_constants(constants)` | Orthotropic elastic. Rows of `[E1, E2, E3, v12, v13, v23, G12, G13, G23, temperature]`, each physically stable, with strictly increasing temperatures. |
-| `elastic_lamina(constants)` | Lamina elastic. Rows of `[E1, E2, v12, G12, G13, G23, temperature]`, each physically stable, with strictly increasing temperatures. |
+| `elastic_lamina(constants)` | Lamina elastic. Rows of `[E1, E2, v12, G12, G13, G23, temperature]`, each physically stable, with strictly increasing temperatures. The solver gets a transversely isotropic material: E3 = E2, v13 = v12 and v23 = E2 / (2 G23) - 1, so a G23 that makes the completed constants unstable is refused. |
 | `density(density)` | Density. One value, or rows of `[density, temperature]`. |
 | `plastic(stress_strain, hardening=None)` | Plastic. Rows of `[stress, strain, temperature]`. `hardening` is `Isotropic`, `Kinematic` or `Combined` and defaults to `Isotropic`. |
 | `specific_heat(specific_heat)` | Specific heat. One value, or rows of `[value, temperature]`. |
 | `thermal_conductivity(thermal_conductivity)` | Thermal conductivity, same shape. |
 | `thermal_expansion(thermal_expansion, zero_temperature=None)` | Thermal expansion, same shape. `zero_temperature` is the temperature the expansion starts from and defaults to 20 in model units. |
 | `slip_wear(hardness, wear_coefficient)` | Slip wear property. |
+| `composite_strength(tensile_strength_1, compressive_strength_1, tensile_strength_2, compressive_strength_2, shear_strength_12, shear_strength_23, tsai_wu_coefficient=None)` | The ply strengths the composite failure criteria use; the solver does not use them. Index 1 is the fiber direction and 2 the transverse direction. Every strength must be larger than 0, the compressive ones given as positive values. `tsai_wu_coefficient` is the normalized Tsai-Wu interaction coefficient F12*, larger than -1 and smaller than 1, and defaults to -0.5. The property has no temperature. |
 | `region(region_type, name)` | Names an existing region of the model. Only the region types a named region of the model carries are taken; `None`, `NodeId`, `ElementId`, `Selection` and `ContactPair` are refused. |
 | `split_tool_line_by_two_points(points=None, splitter=None)` | A line drawn on the surfaces through two points, for `split_face` only. |
 | `split_tool_plane_by_three_points(points=None, splitter=None, offset=0)` | A plane through three points. |
@@ -3066,6 +3204,9 @@ Collection of user-defined result field outputs. These are postprocessing defini
 | `create_field_output_envelope(name, field_name, component_name)` | Creates an envelope draft with `MAX`, `MIN`, and `AVERAGE` components. |
 | `create_field_output_equation(name, equation, unit="/")` | Creates an equation draft. References use case-sensitive `FIELD.COMPONENT` names. |
 | `create_field_output_coordinate_system_transform(name, field_name, coordinate_system_name)` | Creates a coordinate-system transform draft for a vector or tensor field. |
+| `create_field_output_material_axes(name, field_name)` | Creates a draft of a tensor field in the material axes of the shells: axis 1 and 2 in the shell plane, axis 3 along the normal, as the material orientation of each shell element gives them, turned by the layer angle on each layer of a composite shell. It has the components of the source field, `S11` to `S31` for `STRESS`, and its invariants. A node off the shells reads NaN. |
+| `create_field_output_shell_in_plane_state(name, field_name, quantity='Stress')` | Creates a draft of the in-plane state of the shells, in the material axes of the shell elements and of the layers of composite shells, neglecting the components through the thickness. `quantity` `Stress` takes the stresses of a stress field such as `STRESS` as CalculiX solves them in 3D; `PlaneStressFromStrain` the plane stresses the elastic constants of the ply material - E1, E2, v12 and G12 of its first temperature - give the in-plane strains of a strain field such as `TOSTRAIN`, as classical lamination theory computes them, a node whose material has no elastic constants reading NaN; and `Strain` the in-plane strains of a strain field. A stress field takes only `Stress` and a strain field, one without a unit, only the other two: any other pairing is refused naming `field_name`. The components are `S11`, `S22` and `S12` of a stress, or `E11`, `E22` and the tensor shear `E12` of a strain, the in-plane principal values `PRINCIPAL_MAX` and `PRINCIPAL_MIN`, the maximum in-plane shear `SHEAR_MAX`, and `ANGLE`, the angle in degrees from axis 1 to the maximum principal direction, in (-90, 90]. A node whose in-plane shear is below 0.1 % of half the difference of the two normal components is in its principal axes and reads exactly 0 or 90, and a node whose in-plane state is practically zero - its maximum shear below a millionth of the largest in the field - has no principal direction and reads NaN in `ANGLE`. A node off the shells reads NaN. |
+| `create_field_output_composite_failure(name, field_name, criterion, quantity='Stress')` | Creates a draft of a failure criterion of the plies, evaluated from the in-plane stresses in the material axes with the composite strength of the material of each ply; `quantity` takes them as `create_field_output_shell_in_plane_state` does, `Stress` or `PlaneStressFromStrain` - `Strain` is refused naming `quantity`, since a criterion evaluates stresses. `criterion` is `MaxStress`, `TsaiHill`, `TsaiWu` or `Hashin` (Hashin 1980, plane stress). The components are `FAILURE_INDEX`, `RESERVE_FACTOR`, the factor the stresses can be multiplied by to reach failure, NaN where no factor does, and `MODE`, the governing mode: 1 fiber tension, 2 fiber compression, 3 matrix tension, 4 matrix compression, 5 in-plane shear, and 0 for `TsaiHill` and `TsaiWu`, which have no modes. `MAX_FAILURE_INDEX` is the largest failure index of all layers of a shell element, shown on each of its layers, and `CRITICAL_LAYER` the layer it is reached in; a node takes the largest of the shell elements around it. A node off the shells or of a material without a composite strength reads NaN. |
 | `create_median_filter(source="AllNodes", number_of_layers=1, number_of_iterations=1)` | Creates a median filter. `source` can be `"AllNodes"` or `"SurfaceNodes"`, in any case. |
 | `create_average_filter(source="AllNodes", number_of_layers=1, number_of_iterations=1)` | Creates an average filter. `source` can be `"AllNodes"` or `"SurfaceNodes"`, in any case. |
 | `create_smooth_filter(source="AllNodes", number_of_layers=1, number_of_iterations=1)` | Creates a smooth filter. `source` can be `"AllNodes"` or `"SurfaceNodes"`, in any case. |
@@ -3207,7 +3348,8 @@ result.field_outputs.export_to_csv(
 
 Every `create_*` above has a single call counterpart that creates the definition and adds it to the
 result in one step: `add_limit`, `add_envelope`, `add_equation` and
-`add_coordinate_system_transform`, each taking the arguments of its `create_*` plus the optional
+`add_coordinate_system_transform`, `add_material_axes`, `add_shell_in_plane_state` and `add_composite_failure`, each
+taking the arguments of its `create_*` plus the optional
 `filter1` and `filter2`, and each with a matching `replace_*` that takes `old_name` first.
 
 ```python
@@ -3217,6 +3359,27 @@ outputs.add_equation('SEQV2', 'STRESS.MISES * 2')
 # The same thing in two steps, which still works
 draft = outputs.create_field_output_equation('SEQV3', 'STRESS.MISES * 3')
 outputs.add(draft)
+```
+
+The shell outputs - material axes, shell in-plane state and composite failure - need the model the results were
+solved from: when the results are opened, the shell sections and material orientations of the model give the material
+axes of every shell element, and of every layer of a composite shell, whose layer elements CalculiX writes after all
+others. Each layer of a composite shell section is then a result element set named `<section name>_LAYER-<n>`, layer 1
+on the negative side of the normal, the mirrored layers of a symmetric layup numbered on from there. Since a layer has
+nodes of its own, it is also a result part of its own, named `<model part>_Layer-<n>` after the model part it lies
+on - `<model part>_<section name>_Layer-<n>` when the part holds layers of more than one section - and the layers of a
+model part are gathered in a group of the results parts tree named after it, or `<model part>_Layers` when a result
+part still has that name; `pmx.model.tree.get_layout('results', 'parts')` lists it. Results opened without such a model, or a field that is not a tensor with all its
+components in the global axes, are refused naming `field_name`. A `TensorPlot` of the material axes draws `S11`, `S22`
+and `S33` along the material axes of each node and the principal values along their directions, and one of the shell
+in-plane state draws its first two components along axes 1 and 2 and `PRINCIPAL_MAX` and `PRINCIPAL_MIN` along the in-plane
+principal directions; the other components and the composite failure have no direction to draw.
+
+```python
+outputs = pmx.results.current.field_outputs
+outputs.add_material_axes('PLY', 'STRESS')
+outputs.add_composite_failure('TSAI_WU', 'STRESS', 'TsaiWu')
+outputs.add_shell_in_plane_state('CLT', 'TOSTRAIN', quantity='PlaneStressFromStrain')
 ```
 
 A results `replace_*` **re-specifies the whole definition**, unlike a model `replace_*` where a value
@@ -3278,6 +3441,36 @@ Coordinate-system transform draft returned by `create_field_output_coordinate_sy
 | `field_name` | Source vector or tensor field name. |
 | `coordinate_system_name` | Result coordinate system name. |
 
+### `FieldOutputMaterialAxesDraft`
+
+Material axes draft returned by `create_field_output_material_axes`.
+
+| Member | Description |
+| --- | --- |
+| `name` | Field output name. |
+| `field_name` | Source tensor field name. |
+
+### `FieldOutputShellInPlaneStateDraft`
+
+Shell in-plane state draft returned by `create_field_output_shell_in_plane_state`.
+
+| Member | Description |
+| --- | --- |
+| `name` | Field output name. |
+| `field_name` | Source tensor field name. |
+| `quantity` | `Stress`, `PlaneStressFromStrain` or `Strain`. |
+
+### `FieldOutputCompositeFailureDraft`
+
+Composite failure draft returned by `create_field_output_composite_failure`.
+
+| Member | Description |
+| --- | --- |
+| `name` | Field output name. |
+| `field_name` | Source tensor field name. |
+| `criterion` | `MaxStress`, `TsaiHill`, `TsaiWu` or `Hashin`. |
+| `quantity` | `Stress` or `PlaneStressFromStrain`. |
+
 ### `FieldOutput`
 
 Base representation of a user-defined result field output.
@@ -3285,7 +3478,7 @@ Base representation of a user-defined result field output.
 | Member | Description |
 | --- | --- |
 | `name` | Field output name. |
-| `item_type` | `limit`, `envelope`, `equation` or `coordinate_system_transform`, named after the `add_*` method that makes it. |
+| `item_type` | `limit`, `envelope`, `equation`, `coordinate_system_transform`, `material_axes`, `shell_in_plane_state` or `composite_failure`, named after the `add_*` method that makes it. |
 | `valid` | False when a field, part, element set or coordinate system the output is computed from no longer resolves. |
 | `filter1` | First `FieldOutputFilter`, or `None` when disabled. |
 | `filter2` | Second `FieldOutputFilter`, or `None` when disabled. |
@@ -3323,6 +3516,27 @@ Limit-based field output returned by `add(output)` or collection lookup.
 | --- | --- |
 | `field_name` | Source vector or tensor field name. |
 | `coordinate_system_name` | Result coordinate system name. |
+
+### `FieldOutputMaterialAxes`
+
+| Member | Description |
+| --- | --- |
+| `field_name` | Source tensor field name. |
+
+### `FieldOutputShellInPlaneState`
+
+| Member | Description |
+| --- | --- |
+| `field_name` | Source tensor field name. |
+| `quantity` | `Stress`, `PlaneStressFromStrain` or `Strain`. |
+
+### `FieldOutputCompositeFailure`
+
+| Member | Description |
+| --- | --- |
+| `field_name` | Source tensor field name. |
+| `criterion` | `MaxStress`, `TsaiHill`, `TsaiWu` or `Hashin`. |
+| `quantity` | `Stress` or `PlaneStressFromStrain`. |
 
 ## Steps and increments
 

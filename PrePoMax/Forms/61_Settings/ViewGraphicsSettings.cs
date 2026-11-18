@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -143,6 +143,35 @@ namespace PrePoMax.Settings
             get { return _graphicsSettings.DiffuseComponent; }
             set { _graphicsSettings.DiffuseComponent = value; }
         }
+        //
+        [CategoryAttribute("Lighting")]
+        [OrderedDisplayName(2, 10, "Ambient occlusion")]
+        [DescriptionAttribute("Enable/disable screen space ambient occlusion (SSAO) shading of the model in the VTK 9 view.")]
+        public bool AmbientOcclusion
+        {
+            get { return _graphicsSettings.AmbientOcclusion; }
+            set { _graphicsSettings.AmbientOcclusion = value; UpdateVisibilities(); }
+        }
+        //
+        [CategoryAttribute("Lighting")]
+        [OrderedDisplayName(3, 10, "Ambient occlusion radius")]
+        [DescriptionAttribute("Select the ambient occlusion sampling radius relative to the model size (0.001 ... 1).")]
+        [TypeConverter(typeof(StringDoubleConverter))]
+        public double AmbientOcclusionRadius
+        {
+            get { return _graphicsSettings.AmbientOcclusionRadius; }
+            set { _graphicsSettings.AmbientOcclusionRadius = value; }
+        }
+        //
+        [CategoryAttribute("Lighting")]
+        [OrderedDisplayName(4, 10, "Ambient occlusion samples")]
+        [DescriptionAttribute("Select the number of ambient occlusion samples per pixel (8 ... 512). Higher values are smoother "
+                              + "but slower.")]
+        public int AmbientOcclusionKernelSize
+        {
+            get { return _graphicsSettings.AmbientOcclusionKernelSize; }
+            set { _graphicsSettings.AmbientOcclusionKernelSize = value; }
+        }
         // Smoothing                                                                                
         [CategoryAttribute("Smoothing")]
         [OrderedDisplayName(0, 10, "Point smoothing")]
@@ -213,6 +242,7 @@ namespace PrePoMax.Settings
             _dctd.RenameBooleanPropertyToOnOff(nameof(CoorSysVisibility));
             _dctd.RenameBooleanPropertyToOnOff(nameof(ScaleWidgetVisibility));
             _dctd.RenameBooleanPropertyToOnOff(nameof(WidgetHighlightEnabled));
+            _dctd.RenameBooleanPropertyToOnOff(nameof(AmbientOcclusion));
             _dctd.RenameBooleanPropertyToOnOff(nameof(PointSmoothing));
             _dctd.RenameBooleanPropertyToOnOff(nameof(LineSmoothing));
             _dctd.RenameBooleanProperty(nameof(LinearDeflectionRelative), "Relative", "Absolute");
@@ -240,6 +270,10 @@ namespace PrePoMax.Settings
             bool visible = _graphicsSettings.LinearDeflectionRelative;
             _dctd.GetProperty(nameof(LinearDeflection)).SetIsBrowsable(visible);
             _dctd.GetProperty(nameof(LinearDeflectionInUnits)).SetIsBrowsable(!visible);
+            //
+            bool ambientOcclusion = _graphicsSettings.AmbientOcclusion;
+            _dctd.GetProperty(nameof(AmbientOcclusionRadius)).SetIsBrowsable(ambientOcclusion);
+            _dctd.GetProperty(nameof(AmbientOcclusionKernelSize)).SetIsBrowsable(ambientOcclusion);
         }
     }
 

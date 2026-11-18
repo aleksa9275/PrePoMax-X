@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -21,7 +21,7 @@ namespace PrePoMax
     public static class Globals
     {
         public static string HomePage = "https://prepomax.fs.um.si/";
-        public static string ReleaseCandidate = "RC1";
+        public static string ReleaseCandidate = "";
         //
         public static string ProgramName
         {

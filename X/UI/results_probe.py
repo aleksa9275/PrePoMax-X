@@ -55,7 +55,7 @@ def run(session,output):
         for family,name in [('Result coordinate systems','ResultCS'),('Result reference points','ResultRP')]:
             draft=r.Edit(family);draft.Properties.Set('Name',name);draft.Commit();check('original '+family+' command',name in list(c.GetResultCoordinateSystemNames() if family=='Result coordinate systems' else c.GetResultReferencePointNames()))
         draft=r.Edit('Result coordinate systems','ResultCS');draft.Properties.Set('Name','ResultCS_Renamed');draft.Commit();check('original result coordinate edit', 'ResultCS_Renamed' in list(c.GetResultCoordinateSystemNames()))
-        for family,count in [('Result fields',4),('Result histories',7)]:
+        for family,count in [('Result fields',7),('Result histories',7)]:  # 3.0.1: + Material Axes, Shell In-Plane State, Composite Failure
             draft=r.Edit(family);check(family+' original factory count',len(draft.Choices)==count)
             for i,choice in enumerate(draft.Choices):draft.Select(i);list(draft.Properties.Fields)
             check(family+' original descriptors',True)

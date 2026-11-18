@@ -44,6 +44,8 @@ JOURNAL_EXCEPTIONS = {
 ADD_WITHOUT_REPLACE_FILES = {
     "APIs/Python/Selection/SelectionAPI.cs": "add_by_* and add_all extend a selection under construction",
     "APIs/Python/View/ViewAnnotationsAPI.cs": "an annotation is view state, removed and added again",
+    "APIs/Python/Model/Interactions/ContactSearchResultAPI.cs": "add makes the found ties and contact pairs, which "
+                                                                "replace_tie and contact_pairs.replace edit",
 }
 # The description an EMITTED_NAME_EXCEPTIONS entry carries when it is a parameter name of an API method
 ARGUMENT_NAME = "an argument name"
@@ -61,6 +63,8 @@ EMITTED_NAME_EXCEPTIONS = {
     "axis_point": "an argument name",
     "cavity_name": "an argument name",
     "coefficient_amplitude_name": "an argument name",
+    "compressive_strength_1": "an argument name",
+    "compressive_strength_2": "an argument name",
     "contact_pair_name": "an argument name",
     "distribution_name": "an argument name",
     "emissivity": "an argument name",
@@ -78,8 +82,13 @@ EMITTED_NAME_EXCEPTIONS = {
     "pressure_variable_name": "an argument name",
     "reference_point_name": "an argument name",
     "rotational_speed": "an argument name",
+    "shear_strength_12": "an argument name",
+    "shear_strength_23": "an argument name",
     "sink_temperature": "an argument name",
     "slave_region": "an argument name",
+    "tensile_strength_1": "an argument name",
+    "tensile_strength_2": "an argument name",
+    "tsai_wu_coefficient": "an argument name",
     "ur1": "an argument name",
     "ur2": "an argument name",
     "ur3": "an argument name",

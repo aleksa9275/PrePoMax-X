@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -153,6 +153,7 @@ namespace PrePoMax
         private FrmCoordinateSystem _frmCoordinateSystem;
         private FrmMaterial _frmMaterial;
         private FrmSection _frmSection;
+        private FrmMaterialOrientation _frmMaterialOrientation;
         private FrmConstraint _frmConstraint;
         private FrmSurfaceInteraction _frmSurfaceInteraction;
         private FrmContactPair _frmContactPair;
@@ -631,6 +632,9 @@ namespace PrePoMax
                 _frmSection = new FrmSection(_controller);
                 AddFormToAllForms(_frmSection);
                 //
+                _frmMaterialOrientation = new FrmMaterialOrientation(_controller);
+                AddFormToAllForms(_frmMaterialOrientation);
+                //
                 _frmConstraint = new FrmConstraint(_controller);
                 AddFormToAllForms(_frmConstraint);
                 //
@@ -979,6 +983,9 @@ namespace PrePoMax
         private async Task RunBatchScriptAsync()
         {
             WriteDataToOutput("Starting script: " + _cmdOptions.ScriptFileName);
+            // Without a file to open the script starts from File - New, as the user would, so the history holds the
+            // script after the new model and the model the script builds counts as initialized
+            if (_cmdOptions.FileName == null) _controller.New();
             //
             string[] arguments = null;
             if (_cmdOptions.ScriptArguments != null)
@@ -1201,6 +1208,8 @@ namespace PrePoMax
         private void itemForm_Move(object sender, EventArgs e)
         {
             Form form = sender as Form;
+            //
+            if (form is FrmSelectItemSet) return;
             //Size screenSize =  Screen.GetWorkingArea(form).Size;
             //if (form.Left < 0) form.Left = 0;
             //else if (form.Left + form.Width > screenSize.Width) form.Left = screenSize.Width - form.Width;
@@ -1236,8 +1245,9 @@ namespace PrePoMax
             if (_modelTree.ActiveControl != null && _modelTree.ActiveControl is SearchTextBox) return;
             // Model tree edit mode active
             if (_modelTree.EditModeActive) return;
-            // Forward to tree
-            _modelTree.cltv_KeyDown(this, new KeyEventArgs(key));
+            // Forward to tree - after the hook returns: Windows waits for a low level hook and removes it for good when it
+            // takes too long, as hiding a large model and rendering it, or a question before a delete, can
+            BeginInvoke((MethodInvoker)(() => _modelTree.cltv_KeyDown(this, new KeyEventArgs(key))));
             // Prevent that the coders lab tree calls _modelTree.cltv_KeyDown again
             _vtk.Focus();
         }
@@ -1331,6 +1341,7 @@ namespace PrePoMax
                 else if (nodeName == _modelTree.ModelCoordinateSystemsName) tsmiCreateModelCoordinateSystem_Click(null, null);
                 else if (nodeName == _modelTree.MaterialsName) tsmiCreateMaterial_Click(null, null);
                 else if (nodeName == _modelTree.SectionsName) tsmiCreateSection_Click(null, null);
+                else if (nodeName == _modelTree.MaterialOrientationsName) tsmiCreateMaterialOrientation_Click(null, null);
                 else if (nodeName == _modelTree.ConstraintsName) tsmiCreateConstraint_Click(null, null);
                 else if (nodeName == _modelTree.SurfaceInteractionsName) tsmiCreateSurfaceInteraction_Click(null, null);
                 else if (nodeName == _modelTree.ContactPairsName) tsmiCreateContactPair_Click(null, null);
@@ -1377,6 +1388,7 @@ namespace PrePoMax
                 else if (namedClass is CoordinateSystem) EditModelCoordinateSystem(namedClass.Name);
                 else if (namedClass is Material) EditMaterial(namedClass.Name);
                 else if (namedClass is Section) EditSection(namedClass.Name);
+                else if (namedClass is MaterialOrientation) EditMaterialOrientation(namedClass.Name);
                 else if (namedClass is CaeModel.Constraint) EditConstraint(namedClass.Name);
                 else if (namedClass is SurfaceInteraction) EditSurfaceInteraction(namedClass.Name);
                 else if (namedClass is ContactPair) EditContactPair(namedClass.Name);
@@ -1440,6 +1452,7 @@ namespace PrePoMax
                 //
                 ApplyActionOnItems<Material>(items, DuplicateMaterials);
                 ApplyActionOnItems<Section>(items, DuplicateSections);
+                ApplyActionOnItems<MaterialOrientation>(items, DuplicateMaterialOrientations);
                 ApplyActionOnItems<CaeModel.Constraint>(items, DuplicateConstraints);
                 ApplyActionOnItems<SurfaceInteraction>(items, DuplicateSurfaceInteractions);
                 ApplyActionOnItems<ContactPair>(items, DuplicateContactPairs);
@@ -1606,6 +1619,7 @@ namespace PrePoMax
                 ApplyActionOnItems<CoordinateSystem>(items, DeleteModelCoordinateSystems);
                 ApplyActionOnItems<Material>(items, DeleteMaterials);
                 ApplyActionOnItems<Section>(items, DeleteSections);
+                ApplyActionOnItems<MaterialOrientation>(items, DeleteMaterialOrientations);
                 ApplyActionOnItems<CaeModel.Constraint>(items, DeleteConstraints);
                 ApplyActionOnItems<SurfaceInteraction>(items, DeleteSurfaceInteractions);
                 ApplyActionOnItems<ContactPair>(items, DeleteContactPairs);
@@ -1746,7 +1760,7 @@ namespace PrePoMax
 
 
         // Menus                                                                                                                    
-        private void SetMenuAndToolStripVisibility()
+        public void SetMenuAndToolStripVisibility()
         {
             if (IsStateRegeneratingOrUndoing()) return;
             //
@@ -6318,6 +6332,82 @@ namespace PrePoMax
 
         #endregion  ################################################################################################################
 
+        #region Material orientation menu  #########################################################################################
+        internal void tsmiCreateMaterialOrientation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CreateMaterialOrientation();
+            }
+            catch (Exception ex)
+            {
+                ExceptionTools.Show(this, ex);
+            }
+        }
+        private void tsmiEditMaterialOrientation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SelectOneEntity("Material Orientations", _controller.GetAllMaterialOrientations(), EditMaterialOrientation);
+            }
+            catch (Exception ex)
+            {
+                ExceptionTools.Show(this, ex);
+            }
+        }
+        private void tsmiDuplicateMaterialOrientation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SelectMultipleEntities("Material Orientations", _controller.GetAllMaterialOrientations(),
+                                       DuplicateMaterialOrientations);
+            }
+            catch (Exception ex)
+            {
+                ExceptionTools.Show(this, ex);
+            }
+        }
+        private void tsmiDeleteMaterialOrientation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SelectMultipleEntities("Material Orientations", _controller.GetAllMaterialOrientations(),
+                                       DeleteMaterialOrientations);
+            }
+            catch (Exception ex)
+            {
+                ExceptionTools.Show(this, ex);
+            }
+        }
+        //
+        private void CreateMaterialOrientation()
+        {
+            if (_controller.Model.Mesh == null) return;
+            // Data editor
+            ItemSetDataEditor.SetForms(_frmSelectItemSet, false, _frmMaterialOrientation);
+            ShowForm(_frmMaterialOrientation, "Create Material Orientation", null);
+        }
+        private void EditMaterialOrientation(string materialOrientationName)
+        {
+            // Data editor
+            ItemSetDataEditor.SetForms(_frmSelectItemSet, false, _frmMaterialOrientation);
+            ShowForm(_frmMaterialOrientation, "Edit Material Orientation", materialOrientationName);
+        }
+        private void DuplicateMaterialOrientations(string[] materialOrientationNames)
+        {
+            _controller.DuplicateMaterialOrientationsCommand(materialOrientationNames);
+        }
+        private void DeleteMaterialOrientations(string[] materialOrientationNames)
+        {
+            if (MessageBoxes.ShowWarningQuestionOKCancel("OK to delete selected material orientations?" + Environment.NewLine
+                                                 + materialOrientationNames.ToRows()) == DialogResult.OK)
+            {
+                _controller.RemoveMaterialOrientationsCommand(materialOrientationNames);
+            }
+        }
+
+        #endregion  ################################################################################################################
+
         #region Interaction menu  ##################################################################################################
 
         #region Constraint menu  ###################################################################################################
@@ -10787,6 +10877,8 @@ namespace PrePoMax
             if (_frmReferencePoint != null && _frmReferencePoint.Visible) _frmReferencePoint.SelectionChanged(ids);
             if (_frmCoordinateSystem != null && _frmCoordinateSystem.Visible) _frmCoordinateSystem.SelectionChanged(ids);
             if (_frmSection != null && _frmSection.Visible) _frmSection.SelectionChanged(ids);
+            if (_frmMaterialOrientation != null && _frmMaterialOrientation.Visible)
+                _frmMaterialOrientation.SelectionChanged(ids);
             if (_frmConstraint != null && _frmConstraint.Visible) _frmConstraint.SelectionChanged(ids);
             if (_frmContactPair != null && _frmContactPair.Visible) _frmContactPair.SelectionChanged(ids);
             if (_frmInitialCondition != null && _frmInitialCondition.Visible) _frmInitialCondition.SelectionChanged(ids);
@@ -10897,9 +10989,9 @@ namespace PrePoMax
             if (!form.Visible)
             {
                 CloseAllForms();
-                SetFormLocation((Form)form);
                 form.Text = text;
                 if (itemToEditName != null) form.Text += ": " + itemToEditName;
+                SetFormLocation((Form)form);
                 if (form.PrepareForm(stepName, itemToEditName))
                 {
                     ((Form)form).Show(this);
@@ -10917,35 +11009,10 @@ namespace PrePoMax
         }
         private void SetFormLocation(Form form)
         {
-            Rectangle screenBounds;
-            bool intersects = false;
-            Rectangle formSize = form.ClientRectangle;
             Point location = new Point(Left + _formLocation.X, Top + _formLocation.Y);
-            Rectangle locationRect = new Rectangle(location, new Size(1, 1));
+            if (!Screen.AllScreens.Any(screen => screen.Bounds.Contains(location))) location = Location;
             //
-            foreach (var screen in Screen.AllScreens)
-            {
-                screenBounds = screen.Bounds;
-                if (screenBounds.IntersectsWith(locationRect))
-                {
-                    intersects = true;
-                    // Size
-                    if (formSize.Width > screenBounds.Width) formSize.Width = screenBounds.Width;
-                    if (formSize.Height > screenBounds.Height) formSize.Height = screenBounds.Height;
-                    // Location X
-                    if (location.X < screenBounds.Left) location.X = screenBounds.Left;
-                    else if (location.X + formSize.Width > screenBounds.Left + screenBounds.Width)
-                        location.X = screenBounds.Left + screenBounds.Width - formSize.Width;
-                    // Location Y
-                    if (location.Y < screenBounds.Top) location.Y = screenBounds.Top;
-                    else if (location.Y + formSize.Height > screenBounds.Top + screenBounds.Height)
-                        location.Y = screenBounds.Top + screenBounds.Height - formSize.Height;
-                }
-            }
-            //
-            if (!intersects) location = Location;
-            //
-            if (form.Location != location) form.Location = location;
+            form.SetLocationInsideWorkingArea(location);
         }
         private void SaveFormLocation(Form form)
         {
@@ -12173,6 +12240,14 @@ namespace PrePoMax
         {
             InvokeIfRequired(_vtk.AdjustCameraDistanceAndClippingRedraw);
         }
+        public void SuspendCameraAdjustment()
+        {
+            InvokeIfRequired(_vtk.SuspendCameraAdjustment);
+        }
+        public void ResumeCameraAdjustment()
+        {
+            InvokeIfRequired(_vtk.ResumeCameraAdjustment);
+        }
         public void UpdateScalarsAndRedraw()
         {
             InvokeIfRequired(_vtk.UpdateScalarsAndRedraw);
@@ -12332,6 +12407,10 @@ namespace PrePoMax
                                               double symbolSize, vtkRendererLayer layer)
         {
             InvokeIfRequired(_vtk.AddCoordinateSystemSymbol, origin, axisDirections, labels, symbolSize, layer);
+        }
+        public void AddMaterialAxesSymbol(double[] origin, double[][] axisDirections, string[] labels, double symbolSize)
+        {
+            InvokeIfRequired(_vtk.AddMaterialAxesSymbol, origin, axisDirections, labels, symbolSize);
         }
         public void AddCaptionActor(string name, string caption, Color color, double[] position,
                                     double[] offsetVector, double fontScaleFactor, vtkRendererLayer layer)
@@ -12557,6 +12636,10 @@ namespace PrePoMax
         public void SetLighting(double ambient, double diffuse, bool redraw)
         {
             InvokeIfRequired(_vtk.SetLighting, ambient, diffuse, redraw);
+        }
+        public void SetAmbientOcclusion(bool enabled, double relativeRadius, int kernelSize, bool redraw)
+        {
+            InvokeIfRequired(() => _vtk.SetAmbientOcclusion(enabled, relativeRadius, kernelSize, redraw));
         }
         public void SetNavigationSensitivity(double rotateSensitivity, double zoomSensitivity, bool invertZoom, bool smoothZoom)
         {
@@ -12892,6 +12975,14 @@ namespace PrePoMax
             InvokeIfRequired(_modelTree.RegenerateTree, _controller.Model, _controller.Jobs, _controller.CurrentResult, remeshing);
             InvokeIfRequired(UpdateSymbolsList);
             InvokeIfRequired(SelectLastSymbolName);
+        }
+        public void BeginTreeUpdateBatch()
+        {
+            InvokeIfRequired(_modelTree.BeginUpdateBatch);
+        }
+        public void EndTreeUpdateBatch()
+        {
+            InvokeIfRequired(_modelTree.EndUpdateBatch);
         }
         public void AddTreeNode(ViewGeometryModelResults view, NamedClass item, string parentName)
         {

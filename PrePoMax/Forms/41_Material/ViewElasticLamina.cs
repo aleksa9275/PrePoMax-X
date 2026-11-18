@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -85,7 +85,8 @@ namespace PrePoMax
         //
         [CategoryAttribute("Shear moduli")]
         [OrderedDisplayName(2, 3, "G23")]
-        [DescriptionAttribute("Transverse shear modulus in the material 2-3 plane.")]
+        [DescriptionAttribute("Transverse shear modulus in the material 2-3 plane. The lamina is completed as transversely " +
+                              "isotropic: E3 = E2, v13 = v12 and v23 = E2 / (2 G23) - 1.")]
         [TypeConverter(typeof(EquationPressureConverter))]
         public EquationString ShearModulus23
         {

@@ -68,7 +68,7 @@ def main():
             # Package closure of the whole original assemblies, as locked by their projects.
             report['dependencies'] = {name: json.loads((ROOT/'X/Domain'/name/'packages.lock.json').read_text())['dependencies']['net10.0']
                                       for name in ('CaeGlobals','CaeResults')}
-            post = False
+            post = True  # 3.0.1 (D063) contains the post-RC2 lamina stability and composite strength changes
             test_command=['dotnet',work/'build/bin/Tests/release/PrePoMaxX.Tests.dll']+(['--post-rc2'] if post else [])
             tests=json.loads(run(test_command).stdout)
             report['tests']=tests

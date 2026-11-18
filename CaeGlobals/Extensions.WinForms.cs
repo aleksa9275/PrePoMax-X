@@ -2,14 +2,16 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
 
 // PrePoMax-X: WinForms-only members, moved verbatim from Extensions.cs so the portable
 // domain build compiles without WinForms (D062). Included only by the original project.
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CaeGlobals
@@ -60,6 +62,23 @@ namespace CaeGlobals
                         System.Reflection.BindingFlags.Instance);
 
             aProp.SetValue(c, true, null);
+        }
+        public static void SetLocationInsideWorkingArea(this Form form, Point location)
+        {
+            Rectangle workingArea = Screen.FromPoint(location).WorkingArea;
+            Size size = new Size(Math.Min(form.Width, workingArea.Width), Math.Min(form.Height, workingArea.Height));
+            //
+            if (size != form.Size)
+            {
+                form.MinimumSize = new Size(Math.Min(form.MinimumSize.Width, size.Width),
+                                            Math.Min(form.MinimumSize.Height, size.Height));
+                form.Size = size;
+            }
+            //
+            location.X = Math.Max(workingArea.Left, Math.Min(location.X, workingArea.Right - form.Width));
+            location.Y = Math.Max(workingArea.Top, Math.Min(location.Y, workingArea.Bottom - form.Height));
+            //
+            if (form.Location != location) form.Location = location;
         }
     }
 }

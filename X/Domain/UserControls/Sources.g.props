@@ -22,6 +22,7 @@
     <Compile Include="$(RepositoryRoot)UserControls/SidePanel/PanelItem.cs" Link="SidePanel/PanelItem.cs" />
     <Compile Include="$(RepositoryRoot)UserControls/SidePanel/PanelItemLabel.cs" Link="SidePanel/PanelItemLabel.cs" />
     <Compile Include="$(RepositoryRoot)UserControls/SidePanel/PanelItemLinkLabel.cs" Link="SidePanel/PanelItemLinkLabel.cs" />
+    <Compile Include="$(RepositoryRoot)UserControls/ProperyGrid/IMissingPropertyValues.cs" Link="ProperyGrid/IMissingPropertyValues.cs" />
     <Compile Include="$(RepositoryRoot)X/Controller/Host/ViewType.cs" Link="X/ViewType.cs" /> <!-- Original model-tree view discriminator, without rendering control -->
   </ItemGroup>
 </Project>

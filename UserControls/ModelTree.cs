@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -131,6 +131,10 @@ namespace UserControls
         }
         // Variables                                                                                                                
         private bool _screenUpdating;
+        private int _updateBatchCount;
+        private HashSet<TreeNode> _batchedParentNodes;
+        private TreeNode _batchedAddedNode;
+        private ViewType _batchedAddedNodeView;
         private bool _doubleClick;
         private const int WM_MOUSEMOVE = 0x0200;
         private bool _disableMouse;
@@ -154,6 +158,7 @@ namespace UserControls
         private TreeNode _modelReferencePoints;     //     3
         private TreeNode _modelCoordinateSystems;   //     3
         private TreeNode _materials;                //   2
+        private TreeNode _materialOrientations;     //   2
         private TreeNode _sections;                 //   2
         private TreeNode _constraints;              //   2
         private TreeNode _contacts;                 //   2
@@ -193,6 +198,7 @@ namespace UserControls
         private string _modelReferencePointsName = "Reference Points";
         private string _modelCoordinateSystemsName = "Coordinate Systems";
         private string _materialsName = "Materials";
+        private string _materialOrientationsName = "Material Orientations";
         private string _sectionsName = "Sections";
         private string _constraintsName = "Constraints";
         private string _contactsName = "Contacts";
@@ -291,6 +297,7 @@ namespace UserControls
         public string ModelReferencePointsName { get { return _modelReferencePointsName; } }
         public string ModelCoordinateSystemsName { get { return _modelCoordinateSystemsName; } }
         public string MaterialsName { get { return _materialsName; } }
+        public string MaterialOrientationsName { get { return _materialOrientationsName; } }
         public string SectionsName { get { return _sectionsName; } }
         public string ConstraintsName { get { return _constraintsName; } }
         public string SurfaceInteractionsName { get { return _surfaceInteractionsName; } }
@@ -416,6 +423,7 @@ namespace UserControls
             _modelReferencePoints = cltvModel.Nodes.Find(_modelReferencePointsName, true)[0];
             _modelCoordinateSystems = cltvModel.Nodes.Find(_modelCoordinateSystemsName, true)[0];
             _materials = cltvModel.Nodes.Find(_materialsName, true)[0];
+            _materialOrientations = cltvModel.Nodes.Find(_materialOrientationsName, true)[0];
             _sections = cltvModel.Nodes.Find(_sectionsName, true)[0];
             _constraints = cltvModel.Nodes.Find(_constraintsName, true)[0];
             _contacts = cltvModel.Nodes.Find(_contactsName, true)[0];
@@ -455,6 +463,7 @@ namespace UserControls
             _modelCoordinateSystems.StateImageKey = "CoordinateSystem";
             _materials.StateImageKey = "Material";
             _sections.StateImageKey = "Section";
+            _materialOrientations.StateImageKey = "CoordinateSystem";
             _constraints.StateImageKey = "Constraints";
             _surfaceInteractions.StateImageKey = "SurfaceInteractions";
             _contactPairs.StateImageKey = "ContactPairs";
@@ -477,6 +486,7 @@ namespace UserControls
             //
             _doubleClick = false;
             _screenUpdating = true;
+            _batchedParentNodes = new HashSet<TreeNode>();
             _prevStates = new Dictionary<CodersLabTreeView, bool[]>();
             _prevStates.Add(cltvGeometry, null);
             _prevStates.Add(cltvModel, null);
@@ -3367,6 +3377,7 @@ namespace UserControls
             _modelCoordinateSystems.Nodes.Clear();
             _materials.Nodes.Clear();
             _sections.Nodes.Clear();
+            _materialOrientations.Nodes.Clear();
             _constraints.Nodes.Clear();
             _contacts.Nodes.Clear();
             _surfaceInteractions.Nodes.Clear();
@@ -3392,6 +3403,7 @@ namespace UserControls
             _modelCoordinateSystems.Text = _modelCoordinateSystemsName;
             _materials.Text = _materialsName;
             _sections.Text = _sectionsName;
+            _materialOrientations.Text = _materialOrientationsName;
             _constraints.Text = _constraintsName;
             _surfaceInteractions.Text = _surfaceInteractionsName;
             _contactPairs.Text = _contactPairsName;
@@ -3417,6 +3429,7 @@ namespace UserControls
             _modelFeatures.Nodes.Add(_modelReferencePoints);
             _modelFeatures.Nodes.Add(_modelCoordinateSystems);
             _model.Nodes.Add(_materials);
+            _model.Nodes.Add(_materialOrientations);
             _model.Nodes.Add(_sections);
             _model.Nodes.Add(_constraints);
             _model.Nodes.Add(_contacts);
@@ -3693,6 +3706,8 @@ namespace UserControls
                     }
                     // Materials
                     AddObjectsToNode(_materialsName, _materials, model.Materials);
+                    // Material orientations
+                    AddObjectsToNode(_materialOrientationsName, _materialOrientations, model.MaterialOrientations);
                     // Sections
                     AddObjectsToNode(_sectionsName, _sections, model.Sections);
                     // Constraints
@@ -3814,6 +3829,45 @@ namespace UserControls
                 }
             }
         }
+        // Adding many items at once repaints, recounts and selects once at the end instead of after every item, which
+        // would make adding a few thousand of them take minutes
+        public void BeginUpdateBatch()
+        {
+            if (_updateBatchCount == 0)
+            {
+                foreach (CodersLabTreeView tree in new CodersLabTreeView[] { cltvGeometry, cltvModel, cltvResults })
+                {
+                    tree.SuspendLayout();
+                    tree.BeginUpdate();
+                }
+            }
+            _updateBatchCount++;
+        }
+        public void EndUpdateBatch()
+        {
+            if (_updateBatchCount <= 0) throw new InvalidOperationException("The tree update batching is not active.");
+            //
+            _updateBatchCount--;
+            if (_updateBatchCount > 0) return;
+            //
+            try
+            {
+                foreach (TreeNode parent in _batchedParentNodes) UpdateItemCountText(parent);
+                if (_batchedAddedNode != null && _batchedAddedNode.TreeView != null)
+                    SelectAndExpandAddedNode(_batchedAddedNodeView, _batchedAddedNode);
+            }
+            catch { }
+            finally
+            {
+                _batchedParentNodes.Clear();
+                _batchedAddedNode = null;
+                foreach (CodersLabTreeView tree in new CodersLabTreeView[] { cltvGeometry, cltvModel, cltvResults })
+                {
+                    tree.EndUpdate();
+                    tree.ResumeLayout();
+                }
+            }
+        }
         public void AddTreeNode(ViewType view, NamedClass item, string parentName,
                                 IOrderedDictionaryItemLayout<string> orderedDictionary)
         {
@@ -3893,6 +3947,13 @@ namespace UserControls
                 else if (item is Section)
                 {
                     parent = _sections;
+                    node = parent.Nodes.Add(item.Name);
+                    node.Name = node.Text;
+                    node.Tag = item;
+                }
+                else if (item is MaterialOrientation)
+                {
+                    parent = _materialOrientations;
                     node = parent.Nodes.Add(item.Name);
                     node.Name = node.Text;
                     node.Tag = item;
@@ -4043,20 +4104,18 @@ namespace UserControls
                 EnsureOrderedDictionaryContext(parent, view, item.GetType(), parentName, orderedDictionary);
                 MoveTreeNodeToOrderedDictionaryLayoutParent(parent, node);
                 //
-                parent.Text = parent.Name;
-                int parentItemCount = _orderedDictionaryContexts.ContainsKey(parent)
-                    ? CountOrderedDictionaryItemNodes(parent)
-                    : parent.Nodes.Count;
-                if (parentItemCount > 0) parent.Text += " (" + parentItemCount + ")";
-                //
                 SetNodeStatus(node);
                 //
-                GetTree(view).SelectedNode = node;
-                // Expand for propagate
-                while (node != null && node.Parent != null)
+                if (_updateBatchCount > 0)
                 {
-                    node = node.Parent;
-                    if (!node.IsExpanded) node.Expand();
+                    _batchedParentNodes.Add(parent);
+                    _batchedAddedNode = node;
+                    _batchedAddedNodeView = view;
+                }
+                else
+                {
+                    UpdateItemCountText(parent);
+                    SelectAndExpandAddedNode(view, node);
                 }
             }
             catch { }
@@ -4458,6 +4517,24 @@ namespace UserControls
                         else SetNodeStatus(itemNode);
                     }
                 }
+            }
+        }
+        private void UpdateItemCountText(TreeNode parent)
+        {
+            parent.Text = parent.Name;
+            int parentItemCount = _orderedDictionaryContexts.ContainsKey(parent)
+                ? CountOrderedDictionaryItemNodes(parent)
+                : parent.Nodes.Count;
+            if (parentItemCount > 0) parent.Text += " (" + parentItemCount + ")";
+        }
+        private void SelectAndExpandAddedNode(ViewType view, TreeNode node)
+        {
+            GetTree(view).SelectedNode = node;
+            // Expand for propagate
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+                if (!node.IsExpanded) node.Expand();
             }
         }
         private int CountOrderedDictionaryItemNodes(TreeNode node)
@@ -5039,6 +5116,7 @@ namespace UserControls
             else if (node.Name == _modelReferencePointsName) return true;
             else if (node.Name == _modelCoordinateSystemsName) return true;
             else if (node.Name == _materialsName) return true;
+            else if (node.Name == _materialOrientationsName) return true;
             else if (node.Name == _sectionsName) return true;
             else if (node.Name == _constraintsName) return true;
             else if (node.Name == _surfaceInteractionsName) return true;
@@ -5077,6 +5155,7 @@ namespace UserControls
             else if (node.Tag is CoordinateSystem) return true;
             else if (node.Tag is Material) return true;
             else if (node.Tag is Section) return true;
+            else if (node.Tag is MaterialOrientation) return true;
             else if (node.Tag is Constraint) return true;
             else if (node.Tag is SurfaceInteraction) return true;
             else if (node.Tag is ContactPair) return true;
@@ -5107,6 +5186,7 @@ namespace UserControls
             else if (node.TreeView == cltvModel && node.Tag is CoordinateSystem) return true;
             else if (node.Tag is Material) return true;
             else if (node.Tag is Section) return true;
+            else if (node.Tag is MaterialOrientation) return true;
             else if (node.Tag is Constraint) return true;
             else if (node.Tag is SurfaceInteraction) return true;
             else if (node.Tag is ContactPair) return true;
@@ -5171,6 +5251,7 @@ namespace UserControls
             if (node.Tag is MeshSetupItem) return true;
             else if (node.Tag is MeshPart) return true;
             else if (node.Tag is Material) return true;
+            else if (node.Tag is MaterialOrientation) return true;
             else if (node.Tag is Constraint) return true;
             else if (node.Tag is ContactPair) return true;
             else if (node.Tag is InitialCondition) return true;

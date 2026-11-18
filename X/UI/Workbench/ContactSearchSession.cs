@@ -19,5 +19,6 @@ public sealed partial class ContactSearchSession(Controller controller)
     public void Swap(int index){pairs[index].MasterSlaveItem.SwapMasterSlave();pairs[index].Name=pairs[index].MasterSlaveItem.Name;}
     public void Highlight(int index){_selectedContactPairs=[pairs[index]];HighlightContactPairs();}
     public void Merge(int[] indices){_selectedContactPairs=indices.Select(i=>pairs[i]).ToList();MergeSelected();}
-    public void Apply(){controller.AutoCreateTiedPairs(pairs.Where(p=>p.Type==SearchContactPairType.Tie).ToList());controller.AutoCreateContactPairs(pairs.Where(p=>p.Type==SearchContactPairType.Contact).ToList());}
+    // Original btnOK_Click (3.0.1): one OK adds every searched pair as one command.
+    public void Apply()=>controller.AddSearchedContactPairsCommand(pairs);
 }

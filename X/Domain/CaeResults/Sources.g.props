@@ -10,6 +10,15 @@
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/FieldResultFilter.cs" Link="FieldOutput/FieldResultFilter.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutput.cs" Link="FieldOutput/ResultFieldOutput.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputCoordinateSystemTransform.cs" Link="FieldOutput/ResultFieldOutputCoordinateSystemTransform.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputMaterialAxes.cs" Link="FieldOutput/ResultFieldOutputMaterialAxes.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputShellPlaneStress.cs" Link="FieldOutput/ResultFieldOutputShellPlaneStress.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ShellInPlaneQuantityEnum.cs" Link="FieldOutput/ShellInPlaneQuantityEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputCompositeFailure.cs" Link="FieldOutput/ResultFieldOutputCompositeFailure.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/Composite/ShellResultData.cs" Link="Composite/ShellResultData.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/Composite/ShellResultElement.cs" Link="Composite/ShellResultElement.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/Composite/PlyStiffness.cs" Link="Composite/PlyStiffness.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/Composite/PlyStrength.cs" Link="Composite/PlyStrength.cs" />
+    <Compile Include="$(RepositoryRoot)CaeResults/Composite/CompositeFailureCalculator.cs" Link="Composite/CompositeFailureCalculator.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputEnvelope.cs" Link="FieldOutput/ResultFieldOutputEnvelope.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputLimit.cs" Link="FieldOutput/ResultFieldOutputLimit.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/ResultFieldOutputEquation.cs" Link="FieldOutput/ResultFieldOutputEquation.cs" />

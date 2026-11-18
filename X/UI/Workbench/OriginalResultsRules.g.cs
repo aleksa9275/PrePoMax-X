@@ -4,7 +4,7 @@ using System;using System.Collections.Generic;using System.Linq;
 using CaeGlobals;using CaeMesh;using CaeModel;using CaeResults;using CaeJob;using PrePoMax;using PrePoMax.Forms;
 namespace PrePoMaxX.UI.OriginalForms;
 
-// Source PrePoMax/Forms/71_Analysis/FrmAnalysis.cs SHA256 9893d96748e64c63cd65dbdf3acb4e8d408a31695c8d83f2966032a0aeba4815
+// Source PrePoMax/Forms/71_Analysis/FrmAnalysis.cs SHA256 12f65c10af03997cfd6049c3dbf7d0ab413fd429462efad505ea9650e0833702
 public sealed class FrmAnalysisRule : ResultFormRule {
 string[] _jobNames;string _jobToEditName;ViewAnalysisJob _viewJob;
 public FrmAnalysisRule(Controller controller,string name=null):base(controller,name){_jobNames=controller.GetJobNames();_jobToEditName=name;
@@ -51,7 +51,7 @@ public override object Item=>Job;
 protected override void OnSelect(object value){}
 }
 
-// Source PrePoMax/Forms/82_ResultFieldOutput/FrmResultFieldOutput.cs SHA256 0749e5c10fae01cbd94c176e5946bbe6d38d9654db6032ff61721ad4d32344e1
+// Source PrePoMax/Forms/82_ResultFieldOutput/FrmResultFieldOutput.cs SHA256 906f271ffb6daf3aeeb757156cbf9c46717c9488a64a9c30ef86937d3ab629d4
 public sealed class FrmResultFieldOutputRule : ResultFormRule {
 string[] _resultFieldOutputNames;string _resultFieldOutputToEditName;ViewResultFieldOutput _viewResultFieldOutput;
 public FrmResultFieldOutputRule(Controller controller,string name=null):base(controller,name){_resultFieldOutputNames=controller.GetResultFieldOutputNames();_resultFieldOutputToEditName=name;
@@ -78,6 +78,12 @@ public ResultFieldOutput ResultFieldOutput
                     _viewResultFieldOutput = new ViewResultFieldOutputEquation(rfoeq);
                 else if (clone is ResultFieldOutputCoordinateSystemTransform rfocst)
                     _viewResultFieldOutput = new ViewResultFieldOutputCoordinateSystemTransform(rfocst);
+                else if (clone is ResultFieldOutputMaterialAxes rfoma)
+                    _viewResultFieldOutput = new ViewResultFieldOutputMaterialAxes(rfoma);
+                else if (clone is ResultFieldOutputShellPlaneStress rfosps)
+                    _viewResultFieldOutput = new ViewResultFieldOutputShellInPlaneState(rfosps);
+                else if (clone is ResultFieldOutputCompositeFailure rfocf)
+                    _viewResultFieldOutput = new ViewResultFieldOutputCompositeFailure(rfocf);
                 else throw new NotImplementedException();
             }
         }
@@ -158,6 +164,59 @@ private void PopulateListOfResultFieldOutputs(Dictionary<string, string[]> filed
             }
             else item.Tag = new ViewError("There are not field outputs or components for the creation of the field output.");
             choices.Add(item);
+            // Shell outputs
+            string[] shellFieldNames = GetShellSourceFieldNames();
+            string shellFieldName = shellFieldNames.Contains(FOFieldNames.Stress) ? FOFieldNames.Stress :
+                                    shellFieldNames.FirstOrDefault();
+            ViewError shellError = null;
+            if (!_controller.CurrentResult.HasShellResultData())
+                shellError = new ViewError("The results contain no shell elements with known material axes.");
+            else if (shellFieldName == null)
+                shellError = new ViewError("There is no tensor field output for the creation of the field output.");
+            // Material axes
+            item = new EditorChoice("Material Axes");
+            if (shellError == null)
+            {
+                ViewResultFieldOutputMaterialAxes vrfoma = new ViewResultFieldOutputMaterialAxes(
+                    new ResultFieldOutputMaterialAxes(GetResultFieldOutputName("Material_Axes"), shellFieldName));
+                vrfoma.PopulateDropDownLists(shellFieldNames);
+                item.Tag = vrfoma;
+            }
+            else item.Tag = shellError;
+            choices.Add(item);
+            // The in-plane state and the failure start from the stresses as solved, or from the strains without them
+            ShellInPlaneQuantityEnum stressQuantity = GetShellSourceFieldNames(ShellInPlaneQuantityEnum.Stress).Length > 0 ?
+                                                      ShellInPlaneQuantityEnum.Stress :
+                                                      ShellInPlaneQuantityEnum.PlaneStressFromStrain;
+            string[] stressFieldNames = GetShellSourceFieldNames(stressQuantity);
+            string stressFieldName = GetPreferredShellFieldName(stressFieldNames, stressQuantity);
+            // Shell in-plane state
+            item = new EditorChoice("Shell In-Plane State");
+            if (shellError == null)
+            {
+                ResultFieldOutputShellPlaneStress rfosps =
+                    new ResultFieldOutputShellPlaneStress(GetResultFieldOutputName("In_Plane_State"), stressFieldName);
+                rfosps.Quantity = stressQuantity;
+                ViewResultFieldOutputShellInPlaneState vrfosips = new ViewResultFieldOutputShellInPlaneState(rfosps);
+                vrfosips.PopulateDropDownLists(stressFieldNames);
+                item.Tag = vrfosips;
+            }
+            else item.Tag = shellError;
+            choices.Add(item);
+            // Composite failure
+            item = new EditorChoice("Composite Failure");
+            if (shellError == null)
+            {
+                ResultFieldOutputCompositeFailure rfocf =
+                    new ResultFieldOutputCompositeFailure(GetResultFieldOutputName("Failure"), stressFieldName,
+                                                          CompositeFailureCriterionEnum.TsaiWu);
+                rfocf.Quantity = stressQuantity;
+                ViewResultFieldOutputCompositeFailure vrfocf = new ViewResultFieldOutputCompositeFailure(rfocf);
+                vrfocf.PopulateDropDownLists(stressFieldNames);
+                item.Tag = vrfocf;
+            }
+            else item.Tag = shellError;
+            choices.Add(item);
         }
 private string GetResultFieldOutputName(string name)
         {
@@ -166,6 +225,19 @@ private string GetResultFieldOutputName(string name)
             name = _resultFieldOutputNames.GetNextNumberedKey(name);
             //
             return name;
+        }
+private string[] GetShellSourceFieldNames(ShellInPlaneQuantityEnum? quantity = null)
+        {
+            FeResults results = _controller.CurrentResult;
+            return results.GetAllVisibleFiledNameComponentNames().Keys.Where(name => name != _resultFieldOutputToEditName &&
+                results.IsShellSourceField(name) &&
+                (!quantity.HasValue || results.IsShellQuantityValid(name, quantity.Value))).ToArray();
+        }
+private static string GetPreferredShellFieldName(string[] fieldNames, ShellInPlaneQuantityEnum quantity)
+        {
+            string preferredFieldName = quantity == ShellInPlaneQuantityEnum.Stress ? FOFieldNames.Stress :
+                                                                                       FOFieldNames.ToStrain;
+            return fieldNames.Contains(preferredFieldName) ? preferredFieldName : fieldNames.FirstOrDefault();
         }
 protected override void OnApply(bool onOkAddNew)
         {
@@ -206,6 +278,23 @@ protected override void OnApply(bool onOkAddNew)
                 else if (!_controller.CurrentResult.DoesFieldContainsAllNecessaryComponents(rfocst.FieldName))
                     throw new CaeException("The field output does not contain all necessary componets.");
             }
+            // Check shell outputs
+            string shellFieldName = null;
+            if (ResultFieldOutput is ResultFieldOutputMaterialAxes rfoma) shellFieldName = rfoma.FieldName;
+            else if (ResultFieldOutput is ResultFieldOutputShellPlaneStress rfosps) shellFieldName = rfosps.FieldName;
+            else if (ResultFieldOutput is ResultFieldOutputCompositeFailure rfocf) shellFieldName = rfocf.FieldName;
+            if (shellFieldName != null && !GetShellSourceFieldNames().Contains(shellFieldName))
+                throw new CaeException("Only a tensor field output in global axes with all necessary components " +
+                                       "can be used.");
+            ShellInPlaneQuantityEnum? quantity = null;
+            if (ResultFieldOutput is ResultFieldOutputShellPlaneStress inPlaneState) quantity = inPlaneState.Quantity;
+            else if (ResultFieldOutput is ResultFieldOutputCompositeFailure failure) quantity = failure.Quantity;
+            if (shellFieldName != null && quantity.HasValue &&
+                !_controller.CurrentResult.IsShellQuantityValid(shellFieldName, quantity.Value))
+                throw new CaeException(quantity.Value == ShellInPlaneQuantityEnum.Stress ?
+                                       "The stresses as solved need a stress field, such as STRESS." :
+                                       "The plane stresses from strains and the strains need a strain field, such as " +
+                                       "TOSTRAIN.");
             // Create
             if (_resultFieldOutputToEditName == null)
             {
@@ -221,7 +310,7 @@ public override object Item=>ResultFieldOutput;
 protected override void OnSelect(object value){if(value is ViewResultFieldOutput view)_viewResultFieldOutput=view;}
 }
 
-// Source PrePoMax/Forms/83_ResultHistoryOutput/FrmResultHistoryOutput.cs SHA256 4066074ef5e4385c4caeb4938083b5d920f6e788af707a9fd87cad6ba7adc930
+// Source PrePoMax/Forms/83_ResultHistoryOutput/FrmResultHistoryOutput.cs SHA256 71aa81d131d2625126c5f797cae80d0cad8a683a60a06ee82291fe22cfe89c7a
 public sealed class FrmResultHistoryOutputRule : ResultFormRule {
 string[] _resultHistoryOutputSetNames;string _resultHistoryOutputToEditName;ViewResultHistoryOutput _viewResultHistoryOutput;
 public FrmResultHistoryOutputRule(Controller controller,string name=null):base(controller,name){_resultHistoryOutputSetNames=controller.GetHistoryResultSetNames();_resultHistoryOutputToEditName=name;
@@ -590,7 +679,7 @@ public override object Item=>ResultHistoryOutput;
 protected override void OnSelect(object value){if(value is ViewResultHistoryOutput view)_viewResultHistoryOutput=view;}
 }
 
-// Reused C2 rule FrmReferencePointRule; results-scoped preparation; shared source SHA256 ba4fe9fe7d9aab287eb8b04cf95a6c7f6b443e0072e0542a49bd4cb262b230f9
+// Reused C2 rule FrmReferencePointRule; results-scoped preparation; shared source SHA256 0d71a5cad512a13463e0ec5205c9d996a3deb487d4404d1f77d90ba16e73b518
 public sealed class ResultReferencePointRule : ResultFormRule {
 private HashSet<string> _referencePointNames;
 private string _referencePointToEditName;
@@ -695,7 +784,7 @@ public override vtkSelectItem SelectionKind=>vtkSelectItem.Node;
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Reused C2 rule FrmCoordinateSystemRule; results-scoped preparation; shared source SHA256 ba4fe9fe7d9aab287eb8b04cf95a6c7f6b443e0072e0542a49bd4cb262b230f9
+// Reused C2 rule FrmCoordinateSystemRule; results-scoped preparation; shared source SHA256 0d71a5cad512a13463e0ec5205c9d996a3deb487d4404d1f77d90ba16e73b518
 public sealed class ResultCoordinateSystemRule : ResultFormRule {
 private HashSet<string> _coordinateSystemNames;
 private string _coordinateSystemToEditName;
@@ -785,7 +874,7 @@ public override vtkSelectItem SelectionKind=>vtkSelectItem.Node;
 public override string[] SelectionPrefixes=>["Center","PointX","PointXY"];
 }
 
-// Source PrePoMax/Forms/84_Transformation/FrmTransformation.cs SHA256 dba6737c5776dbf6814a4c7538561a95a94b9171297f169ebb44f698e9f4e29c
+// Source PrePoMax/Forms/84_Transformation/FrmTransformation.cs SHA256 f480f770dc2b93abce3257a15045d3c90249eacbacdebdb717973087233ace92
 public sealed class TransformationEditSession(Controller controller) {
  readonly Controller _controller=controller;bool _propertyItemChanged;
  readonly List<EditorChoice> active=(controller.GetTransformations()??[]).DeepClone().Select(t=>new EditorChoice(t.Name){Tag=Wrap(t)}).ToList();

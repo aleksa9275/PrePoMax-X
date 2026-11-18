@@ -12,7 +12,7 @@ def git(*args):
 
 
 def canonical(url):
-    return url.removesuffix("/").removesuffix(".git").replace("git@gitlab.com:", "https://gitlab.com/")
+    return url.removesuffix("/").removesuffix(".git").replace("git@github.com:", "https://github.com/")
 
 
 def main():
@@ -28,12 +28,12 @@ def main():
             raise ValueError("An integration operation is in progress: " + marker)
     if git("rev-parse", "--is-shallow-repository") != "false":
         raise ValueError("Shallow history cannot establish the complete upstream mirror.")
-    official = "https://gitlab.com/MatejB/PrePoMax"
+    official = "https://github.com/PrePoMax/PrePoMax"  # D064: the GitLab project is archived
     if canonical(git("config", "--get", "remote.upstream.url")) != official:
         raise ValueError("upstream must point to the official PrePoMax repository.")
     origin = canonical(git("config", "--get", "remote.origin.url"))
-    if not origin.startswith("https://gitlab.com/") or origin == official:
-        raise ValueError("origin must be a distinct GitLab fork; inspect remote configuration.")
+    if not origin.startswith("https://github.com/") or origin == official:
+        raise ValueError("origin must be a distinct GitHub fork; inspect remote configuration.")
     advertised = git("ls-remote", "--symref", "upstream", "HEAD")
     defaults = [line.split()[1] for line in advertised.splitlines() if line.startswith("ref: refs/heads/")]
     if len(defaults) != 1:

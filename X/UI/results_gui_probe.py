@@ -105,7 +105,7 @@ def start(app,window,output):
         from form_driver import FormDriver
         forms=FormDriver(window);window.edit_results('Result fields')
         check('original FrmResultFieldOutput opened',type(forms.form).__name__=='FrmResultFieldOutput' and str(forms.form.Text)=='Create Field Output')
-        check('original result field output types',forms.types==['Limit','Envelope','Equation','Coordinate System Transform'])
+        check('original result field output types',forms.types==['Limit','Envelope','Equation','Coordinate System Transform','Material Axes','Shell In-Plane State','Composite Failure'])  # 3.0.1 adds the shell/composite types
         forms.select_type('Equation');forms.set('Name','GUI_Double');forms.set('Equation','=2*STRESS.S11');forms.ok()
     def authored():
         if not wait():return False

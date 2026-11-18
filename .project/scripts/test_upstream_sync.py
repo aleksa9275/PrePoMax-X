@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 SCRIPT = Path(__file__).with_name("upstream-sync.py").resolve()
-OFFICIAL = "https://gitlab.com/MatejB/PrePoMax.git"
+OFFICIAL = "https://github.com/PrePoMax/PrePoMax.git"
 
 
 class SyncTests(unittest.TestCase):
@@ -24,7 +24,7 @@ class SyncTests(unittest.TestCase):
         self.git(self.seed, "push", "origin", "trunk")
         self.git(self.root, "clone", str(self.remote), str(self.local))
         self.configure(self.local)
-        self.git(self.local, "remote", "set-url", "origin", "https://gitlab.com/example/fork.git")
+        self.git(self.local, "remote", "set-url", "origin", "https://github.com/example/fork.git")
         self.git(self.local, "remote", "add", "upstream", OFFICIAL)
         # Exact official URL is redirected to a local fixture only within this temporary repo.
         self.git(self.local, "config", "url." + str(self.remote) + ".insteadOf", OFFICIAL)

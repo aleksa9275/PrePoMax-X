@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -31,6 +31,8 @@ namespace CaeMesh
         private readonly List<int[]> _layerSideSurfaceIds;
         private readonly int[] _directionEdgeIds;
         private readonly bool _reachedTarget;
+        private readonly bool _unlikeEnds;
+        private readonly string _qualityError;
         private HashSet<int> _wallEdgeIds;
         private bool? _prismatic;
         private int[][][] _layerGroupEdgeIds;
@@ -47,14 +49,28 @@ namespace CaeMesh
         /// error names what is wrong with a block that is there rather than that no block could be found.
         /// </summary>
         public bool ReachedTarget { get { return _reachedTarget; } }
+        /// <summary>
+        /// Whether the source and the target outline shapes that are not alike - a loft between them rather than a
+        /// taper - which the search takes only for a part that has no other way.
+        /// </summary>
+        public bool UnlikeEnds { get { return _unlikeEnds; } }
+        /// <summary>
+        /// Why the block would sweep poorly although it can be swept - the sweep lines measured across the source
+        /// departing from a taper, the two sides of a wall along the sweep running different ways - or null. The
+        /// automatic search refuses such a block; a source selected by hand is swept from.
+        /// </summary>
+        public string QualityError { get { return _qualityError; } }
 
 
         // Constructors                                                                                                             
         public SweepBlockValidation(string error, int[] sideSurfaceIds, int[] targetSurfaceIds,
-                                    List<int[]> layerSideSurfaceIds, int[] directionEdgeIds, bool reachedTarget)
+                                    List<int[]> layerSideSurfaceIds, int[] directionEdgeIds, bool reachedTarget,
+                                    bool unlikeEnds, string qualityError)
         {
             _error = error;
             _reachedTarget = reachedTarget;
+            _unlikeEnds = unlikeEnds;
+            _qualityError = qualityError;
             _sideSurfaceIds = sideSurfaceIds;
             _targetSurfaceIds = targetSurfaceIds;
             _layerSideSurfaceIds = layerSideSurfaceIds;

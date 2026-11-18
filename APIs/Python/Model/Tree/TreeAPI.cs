@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -28,7 +28,8 @@ namespace APIs.Python.Model
         private static readonly string[] _geometryItemTypes = { "parts", "mesh_setup_items" };
         private static readonly string[] _modelItemTypes = { "parts", "node_sets", "element_sets", "surfaces",
                                                              "reference_points", "coordinate_systems", "materials",
-                                                             "sections", "constraints", "surface_interactions",
+                                                             "sections", "material_orientations", "constraints",
+                                                             "surface_interactions",
                                                              "contact_pairs", "distributions", "amplitudes",
                                                              "initial_conditions", "jobs" };
         private static readonly string[] _stepItemTypes = { "history_outputs", "field_outputs",

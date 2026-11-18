@@ -561,6 +561,21 @@ namespace System.Windows.Forms
     public class UserControl : ContainerControl { public BorderStyle BorderStyle { get; set; } }
     public class Panel : ScrollableControl { public BorderStyle BorderStyle { get; set; } }
     public class FlowLayoutPanel : Panel { }
+    /// <summary>WinForms Splitter: a docked bar that resizes the control docked before it; MinSize and MinExtra
+    /// bound the sizes of that control and of the remaining space.</summary>
+    public class Splitter : Control
+    {
+        public int MinExtra { get; set; } = 25;
+        public int MinSize { get; set; } = 25;
+        public int SplitPosition { get; set; } = -1;
+        public BorderStyle BorderStyle { get; set; }
+        public event SplitterEventHandler SplitterMoving, SplitterMoved;
+        public void RaiseSplitterMoved(int x, int y, int splitX, int splitY)
+        {
+            SplitterMoving?.Invoke(this, new SplitterEventArgs(x, y, splitX, splitY));
+            SplitterMoved?.Invoke(this, new SplitterEventArgs(x, y, splitX, splitY));
+        }
+    }
     /// <summary>WinForms SplitContainer: two panels side by side (Vertical) or stacked (Horizontal) around a
     /// splitter at SplitterDistance; a fixed panel keeps its size when the container resizes, otherwise the
     /// splitter keeps its proportion; a collapsed panel hides and the other fills the container.</summary>

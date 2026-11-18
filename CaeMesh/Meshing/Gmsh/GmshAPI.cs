@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -696,35 +696,6 @@ namespace CaeMesh
                 Tuple<int, int>[] dimTags = new Tuple<int, int>[0];
                 Gmsh.Model.Mesh.Optimize(gmshSetupItem.OptimizeFirstOrderShell.ToString(), false, 10, dimTags);
             }
-        }
-        // Q-Morph full-quad surface meshing, not offered yet: meant to replace GenerateMesh(2) in ShellGmsh, with
-        // RecombineAll off and the Blossom full-quad recombination for the surfaces Q-Morph leaves to gmsh
-        private void QMorphMesh()
-        {
-            GenerateMesh(1);
-            // The transfinite surfaces keep their structured grid; Q-Morph converts the triangles of the others
-            Tuple<int, int>[] dimTags;
-            Gmsh.Model.GetEntities(out dimTags, 2);
-            List<int> surfaceIds = new List<int>();
-            foreach (var dimTag in dimTags)
-            {
-                if (!_transfiniteSurfaceIds.Contains(dimTag.Item2)) surfaceIds.Add(dimTag.Item2);
-            }
-            // The triangulation Q-Morph starts from is chosen per surface, and the surfaces are meshed in one pass
-            QMorph.SetBackgroundAlgorithms(surfaceIds.ToArray());
-            if (_graded) SetSizeGrading();
-            Gmsh.Model.Mesh.Generate(2);
-            QMorphFaceReport[] reports = QMorph.QuadMeshSurfaces(surfaceIds.ToArray());
-            // A surface Q-Morph cannot mesh keeps its triangles, marked for the recombination by gmsh
-            bool recombineRest = false;
-            foreach (var report in reports)
-            {
-                if (report.QMorph) continue;
-                recombineRest = true;
-                _writeOutput?.Invoke(NameGmshEntities("Q-Morph: surface " + report.Tag + " is recombined by gmsh (" +
-                                                      report.Reason + ")."));
-            }
-            if (recombineRest) Gmsh.Model.Mesh.Recombine();
         }
         private void TetrahedralGmsh(GmshSetupItem gmshSetupItem, bool preview)
         {
@@ -3460,6 +3431,14 @@ namespace CaeMesh
             }
             return alwaysFixedEdgeIds;
         }
+        /// <summary>
+        /// Whether the edge carries a count QuadWild chose in an earlier round, rather than one the user set.
+        /// </summary>
+        private bool IsQuadWildChosenCount(int edgeId)
+        {
+            return _userPinnedEdgeIds != null && !_userPinnedEdgeIds.Contains(edgeId) &&
+                   _gmshData.EdgeIdNumElements.ContainsKey(edgeId);
+        }
         private bool IsQuadWildEdgeFixed(int edgeId, HashSet<int> alwaysFixedEdgeIds, HashSet<int> wallSurfaceIds)
         {
             if (alwaysFixedEdgeIds.Contains(edgeId)) return true;
@@ -4531,11 +4510,17 @@ namespace CaeMesh
                     .ToDictionary(entry => entry.Key, entry => entry.Value);
                 HashSet<int> wallSurfaceIds = new HashSet<int>(walls.Select(wall => wall.SurfaceId));
                 HashSet<int> alwaysFixedEdgeIds = GetAlwaysFixedQuadWildEdgeIds(_sweepBlocks, walls, userPins);
+                // A source is meshed again with the edges the walls moved fixed, so a source whose one free edge carries
+                // the count QuadWild chose in an earlier round has no free edge left once the walls move it - surface 2
+                // of Overlap-7 of SweepQW sweep_66 went from 11 to an odd total - and needs the even total as well; the
+                // row holds without a change while the walls leave the edge as QuadWild meshed it
                 foreach (var surfaceId in _quadWildSourceIds)
                 {
                     Gmsh.Model.GetAdjacencies(2, surfaceId, out _, out edgeIds);
                     edgeIds = edgeIds.Select(id => Math.Abs(id)).Distinct().ToArray();
-                    if (edgeIds.All(id => IsQuadWildEdgeFixed(id, alwaysFixedEdgeIds, wallSurfaceIds)))
+                    int[] freeEdgeIds = edgeIds.Where(id => !IsQuadWildEdgeFixed(id, alwaysFixedEdgeIds, wallSurfaceIds))
+                                               .ToArray();
+                    if (freeEdgeIds.Length == 0 || (freeEdgeIds.Length == 1 && IsQuadWildChosenCount(freeEdgeIds[0])))
                         problem.AddEvenSum("QuadWild Surface " + surfaceId, IntervalRowTierEnum.Hard, edgeIds);
                     // QuadWild lays its own patches over the source and has to reach the counts given on its edges with
                     // them; given fewer than gmsh measured, the patches of sweep_30 found no layout at all
@@ -4569,6 +4554,10 @@ namespace CaeMesh
                     if (minimum > 1) problem.SetMinimum(edgeId, minimum);
                 }
             }
+            // No edge is lowered below the count that keeps its elements within the maximum element size
+            foreach (var entry in GetMaxSizeCounts(problem.EdgeIds.ToDictionary(edgeId => edgeId,
+                                                                                 SweepWallTopology.GetElementCount)))
+                problem.SetMaxSizeCount(entry.Key, entry.Value);
             return problem;
         }
         /// <summary>
@@ -5266,7 +5255,8 @@ namespace CaeMesh
             List<TransfiniteSideTriple> unbalancedTriples;
             List<TransfiniteSidePair> unbalanced = TransfiniteEdgeCountBalancer.Balance(edgeIdCount, naturalCounts,
                                                                                          pinnedEdgeIds, pairs, triples,
-                                                                                         out unbalancedTriples);
+                                                                                         out unbalancedTriples, null, null,
+                                                                                         GetMaxSizeCounts(naturalCounts));
             if (unbalanced.Count > 0 || unbalancedTriples.Count > 0)
                 throw new CaeException(GetUnbalancedSidesMessage(new List<TransfiniteSidePair>(), unbalancedTriples,
                                                                  edgeIdCount, pinnedEdgeIds,
@@ -5512,7 +5502,8 @@ namespace CaeMesh
             List<TransfiniteSidePair> unbalanced = TransfiniteEdgeCountBalancer.Balance(edgeIdCount, naturalCounts,
                                                                                          pinnedEdgeIds, pairs, triples,
                                                                                          out unbalancedTriples,
-                                                                                         freeFaceEdgeIds, sizedEdgeIdCounts);
+                                                                                         freeFaceEdgeIds, sizedEdgeIdCounts,
+                                                                                         GetMaxSizeCounts(naturalCounts));
             if (unbalanced.Count > 0 || unbalancedTriples.Count > 0)
                 throw new CaeException(GetUnbalancedSidesMessage(unbalanced, unbalancedTriples, edgeIdCount,
                                                                  pinnedEdgeIds, null, sizedEdgeIdCounts));
@@ -5532,6 +5523,24 @@ namespace CaeMesh
                 else Gmsh.Model.Mesh.SetTransfiniteSurface(face.FaceId, "AlternateLeft", face.CornerNodeIds);
                 _transfiniteSurfaceIds.Add(face.FaceId);
             }
+        }
+        /// <summary>
+        /// The fewest elements that keep the elements of each edge within the maximum element size gmsh meshes with, and
+        /// no more than the count its 1D mesh has, so that only a count the balance lowers is held up by it.
+        /// </summary>
+        private static Dictionary<int, int> GetMaxSizeCounts(Dictionary<int, int> edgeIdMeshCount)
+        {
+            double length;
+            double maxSize = Gmsh.Option.GetNumber("Mesh.MeshSizeMax");
+            Dictionary<int, int> maxSizeCounts = new Dictionary<int, int>();
+            if (maxSize <= 0) return maxSizeCounts;
+            foreach (var entry in edgeIdMeshCount)
+            {
+                Gmsh.Model.OCC.GetMass(1, entry.Key, out length);
+                int count = Math.Min(entry.Value, (int)Math.Ceiling(length / maxSize - 1E-6));
+                if (count > 1) maxSizeCounts[entry.Key] = count;
+            }
+            return maxSizeCounts;
         }
         private bool IsPolar(TransfiniteFace face)
         {

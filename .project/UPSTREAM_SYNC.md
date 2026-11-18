@@ -1,17 +1,32 @@
 # Upstream synchronization and integration
 
-Maintainer direction, 3 November 2026: initial parity target is **PrePoMax 3.0.0**;
-thereafter follow upstream releases and maintain open-source macOS/Linux packages
-even if upstream does not accept the contribution. Required Windows support and
-the shared-source rule remain. Record the exact release commit/artifact and
-feature/behavior delta for each version; release numbering alone is insufficient.
-This direction does not automatically merge new upstream code or publish a release.
+Maintainer direction, 3 November 2026: follow upstream releases and maintain
+open-source macOS/Linux packages even if upstream does not accept the
+contribution. Required Windows support and the shared-source rule remain. Record
+the exact upstream commit and feature/behavior delta for each sync; release
+numbering alone is insufficient. Current target (D063): upstream `master` at
+`1e2f83f2` (3.0.1 + `vtkNative`), behavioural reference the 3.0.1 release
+`51bca35a`.
 
 ## Repository lanes
 
-`origin` is `git@gitlab.com:aleksa9275/pre-po-max-x.git`; `upstream` is `https://gitlab.com/MatejB/PrePoMax.git`. The advertised default is currently `master`, also referenced by origin/HEAD and upstream/HEAD. `master` mirrors upstream exactly. `x/main` is a separate reviewed integration lane; Phase 0 documentation stays on `feature/project-initialization`. New development branches use the maintainer's requested prefixes.
+GitHub since 18 November 2026 (D064). `origin` is
+`git@github.com:aleksa9275/PrePoMax-X.git` (a fork of upstream); `upstream` is
+`https://github.com/PrePoMax/PrePoMax.git`; `gitlab` is the archived GitLab fork
+(read-only, the pre-replay history at `e08df83f`). The former upstream
+`gitlab.com/MatejB/PrePoMax` is archived and its history was rewritten, so it is
+not a source anymore. `master` mirrors upstream exactly (fast-forward only).
+Development is on `research/native-feasibility`, which sits on upstream's own
+history; `x/main` is a separate reviewed integration lane created when needed.
 
-The repository is not shallow. Fetches preserve full history and tags. Do not replace upstream history with periodic source snapshots, synthetic squashed releases or forced mirror pushes. If the default changes or mirror diverges, stop and review history rather than reset. GitLab branch protections/default-branch changes were not configured; request approval of a concrete protection policy later. Suggested protections: fast-forward-only/restricted writers for master, reviewed integration for x/main, no forced pushes/deletions.
+Syncs merge a pinned upstream commit into the development branch with a reviewed
+merge commit (no rebasing of published work): 3.0.1 was merged at `1e2f83f2`
+([M0 report](reports/phase-m0-upstream-3.0.1.md)).
+
+The repository is not shallow. Fetches preserve full history and tags. Do not
+replace upstream history with periodic source snapshots, synthetic squashed
+releases or forced mirror pushes. If the default changes or the mirror diverges,
+stop and review history rather than reset.
 
 ## Maintenance script
 

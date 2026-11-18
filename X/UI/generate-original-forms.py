@@ -39,8 +39,10 @@ BASE = [
     'UserControls/TextBoxes/NumericTextBox.cs', 'UserControls/TextBoxes/NumericTextBox.Designer.cs',
     'UserControls/AnalysisProgressView.cs', 'UserControls/AnalysisProgressView.Designer.cs',
     'PrePoMax/Forms/00_Common/ViewDoubleValue.cs', 'PrePoMax/Forms/00_Common/ViewColor.cs',
-    'PrePoMax/Forms/01_Edit/DataGridViewExtension.cs', 'PrePoMax/Forms/44_SurfaceInteraction/ListViewItemComparer.cs',
+    'PrePoMax/Forms/01_Edit/DataGridViewExtension.cs', 'PrePoMax/Forms/45_SurfaceInteraction/ListViewItemComparer.cs',
     'UserControls/MessageBoxes/AutoClosingMessageBox.cs', 'PrePoMax/Forms/61_Settings/EnvVarsUIEditor.cs',
+    # 3.0.1 composite shell section (FrmSection Layers tab): the layup diagram panel
+    'UserControls/SidePanel/DoubleBufferedPanel.cs',
     # Code editor forms (C12): the original text boxes on the FastColoredTextBox model
     'UserControls/TextBoxes/CalculixKeywordTextBox/CalculixInpTextBox.cs',
     'UserControls/TextBoxes/CalculixKeywordTextBox/ICalculixInpTextBox.cs',
@@ -57,7 +59,7 @@ BASE = [
 FORMS = '''FrmBoundaryLayer FrmCaptureViewport FrmContactPair FrmElementSet FrmMergeCoincidentNodes FrmMirror
 FrmModelProperties FrmNodeSet FrmOffsetFace FrmPartProperties FrmRemeshingParameters FrmRepairGeometry FrmRotate FrmScale
 FrmSplitPeriodicFaces FrmSurface FrmSurfaceOperation FrmThickenShellMesh FrmTranslate FrmBC FrmConstraint FrmDefinedField
-FrmFieldOutput FrmHistoryOutput FrmInitialCondition FrmLoad FrmMeshSetupItem FrmNewModel FrmSection FrmSplitSolid FrmStep
+FrmFieldOutput FrmHistoryOutput FrmInitialCondition FrmLoad FrmMeshSetupItem FrmNewModel FrmSection FrmMaterialOrientation FrmSplitSolid FrmStep
 FrmSplitShell FrmCoordinateSystem FrmElementQuality FrmExportFileWithProperties FrmReferencePoint
 FrmSplitPartMeshUsingSurface FrmViewObjectProperties
 FrmAmplitude FrmDistribution FrmResultFieldOutput FrmResultHistoryOutput

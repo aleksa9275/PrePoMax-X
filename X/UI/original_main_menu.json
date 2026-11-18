@@ -1,7 +1,7 @@
 {
  "source": {
-  "PrePoMax/Forms/FrmMain.Designer.cs": "ac5ce48bf504113a493b38ee90ad96ad5410abf462153adad6c9972cbd1df0e7",
-  "PrePoMax/Forms/FrmMain.cs": "615be6b02b18de7a026b38c7d688817c6a5f67535a7eee678b16acdca5507efe",
+  "PrePoMax/Forms/FrmMain.Designer.cs": "4d74fd387a224dbae86603e43c2d99aeaa665aa5684faf88f0028ebddcd6d9e6",
+  "PrePoMax/Forms/FrmMain.cs": "525cea761cc434ff492f126d67093945e401251ebae38788d5971c9044db078d",
   "PrePoMax/Properties/Resources.resx": "1c942cc402b63f99902f6408902c3c8c39962acc90487c879cb92ea0539db70a"
  },
  "menus": [
@@ -2215,6 +2215,76 @@
      "text": "Material Library",
      "handler": "tsmiMaterialLibrary_Click",
      "image": "PrePoMax/Icons/Material/Library.ico"
+    },
+    {
+     "id": "tsmiMaterialOrientation",
+     "text": "Material Orientation",
+     "image": "PrePoMax/Icons/Mesh/CoordinateSystem.ico",
+     "children": [
+      {
+       "id": "tsmiCreateMaterialOrientation",
+       "text": "Create",
+       "handler": "tsmiCreateMaterialOrientation_Click"
+      },
+      {
+       "id": "tsmiEditMaterialOrientation",
+       "text": "Edit",
+       "handler": "tsmiEditMaterialOrientation_Click",
+       "select": {
+        "mode": "one",
+        "title": "Material Orientations",
+        "getter": "GetAllMaterialOrientations",
+        "target": "EditMaterialOrientation",
+        "minimum": 1,
+        "action": {
+         "form": {
+          "form": "MaterialOrientation",
+          "title": "Edit Material Orientation"
+         }
+        }
+       }
+      },
+      {
+       "id": "tsmiDuplicateMaterialOrientation",
+       "text": "Duplicate",
+       "handler": "tsmiDuplicateMaterialOrientation_Click",
+       "select": {
+        "mode": "many",
+        "title": "Material Orientations",
+        "getter": "GetAllMaterialOrientations",
+        "target": "DuplicateMaterialOrientations",
+        "minimum": 1,
+        "action": {
+         "calls": [
+          "DuplicateMaterialOrientationsCommand"
+         ]
+        }
+       }
+      },
+      {
+       "id": "tsmiDividerMaterialOrientation1",
+       "separator": true
+      },
+      {
+       "id": "tsmiDeleteMaterialOrientation",
+       "text": "Delete",
+       "handler": "tsmiDeleteMaterialOrientation_Click",
+       "select": {
+        "mode": "many",
+        "title": "Material Orientations",
+        "getter": "GetAllMaterialOrientations",
+        "target": "DeleteMaterialOrientations",
+        "minimum": 1,
+        "action": {
+         "confirm": "OK to delete selected material orientations?",
+         "calls": [
+          "RemoveMaterialOrientationsCommand"
+         ]
+        }
+       },
+       "image": "PrePoMax/Icons/Common/Delete.ico"
+      }
+     ]
     },
     {
      "id": "tsmiSection",

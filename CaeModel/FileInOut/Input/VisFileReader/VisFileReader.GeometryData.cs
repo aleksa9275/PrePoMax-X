@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -299,8 +299,9 @@ namespace FileInOut.Input
                     //
                     edgeNodeIds.Add(nodeIds[0]);
                     edgeNodeIds.Add(nodeIds[1]);
-                    // A partial triangulation can leave a free side between nonconsecutive polyline nodes.
-                    // Only consecutive nodes form a segment of the CAD edge.
+                    // Only the segments of the polyline are edge elements. A face the kernel triangulated only in
+                    // part has free triangle edges that join polyline nodes far apart, and as edge elements they
+                    // close loops along the edge that split it into overlapping visualization edges
                     if (nodeIds[0] != nodeIds[1])
                     {
                         key = nodeIds[0] < nodeIds[1] ? new int[] { nodeIds[0], nodeIds[1] } :

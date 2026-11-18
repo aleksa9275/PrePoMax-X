@@ -254,7 +254,7 @@ def start(app, w, output, model, results):
             model_node = top[0]
             names = [model_node.child(i).text(0).split(' (')[0] for i in range(model_node.childCount())]
             report['modelTreeNodes'] = names
-            check('original Model children order', names == ['Mesh', 'Features', 'Materials', 'Sections', 'Constraints', 'Contacts',
+            check('original Model children order', names == ['Mesh', 'Features', 'Materials', 'Material Orientations', 'Sections', 'Constraints', 'Contacts',  # 3.0.1
                                                              'Distributions', 'Amplitudes', 'Initial Conditions', 'Steps'])
             def find(text, parent=None):
                 stack = [parent] if parent else [w.tree.topLevelItem(i) for i in range(w.tree.topLevelItemCount())]

@@ -80,7 +80,8 @@ class MainMenuWorkbench:
     # Original Edit/Create forms → (Qt editor kind, family)
     FORMS = {
         'NodeSet': ('model', 'Node sets'), 'ElementSet': ('model', 'Element sets'), 'Surface': ('model', 'Surfaces'),
-        'Material': ('model', 'Materials'), 'Section': ('model', 'Sections'), 'Constraint': ('model', 'Constraints'),
+        'Material': ('model', 'Materials'), 'MaterialOrientation': ('model', 'Material orientations'),
+        'Section': ('model', 'Sections'), 'Constraint': ('model', 'Constraints'),
         'SurfaceInteraction': ('model', 'Surface interactions'), 'ContactPair': ('model', 'Contact pairs'),
         'Distribution': ('model', 'Distributions'), 'Amplitude': ('model', 'Amplitudes'),
         'InitialCondition': ('model', 'Initial conditions'), 'Step': ('model', 'Steps'),
@@ -102,13 +103,14 @@ class MainMenuWorkbench:
         'tsmiCreateNodeSet_Click': 'Node sets', 'tsmiCreateElementSet_Click': 'Element sets',
         'tsmiCreateSurface_Click': 'Surfaces', 'tsmiCreateModelReferencePoint_Click': 'Reference points',
         'tsmiCreateModelCoordinateSystem_Click': 'Coordinate systems', 'tsmiCreateMaterial_Click': 'Materials',
+        'tsmiCreateMaterialOrientation_Click': 'Material orientations',
         'tsmiCreateSection_Click': 'Sections', 'tsmiCreateConstraint_Click': 'Constraints',
         'tsmiCreateSurfaceInteraction_Click': 'Surface interactions', 'tsmiCreateContactPair_Click': 'Contact pairs',
         'tsmiCreateDistribution_Click': 'Distributions', 'tsmiCreateAmplitude_Click': 'Amplitudes',
         'tsmiCreateInitialCondition_Click': 'Initial conditions', 'tsmiCreateStep_Click': 'Steps',
     }
     # Original creates that return when there is no mesh (FrmMain checks Mesh == null)
-    NEEDS_MESH = {'Node sets', 'Element sets', 'Surfaces', 'Reference points', 'Materials', 'Constraints',
+    NEEDS_MESH = {'Node sets', 'Element sets', 'Surfaces', 'Reference points', 'Materials', 'Material orientations', 'Constraints',
                   'Surface interactions', 'Contact pairs', 'Steps'}
 
     # ------------------------------------------------------------------ build

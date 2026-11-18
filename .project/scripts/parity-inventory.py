@@ -105,7 +105,7 @@ def main() -> None:
         "are excluded; Commands lists source entries, including its base. Results tools,",
         "utilities, automation, dependencies and installers need separate acceptance. B records",
         "structural reachability, not execution of every feature. V requires full item coverage.",
-        "The dormant Q-Morph wrapper is not exposed. B coverage is documented in the Phase B report;",
+        "Upstream 3.0.1 removed the dormant Q-Morph wrapper. B coverage is documented in the Phase B report;",
         "bounded original-app interoperability does not mark whole feature families V.",
         "C1 connects Open/Save/ReplaceMaterial through the UI; existing material editing",
         "and the native viewport foundation are detailed in [the C1 report](reports/phase-c1-ui-foundation.md).",

@@ -1,13 +1,13 @@
 # NetGenMesher (vendored binaries)
 
 The meshing and CAD utility PrePoMax shells out to for Netgen meshing and all OpenCASCADE geometry
-operations. Built from `C:\Pc\Programiranje\NetgenMesher` (not part of this repository), so a clean
-checkout could not otherwise produce a working `Meshers\Netgen`.
+operations. Built from https://github.com/PrePoMax/NetgenMesher (not part of this repository), so a
+clean checkout could not otherwise produce a working `Meshers\Netgen`.
 
 | Component | Files | License |
 |---|---|---|
-| NetGenMesher | `NetGenMesher.exe` | GPL-3.0 - own build, same license as PrePoMax |
-| Netgen 5.3.1 | `nglib.dll` | LGPL-2.1 |
+| NetGenMesher | `NetGenMesher.exe` | LGPL-2.1 - own build, published with its Netgen port |
+| Netgen 5.3.1, ported to OpenCASCADE 8.0.1 | `nglib.dll` | LGPL-2.1 |
 | OpenCASCADE 8.0.1 | 29 x `TK*.dll` | LGPL-2.1 with the Open CASCADE exception |
 | pthreads-win32 2.9.1 | `pthreadVC2.dll` | LGPL-2.1 |
 | zlib 1.2.11 | `zlib.dll` | zlib License |
@@ -47,7 +47,9 @@ and BRepMesh silently drops whole faces. It divides a copy in which every face h
 own, because faces a split cut from one face share its surface and the pcurves of the edges between
 them, and dividing one of them left the other without pcurves on those edges. It warns on stdout about
 every face it could not
-triangulate. Its `BREP_MESH` reads the optional `transfinite_faces`, `transfinite_angle` and
+triangulate. A face BRepMesh triangulated only in part, because the polylines of its edges cross in its
+parameter space, is meshed again with its edges divided finer, so a thin face along long curved edges reaches
+PrePoMax whole with all its edges. Its `BREP_MESH` reads the optional `transfinite_faces`, `transfinite_angle` and
 `transfinite_filename` entries of the mesh parameters file. The file names the structured faces PrePoMax
 finds by the one definition all its meshers follow - every face with its sides as chains of edges, the
 numbers of elements set on edges and the names messages use - and Netgen then finds none of its own: it

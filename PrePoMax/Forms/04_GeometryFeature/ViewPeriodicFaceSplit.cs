@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace PrePoMax.Forms
 {
     [Serializable]
-    public class ViewPeriodicFaceSplit
+    public class ViewPeriodicFaceSplit : UserControls.IMissingPropertyValues
     {
         // Variables
         private PeriodicFaceSplit _periodicFaceSplit;
@@ -69,6 +69,11 @@ namespace PrePoMax.Forms
         public PeriodicFaceSplit GetBase()
         {
             return _periodicFaceSplit;
+        }
+        public bool IsPropertyValueMissing(string propertyName)
+        {
+            return propertyName == nameof(RegionSelection) &&
+                   (_periodicFaceSplit.CreationIds == null || _periodicFaceSplit.CreationIds.Length == 0);
         }
     }
 }

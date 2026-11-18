@@ -22,6 +22,7 @@ void SetCurrentEdgesVisibilities(vtkControl.vtkEdgesVisibility edgesVisibility);
 bool ScreenUpdating { get; set; }
 bool RenderingOn { get; set; }
 bool LastOpenResultsAccepted { get; }
+void SetMenuAndToolStripVisibility();
 void Open(string fileName, Action<string, string> ActionOnFile, bool resetCamera = true, string parameters = null);
 void UpdateRecentFilesThreadSafe();
 void EnableDisableUndoRedo(string undo, string redo);
@@ -85,6 +86,8 @@ void SetZoomToFit(bool animate);
 void Rotate(double azimuthAngle, double elevationAngle, double rollAngle);
 double[] GetViewPlaneNormal();
 void AdjustCameraDistanceAndClipping();
+void SuspendCameraAdjustment();
+void ResumeCameraAdjustment();
 void UpdateScalarsAndRedraw();
 void UpdateScalarsAndCameraAndRedraw();
 vtkMaxActorData[] GetVtkMaxActorData();
@@ -120,6 +123,7 @@ void UpdateActorColorContoursVisibility(string[] actorNames, bool colorContour);
 void UpdateResultRepresentationVisibility(string[] partNames, bool visible, bool update);
 void AddSphereActor(vtkMaxActorData actorData, double symbolSize);
 void AddCoordinateSystemSymbol(double[] origin, double[][] axisDirections, string[] labels, double symbolSize, vtkRendererLayer layer);
+void AddMaterialAxesSymbol(double[] origin, double[][] axisDirections, string[] labels, double symbolSize);
 void AddCaptionActor(string name, string caption, Color color, double[] position, double[] offsetVector, double fontScaleFactor, vtkRendererLayer layer);
 void AddLabelActor(string name, double[][] positions, int[] labels, Color color, double fontScaleFactor, vtkRendererLayer layer);
 void AddLabelActor(string name, double[][] positions, string[] labels, Color color, double fontScaleFactor, vtkRendererLayer layer);
@@ -169,6 +173,7 @@ void DrawStatusBlockBorder(bool drawBorder);
 void SetStatusBlock(string name, DateTime dateTime, float analysisTime, string unit, string deformationVariable, float scaleFactor, vtkControl.vtkMaxFieldDataType fieldType, int stepNumber, int incrementNumber, int nodalDiameter);
 void SetBackground(bool gradient, Color topColor, Color bottomColor, bool redraw);
 void SetLighting(double ambient, double diffuse, bool redraw);
+void SetAmbientOcclusion(bool enabled, double relativeRadius, int kernelSize, bool redraw);
 void SetNavigationSensitivity(double rotateSensitivity, double zoomSensitivity, bool invertZoom, bool smoothZoom);
 void SetTrackpadNavigation(bool enabled, bool useWheelFallback, bool twoFingerDragPans, double panSensitivity, bool invertX, bool invertY);
 void SetSmoothing(bool pointSmoothing, bool lineSmoothing, bool redraw);
@@ -197,6 +202,8 @@ bool TryGetAnimationNodeData(int nodeId, out double[] coordinates, out float val
 void ArrangeVisibleArrowWidgets();
 void RemoveArrowWidgets(string[] widgetNames);
 void RegenerateTree(bool remeshing = false);
+void BeginTreeUpdateBatch();
+void EndTreeUpdateBatch();
 void AddTreeNode(ViewGeometryModelResults view, NamedClass item, string parentName);
 void UpdateTreeNode(ViewGeometryModelResults view, string oldItemName, NamedClass item, string parentName, bool updateSelection = true);
 void UpdateTreeNodeLayout(ViewGeometryModelResults view, string itemName, NamedClass item, string parentName);

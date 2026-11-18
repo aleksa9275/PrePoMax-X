@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -47,6 +47,22 @@ namespace PrePoMax.Python.Journal
                 // Only a 2D solid section writes its thickness, and add_solid refuses one in a 3D model
                 if (solidSection.TwoD)
                     arguments.Add("thickness=" + PythonValueFormatter.Equation(solidSection.Thickness));
+            }
+            else if (section is CompositeShellSection compositeShellSection)
+            {
+                method = verb + "_composite_shell";
+                PythonJournalWriter.AddPositional(arguments, "region", region);
+                List<string> rows = new List<string>();
+                foreach (CompositeLayer layer in compositeShellSection.Layers)
+                {
+                    rows.Add("[" + PythonValueFormatter.Equation(layer.Thickness) + ", " +
+                             PythonValueFormatter.Text(layer.MaterialName) + ", " +
+                             PythonValueFormatter.Equation(layer.Angle) + "]");
+                }
+                arguments.Add("layers=[" + string.Join(", ", rows) + "]");
+                arguments.Add("offset=" + PythonValueFormatter.Equation(compositeShellSection.Offset));
+                if (replace || compositeShellSection.Symmetric)
+                    arguments.Add("symmetric=" + (compositeShellSection.Symmetric ? "True" : "False"));
             }
             else if (section is ShellSection shellSection)
             {

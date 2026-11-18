@@ -73,6 +73,9 @@
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/ContactPairAPI.cs" Link="Python/Model/Interactions/ContactPairAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/ContactPairService.cs" Link="Python/Model/Interactions/ContactPairService.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/ContactPairsAPI.cs" Link="Python/Model/Interactions/ContactPairsAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/ContactSearchPairTypeEnum.cs" Link="Python/Model/Interactions/ContactSearchPairTypeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/ContactSearchResultAPI.cs" Link="Python/Model/Interactions/ContactSearchResultAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/FoundContactPairAPI.cs" Link="Python/Model/Interactions/FoundContactPairAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/SurfaceInteractionAPI.cs" Link="Python/Model/Interactions/SurfaceInteractionAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/SurfaceInteractionService.cs" Link="Python/Model/Interactions/SurfaceInteractionService.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Interactions/SurfaceInteractionsAPI.cs" Link="Python/Model/Interactions/SurfaceInteractionsAPI.cs" />
@@ -130,6 +133,9 @@
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Sections/SectionAPI.cs" Link="Python/Model/Sections/SectionAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Sections/SectionService.cs" Link="Python/Model/Sections/SectionService.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Sections/SectionsAPI.cs" Link="Python/Model/Sections/SectionsAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Orientations/MaterialOrientationAPI.cs" Link="Python/Model/Orientations/MaterialOrientationAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Orientations/MaterialOrientationService.cs" Link="Python/Model/Orientations/MaterialOrientationService.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Model/Orientations/MaterialOrientationsAPI.cs" Link="Python/Model/Orientations/MaterialOrientationsAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/ModelAPI.cs" Link="Python/Model/ModelAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Common/ModelItemsAPI.cs" Link="Python/Model/Common/ModelItemsAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Model/Common/ModelResolver.cs" Link="Python/Model/Common/ModelResolver.cs" />
@@ -217,6 +223,12 @@
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputLimitDraftAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputLimitDraftAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputsAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputsAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputService.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputService.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputMaterialAxesAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputMaterialAxesAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputMaterialAxesDraftAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputMaterialAxesDraftAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputShellInPlaneStateAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputShellInPlaneStateAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputShellInPlaneStateDraftAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputShellInPlaneStateDraftAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputCompositeFailureAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputCompositeFailureAPI.cs" />
+    <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultFieldOutputs/ResultFieldOutputCompositeFailureDraftAPI.cs" Link="Python/Results/ResultFieldOutputs/ResultFieldOutputCompositeFailureDraftAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultHistoryOutputs/ResultHistoryOutputAPI.cs" Link="Python/Results/ResultHistoryOutputs/ResultHistoryOutputAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultHistoryOutputs/ResultHistoryOutputComponentAPI.cs" Link="Python/Results/ResultHistoryOutputs/ResultHistoryOutputComponentAPI.cs" />
     <Compile Include="$(RepositoryRoot)APIs/Python/Results/ResultHistoryOutputs/ResultHistoryOutputComponentDataAPI.cs" Link="Python/Results/ResultHistoryOutputs/ResultHistoryOutputComponentDataAPI.cs" />

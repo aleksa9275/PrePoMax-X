@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -75,6 +75,7 @@ namespace UserControls
             treeNode18});
             System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Materials");
             System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("Sections");
+            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Material Orientations");
             System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Constraints");
             System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("Surface Interactions");
             System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("Contact Pairs");
@@ -89,6 +90,7 @@ namespace UserControls
             treeNode16,
             treeNode19,
             treeNode20,
+            treeNode44,
             treeNode21,
             treeNode22,
             treeNode25,
@@ -959,6 +961,11 @@ namespace UserControls
             treeNode21.SelectedImageKey = "Section.ico";
             treeNode21.Text = "Sections";
             treeNode21.ToolTipText = "Sections";
+            treeNode44.ImageKey = "CoordinateSystem.ico";
+            treeNode44.Name = "Material Orientations";
+            treeNode44.SelectedImageKey = "CoordinateSystem.ico";
+            treeNode44.Text = "Material Orientations";
+            treeNode44.ToolTipText = "Material Orientations";
             treeNode22.ImageKey = "Constraints.ico";
             treeNode22.Name = "Constraints";
             treeNode22.SelectedImageKey = "Constraints.ico";

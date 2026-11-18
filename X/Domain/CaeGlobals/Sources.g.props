@@ -99,6 +99,8 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationLengthFixedDOFConverter.cs" Link="UnitSystem/EquationToString/EquationLengthFixedDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationMomentConverter.cs" Link="UnitSystem/EquationToString/EquationMomentConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationHeatTransferCoefficientConverter.cs" Link="UnitSystem/EquationToString/EquationHeatTransferCoefficientConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationAngleDegFromConverter.cs" Link="UnitSystem/EquationToString/EquationAngleDegFromConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationLengthFromConverter.cs" Link="UnitSystem/EquationToString/EquationLengthFromConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationPressureFromConverter.cs" Link="UnitSystem/EquationToString/EquationPressureFromConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationTemperatureFromConverter.cs" Link="UnitSystem/EquationToString/EquationTemperatureFromConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationTemperatureConverter.cs" Link="UnitSystem/EquationToString/EquationTemperatureConverter.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationLengthConverter.cs" Link="UnitSystem/EquationToString/EquationLengthConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/EquationToString/EquationPowerPerVolumeConverter.cs" Link="UnitSystem/EquationToString/EquationPowerPerVolumeConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/NCalc/EquationParameterResolver.cs" Link="NCalc/EquationParameterResolver.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/NCalc/IntegerToDoubleVisitor.cs" Link="NCalc/IntegerToDoubleVisitor.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/NCalc/MyNCalc.cs" Link="NCalc/MyNCalc.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/MyUnit.cs" Link="UnitSystem/MyUnit.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAreaDefaultConverter.cs" Link="UnitSystem/StringToDouble/StringAreaDefaultConverter.cs" />
@@ -172,6 +175,7 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthDOFConverter.cs" Link="UnitSystem/StringToDouble/StringLengthDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthFixedDOFConverter.cs" Link="UnitSystem/StringToDouble/StringLengthFixedDOFConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthFromConverter.cs" Link="UnitSystem/StringToDouble/StringLengthFromConverter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringAngleDegFromConverter.cs" Link="UnitSystem/StringToDouble/StringAngleDegFromConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringMomentConverter.cs" Link="UnitSystem/StringToDouble/StringMomentConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringLengthPixelConverter.cs" Link="UnitSystem/StringToDouble/StringLengthPixelConverter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/UnitSystem/StringToDouble/StringPressureConverter.cs" Link="UnitSystem/StringToDouble/StringPressureConverter.cs" />

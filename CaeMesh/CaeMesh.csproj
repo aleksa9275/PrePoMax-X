@@ -58,6 +58,7 @@
     <Compile Include="ContactSearch\ContactSurface.cs" />
     <Compile Include="ContactSearch\MasterSlaveItem.cs" />
     <Compile Include="CoordinateSystem.cs" />
+    <Compile Include="MaterialOrientationCalculator.cs" />
     <Compile Include="Elements\0D\FeElement0D.cs" />
     <Compile Include="Elements\0D\MassElement.cs" />
     <Compile Include="Elements\1D\LinearGapElement.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Elements\ElementTypeCount.cs" />
     <Compile Include="Elements\VtkCellType.cs" />
     <Compile Include="Enums\ConvertPyramidsToEnum.cs" />
+    <Compile Include="Enums\MaterialOrientationAxisEnum.cs" />
     <Compile Include="Enums\GeomCurveType.cs" />
     <Compile Include="Enums\FrontBackBothFaceSideEnum.cs" />
     <Compile Include="Enums\GeomFaceType.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Meshing\Gmsh\GmshThreeBlockMesher.cs" />
     <Compile Include="Meshing\Gmsh\GmshThreeBlockPrism.cs" />
     <Compile Include="Meshing\MeshTypeEnum.cs" />
+    <Compile Include="Meshing\Netgen\NetgenKernelIds.cs" />
     <Compile Include="Meshing\Netgen\NetgenTransfiniteFile.cs" />
     <Compile Include="Meshing\Transfinite\TransfiniteEdgeCountBalancer.cs" />
     <Compile Include="Meshing\Transfinite\TransfiniteFace.cs" />

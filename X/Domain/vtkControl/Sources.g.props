@@ -18,12 +18,13 @@
     <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Widget/DataFieldType.cs" Link="vtkMax/Widget/DataFieldType.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Widget/AnimationType.cs" Link="vtkMax/Widget/AnimationType.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Animation/vtkMaxAnimationFrameData.cs" Link="vtkMax/Animation/vtkMaxAnimationFrameData.cs" />
-    <Compile Include="$(RepositoryRoot)vtkControl/vtkSelectionGeometry.cs" Link="vtkSelectionGeometry.cs" />
-    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Actor/vtkMaxActor.PolyTopology.cs" Link="vtkMax/Actor/vtkMaxActor.PolyTopology.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/vtkMax/Widget/00_vtkMaxWidgetHighlight.cs" Link="vtkMax/Widget/00_vtkMaxWidgetHighlight.cs" />
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PresentationActor.cs" Link="X/PresentationActor.cs" /> <!-- Headless presentation geometry handle -->
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PresentationServices.cs" Link="X/PresentationServices.cs" /> <!-- Explicit native rendering/export services -->
     <Compile Include="$(RepositoryRoot)vtkControl/Enums/VtkCellType.cs" Link="X/VtkCellType.cs" /> <!-- Existing data enum mirrors the native VTK enum; original WinForms build keeps its native binding -->
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/PolyDataSink.cs" Link="X/PolyDataSink.cs" /> <!-- Nonrendering data sink for the unchanged original cell topology conversion -->
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/TexturePng.cs" Link="X/TexturePng.cs" /> <!-- Portable PNG encoding with original texture row/color mapping -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/Legacy/vtkSelectionGeometry.cs" Link="X/vtkSelectionGeometry.cs" /> <!-- Closest-edge picking of the ActiViz-era vtkControl (3.0.0), used by the headless spatial queries until the original vtkControl runs on vtkNative (M1) -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/Legacy/vtkMaxActor.PolyTopology.cs" Link="X/vtkMaxActor.PolyTopology.cs" /> <!-- Cell topology conversion of the ActiViz-era vtkMaxActor (3.0.0), used by the Python renderer until the original vtkControl runs on vtkNative (M1) -->
   </ItemGroup>
 </Project>

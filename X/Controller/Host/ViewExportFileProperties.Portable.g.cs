@@ -1,4 +1,4 @@
-// Generated; original property view SHA256 c44699f7ef98f7d2c079bfbf5abe33031aac6f9adce742f7eec6f1c2614fb349
+// Generated; original property view SHA256 eecc80b636a5b93b443a1c58b7c121c2d29c8347281051813a2a58f0e643f6a8
 using System;using System.ComponentModel;using System.Drawing.Design;using CaeGlobals;using DynamicTypeDescriptor;
 namespace PrePoMax {
 public sealed class CreateFileNameEditor : UITypeEditor {public static string FileName;public static string Filter;}

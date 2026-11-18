@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -195,6 +195,8 @@ namespace PrePoMax.Forms
                                     item.Tag = new ViewThermalConductivity(tc.DeepClone());
                                 else if (mp is SpecificHeat sh)
                                     item.Tag = new ViewSpecificHeat(sh.DeepClone());
+                                else if (mp is CompositeStrength cs)
+                                    item.Tag = new ViewCompositeStrength(cs.DeepClone());
                                 else throw new NotSupportedException();
                             }
                             else throw new NotSupportedException();
@@ -331,6 +333,10 @@ namespace PrePoMax.Forms
                 {
                     tcProperties.TabPages.Add(_pages[0]);   // properties
                 }
+                else if (lvAddedProperties.PossiblySelectedItems[0].Tag is ViewCompositeStrength)
+                {
+                    tcProperties.TabPages.Add(_pages[0]);   // properties
+                }
                 else throw new NotSupportedException();
                 //
                 propertyGrid.SelectedObject = lvAddedProperties.PossiblySelectedItems[0].Tag;
@@ -410,8 +416,34 @@ namespace PrePoMax.Forms
             _materialToEditName = materialToEditName;
             this.btnOKAddNew.Visible = _materialToEditName == null; // must be here
             // Initialize material properties
-            foreach (var template in MaterialEditor.PropertyTemplates())
-                tvProperties.Nodes.Find(template.Key, true)[0].Tag = template.Value;
+            TreeNode node;
+            node = tvProperties.Nodes.Find("Density", true)[0];
+            node.Tag = new Density(new double[][] { new double[] { 0, 0 } });
+            node = tvProperties.Nodes.Find("Slip Wear", true)[0];
+            node.Tag = new SlipWear(0, 0);
+            node = tvProperties.Nodes.Find("Elastic", true)[0];
+            node.Tag = new Elastic(new double[][] { new double[] { 0, 0, 0 } });
+            node = tvProperties.Nodes.Find("Engineering Constants", true)[0];
+            node.Tag = new ElasticEngineeringConstants(new double[][]
+            {
+                new double[ElasticEngineeringConstants.NumberOfValues]
+            });
+            node = tvProperties.Nodes.Find("Lamina", true)[0];
+            node.Tag = new ElasticLamina(new double[][]
+            {
+                new double[ElasticLamina.NumberOfValues]
+            });
+            node = tvProperties.Nodes.Find("Plastic", true)[0];
+            node.Tag = new Plastic(new double[][] { new double[] { 0, 0, 0 } });
+            node = tvProperties.Nodes.Find("Thermal Expansion", true)[0];
+            node.Tag = new ThermalExpansion(new double[][] { new double[] { 0, 0 } });
+            node = tvProperties.Nodes.Find("Thermal Conductivity", true)[0];
+            node.Tag = new ThermalConductivity(new double[][] { new double[] { 0, 0 } });
+            node = tvProperties.Nodes.Find("Specific Heat", true)[0];
+            node.Tag = new SpecificHeat(new double[][] { new double[] { 0, 0 } });
+            node = tvProperties.Nodes.Find("Composite Strength", true)[0];
+            node.Tag = new CompositeStrength(0, 0, 0, 0, 0, 0, CompositeStrength.DefaultTsaiWuCoefficient);
+            //
             tvProperties.ExpandAll();
             //
             if (_materialToEditName == null)
@@ -472,10 +504,28 @@ namespace PrePoMax.Forms
             {
                 ListViewItem item;
                 ViewMaterialProperty view = null;
-                foreach (ViewMaterialProperty materialView in MaterialEditor.CreateViews(_material))
+                foreach (var property in _material.Properties)
                 {
-                    view = materialView;
-                    if (view is ViewElasticWithDensity) _useSimpleEditor = true;
+                    if (property is Density den) view = new ViewDensity(den);
+                    else if (property is SlipWear sw) view = new ViewSlipWear(sw);
+                    else if (property is Elastic el) view = new ViewElastic(el);
+                    else if (property is ElasticEngineeringConstants eec)
+                        view = new ViewElasticEngineeringConstants(eec);
+                    else if (property is ElasticLamina ela)
+                        view = new ViewElasticLamina(ela);
+                    else if (property is ElasticWithDensity ewd)
+                    {
+                        view = new ViewElasticWithDensity(ewd);
+                        _useSimpleEditor = true;
+                    }
+                    else if (property is Plastic pl) view = new ViewPlastic(pl);
+                    else if (property is ThermalExpansion te)
+                        view = new ViewThermalExpansion(te, cbTemperatureDependent.Checked);
+                    else if (property is ThermalConductivity tc) view = new ViewThermalConductivity(tc);
+                    else if (property is SpecificHeat sh) view = new ViewSpecificHeat(sh);
+                    else if (property is CompositeStrength cs) view = new ViewCompositeStrength(cs);
+                    else throw new NotSupportedException();
+                    //
                     item = new ListViewItem(view.Name);
                     item.Tag = view;
                     item = lvAddedProperties.Items.Add(item);
@@ -539,9 +589,90 @@ namespace PrePoMax.Forms
             // Check if the name exists
             UserControls.FrmProperties.CheckName(_materialToEditName, tbName.Text, _materialNames, "material");
             //
-            _material = MaterialEditor.Build(tbName.Text, tbDescription.Text, cbTemperatureDependent.Checked,
-                                              lvAddedProperties.Items.Cast<ListViewItem>()
-                                              .Select(item => (ViewMaterialProperty)item.Tag));
+            _material = new Material(tbName.Text);
+            _material.Description = tbDescription.Text;
+            _material.TemperatureDependent = cbTemperatureDependent.Checked;
+            //
+            ViewMaterialProperty property;
+            MaterialProperty materialProperty;
+            int elasticityCount = 0;
+            int densityCount = 0;
+            foreach (ListViewItem item in lvAddedProperties.Items)
+            {
+                property = (ViewMaterialProperty)item.Tag;
+                if (property is ViewElastic ||
+                    property is ViewElasticEngineeringConstants ||
+                    property is ViewElasticLamina ||
+                    property is ViewElasticWithDensity)
+                {
+                    elasticityCount++;
+                    if (elasticityCount > 1) throw new CaeException("A material can contain only one elastic property.");
+                }
+                if (property is ViewDensity || property is ViewElasticWithDensity)
+                {
+                    densityCount++;
+                    if (densityCount > 1) throw new CaeException("A material can contain only one density.");
+                }
+                materialProperty = property.GetBase();
+                // Check equations
+                materialProperty.CheckEquations();
+                //
+                if (property is ViewDensity vd)
+                {
+                    for (int i = 0; i < vd.DataPoints.Count; i++)
+                    {
+                        if (vd.DataPoints[i].Density.Value <= 0) throw new CaeException("The density must be larger than 0.");
+                    }
+                }
+                else if (property is ViewElastic ve && ve.GetYoungsModulusValue() <= 0)
+                {
+                    throw new CaeException("The Young's modulus must be larger than 0.");
+                }
+                else if (property is ViewElasticEngineeringConstants && cbTemperatureDependent.Checked)
+                {
+                    ((ElasticEngineeringConstants)materialProperty).CheckTemperatures();
+                }
+                else if (property is ViewElasticLamina && cbTemperatureDependent.Checked)
+                {
+                    ((ElasticLamina)materialProperty).CheckTemperatures();
+                }
+                else if (property is ViewElasticWithDensity ewd)
+                {
+                    if (ewd.GetYoungsModulusValue() <= 0) throw new CaeException("The Young's modulus must be larger than 0.");
+                    if (ewd.GetDensityValue() <= 0) throw new CaeException("The density must be larger than 0.");
+                }
+                else if (property is ViewThermalExpansion vex)
+                {
+                    for (int i = 0; i < vex.DataPoints.Count; i++)
+                    {
+                        if (vex.DataPoints[i].ThermalExpansion.Value <= 0)
+                            throw new CaeException("The thermal expansion coefficient must be larger than 0.");
+                    }
+                }
+                else if (property is ViewThermalConductivity vtc)
+                {
+                    for (int i = 0; i < vtc.DataPoints.Count; i++)
+                    {
+                        if (vtc.DataPoints[i].ThermalConductivity.Value <= 0)
+                            throw new CaeException("The thermal conductivity coefficient must be larger than 0.");
+                    }
+                }
+                else if (property is ViewSpecificHeat vsh)
+                {
+                    for (int i = 0; i < vsh.DataPoints.Count; i++)
+                    {
+                        if (vsh.DataPoints[i].SpecificHeat.Value <= 0)
+                            throw new CaeException("The thermal conductivity coefficient must be larger than 0.");
+                    }
+                }
+                else if (property is ViewSlipWear vsw)
+                {
+                    if (vsw.GetHardnessValue() <= 0) throw new CaeException("The hardness must be larger than 0.");
+                    if (vsw.GetWearCoefficientValue() <= 0) throw new CaeException("The wear coefficient must be larger than 0.");
+                }
+                //
+                _material.AddProperty(materialProperty);
+            }
             //
             if (_materialToEditName == null)
             {
@@ -676,7 +807,8 @@ namespace PrePoMax.Forms
                     vte.SetTemperatureDependence(cbTemperatureDependent.Checked);
                     propertyGrid.Refresh();
                 }
-                else if (lvAddedProperties.PossiblySelectedItems[0].Tag is ViewSlipWear)
+                else if (lvAddedProperties.PossiblySelectedItems[0].Tag is ViewSlipWear ||
+                         lvAddedProperties.PossiblySelectedItems[0].Tag is ViewCompositeStrength)
                 {
                     tcProperties.TabPages.Clear();
                     tcProperties.TabPages.Add(_pages[0]);

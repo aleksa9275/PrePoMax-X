@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -49,7 +49,8 @@ namespace PrePoMax.Mcp
             "\n" +
             "\n" +
             "MODEL_COLLECTIONS = ['parts', 'node_sets', 'element_sets', 'surfaces', 'reference_points',\n" +
-            "                     'coordinate_systems', 'materials', 'sections', 'constraints',\n" +
+            "                     'coordinate_systems', 'materials', 'sections', 'material_orientations',\n" +
+            "                     'constraints',\n" +
             "                     'surface_interactions', 'contact_pairs', 'distributions', 'amplitudes',\n" +
             "                     'initial_conditions', 'parameters', 'steps']\n" +
             "STEP_COLLECTIONS = ['bcs', 'loads', 'defined_fields', 'field_outputs', 'history_outputs']\n" +

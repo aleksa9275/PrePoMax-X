@@ -2,7 +2,7 @@
 //
 // Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
 //
-// Source code: https://gitlab.com/MatejB/PrePoMax
+// Source code: https://github.com/PrePoMax/PrePoMax
 //
 // Author: Matej Borovinšek
 // Contributors:
@@ -43,6 +43,7 @@ namespace CaeModel
         private EquationParameterCollection _parameters;                                        //ISerializable
         private CaeGlobals.OrderedDictionary<string, Material> _materials;                                 //ISerializable
         private CaeGlobals.OrderedDictionary<string, Section> _sections;                                   //ISerializable
+        private CaeGlobals.OrderedDictionary<string, MaterialOrientation> _materialOrientations;           //ISerializable
         private CaeGlobals.OrderedDictionary<string, Constraint> _constraints;                             //ISerializable
         private CaeGlobals.OrderedDictionary<string, SurfaceInteraction> _surfaceInteractions;             //ISerializable
         private CaeGlobals.OrderedDictionary<string, ContactPair> _contactPairs;                           //ISerializable
@@ -71,6 +72,7 @@ namespace CaeModel
         public EquationParameterCollection Parameters { get { return _parameters; } }
         public CaeGlobals.OrderedDictionary<string, Material> Materials { get { return _materials; } }
         public CaeGlobals.OrderedDictionary<string, Section> Sections { get { return _sections; } }
+        public CaeGlobals.OrderedDictionary<string, MaterialOrientation> MaterialOrientations { get { return _materialOrientations; } }
         public CaeGlobals.OrderedDictionary<string, Constraint> Constraints { get { return _constraints; } }
         public CaeGlobals.OrderedDictionary<string, SurfaceInteraction> SurfaceInteractions { get { return _surfaceInteractions; } }
         public CaeGlobals.OrderedDictionary<string, ContactPair> ContactPairs { get { return _contactPairs; } }
@@ -116,6 +118,7 @@ namespace CaeModel
             _parameters = new EquationParameterCollection();
             _materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", sc);
             _sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sc);
+            _materialOrientations = new CaeGlobals.OrderedDictionary<string, MaterialOrientation>("Material Orientations", sc);
             _constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", sc);
             _surfaceInteractions = new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
             _contactPairs = new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
@@ -146,6 +149,7 @@ namespace CaeModel
             _parameters = copy._parameters;
             _materials = copy._materials;
             _sections = copy._sections;
+            _materialOrientations = copy._materialOrientations;
             _constraints = copy._constraints;
             _surfaceInteractions = copy._surfaceInteractions;
             _contactPairs = copy._contactPairs;
@@ -180,6 +184,8 @@ namespace CaeModel
             _userViews = new CaeGlobals.OrderedDictionary<string, UserViewParameters>("User Views", sc);
             // Compatibility for models saved before CalculiX keyword overrides were introduced
             _calculixKeywordOverrides = new List<Calculix.CalculixKeywordOverride>();
+            // Compatibility for models saved before material orientations were introduced
+            _materialOrientations = new CaeGlobals.OrderedDictionary<string, MaterialOrientation>("Material Orientations", sc);
             //
             foreach (SerializationEntry entry in info)
             {
@@ -242,6 +248,8 @@ namespace CaeModel
                         _contactPairs = (CaeGlobals.OrderedDictionary<string, ContactPair>)entry.Value; break;
                     case "_distributions":
                         _distributions = (CaeGlobals.OrderedDictionary<string, Distribution>)entry.Value; break;
+                    case "_materialOrientations":
+                        _materialOrientations = (CaeGlobals.OrderedDictionary<string, MaterialOrientation>)entry.Value; break;
                     case "_amplitudes":
                         _amplitudes = (CaeGlobals.OrderedDictionary<string, Amplitude>)entry.Value; break;
                     case "_initialConditions":
@@ -357,7 +365,13 @@ namespace CaeModel
                 // Region
                 valid = IsSectionRegionValid(section);
                 //
-                if (section is SolidSection || section is ShellSection || section is MembraneSection)
+                if (section is CompositeShellSection css)
+                {
+                    foreach (string materialName in css.GetMaterialNames())
+                        valid &= _materials.ContainsValidActiveKey(materialName);
+                    if (valid) valid = GetCompositeShellElementTypeError(GetElementIdsOfRegion(css)) == null;
+                }
+                else if (section is SolidSection || section is ShellSection || section is MembraneSection)
                     valid &= _materials.ContainsValidActiveKey(section.MaterialName);
                 else if (section is PointMassSection || section is DistributedMassSection) { }
                 else throw new NotSupportedException();
@@ -366,6 +380,22 @@ namespace CaeModel
                 //
                 SetItemValidity(null, section, valid, items);
                 if (!valid && section.Active) invalidItems.Add("Section: " + section.Name);
+            }
+            // Material orientations
+            MaterialOrientation materialOrientation;
+            foreach (var entry in _materialOrientations)
+            {
+                materialOrientation = entry.Value;
+                // Region
+                valid = IsMaterialOrientationRegionValid(materialOrientation) && RegionValid(materialOrientation);
+                // Coordinate system
+                if (materialOrientation.CoordinateSystemName != CoordinateSystem.DefaultCoordinateSystemName &&
+                    !_mesh.CoordinateSystems.ContainsValidKey(materialOrientation.CoordinateSystemName)) valid = false;
+                // Check equations
+                valid &= materialOrientation.TryCheckEquations();
+                //
+                SetItemValidity(null, materialOrientation, valid, items);
+                if (!valid && materialOrientation.Active) invalidItems.Add("Material orientation: " + materialOrientation.Name);
             }
             // Constraints
             Constraint constraint;
@@ -1248,6 +1278,43 @@ namespace CaeModel
                 items.Add(new Tuple<NamedClass, string>(item, stepName));
             }
         }
+        public bool IsMaterialOrientationRegionValid(MaterialOrientation materialOrientation)
+        {
+            return (materialOrientation.RegionType == RegionTypeEnum.PartName &&
+                    _mesh.Parts.ContainsValidKey(materialOrientation.RegionName)) ||
+                   (materialOrientation.RegionType == RegionTypeEnum.ElementSetName &&
+                    _mesh.ElementSets.ContainsValidKey(materialOrientation.RegionName));
+        }
+        public int[] GetElementIdsOfRegion(IMultiRegion region)
+        {
+            if (region.RegionType == RegionTypeEnum.PartName)
+                return _mesh.Parts[region.RegionName].Labels;
+            else if (region.RegionType == RegionTypeEnum.ElementSetName)
+            {
+                FeElementSet elementSet = _mesh.ElementSets[region.RegionName];
+                if (!elementSet.CreatedFromParts) return elementSet.Labels;
+                //
+                List<int> elementIds = new List<int>();
+                foreach (var partName in _mesh.GetPartNamesFromPartIds(elementSet.Labels))
+                    elementIds.AddRange(_mesh.Parts[partName].Labels);
+                return elementIds.ToArray();
+            }
+            else throw new NotSupportedException();
+        }
+        // Returns the active material orientation of every element that one covers; where regions overlap, the later
+        // orientation applies, as a later section does
+        public Dictionary<int, MaterialOrientation> GetElementMaterialOrientations()
+        {
+            Dictionary<int, MaterialOrientation> elementOrientations = new Dictionary<int, MaterialOrientation>();
+            foreach (var entry in _materialOrientations)
+            {
+                if (!entry.Value.Active || !entry.Value.Valid) continue;
+                //
+                foreach (int elementId in GetElementIdsOfRegion(entry.Value))
+                    elementOrientations[elementId] = entry.Value;
+            }
+            return elementOrientations;
+        }
         public bool RegionValid(IMultiRegion multiRegion)
         {
             if (multiRegion.RegionType == RegionTypeEnum.NodeSetName && _mesh.NodeSets.ContainsKey(multiRegion.RegionName))
@@ -1545,9 +1612,69 @@ namespace CaeModel
         public double GetSectionThickness(Section section)
         {
             if (_properties.ModelSpace.IsTwoD() && section is SolidSection sos) return sos.Thickness.Value;
+            else if (section is CompositeShellSection css) return css.GetTotalThickness();
             else if (section is ShellSection shs) return shs.Thickness.Value;
             else if (section is MembraneSection ms) return ms.Thickness.Value;
             else return -1;
+        }
+        // CalculiX writes a composite shell only of S8R and S6 elements; returns null when all elements are such
+        public string GetCompositeShellElementTypeError(int[] elementIds)
+        {
+            HashSet<int> checkedPartIds = new HashSet<int>();
+            FeElement element;
+            MeshPart part;
+            foreach (int elementId in elementIds)
+            {
+                if (!_mesh.Elements.TryGetValue(elementId, out element)) continue;
+                //
+                part = _mesh.GetPartFromId(element.PartId) as MeshPart;
+                if (part == null) continue;
+                if (element is ParabolicQuadrilateralElement)
+                {
+                    if (checkedPartIds.Add(element.PartId * 2) && part.ParabolicQuadType != FeElementTypeParabolicQuad.S8R)
+                        return "A composite shell section takes S8R and S6 elements only. Set the parabolic quadrilateral " +
+                               "element type of the part " + part.Name + " to S8R.";
+                }
+                else if (element is ParabolicTriangleElement)
+                {
+                    if (checkedPartIds.Add(element.PartId * 2 + 1) && part.ParabolicTriaType != FeElementTypeParabolicTria.S6)
+                        return "A composite shell section takes S8R and S6 elements only. Set the parabolic triangle " +
+                               "element type of the part " + part.Name + " to S6.";
+                }
+                else
+                    return "A composite shell section takes S8R and S6 elements only. Mesh the part " + part.Name +
+                           " with parabolic shell elements.";
+            }
+            return null;
+        }
+        // The parts of the elements whose parabolic element types can be set to S8R and S6, and the parts that must be
+        // meshed with parabolic shell elements first
+        public void GetCompositeShellElementTypeParts(int[] elementIds, out string[] partNamesToChangeElementType,
+                                                      out string[] partNamesToMesh)
+        {
+            HashSet<string> changeNames = new HashSet<string>();
+            HashSet<string> meshNames = new HashSet<string>();
+            FeElement element;
+            MeshPart part;
+            foreach (int elementId in elementIds)
+            {
+                if (!_mesh.Elements.TryGetValue(elementId, out element)) continue;
+                //
+                part = _mesh.GetPartFromId(element.PartId) as MeshPart;
+                if (part == null) continue;
+                if (element is ParabolicQuadrilateralElement)
+                {
+                    if (part.ParabolicQuadType != FeElementTypeParabolicQuad.S8R) changeNames.Add(part.Name);
+                }
+                else if (element is ParabolicTriangleElement)
+                {
+                    if (part.ParabolicTriaType != FeElementTypeParabolicTria.S6) changeNames.Add(part.Name);
+                }
+                else meshNames.Add(part.Name);
+            }
+            changeNames.ExceptWith(meshNames);
+            partNamesToChangeElementType = changeNames.OrderBy(name => name).ToArray();
+            partNamesToMesh = meshNames.OrderBy(name => name).ToArray();
         }
         public bool TryComputePartMassProperties(BasePart part, out double mass, out double[] centerOfMass,
                                                  out string[] warnings)
@@ -1605,6 +1732,8 @@ namespace CaeModel
             bool axisymmetric = _properties.ModelSpace == ModelSpaceEnum.Axisymmetric;
             HashSet<string> offsetSectionNames = new HashSet<string>();
             HashSet<string> missingDensitySectionNames = new HashSet<string>();
+            HashSet<string> missingDensityCompositeSectionNames = new HashSet<string>();
+            HashSet<string> missingDensityLayerMaterialNames = new HashSet<string>();
             HashSet<string> temperatureDependentMaterialNames = new HashSet<string>();
             // The section values are parsed from equations and units, which is far too slow to repeat for each element
             int numOfSections = assignedSections.Count;
@@ -1612,11 +1741,15 @@ namespace CaeModel
             bool[] sectionHasOffset = new bool[numOfSections];
             double[] sectionDensity = new double[numOfSections];
             double[] sectionThickness = new double[numOfSections];
-            string[] sectionTemperatureDependentMaterialNames = new string[numOfSections];
+            List<string>[] sectionTemperatureDependentMaterialNames = new List<string>[numOfSections];
+            List<string>[] sectionMissingDensityMaterialNames = new List<string>[numOfSections];
             for (int i = 0; i < numOfSections; i++)
             {
+                sectionTemperatureDependentMaterialNames[i] = new List<string>();
+                sectionMissingDensityMaterialNames[i] = new List<string>();
                 sectionHasDensity[i] = TryGetSectionDensity(assignedSections[i], out sectionDensity[i],
-                                                            out sectionTemperatureDependentMaterialNames[i]);
+                                                            sectionTemperatureDependentMaterialNames[i],
+                                                            sectionMissingDensityMaterialNames[i]);
                 sectionThickness[i] = GetSectionThickness(assignedSections[i]);
                 if (assignedSections[i] is ShellSection shs) sectionHasOffset[i] = shs.Offset.Value != 0;
                 else if (assignedSections[i] is MembraneSection mes) sectionHasOffset[i] = mes.Offset.Value != 0;
@@ -1632,11 +1765,15 @@ namespace CaeModel
                 section = assignedSections[sectionId];
                 if (!sectionHasDensity[sectionId])
                 {
-                    missingDensitySectionNames.Add(section.Name);
+                    if (section is CompositeShellSection)
+                    {
+                        missingDensityCompositeSectionNames.Add(section.Name);
+                        missingDensityLayerMaterialNames.UnionWith(sectionMissingDensityMaterialNames[sectionId]);
+                    }
+                    else missingDensitySectionNames.Add(section.Name);
                     continue;
                 }
-                if (sectionTemperatureDependentMaterialNames[sectionId] != null)
-                    temperatureDependentMaterialNames.Add(sectionTemperatureDependentMaterialNames[sectionId]);
+                temperatureDependentMaterialNames.UnionWith(sectionTemperatureDependentMaterialNames[sectionId]);
                 density = sectionDensity[sectionId];
                 //
                 element = _mesh.Elements[elementId];
@@ -1686,6 +1823,11 @@ namespace CaeModel
             if (missingDensitySectionNames.Count > 0)
                 warnings.Add("Warning: No density is defined for the material of the section(s): " +
                              string.Join(", ", missingDensitySectionNames) + ". The elements are excluded from the mass.");
+            if (missingDensityCompositeSectionNames.Count > 0)
+                warnings.Add("Warning: No density is defined for the layer material(s): " +
+                             string.Join(", ", missingDensityLayerMaterialNames) + " of the composite shell section(s): " +
+                             string.Join(", ", missingDensityCompositeSectionNames) +
+                             ". The elements are excluded from the mass.");
             if (temperatureDependentMaterialNames.Count > 0)
                 warnings.Add("Warning: The first density value is used for the temperature dependent material(s): " +
                              string.Join(", ", temperatureDependentMaterialNames) + ".");
@@ -1762,20 +1904,56 @@ namespace CaeModel
             firstMoment[1] += pointMass * coor[1];
             firstMoment[2] += pointMass * coor[2];
         }
+        // The density of a composite shell section is the density of its layers weighted by their thickness
         private bool TryGetSectionDensity(Section section, out double density,
-                                          out string temperatureDependentMaterialName)
+                                          List<string> temperatureDependentMaterialNames,
+                                          List<string> missingDensityMaterialNames)
         {
             density = 0;
-            temperatureDependentMaterialName = null;
+            if (section is CompositeShellSection css)
+            {
+                double layerDensity;
+                double layerThickness;
+                double densityThicknessSum = 0;
+                double thicknessSum = 0;
+                foreach (CompositeLayer layer in css.GetSolverLayers())
+                {
+                    if (!TryGetMaterialDensity(layer.MaterialName, out layerDensity, temperatureDependentMaterialNames))
+                    {
+                        if (!missingDensityMaterialNames.Contains(layer.MaterialName))
+                            missingDensityMaterialNames.Add(layer.MaterialName);
+                        continue;
+                    }
+                    layerThickness = layer.Thickness.Value;
+                    densityThicknessSum += layerDensity * layerThickness;
+                    thicknessSum += layerThickness;
+                }
+                if (missingDensityMaterialNames.Count > 0 || thicknessSum <= 0) return false;
+                density = densityThicknessSum / thicknessSum;
+                return true;
+            }
+            else
+            {
+                if (TryGetMaterialDensity(section.MaterialName, out density, temperatureDependentMaterialNames))
+                    return true;
+                missingDensityMaterialNames.Add(section.MaterialName);
+                return false;
+            }
+        }
+        private bool TryGetMaterialDensity(string materialName, out double density,
+                                           List<string> temperatureDependentMaterialNames)
+        {
+            density = 0;
             //
             Material material;
-            if (section.MaterialName == null || !_materials.TryGetValue(section.MaterialName, out material)) return false;
+            if (materialName == null || !_materials.TryGetValue(materialName, out material)) return false;
             //
             foreach (var property in material.Properties)
             {
                 if (property is Density den)
                 {
-                    if (den.DensityTemp.Length > 1) temperatureDependentMaterialName = material.Name;
+                    if (den.DensityTemp.Length > 1 && !temperatureDependentMaterialNames.Contains(material.Name))
+                        temperatureDependentMaterialNames.Add(material.Name);
                     density = den.DensityTemp[0][0].Value;
                     return true;
                 }
@@ -2236,7 +2414,8 @@ namespace CaeModel
             Dictionary<string, Dictionary<int, int>> partNameNewEdgeIdOldEdgeId = new Dictionary<string, Dictionary<int, int>>();
             FeMesh mmgMesh = MmgFileReader.Read(fileName, ElementsToImport.Shell,
                                                                 MeshRepresentation.Mesh, convertToSecondOrder,
-                                                                _mesh.MaxNodeId + 1, _mesh.MaxElementId + 1,
+                                                                _mesh.GetMaxNodeIdWithReferencePoints() + 1,
+                                                                _mesh.MaxElementId + 1,
                                                                 borderNodes, midNodes,
                                                                 epsilon * max,
                                                                 partNameNewSurfIdOldSurfId, partNameNewEdgeIdOldEdgeId);
@@ -2378,6 +2557,8 @@ namespace CaeModel
             //
             CalculixUserKeywords = indexedUserKeywords;
             //
+            AssignMissingReferencePointNodeIds();
+            //
             return InpFileReader.Errors;
         }
         public List<string> ImportMaterialsFromInpFile(string fileName, Action<string> WriteDataToOutput)
@@ -2466,6 +2647,30 @@ namespace CaeModel
             }
             _mesh.AddMesh(mesh, reservedPartNames, GetReservedPartIds(), forceRenameParts, renumberNodesAndElements,
                           updateNodeIdElementIds);
+        }
+        public void AssignMissingReferencePointNodeIds()
+        {
+            if (_mesh == null || _mesh.ReferencePoints == null) return;
+            // Number the reference points the way the input file writer numbered them before the node ids were stored
+            HashSet<string> rigidBodyReferencePointNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var entry in _constraints)
+            {
+                if (entry.Value.Active && entry.Value is RigidBody rigidBody && rigidBody.ReferencePointName != null)
+                    rigidBodyReferencePointNames.Add(rigidBody.ReferencePointName);
+            }
+            //
+            int maxNodeId = _mesh.GetMaxNodeIdWithReferencePoints();
+            List<FeReferencePoint> referencePointsWithoutRotNodeId = new List<FeReferencePoint>();
+            foreach (var entry in _mesh.ReferencePoints)
+            {
+                if (entry.Value.RefNodeId <= 0) entry.Value.RefNodeId = ++maxNodeId;
+                if (entry.Value.RotNodeId <= 0)
+                {
+                    if (rigidBodyReferencePointNames.Contains(entry.Key)) entry.Value.RotNodeId = ++maxNodeId;
+                    else referencePointsWithoutRotNodeId.Add(entry.Value);
+                }
+            }
+            foreach (var referencePoint in referencePointsWithoutRotNodeId) referencePoint.RotNodeId = ++maxNodeId;
         }
         // Update                                                                                   
         public void UpdateGeometryPartMassPropertiesFromVisFile(string visFileName, string partName)
@@ -3838,9 +4043,12 @@ namespace CaeModel
             // with the block rather than that there is none
             bool reachedTarget;
             string[] reachedTargetErrors = new string[numOfCells];
+            // The sources of every cell refused only for a loft between outlines that are not alike or for sweeping poorly
+            List<Tuple<int, HashSet<int>, bool>>[] lastResortSources = new List<Tuple<int, HashSet<int>, bool>>[numOfCells];
             for (int i = 0; i < numOfCells; i++)
             {
                 candidates[i] = new List<SweepCellCandidate>();
+                lastResortSources[i] = new List<Tuple<int, HashSet<int>, bool>>();
                 seedErrors[i] = new List<KeyValuePair<HashSet<int>, string>>();
                 foreach (var seedSurfaceIds in GetSeedSurfaceIds(sweptParts[i]))
                     pendingSources.Enqueue(new Tuple<int, HashSet<int>, bool>(i, seedSurfaceIds, false));
@@ -3859,11 +4067,13 @@ namespace CaeModel
                                                   new HashSet<int>(), stamp);
                 }
                 //
+                bool lastResortOnly;
                 SweepCellCandidate candidate = CreateSweepCellCandidate(part, pending.Item2, pending.Item3,
-                                                                        twinSurfaceIds, maps, faceTypes, out error,
-                                                                        out reachedTarget);
+                                                                        twinSurfaceIds, maps, faceTypes, false,
+                                                                        out error, out reachedTarget, out lastResortOnly);
                 if (candidate == null)
                 {
+                    if (lastResortOnly) lastResortSources[cell].Add(pending);
                     if (!pending.Item3 && reachedTarget && reachedTargetErrors[cell] == null)
                         reachedTargetErrors[cell] = error;
                     if (!pending.Item3)
@@ -3894,6 +4104,22 @@ namespace CaeModel
                                                                                neighbourSideSurfaceId, twinEdgeIds);
                     if (continuingIds.Count > 0)
                         pendingSources.Enqueue(new Tuple<int, HashSet<int>, bool>(neighbour, continuingIds, true));
+                }
+            }
+            // A cell left with no way of its own takes the lofts between outlines that are not alike, and the blocks that
+            // would sweep poorly but whose ends cannot fold them
+            for (int i = 0; i < numOfCells; i++)
+            {
+                if (candidates[i].Count > 0) continue;
+                foreach (var pending in lastResortSources[i])
+                {
+                    SweepCellCandidate candidate = CreateSweepCellCandidate(sweptParts[i], pending.Item2, pending.Item3,
+                                                                            twinSurfaceIds, maps, faceTypes, true,
+                                                                            out error, out reachedTarget, out _);
+                    if (candidate == null || candidates[i].Any(other =>
+                            other.SourceSurfaceIds.SetEquals(candidate.SourceSurfaceIds) &&
+                            other.TargetSurfaceIds.SetEquals(candidate.TargetSurfaceIds))) continue;
+                    candidates[i].Add(candidate);
                 }
             }
             if (numOfCells == 1 && candidates[0].Count > 0)
@@ -4026,7 +4252,8 @@ namespace CaeModel
         private SweepCellCandidate CreateSweepCellCandidate(GeometryPart part, HashSet<int> seedSurfaceIds,
                                                             bool derived, Dictionary<int, int> twinSurfaceIds,
                                                             SweepPartMaps maps, Dictionary<int, GeomFaceType> faceTypes,
-                                                            out string error, out bool reachedTarget)
+                                                            bool lastResort, out string error,
+                                                            out bool reachedTarget, out bool lastResortOnly)
         {
             VisualizationData vis = part.Visualization;
             Dictionary<int, HashSet<int>> surfaceIdSurfaceNeighbourIds = maps.GetSurfaceIdSurfaceNeighbourIds(part);
@@ -4046,7 +4273,35 @@ namespace CaeModel
                 () => ValidateSweepBlock(part, sourceSurfaceIds, surfaceIdSurfaceNeighbourIds, maps, twinSurfaceIds));
             error = validation.Error;
             reachedTarget = validation.ReachedTarget;
+            lastResortOnly = false;
             if (error != null) return null;
+            // A loft between outlines that are not alike, and a block that would sweep poorly, are taken only by a part
+            // that has no other way, in the last pass of the search; a poor block then only when no crease of its ends
+            // and no break of its target can fold it
+            if (validation.QualityError != null || validation.UnlikeEnds)
+            {
+                if (!lastResort)
+                {
+                    lastResortOnly = true;
+                    error = validation.QualityError ??
+                            "The sweep target surface/s (" + GetSweepSurfaceNames(part, validation.TargetSurfaceIds) +
+                            ") are not the shape of the sweep source surface/s (" +
+                            GetSweepSurfaceNames(part, sourceSurfaceIds) + ") carried along the sweep direction. " +
+                            "Select the source surfaces by hand, or split the part so that each piece is swept on its " +
+                            "own.";
+                    return null;
+                }
+                if (validation.QualityError != null)
+                {
+                    string endsError = GetLastResortSweepEndsError(part, sourceSurfaceIds, validation.TargetSurfaceIds,
+                                                                   surfaceIdSurfaceNeighbourIds, maps);
+                    if (endsError != null)
+                    {
+                        error = validation.QualityError + " " + endsError;
+                        return null;
+                    }
+                }
+            }
             //
             int[] sideSurfaceIds;
             int[] targetSurfaceIds;
@@ -4101,6 +4356,37 @@ namespace CaeModel
             //
             return new SweepCellCandidate(partId, sourceSurfaceIds.ToArray(), sideSurfaceIds, targetSurfaceIds,
                                           prismatic, wallEdgeIds, vis.FaceEdgeIds, wallIdSideCentroids, blocks, score);
+        }
+        /// <summary>
+        /// Why a block refused for sweeping poorly cannot be taken even as the last way of a part: a target in more than
+        /// one piece, which a connected source cannot be carried onto without its sweep lines parting the ways the pieces
+        /// face, or two surfaces of the source or of the target meeting at a crease sharper than a leaning surface may
+        /// join a source at, across which the sweep lines of the two sides converge and fold - the source of a groove
+        /// swept through the thickness under it. Null when neither holds.
+        /// </summary>
+        private string GetLastResortSweepEndsError(GeometryPart part, HashSet<int> sourceSurfaceIds,
+                                                   int[] targetSurfaceIds,
+                                                   Dictionary<int, HashSet<int>> surfaceIdSurfaceNeighbourIds,
+                                                   SweepPartMaps maps)
+        {
+            if (!part.Visualization.AreSurfacesConnected(targetSurfaceIds, surfaceIdSurfaceNeighbourIds))
+            {
+                return "Its target surfaces are not connected.";
+            }
+            Dictionary<int[], double[]> surfaceIdPairAngles = maps.GetSurfaceIdPairAngles(_geometry, part);
+            foreach (var ends in new IEnumerable<int>[] { sourceSurfaceIds, targetSurfaceIds })
+            {
+                HashSet<int> endSurfaceIds = new HashSet<int>(ends);
+                foreach (var entry in surfaceIdPairAngles)
+                {
+                    if (!endSurfaceIds.Contains(entry.Key[0]) || !endSurfaceIds.Contains(entry.Key[1])) continue;
+                    if (entry.Value[0] <= Globals.SweepSourceAngle) continue;
+                    return "Its " + GetSweepSurfaceName(part, entry.Key[0]) + " and " +
+                           GetSweepSurfaceName(part, entry.Key[1]) + " meet at " + Math.Round(entry.Value[0]) +
+                           " degrees.";
+                }
+            }
+            return null;
         }
         /// <summary>
         /// The edges split into chains of edges that meet at a vertex.
@@ -4739,7 +5025,8 @@ namespace CaeModel
                 // A block is validated once per source and read again by every propagation reaching the source
                 SweepBlockValidation validation = maps.GetSweepBlockValidation(part, sourceSurfaceIds, twinSurfaceIds != null,
                     () => ValidateSweepBlock(part, sourceSurfaceIds, surfaceIdSurfaceNeighbourIds, maps, twinSurfaceIds));
-                error = validation.Error;
+                // A source the user selected is swept from however poorly it sweeps; one derived for it is not
+                error = validation.Error ?? (derived ? validation.QualityError : null);
                 validation.CopyTo(out sideSurfaceIds, out targetSurfaceIds, out layerSideSurfaceIds, out int[] directionEdgeIds);
                 if (error != null)
                 {
@@ -5104,10 +5391,12 @@ namespace CaeModel
                                           SweepPartMaps maps, Dictionary<int, int> twinSurfaceIds,
                                           out int[] sideSurfaceIds, out int[] targetSurfaceIds,
                                           out List<int[]> layerSideSurfaceIds, out int[] directionEdgeIds,
-                                          out bool reachedTarget)
+                                          out bool reachedTarget, out bool unlikeEnds, out string qualityError)
         {
             directionEdgeIds = null;
             reachedTarget = false;
+            unlikeEnds = false;
+            qualityError = null;
             //
             VisualizationData vis = part.Visualization;
             int[] sourceSurfaceIdsArray = sourceSurfaceIds.ToArray();
@@ -5142,7 +5431,8 @@ namespace CaeModel
                             targetSurfaceIds.Length > 0;
             if (error == null)
             {
-                error = ValidateSweepBlockGeometry(part, sourceSurfaceIds, targetSurfaceIds, sideSurfaceIds, maps);
+                error = ValidateSweepBlockGeometry(part, sourceSurfaceIds, targetSurfaceIds, sideSurfaceIds, maps,
+                                                   out unlikeEnds, out qualityError);
                 if (error == null)
                 {
                     HashSet<int> ringDirectionEdgeIds = new HashSet<int>();
@@ -5151,11 +5441,11 @@ namespace CaeModel
                     {
                         foreach (var edgeIds in group) ringDirectionEdgeIds.UnionWith(edgeIds);
                     }
-                    error = GetWallChainsError(part, sourceSurfaceIds, sideSurfaceIds, targetSurfaceIds,
-                                               ringDirectionEdgeIds, maps);
-                    if (error == null)
-                        error = GetUnreachedWallsError(part, sourceSurfaceIds, sideSurfaceIds, targetSurfaceIds,
-                                                       ringDirectionEdgeIds, maps);
+                    if (qualityError == null)
+                        qualityError = GetWallChainsError(part, sourceSurfaceIds, sideSurfaceIds, targetSurfaceIds,
+                                                          ringDirectionEdgeIds, maps);
+                    error = GetUnreachedWallsError(part, sourceSurfaceIds, sideSurfaceIds, targetSurfaceIds,
+                                                   ringDirectionEdgeIds, maps);
                     if (error == null)
                         error = GetUnpairedTargetEdgesError(part, sourceSurfaceIds, sideSurfaceIds, targetSurfaceIds,
                                                             ringDirectionEdgeIds);
@@ -5180,7 +5470,7 @@ namespace CaeModel
                                     out chainTargetSurfaceIds, out chainEdgeIds) != null) return error;
             reachedTarget = true;
             error = ValidateSweepBlockGeometry(part, sourceSurfaceIds, chainTargetSurfaceIds,
-                                               chainSideSurfaceIds, maps);
+                                               chainSideSurfaceIds, maps, out unlikeEnds, out qualityError);
             if (error == null)
                 error = GetUnpairedTargetEdgesError(part, sourceSurfaceIds, chainSideSurfaceIds, chainTargetSurfaceIds,
                                                     chainEdgeIds);
@@ -5200,11 +5490,14 @@ namespace CaeModel
             int[] directionEdgeIds;
             List<int[]> layerSideSurfaceIds;
             bool reachedTarget;
+            bool unlikeEnds;
+            string qualityError;
             string error = ValidateSweepBlock(part, sourceSurfaceIds, surfaceIdSurfaceNeighbourIds, maps, twinSurfaceIds,
                                               out sideSurfaceIds, out targetSurfaceIds, out layerSideSurfaceIds,
-                                              out directionEdgeIds, out reachedTarget);
+                                              out directionEdgeIds, out reachedTarget, out unlikeEnds,
+                                              out qualityError);
             return new SweepBlockValidation(error, sideSurfaceIds, targetSurfaceIds, layerSideSurfaceIds,
-                                            directionEdgeIds, reachedTarget);
+                                            directionEdgeIds, reachedTarget, unlikeEnds, qualityError);
         }
         /// <summary>
         /// Refuses a block whose target is divided into several surfaces along an edge the source does not carry.
@@ -5397,8 +5690,11 @@ namespace CaeModel
         /// </summary>
         private string ValidateSweepBlockGeometry(GeometryPart part, HashSet<int> sourceSurfaceIds,
                                                   int[] targetSurfaceIds, int[] sideSurfaceIds,
-                                                  SweepPartMaps maps)
+                                                  SweepPartMaps maps, out bool unlikeEnds,
+                                                  out string qualityError)
         {
+            unlikeEnds = false;
+            qualityError = null;
             // A block the transfinite mesher accepts carries the same structured grid whichever of its faces
             // the sweep starts from, so none of the measurements below has anything to refuse on it. They
             // would refuse a curved block swept from its inner face to its outer one, where the target is the
@@ -5439,7 +5735,11 @@ namespace CaeModel
             }
             // The target of a sweep is the source carried along the sweep lines, so it is a similar shape
             // however strongly the sweep tapers: the square root of its area ratio and its perimeter ratio
-            // then report the same scale. A target that is the rest of the body reports two different ones
+            // then report the same scale. A target that is the rest of the body reports two different ones. So does
+            // a loft between outlines that are not alike - a bore widening faster than the outside of the tube - but
+            // its ends lie as flat as each other: the area of an end against the area its outline spans, which a
+            // target bulging over the rest of the body far exceeds, and which for alike ends is the same measure.
+            // Such a block sweeps, but the search takes it only where the part has no way between alike ends
             if (vis.FaceAreas != null && vis.EdgeLengths != null && targetSurfaceIds.Length > 0)
             {
                 double sourceArea = sourceSurfaceIdsArray.Sum(id => vis.FaceAreas[id]);
@@ -5451,11 +5751,17 @@ namespace CaeModel
                     double scale = Math.Sqrt(targetArea / sourceArea) * sourcePerimeter / targetPerimeter;
                     if (scale < 0.8 || scale > 1.25)
                     {
-                        return "The sweep target surface/s (" + GetSweepSurfaceNames(part, targetSurfaceIds) + ") are " +
-                               "not the shape of the sweep source surface/s (" +
-                               GetSweepSurfaceNames(part, sourceSurfaceIdsArray) + ") carried along the sweep " +
-                               "direction. Select the source surfaces by hand, or split the part so that each piece " +
-                               "is swept on its own.";
+                        double flatnessRatio = GetSweepEndFlatness(vis, targetSurfaceIds) /
+                                               GetSweepEndFlatness(vis, sourceSurfaceIdsArray);
+                        if (flatnessRatio >= 0.8 * 0.8 && flatnessRatio <= 1.25 * 1.25) unlikeEnds = true;
+                        else
+                        {
+                            return "The sweep target surface/s (" + GetSweepSurfaceNames(part, targetSurfaceIds) +
+                                   ") are not the shape of the sweep source surface/s (" +
+                                   GetSweepSurfaceNames(part, sourceSurfaceIdsArray) + ") carried along the sweep " +
+                                   "direction. Select the source surfaces by hand, or split the part so that each " +
+                                   "piece is swept on its own.";
+                        }
                     }
                 }
             }
@@ -5464,6 +5770,12 @@ namespace CaeModel
             Dictionary<int, HashSet<int>> vertexIdEdgeIds = maps.GetVertexIdEdgeIds(part);
             HashSet<int> chainEdgeIds = new HashSet<int>();
             Dictionary<int, double> vertexIdChainLength = new Dictionary<int, double>();
+            List<int[]> chainStartEdgeVertexIds = new List<int[]>();
+            BoundingBox sourceBox = new BoundingBox();
+            foreach (var vertexId in vis.GetVertexNodeIdsForEdgeIds(sourceEdgeIds.ToArray()))
+                sourceBox.IncludeCoor(_geometry.Nodes[vertexId].Coor);
+            double sourceDiagonal = sourceBox.GetDiagonal();
+            HashSet<int> targetVertexIds = vis.GetVertexNodeIdsForSurfaceIds(targetSurfaceIds);
             foreach (var vertexId in vis.GetVertexNodeIdsForEdgeIds(sourceEdgeIds.ToArray()).OrderBy(id => id))
             {
                 foreach (var edgeId in vertexIdEdgeIds[vertexId].OrderBy(id => id))
@@ -5477,8 +5789,10 @@ namespace CaeModel
                                      chainEdgeIds, out lastEdgeId, out lastVertexId, out chainLength);
                     Vec3D chord = new Vec3D(_geometry.Nodes[lastVertexId].Coor) -
                                   new Vec3D(_geometry.Nodes[vertexId].Coor);
-                    // A chain that ends near where it began has run around the body rather than across it
-                    if (chainLength > 0 && chord.Len < 0.3 * chainLength)
+                    // A chain that ends near where it began has run around the body rather than across it. Near is
+                    // within the size of the source: a coil runs a long way round as well, but it ends far from
+                    // where it began
+                    if (chainLength > 0 && chord.Len < 0.3 * chainLength && chord.Len < sourceDiagonal)
                     {
                         return "The edge chain following the sweep direction from " + GetSweepEdgeName(part, edgeId) +
                                " turns back on itself instead of running from the source surface/s (" +
@@ -5504,11 +5818,17 @@ namespace CaeModel
                                "entering it, so the source and the target surface/s are the wrong way round.";
                     }
                     //
+                    // A chain measures the length of its sweep line only when it reaches the target; one that stops
+                    // where the wall turns by more than a chain may - the flare of a horn - measured part of it
                     if (chainLength > 0)
                     {
-                        double length;
-                        vertexIdChainLength.TryGetValue(vertexId, out length);
-                        vertexIdChainLength[vertexId] = Math.Max(length, chainLength);
+                        if (targetVertexIds.Contains(lastVertexId))
+                        {
+                            double length;
+                            vertexIdChainLength.TryGetValue(vertexId, out length);
+                            vertexIdChainLength[vertexId] = Math.Max(length, chainLength);
+                        }
+                        chainStartEdgeVertexIds.Add(new int[] { edgeId, vertexId });
                     }
                 }
             }
@@ -5544,32 +5864,100 @@ namespace CaeModel
             // one another smoothly - the two walls of a slot and the rounded bottom between them - has vertices
             // no edge leaves, and the length across the body behind them is never seen: the chains report the
             // width of the prongs and nothing of the way from the bottom of the slot to the end of the part.
-            // So the sweep lines are measured across the source as well, from its cells into the material
+            // So the sweep lines are measured across the source as well, from its cells into the material. A block
+            // turning about an axis lengthens its lines with the distance from the axis, as the chains above allow,
+            // and the lines measured straight across its source report the same; there they are compared by the angle
+            // they turn through about the axis, which is what one element layer count has to suit. Lines that differ
+            // only as a linear function of where they leave the source - a taper, a wedge - end on a target that is
+            // an affine image of the source, which the morph of the layers reproduces exactly whatever the lengths;
+            // the lines of a slot, a step or a groove depart from any linear function, and the layers fold there
+            Vec3D axisPoint;
+            Vec3D axisDirection;
+            GetSweepTurnAxis(vis, chainStartEdgeVertexIds, 1E-3 * part.BoundingBox.GetDiagonal(), out axisPoint,
+                             out axisDirection);
             double minSampledLength;
             double maxSampledLength;
-            if (SampleSweepLengths(vis, sourceSurfaceIdsArray, targetSurfaceIds, out minSampledLength,
-                                   out maxSampledLength) && minSampledLength < 0.5 * maxSampledLength)
+            double linearDeviation;
+            if (SampleSweepLengths(vis, sourceSurfaceIdsArray, targetSurfaceIds, axisPoint, axisDirection,
+                                   out minSampledLength, out maxSampledLength, out linearDeviation) &&
+                minSampledLength < 0.5 * maxSampledLength &&
+                linearDeviation > _maxSweepLengthDeviation * maxSampledLength)
             {
-                return "The sweep lines measured across the sweep source surface/s (" +
-                       GetSweepSurfaceNames(part, sourceSurfaceIdsArray) + ") differ in length by more than half, so " +
-                       "one element layer count cannot suit them all. Select the source surfaces by hand, or split " +
-                       "the part so that each piece is swept on its own.";
+                qualityError = "The sweep lines measured across the sweep source surface/s (" +
+                               GetSweepSurfaceNames(part, sourceSurfaceIdsArray) + ") differ in " +
+                               (axisDirection != null ? "the angle they turn through about the sweep axis" : "length") +
+                               " by more than half, and not as a taper changes them, so one element layer count " +
+                               "cannot suit them all. Select the source surfaces by hand, or split the part so that " +
+                               "each piece is swept on its own.";
             }
             //
             return null;
+        }
+        /// <summary>
+        /// The axis a block turns about: the line every chain leaving the source starts along as a circular arc
+        /// of. A chain starting along a straight line has none, and neither has a block in which fewer than two
+        /// chains start along a circle; a chain starting along any other curve is not asked.
+        /// </summary>
+        private void GetSweepTurnAxis(VisualizationData vis, List<int[]> chainStartEdgeVertexIds, double tolerance,
+                                      out Vec3D axisPoint, out Vec3D axisDirection)
+        {
+            axisPoint = null;
+            axisDirection = null;
+            if (vis.EdgeTypes == null) return;
+            //
+            int numOfArcs = 0;
+            Vec3D point = null;
+            Vec3D direction = null;
+            foreach (var edgeVertexIds in chainStartEdgeVertexIds)
+            {
+                GeomCurveType edgeType = vis.EdgeTypes[edgeVertexIds[0]];
+                if (edgeType == GeomCurveType.Line) return;
+                if (edgeType != GeomCurveType.Circle) continue;
+                //
+                double r;
+                double arcAngleDeg;
+                double[] center;
+                double[] normal;
+                vis.GetArcEdgeDataForEdgeId(edgeVertexIds[0], new HashSet<int>() { edgeVertexIds[1] }, _geometry.Nodes,
+                                            out r, out arcAngleDeg, out center, out normal);
+                if (center == null || r <= 0 || double.IsInfinity(r) || double.IsNaN(r)) return;
+                Vec3D arcCenter = new Vec3D(center);
+                Vec3D arcDirection = new Vec3D(normal);
+                if (arcDirection.Len == 0) return;
+                arcDirection.Normalize();
+                //
+                if (direction == null)
+                {
+                    point = arcCenter;
+                    direction = arcDirection;
+                }
+                else if (Vec3D.CrossProduct(arcDirection, direction).Len > _sweepTurnAxisSine ||
+                         Vec3D.CrossProduct(arcCenter - point, direction).Len > tolerance) return;
+                numOfArcs++;
+            }
+            if (numOfArcs < 2) return;
+            //
+            axisPoint = point;
+            axisDirection = direction;
         }
         /// <summary>
         /// The shortest and the longest sweep line measured across the source: from the centroid of a source
         /// cell along the inward normal of the cell to the first cell of the part the line meets, for up to a
         /// hundred cells spread over the source. Only a line ending on a target surface is measured - a line
         /// ending on a wall belongs to a body that bends, and the straight line says nothing of its length.
-        /// False when no line reached a target.
+        /// With an axis the block turns about, a line is measured by the angle between its ends about the axis.
+        /// linearDeviation is the largest departure of a measured line from the linear function of the point it
+        /// leaves the source at that fits them all best. False when no line reached a target.
         /// </summary>
         private bool SampleSweepLengths(VisualizationData vis, int[] sourceSurfaceIds, int[] targetSurfaceIds,
-                                        out double minLength, out double maxLength)
+                                        Vec3D axisPoint, Vec3D axisDirection, out double minLength,
+                                        out double maxLength, out double linearDeviation)
         {
             minLength = double.MaxValue;
             maxLength = 0;
+            linearDeviation = 0;
+            List<Vec3D> origins = new List<Vec3D>();
+            List<double> lengths = new List<double>();
             if (vis.Cells == null || vis.CellIdsByFace == null) return false;
             //
             HashSet<int> sourceSurfaceIdSet = new HashSet<int>(sourceSurfaceIds);
@@ -5639,10 +6027,82 @@ namespace CaeModel
                     }
                 }
                 if (nearestSurfaceId < 0 || !targetSurfaceIdSet.Contains(nearestSurfaceId)) continue;
+                if (axisDirection != null)
+                {
+                    Vec3D start = origin - axisPoint;
+                    Vec3D end = origin + nearest * direction - axisPoint;
+                    start = start - Vec3D.DotProduct(start, axisDirection) * axisDirection;
+                    end = end - Vec3D.DotProduct(end, axisDirection) * axisDirection;
+                    if (start.Len == 0 || end.Len == 0) continue;
+                    nearest = Math.Atan2(Vec3D.CrossProduct(start, end).Len, Vec3D.DotProduct(start, end));
+                }
                 minLength = Math.Min(minLength, nearest);
                 maxLength = Math.Max(maxLength, nearest);
+                origins.Add(origin);
+                lengths.Add(nearest);
             }
+            linearDeviation = GetLinearFitDeviation(origins, lengths);
             return maxLength > 0;
+        }
+        /// <summary>
+        /// The largest difference between a value and the linear function of position that fits the values best, by
+        /// least squares. A position may vary in fewer than three directions - the points of a plane - so the fit is
+        /// pulled lightly towards no change in the directions the points do not span.
+        /// </summary>
+        private static double GetLinearFitDeviation(List<Vec3D> points, List<double> values)
+        {
+            int count = points.Count;
+            if (count == 0) return 0;
+            Vec3D center = new Vec3D();
+            double meanValue = 0;
+            for (int i = 0; i < count; i++)
+            {
+                center = center + points[i];
+                meanValue += values[i];
+            }
+            center = (1.0 / count) * center;
+            meanValue /= count;
+            //
+            double[,] matrix = new double[3, 3];
+            double[] rightSide = new double[3];
+            for (int i = 0; i < count; i++)
+            {
+                double[] q = (points[i] - center).Coor;
+                for (int r = 0; r < 3; r++)
+                {
+                    rightSide[r] += q[r] * (values[i] - meanValue);
+                    for (int c = 0; c < 3; c++) matrix[r, c] += q[r] * q[c];
+                }
+            }
+            double regularization = 1E-6 * (matrix[0, 0] + matrix[1, 1] + matrix[2, 2]) + 1E-30;
+            for (int r = 0; r < 3; r++) matrix[r, r] += regularization;
+            double[] slope = SolveSymmetric3x3(matrix, rightSide);
+            //
+            double deviation = 0;
+            for (int i = 0; i < count; i++)
+            {
+                double[] q = (points[i] - center).Coor;
+                double fitted = meanValue + slope[0] * q[0] + slope[1] * q[1] + slope[2] * q[2];
+                deviation = Math.Max(deviation, Math.Abs(values[i] - fitted));
+            }
+            return deviation;
+        }
+        private static double[] SolveSymmetric3x3(double[,] m, double[] b)
+        {
+            double det = m[0, 0] * (m[1, 1] * m[2, 2] - m[1, 2] * m[2, 1]) -
+                         m[0, 1] * (m[1, 0] * m[2, 2] - m[1, 2] * m[2, 0]) +
+                         m[0, 2] * (m[1, 0] * m[2, 1] - m[1, 1] * m[2, 0]);
+            if (det == 0) return new double[3];
+            double[] x = new double[3];
+            for (int k = 0; k < 3; k++)
+            {
+                double[,] mk = (double[,])m.Clone();
+                for (int r = 0; r < 3; r++) mk[r, k] = b[r];
+                x[k] = (mk[0, 0] * (mk[1, 1] * mk[2, 2] - mk[1, 2] * mk[2, 1]) -
+                        mk[0, 1] * (mk[1, 0] * mk[2, 2] - mk[1, 2] * mk[2, 0]) +
+                        mk[0, 2] * (mk[1, 0] * mk[2, 1] - mk[1, 1] * mk[2, 0])) / det;
+            }
+            return x;
         }
         private static bool DoesRayHitBox(Vec3D origin, Vec3D direction, double[] min, double[] max, double maxDistance)
         {
@@ -5748,6 +6208,34 @@ namespace CaeModel
             }
             return perimeter;
         }
+        /// <summary>
+        /// The area of a group of surfaces against the area its outline spans: one for a flat group, more for one
+        /// that bulges. The spanned area is the length of the sum of the oriented areas of its cells, which only the
+        /// outline decides, and infinity when the outline spans none, as round a whole cylinder.
+        /// </summary>
+        private double GetSweepEndFlatness(VisualizationData vis, int[] surfaceIds)
+        {
+            double area = 0;
+            Vec3D orientedArea = new Vec3D();
+            foreach (var surfaceId in surfaceIds)
+            {
+                foreach (var cellId in vis.CellIdsByFace[surfaceId])
+                {
+                    int[] cell = vis.Cells[cellId];
+                    if (cell.Length < 3) continue;
+                    int numCorners = cell.Length == 3 || cell.Length == 6 ? 3 : 4;
+                    Vec3D a = new Vec3D(_geometry.Nodes[cell[0]].Coor);
+                    for (int i = 1; i < numCorners - 1; i++)
+                    {
+                        Vec3D cross = 0.5 * Vec3D.CrossProduct(new Vec3D(_geometry.Nodes[cell[i]].Coor) - a,
+                                                               new Vec3D(_geometry.Nodes[cell[i + 1]].Coor) - a);
+                        area += cross.Len;
+                        orientedArea = orientedArea + cross;
+                    }
+                }
+            }
+            return orientedArea.Len > 0 ? area / orientedArea.Len : double.PositiveInfinity;
+        }
         private static string GetSweepSideHoleError(BasePart part, int surfaceId)
         {
             return "The sweep side " + GetSweepSurfaceName(part, surfaceId) + " has a hole. A bore running across the " +
@@ -5785,6 +6273,14 @@ namespace CaeModel
         // How fast the length of the sweep lines may change across the source: a block bending through a full turn
         // lengthens them by two pi for every unit of distance from the inside of the bend to the outside
         private const double _maxSweepLengthGradient = 2 * Math.PI;
+        // The sine of the angle between two arcs of a block that still turn about one axis, about half a degree
+        private const double _sweepTurnAxisSine = 1E-2;
+        // How far the sweep lines measured across the source may depart from a taper, as a share of the longest
+        private const double _maxSweepLengthDeviation = 0.05;
+        // The angle in degrees a chain through the edges following the sweep direction may turn by
+        private const double _layerEdgeChainAngle = 75;
+        // The angle in degrees a straight edge splitting a ring wall stands across its loops at, as the mesher asks
+        private const double _ringConnectorMinAngle = 70;
         private static readonly double _wallChainsCosine = Math.Cos(45 * Math.PI / 180);
         private const double _wallChainsLengthTolerance = 0.05;
         private const string _swallowedWallError = "A sweep side surface was taken for a target surface.";
@@ -5831,10 +6327,15 @@ namespace CaeModel
                 // A wall with a hole - the opening of a bore that runs across the sweep - has no structured
                 // grid; gmsh refuses such a transfinite surface, so it is refused here first. A wall running around
                 // the body as a ring, one of its two loops on the source and the other on the target - the end of a
-                // tube swept through its wall - is no such wall: the mesher splits it into walls of four sides
-                int numOfEdgeLoops = CountEdgeLoops(vis.FaceEdgeIds[surfaceId], vertexIdEdgeIds);
+                // tube swept through its wall - is no such wall: the mesher splits it into walls of four sides, when
+                // straight edges across it can be found to split it along
+                int numOfEdgeLoops = CountEdgeLoops(vis, vis.FaceEdgeIds[surfaceId], vertexIdEdgeIds);
                 if (numOfEdgeLoops == 2 && IsRingWall(vis.FaceEdgeIds[surfaceId], sourceEdgeIds, targetEdgeIdSet))
+                {
+                    string ringWallError = GetRingWallSplitError(part, surfaceId, sourceEdgeIds, targetEdgeIdSet);
+                    if (ringWallError != null) return ringWallError;
                     continue;
+                }
                 if (numOfEdgeLoops != 1) return GetSweepSideHoleError(part, surfaceId);
                 if (vis.IsSurfaceACylinderLike(surfaceId, out _)) continue;
                 //
@@ -6024,7 +6525,7 @@ namespace CaeModel
             //
             foreach (var surfaceId in wallSurfaceIds)
             {
-                if (CountEdgeLoops(vis.FaceEdgeIds[surfaceId], vertexIdEdgeIds) != 1)
+                if (CountEdgeLoops(vis, vis.FaceEdgeIds[surfaceId], vertexIdEdgeIds) != 1)
                     return GetSweepSideHoleError(part, surfaceId);
                 if (vis.IsSurfaceACylinderLike(surfaceId, out _)) continue;
                 //
@@ -6100,11 +6601,12 @@ namespace CaeModel
         /// </summary>
         /// <summary>
         /// Refuses a block with a wall that touches neither its source nor its target and that no chain of the edges
-        /// following the sweep direction reaches from the source. The mesher sides such a wall by those chains alone -
-        /// from every source vertex along the edge that continues most smoothly, within the angle a swallowed wall
-        /// may turn by - and a wall they do not reach is left with neither side, which gmsh then refuses to mesh as
-        /// a structured grid, failing the whole compound. The rings of walls one half hole would sweep onto another
-        /// through a bent plate turn at every bend, and their chains stop at the first.
+        /// following the sweep direction reaches from the source: such a wall is left with neither side, which gmsh
+        /// then refuses to mesh as a structured grid, failing the whole compound. A chain runs from every source vertex
+        /// along the edge that continues most smoothly, and as only the edges the walk marked as following the sweep
+        /// direction are candidates, it may turn as far as a wall turns at a chamfer or a shoulder - the 49 degrees of
+        /// the chamfered hexagon of sweep_64 - without being led astray. The rings of walls one half hole would sweep
+        /// onto another through a bent plate turn at every bend, and their chains stop at the first.
         /// </summary>
         private string GetUnreachedWallsError(GeometryPart part, HashSet<int> sourceSurfaceIds, int[] wallSurfaceIds,
                                               int[] targetSurfaceIds, HashSet<int> directionEdgeIds, SweepPartMaps maps)
@@ -6116,7 +6618,7 @@ namespace CaeModel
             candidateEdgeIds.IntersectWith(directionEdgeIds);
             candidateEdgeIds.ExceptWith(sourceEdgeIds);
             Dictionary<int, HashSet<int>> vertexIdEdgeIds = maps.GetVertexIdEdgeIds(part);
-            double minCosine = Math.Cos(Globals.SweepSwallowedWallAngle * Math.PI / 180);
+            double minCosine = Math.Cos(_layerEdgeChainAngle * Math.PI / 180);
             //
             HashSet<int> reachedEdgeIds = new HashSet<int>();
             foreach (var startVertexId in vis.GetVertexNodeIdsForEdgeIds(sourceEdgeIds.ToArray()).OrderBy(id => id))
@@ -6281,13 +6783,200 @@ namespace CaeModel
                    wallEdgeIds.Any(sourceEdgeIds.Contains) && wallEdgeIds.Any(targetEdgeIds.Contains);
         }
         /// <summary>
+        /// Why the mesher cannot split a ring wall into walls of four sides the way it splits one: by straight edges from
+        /// a vertex of its source loop to the nearest vertex of its target loop, each vertex the nearest of the other,
+        /// standing across both loops at the angle the mesher asks or more and lying on the wall, as many of them as do
+        /// not cross; it needs two, or one when both loops are a single closed edge. The end of a tube whose inner and
+        /// outer corners are rounded about different centres has no such edge, and swept through its wall it fails to
+        /// mesh. Null when the wall can be split, or when its loops cannot be followed and the mesher is left to tell.
+        /// </summary>
+        private string GetRingWallSplitError(GeometryPart part, int wallId, HashSet<int> sourceEdgeIds,
+                                             HashSet<int> targetEdgeIds)
+        {
+            VisualizationData vis = part.Visualization;
+            int[] wallEdgeIds = vis.FaceEdgeIds[wallId].Distinct().ToArray();
+            int[] wallSourceEdgeIds = wallEdgeIds.Where(sourceEdgeIds.Contains).ToArray();
+            int[] wallTargetEdgeIds = wallEdgeIds.Where(targetEdgeIds.Contains).ToArray();
+            int[] sourceVertexIds = GetSweepLoopVertexIds(vis, wallSourceEdgeIds);
+            int[] targetVertexIds = GetSweepLoopVertexIds(vis, wallTargetEdgeIds);
+            if (sourceVertexIds == null || targetVertexIds == null) return null;
+            //
+            int n = sourceVertexIds.Length;
+            int m = targetVertexIds.Length;
+            Vec3D[] sourceCoors = sourceVertexIds.Select(id => new Vec3D(_geometry.Nodes[id].Coor)).ToArray();
+            Vec3D[] targetCoors = targetVertexIds.Select(id => new Vec3D(_geometry.Nodes[id].Coor)).ToArray();
+            int[] nearestTarget = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, m)
+                .OrderBy(j => (targetCoors[j] - sourceCoors[i]).Len).First()).ToArray();
+            int[] nearestSource = Enumerable.Range(0, m).Select(j => Enumerable.Range(0, n)
+                .OrderBy(i => (targetCoors[j] - sourceCoors[i]).Len).First()).ToArray();
+            double tolerance = 1E-3 * part.BoundingBox.GetDiagonal();
+            List<int[]> candidates = new List<int[]>();
+            for (int i = 0; i < n; i++)
+            {
+                int j = nearestTarget[i];
+                if (nearestSource[j] != i) continue;
+                Vec3D across = targetCoors[j] - sourceCoors[i];
+                if (!StandsAcrossSweepLoop(vis, across, sourceVertexIds[i], wallSourceEdgeIds) ||
+                    !StandsAcrossSweepLoop(vis, across, targetVertexIds[j], wallTargetEdgeIds)) continue;
+                double surfaceTolerance = tolerance + 0.02 * across.Len;
+                if (new double[] { 0.25, 0.5, 0.75 }.All(fraction =>
+                        GetDistanceToSurfaceCells(vis, wallId, sourceCoors[i] + fraction * across) <= surfaceTolerance))
+                    candidates.Add(new int[] { i, j });
+            }
+            // As the mesher keeps them: following the source loop, the target vertices follow the target loop one way
+            int numOfConnectors = candidates.Count;
+            if (candidates.Count > 2)
+            {
+                numOfConnectors = 0;
+                foreach (var direction in new int[] { 1, -1 })
+                {
+                    for (int start = 0; start < candidates.Count; start++)
+                    {
+                        int kept = 1;
+                        int last = candidates[start][1];
+                        int advanced = 0;
+                        for (int k = 1; k < candidates.Count; k++)
+                        {
+                            int[] candidate = candidates[(start + k) % candidates.Count];
+                            int step = ((direction * (candidate[1] - last)) % m + m) % m;
+                            if (step == 0 || advanced + step >= m) continue;
+                            kept++;
+                            last = candidate[1];
+                            advanced += step;
+                        }
+                        numOfConnectors = Math.Max(numOfConnectors, kept);
+                    }
+                }
+            }
+            int numOfNeeded = wallSourceEdgeIds.Length == 1 && wallTargetEdgeIds.Length == 1 ? 1 : 2;
+            if (numOfConnectors >= numOfNeeded) return null;
+            //
+            return "The sweep side " + GetSweepSurfaceName(part, wallId) + " runs around the block, and " +
+                   (numOfConnectors == 0 ? "no" : "only one") + " straight edge from a vertex of its source loop to " +
+                   "the nearest vertex of its target loop stands across both loops at " + _ringConnectorMinAngle +
+                   " degrees or more and lies on it, so it cannot be split into walls of four sides. Select the " +
+                   "source surfaces by hand, or split the part so that each piece is swept on its own.";
+        }
+        /// <summary>
+        /// The vertices of a closed loop of edges in their order round it, the one vertex of a single closed edge, or
+        /// null when the edges do not form one loop.
+        /// </summary>
+        private static int[] GetSweepLoopVertexIds(VisualizationData vis, int[] edgeIds)
+        {
+            if (edgeIds.Length == 0) return null;
+            if (edgeIds.Length == 1)
+            {
+                int[] ends = vis.GetVertexNodeIdsForEdgeId(edgeIds[0]).Distinct().ToArray();
+                return ends.Length == 1 ? ends : null;
+            }
+            Dictionary<int, List<int>> vertexIdEdgeIds = new Dictionary<int, List<int>>();
+            foreach (var edgeId in edgeIds)
+            {
+                int[] ends = vis.GetVertexNodeIdsForEdgeId(edgeId).Distinct().ToArray();
+                if (ends.Length != 2) return null;
+                foreach (var vertexId in ends)
+                {
+                    if (!vertexIdEdgeIds.ContainsKey(vertexId)) vertexIdEdgeIds.Add(vertexId, new List<int>());
+                    vertexIdEdgeIds[vertexId].Add(edgeId);
+                }
+            }
+            if (vertexIdEdgeIds.Values.Any(ids => ids.Count != 2)) return null;
+            //
+            List<int> loop = new List<int>();
+            int edge = edgeIds[0];
+            int[] firstEnds = vis.GetVertexNodeIdsForEdgeId(edge).Distinct().ToArray();
+            int start = firstEnds[0];
+            int current = firstEnds[1];
+            loop.Add(start);
+            while (current != start)
+            {
+                if (loop.Count > edgeIds.Length) return null;
+                loop.Add(current);
+                edge = vertexIdEdgeIds[current][0] == edge ? vertexIdEdgeIds[current][1] : vertexIdEdgeIds[current][0];
+                int[] ends = vis.GetVertexNodeIdsForEdgeId(edge).Distinct().ToArray();
+                current = ends[0] == current ? ends[1] : ends[0];
+            }
+            return loop.Count == edgeIds.Length ? loop.ToArray() : null;
+        }
+        /// <summary>
+        /// Whether a straight edge leaving a vertex of a loop stands across it, at the angle the mesher asks or more to
+        /// every edge of the loop at the vertex.
+        /// </summary>
+        private bool StandsAcrossSweepLoop(VisualizationData vis, Vec3D direction, int vertexId, int[] loopEdgeIds)
+        {
+            if (direction.Len == 0) return false;
+            double minimumCosine = Math.Cos(_ringConnectorMinAngle * Math.PI / 180);
+            foreach (var edgeId in loopEdgeIds)
+            {
+                if (!vis.GetVertexNodeIdsForEdgeId(edgeId).Contains(vertexId)) continue;
+                Vec3D tangent = GetSweepEdgeTangent(vis, edgeId, vertexId);
+                if (tangent.Len == 0) continue;
+                if (Math.Abs(Vec3D.DotProduct(direction, tangent)) / (direction.Len * tangent.Len) > minimumCosine)
+                    return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// The distance from a point to the nearest of the cells a surface is drawn with.
+        /// </summary>
+        private double GetDistanceToSurfaceCells(VisualizationData vis, int surfaceId, Vec3D point)
+        {
+            double minimum = double.MaxValue;
+            foreach (var cellId in vis.CellIdsByFace[surfaceId])
+            {
+                int[] cell = vis.Cells[cellId];
+                if (cell.Length < 3) continue;
+                int numCorners = cell.Length == 3 || cell.Length == 6 ? 3 : 4;
+                Vec3D a = new Vec3D(_geometry.Nodes[cell[0]].Coor);
+                for (int k = 1; k + 1 < numCorners; k++)
+                {
+                    Vec3D b = new Vec3D(_geometry.Nodes[cell[k]].Coor);
+                    Vec3D c = new Vec3D(_geometry.Nodes[cell[k + 1]].Coor);
+                    minimum = Math.Min(minimum, GetDistanceToTriangle(point, a, b, c));
+                }
+            }
+            return minimum;
+        }
+        /// <summary>
+        /// The distance from a point to a triangle.
+        /// </summary>
+        private static double GetDistanceToTriangle(Vec3D p, Vec3D a, Vec3D b, Vec3D c)
+        {
+            Vec3D ab = b - a;
+            Vec3D ac = c - a;
+            Vec3D ap = p - a;
+            double d1 = Vec3D.DotProduct(ab, ap);
+            double d2 = Vec3D.DotProduct(ac, ap);
+            if (d1 <= 0 && d2 <= 0) return ap.Len;
+            Vec3D bp = p - b;
+            double d3 = Vec3D.DotProduct(ab, bp);
+            double d4 = Vec3D.DotProduct(ac, bp);
+            if (d3 >= 0 && d4 <= d3) return bp.Len;
+            double vc = d1 * d4 - d3 * d2;
+            if (vc <= 0 && d1 >= 0 && d3 <= 0) return (p - (a + (d1 / (d1 - d3)) * ab)).Len;
+            Vec3D cp = p - c;
+            double d5 = Vec3D.DotProduct(ab, cp);
+            double d6 = Vec3D.DotProduct(ac, cp);
+            if (d6 >= 0 && d5 <= d6) return cp.Len;
+            double vb = d5 * d2 - d1 * d6;
+            if (vb <= 0 && d2 >= 0 && d6 <= 0) return (p - (a + (d2 / (d2 - d6)) * ac)).Len;
+            double va = d3 * d6 - d5 * d4;
+            if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0)
+                return (p - (b + ((d4 - d3) / ((d4 - d3) + (d5 - d6))) * (c - b))).Len;
+            double denominator = va + vb + vc;
+            if (denominator == 0) return ap.Len;
+            return (p - (a + (vb / denominator) * ab + (vc / denominator) * ac)).Len;
+        }
+        /// <summary>
         /// The number of closed edge loops the given edges form, edges being joined at their vertices.
         /// </summary>
-        private static int CountEdgeLoops(int[] edgeIds, Dictionary<int, HashSet<int>> vertexIdEdgeIds)
+        private static int CountEdgeLoops(VisualizationData vis, int[] edgeIds,
+                                          Dictionary<int, HashSet<int>> vertexIdEdgeIds)
         {
             HashSet<int> edgeIdSet = new HashSet<int>(edgeIds);
             HashSet<int> visited = new HashSet<int>();
             Queue<int> pending = new Queue<int>();
+            HashSet<int> vertexEdgeIds;
             int numLoops = 0;
             foreach (var edgeId in edgeIds)
             {
@@ -6298,10 +6987,10 @@ namespace CaeModel
                 while (pending.Count > 0)
                 {
                     int currentEdgeId = pending.Dequeue();
-                    foreach (var entry in vertexIdEdgeIds)
+                    foreach (var nodeId in vis.GetNodeIdsForEdgeId(currentEdgeId))
                     {
-                        if (!entry.Value.Contains(currentEdgeId)) continue;
-                        foreach (var otherEdgeId in entry.Value)
+                        if (!vertexIdEdgeIds.TryGetValue(nodeId, out vertexEdgeIds)) continue;
+                        foreach (var otherEdgeId in vertexEdgeIds)
                         {
                             if (edgeIdSet.Contains(otherEdgeId) && visited.Add(otherEdgeId)) pending.Enqueue(otherEdgeId);
                         }
@@ -6338,7 +7027,7 @@ namespace CaeModel
         {
             SweepBlockValidation validation = maps.GetSweepBlockValidation(part, sourceSurfaceIds, false,
                 () => ValidateSweepBlock(part, sourceSurfaceIds, surfaceIdSurfaceNeighbourIds, maps, null));
-            if (validation.Error != null) return;
+            if (validation.Error != null || validation.QualityError != null) return;
             int[] targetSurfaceIds = validation.TargetSurfaceIds;
             if (targetSurfaceIds == null || targetSurfaceIds.Length < 2) return;
             //
@@ -6360,7 +7049,7 @@ namespace CaeModel
             //
             SweepBlockValidation extendedValidation = maps.GetSweepBlockValidation(part, extendedSourceSurfaceIds, false,
                 () => ValidateSweepBlock(part, extendedSourceSurfaceIds, surfaceIdSurfaceNeighbourIds, maps, null));
-            if (extendedValidation.Error != null) return;
+            if (extendedValidation.Error != null || extendedValidation.QualityError != null) return;
             int[] extendedTargetSurfaceIds = extendedValidation.TargetSurfaceIds;
             if (extendedTargetSurfaceIds == null ||
                 extendedTargetSurfaceIds.Length >= targetSurfaceIds.Length) return;
@@ -8450,6 +9139,8 @@ namespace CaeModel
             info.AddValue("_parameters", _parameters, typeof(EquationParameterCollection));
             info.AddValue("_materials", _materials, typeof(CaeGlobals.OrderedDictionary<string, Material>));
             info.AddValue("_sections", _sections, typeof(CaeGlobals.OrderedDictionary<string, Section>));
+            info.AddValue("_materialOrientations", _materialOrientations,
+                          typeof(CaeGlobals.OrderedDictionary<string, MaterialOrientation>));
             info.AddValue("_constraints", _constraints, typeof(CaeGlobals.OrderedDictionary<string, Constraint>));
             info.AddValue("_surfaceInteractions", _surfaceInteractions, typeof(CaeGlobals.OrderedDictionary<string, SurfaceInteraction>));
             info.AddValue("_contactPairs", _contactPairs, typeof(CaeGlobals.OrderedDictionary<string, ContactPair>));

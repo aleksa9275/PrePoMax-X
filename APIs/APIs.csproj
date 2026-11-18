@@ -116,6 +116,9 @@
     <Compile Include="Python\Model\Interactions\ContactPairAPI.cs" />
     <Compile Include="Python\Model\Interactions\ContactPairService.cs" />
     <Compile Include="Python\Model\Interactions\ContactPairsAPI.cs" />
+    <Compile Include="Python\Model\Interactions\ContactSearchPairTypeEnum.cs" />
+    <Compile Include="Python\Model\Interactions\ContactSearchResultAPI.cs" />
+    <Compile Include="Python\Model\Interactions\FoundContactPairAPI.cs" />
     <Compile Include="Python\Model\Interactions\SurfaceInteractionAPI.cs" />
     <Compile Include="Python\Model\Interactions\SurfaceInteractionService.cs" />
     <Compile Include="Python\Model\Interactions\SurfaceInteractionsAPI.cs" />
@@ -173,6 +176,9 @@
     <Compile Include="Python\Model\Sections\SectionAPI.cs" />
     <Compile Include="Python\Model\Sections\SectionService.cs" />
     <Compile Include="Python\Model\Sections\SectionsAPI.cs" />
+    <Compile Include="Python\Model\Orientations\MaterialOrientationAPI.cs" />
+    <Compile Include="Python\Model\Orientations\MaterialOrientationService.cs" />
+    <Compile Include="Python\Model\Orientations\MaterialOrientationsAPI.cs" />
     <Compile Include="Python\Model\ModelAPI.cs" />
     <Compile Include="Python\Model\Common\ModelItemsAPI.cs" />
     <Compile Include="Python\Model\Common\ModelResolver.cs" />
@@ -260,6 +266,12 @@
     <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputLimitDraftAPI.cs" />
     <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputsAPI.cs" />
     <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputService.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputMaterialAxesAPI.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputMaterialAxesDraftAPI.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputShellInPlaneStateAPI.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputShellInPlaneStateDraftAPI.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputCompositeFailureAPI.cs" />
+    <Compile Include="Python\Results\ResultFieldOutputs\ResultFieldOutputCompositeFailureDraftAPI.cs" />
     <Compile Include="Python\Results\ResultHistoryOutputs\ResultHistoryOutputAPI.cs" />
     <Compile Include="Python\Results\ResultHistoryOutputs\ResultHistoryOutputComponentAPI.cs" />
     <Compile Include="Python\Results\ResultHistoryOutputs\ResultHistoryOutputComponentDataAPI.cs" />

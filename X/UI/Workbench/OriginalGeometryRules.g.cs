@@ -10,7 +10,7 @@ using PrePoMax;
 using PrePoMax.Forms;
 namespace PrePoMaxX.UI.OriginalForms;
 
-// Source PrePoMax/Forms/11_MeshSetup/FrmMeshSetupItem.cs SHA256 e27d470f4bd715787682ebf014b584c51220233d8aa30ea3e0ac3e4a99e618f0
+// Source PrePoMax/Forms/11_MeshSetup/FrmMeshSetupItem.cs SHA256 dc326fbdc71c6e18bc5a1074a96ce981b5a040d18bf726f4d9da9072c4befa8b
 public sealed class FrmMeshSetupItemRule : GeometryFormRule {
 string[] _meshSetupItemNames; string _meshSetupItemToEditName;
 ViewMeshSetupItem _viewMeshSetupItem; readonly HashSet<ViewMeshSetupItem> _viewsChangedByUser=[];
@@ -165,7 +165,7 @@ protected override void OnSelect(object value) { _viewMeshSetupItem=(ViewMeshSet
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/04_GeometryFeature/FrmOffsetFace.cs SHA256 82fb2f71a96d117c109cb7e337d58af8d7bdcc1bf0aaecae46688b37c5a44c41
+// Source PrePoMax/Forms/04_GeometryFeature/FrmOffsetFace.cs SHA256 6a78c08b15af1d43a154d6d025e5ef9659c92b1ca68ad4c98e4c9aac75f27420
 public sealed class FrmOffsetFaceRule : GeometryFormRule {
 ViewFaceOffset _viewFaceOffset;bool _applying;
 public FrmOffsetFaceRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _viewFaceOffset=new ViewFaceOffset(new FaceOffset());SelectedObject=_viewFaceOffset; }
@@ -201,7 +201,7 @@ protected override void OnSelect(object value) { _viewFaceOffset=(ViewFaceOffset
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/04_GeometryFeature/FrmRepairGeometry.cs SHA256 79e854858f56f10fca74f0919569d4e9e28c8d7e0d0e7d4632379242e28cf4e7
+// Source PrePoMax/Forms/04_GeometryFeature/FrmRepairGeometry.cs SHA256 183b5d74ce6f8d41c8ad426cc2d87f603d0b529ebceb68732f5e7593ce1c4ca5
 public sealed class FrmRepairGeometryRule : GeometryFormRule {
 ViewGeometryRepair _viewGeometryRepair;bool _applying;
 public FrmRepairGeometryRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _viewGeometryRepair=new ViewGeometryRepair(new GeometryRepair(), GetInitialTolerance());SelectedObject=_viewGeometryRepair; }
@@ -264,7 +264,7 @@ protected override void OnSelect(object value) { _viewGeometryRepair=(ViewGeomet
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/04_GeometryFeature/FrmSplitPeriodicFaces.cs SHA256 2df5de17b976fdc799b14246d3280af6c0c29a67c250d420cdf5acbeed3cd84c
+// Source PrePoMax/Forms/04_GeometryFeature/FrmSplitPeriodicFaces.cs SHA256 27a356364c8ee5d8b660ec2837f18a7a0f9d116b9dd79ce4462e9a9ba36360b8
 public sealed class FrmSplitPeriodicFacesRule : GeometryFormRule {
 ViewPeriodicFaceSplit _viewPeriodicFaceSplit;bool _applying;
 public FrmSplitPeriodicFacesRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _viewPeriodicFaceSplit=new ViewPeriodicFaceSplit(new PeriodicFaceSplit());SelectedObject=_viewPeriodicFaceSplit; }
@@ -317,7 +317,7 @@ protected override void OnSelect(object value) { _viewPeriodicFaceSplit=(ViewPer
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/04_GeometryFeature/FrmSurfaceOperation.cs SHA256 39c30ac37ea942703faefe007560250c9e5d500c9728888a181675725995d5c8
+// Source PrePoMax/Forms/04_GeometryFeature/FrmSurfaceOperation.cs SHA256 5014acaf4014b7ea15757b0d3cd11cc737aae4d35e06bfa2b1b792399df19a37
 public sealed class FrmSurfaceOperationRule : GeometryFormRule {
 ViewSurfaceOperation _viewSurfaceOperation;bool _applying;SurfaceOperationEnum _operation;
 public FrmSurfaceOperationRule(Controller controller,string name=null,string[] parts=null):base(controller,null) {  _operation=Enum.Parse<SurfaceOperationEnum>(name);_viewSurfaceOperation=new ViewSurfaceOperation(new GeometrySelection("Selection"),_operation);SelectedObject=_viewSurfaceOperation; }
@@ -366,7 +366,7 @@ protected override void OnSelect(object value) { _viewSurfaceOperation=(ViewSurf
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/04_GeometryFeature/FrmSplitSolid.cs SHA256 d0d6eb8bcf4ff39d6eadea36247cb76e99ad1aa59b76a7bc55b789e2b193b40a
+// Source PrePoMax/Forms/04_GeometryFeature/FrmSplitSolid.cs SHA256 cfc9b8c13f7216bec24295e62f67379b2d57e48eaf99d4d14837e28618c460bd
 public sealed class FrmSplitSolidRule : GeometryFormRule {
 ViewGeometryFeature _viewGeometryFeature; bool _splitting;int _repeatTypeIndex;
 public SplitTypeEnum SplitType {get;private set;}
@@ -445,7 +445,7 @@ public override object Item=>GeometryFeature;
 protected override void OnSelect(object value) { _viewGeometryFeature=(ViewGeometryFeature)value; }
 }
 
-// Source PrePoMax/Forms/24_Part/FrmPartProperties.cs SHA256 984960fa89aa08f779ee510d9c750ac226ac631f11877a05baf0166b084ac0ef
+// Source PrePoMax/Forms/24_Part/FrmPartProperties.cs SHA256 363dddb81149aacd7f59926a0641614e3b3862ddf44d4a806760aa9b806d1629
 public sealed class FrmPartPropertiesRule : GeometryFormRule {
 HashSet<string> _partNames=[];string _partToEditName;ViewPartProperties _viewPartProperties;ViewGeometryModelResults _currentView;
 public FrmPartPropertiesRule(Controller controller,string name=null,string[] parts=null):base(controller,name) { _currentView=controller.CurrentView;_partToEditName=name;
@@ -506,7 +506,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[];
 }
 
-// Source PrePoMax/Forms/24_Part/FrmTranslate.cs SHA256 2932daf41f585e17986d0dc0756034ae077082f9e593c353b57da0593a2dbf4c
+// Source PrePoMax/Forms/24_Part/FrmTranslate.cs SHA256 2b74e6b0c9187b4f8f99256ed7b68f7c9fef3c757b331faee14d47a78ab0ebce
 public sealed class FrmTranslateRule : GeometryFormRule {
 TranslateParameters _translateParameters;string[] _partNames;
 public FrmTranslateRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _partNames=parts??throw new ArgumentNullException(nameof(parts));_translateParameters=new TranslateParameters(controller.Model.Properties.ModelSpace);SelectedObject=_translateParameters; }
@@ -528,7 +528,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[];
 }
 
-// Source PrePoMax/Forms/24_Part/FrmRotate.cs SHA256 c33dc48e03df937f8a18967ac8ca3761b242bbd0101a9a1e16f4315d0f222d9d
+// Source PrePoMax/Forms/24_Part/FrmRotate.cs SHA256 8ea2b9f8de1136307b6d74f5cd2ccc140dc7e6f0f14a97d9ca405b24e46c01d7
 public sealed class FrmRotateRule : GeometryFormRule {
 RotateParameters _rotateParameters;string[] _partNames;
 public FrmRotateRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _partNames=parts??throw new ArgumentNullException(nameof(parts));_rotateParameters=new RotateParameters(controller.Model.Properties.ModelSpace);SelectedObject=_rotateParameters; }
@@ -549,7 +549,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[];
 }
 
-// Source PrePoMax/Forms/24_Part/FrmMirror.cs SHA256 218a0098d93272ff4e6e28633ec618b7d7c5998daeb45b629faaca0f88231523
+// Source PrePoMax/Forms/24_Part/FrmMirror.cs SHA256 9719d4b6a5ae35289369d1addc6fafffe219e492a8235d74d2e1f58b5e091067
 public sealed class FrmMirrorRule : GeometryFormRule {
 MirrorParameters _mirrorParameters;string[] _partNames;
 public FrmMirrorRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _partNames=parts??throw new ArgumentNullException(nameof(parts));_mirrorParameters=new MirrorParameters(controller.Model.Properties.ModelSpace);SelectedObject=_mirrorParameters; }
@@ -569,7 +569,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[];
 }
 
-// Source PrePoMax/Forms/24_Part/FrmScale.cs SHA256 2e5971ce4f2ef14f65692d9e227d56d821bc7b6be9b77d24d0f105fb16378efb
+// Source PrePoMax/Forms/24_Part/FrmScale.cs SHA256 be9195a5f2ce5505081fcb7e477aba11dfdc3cc779d7aa1cbf1587e1b413ba0c
 public sealed class FrmScaleRule : GeometryFormRule {
 ScaleParameters _scaleParameters;string[] _partNames;
 public FrmScaleRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _partNames=parts??throw new ArgumentNullException(nameof(parts));_scaleParameters=new ScaleParameters(controller.Model.Properties.ModelSpace);SelectedObject=_scaleParameters; }
@@ -589,7 +589,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[];
 }
 
-// Source PrePoMax/Forms/21_FEModel/FrmThickenShellMesh.cs SHA256 b754a7f89954f90afed9274ccafc9254ca093c21d6a43ec951b9f000bae4c306
+// Source PrePoMax/Forms/21_FEModel/FrmThickenShellMesh.cs SHA256 9e7e4b7e6437dcca28c4849e7c431e3a6fe5c9c0bc0235508b54e07791f62362
 public sealed class FrmThickenShellMeshRule : GeometryFormRule {
 ViewThickenShellMesh _viewThickenShellMesh;
 public FrmThickenShellMeshRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { if(controller.Model.Properties.ModelSpace!=ModelSpaceEnum.ThreeD)throw new CaeException("Solid mesh creation is possible only in 3D model space.");_viewThickenShellMesh=new ViewThickenShellMesh(new ThickenShellMesh("ThickenShellMesh"));SelectedObject=_viewThickenShellMesh; }
@@ -621,7 +621,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/21_FEModel/FrmRemeshingParameters.cs SHA256 c6f1e484cb3369bfd81b66a56c8819eb6be032440fd659af3dbc783a7afedb3c
+// Source PrePoMax/Forms/21_FEModel/FrmRemeshingParameters.cs SHA256 9b9b30aa0e369f5e63e4e5fa42a262e4e90e08255236ae1969d188f312e7a680
 public sealed class FrmRemeshingParametersRule : GeometryFormRule {
 ViewRemeshingParameters _viewRemeshingParameters;RemeshingParameters _prevRemeshingParameters;bool _highlightEnabled;
 public FrmRemeshingParametersRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { var meshParts=controller.GetModelPartNames();var mp=controller.GetPartDefaultMeshingParameters(meshParts);
@@ -673,7 +673,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/21_FEModel/FrmBoundaryLayer.cs SHA256 f1e9b5a2ad1eb4e2cf30cf8904d4b305fd3553e16f649f836de3f2540d241b3f
+// Source PrePoMax/Forms/21_FEModel/FrmBoundaryLayer.cs SHA256 5fbf9ae64d365eee87c5b929bd19218da28a72113a3b2910815b2325a85ad25b
 public sealed class FrmBoundaryLayerRule : GeometryFormRule {
 ViewBoundaryLayer _viewBoundaryLayer;
 public FrmBoundaryLayerRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { if(controller.Model.Properties.ModelSpace!=ModelSpaceEnum.ThreeD)throw new CaeException("Boundary layer creation is possible only for 3D solid meshes.");_viewBoundaryLayer=new ViewBoundaryLayer();SelectedObject=_viewBoundaryLayer; }
@@ -702,7 +702,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/22_Node/FrmMergeCoincidentNodes.cs SHA256 8be94ff828763d9848d1f75d9e0963f457d47194f699d2db1b5370a446a02907
+// Source PrePoMax/Forms/22_Node/FrmMergeCoincidentNodes.cs SHA256 f49d9a8c447825c9bade6388e97e680421d6739f2e84d49129b9a1f2e7ef39c6
 public sealed class FrmMergeCoincidentNodesRule : GeometryFormRule {
 ViewMergeCoincidentNodes _viewMergeCoincidentNodes;
 public FrmMergeCoincidentNodesRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _viewMergeCoincidentNodes=new ViewMergeCoincidentNodes();SelectedObject=_viewMergeCoincidentNodes; }
@@ -738,7 +738,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>[""];
 }
 
-// Source PrePoMax/Forms/21_FEModel/FrmSplitPartMeshUsingSurface.cs SHA256 cd0efdafaedb2e331a207abca933b9b6d06e506e14ca0e311ee6a4e4afcc4a25
+// Source PrePoMax/Forms/21_FEModel/FrmSplitPartMeshUsingSurface.cs SHA256 f6d815aab6cb3a99da0cde358788887e6cc62defec08eb3bcbdb15a1d3e1b2b1
 public sealed class FrmSplitPartMeshUsingSurfaceRule : GeometryFormRule {
 ViewSplitPartMeshData _viewSplitPartMeshData;SplitPartMeshData _prevSplitPartMeshData;bool _highlightEnabled;
 public FrmSplitPartMeshUsingSurfaceRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { SplitPartMeshData=new SplitPartMeshData(RegionTypeEnum.Selection,"",RegionTypeEnum.Selection,"");
@@ -832,7 +832,7 @@ protected override void OnSelect(object value) {  }
 public override string[] SelectionPrefixes=>["Base part","Splitter surface"];
 }
 
-// Source PrePoMax/Forms/23_Element/FrmElementQuality.cs SHA256 7d3cf7be626188d5031c3fbb09a13195715880c539a283a4e454f2f7349a7071
+// Source PrePoMax/Forms/23_Element/FrmElementQuality.cs SHA256 09e1506278252e003038ca5cac2b3bfe3d7ffd16142a38b357995d05d709b033
 public sealed class FrmElementQualityRule : GeometryFormRule {
 ViewElementQuality _viewElementQuality;string[] _partNames;Dictionary<int,double> _elementQualities;
 public FrmElementQualityRule(Controller controller,string name=null,string[] parts=null):base(controller,null) { _partNames=parts;_viewElementQuality=new ViewElementQuality();SelectedObject=_viewElementQuality; }
