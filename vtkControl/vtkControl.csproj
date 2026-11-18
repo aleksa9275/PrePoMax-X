@@ -84,6 +84,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Native\VtkNativeLibrary.cs" />
+    <Compile Include="Native\VtkNativeLibrary.Windows.cs" />
     <Compile Include="Native\Geometry\VtkNativeMesh.cs" />
     <Compile Include="Native\Geometry\VtkNativeMeshData.cs" />
     <Compile Include="Native\VtkNativeMethods.cs" />

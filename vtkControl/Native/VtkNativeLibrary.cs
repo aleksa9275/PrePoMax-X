@@ -18,7 +18,7 @@ namespace vtkControl.Native
     // Loads vtkNative.dll from the folder of this assembly and turns the status codes of the C API into exceptions.
     // The library is loaded by its full path with the altered search path, so the VTK DLLs beside it are found
     // there and the DllImport declarations bind to the module already loaded, on .NET Framework and .NET alike
-    public static class VtkNativeLibrary
+    public static partial class VtkNativeLibrary
     {
         // Variables
         private static readonly object _loadLock = new object();
@@ -37,7 +37,7 @@ namespace vtkControl.Native
             get
             {
                 string directory = Path.GetDirectoryName(typeof(VtkNativeLibrary).Assembly.Location);
-                return Path.Combine(directory, VtkNativeMethods.LibraryName);
+                return Path.Combine(directory, LibraryFileName);
             }
         }
 
@@ -53,11 +53,10 @@ namespace vtkControl.Native
                 string path = LibraryPath;
                 if (!File.Exists(path))
                     throw new VtkNativeException(VtkNativeStatus.LibraryNotLoaded, "The native library is missing: " + path);
-                IntPtr module = VtkNativeMethods.LoadLibraryEx(path, IntPtr.Zero,
-                                                               VtkNativeMethods.LOAD_WITH_ALTERED_SEARCH_PATH);
+                string reason;
+                IntPtr module = LoadModule(path, out reason);
                 if (module == IntPtr.Zero)
                 {
-                    string reason = new Win32Exception(Marshal.GetLastWin32Error()).Message;
                     throw new VtkNativeException(VtkNativeStatus.LibraryNotLoaded,
                                                  "The native library could not be loaded: " + path + " - " + reason);
                 }

@@ -187,6 +187,8 @@ namespace vtkControl
         }
         private static bool FindTouchpadDevice()
         {
+            // The raw input of user32 exists on Windows only
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT) return false;
             uint count = 0;
             int listSize = Marshal.SizeOf(typeof(RAWINPUTDEVICELIST));
             if (GetRawInputDeviceList(null, ref count, (uint)listSize) != 0 || count == 0) return false;

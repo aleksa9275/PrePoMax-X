@@ -5,8 +5,11 @@
 // VTK 9.7 window created for that instance gets the window procedure of VTK 5.8, which reads the VTK 9.7 object
 // as a VTK 5.8 one and crashes. This window registers and creates its windows for the instance of vtkNative.dll,
 // so the two versions keep separate classes in one process.
+// On macOS and Linux there is no window class to share: the view uses the render window VTK makes for the platform
+// (Cocoa, X11).
 #pragma once
 
+#if defined(_WIN32)
 #include <vtkWin32OpenGLRenderWindow.h>
 
 class vtkNativeRenderWindow : public vtkWin32OpenGLRenderWindow
@@ -19,3 +22,8 @@ protected:
     vtkNativeRenderWindow();
     ~vtkNativeRenderWindow() override = default;
 };
+#else
+#include <vtkRenderWindow.h>
+
+using vtkNativeRenderWindow = vtkRenderWindow;
+#endif

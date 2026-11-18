@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "note": "VTK as upstream builds it for vtkNative (README.md, vtkNative/CMakeLists.txt): 9.7.1 with vtkNative/patches/vtk-9.7.1-ssao-background.patch. The SHA-256 was recorded at the first download from vtk.org on 18 November 2026.",
+  "source": {"version": "9.7.1", "archive": "VTK-9.7.1.tar.gz",
+             "url": "https://www.vtk.org/files/release/9.7/VTK-9.7.1.tar.gz",
+             "sha256": "cae04fd355004cb916a409db79d53a208f1221e975aeacc7540ee67b148ee91a"},
+  "patches": ["vtkNative/patches/vtk-9.7.1-ssao-background.patch"],
+  "license": "BSD-3-Clause (VTK Copyright.txt, copied into the runtime)"
+}
