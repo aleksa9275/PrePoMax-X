@@ -10,6 +10,8 @@ Stages (each into <workspace>/<stage>, resumable: a finished stage is reused):
     lib3mf    official 2.4.1 library (macOS) / 2.4.1 source build (Linux)
     gmsh      X/Build/Gmsh/build.py           patched Gmsh 4.13.0 + static OCCT 7.7.0
     netgen    X/Build/NativeCad/build.py      original Netgen wrapper + OCCT 8.0.1
+    quadwild  X/Build/QuadWild/build.py       PrePoMax's QuadWild-BiMDF fork (the 3.0.1 revision)
+    vtk       X/Build/Vtk/build.py            VTK 9.7.1 + the original vtkNative (the 3D view)
     solver    X/Build/build.py ... solver     CalculiX 2.22, SPOOLES, ARPACK-ng, OpenBLAS
     package   X/Build/package_ui.py
 
@@ -144,6 +146,14 @@ def main():
             r = stage(workspace, 'netgen', lambda out: (run([py, HERE / 'NativeCad/build.py', '--output', out, '--jobs', a.jobs]),
                       {'runtime': str(out / 'runtime')})[1])
             inputs['--netgen'] = r['runtime']
+        if 'quadwild' not in skip:
+            r = stage(workspace, 'quadwild', lambda out: (run([py, HERE / 'QuadWild/build.py', '--archive-cache', cache, '--output', out,
+                                                               '--jobs', a.jobs]), {'runtime': str(out / 'runtime')})[1])
+            inputs['--quadwild'] = r['runtime']
+        if 'vtk' not in skip:
+            r = stage(workspace, 'vtk', lambda out: (run([py, HERE / 'Vtk/build.py', '--archive-cache', cache, '--output', out,
+                                                          '--jobs', a.jobs]), {'runtime': str(out / 'vtkNative/runtime')})[1])
+            inputs['--vtk-native'] = r['runtime']
         if 'solver' not in skip:
             r = stage(workspace, 'solver', lambda out: (run([py, HERE / 'build.py', 'build', '--target', target, '--component', 'solver',
                                                              '--jobs', a.jobs, '--output', out]), {'build': str(out / 'solver')})[1])

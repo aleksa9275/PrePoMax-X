@@ -20,15 +20,6 @@
         "resolved": "0.0.28",
         "contentHash": "EQ9vOeuPP9qOApZ2WNaPtNaeyKhG+uul4p6/MwfCB9NB1Wn8ZuxJWDRF38QnffT2NmXWk/pz6tko+aNAAiua4A=="
       },
-      "System.Drawing.Common": {
-        "type": "Direct",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "kohT9ZZlkB5R5ifihCBnPJLdIUQGiTj1ZI6z4LKatr+F4MmIJJu7qQpBkqt9280ivtnSvlTx9qZEY+CpJ0zMkA==",
-        "dependencies": {
-          "Microsoft.Win32.SystemEvents": "10.0.0"
-        }
-      },
       "System.Management": {
         "type": "Direct",
         "requested": "[10.0.0, 10.0.0]",
@@ -44,21 +35,13 @@
         "resolved": "4.89.1",
         "contentHash": "B9+ViJEjcgmwRxRH2lZTc7FolLHHPET9UYPNr5uoFkt80q+iKKO1iPD6+YpG9zrOSBJjKHmDgswb9QnqWolj+g=="
       },
-      "Microsoft.Win32.SystemEvents": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "bYdnhuD0XxcVTrxc8RyBjXo+AXYWJPnda3clhGz2Kakleyun1PyrzYV8RezT7ZYmR9OBSOgvpFQcvHo/K8Y90w=="
-      },
       "System.CodeDom": {
         "type": "Transitive",
         "resolved": "10.0.0",
         "contentHash": "QWERdKi/tQAx+MbrPxTGcpchqMANnVXNiv2r2tILBBB38E74buD+fABSUhozZ1G9kjbadFB0m+HPFMkhJPeFvA=="
       },
       "PrePoMaxX.WinFormsCompat": {
-        "type": "Project",
-        "dependencies": {
-          "System.Drawing.Common": "[10.0.0, 10.0.0]"
-        }
+        "type": "Project"
       }
     }
   }

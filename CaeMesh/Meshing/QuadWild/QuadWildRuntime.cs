@@ -164,6 +164,8 @@ namespace CaeMesh
         {
             if (path.StartsWith(@"\\?\", StringComparison.Ordinal)) return path;
             string fullPath = Path.GetFullPath(path);
+            // The prefix is a Windows path form; other systems have no MAX_PATH limit and read it as part of the name
+            if (Path.DirectorySeparatorChar != '\\') return fullPath;
             if (fullPath.StartsWith(@"\\", StringComparison.Ordinal)) return @"\\?\UNC\" + fullPath.Substring(2);
             return @"\\?\" + fullPath;
         }

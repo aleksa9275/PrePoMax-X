@@ -46,6 +46,26 @@ def visible_name(text):
     return str(OrderedNameComparer.Visible(text or ''))
 
 
+MISSING_VALUE_TOOLTIP = 'Select at least one item.'   # UserControls/ProperyGrid/MySite.cs MissingValueToolTip
+MISSING_VALUES = System.Type.GetType('UserControls.IMissingPropertyValues, UserControls', True)
+_MISSING_ICON = []
+
+
+def missing_value_icon():
+    """MySite.CreateMissingValueImage: an 8 x 8 red dot (antialiased ellipse 0, 0, 7, 7)."""
+    if not _MISSING_ICON:
+        pixmap = QtGui.QPixmap(8, 8)
+        pixmap.fill(QtCore.Qt.GlobalColor.transparent)
+        painter = QtGui.QPainter(pixmap)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+        painter.setBrush(QtGui.QColor('red'))
+        painter.drawEllipse(QtCore.QRectF(0, 0, 7, 7))
+        painter.end()
+        _MISSING_ICON.append(QtGui.QIcon(pixmap))
+    return _MISSING_ICON[0]
+
+
 class PropertyGridWidget(QtWidgets.QWidget):
     """WinForms PropertyGrid look: categorized rows, value column, help pane with name and description."""
 
@@ -139,9 +159,16 @@ class PropertyGridWidget(QtWidgets.QWidget):
         choices, exclusive = grid.GetStandardValues(grid_item, exclusive)
         choices = [str(c) for c in choices]
         editor_type = self.window.renderer.editor_type(descriptor)
+        missing = self.value_missing(descriptor)
+        if missing:
+            # 3.0.1 missing values (IMissingPropertyValues): the value text in MissingValueColor
+            # (PropertyGridMissingValuePainter) and the red dot with its tooltip (MySite's PropertyValueUIItem)
+            item.setIcon(0, missing_value_icon())
+            item.setToolTip(0, MISSING_VALUE_TOOLTIP)
+            item.setToolTip(1, MISSING_VALUE_TOOLTIP)
         if read_only or (not grid.CanEditText(grid_item) and not choices and editor_type is None):
             item.setText(1, text)
-            item.setForeground(1, QtGui.QBrush(QtGui.QColor(80, 80, 80)))
+            item.setForeground(1, QtGui.QBrush(QtGui.QColor('red') if missing else QtGui.QColor(80, 80, 80)))
             return
         holder = QtWidgets.QWidget()
         row = QtWidgets.QHBoxLayout(holder)
@@ -167,6 +194,11 @@ class PropertyGridWidget(QtWidgets.QWidget):
                 completer = QtWidgets.QCompleter(completer_items, edit)
                 completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
                 edit.setCompleter(completer)
+        if missing:
+            palette = edit.palette()
+            palette.setColor(QtGui.QPalette.ColorRole.Text, QtGui.QColor('red'))
+            edit.setPalette(palette)
+            edit.setProperty('missingValue', True)
         edit.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
         edit.installEventFilter(self)
         edit.setProperty('gridKey', self.key(grid_item))
@@ -177,6 +209,16 @@ class PropertyGridWidget(QtWidgets.QWidget):
             button.clicked.connect(lambda checked=False, g=grid_item: self.window.renderer.edit_modal(self, g))
             row.addWidget(button)
         self.tree.setItemWidget(item, 1, holder)
+
+    def value_missing(self, descriptor):
+        """IMissingPropertyValues.IsPropertyValueMissing of the selected object for this property (3.0.1)."""
+        selected = self.grid.SelectedObject
+        if selected is None or descriptor is None:
+            return False
+        if not MISSING_VALUES.IsInstanceOfType(selected):
+            return False
+        return bool(self.window.renderer.guard(lambda: MISSING_VALUES.GetMethod('IsPropertyValueMissing').Invoke(
+            selected, Array[System.Object]([descriptor.Name]))))
 
     def commit(self, grid_item, text):
         if self.updating:
@@ -846,7 +888,9 @@ class FormWindow(QtWidgets.QDialog):
             self.sync_tabs(control, widget)
             widget.currentChanged.connect(lambda index, c=control, w=widget: None if getattr(w, 'syncing_tabs', False) else r.input(lambda: setattr(c, 'SelectedIndex', index)))
             return widget
-        # Panels and containers
+        # Panels and containers; a control with a Paint handler shows its own painting
+        if control.HasPaintHandler:
+            return oc.PaintedControl(self, control, parent)
         return QtWidgets.QFrame(parent)
 
     def sync_tabs(self, control, widget):
@@ -964,6 +1008,8 @@ class FormWindow(QtWidgets.QDialog):
             widget.sync(scroll_to_end=True)
         elif isinstance(widget, oc.CodeEditor):
             widget.rebuild()
+        elif isinstance(widget, oc.PaintedControl):
+            widget.update()
 
     # Window events --------------------------------------------------------------------------------------------------------
     def resizeEvent(self, event):

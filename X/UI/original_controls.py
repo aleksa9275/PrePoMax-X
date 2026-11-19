@@ -838,3 +838,185 @@ class SplitFrame(QtWidgets.QFrame):
     def mouseReleaseEvent(self, event):
         self.dragging = False
         super().mouseReleaseEvent(event)
+
+
+# Painted controls (M2): a control's own Paint drawn by Qt ----------------------------------------------------------------
+_DASHES = {'Solid': QtCore.Qt.PenStyle.SolidLine, 'Dash': QtCore.Qt.PenStyle.DashLine, 'Dot': QtCore.Qt.PenStyle.DotLine,
+           'DashDot': QtCore.Qt.PenStyle.DashDotLine, 'DashDotDot': QtCore.Qt.PenStyle.DashDotDotLine}
+
+
+def _qpen(pen):
+    qpen = QtGui.QPen(qcolor(pen.Color))
+    qpen.setWidthF(max(float(pen.Width), 1.0) if float(pen.Width) > 0 else 1.0)
+    qpen.setStyle(_DASHES.get(str(pen.DashStyle), QtCore.Qt.PenStyle.SolidLine))
+    qpen.setCapStyle(QtCore.Qt.PenCapStyle.FlatCap)
+    return qpen
+
+
+def _qbrush(brush):
+    color = getattr(brush, 'Color', None)
+    return QtGui.QBrush(qcolor(color)) if color is not None else QtGui.QBrush()
+
+
+def _rect(r):
+    return QtCore.QRectF(float(r.X), float(r.Y), float(r.Width), float(r.Height))
+
+
+def _points(points):
+    return QtGui.QPolygonF([QtCore.QPointF(float(p.X), float(p.Y)) for p in points])
+
+
+def _qfont(font):
+    from original_forms import original_font
+    qfont = original_font()
+    qfont.setPixelSize(max(1, round(float(font.Size) * 96 / 72)))
+    qfont.setBold(bool(font.Bold))
+    qfont.setItalic(bool(font.Italic))
+    return qfont
+
+
+def _arrow_cap(painter, pen, start, end):
+    """GDI+ AdjustableArrowCap at the end of a line: a triangle Width x Height pen widths with its tip on the end."""
+    cap = pen.CustomEndCap
+    if cap is None or type(cap).__name__ != 'AdjustableArrowCap':
+        return
+    width = max(float(pen.Width), 1.0)
+    dx, dy = end.x() - start.x(), end.y() - start.y()
+    length = (dx * dx + dy * dy) ** 0.5
+    if length == 0:
+        return
+    ux, uy = dx / length, dy / length
+    back = float(cap.Height) * width
+    half = float(cap.Width) * width / 2
+    base = QtCore.QPointF(end.x() - ux * back, end.y() - uy * back)
+    triangle = QtGui.QPolygonF([end, QtCore.QPointF(base.x() - uy * half, base.y() + ux * half),
+                                QtCore.QPointF(base.x() + uy * half, base.y() - ux * half)])
+    painter.save()
+    painter.setPen(QtCore.Qt.PenStyle.NoPen)
+    painter.setBrush(qcolor(pen.Color))
+    painter.drawPolygon(triangle)
+    painter.restore()
+
+
+def replay(painter, commands, size):
+    """Draws the commands of a recording System.Drawing.Graphics (X/Domain/WinFormsCompat/Painting.cs)."""
+    TextFormatFlags = System.Windows.Forms.TextFormatFlags
+    for command in commands:
+        name, a = str(command.Name), list(command.Arguments)
+        if name == 'SmoothingMode':
+            painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, str(a[0]) in ('AntiAlias', 'HighQuality'))
+        elif name == 'Save':
+            painter.save()
+        elif name == 'Restore':
+            painter.restore()
+        elif name == 'SetClip':
+            painter.setClipRect(_rect(a[0]))
+        elif name == 'ResetClip':
+            painter.setClipping(False)
+        elif name == 'TranslateTransform':
+            painter.translate(float(a[0]), float(a[1]))
+        elif name == 'RotateTransform':
+            painter.rotate(float(a[0]))
+        elif name == 'ScaleTransform':
+            painter.scale(float(a[0]), float(a[1]))
+        elif name == 'ResetTransform':
+            painter.resetTransform()
+        elif name == 'Clear':
+            painter.fillRect(QtCore.QRectF(0, 0, size.width(), size.height()), qcolor(a[0]))
+        elif name == 'FillRectangle':
+            painter.fillRect(_rect(a[1]), _qbrush(a[0]))
+        elif name in ('DrawRectangle', 'DrawEllipse'):
+            painter.save()
+            painter.setPen(_qpen(a[0]))
+            painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+            (painter.drawRect if name == 'DrawRectangle' else painter.drawEllipse)(_rect(a[1]))
+            painter.restore()
+        elif name == 'FillEllipse':
+            painter.save()
+            painter.setPen(QtCore.Qt.PenStyle.NoPen)
+            painter.setBrush(_qbrush(a[0]))
+            painter.drawEllipse(_rect(a[1]))
+            painter.restore()
+        elif name == 'DrawLine':
+            start, end = QtCore.QPointF(float(a[1].X), float(a[1].Y)), QtCore.QPointF(float(a[2].X), float(a[2].Y))
+            painter.save()
+            painter.setPen(_qpen(a[0]))
+            painter.drawLine(start, end)
+            _arrow_cap(painter, a[0], start, end)
+            painter.restore()
+        elif name in ('DrawLines', 'DrawPolygon'):
+            painter.save()
+            painter.setPen(_qpen(a[0]))
+            painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+            (painter.drawPolyline if name == 'DrawLines' else painter.drawPolygon)(_points(a[1]))
+            painter.restore()
+        elif name == 'FillPolygon':
+            painter.save()
+            painter.setPen(QtCore.Qt.PenStyle.NoPen)
+            painter.setBrush(_qbrush(a[0]))
+            painter.drawPolygon(_points(a[1]))
+            painter.restore()
+        elif name in ('DrawText', 'DrawString'):
+            if name == 'DrawText':
+                text, font, box, color, flags = str(a[0]), a[1], a[2], qcolor(a[3]), int(a[4])
+            else:
+                text, font, box = str(a[0]), a[1], a[3]
+                color, flags = qcolor(getattr(a[2], 'Color', System.Drawing.Color.Black)), 0
+            painter.save()
+            painter.setFont(_qfont(font))
+            painter.setPen(color)
+            rect = _rect(box)
+            align = QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignTop
+            if rect.width() <= 0 or rect.height() <= 0:
+                rect = QtCore.QRectF(rect.x(), rect.y(), 100000, 100000)
+            elif name == 'DrawText':
+                align = QtCore.Qt.AlignmentFlag(0)
+                align |= (QtCore.Qt.AlignmentFlag.AlignHCenter if flags & int(TextFormatFlags.HorizontalCenter) else
+                          QtCore.Qt.AlignmentFlag.AlignRight if flags & int(TextFormatFlags.Right) else QtCore.Qt.AlignmentFlag.AlignLeft)
+                align |= (QtCore.Qt.AlignmentFlag.AlignVCenter if flags & int(TextFormatFlags.VerticalCenter) else
+                          QtCore.Qt.AlignmentFlag.AlignBottom if flags & int(TextFormatFlags.Bottom) else QtCore.Qt.AlignmentFlag.AlignTop)
+            painter.drawText(rect, align, text)
+            painter.restore()
+
+
+class PaintedControl(QtWidgets.QFrame):
+    """A control that paints itself (Paint handler, e.g. FrmSection's layup diagram): Qt asks the model to paint
+    (Control.RenderPaint) and replays the recorded GDI+ calls; mouse input reaches the control as WinForms raises it."""
+
+    def __init__(self, window, control, parent):
+        super().__init__(parent)
+        self.window, self.control = window, control
+        self.pressed = None
+        self.commands = 0
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        graphics = self.window.renderer.guard(lambda: self.control.RenderPaint())
+        if graphics is None:
+            return
+        self.commands = graphics.Commands.Count
+        painter = QtGui.QPainter(self)
+        try:
+            color = self.control.BackColor
+            if int(color.A) > 0:
+                painter.fillRect(self.rect(), qcolor(color))
+            replay(painter, graphics.Commands, self.size())
+        finally:
+            painter.end()
+
+    def mousePressEvent(self, event):
+        position, button = event.position().toPoint(), mouse_button(event.button())
+        self.pressed = button
+        self.window.renderer.input(lambda: self.control.RaiseMouse('down', button, 1, position.x(), position.y()))
+
+    def mouseReleaseEvent(self, event):
+        position, button = event.position().toPoint(), mouse_button(event.button())
+        clicked = self.pressed == button and self.rect().contains(position)
+        self.pressed = None
+
+        def raise_events():
+            if clicked:
+                self.control.RaiseClick()
+                self.control.RaiseMouse('click', button, 1, position.x(), position.y())
+            self.control.RaiseMouse('up', button, 1, position.x(), position.y())
+        self.window.renderer.input(raise_events)

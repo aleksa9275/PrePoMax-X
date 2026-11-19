@@ -216,10 +216,10 @@ namespace System.Windows.Forms
         public int Count => columns.Count;
         public DataGridViewColumn this[int index] => columns[index];
         public DataGridViewColumn this[string name] => columns.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
-        public int Add(DataGridViewColumn column) { column.DataGridView = owner; columns.Add(column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); return columns.Count - 1; }
+        public int Add(DataGridViewColumn column) { column.DataGridView = owner; columns.Add(column); owner.BindColumn(column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); return columns.Count - 1; }
         public int Add(string name, string headerText) => Add(new DataGridViewTextBoxColumn { Name = name, HeaderText = headerText });
         public void AddRange(params DataGridViewColumn[] values) { foreach (var c in values) Add(c); }
-        public void Insert(int index, DataGridViewColumn column) { column.DataGridView = owner; columns.Insert(index, column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); }
+        public void Insert(int index, DataGridViewColumn column) { column.DataGridView = owner; columns.Insert(index, column); owner.BindColumn(column); owner.ColumnsChanged(); owner.RaiseColumnAdded(column); owner.ColumnsSyncRows(); }
         public void Remove(DataGridViewColumn column) { if (columns.Remove(column)) { column.DataGridView = null; owner.ColumnsChanged(); owner.RaiseColumnRemoved(column); owner.ColumnsSyncRows(); } }
         public void Remove(string name) { var c = this[name]; if (c != null) Remove(c); }
         public void RemoveAt(int index) => Remove(columns[index]);
@@ -540,6 +540,13 @@ namespace System.Windows.Forms
             if (_current.HasValue) _selection.Add(_current.Value);
             DataSourceChanged?.Invoke(this, EventArgs.Empty);
             GridChanged("Columns");
+        }
+        /// <summary>WinForms DataGridViewDataConnection: a column added to a bound grid is bound to the property its
+        /// DataPropertyName names (FrmSection replaces the bound Material column by a combo box column).</summary>
+        internal void BindColumn(DataGridViewColumn column)
+        {
+            if (_properties != null && column.Property == null && column.DataPropertyName.Length > 0)
+                column.Property = _properties.Find(column.DataPropertyName, true);
         }
         static IList ResolveList(object dataSource)
         {

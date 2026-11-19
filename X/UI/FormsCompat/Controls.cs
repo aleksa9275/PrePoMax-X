@@ -275,6 +275,7 @@ namespace System.Windows.Forms
         public DockStyle Dock { get => _dock; set { if (_dock == value) return; _dock = value; RelayoutParentForDock(); } }
         void RelayoutParentForDock()
         {
+            if (_parent != null && _parent._layoutSuspended != 0) _parent._layoutDeferred = true;
             if (_parent == null || _parent._layoutSuspended != 0 || _parent._inParentLayout) return;
             _parent._inParentLayout = true;
             try { _parent.PerformLayout(); } finally { _parent._inParentLayout = false; }
@@ -305,15 +306,35 @@ namespace System.Windows.Forms
         internal void SetVisibleCore(bool value) => _visible = value;
         public Form FindForm() { for (Control c = this; c != null; c = c._parent) if (c is Form f) return f; return null; }
         public Control TopLevelControl { get { Control c = this; while (c._parent != null) c = c._parent; return c; } }
-        public bool Focused { get; internal set; }
-        public bool ContainsFocus => Focused || Controls.Cast<Control>().Any(c => c.ContainsFocus);
+        bool _focused;
+        // WinForms Control.Focused is virtual (the original PythonPanel overrides it)
+        public virtual bool Focused { get => _focused; }
+        public bool ContainsFocus => _focused || Controls.Cast<Control>().Any(c => c.ContainsFocus);
         public BindingContext BindingContext { get; set; } = new BindingContext();
         public ControlBindingsCollection DataBindings { get; } = new ControlBindingsCollection();
 
         public bool Visible
         {
             get => _visible && (_parent == null || _parent.Visible);
-            set { if (_visible == value) return; _visible = value; Notify(nameof(Visible)); if (_dock != DockStyle.None) RelayoutParentForDock(); OnVisibleChanged(EventArgs.Empty); }
+            set
+            {
+                if (_visible == value) return;
+                _visible = value;
+                // WinForms: a control that is shown is created (CreateControl), which performs the layout deferred
+                // while its layout was suspended (ResumeLayout(false) leaves it pending)
+                if (value && Visible) PerformDeferredLayouts();
+                Notify(nameof(Visible));
+                if (_dock != DockStyle.None) RelayoutParentForDock();
+                OnVisibleChanged(EventArgs.Empty);
+            }
+        }
+        bool _layoutDeferred;
+        /// <summary>The layouts deferred in this control and its children (STATE_LAYOUTDEFERRED), performed in order.</summary>
+        internal void PerformDeferredLayouts()
+        {
+            if (_layoutSuspended != 0) return;
+            if (_layoutDeferred) { _layoutDeferred = false; OnLayout(new LayoutEventArgs(this, null)); Notify("Layout"); }
+            foreach (Control c in Controls) if (c._visible) c.PerformDeferredLayouts();
         }
         internal bool VisibleCore => _visible;
         public bool Enabled
@@ -330,7 +351,7 @@ namespace System.Windows.Forms
             if (_layoutSuspended > 0 && --_layoutSuspended == 0)
             {
                 foreach (Control c in Controls) c.UpdateAnchorInfo();
-                if (performLayout) OnLayout(new LayoutEventArgs(this, null));
+                if (performLayout) { _layoutDeferred = false; OnLayout(new LayoutEventArgs(this, null)); }
                 Notify("Layout");
             }
         }
@@ -339,7 +360,7 @@ namespace System.Windows.Forms
         protected virtual void OnLayout(LayoutEventArgs levent) { LayoutChildren(); Layout?.Invoke(this, levent); }
         public void Show() => Visible = true;
         public void Hide() => Visible = false;
-        public bool Focus() { Focused = true; Notify("Focus"); OnGotFocus(EventArgs.Empty); return true; }
+        public bool Focus() { _focused = true; Notify("Focus"); OnGotFocus(EventArgs.Empty); return true; }
         public void Select() => Focus();
         public virtual void Refresh() => Notify("Refresh");
         public void Invalidate() => Notify("Refresh");
@@ -432,6 +453,9 @@ namespace System.Windows.Forms
         protected virtual void OnKeyPress(KeyPressEventArgs e) => KeyPress?.Invoke(this, e);
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) => PreviewKeyDown?.Invoke(this, e);
         protected virtual void OnPaint(PaintEventArgs e) => Paint?.Invoke(this, e);
+        protected virtual void OnPaintBackground(PaintEventArgs e) { }
+        protected virtual void OnMouseCaptureChanged(EventArgs e) => MouseCaptureChanged?.Invoke(this, e);
+        public event EventHandler MouseCaptureChanged;
         protected virtual void OnHandleCreated(EventArgs e) => HandleCreated?.Invoke(this, e);
         protected virtual void OnHandleDestroyed(EventArgs e) => HandleDestroyed?.Invoke(this, e);
         protected virtual void OnValidating(CancelEventArgs e) => Validating?.Invoke(this, e);
@@ -486,9 +510,21 @@ namespace System.Windows.Forms
         /// <summary>WM_CHAR: ProcessKeyMessage, then KeyPress.</summary>
         protected virtual void ProcessCharInput(char c, Keys modifiers) => OnKeyPress(new KeyPressEventArgs(c));
         public void RaiseKeyUp(Keys keyData) => OnKeyUp(new KeyEventArgs(keyData));
-        public void RaiseEnter() { Focused = true; OnEnter(EventArgs.Empty); OnGotFocus(EventArgs.Empty); }
-        public void RaiseLeave() { Focused = false; OnLeave(EventArgs.Empty); OnLostFocus(EventArgs.Empty); }
+        public void RaiseEnter() { _focused = true; OnEnter(EventArgs.Empty); OnGotFocus(EventArgs.Empty); }
+        public void RaiseLeave() { _focused = false; OnLeave(EventArgs.Empty); OnLostFocus(EventArgs.Empty); }
         public void RaiseMouseEnter() => OnMouseEnter(EventArgs.Empty);
+        /// <summary>Whether the control paints itself (a Paint handler): the renderer shows its painting.</summary>
+        public bool HasPaintHandler => Paint != null;
+        /// <summary>Renderer input: WM_PAINT. The control paints its client area (OnPaintBackground, then OnPaint and
+        /// its Paint handlers) on a recording surface, which the renderer replays with its own painter.</summary>
+        public Graphics RenderPaint()
+        {
+            var graphics = new Graphics(ClientRectangle);
+            var e = new PaintEventArgs(graphics, ClientRectangle);
+            OnPaintBackground(e);
+            OnPaint(e);
+            return graphics;
+        }
         public void RaiseMouseLeave() => OnMouseLeave(EventArgs.Empty);
         internal void OnKeyDownInternal(KeyEventArgs e) => OnKeyDown(e);
 
@@ -508,8 +544,13 @@ namespace System.Windows.Forms
                 items.Add(value);
                 value.SetParentInternal(owner);
                 value.UpdateAnchorInfo();
+                // WinForms lays the parent out for an added control; while its layout is suspended the layout is
+                // deferred (ResumeLayout(true) or the parent's creation performs it)
+                owner._layoutDeferred = true;
                 owner.OnControlAdded(new ControlEventArgs(value));
                 owner.Notify("Controls");
+                // A shown parent lays out now, and the added control is created and performs its deferred layouts
+                if (owner.Visible) owner.PerformDeferredLayouts();
             }
             public void AddRange(Control[] controls) { foreach (Control c in controls) Add(c); }
             public void Remove(Control value)
@@ -824,7 +865,13 @@ namespace System.Windows.Forms
         public void SetUserText(string text) { Text = text; Modified = true; }
     }
     public enum CharacterCasing { Normal, Upper, Lower }
-    public class RichTextBox : TextBoxBase { public string Rtf { get; set; } public RichTextBoxScrollBars ScrollBars { get; set; } }
+    public class RichTextBox : TextBoxBase
+    {
+        public string Rtf { get; set; }
+        public RichTextBoxScrollBars ScrollBars { get; set; }
+        public event EventHandler VScroll;
+        protected virtual void OnVScroll(EventArgs e) => VScroll?.Invoke(this, e);
+    }
     public enum RichTextBoxScrollBars { None, Horizontal, Vertical, Both, ForcedHorizontal, ForcedVertical, ForcedBoth }
 
     public class ListControl : Control
@@ -1043,6 +1090,8 @@ namespace System.Windows.Forms.VisualStyles
     public static class VisualStyleElement
     {
         public static class TaskbarClock { }
+        // Named by using static directives of the original ModelTree.cs; nothing of it is used
+        public static class TextBox { }
         // Named by using static directives of the original vtkControl.cs; nothing of them is used
         public static class ProgressBar { }
         public static class TreeView { }

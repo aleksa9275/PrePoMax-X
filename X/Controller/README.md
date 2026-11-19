@@ -25,6 +25,15 @@ dotnet X/Controller/Headless/bin/Debug/net10.0/PrePoMaxX.Headless.dll \
 ```
 
 It does not replace the original application's CLI/RPC/MCP servers or GUI.
+Options after the positional arguments follow the original batch start: `--unit-system UNITS`
+(an imported file starts a new 3D model in that unit system, as `-f FILE -u UNITS`), `--script-args "..."`,
+`--solver REGISTRY BUILD_ID DIRECTORY` (a verified CalculiX build) and `--default-solver-type TYPE` (Settings -
+Solver; the original default PARDISO is unavailable off Windows, D060, so a run states its substitute).
+
+`python3 X/Controller/run-upstream-scripts.py --output DIR --python-profile P --native-tools T [--solver ...]
+[--default-solver-type Spooles] [--filter Composite]` runs upstream's `APIs/Python/Test_Scripts` on this host,
+reading each script's command line with upstream's `Run_Tests.py`. Runs that need the original command line
+(batch run reports, the automation server, scripts starting `PrePoMax.com`) are reported pending.
 Original script-recording guards still apply (including new/open inside a recorded
 script). Use `HeadlessSession.Open`, `Controller.New` and other original methods
 for embedding. Configure one runtime profile per process before starting work;

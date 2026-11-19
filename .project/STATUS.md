@@ -2,8 +2,15 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (18 November 2026)
+## Where we are (19 November 2026)
 
+- **M2 part 1: 3.0.1 composites and painting.** Upstream's composite test scripts run on the headless original
+  Controller (3 pass with the rebuilt CalculiX; the `-r/-p` regeneration script needs the original command line).
+  Original paint handlers draw on a recording `System.Drawing.Graphics` replayed by Qt (System.Drawing.Common is no
+  longer referenced): FrmSection's Layers tab with its layup diagram and FrmMaterialOrientation run whole; missing
+  property values show red. Netgen's pin is already the 3.0.1 source; QuadWild for macOS/Linux builds from the
+  published fork (`X/Build/QuadWild`). FrmMain whole is sized (it must join the Controller's `PrePoMax` assembly) and
+  is the rest of M2. [M2 report](reports/phase-m2-composites-painting.md).
 - **M1 original vtkControl on vtkNative** (D063). The 3D view of X/UI is the original `vtkControl`, compiled
   whole, drawing through upstream's `vtkNative` on VTK 9.7.1 (pinned recipe `X/Build/Vtk`), embedded in a Qt
   widget on macOS (Cocoa) and Linux (X11); the 137 view members of the original FrmMain run unchanged in
@@ -17,8 +24,8 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   ([P1](reports/phase-p1-desktop-packages.md), [manual testing](MANUAL_TESTING.md) — those packages are
   3.0.0-based). Earlier phase reports: [C6](reports/phase-c6-main-window.md) …
   [C12](reports/phase-c12-editor-forms.md).
-- **Full parity is not accepted.** Inventory: model/mesh 111 A / 108 C; commands 242 A / 231 C; forms
-  73 / 71 compiled / 69 C; V zero. New 3.0.1 items are A only (no executed evidence yet).
+- **Full parity is not accepted.** Inventory: model/mesh 111 A / 110 C; commands 242 A / 232 C; forms
+  73 / 71 compiled / 70 C; V zero. The 3.0.1 composite items have executed evidence (M2).
   [Inventory](PARITY_INVENTORY.md). B011 stays **failed** (D061); D029, B006–B012 open.
 - Plan to release (M1–M5) and manual items: [REMAINING_WORK.md](REMAINING_WORK.md).
 
@@ -43,18 +50,18 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | P1 | Desktop packages (macOS DMG, Linux tar.gz, Windows zip), rebuildable runtime profiles | Mac and Linux ARM64 packages self-checked; Windows not run |
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
-| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | next |
+| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | part 1 done (composites, painting, Netgen/QuadWild); FrmMain whole next |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-M2: the 3.0.1 features (composite sections with layers/layup, FrmMaterialOrientation in use, the new result
-outputs, property-grid missing values, a Qt-drawn Graphics/Paint layer), FrmMain compiled whole on the native
-vtkControl, Netgen re-pinned to the published NetgenMesher and QuadWild for macOS/Linux from the published
-fork. The retained macOS CalculiX build needs a rebuild (Homebrew libomp changed). In parallel when the
-maintainer agrees: GitHub Actions (M3).
+M2 part 2: FrmMain compiled whole. The Controller, `Rpc`, `FrmAnimation` and the Advisor name `FrmMain`, so it
+belongs in the same `PrePoMax` assembly as the Controller: a UI build of the whole PrePoMax and UserControls
+assemblies (with the original ModelTree, side panels, XYPlot, tool/menu strips) that replaces the headless host and
+the extracted OriginalFormHost/OriginalViewHost, and brings the original command line (`PrePoMax.com` batch runs,
+`-r/-p` regeneration, batch reports, RPC). In parallel when the maintainer agrees: GitHub Actions (M3).
 
 ## Environment
 
@@ -70,4 +77,5 @@ maintainer agrees: GitHub Actions (M3).
   `X/Build/artifacts/vtk-linux-arm64/vtkNative/runtime`, under `xvfb-run` with `LIBGL_ALWAYS_SOFTWARE=1`.
 - VTK 9.7.1 (vtkNative), PyQt6 6.10.0 / Qt 6.10.2, Python.NET 3.1.0, CPython 3.12.14 in packages; patched
   Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned. Latest local candidate: `X/Build/artifacts/ui-m1` (macOS
-  app with vtkNative, CalculiX missing).
+  app with vtkNative, CalculiX missing). CalculiX for macOS rebuilt in `X/Build/artifacts/solver-m2`; QuadWild for macOS in
+  `X/Build/artifacts/quadwild-mac-arm64` (Linux ARM64 needs a Podman VM with more than 4 GiB).

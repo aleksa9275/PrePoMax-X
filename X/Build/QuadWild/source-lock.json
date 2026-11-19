@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "note": "The modified QuadWild-BiMDF that upstream 3.0.1 ships as Windows binaries (ThirdParty/quadwild-bimdf, last rebuilt in upstream aba367c6, 10 October 2026 12:34): the published fork's commit of that build (df747a1, 12:33 the same day, 'Keep the patterns of 5-sided patches in the strips and along the holes'). Its libraries are vendored in the repository; only GMM is fetched by its CMakeLists.txt, pinned here by the SHA-224 it names. SHA-256 values recorded at the first download, 19 November 2026.",
+  "source": {
+    "repository": "https://github.com/PrePoMax/QuadWild",
+    "revision": "df747a1f795065738fe8972f595d1e801cb70c82",
+    "archive": "QuadWild-df747a1f795065738fe8972f595d1e801cb70c82.tar.gz",
+    "url": "https://codeload.github.com/PrePoMax/QuadWild/tar.gz/df747a1f795065738fe8972f595d1e801cb70c82",
+    "sha256": "3408eef86c8d34518827feac3dc07c589af4e2418dee9869639b8ffe99eb0c1c"
+  },
+  "gmm": {
+    "version": "5.4.2",
+    "archive": "gmm-5.4.2.tar.gz",
+    "url": "http://download-mirror.savannah.gnu.org/releases/getfem/stable/gmm-5.4.2.tar.gz",
+    "sha224": "8f4951901a55a1d1987d8199ed0e0b36ff2da26c870a4c3d55694a14"
+  },
+  "options": ["-DCMAKE_BUILD_TYPE=Release", "-DSATSUMA_ENABLE_BLOSSOM5=OFF", "-DCMAKE_DISABLE_FIND_PACKAGE_Gurobi=ON"],
+  "license": "GPL-3.0 (LICENSE of the fork; Licenses/quadwild in the packages). Blossom-V (non-free) stays off, as in the fork's own CI builds; Gurobi (commercial) is not used."
+}

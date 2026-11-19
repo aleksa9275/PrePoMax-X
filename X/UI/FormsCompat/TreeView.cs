@@ -77,7 +77,17 @@ namespace System.Windows.Forms
         public static Func<string, FontSpec, Size> MeasureHandler;
         public static Size MeasureText(string text, FontSpec font)
             => MeasureHandler != null ? MeasureHandler(text ?? "", font ?? FontSpec.Default) : new Size((int)Math.Ceiling((text ?? "").Length * 6.5), 15);
-        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Point pt, Color foreColor) => throw new PlatformNotSupportedException("GDI+ painting: the renderer draws text.");
+        /// <summary>Text on a painting surface (System.Drawing.Graphics records it; the renderer draws it).</summary>
+        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Point pt, Color foreColor)
+            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)TextFormatFlags.Default);
+        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Point pt, Color foreColor, TextFormatFlags flags)
+            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)flags);
+        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Rectangle bounds, Color foreColor)
+            => DrawText(dc, text, font, bounds, foreColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
+            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height), foreColor, (int)flags);
+        public static Size MeasureText(IDeviceContext dc, string text, FontSpec font) => MeasureText(text, font);
+        public static Size MeasureText(string text, FontSpec font, Size proposedSize, TextFormatFlags flags) => MeasureText(text, font);
         /// <summary>Graphics.MeasureString equivalent (GDI+ adds about 1/6 em of padding to the TextRenderer width).</summary>
         public static SizeF MeasureString(string text, FontSpec font) { Size size = MeasureText(text, font); return new SizeF(size.Width + (font ?? FontSpec.Default).Size * 96f / 72f / 3f, size.Height); }
     }

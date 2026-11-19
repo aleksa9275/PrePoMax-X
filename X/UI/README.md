@@ -323,3 +323,13 @@ autocomplete menu, find/replace); `original_controls.CodeEditor` draws it and se
 WM_KEYDOWN/WM_CHAR. `SplitContainer` lays out its panels in the model. The probe steps are in
 `forms_gui_probe_editor.py`; beam element evidence is in `geometry_gui_probe.py`.
 [C12 report](../../.project/reports/phase-c12-editor-forms.md).
+
+### M2 painting and 3.0.1 composites
+
+Original paint handlers draw on a recording `System.Drawing.Graphics` (`X/Domain/WinFormsCompat/Painting.cs`;
+System.Drawing.Common is not referenced): `Control.RenderPaint` runs OnPaintBackground and OnPaint, and
+`original_controls.PaintedControl` replays the calls with QPainter and forwards mouse input. FrmSection's 3.0.1
+Layers tab (layup diagram) and FrmMaterialOrientation run whole on upstream's `composite_shells.inp`
+(`forms_gui_probe_composite.py`). Property values the selected object reports as missing
+(`IMissingPropertyValues`) are drawn red with the original red dot and tooltip.
+[M2 report](../../.project/reports/phase-m2-composites-painting.md).

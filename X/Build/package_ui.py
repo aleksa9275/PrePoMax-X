@@ -17,9 +17,9 @@ The payload layout is the same on every target:
     launch.py   writes the absolute runtime profiles to the user's data folder and starts the host
     package.json, Licenses/, NOTICE.md
 
-Inputs that are not supplied are recorded as missing in package.json; nothing is substituted. QuadWild has no
-macOS/Linux build (the shipped Windows binaries come from a modified fork whose source is not in the repository).
-Windows layouts take the vendored ThirdParty binaries. The package is a local test build: ad-hoc signed on
+Inputs that are not supplied are recorded as missing in package.json; nothing is substituted. QuadWild on macOS/Linux
+is the runtime X/Build/QuadWild builds from the published fork (--quadwild); Windows layouts take the vendored
+ThirdParty binaries. The package is a local test build: ad-hoc signed on
 macOS, no notarization or installer.
 """
 import argparse
@@ -148,6 +148,7 @@ def main():
     p.add_argument('--target', required=True, choices=sorted(CATALOG['targets']))
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--cache', type=Path, required=True, help='download cache (CPython archive)')
+    p.add_argument('--quadwild', type=Path, help='QuadWild runtime folder from X/Build/QuadWild (macOS/Linux)')
     p.add_argument('--vtk-native', type=Path, help='vtkNative runtime folder from X/Build/Vtk (the 3D view; Windows: vtkNative build runtime)')
     p.add_argument('--netgen', type=Path, help='NativeCad runtime folder (bin/NetGenMesher, lib/)')
     p.add_argument('--gmsh-library', type=Path, help='patched Gmsh 4.13.0 library with gmsh-build.json beside it')
@@ -245,9 +246,19 @@ def main():
         tools['\\Meshers\\QuadWild\\quadwild.exe'] = 'tools/QuadWild/quadwild.exe'
         tools['\\Meshers\\QuadWild\\quad_from_patches.exe'] = 'tools/QuadWild/quad_from_patches.exe'
         manifest['components']['quadwild'] = {'vendored': 'ThirdParty/quadwild-bimdf'}
+    elif a.quadwild:
+        receipt = json.loads((a.quadwild / 'quadwild-build.json').read_text())
+        for name, expected in receipt['files'].items():
+            if sha(a.quadwild / name) != expected:
+                raise SystemExit(f'{a.quadwild / name}: differs from quadwild-build.json')
+        copy_tree(a.quadwild, stage / 'tools/QuadWild')
+        tools['\\Meshers\\QuadWild\\quadwild.exe'] = 'tools/QuadWild/quadwild.exe'
+        tools['\\Meshers\\QuadWild\\quad_from_patches.exe'] = 'tools/QuadWild/quad_from_patches.exe'
+        manifest['components']['quadwild'] = {'revision': receipt['source']['revision'], 'repository': receipt['source']['repository'],
+                                              'receipt': 'tools/QuadWild/quadwild-build.json',
+                                              'receiptSha256': sha(a.quadwild / 'quadwild-build.json')}
     else:
-        manifest['missing']['quadwild'] = ('no macOS/Linux build: the Windows binaries come from a modified QuadWild-BiMDF '
-                                           '0.0.2 fork whose source is not in the repository')
+        manifest['missing']['quadwild'] = 'not supplied: build it with X/Build/QuadWild/build.py and pass --quadwild'
 
     # lib3mf
     if a.lib3mf:

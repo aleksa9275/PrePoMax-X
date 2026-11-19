@@ -206,9 +206,20 @@ def start(app, window, output):
                                                'max': [selection_form.MaximumSize.Width, selection_form.MaximumSize.Height], 'moreLess': str(by_name(selection_form, 'btnMoreLess').Text),
                                                'window': [selection_window.width(), selection_window.height()]}
         snapshot('FrmSelectItemSet', selection_form)
+        # 3.0.1: an empty selection is a missing value (IMissingPropertyValues) - red value text and the red dot
+        from original_forms import MISSING_VALUE_TOOLTIP
+        grid_widget_ = w.widgets[grid]
+        region_item = grid_widget_.items[grid_widget_.key(grid_row(grid, 'Region type'))]
+        region_edit = grid_widget_.tree.itemWidget(region_item, 1)
+        region_edit = region_edit.findChild(QtWidgets.QComboBox) if region_edit is not None else None
+        check('empty selection region shown as a missing value (red text, red dot and tooltip)',
+              region_item.toolTip(0) == MISSING_VALUE_TOOLTIP and not region_item.icon(0).isNull()
+              and region_edit is not None and bool(region_edit.property('missingValue')))
         # Region by node set
         grid.SetValueFromText(grid_row(grid, 'Region type'), 'Node set name')
         renderer.flush()
+        region_item = grid_widget_.items[grid_widget_.key(grid_row(grid, 'Region type'))]
+        check('a node set region is no longer marked missing', region_item.toolTip(0) == '' and region_item.icon(0).isNull())
         check('Region type Node set hides FrmSelectItemSet', not selection_form.Visible)
         grid.SetValueFromText(grid_row(grid, 'Node set'), 'BOTTOM')
         grid.SetValueFromText(grid_row(grid, 'U1'), '0')
@@ -442,7 +453,28 @@ def start(app, window, output):
         editors.keyword_editor()
         editors.edit_commands()
 
-    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, child_forms, geometry_catalogue, geometry_ready])
+    composite = {}
+
+    def composite_model():
+        """M2: the 3.0.1 composite shell forms (forms_gui_probe_composite.py) on upstream's composite_shells.inp."""
+        from forms_gui_probe_composite import CompositeFormsProbe
+        if not ready():
+            return False
+        if host is not None:
+            host.CloseAllForms()
+        composite['probe'] = CompositeFormsProbe(app, window, check, report, snapshot)
+        composite['probe'].model()
+
+    def composite_forms():
+        probe = composite['probe']
+        if not probe.ready():
+            return False
+        probe.add_materials()
+        probe.material_orientation()
+        probe.section()
+
+    steps = iter([import_model, step_form, bc_form, model_catalogue, edit_mode, data_grid_forms, child_forms, geometry_catalogue, geometry_ready,
+                  composite_model, composite_forms])
     current = [None]
     timer = QtCore.QTimer(window)
 
