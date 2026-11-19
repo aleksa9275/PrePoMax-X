@@ -8,6 +8,9 @@ CI: M3-1 renders the same FormsCompat control model from .NET (toolkit chosen by
 spike: Avalonia with a native host for vtkNative, or Qt 6 through a thin C ABI
 shim), moves the GUI probes and packages to X/App and retires the Python renderer
 and the workbench hosts. CPython stays only for the original's own Python features.
+Layout in M3-1 is ported from the MIT-licensed dotnet/winforms layout engines
+into FormsCompat (not reimplemented), and checked by a per-form control-bounds
+comparison against the original application.
 M3–M5 keep their content and order after M3-1.
 
 D064 — GitHub as the project home, 2026-11-18: upstream moved to

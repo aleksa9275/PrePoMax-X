@@ -61,7 +61,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 M2 closeout: confirm the X/App runtime uses the re-pinned NetgenMesher (the full-suite run used the 3.0.0
 binary) and give `-g No` runs the hidden FrmMain view the original has on Windows (a parity gap, not an
-environment limit). Then **M3-1** (D065, [plan](REMAINING_WORK.md)): the toolkit spike, the .NET renderer, GUI
+environment limit). Then **M3-1** (D065, [plan](REMAINING_WORK.md)): the toolkit spike, the .NET renderer, the WinForms layout engines ported from dotnet/winforms with a control-bounds comparison against the original, GUI
 probes and packages on `X/App`, retiring the Python renderer and workbench hosts, and the X/App run on Linux
 ARM64 (Podman). Linux QuadWild needs a Podman VM with more than 4 GiB (or M3 CI).
 
