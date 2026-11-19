@@ -1,5 +1,15 @@
 # Decision register
 
+D065 — One runtime for the front end (M3-1), 2026-11-19: the Qt front end of
+X/App is drawn by Python (PyQt6 through Python.NET), so the original .NET code and
+the renderer share one process with two runtimes, the GIL and a cross-thread queue;
+M2's deadlocks came from that boundary. The maintainer chose to replace it before
+CI: M3-1 renders the same FormsCompat control model from .NET (toolkit chosen by a
+spike: Avalonia with a native host for vtkNative, or Qt 6 through a thin C ABI
+shim), moves the GUI probes and packages to X/App and retires the Python renderer
+and the workbench hosts. CPython stays only for the original's own Python features.
+M3–M5 keep their content and order after M3-1.
+
 D064 — GitHub as the project home, 2026-11-18: upstream moved to
 github.com/PrePoMax/PrePoMax (the GitLab project is archived; its history was
 rewritten before archiving). The maintainer forked it as

@@ -1,6 +1,6 @@
 # Remaining work to full completion (D060)
 
-Updated 18 November 2026 after M1 (original vtkControl on vtkNative, macOS and Linux; D063). Replace,
+Updated 19 November 2026 after M2 (original application compiled whole) and the M3-1 decision (D065). Replace,
 don't append. Evidence for each item is in the phase reports, `.project/bugs/` and the
 [backlog](reports/deferred-correctness-improvements.md).
 
@@ -11,6 +11,7 @@ don't append. Evidence for each item is in the phase reports, `.project/bugs/` a
 | M0 | ~~GitHub replay, merge upstream `1e2f83f2`, sources/allowlist/generators~~ ([M0](reports/phase-m0-upstream-3.0.1.md)) | checks and UI verification pass on the new base |
 | M1 | ~~VTK 9.7 recipe; `vtkNative` for macOS/Linux; original `vtkControl` compiled whole and embedded in Qt~~ ([M1](reports/phase-m1-original-vtkcontrol.md)) | all GUI probes pass with the original renderer (Mac, Linux ARM64) |
 | M2 | 3.0.1 features (composites: FrmSection Layers/layup, FrmMaterialOrientation, result outputs, property-grid missing values; a Graphics/Paint layer drawn by Qt), Netgen re-pin to the published NetgenMesher, QuadWild for macOS/Linux from the published fork; FrmMain whole on the native `vtkControl` | every form compiled whole; upstream composite test scripts pass (one VTK per package: done in M1). Done on macOS ARM64 ([M2](reports/phase-m2-composites-painting.md)): all 73 forms compiled whole with FrmMain and Program (`X/App`), 4 of 4 composite scripts pass through the original command line, FrmMain shown in Qt; open: packages/probes on `X/App`, Linux QuadWild build |
+| M3-1 | One runtime for the front end (D065): a .NET renderer of the FormsCompat control model replaces the Python/PyQt renderer (`X/UI` original_controls, original_forms, main_form, original_viewport). First a spike picks the toolkit — Avalonia with a native host for vtkNative, or Qt 6 through a thin C ABI shim — on FrmMain (menus, tool strips, tree, vtkControl) and FrmMaterial. Then: GUI probes and packages on `X/App`; retire the workbench, headless host, `OriginalFormHost`/`OriginalViewHost` and PyQt; CPython only for the original's Python features | the app probe and the eight probe areas pass on `X/App` with the .NET front end on macOS and Linux ARM64; no PyQt in the packages |
 | M3 | GitHub Actions for win-x64, linux-x64, linux-arm64, osx-arm64: `build_ui.py`, checks, GUI probes; Windows MSVC Gmsh and CalculiX | four packages built and tested in CI |
 | M4 | Original-app comparison through upstream's Python API test scripts (79) on the original (Windows runner) and on X; analysis/meshing matrices | V evidence |
 | M5 | D061 fixes and warnings, clean organization (discussed first), installers, signing, notices, maintainer sign-off, upstream PR(s) | release |
