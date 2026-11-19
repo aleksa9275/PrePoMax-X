@@ -4,13 +4,14 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Where we are (19 November 2026)
 
-- **M2 part 1: 3.0.1 composites and painting.** Upstream's composite test scripts run on the headless original
-  Controller (3 pass with the rebuilt CalculiX; the `-r/-p` regeneration script needs the original command line).
-  Original paint handlers draw on a recording `System.Drawing.Graphics` replayed by Qt (System.Drawing.Common is no
-  longer referenced): FrmSection's Layers tab with its layup diagram and FrmMaterialOrientation run whole; missing
-  property values show red. Netgen's pin is already the 3.0.1 source; QuadWild for macOS/Linux builds from the
-  published fork (`X/Build/QuadWild`). FrmMain whole is sized (it must join the Controller's `PrePoMax` assembly) and
-  is the rest of M2. [M2 report](reports/phase-m2-composites-painting.md).
+- **M2: the original application compiled whole** (`X/App`): the whole `PrePoMax` and `UserControls` assemblies —
+  Controller, Commands, all 73 forms, FrmMain and the original `Program` — on the headless WinForms model. The
+  original command line runs upstream's composite scripts through upstream's own runner (4 of 4 pass, including the
+  `-r/-p` regeneration script), and FrmMain is shown in Qt with its original menus, tool strips, tree, view and
+  forms (`X/UI/main_form.py`, GUI probe 9 checks). Part 1: 3.0.1 composites (FrmSection Layers, FrmMaterialOrientation),
+  original painting replayed by Qt, missing property values, Netgen pin confirmed, QuadWild for macOS from the
+  published fork. Packages and the eight GUI probes still use the workbench; moving them to `X/App` is next.
+  [M2 report](reports/phase-m2-composites-painting.md).
 - **M1 original vtkControl on vtkNative** (D063). The 3D view of X/UI is the original `vtkControl`, compiled
   whole, drawing through upstream's `vtkNative` on VTK 9.7.1 (pinned recipe `X/Build/Vtk`), embedded in a Qt
   widget on macOS (Cocoa) and Linux (X11); the 137 view members of the original FrmMain run unchanged in
@@ -25,7 +26,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   3.0.0-based). Earlier phase reports: [C6](reports/phase-c6-main-window.md) …
   [C12](reports/phase-c12-editor-forms.md).
 - **Full parity is not accepted.** Inventory: model/mesh 111 A / 110 C; commands 242 A / 232 C; forms
-  73 / 71 compiled / 70 C; V zero. The 3.0.1 composite items have executed evidence (M2).
+  73 / 73 compiled whole / 71 C; V zero. The 3.0.1 composite items have executed evidence (M2).
   [Inventory](PARITY_INVENTORY.md). B011 stays **failed** (D061); D029, B006–B012 open.
 - Plan to release (M1–M5) and manual items: [REMAINING_WORK.md](REMAINING_WORK.md).
 
@@ -50,18 +51,17 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | P1 | Desktop packages (macOS DMG, Linux tar.gz, Windows zip), rebuildable runtime profiles | Mac and Linux ARM64 packages self-checked; Windows not run |
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
-| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | part 1 done (composites, painting, Netgen/QuadWild); FrmMain whole next |
+| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line; packages/probes on X/App and Linux QuadWild open |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-M2 part 2: FrmMain compiled whole. The Controller, `Rpc`, `FrmAnimation` and the Advisor name `FrmMain`, so it
-belongs in the same `PrePoMax` assembly as the Controller: a UI build of the whole PrePoMax and UserControls
-assemblies (with the original ModelTree, side panels, XYPlot, tool/menu strips) that replaces the headless host and
-the extracted OriginalFormHost/OriginalViewHost, and brings the original command line (`PrePoMax.com` batch runs,
-`-r/-p` regeneration, batch reports, RPC). In parallel when the maintainer agrees: GitHub Actions (M3).
+Move the packages (`package_ui.py`) and the GUI probes from the workbench to the original application (`X/App`),
+then retire the headless host, `OriginalFormHost` and `OriginalViewHost`; an off-screen vtkNative view for `-g No`
+runs; the X/App run on Linux ARM64 (Podman). Linux QuadWild needs a Podman VM with more than 4 GiB (or M3 CI).
+In parallel when the maintainer agrees: GitHub Actions (M3).
 
 ## Environment
 

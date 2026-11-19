@@ -13,12 +13,14 @@
         "Editors/FilteredFileNameEditor.cs": "WinForms file dialog editor; used only by PrePoMax forms (UI layer)",
         "MouseHook.cs": "Win32 global mouse hook (UI layer)",
         "KeyboardHook.cs": "Win32 global keyboard hook (UI layer)",
-        "Tools.WinForms.cs": "WinForms start-up path; portable counterpart added"
+        "Tools.WinForms.cs": "WinForms start-up path; portable counterpart added",
+        "MessageBoxManager.cs": "user32 window hook renaming native message box buttons; portable counterpart added"
       },
       "add": {
         "X/Domain/CaeGlobals/Portable/MessageBoxes.Portable.cs": "Host-supplied dialog presenter",
         "X/Domain/CaeGlobals/Portable/StandardValueEditor.Portable.cs": "Editor metadata without WinForms",
-        "X/Domain/CaeGlobals/Portable/Tools.Portable.cs": "Start-up path without WinForms"
+        "X/Domain/CaeGlobals/Portable/Tools.Portable.cs": "Start-up path without WinForms",
+        "X/Domain/CaeGlobals/Portable/MessageBoxManager.Portable.cs": "Message box button texts without the user32 hook"
       }
     },
     "CaeMesh": {

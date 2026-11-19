@@ -31,6 +31,8 @@ Since M1 the C evidence of the 3D view runs on the original vtkControl (upstream
 Linux ARM64, not on a reimplemented renderer; see [M1](reports/phase-m1-original-vtkcontrol.md).
 M2 adds the 3.0.1 composite evidence: upstream's composite test scripts on the headless Controller (B) and the original
 FrmMaterialOrientation and FrmSection Layers tab with its layup diagram drawn by Qt (C); see [M2](reports/phase-m2-composites-painting.md).
+M2 part 2 compiles the whole PrePoMax and UserControls assemblies with FrmMain and the original Program (X/App):
+the original command line runs upstream's composite scripts through upstream's runner, and FrmMain is shown in Qt (C).
 Commands marked 'compatibility only' are never constructed by the original UI (old-history types or controller-inserted).
 See [C2](reports/phase-c2-model-authoring.md), [C3](reports/phase-c3-geometry-meshing.md), [C4](reports/phase-c4-jobs-results.md) and [C5](reports/phase-c5-application-tools.md).
 The [C5 source audit](reports/phase-c5-ui-audit.json) inventories all 72 forms and their designer fields/events; it does not accept full forms.
@@ -44,7 +46,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|---|---|---|---|
 | Model and mesh features | 111 | 111 | 111 | 110 | 0 |
 | Commands | 242 | 242 | 239 | 232 | 0 |
-| Forms | 73 | 71 | 71 | 70 | 0 |
+| Forms | 73 | 73 | 72 | 71 | 0 |
 
 ## Model and mesh features
 
@@ -889,6 +891,6 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| FrmMain | - |
-| FrmPythonStop | - |
+| FrmMain | ABC |
+| FrmPythonStop | A |
 | FrmSplash | ABC |

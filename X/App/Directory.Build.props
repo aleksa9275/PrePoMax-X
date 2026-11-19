@@ -1,0 +1,10 @@
+<Project>
+  <!-- The original application compiled whole for macOS/Linux (M2): the domain build settings, the whole original
+       PrePoMax and UserControls assemblies on the headless WinForms control model (X/UI/FormsCompat). -->
+  <Import Project="../Domain/Directory.Build.props" />
+  <PropertyGroup>
+    <!-- Generated copies (X/App/Original, X/UI/Workbench/OriginalForms) and the original sources they stand beside;
+         original warnings are reviewed in the post-parity pass (D061) -->
+    <NoWarn>$(NoWarn);CS0436;CS0168;CS0169;CS0414;CS0649;CS0067;CS0108;CS0114;CS0162;CS0219;CS0618;CS1998;CS4014;CA1416</NoWarn>
+  </PropertyGroup>
+</Project>

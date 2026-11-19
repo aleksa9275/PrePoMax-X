@@ -60,7 +60,9 @@ def validate_data(result, reference):
     # Whole original assemblies (D062) reference their original packages and the portable
     # GmshCommon/vtkControl/WinForms-compat assemblies; real desktop frameworks stay excluded.
     # Microsoft.Win32.Registry: original Tools.cs reads the Windows registry (runtime portability item).
-    allowed = {"CaeGlobals", "CaeMesh", "CaeResults", "GmshCommon", "vtkControl", "PrePoMaxX.WinFormsCompat",
+    # PrePoMaxX.FormsCompat (M2): the original CaeMesh project references System.Windows.Forms for
+    # Application.DoEvents (GmshAPI); the portable headless control model provides it.
+    allowed = {"CaeGlobals", "CaeMesh", "CaeResults", "GmshCommon", "vtkControl", "PrePoMaxX.WinFormsCompat", "PrePoMaxX.FormsCompat",
                "NCalc", "UnitsNet", "ExtendedNumerics.BigDecimal", "Parlot", "PriorityQueue", "Microsoft.CSharp",
                "Microsoft.Win32.Registry", "netstandard", "mscorlib"}
     for assembly in contracts["assemblies"]:

@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         public Form Owner { get => _owner; set { _owner = value; Notify(nameof(Owner)); } }
         public MenuStrip MainMenuStrip { get; set; }
         public static Form ActiveForm { get; private set; }
-        protected virtual CreateParams CreateParams => new CreateParams();
+
         protected virtual bool ShowWithoutActivation => false;
         public Color TransparencyKey { get; set; } = Color.Empty;
 
@@ -55,12 +55,33 @@ namespace System.Windows.Forms
         public event EventHandler Load, Shown, Activated, Deactivate, ResizeBegin, ResizeEnd;
 
         public void Show(IWin32Window owner) { if ((owner as Control)?.FindForm() is Form f && f != this) Owner = f; Show(); }
+        /// <summary>Set by a run without a renderer: showing a form creates its controls, which raises the Load event of
+        /// its user controls before the form's own Load (WinForms CreateControl); a renderer raises them itself.</summary>
+        public static bool CreateControlsOnShow;
+        static void CreateChildControls(Control control)
+        {
+            foreach (Control child in control.Controls.Cast<Control>().ToArray()) CreateControlTree(child);
+        }
+        internal static void CreateControlTree(Control control)
+        {
+            CreateChildControls(control);
+            if (control is UserControl userControl) userControl.RaiseLoad();
+        }
+        /// <summary>The form's controls were created (a run without a renderer, after the first Show).</summary>
+        internal bool ControlsCreated { get; private set; }
         public new void Show()
         {
             bool first = !openForms.Contains(this);
+            if (first && CreateControlsOnShow) { CreateChildControls(this); ControlsCreated = true; }
             if (first) { openForms.Add(this); OnLoad(EventArgs.Empty); }
             Visible = true;
-            if (first) OnShown(EventArgs.Empty);
+            // WinForms raises Shown through a posted message once the window is displayed; with a message loop it is
+            // posted here too (the loop shows the window first), without one it is raised at once
+            if (first)
+            {
+                if (UiThreadContext != null) UiThreadContext.Post(_ => OnShown(EventArgs.Empty), null);
+                else OnShown(EventArgs.Empty);
+            }
             Activate();
         }
         /// <summary>Modal display needs the renderer's nested event loop (FormHost.ShowDialog).</summary>
@@ -70,6 +91,18 @@ namespace System.Windows.Forms
         {
             if (owner is Form f && f != this) Owner = f;
             if (ShowDialogHandler == null) throw new InvalidOperationException("No form renderer is attached for modal forms.");
+            ToolkitSynchronizationContext ui = ToolkitSynchronizationContext.Installed;
+            if (ui != null && !ui.IsUiThread)
+            {
+                // Shown from another thread (the original splash screen runs on a thread of its own): the window is
+                // the user-interface thread's, whose event loop keeps running; this thread waits for the form to
+                // close, as in its own modal loop
+                _dialogResult = DialogResult.None;
+                ui.Send(_ => { Modal = true; Show(); }, null);
+                while (Visible) System.Threading.Thread.Sleep(20);
+                ui.Send(_ => Modal = false, null);
+                return _dialogResult == DialogResult.None ? DialogResult.Cancel : _dialogResult;
+            }
             Modal = true;
             _dialogResult = DialogResult.None;
             try
@@ -82,6 +115,11 @@ namespace System.Windows.Forms
         }
         public void Activate() { ActiveForm = this; Notify("Activate"); OnActivated(EventArgs.Empty); }
         public void Close() => CloseCore(CloseReason.UserClosing);
+        /// <summary>The size and location of the window in its normal state (the renderer reports them while the
+        /// window is maximized or minimized).</summary>
+        public Rectangle RestoreBounds { get => _restoreBounds ?? Bounds; set => _restoreBounds = value; }
+        Rectangle? _restoreBounds;
+        internal void CloseForExit() => CloseCore(CloseReason.ApplicationExitCall);
         /// <summary>Renderer input: the window close button.</summary>
         public bool CloseByUser() { CloseCore(CloseReason.UserClosing); return !Visible; }
         void CloseCore(CloseReason reason)
@@ -151,7 +189,7 @@ namespace System.Windows.Forms
         public string ToolTipText { get; set; } = "";
         public Color ForeColor { get; set; } = SystemColors.WindowText;
         public Color BackColor { get; set; } = SystemColors.Window;
-        public FontSpec Font { get; set; }
+        public Font Font { get; set; }
         public ListViewGroup Group { get; set; }
         public ListView ListView => owner;
         public int Index => owner?.Items.IndexOf(this) ?? -1;
@@ -487,10 +525,19 @@ namespace System.Windows.Forms
             {
                 if (value < -1 || value >= TabPages.Count) return;
                 if (_selectedIndex == value) return;
+                // WinForms order: Deselecting (the current page), Selecting (the new page), then Deselected/Selected
+                if (_selectedIndex >= 0 && _selectedIndex < TabPages.Count)
+                {
+                    var d = new TabControlCancelEventArgs(TabPages[_selectedIndex], _selectedIndex, false);
+                    Deselecting?.Invoke(this, d);
+                    if (d.Cancel) return;
+                }
                 var e = new TabControlCancelEventArgs(value >= 0 ? TabPages[value] : null, value, false);
                 Selecting?.Invoke(this, e);
                 if (e.Cancel) return;
+                int previous = _selectedIndex;
                 _selectedIndex = value;
+                if (previous >= 0 && previous < TabPages.Count) Deselected?.Invoke(this, new TabControlEventArgs(TabPages[previous], previous));
                 Notify(nameof(SelectedIndex));
                 SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
                 Selected?.Invoke(this, new TabControlEventArgs(SelectedTab, value));
@@ -500,6 +547,8 @@ namespace System.Windows.Forms
         public event EventHandler SelectedIndexChanged;
         public event TabControlEventHandler Selected;
         public event TabControlCancelEventHandler Selecting;
+        public event TabControlCancelEventHandler Deselecting;
+        public event TabControlEventHandler Deselected;
         public event DrawItemEventHandler DrawItem;
         public Rectangle GetTabRect(int index) => new Rectangle(index * 80, 0, 80, 24);
         /// <summary>WinForms page area at 96 DPI with Segoe UI 9 pt tabs: 4 px border, 24 px tab row.</summary>
@@ -580,7 +629,7 @@ namespace System.Windows.Forms
     public enum TabDrawMode { Normal, OwnerDrawFixed }
     public class TabControlCancelEventArgs : CancelEventArgs { public TabPage TabPage { get; } public int TabPageIndex { get; } public TabControlCancelEventArgs(TabPage page, int index, bool cancel) : base(cancel) { TabPage = page; TabPageIndex = index; } }
     public delegate void TabControlCancelEventHandler(object sender, TabControlCancelEventArgs e);
-    public class DrawItemEventArgs : EventArgs { public Graphics Graphics { get; } public int Index { get; } public Rectangle Bounds { get; } public DrawItemEventArgs(Graphics g, FontSpec font, Rectangle bounds, int index, DrawItemState state) { Graphics = g; Bounds = bounds; Index = index; } }
+    public class DrawItemEventArgs : EventArgs { public Graphics Graphics { get; } public int Index { get; } public Rectangle Bounds { get; } public DrawItemEventArgs(Graphics g, Font font, Rectangle bounds, int index, DrawItemState state) { Graphics = g; Bounds = bounds; Index = index; } }
     public enum DrawItemState { None = 0, Selected = 1 }
     public delegate void DrawItemEventHandler(object sender, DrawItemEventArgs e);
 
@@ -592,20 +641,44 @@ namespace System.Windows.Forms
         public ToolStripItem() { }
         public ToolStripItem(string text) { _text = text ?? ""; }
         public string Name { get; set; } = "";
-        public virtual string Text { get => _text; set => _text = value ?? ""; }
+        public virtual string Text { get => _text; set { _text = value ?? ""; NotifyItem(); } }
         public string ToolTipText { get; set; } = "";
         public object Tag { get; set; }
-        public ImageResource Image { get; set; }
+        Image _image;
+        public Image Image { get => _image; set { _image = value; NotifyItem(); } }
+        /// <summary>The tool strip the item is shown on changed: the renderer updates it (a drop-down item's strip is
+        /// the strip of its top item; open drop-downs are rebuilt when they open).</summary>
+        protected void NotifyItem()
+        {
+            ToolStripItem item = this;
+            ToolStrip strip = Owner;
+            while (strip == null && item.OwnerItem != null) { item = item.OwnerItem; strip = item.Owner; }
+            if (strip != null) ControlNotifications.Raise(strip, "Items");
+        }
         public ToolStripItemDisplayStyle DisplayStyle { get; set; } = ToolStripItemDisplayStyle.ImageAndText;
         public Color ImageTransparentColor { get; set; }
-        public bool Enabled { get => _enabled; set => _enabled = value; }
-        public bool Visible { get => _visible; set => _visible = value; }
-        public bool Available { get => _visible; set => _visible = value; }
+        public bool Enabled { get => _enabled; set { if (_enabled == value) return; _enabled = value; EnabledChanged?.Invoke(this, EventArgs.Empty); NotifyItem(); } }
+        public bool Visible { get => _visible; set { if (_visible == value) return; _visible = value; VisibleChanged?.Invoke(this, EventArgs.Empty); NotifyItem(); } }
+        public bool Available { get => _visible; set => Visible = value; }
         public Size Size { get; set; }
         public ToolStrip Owner { get; internal set; }
         public ToolStripItem OwnerItem { get; internal set; }
-        public FontSpec Font { get; set; }
+        public Font Font { get; set; }
         public Padding Margin { get; set; }
+        public Padding Padding { get; set; }
+        public bool AutoSize { get; set; } = true;
+        public ToolStripItemImageScaling ImageScaling { get; set; } = ToolStripItemImageScaling.SizeToFit;
+        public ContentAlignment TextAlign { get; set; } = ContentAlignment.MiddleCenter;
+        public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleCenter;
+        public TextImageRelation TextImageRelation { get; set; } = TextImageRelation.ImageBeforeText;
+        public bool AutoToolTip { get; set; }
+        public int Height { get => Size.Height; set => Size = new Size(Size.Width, value); }
+        public int Width { get => Size.Width; set => Size = new Size(value, Size.Height); }
+        public Color ForeColor { get; set; } = SystemColors.ControlText;
+        public Color BackColor { get; set; } = SystemColors.Control;
+        public ToolStripItemOverflow Overflow { get; set; }
+        /// <summary>The renderer reports the item under the mouse or keyboard selection.</summary>
+        public bool Selected { get; set; }
         public ToolStripItemAlignment Alignment { get; set; }
         public event EventHandler Click, MouseHover, MouseEnter, MouseLeave, VisibleChanged, EnabledChanged;
         public event MouseEventHandler MouseUp, MouseDown;
@@ -615,15 +688,46 @@ namespace System.Windows.Forms
     public enum ToolStripItemAlignment { Left, Right }
     public class ToolStripSeparator : ToolStripItem { public ToolStripSeparator() : base("-") { } }
     public class ToolStripLabel : ToolStripItem { public ToolStripLabel() { } public ToolStripLabel(string text) : base(text) { } }
-    public class ToolStripStatusLabel : ToolStripLabel { public ToolStripStatusLabel() { } public ToolStripStatusLabel(string text) : base(text) { } public bool Spring { get; set; } }
-    public class ToolStripButton : ToolStripItem { public bool Checked { get; set; } public bool CheckOnClick { get; set; } public ToolStripButton() { } public ToolStripButton(string text) : base(text) { } }
+    public class ToolStripStatusLabel : ToolStripLabel
+    {
+        public ToolStripStatusLabel() { }
+        public ToolStripStatusLabel(string text) : base(text) { }
+        public bool Spring { get; set; }
+        public ToolStripStatusLabelBorderSides BorderSides { get; set; }
+        public Border3DStyle BorderStyle { get; set; } = Border3DStyle.Flat;
+    }
+    [Flags] public enum ToolStripStatusLabelBorderSides { None = 0, Left = 1, Top = 2, Right = 4, Bottom = 8, All = 15 }
+    public enum Border3DStyle { Adjust = 8192, Bump = 9, Etched = 6, Flat = 16394, Raised = 5, RaisedInner = 4, RaisedOuter = 1, Sunken = 10, SunkenInner = 8, SunkenOuter = 2 }
+    public enum ToolStripItemImageScaling { None, SizeToFit }
+    public class ToolStripButton : ToolStripItem
+    {
+        bool _checked;
+        public bool Checked { get => _checked; set { if (_checked == value) return; _checked = value; CheckedChanged?.Invoke(this, EventArgs.Empty); NotifyItem(); } }
+        public CheckState CheckState { get => _checked ? CheckState.Checked : CheckState.Unchecked; set => Checked = value != CheckState.Unchecked; }
+        public bool CheckOnClick { get; set; }
+        public event EventHandler CheckedChanged;
+        public ToolStripButton() { }
+        public ToolStripButton(string text) : base(text) { }
+        public ToolStripButton(string text, Image image) : base(text) { Image = image; }
+        public ToolStripButton(string text, Image image, EventHandler onClick) : base(text) { Image = image; if (onClick != null) Click += onClick; }
+        protected override void OnClick(EventArgs e) { if (CheckOnClick) Checked = !Checked; base.OnClick(e); }
+    }
     public class ToolStripDropDownItem : ToolStripItem
     {
         public ToolStripDropDownItem() { DropDownItems = new ToolStripItemCollection(null, this); }
         public ToolStripDropDownItem(string text) : base(text) { DropDownItems = new ToolStripItemCollection(null, this); }
         public ToolStripItemCollection DropDownItems { get; }
         public bool HasDropDownItems => DropDownItems.Count > 0;
+        ToolStripDropDownMenu _dropDown;
+        /// <summary>The drop-down window of the item (its events; the items are DropDownItems).</summary>
+        public ToolStripDropDown DropDown => _dropDown ??= new ToolStripDropDownMenu();
+        /// <summary>Renderer input: the item's drop-down is closing; false when a Closing handler cancelled it.</summary>
+        public bool RaiseDropDownClosing(ToolStripDropDownCloseReason reason) => _dropDown == null || _dropDown.RaiseClosing(reason);
         public event EventHandler DropDownOpening, DropDownOpened, DropDownClosed;
+        /// <summary>Renderer input: the item's drop-down opens (DropDownOpening, then DropDownOpened) and closes
+        /// (Closing may cancel; DropDownClosed).</summary>
+        public void RaiseDropDownOpening() { DropDownOpening?.Invoke(this, EventArgs.Empty); DropDownOpened?.Invoke(this, EventArgs.Empty); }
+        public void RaiseDropDownClosed() => DropDownClosed?.Invoke(this, EventArgs.Empty);
         public event ToolStripItemClickedEventHandler DropDownItemClicked;
         internal void RaiseDropDownItemClicked(ToolStripItem item) => DropDownItemClicked?.Invoke(this, new ToolStripItemClickedEventArgs(item));
     }
@@ -632,9 +736,9 @@ namespace System.Windows.Forms
         bool _checked;
         public ToolStripMenuItem() { }
         public ToolStripMenuItem(string text) : base(text) { }
-        public ToolStripMenuItem(string text, ImageResource image) : base(text) { Image = image; }
-        public ToolStripMenuItem(string text, ImageResource image, EventHandler onClick) : base(text) { Image = image; if (onClick != null) Click += onClick; }
-        public bool Checked { get => _checked; set { if (_checked == value) return; _checked = value; CheckedChanged?.Invoke(this, EventArgs.Empty); } }
+        public ToolStripMenuItem(string text, Image image) : base(text) { Image = image; }
+        public ToolStripMenuItem(string text, Image image, EventHandler onClick) : base(text) { Image = image; if (onClick != null) Click += onClick; }
+        public bool Checked { get => _checked; set { if (_checked == value) return; _checked = value; CheckedChanged?.Invoke(this, EventArgs.Empty); NotifyItem(); } }
         public bool CheckOnClick { get; set; }
         public CheckState CheckState { get => _checked ? CheckState.Checked : CheckState.Unchecked; set => Checked = value != CheckState.Unchecked; }
         public Keys ShortcutKeys { get; set; }
@@ -643,8 +747,44 @@ namespace System.Windows.Forms
         public event EventHandler CheckedChanged;
         protected override void OnClick(EventArgs e) { if (CheckOnClick) Checked = !Checked; base.OnClick(e); }
     }
-    public class ToolStripComboBox : ToolStripItem { public ComboBox ComboBox { get; } = new ComboBox(); public ComboBox.ObjectCollection Items => ComboBox.Items; public int SelectedIndex { get => ComboBox.SelectedIndex; set => ComboBox.SelectedIndex = value; } }
-    public class ToolStripTextBox : ToolStripItem { public TextBox TextBox { get; } = new TextBox(); }
+    /// <summary>A combo box on a tool strip: the item forwards the hosted combo box.</summary>
+    public class ToolStripComboBox : ToolStripControlHost
+    {
+        public ToolStripComboBox() : base(new ComboBox())
+        {
+            ComboBox.SelectedIndexChanged += (s, e) => OnSelectedIndexChanged(e);
+            ComboBox.DropDown += (s, e) => DropDown?.Invoke(this, e);
+            ComboBox.DropDownClosed += (s, e) => DropDownClosed?.Invoke(this, e);
+            ComboBox.SelectionChangeCommitted += (s, e) => SelectionChangeCommitted?.Invoke(this, e);
+        }
+        public ComboBox ComboBox => (ComboBox)Control;
+        public ComboBox.ObjectCollection Items => ComboBox.Items;
+        public int SelectedIndex { get => ComboBox.SelectedIndex; set => ComboBox.SelectedIndex = value; }
+        public object SelectedItem { get => ComboBox.SelectedItem; set => ComboBox.SelectedItem = value; }
+        public override string Text { get => ComboBox.Text; set => ComboBox.Text = value; }
+        public ComboBoxStyle DropDownStyle { get => ComboBox.DropDownStyle; set => ComboBox.DropDownStyle = value; }
+        public int DropDownWidth { get => ComboBox.DropDownWidth; set => ComboBox.DropDownWidth = value; }
+        public int MaxDropDownItems { get => ComboBox.MaxDropDownItems; set => ComboBox.MaxDropDownItems = value; }
+        public FlatStyle FlatStyle { get; set; } = FlatStyle.Popup;
+        public bool Sorted { get => ComboBox.Sorted; set => ComboBox.Sorted = value; }
+        public event EventHandler SelectedIndexChanged, DropDown, DropDownClosed, SelectionChangeCommitted;
+        protected virtual void OnSelectedIndexChanged(EventArgs e) => SelectedIndexChanged?.Invoke(this, e);
+        public void BeginUpdate() { }
+        public void EndUpdate() { }
+    }
+    /// <summary>A text box on a tool strip: the item forwards the hosted text box's text, keys and focus.</summary>
+    public class ToolStripTextBox : ToolStripControlHost
+    {
+        public ToolStripTextBox() : base(new TextBox()) { }
+        public TextBox TextBox => (TextBox)Control;
+        public override string Text { get => TextBox.Text; set => TextBox.Text = value; }
+        public bool ShortcutsEnabled { get => TextBox.ShortcutsEnabled; set => TextBox.ShortcutsEnabled = value; }
+        public bool ReadOnly { get => TextBox.ReadOnly; set => TextBox.ReadOnly = value; }
+        public HorizontalAlignment TextBoxTextAlign { get => TextBox.TextAlign; set => TextBox.TextAlign = value; }
+        public int SelectionStart { get => TextBox.SelectionStart; set => TextBox.SelectionStart = value; }
+        public int SelectionLength { get => TextBox.SelectionLength; set => TextBox.SelectionLength = value; }
+        public void SelectAll() => TextBox.SelectAll();
+    }
     public class ToolStripItemCollection : IList, IEnumerable<ToolStripItem>
     {
         readonly ToolStrip owner;
@@ -656,7 +796,7 @@ namespace System.Windows.Forms
         public ToolStripItem this[string key] => items.FirstOrDefault(i => i.Name == key);
         public int Add(ToolStripItem item) { item.Owner = owner; item.OwnerItem = ownerItem; items.Add(item); return items.Count - 1; }
         public ToolStripItem Add(string text) { var item = new ToolStripMenuItem(text); Add(item); return item; }
-        public ToolStripItem Add(string text, ImageResource image, EventHandler onClick) { var item = new ToolStripMenuItem(text, image, onClick); Add(item); return item; }
+        public ToolStripItem Add(string text, Image image, EventHandler onClick) { var item = new ToolStripMenuItem(text, image, onClick); Add(item); return item; }
         public void AddRange(ToolStripItem[] values) { foreach (var item in values) Add(item); }
         public void Insert(int index, ToolStripItem item) { item.Owner = owner; item.OwnerItem = ownerItem; items.Insert(index, item); }
         public void Remove(ToolStripItem item) => items.Remove(item);
@@ -694,9 +834,44 @@ namespace System.Windows.Forms
     public enum ToolStripGripStyle { Hidden, Visible }
     public enum ToolStripLayoutStyle { StackWithOverflow, HorizontalStackWithOverflow, VerticalStackWithOverflow, Flow, Table }
     public enum ToolStripRenderMode { Custom, System, Professional, ManagerRenderMode }
-    public class MenuStrip : ToolStrip { }
-    public class StatusStrip : ToolStrip { }
-    public class ToolStripDropDown : ToolStrip { public event ToolStripDropDownClosedEventHandler Closed; public event CancelEventHandler Opening; public event EventHandler Opened; public bool AutoClose { get; set; } = true; internal void RaiseOpening(CancelEventArgs e) => Opening?.Invoke(this, e); internal void RaiseOpened() => Opened?.Invoke(this, EventArgs.Empty); }
+    // WinForms DefaultDock: a menu strip docks at the top and a status strip at the bottom (the designer omits it)
+    public class MenuStrip : ToolStrip { public MenuStrip() { Dock = DockStyle.Top; } }
+    public class StatusStrip : ToolStrip { public StatusStrip() { Dock = DockStyle.Bottom; } }
+    public class ToolStripDropDown : ToolStrip
+    {
+        public event ToolStripDropDownClosedEventHandler Closed;
+        public event ToolStripDropDownClosingEventHandler Closing;
+        public event CancelEventHandler Opening;
+        public event EventHandler Opened;
+        public bool AutoClose { get; set; } = true;
+        public bool DropShadowEnabled { get; set; } = true;
+        public double Opacity { get; set; } = 1;
+        public Control SourceControl { get; protected set; }
+        internal void RaiseOpening(CancelEventArgs e) => Opening?.Invoke(this, e);
+        internal void RaiseOpened() => Opened?.Invoke(this, EventArgs.Empty);
+        /// <summary>Shows the drop-down at a point of a control (client coordinates); the renderer opens it.</summary>
+        public void Show(Control control, Point position) { SourceControl = control; ShownAt = position; Visible = true; ControlNotifications.Raise(control, "ContextMenu"); Notify("Show"); }
+        public void Show(Control control, int x, int y) => Show(control, new Point(x, y));
+        public void Show(Point screenLocation) { ShownAt = screenLocation; Visible = true; Notify("Show"); }
+        public Point ShownAt { get; private set; }
+        public void Close() => Close(ToolStripDropDownCloseReason.CloseCalled);
+        internal bool RaiseClosing(ToolStripDropDownCloseReason reason)
+        {
+            var closing = new ToolStripDropDownClosingEventArgs(reason);
+            Closing?.Invoke(this, closing);
+            return !closing.Cancel;
+        }
+        public void Close(ToolStripDropDownCloseReason reason)
+        {
+            if (!Visible) return;
+            var closing = new ToolStripDropDownClosingEventArgs(reason);
+            Closing?.Invoke(this, closing);
+            if (closing.Cancel) return;
+            Visible = false;
+            Notify("Close");
+            Closed?.Invoke(this, new ToolStripDropDownClosedEventArgs());
+        }
+    }
     public class ToolStripDropDownClosedEventArgs : EventArgs { }
     public delegate void ToolStripDropDownClosedEventHandler(object sender, ToolStripDropDownClosedEventArgs e);
     public class ToolStripDropDownMenu : ToolStripDropDown { public bool ShowImageMargin { get; set; } = true; public bool ShowCheckMargin { get; set; } }
@@ -704,7 +879,6 @@ namespace System.Windows.Forms
     {
         public ContextMenuStrip() { }
         public ContextMenuStrip(IContainer container) { container?.Add(this); }
-        public Control SourceControl { get; private set; }
         /// <summary>Renderer input: opens the menu for a control; returns false when Opening cancelled it.</summary>
         public bool OpenFor(Control source)
         {
@@ -715,8 +889,6 @@ namespace System.Windows.Forms
             RaiseOpened();
             return true;
         }
-        public void Show(Control control, Point position) { SourceControl = control; ControlNotifications.Raise(control, "ContextMenu"); }
-        public void Show(Point position) { }
     }
 
     // Property grid ------------------------------------------------------------------------------------------------------------

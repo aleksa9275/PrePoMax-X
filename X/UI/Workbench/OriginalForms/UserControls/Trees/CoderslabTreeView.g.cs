@@ -4,6 +4,7 @@
 // Rewrite x2: CodersLabTreeView reads the native scroll position through user32; the TreeView model reports it.
 // Rewrite x1: CodersLabTreeView draws its focus rectangle with GDI+; the renderer draws the focus the model records.
 // Rewrite x2: CodersLabTreeView focus rectangle: the colour instead of a GDI+ pen.
+// Rewrite x2: .NET adds System.Reflection.MethodInvoker (net48 has none); the original means the WinForms delegate.
 #line 1 "../../../../../../UserControls/Trees/CoderslabTreeView.cs"
 // *****************************************************************************
 // 
@@ -518,7 +519,7 @@ namespace UserControls
         private void EditTimer_Tick(object sender, EventArgs e)
         {
             _editTmer.Stop();
-            BeginInvoke((MethodInvoker)StartEdit);
+            BeginInvoke((System.Windows.Forms.MethodInvoker)StartEdit);
         }
         // Related nodes
         /// <summary>
@@ -1511,7 +1512,7 @@ namespace UserControls
 		{
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new MethodInvoker(delegate
+				this.Invoke(new System.Windows.Forms.MethodInvoker(delegate
 												  {
 													  FlashNode();
 												  }));

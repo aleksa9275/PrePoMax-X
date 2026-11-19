@@ -12,7 +12,6 @@ from System.Drawing import Size
 from PyQt6 import QtCore, QtWidgets
 import vtkControl as original
 from vtkControl.Native import VtkNativeInput
-from PrePoMax import OriginalViewHost
 
 # The VTK key symbols the interaction style compares (vtkNativeInteractorStyle GetLegacyKeyCode) and those of the
 # other keys a Win32 or Cocoa window reports
@@ -26,7 +25,7 @@ BUTTONS = {QtCore.Qt.MouseButton.LeftButton: (VtkNativeInput.LeftButtonDown, Vtk
 
 
 class OriginalViewport(QtWidgets.QWidget):
-    def __init__(self, parent, post):
+    def __init__(self, parent, post, control=None):
         super().__init__(parent)
         for attribute in (QtCore.Qt.WidgetAttribute.WA_NativeWindow, QtCore.Qt.WidgetAttribute.WA_PaintOnScreen,
                           QtCore.Qt.WidgetAttribute.WA_NoSystemBackground, QtCore.Qt.WidgetAttribute.WA_OpaquePaintEvent):
@@ -35,10 +34,17 @@ class OriginalViewport(QtWidgets.QWidget):
         self.setMouseTracking(True)
         self.setMinimumSize(200, 150)
         self._wheel = 0
-        self.control = original.vtkControl()
-        # OriginalViewHost marshals to this thread through post (FrmMain.InvokeIfRequired)
         self._post = Action[Action](lambda action: post(action))
-        self.host = OriginalViewHost(self.control, self._post)
+        if control is None:
+            # The workbench: the view half of FrmMain (OriginalViewHost) owns the control and marshals to this thread
+            # through post (FrmMain.InvokeIfRequired)
+            from PrePoMax import OriginalViewHost
+            self.control = original.vtkControl()
+            self.host = OriginalViewHost(self.control, self._post)
+        else:
+            # FrmMain compiled whole (main_form.py): the original FrmMain created the control and drives it
+            self.control = control
+            self.host = None
         self.attached = False
 
     # Qt draws nothing here: VTK owns the native window (no paint engine, no "paintEngine" warnings)
@@ -54,10 +60,16 @@ class OriginalViewport(QtWidgets.QWidget):
         if self.attached:
             return
         self.attached = True
-        width, height = self.pixel_size()
-        self.control.Size = Size(width, height)
+        if self.host is not None:
+            # The workbench sizes the control in device pixels; in FrmMain the WinForms layout sizes it
+            width, height = self.pixel_size()
+            self.control.Size = Size(width, height)
         self.control.NativeHost.AttachNativeWindow(IntPtr(int(self.winId())))
         self.control.RaiseLoad()
+        if self.host is None:
+            # FrmMain loaded the control when it created it, before this window existed (WinForms creates the
+            # handle first): the control sends its scene to the native view now that there is one
+            self.control.EnableNativeMirror(True)
         # X11: VTK's window leaves its input to this widget; its exposure, size and the interaction style's timers
         # (the selection after a click, smooth zoom) come from its own display connection, pumped here
         if platform.system() == 'Linux':
@@ -71,6 +83,8 @@ class OriginalViewport(QtWidgets.QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        if self.host is None:
+            return  # FrmMain: the widget follows the control's bounds (the WinForms layout), not the other way round
         width, height = self.pixel_size()
         self.control.Size = Size(width, height)
 

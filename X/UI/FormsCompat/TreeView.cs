@@ -74,22 +74,22 @@ namespace System.Windows.Forms
     /// its font metrics, the fallback is Segoe UI 9 pt's average advance.</summary>
     public static class TextRenderer
     {
-        public static Func<string, FontSpec, Size> MeasureHandler;
-        public static Size MeasureText(string text, FontSpec font)
-            => MeasureHandler != null ? MeasureHandler(text ?? "", font ?? FontSpec.Default) : new Size((int)Math.Ceiling((text ?? "").Length * 6.5), 15);
+        public static Func<string, Font, Size> MeasureHandler;
+        public static Size MeasureText(string text, Font font)
+            => MeasureHandler != null ? ToolkitSynchronizationContext.OnUiThread(() => MeasureHandler(text ?? "", font ?? Control.DefaultFont)) : new Size((int)Math.Ceiling((text ?? "").Length * 6.5), 15);
         /// <summary>Text on a painting surface (System.Drawing.Graphics records it; the renderer draws it).</summary>
-        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Point pt, Color foreColor)
-            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)TextFormatFlags.Default);
-        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Point pt, Color foreColor, TextFormatFlags flags)
-            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)flags);
-        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Rectangle bounds, Color foreColor)
+        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor)
+            => ((Graphics)dc).DrawText(text, font ?? Control.DefaultFont, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)TextFormatFlags.Default);
+        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, TextFormatFlags flags)
+            => ((Graphics)dc).DrawText(text, font ?? Control.DefaultFont, new RectangleF(pt.X, pt.Y, 0, 0), foreColor, (int)flags);
+        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor)
             => DrawText(dc, text, font, bounds, foreColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-        public static void DrawText(IDeviceContext dc, string text, FontSpec font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
-            => ((Graphics)dc).DrawText(text, font ?? FontSpec.Default, new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height), foreColor, (int)flags);
-        public static Size MeasureText(IDeviceContext dc, string text, FontSpec font) => MeasureText(text, font);
-        public static Size MeasureText(string text, FontSpec font, Size proposedSize, TextFormatFlags flags) => MeasureText(text, font);
+        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
+            => ((Graphics)dc).DrawText(text, font ?? Control.DefaultFont, new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height), foreColor, (int)flags);
+        public static Size MeasureText(IDeviceContext dc, string text, Font font) => MeasureText(text, font);
+        public static Size MeasureText(string text, Font font, Size proposedSize, TextFormatFlags flags) => MeasureText(text, font);
         /// <summary>Graphics.MeasureString equivalent (GDI+ adds about 1/6 em of padding to the TextRenderer width).</summary>
-        public static SizeF MeasureString(string text, FontSpec font) { Size size = MeasureText(text, font); return new SizeF(size.Width + (font ?? FontSpec.Default).Size * 96f / 72f / 3f, size.Height); }
+        public static SizeF MeasureString(string text, Font font) { Size size = MeasureText(text, font); return new SizeF(size.Width + (font ?? Control.DefaultFont).Size * 96f / 72f / 3f, size.Height); }
     }
 
     public class TreeNode : ICloneable
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         public int StateImageIndex { get; set; } = -1;
         public Color BackColor { get => _backColor; set { if (_backColor == value) return; _backColor = value; Changed(); } }
         public Color ForeColor { get => _foreColor; set { if (_foreColor == value) return; _foreColor = value; Changed(); } }
-        public FontSpec NodeFont { get; set; }
+        public Font NodeFont { get; set; }
         public bool Checked { get; set; }
         public ContextMenuStrip ContextMenuStrip { get; set; }
         public TreeNodeCollection Nodes { get; }

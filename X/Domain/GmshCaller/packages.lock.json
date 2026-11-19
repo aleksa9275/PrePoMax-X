@@ -77,14 +77,16 @@
       "caejob": {
         "type": "Project",
         "dependencies": {
-          "CaeGlobals": "[1.0.0, )"
+          "CaeGlobals": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
         }
       },
       "caemesh": {
         "type": "Project",
         "dependencies": {
           "CaeGlobals": "[1.0.0, )",
-          "GmshCommon": "[1.0.0, )"
+          "GmshCommon": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
         }
       },
       "caemodel": {

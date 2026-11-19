@@ -33,7 +33,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/IContainsEquations.cs" Link="IContainsEquations.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMasterSlaveMultiRegion.cs" Link="IMasterSlaveMultiRegion.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMultiRegion.cs" Link="IMultiRegion.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/MessageBoxManager.cs" Link="MessageBoxManager.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Octree/BoundsOctree.cs" Link="Octree/BoundsOctree.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Octree/BoundsOctreeNode.cs" Link="Octree/BoundsOctreeNode.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Octree/Data/BoundingBox.cs" Link="Octree/Data/BoundingBox.cs" />
@@ -186,5 +185,6 @@
     <Compile Include="$(RepositoryRoot)X/Domain/CaeGlobals/Portable/MessageBoxes.Portable.cs" Link="X/MessageBoxes.Portable.cs" /> <!-- Host-supplied dialog presenter -->
     <Compile Include="$(RepositoryRoot)X/Domain/CaeGlobals/Portable/StandardValueEditor.Portable.cs" Link="X/StandardValueEditor.Portable.cs" /> <!-- Editor metadata without WinForms -->
     <Compile Include="$(RepositoryRoot)X/Domain/CaeGlobals/Portable/Tools.Portable.cs" Link="X/Tools.Portable.cs" /> <!-- Start-up path without WinForms -->
+    <Compile Include="$(RepositoryRoot)X/Domain/CaeGlobals/Portable/MessageBoxManager.Portable.cs" Link="X/MessageBoxManager.Portable.cs" /> <!-- Message box button texts without the user32 hook -->
   </ItemGroup>
 </Project>

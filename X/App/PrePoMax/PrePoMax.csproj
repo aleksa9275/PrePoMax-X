@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The whole original PrePoMax assembly (M2): the domain part (X/Domain/PrePoMax), the forms and FrmMain generated
+       by X/UI/generate-original-forms.py, and the original Program - PrePoMax with its original command line. -->
+  <PropertyGroup>
+    <AssemblyName>PrePoMax</AssemblyName><RootNamespace>PrePoMax</RootNamespace><OutputType>Exe</OutputType>
+    <StartupObject>PrePoMax.Program</StartupObject>
+  </PropertyGroup>
+  <Import Project="../../Domain/PrePoMax/Sources.g.props" />
+  <ItemGroup>
+    <Compile Include="../../UI/Workbench/OriginalForms/PrePoMax/**/*.g.cs" LinkBase="Original/Shared" />
+    <Compile Include="../Original/PrePoMax/**/*.g.cs" LinkBase="Original/App" />
+    <!-- Platform parts of the X host: Python runtime profile, tool manifest, solver build, mesher memory, the
+         automation server with portable permission boundaries -->
+    <Compile Include="../../Controller/Host/PythonRuntime.cs;../../Controller/Host/NativeTools.cs;../../Controller/Host/SolverRuntime.cs;../../Controller/Host/MesherMemory.cs;../../Controller/Host/RpcServer.Portable.g.cs;../../Controller/Host/RpcSessionInfoWriter.Portable.g.cs;../../Controller/Host/OriginalCommandTools.g.cs;../../Controller/Host/OriginalPersistence.cs" LinkBase="X" />
+    <Compile Include="XRuntime.cs" />
+    <EmbeddedResource Include="../../Controller/Host/spatial.py" LogicalName="PrePoMaxX.SpatialPython" />
+    <EmbeddedResource Include="../../Persistence/allowed-types.txt" LogicalName="PrePoMaxX.AllowedTypes" />
+    <PackageReference Include="CommandLineParser" Version="[2.9.1]" />
+    <ProjectReference Include="../../Domain/CaeModel/CaeModel.csproj" />
+    <ProjectReference Include="../../Domain/CaeJob/CaeJob.csproj" />
+    <ProjectReference Include="../../Domain/APIs/APIs.csproj" />
+    <ProjectReference Include="../../Persistence/Persistence.csproj" />
+    <ProjectReference Include="../UserControls/UserControls.csproj" />
+    <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
+  </ItemGroup>
+  <!-- The 3D view: libvtkNative and the VTK libraries beside vtkControl.dll (X/Build/Vtk/build.py runtime folder), as
+       for the workbench -->
+  <ItemGroup Condition="'$(VtkNativeRuntime)' != ''">
+    <None Include="$(VtkNativeRuntime)/libvtk*;$(VtkNativeRuntime)/vtk*.dll;$(VtkNativeRuntime)/vtk-build.json;$(VtkNativeRuntime)/VTK-Copyright.txt"
+          Exclude="$(VtkNativeRuntime)/vtkControl.*" LinkBase="." CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

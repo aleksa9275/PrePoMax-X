@@ -55,6 +55,55 @@ BASE = [
     'UserControls/TextBoxes/PythonTextBox/PythonTextBoxScriptAnalyzer.cs',
     'UserControls/TextBoxes/PythonTextBox/PythonTextBoxSyntaxHighlighter.cs',
 ]
+# The original application compiled whole (M2, X/App): FrmMain, Program and the rest of the PrePoMax and UserControls
+# assemblies beside the forms above. Generated into X/App/Original; the workbench build does not compile them.
+APP = [
+    'PrePoMax/Forms/FrmMain.cs', 'PrePoMax/Forms/FrmMain.Designer.cs', 'PrePoMax/Forms/FrmMain.Plotting.cs',
+    'PrePoMax/Forms/FrmMain.ControllerHost.cs', 'PrePoMax/Forms/FrmPythonStop.cs', 'PrePoMax/Forms/FrmPythonStop.Designer.cs',
+    'PrePoMax/Forms/00_Common/FileExporter/ViewExportFileProperties.cs', 'PrePoMax/Forms/00_Common/ViewStringValue.cs',
+    'PrePoMax/Forms/00_Advisor/AdvisorCreator.cs', 'PrePoMax/Forms/11_MeshSetup/Base/MeshSetupItemTypes.cs',
+    'PrePoMax/Forms/04_GeometryFeature/GeometryFeatureTypes.cs',
+    'PrePoMax/Python/Engine/PythonStopWatchdog.cs', 'PrePoMax/Python/PythonScriptException.cs',
+    'PrePoMax/Program.cs', 'PrePoMax/Settings/GeneralSettings.WinForms.cs',
+    'CaeGlobals/KeyboardHook.cs', 'CaeGlobals/MouseHook.cs', 'CaeGlobals/Editors/FilteredFileNameEditor.cs',
+    'UserControls/AutocompleteMenu/AutocompleteItem.cs', 'UserControls/AutocompleteMenu/AutocompleteItems.cs',
+    'UserControls/AutocompleteMenu/AutocompleteListView.cs', 'UserControls/AutocompleteMenu/AutocompleteMenu.cs',
+    'UserControls/AutocompleteMenu/AutocompleteMenuHost.cs', 'UserControls/AutocompleteMenu/Colors.cs',
+    'UserControls/AutocompleteMenu/EventArgs.cs', 'UserControls/AutocompleteMenu/IAutocompleteListView.cs',
+    'UserControls/AutocompleteMenu/ITextBoxWrapper.cs', 'UserControls/AutocompleteMenu/Range.cs',
+    'UserControls/AutocompleteMenu/TextBoxWrapper.cs', 'UserControls/Buttons/MenuStyleButton.cs',
+    'UserControls/MenuStrip/NoHighlightRenderer.cs', 'UserControls/NoBeepMessageFilter.cs',
+    'UserControls/Forms/MainMouseWheelManagedForm.cs', 'UserControls/ListView/MyListView.cs',
+    'UserControls/SidePanel/XYPlot/FrmXYPlotSettings.cs', 'UserControls/SidePanel/XYPlot/XYPlotSettings.ZedGraph.cs',
+    'UserControls/SidePanel/XYPlot/XYPlot.cs', 'UserControls/SidePanel/XYPlot/XYPlot.Designer.cs',
+    'UserControls/SidePanel/XYPlot/XYPlotPanel.cs', 'UserControls/SidePanel/XYPlot/XYPlotPanel.Designer.cs',
+    'UserControls/SidePanel/PythonPanel.cs', 'UserControls/SidePanel/PythonPanel.Designer.cs',
+    'UserControls/SidePanel/SidePanel.cs', 'UserControls/Panels/BorderColoredPanel.cs',
+    'UserControls/TextBoxes/PythonConsoleTextBox/PythonConsoleFastTextBox.cs',
+    'UserControls/TextBoxes/PythonConsoleTextBox/PythonConsoleTextBox.cs', 'UserControls/TextBoxes/OutputTextBox.cs',
+    'UserControls/TextBoxes/ViewportEditorRichTextBox.cs',
+    'UserControls/TextBoxes/UnitAwareToolStripTextBox.cs', 'UserControls/TextBoxes/UnitAwareToolStripTextBox.Designer.cs',
+    'UserControls/TextBoxes/NumericToolStripTextBox.cs', 'UserControls/TextBoxes/NumericToolStripTextBox.Designer.cs',
+    'UserControls/TextBoxes/ResizableTextBox.cs', 'UserControls/TextBoxes/SearchTextBox.cs',
+    'UserControls/TextBoxes/SearchTextBox.Designer.cs', 'UserControls/MenuStrip/MenuStripFocus.cs',
+    'UserControls/MenuStrip/MenuStripFocus.Designer.cs', 'UserControls/ModelTree.cs', 'UserControls/ModelTree.Designer.cs',
+    'UserControls/ToolStrip/ToolStripFocus.cs',
+    'UserControls/ToolStrip/ToolStripFocus.Designer.cs', 'UserControls/Trees/Extensions.cs',
+    'UserControls/UITypeEditors/DampingRatiosAndValuesUIEditor.cs', 'UserControls/UITypeEditors/FlagsEnumEditor.cs',
+    'UserControls/UITypeEditors/FrmGetDampingRatios.cs', 'UserControls/UITypeEditors/FrmGetDampingRatios.Designer.cs',
+    'UserControls/Views/Sections/ViewSection.cs', 'UserControls/Views/Sections/ViewSolidSection.cs',
+    'UserControls/Views/Step/ViewStaticStep.cs', 'UserControls/Views/Step/ViewStep.cs', 'UserControls/SidePanel/PanelPage.cs',
+    'UserControls/SidePanel/AdvisorPanel.cs', 'UserControls/SidePanel/AdvisorPanel.Designer.cs',
+    'UserControls/ViewportTextEditor.cs', 'UserControls/ViewportTextEditor.Designer.cs',
+]
+# Not compiled in X/App, with their counterparts: UserControls AutoScrollTextBox, TabEnabledPropertyGrid,
+# ChildMouseWheelManagedForm, MySite, PropertyGridMissingValuePainter and ColorEditorEx reach WinForms internals through user32 or
+# private reflection (stand-ins in X/UI/FormsCompat/UserControls.cs, the missing-value mark in the renderer);
+# PrePoMax MesherMemory.Windows.cs, PythonEngineManager.Windows.cs (X/Controller/Host), Rpc/*.cs (their portable
+# generated copies) and ViewNodeSet.Windows.cs (only the Windows forms build calls its overload); PrePoMax
+# Settings.cs and Properties/Settings.Designer.cs, the empty Visual Studio application settings class nothing uses
+# (System.Configuration.ApplicationSettingsBase is a separate package on .NET).
+APP_OUT = ROOT / 'X/App/Original'
 # Forms derived from FrmProperties / FrmPropertyListView / FrmPropertyDataListView.
 FORMS = '''FrmBoundaryLayer FrmCaptureViewport FrmContactPair FrmElementSet FrmMergeCoincidentNodes FrmMirror
 FrmModelProperties FrmNodeSet FrmOffsetFace FrmPartProperties FrmRemeshingParameters FrmRepairGeometry FrmRotate FrmScale
@@ -70,13 +119,9 @@ FrmCalculixKeywordEditor FrmEditCommands'''.split()
 REWRITES = [
     (r'new ViewNodeSet\(this, ', 'new ViewNodeSet(',
      'ViewNodeSet.Windows.cs (Windows build only) adds a Form overload that forwards to ViewNodeSet(FeNodeSet).'),
-    (r'new System\.Drawing\.Font\(', 'new System.Windows.Forms.FontSpec(',
-     'System.Drawing.Font needs GDI+, which .NET 10 provides only on Windows; designer fonts become font descriptions.'),
     (r'System\.ComponentModel\.ComponentResourceManager resources = new System\.ComponentModel\.ComponentResourceManager\(typeof\(\w+\)\)',
      lambda path: f'System.Windows.Forms.ResxResources resources = new System.Windows.Forms.ResxResources("{resx_of(path)}")',
      'Designer images are read from the original .resx by the renderer (base64 image bytes); no resource deserialization.'),
-    (r'\(\(System\.Drawing\.Image\)\(resources\.GetObject\(', '((System.Windows.Forms.ImageResource)(resources.GetObject(',
-     'A designer image is an ImageResource (System.Drawing.Image needs GDI+).'),
     (r'\(\(System\.Drawing\.Icon\)\(resources\.GetObject\(', '((System.Drawing.Icon)(resources.GetIcon(',
      'Form icons are the application icon in the renderer (System.Drawing.Icon needs GDI+).'),
     (r'(?<![\w.])OrderedDictionary<', lambda path: 'OrderedDictionary<' if path.startswith('UserControls/') else 'CaeGlobals.OrderedDictionary<',
@@ -105,17 +150,11 @@ REWRITES = [
      'System.Drawing.Brushes needs GDI+ (Windows only on .NET 10); a FastColoredTextBox style brush is its colour.'),
     (r'new SolidBrush\(', lambda path: 'new FastColoredTextBoxNS.StyleBrush(' if path.startswith('UserControls/TextBoxes/') else None,
      'SolidBrush needs GDI+; a FastColoredTextBox style brush is its colour.'),
-    (r'new Font\(', lambda path: 'new System.Windows.Forms.FontSpec(' if path.startswith('UserControls/TextBoxes/') or 'FrmCalculixKeywordEditor' in path else None,
-     'System.Drawing.Font needs GDI+; fonts are font descriptions.'),
     (r'(?m)^using FastColoredTextBoxNS;$', lambda path: 'using FastColoredTextBoxNS; using Range = FastColoredTextBoxNS.Range;' if path.startswith('UserControls/') else None,
      '.NET adds System.Range (net48 has none); FastColoredTextBoxNS.Range is named by an alias on the same line.'),
-    (r'(?m)^(\s*(?:private )?)Font (\w+(?: =|;))', lambda path: r'\1System.Windows.Forms.FontSpec \2' if 'FrmCalculixKeywordEditor' in path else None,
-     'System.Drawing.Font needs GDI+; the keyword tree\'s emphasized node font is a font description.'),
     (r'\[System\.Runtime\.InteropServices\.DllImport\("user32\.dll"\)\]\n(\s*)public static extern bool LockWindowUpdate\(IntPtr hWndLock\);',
      r'// user32 LockWindowUpdate (rewritten, see header)\n\1public static bool LockWindowUpdate(IntPtr hWndLock) => true; // user32: suspends painting only; the renderer paints after the handler',
      'FrmCalculixKeywordEditor suspends window painting through user32 while it adds a node; the renderer repaints once the handler returns.'),
-    (r'public override Font Font', 'public override System.Windows.Forms.FontSpec Font',
-     'Control.Font is a font description (System.Drawing.Font needs GDI+).'),
     (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool GetKeyboardState\(byte\[\] keyState\);',
      r'// user32 GetKeyboardState (rewritten, see header)\n\1private static bool GetKeyboardState(byte[] keyState) => System.Windows.Forms.KeyboardLayout.GetKeyboardState(keyState);',
      'PythonTextBoxAutocompleteMenuHelper maps a key to its character through user32; the renderer reports the character the platform keyboard layout produced.'),
@@ -125,6 +164,87 @@ REWRITES = [
     (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Unicode\)\]\n(\s*)private static extern int ToUnicode\(uint virtualKeyCode, uint scanCode, byte\[\] keyState,\n\s*\[Out, MarshalAs\(UnmanagedType\.LPWStr\)\] StringBuilder receivingBuffer,\n\s*int bufferSize, uint flags\);',
      r'// user32 ToUnicode (rewritten, see header)\n\1//\n\1//\n\1private static int ToUnicode(uint virtualKeyCode, uint scanCode, byte[] keyState, StringBuilder receivingBuffer, int bufferSize, uint flags) => System.Windows.Forms.KeyboardLayout.ToUnicode(virtualKeyCode, keyState, receivingBuffer);',
      'PythonTextBoxAutocompleteMenuHelper: user32 ToUnicode (the character of the current key in the platform keyboard layout).'),
+    # FrmMain and the rest of the application compiled whole (M2, X/App)
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr SetWindowsHookEx\(int idHook, KeyboardHookHandler lpfn, IntPtr hMod, uint dwThreadId\);',
+     r'// user32 SetWindowsHookEx (rewritten, see header)\n\1private static IntPtr SetWindowsHookEx(int idHook, KeyboardHookHandler lpfn, IntPtr hMod, uint dwThreadId) => System.Windows.Forms.LowLevelKeyboardHook.Set(idHook, (n, w, l) => lpfn(n, w, l));',
+     'KeyboardHook installs a user32 low-level keyboard hook; the renderer reports the application\'s keys to it with the same message codes.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)\[return: MarshalAs\(UnmanagedType\.Bool\)\]\n(\s*)private static extern bool UnhookWindowsHookEx\(IntPtr hhk\);',
+     r'// user32 UnhookWindowsHookEx (rewritten, see header)\n\1//\n\2private static bool UnhookWindowsHookEx(IntPtr hhk) => System.Windows.Forms.LowLevelKeyboardHook.Unset(hhk);',
+     'KeyboardHook: user32 hook removal.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr CallNextHookEx\(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam\);',
+     r'// user32 CallNextHookEx (rewritten, see header)\n\1private static IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam) => System.Windows.Forms.LowLevelKeyboardHook.CallNext(hhk, nCode, wParam, lParam);',
+     'KeyboardHook: the next hook in the user32 chain (the renderer has none).'),
+    (r'\[DllImport\("kernel32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr GetModuleHandle\(string lpModuleName\);',
+     r'// kernel32 GetModuleHandle (rewritten, see header)\n\1private static IntPtr GetModuleHandle(string lpModuleName) => IntPtr.Zero;',
+     'KeyboardHook: the kernel32 module handle a user32 hook needs (unused by the renderer\'s hook).'),
+    (r'(?m)^using System\.Runtime\.Remoting\.Metadata\.W3cXsd2001;$', '// using System.Runtime.Remoting.Metadata.W3cXsd2001; (net48 only, nothing of it is used)',
+     'ModelTree names a .NET Framework remoting namespace that .NET 10 lacks; nothing of it is used.'),
+    # Program (the original command line): kernel32 console, process and Ctrl+C entry points
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern IntPtr GetConsoleWindow\(\);',
+     r'// kernel32 GetConsoleWindow (rewritten, see header)\n\1private static IntPtr GetConsoleWindow() => IntPtr.Zero;',
+     'Program: kernel32 GetConsoleWindow (only in a comment); a Unix process has no console window.'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)static extern bool AttachConsole\(int dwProcessId\);',
+     r'// kernel32 AttachConsole (rewritten, see header)\n\1static bool AttachConsole(int dwProcessId) => false;',
+     'Program: a Unix process inherits the standard handles of its parent; there is no console to attach to.'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern IntPtr GetStdHandle\(int nStdHandle\);',
+     r'// kernel32 GetStdHandle (rewritten, see header)\n\1private static IntPtr GetStdHandle(int nStdHandle) => new IntPtr(nStdHandle == STD_ERROR_HANDLE ? 2 : 1);',
+     'Program: a Unix process always has its standard output and error (file descriptors 1 and 2).'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern bool SetStdHandle\(int nStdHandle, IntPtr hHandle\);',
+     r'// kernel32 SetStdHandle (rewritten, see header)\n\1private static bool SetStdHandle(int nStdHandle, IntPtr hHandle) => true;',
+     'Program: the standard handles stay the inherited ones.'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern IntPtr GetCurrentProcess\(\);',
+     r'// kernel32 GetCurrentProcess (rewritten, see header)\n\1private static IntPtr GetCurrentProcess() => new IntPtr(-1);',
+     'Program: the pseudo handle of the current process.'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern bool TerminateProcess\(IntPtr hProcess, uint uExitCode\);',
+     r'// kernel32 TerminateProcess (rewritten, see header)\n\1private static bool TerminateProcess(IntPtr hProcess, uint uExitCode) { Environment.Exit((int)uExitCode); return true; }',
+     'Program: the process ends with its exit code (Environment.Exit; the report and journal are written before).'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern bool SetConsoleCtrlHandler\(ConsoleCtrlHandler handler, bool add\);',
+     r'// kernel32 SetConsoleCtrlHandler (rewritten, see header)\n\1private static bool SetConsoleCtrlHandler(ConsoleCtrlHandler handler, bool add) { s_sigint = System.Runtime.InteropServices.PosixSignalRegistration.Create(System.Runtime.InteropServices.PosixSignal.SIGINT, context => context.Cancel = handler(CTRL_C_EVENT)); return true; }\n\1private static System.Runtime.InteropServices.PosixSignalRegistration s_sigint;',
+     'Program: Ctrl+C is SIGINT on Unix; the handler gets CTRL_C_EVENT and keeps the process alive when it handles it.'),
+    (r'_cancelEvent = new EventWaitHandle\(false, EventResetMode\.ManualReset,\n(\s*)CancelEventNamePrefix \+ Process\.GetCurrentProcess\(\)\.Id\);',
+     r'_cancelEvent = new EventWaitHandle(false, EventResetMode.ManualReset); // named on Windows (see header)\n\1//',
+     'Program: on Windows the PrePoMax.com launcher signals a named event; on macOS/Linux PrePoMax.com is this same program and Ctrl+C reaches it as SIGINT (named events are Windows-only).'),
+    # FrmMain: window redraw suspension and the search for open native dialogs
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern IntPtr SendMessage\(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam\);\n(\s*)\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool RedrawWindow\(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags\);',
+     r'// user32 SendMessage/RedrawWindow (rewritten, see header)\n\1private static IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam) => IntPtr.Zero;\n\2//\n\3private static bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags) => true;',
+     'FrmMain suspends window painting (WM_SETREDRAW) while it rebuilds the tree; the renderer paints once after the handler returns.'),
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool EnumThreadWindows\(int threadId, EnumThreadWindowsCallback callback, IntPtr parameter\);',
+     r'// user32 EnumThreadWindows (rewritten, see header)\n\1private static bool EnumThreadWindows(int threadId, EnumThreadWindowsCallback callback, IntPtr parameter) => System.Windows.Forms.NativeDialogs.EnumThreadWindows((h, p) => callback(h, p), parameter);',
+     'FrmMain finds an open message box or file dialog among its thread\'s windows; the toolkit\'s open native dialogs are enumerated instead.'),
+    (r'\[DllImport\("kernel32\.dll"\)\]\n(\s*)private static extern int GetCurrentThreadId\(\);',
+     r'// kernel32 GetCurrentThreadId (rewritten, see header)\n\1private static int GetCurrentThreadId() => Environment.CurrentManagedThreadId;',
+     'FrmMain: the user-interface thread.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Unicode\)\]\n(\s*)private static extern int GetClassName\(IntPtr windowHandle, StringBuilder className, int maxCount\);',
+     r'// user32 GetClassName (rewritten, see header)\n\1private static int GetClassName(IntPtr windowHandle, StringBuilder className, int maxCount) => System.Windows.Forms.NativeDialogs.GetClassName(windowHandle, className);',
+     'FrmMain: the dialog window class of an open native dialog.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Unicode\)\]\n(\s*)private static extern int GetWindowText\(IntPtr windowHandle, StringBuilder text, int maxCount\);',
+     r'// user32 GetWindowText (rewritten, see header)\n\1private static int GetWindowText(IntPtr windowHandle, StringBuilder text, int maxCount) => System.Windows.Forms.NativeDialogs.GetWindowText(windowHandle, text);',
+     'FrmMain: the title of an open native dialog.'),
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool IsWindowVisible\(IntPtr windowHandle\);',
+     r'// user32 IsWindowVisible (rewritten, see header)\n\1private static bool IsWindowVisible(IntPtr windowHandle) => System.Windows.Forms.NativeDialogs.IsWindowVisible(windowHandle);',
+     'FrmMain: an open native dialog is visible.'),
+    # CaeGlobals MouseHook (the autocomplete list closes on a click elsewhere)
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr SetWindowsHookEx\(int idHook,\n\s*MouseHookHandler lpfn, IntPtr hMod, uint dwThreadId\);',
+     r'// user32 SetWindowsHookEx (rewritten, see header)\n\1//\n\1private static IntPtr SetWindowsHookEx(int idHook, MouseHookHandler lpfn, IntPtr hMod, uint dwThreadId) => System.Windows.Forms.LowLevelMouseHook.Set(idHook, (n, w, l) => lpfn(n, w, l));',
+     'MouseHook installs a user32 low-level mouse hook; the renderer reports the application\'s mouse messages to it.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)\[return: MarshalAs\(UnmanagedType\.Bool\)\]\n(\s*)public static extern bool UnhookWindowsHookEx\(IntPtr hhk\);',
+     r'// user32 UnhookWindowsHookEx (rewritten, see header)\n\1//\n\2public static bool UnhookWindowsHookEx(IntPtr hhk) => System.Windows.Forms.LowLevelMouseHook.Unset(hhk);',
+     'MouseHook: user32 hook removal.'),
+    (r'\[DllImport\("user32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr CallNextHookEx\(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam\);\n\n(\s*)\[DllImport\("kernel32\.dll", CharSet = CharSet\.Auto, SetLastError = true\)\]\n(\s*)private static extern IntPtr GetModuleHandle\(string lpModuleName\);',
+     r'// user32 CallNextHookEx, kernel32 GetModuleHandle (rewritten, see header)\n\1private static IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam) => System.Windows.Forms.LowLevelMouseHook.CallNext(hhk, nCode, wParam, lParam);\n\n\2//\n\3private static IntPtr GetModuleHandle(string lpModuleName) => IntPtr.Zero;',
+     'MouseHook: the next hook (the renderer has none) and the module handle a user32 hook needs (unused).'),
+    # ViewportEditorRichTextBox: paragraph line spacing and the scroll reset of the viewport text editor
+    (r'\[DllImport\("user32", CharSet = CharSet\.Auto\)\]\n(\s*)private static extern IntPtr SendMessage\(HandleRef hWnd, int msg, int wParam, ref PARAFORMAT lParam\);',
+     r'// user32 SendMessage EM_SETPARAFORMAT (rewritten, see header)\n\1private static IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref PARAFORMAT lParam) { ((ViewportEditorRichTextBox)hWnd.Wrapper).LineSpacing = (lParam.bLineSpacingRule, lParam.dyLineSpacing); return IntPtr.Zero; }',
+     'ViewportEditorRichTextBox sets the paragraph line spacing through a rich edit message; the renderer applies the recorded spacing.'),
+    (r'\[return: MarshalAs\(UnmanagedType\.Bool\)\]\n(\s*)\[DllImport\("user32\.dll", SetLastError = true\)\]\n(\s*)private static extern bool PostMessage\(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam\);',
+     r'// user32 PostMessage (rewritten, see header)\n\1//\n\2private static bool PostMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam) => false;',
+     'ViewportEditorRichTextBox posts WM_VSCROLL SB_TOP to undo a rich edit autoscroll; the call below scrolls the box instead.'),
+    (r'PostMessage\(Handle, WM_VSCROLL, \(IntPtr\)SB_TOP, IntPtr\.Zero\);',
+     r'BeginInvoke((System.Windows.Forms.MethodInvoker)VerticalScrollToTop); // WM_VSCROLL SB_TOP, posted',
+     'ViewportEditorRichTextBox: the posted scroll to the top runs after the current message, as the posted WM_VSCROLL does.'),
+    (r'(?<![\w.])MethodInvoker\b', 'System.Windows.Forms.MethodInvoker',
+     '.NET adds System.Reflection.MethodInvoker (net48 has none); the original means the WinForms delegate.'),
 ]
 
 
@@ -329,12 +449,13 @@ def main():
     parser.add_argument('--extractor', type=Path, default=HERE / 'FormSourceGen/bin/Release/net10.0/FormSourceGen.dll')
     args = parser.parse_args()
     outputs = {f: OUT / (Path(f).with_suffix('').as_posix() + '.g.cs') for f in form_files()}
+    outputs.update({f: APP_OUT / (Path(f).with_suffix('').as_posix() + '.g.cs') for f in APP})
     expected = {o: render(f, o) for f, o in outputs.items()}
     for namespace, designer, resx in RESOURCES:
         expected[OUT / (Path(designer).with_suffix('').as_posix() + '.g.cs')] = resources(namespace, designer, resx)
     expected[OUT / 'OriginalFormHost.g.cs'] = host(args.extractor)
     stale = [p for p, t in expected.items() if not p.exists() or p.read_text(encoding='utf-8') != t]
-    extra = [p for p in OUT.rglob('*.g.cs') if p not in expected] if OUT.exists() else []
+    extra = [p for out in (OUT, APP_OUT) if out.exists() for p in out.rglob('*.g.cs') if p not in expected]
     if args.check:
         if stale or extra:
             raise SystemExit('Stale original forms: run X/UI/generate-original-forms.py\n' +

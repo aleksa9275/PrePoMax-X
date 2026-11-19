@@ -1,17 +1,14 @@
 using System;
 using System.IO;
-using System.Reflection;
 using CaeGlobals;
 using CaeModel;
-using PrePoMaxX.Persistence;
 namespace PrePoMax
 {
     public sealed class HeadlessSession
     {
-        static readonly Lazy<NrbfTypePolicy> policy=new(CreatePolicy);
         public FrmMain Presentation {get;}
         public Controller Controller {get;}
-        public static void InstallPersistence() {System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);RuntimeInitialization.SetCultureAndLanguage();BinarySerialization.Factory=()=>new RestrictedNrbfSerializer(policy.Value);}
+        public static void InstallPersistence() => OriginalPersistence.Install();
         public HeadlessSession(string workDirectory,Action<string> output=null)
         {
             if(!Path.IsPathFullyQualified(workDirectory))throw new ArgumentException("Work directory must be absolute.");
@@ -65,13 +62,6 @@ namespace PrePoMax
         public Python.PythonEngineResult RunScript(string fileName,string[] arguments=null)
         {
             return Controller.RunPythonScriptCommand(File.ReadAllText(fileName),fileName,arguments);
-        }
-        static NrbfTypePolicy CreatePolicy()
-        {
-            Assembly[] assemblies={typeof(Controller).Assembly,typeof(FeModel).Assembly,typeof(CaeMesh.FeMesh).Assembly,typeof(CaeResults.FeResults).Assembly,typeof(CaeJob.AnalysisJob).Assembly,typeof(NamedClass).Assembly,typeof(vtkControl.vtkMaxActorData).Assembly,typeof(UserControls.SidePanelsState).Assembly,typeof(System.Windows.Forms.DialogResult).Assembly};
-            using var resource=typeof(HeadlessSession).Assembly.GetManifestResourceStream("PrePoMaxX.AllowedTypes");
-            using var reader=new StreamReader(resource);
-            return new NrbfTypePolicy(assemblies,reader.ReadToEnd().Split(new[]{'\r','\n'},StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

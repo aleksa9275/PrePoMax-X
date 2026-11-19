@@ -2,8 +2,6 @@
 // Original SHA256 06cb6b8b536211103ee899272f8a19f2193f46e5a4955ec65a7c8a15018c0139
 // Original source: PrePoMax, Copyright (C) 2016-2026 Matej Borovinšek; root LICENSE.
 // Rewrite x4: .NET 9+ adds System.Collections.Generic.OrderedDictionary<,>; the original CaeGlobals type is named in full.
-// Rewrite x1: System.Drawing.Font needs GDI+; fonts are font descriptions.
-// Rewrite x2: System.Drawing.Font needs GDI+; the keyword tree's emphasized node font is a font description.
 // Rewrite x1: FrmCalculixKeywordEditor suspends window painting through user32 while it adds a node; the renderer repaints once the handler returns.
 #line 1 "../../../../../../../PrePoMax/Forms/21_FEModel/FrmCalculixKeywordEditor.cs"
 // PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
@@ -52,7 +50,7 @@ namespace PrePoMax.Forms
         private const string DotsTransparentImageKey = "Dots_t.ico";
         private const string AddedKeywordImageKey = "Keyword_added.ico";
         private const string ModifiedKeywordImageKey = "Keyword_modified.ico";
-        private System.Windows.Forms.FontSpec _emphasizedKeywordFont;
+        private Font _emphasizedKeywordFont;
         private int _selectedKeywordFirstLine;
         private int _selectedKeywordNumOfLines;
         private bool _adding;
@@ -90,7 +88,7 @@ namespace PrePoMax.Forms
         {
             InitializeComponent();
             cltvKeywordsTree.EnsureSelectedNodeVisible = false;
-            _emphasizedKeywordFont = new System.Windows.Forms.FontSpec(cltvKeywordsTree.Font,
+            _emphasizedKeywordFont = new Font(cltvKeywordsTree.Font,
                                                cltvKeywordsTree.Font.Style | FontStyle.Bold);
             InitializeKeywordTreeImages();
             _keywordOverrides = new List<CalculixKeywordOverride>();
@@ -529,7 +527,7 @@ namespace PrePoMax.Forms
                 node.ImageKey = imageKey;
                 node.SelectedImageKey = imageKey;
             }
-            System.Windows.Forms.FontSpec nodeFont = emphasize ? _emphasizedKeywordFont : null;
+            Font nodeFont = emphasize ? _emphasizedKeywordFont : null;
             if (!ReferenceEquals(node.NodeFont, nodeFont)) node.NodeFont = nodeFont;
             Color foreColor = emphasize ? SystemColors.Highlight : cltvKeywordsTree.ForeColor;
             if (node.ForeColor != foreColor) cltvKeywordsTree.SetNodeForeColor(node, foreColor);

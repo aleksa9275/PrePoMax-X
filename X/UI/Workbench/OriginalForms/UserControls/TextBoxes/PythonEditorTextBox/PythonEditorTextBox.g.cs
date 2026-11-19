@@ -2,9 +2,8 @@
 // Original SHA256 41943ed370aae6326da9800186c2ac32c7e51037573902473d687bb3fb7e4c8e
 // Original source: PrePoMax, Copyright (C) 2016-2026 Matej Borovinšek; root LICENSE.
 // Rewrite x2: SolidBrush needs GDI+; a FastColoredTextBox style brush is its colour.
-// Rewrite x1: System.Drawing.Font needs GDI+; fonts are font descriptions.
 // Rewrite x1: .NET adds System.Range (net48 has none); FastColoredTextBoxNS.Range is named by an alias on the same line.
-// Rewrite x1: Control.Font is a font description (System.Drawing.Font needs GDI+).
+// Rewrite x3: .NET adds System.Reflection.MethodInvoker (net48 has none); the original means the WinForms delegate.
 #line 1 "../../../../../../../UserControls/TextBoxes/PythonEditorTextBox/PythonEditorTextBox.cs"
 // PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
 //
@@ -153,7 +152,7 @@ namespace UserControls
             get { return ScriptText; }
             set { ScriptText = value; }
         }
-        public override System.Windows.Forms.FontSpec Font
+        public override Font Font
         {
             get { return base.Font; }
             set
@@ -244,7 +243,7 @@ namespace UserControls
             _textBox.AutoIndent = false;
             _textBox.AutoCompleteBrackets = true;
             _textBox.AutoCompleteBracketsList = new char[] { '(', ')', '{', '}', '[', ']', '"', '"', '\'', '\'' };
-            _textBox.Font = new System.Windows.Forms.FontSpec("Consolas", 10.0f);
+            _textBox.Font = new Font("Consolas", 10.0f);
             _textBox.BorderStyle = BorderStyle.FixedSingle;
             _textBox.CurrentLineColor = Color.FromArgb(35, Color.LightSteelBlue);
             _textBox.SelectionColor = Color.FromArgb(60, 0, 0, 255);
@@ -564,9 +563,9 @@ namespace UserControls
                 _autocompleteMenu.OnSelecting();
 
             if (IsAutocompleteTriggerCharacter(e.KeyChar) && IsHandleCreated)
-                BeginInvoke(new MethodInvoker(ShowAutocompleteListAfterTextInput));
+                BeginInvoke(new System.Windows.Forms.MethodInvoker(ShowAutocompleteListAfterTextInput));
             else if (!char.IsControl(e.KeyChar) && IsHandleCreated)
-                BeginInvoke(new MethodInvoker(HideAutocompleteList));
+                BeginInvoke(new System.Windows.Forms.MethodInvoker(HideAutocompleteList));
         }
         internal void ProcessSelectionChanged()
         {
@@ -1408,7 +1407,7 @@ namespace UserControls
             _textBox.InsertText(text);
 
             if (text == "." && IsHandleCreated)
-                BeginInvoke(new MethodInvoker(ShowAutocompleteListAfterTextInput));
+                BeginInvoke(new System.Windows.Forms.MethodInvoker(ShowAutocompleteListAfterTextInput));
 
             e.SuppressKeyPress = true;
             return true;

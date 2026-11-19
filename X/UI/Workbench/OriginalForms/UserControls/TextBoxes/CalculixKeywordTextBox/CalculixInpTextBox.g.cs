@@ -3,7 +3,6 @@
 // Original source: PrePoMax, Copyright (C) 2016-2026 Matej Borovinšek; root LICENSE.
 // Rewrite x3: System.Drawing.Brushes needs GDI+ (Windows only on .NET 10); a FastColoredTextBox style brush is its colour.
 // Rewrite x1: SolidBrush needs GDI+; a FastColoredTextBox style brush is its colour.
-// Rewrite x1: System.Drawing.Font needs GDI+; fonts are font descriptions.
 // Rewrite x1: .NET adds System.Range (net48 has none); FastColoredTextBoxNS.Range is named by an alias on the same line.
 #line 1 "../../../../../../../UserControls/TextBoxes/CalculixKeywordTextBox/CalculixInpTextBox.cs"
 // PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
@@ -102,7 +101,7 @@ namespace UserControls
             _textBox.BackBrush = null;
             _textBox.BorderStyle = BorderStyle.FixedSingle;
             _textBox.DisabledColor = Color.FromArgb(100, 180, 180, 180);
-            _textBox.Font = new System.Windows.Forms.FontSpec("Consolas", 9.0f);
+            _textBox.Font = new Font("Consolas", 9.0f);
             _textBox.Paddings = new Padding(0);
             _textBox.SelectionColor = Color.FromArgb(60, 0, 0, 255);
             _textBox.Zoom = 100;

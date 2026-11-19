@@ -333,3 +333,12 @@ Layers tab (layup diagram) and FrmMaterialOrientation run whole on upstream's `c
 (`forms_gui_probe_composite.py`). Property values the selected object reports as missing
 (`IMissingPropertyValues`) are drawn red with the original red dot and tooltip.
 [M2 report](../../.project/reports/phase-m2-composites-painting.md).
+
+## The original main window (M2)
+
+`main_form.py` shows the original FrmMain, compiled whole in `X/App`, when the original `Program` calls
+`Application.Run` (see [X/App](../App/README.md)). FrmMain is a top-level window of the same generic renderer as the
+other original forms (`original_forms.py`); `main_form.py` adds the menu strip, tool strips and status strip (Qt menus
+and tool bars over the original ToolStripItems) and embeds FrmMain's own vtkControl. Calls from other threads reach
+Qt only through `ToolkitSynchronizationContext` (the WinForms message queue of the Qt thread). `app_gui_probe.py`
+checks it unattended. The workbench (`workbench.py`) remains the packaged UI until the packages move to `X/App`.

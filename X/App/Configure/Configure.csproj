@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Writes the explicit runtime profile and the solver settings of an X/App build (M2) -->
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.Configure</AssemblyName><RootNamespace>PrePoMaxX.App</RootNamespace></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <ProjectReference Include="../PrePoMax/PrePoMax.csproj" />
+  </ItemGroup>
+</Project>

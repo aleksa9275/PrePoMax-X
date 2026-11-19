@@ -15,11 +15,14 @@ namespace CaeGlobals
         public static Func<IWin32Window, string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> InteractivePresenter;
         /// <summary>Runs a function on the UI thread (the original Form.Invoke hop); null runs it directly.</summary>
         public static Func<Func<object>, object> UiDispatcher;
+        /// <summary>The owner of the dialogs (the original sets the main form; IWin32Window here, as CaeGlobals has
+        /// no form type).</summary>
+        public static IWin32Window ParentForm;
 
         private static DialogResult ShowInteractive(string text, string caption, MessageBoxButtons buttons,
                                                     MessageBoxIcon icon)
         {
-            return ShowNative(null, text, caption, buttons, icon);
+            return ShowNative(ParentForm, text, caption, buttons, icon);
         }
         private static DialogResult ShowNative(IWin32Window owner, string text, string caption, MessageBoxButtons buttons,
                                                MessageBoxIcon icon)

@@ -13,31 +13,15 @@ using System.Linq;
 namespace System.Windows.Forms
 {
     /// <summary>Designer font description (System.Drawing.Font needs GDI+, which is Windows-only on .NET 10).</summary>
-    public sealed class FontSpec
-    {
-        public string Name { get; }
-        public float Size { get; }
-        public FontStyle Style { get; }
-        public bool Bold => (Style & FontStyle.Bold) != 0;
-        public bool Italic => (Style & FontStyle.Italic) != 0;
-        public bool Underline => (Style & FontStyle.Underline) != 0;
-        public FontSpec(string name, float size) : this(name, size, FontStyle.Regular) { }
-        public FontSpec(string name, float size, FontStyle style) { Name = name; Size = size; Style = style; }
-        public FontSpec(string name, float size, FontStyle style, GraphicsUnit unit) : this(name, size, style) { }
-        public FontSpec(string name, float size, FontStyle style, GraphicsUnit unit, byte charSet) : this(name, size, style) { }
-        public FontSpec(FontSpec prototype, FontStyle style) : this(prototype?.Name ?? "Segoe UI", prototype?.Size ?? 9F, style) { }
-        public static FontSpec Default { get; } = new FontSpec("Segoe UI", 9F);
-        /// <summary>System.Drawing.Font is IDisposable; a description holds nothing.</summary>
-        public void Dispose() { }
-    }
 
     /// <summary>An original embedded image (Properties.Resources entry) by name and repository file.</summary>
-    public sealed class ImageResource
+    public sealed class ImageResource : Bitmap
     {
         public string Name { get; }
         public string Path { get; }
         /// <summary>Path is the image file, or the form's .resx for an image stored in it (Name = resx entry).</summary>
         public ImageResource(string name, string path) { Name = name; Path = path; }
+        public override object Clone() => this;
         public override string ToString() => Name;
     }
 
@@ -47,7 +31,8 @@ namespace System.Windows.Forms
     {
         public string Path { get; }
         public ResxResources(string path) { Path = path; }
-        public object GetObject(string name) => new ImageResource(name, Path);
+        /// <summary>A designer resource: an image list's stream (the designer names it "list.ImageStream") or an image.</summary>
+        public object GetObject(string name) => name.EndsWith(".ImageStream", StringComparison.Ordinal) ? new ImageListStreamer(name, Path) : (object)new ImageResource(name, Path);
         public System.Drawing.Icon GetIcon(string name) => null;
         public string GetString(string name) => null;
         public void ApplyResources(object value, string objectName) { }
@@ -95,8 +80,8 @@ namespace System.Windows.Forms
         public static Func<string> GetTextHandler;
         public static Action<string> SetTextHandler;
         static string local = "";
-        public static string GetText() => GetTextHandler != null ? GetTextHandler() ?? "" : local;
-        public static void SetText(string text) { if (SetTextHandler != null) SetTextHandler(text); else local = text ?? ""; }
+        public static string GetText() => GetTextHandler != null ? ToolkitSynchronizationContext.OnUiThread(GetTextHandler) ?? "" : local;
+        public static void SetText(string text) { if (SetTextHandler != null) ToolkitSynchronizationContext.OnUiThread(() => { SetTextHandler(text); return 0; }); else local = text ?? ""; }
         public static bool ContainsText() => GetText().Length > 0;
         public static void Clear() => SetText("");
         // Data objects: the text goes to the platform clipboard; the object (with its private formats) is kept
@@ -104,6 +89,10 @@ namespace System.Windows.Forms
         static DataObject stored;
         public static void SetDataObject(object data) { stored = data as DataObject ?? new DataObject(data); SetText(stored.GetText()); }
         public static void SetDataObject(object data, bool copy) => SetDataObject(data);
+        public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay) => SetDataObject(data);
+        /// <summary>The renderer puts an image on the platform clipboard.</summary>
+        public static Action<System.Drawing.Image> SetImageHandler;
+        public static void SetImage(System.Drawing.Image image) { if (SetImageHandler != null) SetImageHandler(image); }
         public static IDataObject GetDataObject()
         {
             string text = GetText();
@@ -159,7 +148,11 @@ namespace System.Windows.Forms
     public static class ControlNotifications
     {
         public static event Action<Control, string> Changed;
-        internal static void Raise(Control control, string property) => Changed?.Invoke(control, property);
+        internal static void Raise(Control control, string property)
+        {
+            if (ToolkitSynchronizationContext.Defer(() => Changed?.Invoke(control, property))) return;
+            Changed?.Invoke(control, property);
+        }
     }
 
     public class Control : Component, IWin32Window
@@ -183,6 +176,7 @@ namespace System.Windows.Forms
             if (window == IntPtr.Zero) throw new ArgumentException("A native window is required.", nameof(window));
             if (_nativeWindow != IntPtr.Zero) throw new InvalidOperationException("The control already has a native window.");
             _nativeWindow = window;
+            lock (s_nativeWindows) s_nativeWindows[window] = new WeakReference<Control>(this);
             OnHandleCreated(EventArgs.Empty);
         }
         /// <summary>Before the renderer destroys the native window: OnHandleDestroyed, while the window still exists.</summary>
@@ -190,9 +184,21 @@ namespace System.Windows.Forms
         {
             if (_nativeWindow == IntPtr.Zero) return;
             OnHandleDestroyed(EventArgs.Empty);
+            lock (s_nativeWindows) s_nativeWindows.Remove(_nativeWindow);
             _nativeWindow = IntPtr.Zero;
         }
         public bool IsHandleCreated => true;
+        static readonly Dictionary<IntPtr, WeakReference<Control>> s_nativeWindows = new Dictionary<IntPtr, WeakReference<Control>>();
+        /// <summary>The control shown in a native window (only the controls the renderer gives one have a handle).</summary>
+        public static Control FromHandle(IntPtr handle)
+        {
+            lock (s_nativeWindows) return s_nativeWindows.TryGetValue(handle, out var control) && control.TryGetTarget(out Control c) ? c : null;
+        }
+        public static Control FromChildHandle(IntPtr handle) => FromHandle(handle);
+        /// <summary>Mouse capture: set while a mouse button pressed on the control is held (the renderer reports it).</summary>
+        public bool Capture { get; set; }
+        public virtual Size GetPreferredSize(Size proposedSize) => PreferredSize;
+        public virtual Size PreferredSize => Size;
         public bool IsDisposed { get; private set; }
         public bool Disposing => false;
         public string Name { get; set; } = "";
@@ -286,14 +292,16 @@ namespace System.Windows.Forms
         public bool TabStop { get; set; } = true;
         public bool AutoSize { get; set; }
         public AutoSizeMode AutoSizeMode { get; set; }
-        FontSpec _font = FontSpec.Default;
-        public virtual FontSpec Font { get => _font; set => _font = value; }
+        /// <summary>WinForms Control.DefaultFont (the renderer measures with the platform font of this description).</summary>
+        public static Font DefaultFont { get; } = new Font("Segoe UI", 9F);
+        Font _font = DefaultFont;
+        public virtual Font Font { get => _font; set => _font = value; }
         public Color BackColor { get; set; } = SystemColors.Control;
         public ImageLayout BackgroundImageLayout { get; set; }
         public Color ForeColor { get; set; } = SystemColors.ControlText;
-        public ImageResource BackgroundImage { get; set; }
+        public Image BackgroundImage { get; set; }
         public ImeMode ImeMode { get; set; }
-        public RightToLeft RightToLeft { get; set; }
+        public virtual RightToLeft RightToLeft { get; set; }
         public Cursor Cursor { get; set; }
         public bool CausesValidation { get; set; } = true;
         public bool UseWaitCursor { get; set; }
@@ -376,6 +384,7 @@ namespace System.Windows.Forms
         static System.Threading.SynchronizationContext _uiContext;
         static int _uiThread;
         public static void SetUiThreadContext(System.Threading.SynchronizationContext context) { _uiContext = context; _uiThread = Environment.CurrentManagedThreadId; }
+        protected static System.Threading.SynchronizationContext UiThreadContext => _uiContext;
         public object Invoke(Delegate method) => Invoke(method, null);
         public object Invoke(Delegate method, params object[] args)
         {
@@ -398,7 +407,9 @@ namespace System.Windows.Forms
         public Rectangle FocusRectangle { get; private set; }
         public Color FocusRectangleColor { get; private set; }
         internal void SetFocusRectangle(Color color, Rectangle rect) { FocusRectangle = rect; FocusRectangleColor = color; Notify("Refresh"); }
-        public Graphics CreateGraphics() => throw new PlatformNotSupportedException("GDI+ drawing is not available; the renderer owns painting.");
+        /// <summary>A drawing surface of the client area: measurements use the renderer's font metrics; what is drawn on
+        /// it outside a paint event is not shown (WinForms draws it until the next paint).</summary>
+        public Graphics CreateGraphics() => new Graphics(ClientRectangle);
         public void SetBounds(int x, int y, int width, int height) { Location = new Point(x, y); Size = new Size(width, height); }
         public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) => true;
         protected override void Dispose(bool disposing) { IsDisposed = true; base.Dispose(disposing); }
@@ -467,8 +478,11 @@ namespace System.Windows.Forms
         protected virtual void WndProc(ref Message m) { }
         protected virtual void DefWndProc(ref Message m) { }
         protected void SetStyle(ControlStyles flag, bool value) { }
+        protected bool ResizeRedraw { get; set; }
         protected bool GetStyle(ControlStyles flag) => false;
         protected virtual bool DoubleBuffered { get; set; }
+        // Window creation parameters: read by the original controls that override them; nothing creates a Win32 window
+        protected virtual CreateParams CreateParams => new CreateParams();
         protected virtual void OnCreateControl() { }
         protected void UpdateStyles() { }
         protected void RecreateHandle() { }
@@ -551,6 +565,9 @@ namespace System.Windows.Forms
                 owner.Notify("Controls");
                 // A shown parent lays out now, and the added control is created and performs its deferred layouts
                 if (owner.Visible) owner.PerformDeferredLayouts();
+                // A control added to a created window is created at once (WinForms ControlCollection.Add): in a run
+                // without a renderer its user controls get their Load here
+                if (owner.FindForm() is Form form && form.ControlsCreated) Form.CreateControlTree(value);
             }
             public void AddRange(Control[] controls) { foreach (Control c in controls) Add(c); }
             public void Remove(Control value)
@@ -600,12 +617,23 @@ namespace System.Windows.Forms
 
     public class ScrollableControl : Control
     {
+        public ScrollableControl() { VerticalScroll = new VScrollProperties(this); HorizontalScroll = new HScrollProperties(this); }
+        /// <summary>The scroll bars of an auto-scrolling control; the renderer reports their range and position.</summary>
+        public VScrollProperties VerticalScroll { get; }
+        public HScrollProperties HorizontalScroll { get; }
+        protected bool VScroll { get => VerticalScroll.Visible; set => VerticalScroll.Visible = value; }
+        protected bool HScroll { get => HorizontalScroll.Visible; set => HorizontalScroll.Visible = value; }
+        public void ScrollControlIntoView(Control activeControl) => Notify("ScrollIntoView");
+        public event ScrollEventHandler Scroll;
+        protected virtual void OnScroll(ScrollEventArgs se) => Scroll?.Invoke(this, se);
         public bool AutoScroll { get; set; }
         public Size AutoScrollMinSize { get; set; }
         public Point AutoScrollPosition { get; set; }
     }
-    public class ContainerControl : ScrollableControl
+    public interface IContainerControl { Control ActiveControl { get; set; } bool ActivateControl(Control active); }
+    public class ContainerControl : ScrollableControl, IContainerControl
     {
+        public bool ActivateControl(Control active) { ActiveControl = active; return true; }
         public SizeF AutoScaleDimensions { get; set; }
         public AutoScaleMode AutoScaleMode { get; set; }
         public Control ActiveControl { get; set; }
@@ -645,6 +673,7 @@ namespace System.Windows.Forms
     public class SplitContainer : ContainerControl, ISupportInitialize
     {
         int _distance = 50, _width = 4, _panel1Min = 25, _panel2Min = 25, _init;
+        public BorderStyle BorderStyle { get; set; }
         bool _p1Collapsed, _p2Collapsed;
         Orientation _orientation = Orientation.Vertical;
         Size _lastSize;
@@ -744,9 +773,11 @@ namespace System.Windows.Forms
     public class GroupBox : Control { public FlatStyle FlatStyle { get; set; } }
     public class Label : Control
     {
+        public bool UseCompatibleTextRendering { get; set; }
+        public bool AutoEllipsis { get; set; }
         public ContentAlignment TextAlign { get; set; } = ContentAlignment.TopLeft;
         public BorderStyle BorderStyle { get; set; }
-        public ImageResource Image { get; set; }
+        public Image Image { get; set; }
         public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleCenter;
         public bool UseMnemonic { get; set; } = true;
     }
@@ -758,18 +789,21 @@ namespace System.Windows.Forms
         public Color ActiveLinkColor { get; set; } = Color.Red;
         public Color VisitedLinkColor { get; set; } = Color.FromArgb(128, 0, 128);
         public bool LinkVisited { get; set; }
+        public LinkBehavior LinkBehavior { get; set; }
+        public Color DisabledLinkColor { get; set; } = Color.FromArgb(133, 133, 133);
         public DialogResult DialogResult { get; set; }
         public void NotifyDefault(bool value) { }
         public void PerformClick() => RaiseLinkClicked();
         public void RaiseLinkClicked() => LinkClicked?.Invoke(this, new LinkLabelLinkClickedEventArgs());
     }
     public class LinkLabelLinkClickedEventArgs : EventArgs { }
+    public enum LinkBehavior { SystemDefault, AlwaysUnderline, HoverUnderline, NeverUnderline }
     public delegate void LinkLabelLinkClickedEventHandler(object sender, LinkLabelLinkClickedEventArgs e);
 
     public abstract class ButtonBase : Control
     {
         public FlatStyle FlatStyle { get; set; }
-        public ImageResource Image { get; set; }
+        public Image Image { get; set; }
         public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleCenter;
         public ContentAlignment TextAlign { get; set; } = ContentAlignment.MiddleCenter;
         public TextImageRelation TextImageRelation { get; set; }
@@ -843,6 +877,23 @@ namespace System.Windows.Forms
         public bool Modified { get; set; }
         public string[] Lines { get => Text.Split('\n'); set => Text = string.Join(Environment.NewLine, value ?? new string[0]); }
         public void SelectAll() { SelectionStart = 0; SelectionLength = Text.Length; Notify("Selection"); }
+        public int TextLength => Text.Length;
+        /// <summary>The line of a character: lines end at line feeds (the renderer wraps nothing it does not report).</summary>
+        public int GetLineFromCharIndex(int index)
+        {
+            string text = Text;
+            int line = 0;
+            for (int i = 0; i < Math.Min(index, text.Length); i++) if (text[i] == '\n') line++;
+            return line;
+        }
+        public int GetFirstCharIndexFromLine(int lineNumber)
+        {
+            string text = Text;
+            if (lineNumber == 0) return 0;
+            int line = 0;
+            for (int i = 0; i < text.Length; i++) if (text[i] == '\n' && ++line == lineNumber) return i + 1;
+            return -1;
+        }
         public void Select(int start, int length) { SelectionStart = start; SelectionLength = length; Notify("Selection"); }
         public void AppendText(string text) => Text += text;
         public void Clear() => Text = "";
@@ -869,6 +920,13 @@ namespace System.Windows.Forms
     {
         public string Rtf { get; set; }
         public RichTextBoxScrollBars ScrollBars { get; set; }
+        public bool DetectUrls { get; set; } = true;
+        /// <summary>Paragraph line spacing (rich edit PARAFORMAT rule and spacing in twips), drawn by the renderer.</summary>
+        public (byte Rule, int Spacing) LineSpacing { get; set; }
+        /// <summary>Scrolls the box to its first line (rich edit WM_VSCROLL SB_TOP).</summary>
+        public void VerticalScrollToTop() => Notify("ScrollTop");
+        public bool EnableAutoDragDrop { get; set; }
+        public void Paste(DataFormats.Format clipFormat) => Paste();
         public event EventHandler VScroll;
         protected virtual void OnVScroll(EventArgs e) => VScroll?.Invoke(this, e);
     }
@@ -1027,7 +1085,7 @@ namespace System.Windows.Forms
         public void Increment(int value) => Value = Math.Max(Minimum, Math.Min(Maximum, _value + value));
     }
     public enum ProgressBarStyle { Blocks, Continuous, Marquee }
-    public class PictureBox : Control { public ImageResource Image { get; set; } public PictureBoxSizeMode SizeMode { get; set; } public BorderStyle BorderStyle { get; set; } }
+    public class PictureBox : Control { public Image Image { get; set; } public PictureBoxSizeMode SizeMode { get; set; } public BorderStyle BorderStyle { get; set; } }
     public enum PictureBoxSizeMode { Normal, StretchImage, AutoSize, CenterImage, Zoom }
 
     public class ToolTip : Component
@@ -1042,6 +1100,27 @@ namespace System.Windows.Forms
         public bool IsBalloon { get; set; }
         public void SetToolTip(Control control, string caption) { tips[control] = caption; ControlNotifications.Raise(control, "ToolTip"); }
         public string GetToolTip(Control control) => tips.TryGetValue(control, out string text) ? text : "";
+        public string ToolTipTitle { get; set; } = "";
+        public ToolTipIcon ToolTipIcon { get; set; }
+        public bool UseAnimation { get; set; } = true;
+        public bool UseFading { get; set; } = true;
+        /// <summary>A tool tip shown now (not on hover): the renderer shows Shown at the window's client point.</summary>
+        public (string Text, IWin32Window Window, Point Location, int Duration)? Shown { get; private set; }
+        public void Show(string text, IWin32Window window) => Show(text, window, Point.Empty, 0);
+        public void Show(string text, IWin32Window window, int duration) => Show(text, window, Point.Empty, duration);
+        public void Show(string text, IWin32Window window, Point point) => Show(text, window, point, 0);
+        public void Show(string text, IWin32Window window, int x, int y) => Show(text, window, new Point(x, y), 0);
+        public void Show(string text, IWin32Window window, int x, int y, int duration) => Show(text, window, new Point(x, y), duration);
+        public void Show(string text, IWin32Window window, Point point, int duration)
+        {
+            Shown = (text, window, point, duration);
+            if (window is Control control) ControlNotifications.Raise(control, "ToolTipShow");
+        }
+        public void Hide(IWin32Window window)
+        {
+            Shown = null;
+            if (window is Control control) ControlNotifications.Raise(control, "ToolTipShow");
+        }
         public void RemoveAll() => tips.Clear();
     }
 
@@ -1054,17 +1133,24 @@ namespace System.Windows.Forms
         public ColorDepth ColorDepth { get; set; }
         public Color TransparentColor { get; set; }
         public ImageListStreamer ImageStream { get; set; }
-        public class ImageCollection : List<ImageResource>
+        public class ImageCollection : List<Image>
         {
-            readonly Dictionary<string, ImageResource> keyed = new Dictionary<string, ImageResource>();
-            public void Add(string key, ImageResource image) { keyed[key] = image; Add(image); }
+            readonly Dictionary<string, Image> keyed = new Dictionary<string, Image>();
+            public void Add(string key, Image image) { keyed[key] = image; Add(image); }
             public void SetKeyName(int index, string name) { }
-            public ImageResource this[string key] => keyed.TryGetValue(key, out ImageResource image) ? image : null;
+            public Image this[string key] => keyed.TryGetValue(key, out Image image) ? image : null;
             public bool ContainsKey(string key) => keyed.ContainsKey(key);
         }
     }
     public enum ColorDepth { Depth4Bit = 4, Depth8Bit = 8, Depth16Bit = 16, Depth24Bit = 24, Depth32Bit = 32 }
-    public sealed class ImageListStreamer { }
+    /// <summary>A designer image list stream by .resx entry; its bitmap strip is not deserialized here (the renderer
+    /// reads the images of the list from their original files).</summary>
+    public sealed class ImageListStreamer
+    {
+        public ImageListStreamer(string name, string path) { Name = name; Path = path; }
+        public string Name { get; }
+        public string Path { get; }
+    }
 
     public class Screen
     {
@@ -1131,7 +1217,7 @@ namespace AutocompleteMenuNS
             new System.Collections.Generic.Dictionary<System.Windows.Forms.Control, AutocompleteMenu>();
         public AutocompleteMenu() { }
         public bool AllowsTabKey { get; set; }
-        public System.Windows.Forms.FontSpec Font { get; set; }
+        public Font Font { get; set; }
         public System.Windows.Forms.ImageList ImageList { get; set; }
         public string[] Items { get; set; } = new string[0];
         public System.Drawing.Size MaximumSize { get; set; }

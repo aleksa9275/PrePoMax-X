@@ -378,7 +378,7 @@ class ToolkitServices:
         Timer.StateChanged += self.timer_handler
         self.file_handler = System.Func[FileDialog, System.Windows.Forms.IWin32Window, DialogResult](self.file_dialog)
         FileDialog.ShowHandler = self.file_handler
-        self.measure_handler = System.Func[System.String, System.Windows.Forms.FontSpec, System.Drawing.Size](self.measure)
+        self.measure_handler = System.Func[System.String, System.Drawing.Font, System.Drawing.Size](self.measure)
         TextRenderer.MeasureHandler = self.measure_handler
         self.close_handler = System.Action[System.IntPtr](self.close_message_box)
         MessageBox.CloseHandler = self.close_handler
@@ -854,6 +854,12 @@ def _qpen(pen):
 
 
 def _qbrush(brush):
+    colors = getattr(brush, 'LinearColors', None)
+    if colors is not None:
+        gradient = QtGui.QLinearGradient(float(brush.Start.X), float(brush.Start.Y), float(brush.End.X), float(brush.End.Y))
+        gradient.setColorAt(0, qcolor(colors[0]))
+        gradient.setColorAt(1, qcolor(colors[len(colors) - 1]))
+        return QtGui.QBrush(gradient)
     color = getattr(brush, 'Color', None)
     return QtGui.QBrush(qcolor(color)) if color is not None else QtGui.QBrush()
 

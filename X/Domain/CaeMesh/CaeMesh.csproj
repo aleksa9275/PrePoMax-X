@@ -3,6 +3,8 @@
   <Import Project="Sources.g.props" />
   <ItemGroup>
     <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+    <!-- System.Windows.Forms of the original project: Application.DoEvents (the headless control model) -->
+    <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
     <ProjectReference Include="../GmshCommon/GmshCommon.csproj" />
   </ItemGroup>
 </Project>

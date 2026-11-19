@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The whole original UserControls assembly: the domain subset (X/Domain/UserControls) and the controls generated
+       by X/UI/generate-original-forms.py (forms and controls shared with the workbench, the rest in X/App/Original) -->
+  <PropertyGroup><AssemblyName>UserControls</AssemblyName><RootNamespace>UserControls</RootNamespace></PropertyGroup>
+  <Import Project="../../Domain/UserControls/Sources.g.props" />
+  <ItemGroup>
+    <!-- ModelTree.cs declares ViewType itself -->
+    <Compile Remove="$(RepositoryRoot)X/Controller/Host/ViewType.cs" />
+    <Compile Include="../../UI/Workbench/OriginalForms/UserControls/**/*.g.cs" LinkBase="Original/Shared" />
+    <Compile Include="../Original/UserControls/**/*.g.cs" LinkBase="Original/App" />
+    <Compile Include="ColorEditorEx.cs" />
+    <!-- CaeGlobals KeyboardHook/MouseHook: excluded from the domain CaeGlobals as UI layer; the controls use them -->
+    <Compile Include="../Original/CaeGlobals/**/*.g.cs" LinkBase="Original/App/CaeGlobals" />
+    <ProjectReference Include="../../Domain/CaeGlobals/CaeGlobals.csproj" />
+    <ProjectReference Include="../../Domain/CaeJob/CaeJob.csproj" />
+    <ProjectReference Include="../../Domain/CaeMesh/CaeMesh.csproj" />
+    <ProjectReference Include="../../Domain/CaeModel/CaeModel.csproj" />
+    <ProjectReference Include="../../Domain/CaeResults/CaeResults.csproj" />
+    <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
+  </ItemGroup>
+</Project>

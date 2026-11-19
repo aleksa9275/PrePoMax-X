@@ -20,24 +20,6 @@ namespace System.Windows.Forms
 
 namespace System.Windows.Forms
 {
-    /// <summary>Only the message-pump hook used by original domain code. The
-    /// cross-platform UI may set <see cref="DoEventsHandler"/>; without a UI it
-    /// does nothing.</summary>
-    public static class Application
-    {
-        public static Action DoEventsHandler;
-        public static string StartupPath => AppContext.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar);
-        public static string ProductVersion => System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "3.0.0.0";
-        public static bool MessageLoop => DoEventsHandler != null;
-        public static void DoEvents() => DoEventsHandler?.Invoke();
-        // Message filters and the idle event: a filter sees no Win32 message here; the UI raises Idle after it has
-        // processed its pending events
-        static readonly System.Collections.Generic.List<IMessageFilter> filters = new System.Collections.Generic.List<IMessageFilter>();
-        public static event EventHandler Idle;
-        public static void AddMessageFilter(IMessageFilter filter) { lock (filters) filters.Add(filter); }
-        public static void RemoveMessageFilter(IMessageFilter filter) { lock (filters) filters.Remove(filter); }
-        public static void RaiseIdle() => Idle?.Invoke(null, EventArgs.Empty);
-    }
     public interface IMessageFilter { bool PreFilterMessage(ref Message m); }
     public struct Message
     {
@@ -62,5 +44,3 @@ namespace System.Windows.Forms
     }
 }
 namespace System.Windows.Forms { public delegate void MethodInvoker(); }
-namespace System.Windows.Forms.Design { public sealed class FolderNameEditor : System.Drawing.Design.UITypeEditor {} }
-namespace System.Windows.Forms.Design { public sealed class FileNameEditor : System.Drawing.Design.UITypeEditor {} }

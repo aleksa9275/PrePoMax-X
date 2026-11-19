@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "CommandLineParser": {
+        "type": "Transitive",
+        "resolved": "2.9.1",
+        "contentHash": "OE0sl1/sQ37bjVsPKKtwQlWDgqaxWgtme3xZz7JssWUzg5JpMIyHgCTY9MVMxOg48fJ1AgGT3tgdH5m/kQ5xhA=="
+      },
+      "ExtendedNumerics.BigDecimal": {
+        "type": "Transitive",
+        "resolved": "2025.1001.2.129",
+        "contentHash": "+woGT1lsBtwkntOpx2EZbdbySv0aWPefE0vrfvclxVdbi4oa2bbtphFPWgMiQe+kRCPICbfFJwp6w1DuR7Ge2Q=="
+      },
+      "ncalc": {
+        "type": "Transitive",
+        "resolved": "1.3.8",
+        "contentHash": "T3kt6mWc70x3Ex5PxOmuILy563CGAdoAnyknXX7Du2/SXs2T94hNwc5CVwZcwCu5/A2ZBZhnHnc5dpcqCRGQ0A=="
+      },
+      "OptimizedPriorityQueue": {
+        "type": "Transitive",
+        "resolved": "5.1.0",
+        "contentHash": "0AnX6kAs0GiLrSqrHKe5mpQhJSHTmXeqLNucV2CxGATP/I9UzLMc1N4MtS/z8qB6mcgX61OjHdY3YbOmETGs+A=="
+      },
+      "Parlot": {
+        "type": "Transitive",
+        "resolved": "0.0.28",
+        "contentHash": "EQ9vOeuPP9qOApZ2WNaPtNaeyKhG+uul4p6/MwfCB9NB1Wn8ZuxJWDRF38QnffT2NmXWk/pz6tko+aNAAiua4A=="
+      },
+      "pythonnet": {
+        "type": "Transitive",
+        "resolved": "3.1.0",
+        "contentHash": "JPu5xzgJ2wuCRg7K7Q3E/TP5bmUdYvSDCj1/hO5v50S3FFUzwa0YYAouW/u8WGyO94pHJRCXM4zIWUVbHIrJ+A=="
+      },
+      "System.CodeDom": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "QWERdKi/tQAx+MbrPxTGcpchqMANnVXNiv2r2tILBBB38E74buD+fABSUhozZ1G9kjbadFB0m+HPFMkhJPeFvA=="
+      },
+      "System.Formats.Nrbf": {
+        "type": "Transitive",
+        "resolved": "10.0.14",
+        "contentHash": "pl9R3NfEKEYnU9Dj74AKRpe3tFQEA4tcLepHLOUQVT2vAyTW6E+WeKS3+JydxYnig4hXtLOrLNDcBkUNzm+9FA=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "dependencies": {
+          "System.CodeDom": "10.0.0"
+        }
+      },
+      "UnitsNet": {
+        "type": "Transitive",
+        "resolved": "4.89.1",
+        "contentHash": "B9+ViJEjcgmwRxRH2lZTc7FolLHHPET9UYPNr5uoFkt80q+iKKO1iPD6+YpG9zrOSBJjKHmDgswb9QnqWolj+g=="
+      },
+      "apis": {
+        "type": "Project",
+        "dependencies": {
+          "CaeJob": "[1.0.0, )",
+          "CaeModel": "[1.0.0, )",
+          "pythonnet": "[3.1.0, 3.1.0]"
+        }
+      },
+      "caeglobals": {
+        "type": "Project",
+        "dependencies": {
+          "ExtendedNumerics.BigDecimal": "[2025.1001.2.129, 2025.1001.2.129]",
+          "Parlot": "[0.0.28, 0.0.28]",
+          "PrePoMaxX.WinFormsCompat": "[1.0.0, )",
+          "System.Management": "[10.0.0, 10.0.0]",
+          "UnitsNet": "[4.89.1, 4.89.1]",
+          "ncalc": "[1.3.8, 1.3.8]"
+        }
+      },
+      "caejob": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
+        }
+      },
+      "caemesh": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )",
+          "GmshCommon": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
+        }
+      },
+      "caemodel": {
+        "type": "Project",
+        "dependencies": {
+          "CaeResults": "[1.0.0, )",
+          "STL": "[1.0.0, )",
+          "ThreeMF": "[1.0.0, )",
+          "vtkControl": "[1.0.0, )"
+        }
+      },
+      "caeresults": {
+        "type": "Project",
+        "dependencies": {
+          "CaeMesh": "[1.0.0, )",
+          "OptimizedPriorityQueue": "[5.1.0, 5.1.0]"
+        }
+      },
+      "gmshcommon": {
+        "type": "Project"
+      },
+      "persistence": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )",
+          "System.Formats.Nrbf": "[10.0.14, 10.0.14]"
+        }
+      },
+      "prepomax": {
+        "type": "Project",
+        "dependencies": {
+          "APIs": "[1.0.0, )",
+          "CaeJob": "[1.0.0, )",
+          "CaeModel": "[1.0.0, )",
+          "CommandLineParser": "[2.9.1, 2.9.1]",
+          "Persistence": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )",
+          "UserControls": "[1.0.0, )"
+        }
+      },
+      "PrePoMaxX.FormsCompat": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )"
+        }
+      },
+      "PrePoMaxX.WinFormsCompat": {
+        "type": "Project"
+      },
+      "stl": {
+        "type": "Project"
+      },
+      "threemf": {
+        "type": "Project"
+      },
+      "usercontrols": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )",
+          "CaeJob": "[1.0.0, )",
+          "CaeMesh": "[1.0.0, )",
+          "CaeModel": "[1.0.0, )",
+          "CaeResults": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
+        }
+      },
+      "vtkcontrol": {
+        "type": "Project",
+        "dependencies": {
+          "CaeGlobals": "[1.0.0, )",
+          "CaeMesh": "[1.0.0, )",
+          "PrePoMaxX.FormsCompat": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}

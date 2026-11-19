@@ -18,7 +18,8 @@ namespace System.Windows.Forms
         public static event Action<Timer> StateChanged;
         public event EventHandler Tick;
         public object Tag { get; set; }
-        public bool Enabled { get => _enabled; set { if (_enabled == value) return; _enabled = value; StateChanged?.Invoke(this); } }
+        public bool Enabled { get => _enabled; set { if (_enabled == value) return; _enabled = value; RaiseStateChanged(); } }
+        void RaiseStateChanged() { if (!ToolkitSynchronizationContext.Defer(() => StateChanged?.Invoke(this))) StateChanged?.Invoke(this); }
         public int Interval
         {
             get => _interval;
@@ -27,7 +28,7 @@ namespace System.Windows.Forms
                 if (value < 1) throw new ArgumentOutOfRangeException(nameof(Interval), $"Interval value '{value}' is not valid. Interval must be greater than 0.");
                 if (_interval == value) return;
                 _interval = value;
-                if (_enabled) StateChanged?.Invoke(this);
+                if (_enabled) RaiseStateChanged();
             }
         }
         public void Start() => Enabled = true;
@@ -122,7 +123,13 @@ namespace System.Windows.Forms
         public bool SupportMultiDottedExtensions { get; set; }
         public abstract bool IsSave { get; }
         public DialogResult ShowDialog() => ShowDialog(null);
-        public DialogResult ShowDialog(IWin32Window owner) => ShowHandler?.Invoke(this, owner) ?? DialogResult.Cancel;
+        public DialogResult ShowDialog(IWin32Window owner)
+        {
+            if (ShowHandler == null) return DialogResult.Cancel;
+            IntPtr dialog = NativeDialogs.Opened(Title);
+            try { return ToolkitSynchronizationContext.OnUiThread(() => ShowHandler(this, owner)); }
+            finally { NativeDialogs.Closed(dialog); }
+        }
         public void Reset() { FileName = ""; Filter = ""; Title = ""; InitialDirectory = ""; }
     }
     public class OpenFileDialog : FileDialog { public bool Multiselect { get; set; } public override bool IsSave => false; }
@@ -260,8 +267,9 @@ namespace System.Windows.Forms
             lock (open) open[handle] = caption ?? "";
             IntPtr previous = showing;
             showing = handle;
+            IntPtr dialog = NativeDialogs.Opened(caption);
             try { return presenter(owner, text, caption, buttons, icon); }
-            finally { showing = previous; lock (open) open.Remove(handle); }
+            finally { showing = previous; lock (open) open.Remove(handle); NativeDialogs.Closed(dialog); }
         }
         /// <summary>user32 FindWindow("#32770", caption) for message boxes.</summary>
         public static IntPtr FindOpen(string className, string caption)
@@ -293,10 +301,6 @@ namespace System.Windows.Forms
     public static class GroupBoxRenderer
     {
         public static void DrawGroupBox(Graphics g, Rectangle bounds, VisualStyles.GroupBoxState state) => throw new PlatformNotSupportedException("GDI+ painting: the renderer draws group boxes.");
-    }
-    public static class GdiPaintingExtensions
-    {
-        public static void DrawImage(this Graphics g, ImageResource image, Rectangle rect) => throw new PlatformNotSupportedException("GDI+ painting: the renderer draws images.");
     }
 }
 

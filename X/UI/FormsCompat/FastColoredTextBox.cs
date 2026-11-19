@@ -684,8 +684,11 @@ namespace FastColoredTextBoxNS
 
     /// <summary>The code editor control.</summary>
     [ToolboxItem(true)]
-    public class FastColoredTextBox : UserControl
+    public class FastColoredTextBox : UserControl, System.ComponentModel.ISupportInitialize
     {
+        // Designer initialization brackets (FastColoredTextBox is an ISupportInitialize)
+        public void BeginInit() { }
+        public void EndInit() { }
         readonly List<Line> lines = new List<Line>();
         readonly CommandHistory history;
         Range selection;
@@ -710,7 +713,7 @@ namespace FastColoredTextBoxNS
             HotkeysMapping = new HotkeysMapping();
             HotkeysMapping.InitDefault();
             Styles = new Style[sizeof(ushort) * 8];
-            Font = new FontSpec("Courier New", 9.75f);
+            Font = new Font("Courier New", 9.75f);
             BackColor = Color.White;
             ForeColor = Color.Black;
             delayedTextChangedTimer.Interval = DelayedTextChangedInterval;
@@ -858,7 +861,12 @@ namespace FastColoredTextBoxNS
         public int CharWidth { get; set; } = 8;
         public int CharHeight { get; set; } = 15;
         public int LeftIndent { get; set; }
-        public int VerticalScrollValue { get; set; }
+        /// <summary>The vertical scroll position (VerticalScroll.Value, as in FastColoredTextBox).</summary>
+        public int VerticalScrollValue
+        {
+            get => VerticalScroll.Value;
+            set { if (value > VerticalScroll.Maximum) VerticalScroll.Maximum = value; VerticalScroll.Value = Math.Max(VerticalScroll.Minimum, value); }
+        }
         public int HorizontalScrollValue { get; set; }
         internal int VisibleLinesCount => Math.Max(1, ClientSize.Height / Math.Max(1, CharHeight + LineInterval));
 
@@ -901,6 +909,33 @@ namespace FastColoredTextBoxNS
 
         // Styles
         public int GetStyleIndex(Style style) => Array.IndexOf(Styles, style);
+        /// <summary>The styles of the character at a place (FastColoredTextBox.GetStylesOfChar).</summary>
+        public List<Style> GetStylesOfChar(Place place)
+        {
+            var result = new List<Style>();
+            if (place.iLine < 0 || place.iLine >= LinesCount || place.iChar < 0 || place.iChar >= this[place.iLine].Count) return result;
+            StyleIndex mask = this[place.iLine][place.iChar].style;
+            for (int i = 0; i < Styles.Length; i++)
+                if (Styles[i] != null && (mask & Range.ToStyleIndex(i)) != 0) result.Add(Styles[i]);
+            return result;
+        }
+        public bool WordWrapAutoIndent { get; set; } = true;
+        public int WordWrapIndent { get; set; }
+        public bool SelectionHighlightingForLineBreaksEnabled { get; set; } = true;
+        /// <summary>The first and last line shown in the view, reported by the renderer (all lines until it does).</summary>
+        public int VisibleFirstLine { get; set; }
+        public int VisibleLastLine { get; set; } = int.MaxValue;
+        public Range VisibleRange
+        {
+            get
+            {
+                if (LinesCount == 0) return new Range(this, new Place(0, 0), new Place(0, 0));
+                int first = Math.Max(0, Math.Min(VisibleFirstLine, LinesCount - 1)), last = Math.Max(first, Math.Min(VisibleLastLine, LinesCount - 1));
+                return new Range(this, new Place(0, first), new Place(this[last].Count, last));
+            }
+        }
+        /// <summary>The scroll range follows the text; the renderer recomputes it.</summary>
+        public void UpdateScrollbars() => Notify("Scrollbars");
         public StyleIndex GetStyleIndexMask(Style[] styles)
         {
             StyleIndex mask = StyleIndex.None;
@@ -1981,7 +2016,7 @@ namespace FastColoredTextBoxNS
         public ImageList ImageList { get; set; }
         public Size MinimumSize { get; set; }
         public Size MaximumSize { get; set; } = new Size(180, 180);
-        public FontSpec Font { get; set; } = new FontSpec("Microsoft Sans Serif", 9);
+        public Font Font { get; set; } = new Font("Microsoft Sans Serif", 9);
         public int ItemHeight => Math.Max(18, (int)Math.Ceiling((Font?.Size ?? 9) * 96 / 72) + 4);
         public int Count => visibleItems.Count;
         public IReadOnlyList<AutocompleteItem> VisibleItems => visibleItems;
@@ -2176,7 +2211,7 @@ namespace FastColoredTextBoxNS
         public bool AlwaysShowTooltip { get => listView.AlwaysShowTooltip; set => listView.AlwaysShowTooltip = value; }
         public Color SelectedColor { get => listView.SelectedColor; set => listView.SelectedColor = value; }
         public Color HoveredColor { get => listView.HoveredColor; set => listView.HoveredColor = value; }
-        public FontSpec Font { get => listView.Font; set => listView.Font = value; }
+        public Font Font { get => listView.Font; set => listView.Font = value; }
         public Size MinimumSize { get => listView.MinimumSize; set => listView.MinimumSize = value; }
         public Size MaximumSize { get => listView.MaximumSize; set => listView.MaximumSize = value; }
         public ImageList ImageList { get => listView.ImageList; set => listView.ImageList = value; }

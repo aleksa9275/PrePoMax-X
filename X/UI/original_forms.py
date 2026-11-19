@@ -1046,6 +1046,37 @@ class FormWindow(QtWidgets.QDialog):
         super().keyPressEvent(event)
 
 
+class _SyncRequest(QtCore.QObject):
+    """A sync requested on another thread (original code changing controls from a task) runs on the
+    user-interface thread: the signal is queued to the thread this object lives in."""
+    requested = QtCore.pyqtSignal()
+    call = QtCore.pyqtSignal(object)
+
+    def __init__(self):
+        super().__init__()
+        self.call.connect(lambda job: job(), QtCore.Qt.ConnectionType.QueuedConnection)
+
+    def on_ui_thread(self, function):
+        """Runs function on the user-interface thread and returns its result (the caller waits)."""
+        if QtCore.QThread.currentThread() is self.thread():
+            return function()
+        import threading
+        done, box = threading.Event(), {}
+
+        def job():
+            try:
+                box['value'] = function()
+            except BaseException as error:
+                box['error'] = error
+            finally:
+                done.set()
+        self.call.emit(job)
+        done.wait()
+        if 'error' in box:
+            raise box['error']
+        return box.get('value')
+
+
 class OriginalFormRenderer:
     """Keeps a Qt window for every visible original form and mirrors control-model notifications."""
 
@@ -1066,6 +1097,8 @@ class OriginalFormRenderer:
         self.clipboard_set = System.Action[System.String](lambda text: QtWidgets.QApplication.clipboard().setText(str(text)))
         Clipboard.GetTextHandler, Clipboard.SetTextHandler = self.clipboard_get, self.clipboard_set
         self.services = oc.ToolkitServices(self)
+        self.sync_request = _SyncRequest()
+        self.sync_request.requested.connect(self.sync_soon, QtCore.Qt.ConnectionType.QueuedConnection)
         self.update_screens()
 
     def show_context_menu(self, strip, global_position, owner=None):
@@ -1115,6 +1148,9 @@ class OriginalFormRenderer:
         self.sync_soon()
 
     def sync_soon(self):
+        if QtCore.QThread.currentThread() is not self.sync_request.thread():
+            self.sync_request.requested.emit()
+            return
         if not self.pending:
             self.pending = True
             QtCore.QTimer.singleShot(0, self.sync)
@@ -1172,6 +1208,29 @@ class OriginalFormRenderer:
     def show_dialog(self, form):
         """Form.ShowDialog: the form is shown application-modal and a nested event loop runs until it closes
         (WinForms: a DialogResult or Close ends the modal loop)."""
+        if QtCore.QThread.currentThread() is not self.sync_request.thread():
+            # Shown from another thread (the original splash screen runs on a thread of its own): the window lives
+            # on the user-interface thread, which keeps its own event loop; the calling thread waits for the form
+            # to close, as in its own WinForms modal loop
+            import time
+
+            def open_window():
+                form.Show()
+                self.flush()
+                window = self.windows.get(form)
+                if window is not None:
+                    window.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
+            self.sync_request.on_ui_thread(open_window)
+            while form.Visible:
+                time.sleep(0.02)
+
+            def close_window():
+                window = self.windows.get(form)
+                if window is not None:
+                    window.setWindowModality(QtCore.Qt.WindowModality.NonModal)
+                    window.hide()
+            self.sync_request.on_ui_thread(close_window)
+            return form.DialogResult
         form.Show()
         self.flush()
         window = self.windows.get(form)
@@ -1203,7 +1262,11 @@ class OriginalFormRenderer:
         except Exception as error:
             # WinForms reports an input the original handlers did not catch (e.g. an invalid grid value)
             # in a message box; it goes through the original MessageBoxes presenter.
-            from authoring_widgets import message
+            try:
+                from authoring_widgets import message
+            except ImportError:  # the original application (main_form.py) has no workbench sessions
+                def message(error):
+                    return str(getattr(error, 'Message', None) or error)
             from CaeGlobals import MessageBoxes
             MessageBoxes.ShowError(message(error))
 
@@ -1216,7 +1279,11 @@ class OriginalFormRenderer:
     def icon(self, image):
         if image is None:
             return None
-        path, name = str(image.Path), str(image.Name)
+        # An original resource image (Properties.Resources, designer .resx); a bitmap made in code has no file
+        resource = image if hasattr(image, 'Path') else getattr(image, 'Source', None)
+        if resource is None or not hasattr(resource, 'Path'):
+            return None
+        path, name = str(resource.Path), str(resource.Name)
         key = path + '#' + name if path.endswith('.resx') else path
         if key not in self.icons:
             if path.endswith('.resx'):

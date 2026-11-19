@@ -22,6 +22,17 @@ namespace ZedGraph
 
     public class FontSpec
     {
+        public FontSpec() { }
+        public FontSpec(FontSpec rhs)
+        {
+            Size = rhs.Size; Family = rhs.Family; IsBold = rhs.IsBold; IsItalic = rhs.IsItalic; IsUnderline = rhs.IsUnderline;
+            FontColor = rhs.FontColor; Angle = rhs.Angle; Fill = new Fill(rhs.Fill.Color) { Type = rhs.Fill.Type }; Border.IsVisible = rhs.Border.IsVisible;
+            Border.Color = rhs.Border.Color; Border.Width = rhs.Border.Width;
+        }
+        public FontSpec(string family, float size, Color color, bool isBold, bool isItalic, bool isUnderline)
+        { Family = family; Size = size; FontColor = color; IsBold = isBold; IsItalic = isItalic; IsUnderline = isUnderline; }
+        public bool IsUnderline { get; set; }
+        public float Angle { get; set; }
         public float Size { get; set; } = 12;
         public string Family { get; set; } = "Arial";
         public bool IsBold { get; set; }
@@ -64,6 +75,18 @@ namespace ZedGraph
         public double MaxGrace { get; set; } = DefaultMaxGrace;
         public bool IsVisible { get; set; } = true;
         public bool IsPreventLabelOverlap { get; set; } = true;
+        public bool IsReverse { get; set; }
+        /// <summary>ZedGraph Scale.Transform: the pixel of a value inside the chart rectangle (Chart.Rect, set by the
+        /// renderer when it lays out the pane) - left to right for the X axis, bottom to top for the Y axes.</summary>
+        public float Transform(double x)
+        {
+            RectangleF rect = Owner?.Pane?.Chart.Rect ?? RectangleF.Empty;
+            bool log = Owner?.Type == AxisType.Log;
+            double min = log ? Math.Log10(_min) : _min, max = log ? Math.Log10(_max) : _max, v = log ? Math.Log10(x) : x;
+            double ratio = max == min ? 0 : (v - min) / (max - min);
+            if (IsReverse) ratio = 1 - ratio;
+            return Owner is XAxis ? (float)(rect.Left + ratio * rect.Width) : (float)(rect.Bottom - ratio * rect.Height);
+        }
         public bool MagAuto { get; set; } = true;
         public int Mag { get; set; }
         public string Format { get; set; } = "g";
@@ -126,6 +149,7 @@ namespace ZedGraph
     }
     public class Axis
     {
+        internal GraphPane Pane;
         protected Axis() { Scale.Owner = this; }
         public AxisLabel Title { get; } = new AxisLabel();
         public Scale Scale { get; } = new Scale();
@@ -218,8 +242,31 @@ namespace ZedGraph
         public ZoomState Pop(GraphPane pane) { if (IsEmpty) return null; ZoomState s = this[Count - 1]; RemoveAt(Count - 1); s.ApplyState(pane); return s; }
     }
 
+    /// <summary>Text, lines and boxes placed on a pane (ZedGraph GraphObj); the renderer draws them.</summary>
+    public abstract class GraphObj { public bool IsVisible { get; set; } = true; public object Tag { get; set; } public int ZOrder { get; set; } }
+    public class GraphObjList : List<GraphObj> { }
+    /// <summary>The pane collection of a ZedGraphControl (one pane here: GraphPane).</summary>
+    public class MasterPane { public Fill Fill { get; set; } = new Fill(Color.White); public Border Border { get; } = new Border(); public float InnerPaneGap { get; set; } = 10; }
+
     public class GraphPane
     {
+        public GraphPane() { foreach (Axis axis in Axes) axis.Pane = this; }
+        public GraphObjList GraphObjList { get; } = new GraphObjList();
+        /// <summary>ZedGraph FindNearestObject: the legend entry, curve or graph object under a point. The renderer
+        /// draws the legend and reports the entry under the mouse (LegendHit); curves are found by the original
+        /// caller from the axis scales (Scale.Transform). Returns the reported legend entry, else false.</summary>
+        public bool FindNearestObject(PointF mousePt, Graphics g, out object nearestObj, out int index)
+        {
+            nearestObj = null; index = -1;
+            if (LegendHit != null && LegendHit(mousePt) is int entry && entry >= 0 && entry < CurveList.Count)
+            {
+                nearestObj = Legend; index = entry;
+                return true;
+            }
+            return false;
+        }
+        /// <summary>Renderer: the legend entry (curve index) at a pane point, or null.</summary>
+        public Func<PointF, int?> LegendHit { get; set; }
         public CurveList CurveList { get; } = new CurveList();
         public Label Title { get; } = new Label();
         public Legend Legend { get; } = new Legend();
@@ -281,6 +328,16 @@ namespace ZedGraph
 
     public class ZedGraphControl : Control
     {
+        public delegate bool ZedMouseEventHandler(ZedGraphControl sender, MouseEventArgs e);
+        /// <summary>Raised before the control's own handling; a handler returning true consumes the event.</summary>
+        public event ZedMouseEventHandler MouseDownEvent, MouseUpEvent, MouseMoveEvent, DoubleClickEvent;
+        /// <summary>Renderer input: a mouse press/double click on the graph (true when a handler consumed it).</summary>
+        public bool RaiseZedMouseDown(MouseEventArgs e) => MouseDownEvent?.Invoke(this, e) ?? false;
+        public bool RaiseZedDoubleClick(MouseEventArgs e) => DoubleClickEvent?.Invoke(this, e) ?? false;
+        public MasterPane MasterPane { get; } = new MasterPane();
+        /// <summary>ZedGraph SaveAs: the image save dialog; the renderer saves the drawn graph.</summary>
+        public void SaveAs() => Notify("SaveAs");
+        public void SaveAs(string defaultFileName) => Notify("SaveAs");
         public GraphPane GraphPane { get; set; } = new GraphPane();
         public double ScrollGrace { get; set; }
         public double ScrollMaxX { get; set; }

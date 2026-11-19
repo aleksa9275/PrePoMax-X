@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         public Color ForeColor { get; set; }
         public Color SelectionBackColor { get; set; }
         public Color SelectionForeColor { get; set; }
-        public FontSpec Font { get; set; }
+        public Font Font { get; set; }
         public DataGridViewTriState WrapMode { get; set; }
         public string Format { get; set; } = "";
         public object NullValue { get; set; } = "";
@@ -461,6 +461,13 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellEndEdit, CellValueChanged, CellClick, CellDoubleClick, CellEnter, CellLeave;
         public event DataGridViewCellCancelEventHandler CellBeginEdit;
         public event DataGridViewCellMouseEventHandler CellMouseDown, CellMouseClick, CellMouseDoubleClick;
+        public event DataGridViewCellMouseEventHandler ColumnHeaderMouseClick, ColumnHeaderMouseDoubleClick;
+        /// <summary>Renderer input: a click on a column header.</summary>
+        public void RaiseColumnHeaderMouseClick(int columnIndex, MouseButtons button, int clicks)
+        {
+            var e = new DataGridViewCellMouseEventArgs(columnIndex, -1, 0, 0, new MouseEventArgs(button, clicks, 0, 0, 0));
+            if (clicks >= 2) ColumnHeaderMouseDoubleClick?.Invoke(this, e); else ColumnHeaderMouseClick?.Invoke(this, e);
+        }
         public event DataGridViewEditingControlShowingEventHandler EditingControlShowing;
         public event DataGridViewDataErrorEventHandler DataError;
         public event DataGridViewRowEventHandler UserAddedRow, UserDeletedRow;
@@ -1075,7 +1082,9 @@ namespace System.Windows.Forms
     // Clipboard data objects ------------------------------------------------------------------------------------------------------
     public static class DataFormats
     {
-        public const string Text = "Text", UnicodeText = "UnicodeText", CommaSeparatedValue = "Csv", Html = "HTML Format", Rtf = "Rich Text Format", FileDrop = "FileDrop";
+        public const string Text = "Text", UnicodeText = "UnicodeText", CommaSeparatedValue = "Csv", Html = "HTML Format", Rtf = "Rich Text Format", FileDrop = "FileDrop", Bitmap = "Bitmap";
+        public class Format { public Format(string name, int id) { Name = name; Id = id; } public string Name { get; } public int Id { get; } }
+        public static Format GetFormat(string format) => new Format(format, format.GetHashCode() & 0xFFFF);
     }
     public interface IDataObject
     {
@@ -1099,6 +1108,9 @@ namespace System.Windows.Forms
         public bool GetDataPresent(Type format) => data.ContainsKey(format.FullName);
         public string[] GetFormats() => data.Keys.ToArray();
         public void SetData(string format, object value) => data[format] = value;
+        public void SetData(string format, bool autoConvert, object value) => data[format] = value;
+        public void SetImage(System.Drawing.Image image) => SetData(DataFormats.Bitmap, image);
+        public System.Drawing.Image GetImage() => GetData(DataFormats.Bitmap) as System.Drawing.Image;
         public void SetData(object value) { if (value is string s) { SetData(DataFormats.UnicodeText, s); SetData(DataFormats.Text, s); } else if (value != null) SetData(value.GetType().FullName, value); }
         public bool ContainsText() => GetDataPresent(DataFormats.UnicodeText) || GetDataPresent(DataFormats.Text);
         public string GetText() => (GetData(DataFormats.UnicodeText) ?? GetData(DataFormats.Text)) as string ?? "";
