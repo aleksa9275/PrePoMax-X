@@ -10,7 +10,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   `-r/-p` regeneration script), and FrmMain is shown in Qt with its original menus, tool strips, tree, view and
   forms (`X/UI/main_form.py`, GUI probe 9 checks). Part 1: 3.0.1 composites (FrmSection Layers, FrmMaterialOrientation),
   original painting replayed by Qt, missing property values, Netgen pin confirmed, QuadWild for macOS from the
-  published fork. Packages and the eight GUI probes still use the workbench; moving them to `X/App` is next.
+  published fork. Closeout: the Netgen and Gmsh pins are the 3.0.1 sources; `-g No` runs draw FrmMain's view off screen; upstream's suite through the original command line passes 63 of 81 (the rest: Windows-only test content, the automation server, B013, B014).
   [M2 report](reports/phase-m2-composites-painting.md).
 - **M1 original vtkControl on vtkNative** (D063). The 3D view of X/UI is the original `vtkControl`, compiled
   whole, drawing through upstream's `vtkNative` on VTK 9.7.1 (pinned recipe `X/Build/Vtk`), embedded in a Qt
@@ -51,7 +51,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | P1 | Desktop packages (macOS DMG, Linux tar.gz, Windows zip), rebuildable runtime profiles | Mac and Linux ARM64 packages self-checked; Windows not run |
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
-| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line; packages/probes on X/App and Linux QuadWild open |
+| M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
 | M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | next |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
@@ -59,11 +59,12 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Next step
 
-M2 closeout: confirm the X/App runtime uses the re-pinned NetgenMesher (the full-suite run used the 3.0.0
-binary) and give `-g No` runs the hidden FrmMain view the original has on Windows (a parity gap, not an
-environment limit). Then **M3-1** (D065, [plan](REMAINING_WORK.md)): the toolkit spike, the .NET renderer, the WinForms layout engines ported from dotnet/winforms with a control-bounds comparison against the original, GUI
-probes and packages on `X/App`, retiring the Python renderer and workbench hosts, and the X/App run on Linux
-ARM64 (Podman). Linux QuadWild needs a Podman VM with more than 4 GiB (or M3 CI).
+**M3-1** (D065, [plan](REMAINING_WORK.md)): the toolkit spike, the .NET renderer, the WinForms layout engines ported
+from dotnet/winforms with a control-bounds comparison against the original, GUI probes and packages on `X/App`
+(native tools beside it, lp_solve included), retiring the Python renderer and workbench hosts, and the X/App run on
+Linux ARM64 (Podman). Open from the M2 closeout: B013 (FileInfo in PMX), B014 (9 CAD/meshing scripts differ from
+the original), the automation server on Unix, an intermittent FrmMain start-up stall. Linux QuadWild needs a Podman
+VM with more than 4 GiB (or M3 CI).
 
 ## Environment
 

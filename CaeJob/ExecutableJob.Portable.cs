@@ -70,11 +70,14 @@ namespace CaeJob
                 string logDirectory = ProcessLogDirectoryFactory?.Invoke(_workDirectory, Name) ?? _workDirectory;
                 if (!Path.IsPathFullyQualified(logDirectory)) throw new ArgumentException("Absolute process log directory required.");
                 Directory.CreateDirectory(logDirectory);
-                string outputPath = Path.Combine(logDirectory, "_output_" + Name + ".txt");
-                string errorPath = Path.Combine(logDirectory, "_error_" + Name + ".txt");
-                // Never overwrite evidence from an earlier run. Callers allocate a fresh run directory.
-                using (new FileStream(outputPath, FileMode.CreateNew)) { }
-                using (new FileStream(errorPath, FileMode.CreateNew)) { }
+                string tmpName = Path.GetFileName(Name);
+                string outputPath = Path.Combine(logDirectory, "_output_" + tmpName + ".txt");
+                string errorPath = Path.Combine(logDirectory, "_error_" + tmpName + ".txt");
+                // Hosts with a log directory factory keep the evidence of every run (never overwritten); the original
+                // application (no factory) replaces the files of the previous run of the same job, as Legacy Run does
+                FileMode mode = ProcessLogDirectoryFactory == null ? FileMode.Create : FileMode.CreateNew;
+                using (new FileStream(outputPath, mode)) { }
+                using (new FileStream(errorPath, mode)) { }
                 _outputFileName = outputPath; _errorFileName = errorPath;
                 var info = new ProcessStartInfo(_executable) {
                     WorkingDirectory = _workDirectory, UseShellExecute = false,

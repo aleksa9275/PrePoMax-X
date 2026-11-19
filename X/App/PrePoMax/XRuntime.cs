@@ -7,7 +7,9 @@
 // folder of the runtime profile) on the embedded CPython; a run with -g No - the original places its window off
 // screen - runs the headless message loop instead.
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows.Forms;
@@ -42,7 +44,21 @@ namespace PrePoMaxX.App
             form.StartPosition == FormStartPosition.Manual && form.Location.X == -32000 && form.Location.Y == -32000 && !form.ShowInTaskbar;
         static void Run(Form mainForm)
         {
-            if (IsHiddenRun(mainForm)) { Application.RunHeadless(mainForm); return; }
+            if (IsHiddenRun(mainForm))
+            {
+                // On Windows the hidden window still draws its 3D view (picks, view parameters, images); here the
+                // original vtkControl gets an off screen vtkNative view when FrmMain loads, before its Shown runs scripts
+                mainForm.Load += (s, e) =>
+                {
+                    foreach (var view in Controls(mainForm).OfType<vtkControl.vtkControl>())
+                    {
+                        view.NativeHost.CreateOffScreenHandle();
+                        view.EnableNativeMirror(true);
+                    }
+                };
+                Application.RunHeadless(mainForm);
+                return;
+            }
             if (Environment.GetEnvironmentVariable("PREPOMAXX_TRACE_EXCEPTIONS") == "1")
                 Console.Error.WriteLine("[run] thread " + Environment.CurrentManagedThreadId + " main " + (OperatingSystem.IsMacOS() ? pthread_main_np() : -1));
             if (s_ui == null) throw new InvalidOperationException("The user interface needs the \"ui\" folder in " + FileName + "; use -g No without it.");
@@ -55,6 +71,14 @@ namespace PrePoMaxX.App
                 scope.Set("ui_directory", s_ui);
                 scope.Exec("import sys\nsys.path.insert(0, ui_directory)\n");
                 scope.Exec(File.ReadAllText(script));
+            }
+        }
+        static IEnumerable<Control> Controls(Control control)
+        {
+            foreach (Control child in control.Controls)
+            {
+                yield return child;
+                foreach (Control descendant in Controls(child)) yield return descendant;
             }
         }
         static void Apply(string file)

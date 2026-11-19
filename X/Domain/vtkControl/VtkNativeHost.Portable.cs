@@ -50,6 +50,14 @@ namespace vtkControl.Native
         {
             base.OnHandleCreated(e);
             //
+            if (Handle == IntPtr.Zero)
+            {
+                // A run without a user interface (-g No, CreateOffScreenHandle): the original's hidden window still
+                // draws on Windows; here the view draws off screen
+                _view = VtkNativeView.CreateOffScreen(Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height));
+                ViewCreated?.Invoke(this, EventArgs.Empty);
+                return;
+            }
             _view = VtkNativeView.CreateEmbedded(Handle, Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height));
             if (OperatingSystem.IsMacOS())
             {

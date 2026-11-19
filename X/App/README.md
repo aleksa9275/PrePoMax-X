@@ -12,7 +12,9 @@ assembly, on the headless WinForms control model (`X/UI/FormsCompat`) and the do
   permission, and the runtime profile `PrePoMaxX.runtime.json` beside `PrePoMax.dll` (or `PREPOMAXX_RUNTIME`):
   `python` (CPython 3.12 profile), `ui` (the `X/UI` folder), `nativeTools` (tool manifest), `gmshLibrary`.
   `Application.Run(FrmMain)` shows FrmMain through Qt (`X/UI/main_form.py`); with `-g No` it runs the headless
-  message loop instead.
+  message loop instead, and FrmMain's vtkControl draws off screen (as the hidden original window does on Windows), so
+  the vtkNative runtime is needed in both cases. lp_solve (`lpsolve55.dll.dylib` / `.so`) goes beside the assemblies
+  and beside GmshCaller, as in the packages.
 - `Configure/` writes the runtime profile and, with `--solver`, the original settings file of the application folder
   with the verified CalculiX build (and `--default-solver-type`, D060).
 

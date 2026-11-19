@@ -32,7 +32,7 @@ def main():
    work=Path(temp)
    run(['dotnet','build',HERE/'PrePoMaxX.Execution.slnx','-c','Release','--disable-build-servers','-m:1','--artifacts-path',work/'build','-v:minimal'])
    report['tests']=json.loads(run(['dotnet',work/'build/bin/Tests/release/PrePoMaxX.ExecutionTests.dll']).stdout)
-   if not report['tests']['success']or report['tests']['passed']!=49 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
+   if not report['tests']['success']or report['tests']['passed']!=50 or report['tests']['runtime']['architecture']!=arch:raise ValueError('Native transport/monitor/thread-plan checks incomplete or failed')
    cli=work/'build/bin/Solve/release/PrePoMaxX.Solve.dll'
    report['desktopDefinitionControl']=definition_control.verify(run,cli,ROOT,work)
    report['threadPlanning']={}

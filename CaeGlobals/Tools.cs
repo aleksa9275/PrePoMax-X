@@ -233,6 +233,8 @@ namespace CaeGlobals
         // Check if it's Windows 8.1
         public static bool IsWindows10orNewer()
         {
+            // macOS and Linux have no Windows registry: they run processes the modern way (redirected output)
+            if (Environment.OSVersion.Platform == PlatformID.Unix) return true;
             try
             {
                 string[] tmp = GetWindowsName().Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);

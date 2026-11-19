@@ -63,7 +63,13 @@ try{
   cts.Cancel();await firstTask;Check("explicit concurrent-run flag permits independent jobs",overlapped&&parallelSecond.JobStatus==JobStatus.OK);
  }
  var missing=Job("missing","echo");missing.Executable=Path.Combine(root,"missing-native-program");await missing.SubmitAsync();Check("missing executable recorded as failure",missing.JobStatus==JobStatus.Failed&&missing.FailureReason!=null&&missing.ExitCode==null);
- var existing=Job("existing","echo");string original=Path.Combine(existing.WorkDirectory,"_output_existing.txt");File.WriteAllText(original,"preserve");await existing.SubmitAsync();Check("existing output evidence never overwritten",existing.JobStatus==JobStatus.Failed&&File.ReadAllText(original)=="preserve");
+ var existing=Job("existing","echo");string original=Path.Combine(existing.WorkDirectory,"_output_existing.txt");File.WriteAllText(original,"preserve");
+ ExecutableJob.ProcessLogDirectoryFactory=(directory,name)=>directory;
+ try {await existing.SubmitAsync();} finally {ExecutableJob.ProcessLogDirectoryFactory=null;}
+ Check("existing output evidence never overwritten with a log folder factory",existing.JobStatus==JobStatus.Failed&&File.ReadAllText(original)=="preserve");
+ // Without a factory (the original application) the previous run's files are replaced, as the original Run does
+ var again=Job("again","echo");string previous=Path.Combine(again.WorkDirectory,"_output_again.txt");File.WriteAllText(previous,"previous run");await again.SubmitAsync();
+ Check("original application replaces the previous run's output",again.JobStatus==JobStatus.OK&&File.ReadAllText(previous)!="previous run");
  var invalid=Job("invalid","echo");invalid.TimeLimit=TimeSpan.Zero;await invalid.SubmitAsync();Check("invalid deadline fails before execution",invalid.JobStatus==JobStatus.Failed&&invalid.ExitCode==null);
  Check("original job type assembly owner",typeof(ExecutableJob).Assembly.GetName().Name=="CaeJob"&&typeof(JobStatus).Assembly==typeof(ExecutableJob).Assembly);
  Check("original JobStatus names and numbers",Enum.GetNames<JobStatus>().SequenceEqual(new[]{"None","InQueue","Running","OK","Killed","TimedOut","Failed","FailedWithResults"})&&(int)JobStatus.FailedWithResults==7);

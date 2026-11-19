@@ -99,12 +99,8 @@ Date: 19 November 2026. Plan: [REMAINING_WORK](../REMAINING_WORK.md) M2. Part 1 
   `X/App/Configure` with Spooles): upstream's own runner, `Run_Tests.py --exe <app>/PrePoMax.com --filter Composite`,
   **4 of 4 pass**, including `Test_Model_Composite_Parameters` (child `PrePoMax.com` runs: `--script`, `--save`, two
   `-r` regenerations with `-p` parameters and a `.pmp` file).
-- **Part 2, all upstream scripts through the original command line** (`Run_Tests.py`, 81 runs): 36 pass, 45 fail.
-  Not acceptance evidence (M4 reruns it with meshers built from the 3.0.1 sources); the failures group as: CAD
-  import/meshing with the 3.0.0-era P1 NetgenMesher (the 6-faced box of `box_and_cylinder.brep` is not found; also
-  failed on the headless host in part 1), PARDISO models (exit 201, D060), selection/view scripts that need a drawn
-  view (a `-g No` run has no VTK window here; on Windows the original draws off screen), the automation server
-  without an access token in the run's settings, and Windows-only test content (`LOCALAPPDATA`, `powershell.exe`).
+- **Part 2, all upstream scripts through the original command line** (`Run_Tests.py`, 81 runs): 36 pass. That run
+  predated the Gmsh entry of the runtime profile and its failure groups were wrong; see the closeout (63 of 81).
 - **Part 2, FrmMain in Qt** (`app_gui_probe.py`, `PrePoMax -f cube.inp -u MM_TON_S_C`, macOS ARM64): 9 checks pass —
   the 16 original menus, the menu/5 tool strips/status strip, the original vtkControl in its native widget, the `-f`
   model imported by FrmMain's own start-up, the original ModelTree showing it (37 nodes), the view drawn by vtkNative
@@ -127,17 +123,53 @@ Date: 19 November 2026. Plan: [REMAINING_WORK](../REMAINING_WORK.md) M2. Part 1 
   for memory even with one job in the 4 GiB Podman VM (the fork's README asks for more memory than the default). The
   recipe is unchanged; it needs a larger VM or the M3 CI runner.
 
+## Closeout (19 November 2026)
+
+- **Netgen**: the NetGenMesher in the runtime is built from the pinned `c5ecb0ba` (= published `f0ba926`, the 3.0.1
+  `nglib.dll`): its build receipt matches the current source manifest, both patches, the CMake file, the builder and
+  the adapter. The earlier "3.0.0-era NetgenMesher" label was wrong. **Gmsh**: the pin `4156db5d` is the newest
+  commit of github.com/PrePoMax/Gmsh, the change behind 3.0.1's `gmsh-4.13.dll` (11 October). Both pins are current.
+- The part 2 full-suite run (36/81) predated `X/App`'s runtime profile with the Gmsh library and ran on the headless
+  host; its failure groups were wrong. Rerun on `X/App` it showed the real causes, fixed here:
+  - **`-g No` view**: FrmMain's original vtkControl gets an off-screen vtkNative view when FrmMain loads in a hidden
+    run (`Control.CreateOffScreenHandle`, `VtkNativeHost.Portable` off screen without a native window, `XRuntime`), as
+    the hidden original window draws on Windows. View parameters, picks and selection by visibility now run.
+  - **Model check and analyses** (`*No Analysis` ends CalculiX with exit 201 by design; the original accepts it from
+    the captured output): `Tools.IsWindows10orNewer` read the Windows registry, so macOS/Linux took the old-Windows
+    job path without captured output. One line in the original `CaeGlobals/Tools.cs` (net48-compatible): Unix takes
+    the modern path.
+  - **Process logs**: the portable `ExecutableJob` refused to replace `_output_<job>.txt`, so a second CAD operation of
+    the same part (transform, split) failed. Without a log-folder factory (the original application) it now replaces
+    the previous run's files as the original does; the checks' hosts keep never-overwrite (execution check updated, 50).
+  - The dev folder lacked `lpsolve55.dll.dylib` beside the assemblies and GmshCaller (the P1 package has it): an
+    `X/App` packaging item, not a code fix.
+- **Upstream suite through the original command line** (`Run_Tests.py`, `X/App`, macOS ARM64): **63 of 81 pass**
+  (was 36). The 18 failures:
+  - Windows-only test content (6): `LOCALAPPDATA` (Journal_Mesh_Setup, Mcp_Http, Mcp_Workflow), `powershell.exe`
+    (Job_Correctness), a named `EventWaitHandle` opened by the script (Batch_Run; .NET has no named events on Unix),
+    `TEMP` and `|` as an invalid file-name character (Api_View_Results; with `TEMP` set its view checks pass up to `|`).
+  - Automation server (2): Rpc_Server needs an access token in the run's settings; Rpc_Live_Session waits for a
+    Windows named pipe. Open.
+  - PMX allowlist (1): Model_Fields, `DistributionFromFile` holds a `System.IO.FileInfo`, which .NET cannot serialize
+    and the allowlist refuses; needs a net48-compatible surrogate in the restricted serializer. Open (B013).
+  - CAD/meshing results differ from the Windows original (9): Delete_Cad_Faces, Meshing_Revolve, Meshing_Shell_Types
+    (empty Gmsh shell mesh), Meshing_Sweep_Compound, Meshing_Transfinite_Frame, Offset_Face, Split_Cells_Compound,
+    Split_Cells_Fuse (6 faces, 7 expected), Split_Periodic_Faces. Split_Cells_Compound and Geometry_Transform pass
+    alone but have failed inside the full run (order-dependent). Open (B014).
+- `python3 X/Checks/check.py`: all 7 areas pass. X/App GUI probe: 9/9 in 3 of 4 runs; one run stalled with the splash
+  open and the `-f` import unfinished after 60 s (intermittent, open).
+
 ## Open
 
-- The packages (`package_ui.py`, P1) and the GUI probes C1–menu still run the workbench (`X/UI/workbench.py` on the
-  headless FrmMain); moving them to the original application (`X/App`), and with it retiring the headless host,
-  `OriginalFormHost` and `OriginalViewHost`, is the next step. The FrmMain probe covers the main window, not yet the
-  workflows the eight workbench probes cover.
+- The packages (`package_ui.py`, P1) and the GUI probes C1–menu still run the workbench; moving them to `X/App`
+  (with the native tools beside it, lp_solve included) is part of M3-1 (D065).
 - FrmMain in Qt: the view renders at logical (not Retina device) pixels; tool strips wider than their designer
   widths show an overflow arrow; the window is not yet styled like the original (dark-mode palette, pre-existing).
-- A `-g No` run has no VTK window, so view-dependent scripts (selection by visibility, view parameters, captures)
-  fail there; the original draws its view off screen. Needs an off-screen vtkNative view.
-- Linux ARM64: the FrmMain GUI and the command line were not run in Podman yet.
+  Intermittent start-up stall (splash open, `-f` import unfinished) in 1 of 4 probe runs.
+- Upstream suite: B013 (FileInfo in PMX), B014 (CAD/meshing differences and order dependence), the automation server
+  without a token and on Unix sockets.
+- Linux ARM64: the FrmMain GUI and the command line were not run in Podman yet; an off-screen view there needs an X
+  display (Xvfb) or an EGL/OSMesa VTK build.
 - QuadWild for Linux ARM64 is not built: the compiler needs more than the 4 GiB of the local Podman VM (or the M3
   CI runner).
 - Upstream's `ThirdParty/quadwild-bimdf/README.md` lists an outdated SHA-256 for `quad_from_patches.exe` (NOTICE.md

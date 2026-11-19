@@ -179,6 +179,15 @@ namespace System.Windows.Forms
             lock (s_nativeWindows) s_nativeWindows[window] = new WeakReference<Control>(this);
             OnHandleCreated(EventArgs.Empty);
         }
+        bool _offScreenHandle;
+        /// <summary>A run without a renderer (-g No): the control gets OnHandleCreated without a native window (Handle
+        /// stays zero), as the hidden original window gets its handle on Windows.</summary>
+        public void CreateOffScreenHandle()
+        {
+            if (_nativeWindow != IntPtr.Zero || _offScreenHandle) throw new InvalidOperationException("The control already has a handle.");
+            _offScreenHandle = true;
+            OnHandleCreated(EventArgs.Empty);
+        }
         /// <summary>Before the renderer destroys the native window: OnHandleDestroyed, while the window still exists.</summary>
         public void DetachNativeWindow()
         {
