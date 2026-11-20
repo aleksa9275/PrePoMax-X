@@ -42,6 +42,15 @@ internal static class PersistenceChecks
         var largeCopy=(int[])Read(Write(large));
         Check("more than 32 million array elements",largeCopy.Length==large.Length && largeCopy[^1]==7);
         large=null;largeCopy=null;strings=null;stringsCopy=null;GC.Collect();
+        // B013: the FileInfo an original distribution keeps of its file, written as net48 writes it
+        var distribution=new DistributionFromFile("Fields");var oldFile=typeof(DistributionFromFile).GetField("_oldFileInfo",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
+        string fieldFile=Path.Combine(Path.GetTempPath(),"field.txt");oldFile.SetValue(distribution,new FileInfo(fieldFile));
+        byte[] distributionData=Write(distribution);var distributionCopy=(DistributionFromFile)Read(distributionData);
+        Check("FileInfo of a distribution file",((FileInfo)oldFile.GetValue(distributionCopy)).FullName==fieldFile &&
+            distributionData.AsSpan().IndexOf(Encoding.UTF8.GetBytes("System.IO.FileInfo"))>=0 && distributionData.AsSpan().IndexOf(Encoding.UTF8.GetBytes("OriginalPath"))>=0);
+        Reject("FileInfo outside its original member",()=>Write(new object[]{new FileInfo(fieldFile)}));
+        Reject("FileInfo payload outside its original member",()=>Read(Class("System.IO.FileInfo",null)));
+        byte[] movedFile=(byte[])distributionData.Clone();Replace(movedFile,"_oldFileInfo","_oldFileInfX");Reject("FileInfo under another member",()=>Read(movedFile));
         Reject("unknown framework type",()=>Read(Class("System.Diagnostics.Process",null)));
         Reject("unknown assembly",()=>Read(Class("CaeGlobals.NamedClass","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
         Reject("delegate payload",()=>Read(Class("System.DelegateSerializationHolder",null)));

@@ -31,6 +31,13 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
         if(records.Count>Math.Max(MinimumRecords,bytes))throw new SerializationException("NRBF record limit exceeded.");
         return new Reader(policy,records.Values,Math.Max(MinimumArrayElements,checked(bytes*ArrayElementsPerByte))).Read(root);
     }
+    // B013: three original types keep the System.IO.FileInfo of the file they read (_oldFileInfo, ISerializable).
+    // .NET cannot serialize FileInfo; it is written and read here exactly as net48 FileSystemInfo.GetObjectData
+    // writes it (OriginalPath, FullPath; mscorlib), and only in that member of those types - never as a general type.
+    const string FileInfoName="System.IO.FileInfo",FileInfoMember="_oldFileInfo";
+    static readonly string[] FileInfoOwners={"CaeModel.DistributionFromFile","CaeModel.ImportedPressure","CaeModel.ImportedSTLoad"};
+    static bool IsFileInfoOwner(string fullName,string assemblyQualifiedName) =>
+        FileInfoOwners.Contains(fullName) && assemblyQualifiedName.Contains(", CaeModel,");
     static FieldInfo[] Fields(Type type) => FormatterServices.GetSerializableMembers(type,context).Cast<FieldInfo>().ToArray();
     static void Callbacks(object value,Type attribute)
     {
@@ -43,7 +50,7 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
         readonly NrbfTypePolicy policy;
         readonly Dictionary<SerializationRecordId,object> objects=new();
         readonly Dictionary<SerializationRecordId,Type> types=new();
-        readonly HashSet<SerializationRecordId> filling=new(),filled=new(),legacyUiMetadata=new();
+        readonly HashSet<SerializationRecordId> filling=new(),filled=new(),legacyUiMetadata=new(),fileInfos=new();
         readonly SerializationRecord[] records;
         int depth;
         readonly long maximumArrayElements;
@@ -57,6 +64,8 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
             // or method named by the input is ever resolved or activated.
             foreach(var owner in records.OfType<ClassRecord>().Where(c=>c.TypeName.FullName=="PrePoMax.Commands.CommandsCollection" && c.HasMember("EnableDisableUndoRedo")))
                 MarkLegacyUiMetadata(owner.GetRawValue("EnableDisableUndoRedo"));
+            foreach(var owner in records.OfType<ClassRecord>().Where(c=>IsFileInfoOwner(c.TypeName.FullName,c.TypeName.AssemblyQualifiedName) && c.HasMember(FileInfoMember)))
+                if(owner.GetRawValue(FileInfoMember) is ClassRecord file && file.TypeName.FullName==FileInfoName)fileInfos.Add(file.Id);
             // Validate every type and shape before allocating application instances.
             long total=0;
             foreach(var record in records)
@@ -67,6 +76,16 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
                 {
                     string identity=record.TypeName.AssemblyQualifiedName;
                     if(!identity.Contains(", mscorlib,") && !identity.Contains(", System.Private.CoreLib,"))throw new SerializationException("Unexpected assembly for framework metadata.");
+                    continue;
+                }
+                if(name==FileInfoName)
+                {
+                    string identity=record.TypeName.AssemblyQualifiedName;
+                    if(!identity.Contains(", mscorlib,") && !identity.Contains(", System.Private.CoreLib,"))throw new SerializationException("Unexpected assembly for FileInfo.");
+                    if(!fileInfos.Contains(record.Id))throw new SerializationException("FileInfo is allowed only in "+FileInfoMember+" of "+string.Join(", ",FileInfoOwners)+".");
+                    var file=(ClassRecord)record;
+                    if(!file.MemberNames.OrderBy(m=>m,StringComparer.Ordinal).SequenceEqual(new[]{"FullPath","OriginalPath"}) ||
+                       file.GetRawValue("FullPath") is not string || file.GetRawValue("OriginalPath") is not (string or null))throw new SerializationException("Invalid FileInfo members.");
                     continue;
                 }
                 Type type=Resolve(record); types[record.Id]=type;
@@ -112,6 +131,11 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
                     {
                         bool ignore=special.TypeName.FullName.Contains("IgnoreCase") || (special.HasMember("_ignoreCase") && special.GetBoolean("_ignoreCase"));
                         object comparer=ignore?StringComparer.OrdinalIgnoreCase:StringComparer.Ordinal;objects[record.Id]=comparer;filled.Add(record.Id);return comparer;
+                    }
+                    if(special.TypeName.FullName==FileInfoName && fileInfos.Contains(record.Id))
+                    {
+                        // net48 FileSystemInfo(SerializationInfo, StreamingContext) takes the full path; the attributes are read from disk on use
+                        object file=new FileInfo(special.GetString("FullPath"));objects[record.Id]=file;filled.Add(record.Id);return file;
                     }
                     if(special.TypeName.FullName=="System.UnitySerializationHolder")
                     {
@@ -179,6 +203,7 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
         readonly Dictionary<object,int> ids=new(ReferenceEqualityComparer.Instance);
         readonly Queue<object> queue=new();
         readonly Dictionary<string,int> libraries=new(StringComparer.Ordinal);
+        readonly HashSet<object> fileInfos=new(ReferenceEqualityComparer.Instance);
         int nextId=1, nextValueId=-1;
         long start;
         public Writer(Stream stream,NrbfTypePolicy policy) {writer=new BinaryWriter(stream,new UTF8Encoding(false,true),leaveOpen:true);this.policy=policy;start=stream.Position;}
@@ -230,6 +255,12 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
                 if(comparer!=StringComparer.Ordinal && comparer!=StringComparer.OrdinalIgnoreCase)throw new SerializationException("Only ordinal string comparers are supported.");
                 Class(id,"System.OrdinalComparer",null,new[]{("_ignoreCase",typeof(bool),(object)(comparer==StringComparer.OrdinalIgnoreCase))});return;
             }
+            if(value is FileInfo file)
+            {
+                if(!fileInfos.Contains(file))throw new SerializationException("FileInfo is allowed only in "+FileInfoMember+" of "+string.Join(", ",FileInfoOwners)+".");
+                // FileSystemInfo.ToString returns OriginalPath, the path the FileInfo was created with
+                Class(id,FileInfoName,null,new[]{("OriginalPath",typeof(string),(object)file.ToString()),("FullPath",typeof(string),(object)file.FullName)});return;
+            }
             policy.Require(type);
             if(value is Array array) {Array(array,id,type);return;}
             Callbacks(value,typeof(OnSerializingAttribute));
@@ -238,7 +269,11 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
             {
                 var info=new SerializationInfo(type,new FormatterConverter());serializable.GetObjectData(info,context);
                 if(info.ObjectType!=type)throw new SerializationException("Serialization type replacement is not allowed: "+type.FullName);
-                foreach(SerializationEntry entry in info)fields.Add((entry.Name,entry.ObjectType,entry.Value));
+                foreach(SerializationEntry entry in info)
+                {
+                    if(entry.Value is FileInfo && entry.Name==FileInfoMember && IsFileInfoOwner(type.FullName,", "+type.Assembly.FullName))fileInfos.Add(entry.Value);
+                    fields.Add((entry.Name,entry.ObjectType,entry.Value));
+                }
             }
             else foreach(var field in Fields(type))fields.Add((field.Name,field.FieldType,field.GetValue(value)));
             Class(id,NrbfTypePolicy.TypeName(type),type,fields.ToArray());

@@ -10,7 +10,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   `-r/-p` regeneration script), and FrmMain is shown in Qt with its original menus, tool strips, tree, view and
   forms (`X/UI/main_form.py`, GUI probe 9 checks). Part 1: 3.0.1 composites (FrmSection Layers, FrmMaterialOrientation),
   original painting replayed by Qt, missing property values, Netgen pin confirmed, QuadWild for macOS from the
-  published fork. Closeout: the Netgen and Gmsh pins are the 3.0.1 sources; `-g No` runs draw FrmMain's view off screen; upstream's suite through the original command line passes 63 of 81 (the rest: Windows-only test content, the automation server, B013, B014).
+  published fork. Closeout: the Netgen and Gmsh pins are the 3.0.1 sources; `-g No` runs draw FrmMain's view off screen; upstream's suite through the original command line passes 63 of 81 (the rest: Windows-only test content, the automation server, B013, B014); with B013 fixed (20 November) 64 of 81.
   [M2 report](reports/phase-m2-composites-painting.md).
 - **M1 original vtkControl on vtkNative** (D063). The 3D view of X/UI is the original `vtkControl`, compiled
   whole, drawing through upstream's `vtkNative` on VTK 9.7.1 (pinned recipe `X/Build/Vtk`), embedded in a Qt
@@ -52,19 +52,22 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
-| M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | next |
+| M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | in progress: Avalonia spike passes on macOS ARM64 except real input (manual) and Linux |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-**M3-1** (D065, [plan](REMAINING_WORK.md)): the toolkit spike, the .NET renderer, the WinForms layout engines ported
-from dotnet/winforms with a control-bounds comparison against the original, GUI probes and packages on `X/App`
-(native tools beside it, lp_solve included), retiring the Python renderer and workbench hosts, and the X/App run on
-Linux ARM64 (Podman). Open from the M2 closeout: B013 (FileInfo in PMX), B014 (9 CAD/meshing scripts differ from
-the original), the automation server on Unix, an intermittent FrmMain start-up stall. Linux QuadWild needs a Podman
-VM with more than 4 GiB (or M3 CI).
+**M3-1** (D065, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)). The toolkit spike
+(`X/Spike/FrontEnd`, Avalonia 11.3.23) runs the original Program with FrmMain, its menus, tool strips, tree, modal
+forms and the original vtkControl in a native host, on one thread and one runtime, on macOS ARM64. Before the
+toolkit decision is recorded: real mouse input over the native view on macOS (manual; synthetic events are refused)
+and the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App with the dotnet/winforms layout engines,
+the bounds comparison, probes and packages on X/App, and the Python renderer and workbench hosts are retired.
+Open: B014 (CAD/meshing results differ and vary between runs), the automation server on Unix, the intermittent Qt
+start-up stall, B013's round trip with the original 3.0.1 (no 3.0.x reference bottle on this Mac), Linux QuadWild
+(Podman VM larger than 4 GiB or M3 CI).
 
 ## Environment
 

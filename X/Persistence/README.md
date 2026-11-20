@@ -22,8 +22,12 @@ limited only by the 64 GiB graph bound and NRBF's Int32 array lengths. Trailing 
 unknown Type metadata and delegate payloads are rejected. These are NRBF graph
 limits, not a promise about arbitrary compressed PMX file resource usage.
 
+One framework type is converted rather than allowlisted (B013): the `System.IO.FileInfo` that
+`DistributionFromFile`, `ImportedPressure` and `ImportedSTLoad` keep in `_oldFileInfo` is written as net48 writes it
+(`OriginalPath`, `FullPath`) and read back as a new `FileInfo`, only in that member of those types.
+
 The catalog is an explicit reviewed build artifact, not reflection-based runtime
 acceptance. `Runner --catalog` prints candidate entries for comparing against it;
 adding a class requires reviewing its serialization constructor/callback behaviour
-and checking interoperability before changing the file. The 20 focused graph and
+and checking interoperability before changing the file. The 26 focused graph and
 rejection checks are in `X/Controller/Runner/PersistenceChecks.cs`.

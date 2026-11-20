@@ -91,8 +91,9 @@ Port defects (original Windows-only code reachable on Mac/Linux):
   `vtkMaxLookupTable` bitmap export; `DynamicTypeDescriptor` `ReflectionOnlyLoad`.
 
 Recorded bugs:
-- **B013** `System.IO.FileInfo` in PMX objects refused (distributions/imported loads from files).
-- **B014** 9 upstream CAD/meshing scripts differ from the Windows original (some order-dependent).
+- **B013** `System.IO.FileInfo` in PMX objects refused (distributions/imported loads from files). Fixed
+  20 November 2026; round trip with the original 3.0.1 pending.
+- **B014** 9 upstream CAD/meshing scripts differ from the Windows original (results vary between runs).
 - **B010** concurrent CAD stages not stopped by Cancel.
 - **B011** doubled-stress diagnostic 199.992 vs 200 (original agrees; cause open).
 - **B012** cancel before the solver process starts is lost.

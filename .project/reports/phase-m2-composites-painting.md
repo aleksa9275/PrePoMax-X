@@ -151,7 +151,8 @@ Date: 19 November 2026. Plan: [REMAINING_WORK](../REMAINING_WORK.md) M2. Part 1 
   - Automation server (2): Rpc_Server needs an access token in the run's settings; Rpc_Live_Session waits for a
     Windows named pipe. Open.
   - PMX allowlist (1): Model_Fields, `DistributionFromFile` holds a `System.IO.FileInfo`, which .NET cannot serialize
-    and the allowlist refuses; needs a net48-compatible surrogate in the restricted serializer. Open (B013).
+    and the allowlist refuses; needs a net48-compatible surrogate in the restricted serializer. Fixed on 20 November
+    (B013): the suite then passes 64 of 81.
   - CAD/meshing results differ from the Windows original (9): Delete_Cad_Faces, Meshing_Revolve, Meshing_Shell_Types
     (empty Gmsh shell mesh), Meshing_Sweep_Compound, Meshing_Transfinite_Frame, Offset_Face, Split_Cells_Compound,
     Split_Cells_Fuse (6 faces, 7 expected), Split_Periodic_Faces. Split_Cells_Compound and Geometry_Transform pass
@@ -166,7 +167,7 @@ Date: 19 November 2026. Plan: [REMAINING_WORK](../REMAINING_WORK.md) M2. Part 1 
 - FrmMain in Qt: the view renders at logical (not Retina device) pixels; tool strips wider than their designer
   widths show an overflow arrow; the window is not yet styled like the original (dark-mode palette, pre-existing).
   Intermittent start-up stall (splash open, `-f` import unfinished) in 1 of 4 probe runs.
-- Upstream suite: B013 (FileInfo in PMX), B014 (CAD/meshing differences and order dependence), the automation server
+- Upstream suite: B014 (CAD/meshing differences, not reproducible from run to run), the automation server
   without a token and on Unix sockets.
 - Linux ARM64: the FrmMain GUI and the command line were not run in Podman yet; an off-screen view there needs an X
   display (Xvfb) or an EGL/OSMesa VTK build.
