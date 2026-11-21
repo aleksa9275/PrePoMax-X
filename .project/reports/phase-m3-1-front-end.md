@@ -166,6 +166,25 @@ All four open points closed; M3-1a is done on macOS ARM64.
   with its libraries; ad-hoc signed; 615 MB, zip 195 MiB. In a clean environment (no `dotnet` on PATH) the bundle and
   the unpacked zip pass the base probe 16/16 and the four areas (120 + 4 + 9 + 5). Published as a preview on the
   branch `release/macos-arm64-preview` (binary only, README with the status).
+- **Preview 2 (source `e076f692`): what the first upload lacked.** The maintainer's download had no icons: the front
+  end found the original images by walking up to the repository, which every earlier check ran inside. An audit
+  against the 3.0.1 release found more of what the original keeps beside the program. Now in the bundle:
+  - `app/resources`: the icons and the designer `.resx` images (235 files);
+  - `Help/Python`: built by X/App itself with upstream's `PythonApiHelp.targets` (Markdig 1.3.2) and the SKILL.md
+    post-build copy;
+  - `materials.lib`, `Models/` and `Tools/abqodb_to_ccxfrd.py` from the 3.0.1 release (`--original`; SHA-256 in
+    `bundle.json`);
+  - an `.icns` and window/Dock icon from `PrePoMax/main.ico`.
+  Not shipped: the release's Windows-only BidirectionalMeshConverter.exe.
+  **Verification now blocks the repository:**
+  - the unpacked zip ran under `sandbox-exec`, with no reads of the repository, the P1 checkout, Homebrew or .NET,
+    on a fresh data folder;
+  - base probe 16/16; areas 124 + 4 + 9 + 5 (new checks: 144/144 menu icons, the app icon, and the material
+    library with 21 materials read through the allowlist);
+  - upstream's Python tests `Test_Analysis`, `Test_Model_Materials_Sections` and `Test_Model_Meshing` passed
+    through `--script -g No`.
+  Netgen prints `Get neighbourpoints failed` during `Test_Model_Meshing`. The test passes; whether Windows 3.0.1
+  prints it too is not checked yet.
 
 ## Next
 
