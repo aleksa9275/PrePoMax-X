@@ -2,6 +2,7 @@
 """Runs the Avalonia probe areas (ProbeAreas.cs) on an app folder and writes one report.
 
   python3 X/App/FrontEnd/run_probe_areas.py --app X/Build/artifacts/app-mac/app --output DIR [--area forms ...]
+  python3 X/App/FrontEnd/run_probe_areas.py --launcher PrePoMax-X.app/Contents/MacOS/PrePoMax-X --output DIR
 
 forms:    the bridge mesh deck (.project/reports/editable-solid-workflow/runs/bridge/baseline/mesh.inp)
 geometry: X/UI/fixtures/cube.brep
@@ -26,7 +27,8 @@ def latest_project():
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('--app', type=Path, required=True)
+    p.add_argument('--app', type=Path, help='an app folder (run with dotnet)')
+    p.add_argument('--launcher', type=Path, help='or a launcher, e.g. PrePoMax-X.app/Contents/MacOS/PrePoMax-X')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--area', action='append', choices=('forms', 'geometry', 'results', 'elements'))
     p.add_argument('--project', type=Path)
@@ -47,10 +49,11 @@ def main():
                    DOTNET_ROLL_FORWARD=os.environ.get('DOTNET_ROLL_FORWARD', 'Major'))
         (a.output / (area + '.json')).unlink(missing_ok=True)
         with open(a.output / (area + '.log'), 'w') as log:
-            code = subprocess.run(['timeout', '-s', 'KILL', '480', 'dotnet', str(a.app.resolve() / 'PrePoMax.dll'),
-                                   '-f', str(Path(fixture).resolve()), '-u', 'MM_TON_S_C'],
+            start = [str(a.launcher.resolve())] if a.launcher else ['dotnet', str(a.app.resolve() / 'PrePoMax.dll')]
+            code = subprocess.run(['timeout', '-s', 'KILL', '480', *start, '-f', str(Path(fixture).resolve()), '-u', 'MM_TON_S_C'],
                                   env=env, stdout=log, stderr=subprocess.STDOUT).returncode
-        (a.app / 'history.pmh').unlink(missing_ok=True)
+        if a.app:
+            (a.app / 'history.pmh').unlink(missing_ok=True)
         report = json.loads((a.output / (area + '.json')).read_text()) if (a.output / (area + '.json')).exists() else {}
         checks = report.get('checks', [])
         summary[area] = {'fixture': str(fixture), 'exit': code, 'success': report.get('success', False),
