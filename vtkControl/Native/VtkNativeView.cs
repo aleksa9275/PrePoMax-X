@@ -26,6 +26,24 @@ namespace vtkControl.Native
         private readonly int _threadId;
         private readonly bool _offScreen;
         private VtkNativeMethods.EventCallback _eventCallback;
+        // Device pixels per control unit of the overlay widgets (scale bar, triad, legends, texts, status block):
+        // vtkControl places and sizes them in control units, the view draws in device pixels. 1 on Windows, where
+        // the application is not DPI aware; a high-DPI display of a front end that draws in device pixels sets it
+        public static double DisplayScale { get; set; } = 1;
+        internal static double ToDevice(double value) { return value * DisplayScale; }
+        internal static int ToDevice(int value) { return (int)Math.Round(value * DisplayScale); }
+        internal static double ToControl(double value) { return value / DisplayScale; }
+        internal static System.Drawing.Rectangle ToControl(int[] values)
+        {
+            return new System.Drawing.Rectangle((int)Math.Round(values[0] / DisplayScale), (int)Math.Round(values[1] / DisplayScale),
+                                                (int)Math.Round(values[2] / DisplayScale), (int)Math.Round(values[3] / DisplayScale));
+        }
+        internal static VtkNativeTextStyle ToDevice(VtkNativeTextStyle style)
+        {
+            style.FontSize = ToDevice(style.FontSize);
+            style.LineOffset = ToDevice(style.LineOffset);
+            return style;
+        }
 
 
         // Events

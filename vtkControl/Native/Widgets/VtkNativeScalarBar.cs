@@ -104,11 +104,12 @@ namespace vtkControl.Native
         // Methods
         public void SetTextStyle(VtkNativeTextStyle style)
         {
+            style = VtkNativeView.ToDevice(style);
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scalar_bar_set_text_style(Handle(), ref style));
         }
         public void SetPadding(int padding)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scalar_bar_set_padding(Handle(), padding));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scalar_bar_set_padding(Handle(), VtkNativeView.ToDevice(padding)));
         }
         public void SetVisibility(bool visibility)
         {
@@ -123,7 +124,8 @@ namespace vtkControl.Native
         }
         public void SetPosition(VtkNativeWidgetAnchor anchor, double x, double y)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scalar_bar_set_position(Handle(), (int)anchor, x, y));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scalar_bar_set_position(Handle(), (int)anchor, VtkNativeView.ToDevice(x),
+                                                                                  VtkNativeView.ToDevice(y)));
         }
         public Rectangle GetRectangle()
         {
@@ -354,9 +356,11 @@ namespace vtkControl.Native
                 colorsHandle.Free();
             }
         }
+        // Rectangles of the legend in control units (VtkNativeView.DisplayScale); hit-test points are the display
+        // pixels of the event that asks
         private static Rectangle ToRectangle(int[] values)
         {
-            return new Rectangle(values[0], values[1], values[2], values[3]);
+            return VtkNativeView.ToControl(values);
         }
     }
 }

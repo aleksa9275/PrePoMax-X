@@ -1,5 +1,17 @@
 # Decision register
 
+D066 — Overlays follow the display scale, 2026-11-21: on a Retina Mac the 3D view
+draws in device pixels (sharp), while the original vtkControl places and sizes its
+overlays (scale bar, axes, legends, texts, status block) in control units. Rather than
+draw VTK at control units magnified, as Windows does for the original (not DPI aware),
+which crashed VTK's Cocoa pixel readback, the maintainer chose to scale the overlays now
+instead of after parity (an exception to D061's order). The C# widget wrappers of
+vtkControl (VtkNativeWidget, VtkNativeScalarBar) convert overlay geometry between
+control units and device pixels by VtkNativeView.DisplayScale; mouse and pick
+coordinates stay device pixels. The scale is 1 on Windows, so the original is unchanged
+there; it fixes high-DPI displays on every platform whose front end draws in device
+pixels.
+
 D065 — One runtime for the front end (M3-1), 2026-11-19: the Qt front end of
 X/App is drawn by Python (PyQt6 through Python.NET), so the original .NET code and
 the renderer share one process with two runtimes, the GIL and a cross-thread queue;

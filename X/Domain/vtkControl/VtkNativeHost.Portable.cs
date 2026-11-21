@@ -67,12 +67,14 @@ namespace vtkControl.Native
                 ViewCreated?.Invoke(this, EventArgs.Empty);
                 return;
             }
+            // The overlays vtkControl places in control units are drawn in the device pixels the view gets
+            if (OperatingSystem.IsMacOS()) VtkNativeView.DisplayScale = DeviceScale;
             _view = VtkNativeView.CreateEmbedded(Handle, Device(Math.Max(1, ClientSize.Width)), Device(Math.Max(1, ClientSize.Height)));
             if (OperatingSystem.IsMacOS())
             {
                 _view.Render();     // VTK creates its NSView at the first render
                 CocoaPassThrough.Apply(Handle);
-                if (FitViewToHost) { CocoaPassThrough.FitSubviews(Handle); _view.Render(); }
+                if (FitViewToHost) { CocoaPassThrough.FitSubviews(Handle, ClientSize.Width, ClientSize.Height); _view.Render(); }
             }
             ViewCreated?.Invoke(this, EventArgs.Empty);
         }
@@ -100,7 +102,8 @@ namespace vtkControl.Native
             if (_view != null && ClientSize.Width > 0 && ClientSize.Height > 0)
             {
                 _view.SetSize(Device(ClientSize.Width), Device(ClientSize.Height));
-                if (FitViewToHost && OperatingSystem.IsMacOS() && Handle != IntPtr.Zero) CocoaPassThrough.FitSubviews(Handle);
+                if (FitViewToHost && OperatingSystem.IsMacOS() && Handle != IntPtr.Zero)
+                    CocoaPassThrough.FitSubviews(Handle, ClientSize.Width, ClientSize.Height);
                 _view.Render();
             }
         }
@@ -153,16 +156,16 @@ namespace vtkControl.Native
         [DllImport(ObjC)] private static extern IntPtr class_getName(IntPtr cls);
         [StructLayout(LayoutKind.Sequential)]
         private struct NSRect { public double X; public double Y; public double Width; public double Height; }
-        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern NSRect SendRect(IntPtr receiver, IntPtr selector);
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendRect(IntPtr receiver, IntPtr selector, NSRect rect);
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendBool(IntPtr receiver, IntPtr selector, bool value);
-        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendULong(IntPtr receiver, IntPtr selector, ulong value);
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern bool SendRespondsTo(IntPtr receiver, IntPtr selector, IntPtr query);
-        /// <summary>Pins every subview (VTK's view) to the bounds of the host view, sizes them with it, and makes the
-        /// host clip them (macOS 14 and later no longer clip subviews by default).</summary>
-        public static void FitSubviews(IntPtr hostView)
+        /// <summary>Places every subview (VTK's view) at the origin of the host view with the control's size in points
+        /// - the size VTK was given, never the host's bounds, which can lag behind a layout pass: VTK reports its view's
+        /// frame as its size, and the overlays are anchored to it - and makes the host clip them (macOS 14 and later
+        /// no longer clip subviews by default).</summary>
+        public static void FitSubviews(IntPtr hostView, int width, int height)
         {
-            NSRect bounds = SendRect(hostView, sel_registerName("bounds"));
+            NSRect bounds = new NSRect { X = 0, Y = 0, Width = width, Height = height };
             IntPtr clips = sel_registerName("setClipsToBounds:");
             if (SendRespondsTo(hostView, sel_registerName("respondsToSelector:"), clips)) SendBool(hostView, clips, true);
             IntPtr subviews = Send(hostView, sel_registerName("subviews"));
@@ -171,7 +174,6 @@ namespace vtkControl.Native
             {
                 IntPtr view = Send(subviews, sel_registerName("objectAtIndex:"), (IntPtr)(long)i);
                 SendRect(view, sel_registerName("setFrame:"), bounds);
-                SendULong(view, sel_registerName("setAutoresizingMask:"), 18);  // NSViewWidthSizable | NSViewHeightSizable
             }
         }
         public static void Apply(IntPtr parentView)

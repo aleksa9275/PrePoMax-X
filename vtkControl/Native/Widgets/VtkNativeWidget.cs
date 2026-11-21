@@ -89,11 +89,12 @@ namespace vtkControl.Native
         // Methods
         public void SetTextStyle(VtkNativeTextStyle style)
         {
+            style = VtkNativeView.ToDevice(style);
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_set_text_style(Handle(), ref style));
         }
         public void SetPadding(int padding)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_set_padding(Handle(), padding));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_set_padding(Handle(), VtkNativeView.ToDevice(padding)));
         }
         public void SetVisibility(bool visibility)
         {
@@ -107,7 +108,8 @@ namespace vtkControl.Native
         }
         public void SetPosition(VtkNativeWidgetAnchor anchor, double x, double y)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_set_position(Handle(), (int)anchor, x, y));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_set_position(Handle(), (int)anchor, VtkNativeView.ToDevice(x),
+                                                                              VtkNativeView.ToDevice(y)));
         }
         // The position measured from the anchor corner and the size: x, y, width, height
         public double[] GetPositionAndSize(out bool visible)
@@ -116,13 +118,14 @@ namespace vtkControl.Native
             int visibility;
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_get_geometry(Handle(), values, out visibility));
             visible = visibility != 0;
+            for (int i = 0; i < values.Length; i++) values[i] = VtkNativeView.ToControl(values[i]);
             return values;
         }
         public Rectangle GetRectangle()
         {
             int[] values = new int[4];
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_get_rectangle(Handle(), values));
-            return new Rectangle(values[0], values[1], values[2], values[3]);
+            return VtkNativeView.ToControl(values);
         }
         // The corners of the hover highlight, or null when none is shown
         public double[][] GetHighlightCorners()
@@ -131,6 +134,7 @@ namespace vtkControl.Native
             int visible;
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_widget_get_highlight(Handle(), values, out visible));
             if (visible == 0) return null;
+            for (int i = 0; i < values.Length; i++) values[i] = VtkNativeView.ToControl(values[i]);
             return new double[][] { new double[] { values[0], values[1] }, new double[] { values[2], values[3] },
                                     new double[] { values[4], values[5] }, new double[] { values[6], values[7] } };
         }
@@ -153,13 +157,13 @@ namespace vtkControl.Native
             int[] values = new int[4];
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_status_block_get_scale_factor_hit(Handle(), out clicked,
                                                                                             values));
-            rectangle = new Rectangle(values[0], values[1], values[2], values[3]);
+            rectangle = VtkNativeView.ToControl(values);
             return clicked != 0;
         }
         // Scale bar
         public void SetScaleBarWidth(int width)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scale_bar_set_width(Handle(), width));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_scale_bar_set_width(Handle(), VtkNativeView.ToDevice(width)));
         }
         public void SetScaleBarUnit(string unit)
         {
@@ -210,13 +214,15 @@ namespace vtkControl.Native
         }
         public void OffsetPosition(double dx, double dy)
         {
-            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_arrow_offset_position(Handle(), dx, dy));
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_arrow_offset_position(Handle(), VtkNativeView.ToDevice(dx),
+                                                                                VtkNativeView.ToDevice(dy)));
         }
         // The leader from the box to the arrow head: { start, end }, each x, y
         public double[][] GetLeaderLine()
         {
             double[] values = new double[4];
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_arrow_get_leader_line(Handle(), values));
+            for (int i = 0; i < values.Length; i++) values[i] = VtkNativeView.ToControl(values[i]);
             return new double[][] { new double[] { values[0], values[1] }, new double[] { values[2], values[3] } };
         }
         // Triad
