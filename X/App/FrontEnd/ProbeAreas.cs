@@ -123,6 +123,11 @@ namespace PrePoMaxX.FrontEnd
                     a.IsEnabled == m.Enabled && a.IsVisible == m.Visible && Equals(a.Header, Ui.AccessText(m.Text))).All(x => x);
                 Check("menu parity in the " + tab + " view", same, string.Join(", ", model.Where(m => !m.Enabled).Select(m => m.Text.Replace("&", ""))) + " disabled");
             }
+            // The original icons are found where the application runs (a package keeps them in app/resources)
+            var withImages = Walk(main.MainMenuStrip.Items.Cast<WinForms.ToolStripItem>()).Where(i => i.Image != null).ToList();
+            int drawn = withImages.Count(i => Ui.Bitmap(i.Image) != null);
+            Check("the application icon loads", Ui.AppIcon != null, Ui.Root);
+            Check("menu icons load", withImages.Count > 20 && drawn == withImages.Count, drawn + " of " + withImages.Count + " from " + Ui.Root);
             // Authoring first: a static step through FrmStep's list and OK (forms_gui_probe); the step entries below need it
             var step = await OpenFromMenu(main, "tsmiCreateStep", "FrmStep");
             var types = All(step).OfType<WinForms.ListView>().First(l => l.Visible);
@@ -199,6 +204,28 @@ namespace PrePoMaxX.FrontEnd
             Press(amplitude, "btnOK");
             await Pump(1);
             Check("OK created the amplitude", ((System.Collections.ICollection)c.GetAmplitudeNames()).Count >= 1 && !amplitude.Visible);
+            // The original material library beside the application (materials.lib), read through the type allowlist; the
+            // original shows it modally (ShowDialog), so it is inspected while open and then cancelled
+            string libraryFile = Path.Combine(WinForms.Application.StartupPath, "materials.lib");
+            string libraryForm = null; int libraryMaterials = -1; bool libraryListed = false;
+            s_onModal = form =>
+            {
+                libraryForm = form.GetType().Name;
+                var libraries = Field<WinForms.ListView>(form, "lvLibraries");
+                libraryListed = libraries != null && libraries.Items.ContainsKey(libraryFile);
+                if (!libraryListed) return;
+                libraries.SelectedIndices.Clear();
+                libraries.Items[libraryFile].Selected = true;
+                libraryMaterials = 0;
+                void CountNodes(WinForms.TreeNodeCollection nodes) { foreach (WinForms.TreeNode n in nodes) { if (n.Tag != null) libraryMaterials++; CountNodes(n.Nodes); } }
+                CountNodes(Field<WinForms.TreeView>(form, "cltvLibrary").Nodes);
+            };
+            var libraryEntry = MenuItem(main, "tsmiMaterialLibrary");
+            Check("tsmiMaterialLibrary enabled", libraryEntry != null && libraryEntry.Enabled);
+            Ui.Input(libraryEntry.PerformClick);
+            await Wait(() => libraryForm != null && !ShownForms(main).Any(f => f.GetType().Name == "FrmMaterialLibrary"), 15, "the material library opens and closes");
+            Check("the original material library lists materials.lib with its materials", libraryForm == "FrmMaterialLibrary" && libraryListed && libraryMaterials >= 10,
+                  libraryForm + "; " + (File.Exists(libraryFile) ? "" : libraryFile + " missing; ") + (libraryListed ? "" : "not listed; ") + libraryMaterials + " materials");
             // The code editor: FrmEditCommands with the history in the original editor (forms_gui_probe_editor)
             var editItem = Walk(main.MainMenuStrip.Items.Cast<WinForms.ToolStripItem>()).FirstOrDefault(i => i.Name == "tsmiEditCommands" || i.Name == "tsmiEditHistory");
             if (editItem != null && editItem.Enabled)

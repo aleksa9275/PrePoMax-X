@@ -10,10 +10,13 @@ results:  the solid project of the latest check run (X/Checks/artifacts/*/contro
           --project overrides), solved with the app's CalculiX
 elements: X/Analysis/StaticDeck/c3d10-force.inp
 Each run is a separate application start (hard timeout); history.pmh is removed after each.
+--fixtures DIR copies each fixture there first, so the application under test reads nothing from the repository
+(for a run with the repository blocked, e.g. a package under sandbox-exec: --launcher accepts a wrapper script).
 """
 import argparse
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -32,6 +35,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--area', action='append', choices=('forms', 'geometry', 'results', 'elements'))
     p.add_argument('--project', type=Path)
+    p.add_argument('--fixtures', type=Path, help='copy the fixtures to this folder and use the copies')
     a = p.parse_args()
     fixtures = {
         'forms': ROOT / '.project/reports/editable-solid-workflow/runs/bridge/baseline/mesh.inp',
@@ -43,6 +47,11 @@ def main():
     summary = {}
     for area in a.area or ['forms', 'geometry', 'results', 'elements']:
         fixture = fixtures[area]
+        if a.fixtures:
+            a.fixtures.mkdir(parents=True, exist_ok=True)
+            copy = a.fixtures / (area + '-' + Path(fixture).name)
+            shutil.copy2(fixture, copy)
+            fixture = copy
         prefix = a.output / area
         env = dict(os.environ, PREPOMAXX_UI_PROBE='avalonia', PREPOMAXX_UI_PROBE_AREA=area,
                    PREPOMAXX_UI_PROBE_OUTPUT=str(prefix), PREPOMAXX_UI_PROBE_TIMEOUT='420',

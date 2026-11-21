@@ -299,6 +299,23 @@ namespace PrePoMaxX.FrontEnd
             }
             return s_named.TryGetValue(name, out string relative) ? Bitmap(new WinForms.ImageResource(name, relative)) : null;
         }
+        static WindowIcon s_appIcon;
+        static bool s_appIconRead;
+        /// <summary>The original application icon (PrePoMax/main.ico).</summary>
+        internal static WindowIcon AppIcon
+        {
+            get
+            {
+                if (!s_appIconRead)
+                {
+                    s_appIconRead = true;
+                    string file = Path.Combine(Root, "PrePoMax/main.ico");
+                    try { if (File.Exists(file)) s_appIcon = new WindowIcon(file); }
+                    catch (Exception e) { if (Trace) Console.Error.WriteLine(e); }
+                }
+                return s_appIcon;
+            }
+        }
         static Bitmap Load(string file) => File.Exists(file) ? new Bitmap(file) : null;
         static Bitmap ResxImage(string path, string name)
         {

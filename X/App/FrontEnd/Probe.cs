@@ -27,6 +27,7 @@ namespace PrePoMaxX.FrontEnd
         static readonly List<Dictionary<string, object>> s_checks = new List<Dictionary<string, object>>();
         static WinForms.DialogResult? s_answer;
         static string s_lastModal;
+        static Action<WinForms.Form> s_onModal;
 
         internal static WinForms.DialogResult Prompt(string caption, string text, WinForms.DialogResult[] offered)
         {
@@ -39,10 +40,14 @@ namespace PrePoMaxX.FrontEnd
         {
             if (!Active) return;
             s_lastModal = form.GetType().Name;
+            // A probe area may inspect the next modal form while it is open (s_onModal), before it is closed
+            Action<WinForms.Form> inspect = s_onModal;
+            s_onModal = null;
             // Unattended: the modal form is closed by its cancel button (or Close) once it is drawn
             DispatcherTimer.RunOnce(() => Ui.Input(() =>
             {
                 if (!form.Visible) return;
+                if (inspect != null) inspect(form);
                 if (form.CancelButton != null) form.CancelButton.PerformClick(); else form.Close();
             }), TimeSpan.FromSeconds(1));
         }

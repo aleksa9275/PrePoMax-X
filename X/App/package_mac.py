@@ -142,11 +142,49 @@ def strip_absolute_rpaths(folder):
                 run('codesign', '--force', '-s', '-', path)
 
 
+def copy_ui_resources(target):
+    """The original images the front end reads at run time (FrontEnd.Bitmap/Named), at their repository-relative paths:
+    the icon folders searched by name, and every image file and .resx named by the compiled designer code."""
+    import re
+    files = {ROOT / 'PrePoMax/main.ico'}
+    for folder in ('PrePoMax/Icons', 'PrePoMax/Resources', 'UserControls/Resources'):
+        files.update(p for p in (ROOT / folder).rglob('*') if p.is_file() and p.name != '.DS_Store')
+    for base in (ROOT / 'X/UI/Workbench/OriginalForms', ROOT / 'X/App/Original'):
+        for source in base.rglob('*.g.cs'):
+            text = source.read_text(encoding='utf-8')
+            for relative in re.findall(r'ResxResources\("([^"]+)"\)', text) + \
+                    re.findall(r'ImageResource\("[^"]*", "([^"]+)"\)', text):
+                files.add(ROOT / relative)
+    missing = sorted(str(p.relative_to(ROOT)) for p in files if not p.is_file())
+    if missing:
+        raise SystemExit('UI resources missing: ' + ', '.join(missing[:10]))
+    for path in sorted(files):
+        destination = target / path.relative_to(ROOT)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+    print(f'UI resources: {len(files)} files')
+
+
+def make_icns(icon, target, work):
+    """The application icon from the original's main.ico (32x32, as the Windows build has it), scaled for the iconset."""
+    iconset = work / 'PrePoMax-X.iconset'
+    iconset.mkdir(parents=True)
+    run('sips', '-s', 'format', 'png', icon, '--out', work / 'main.png', capture_output=True)
+    for size in (16, 32, 128, 256, 512):
+        for scale, suffix in ((1, ''), (2, '@2x')):
+            run('sips', '-z', str(size * scale), str(size * scale), work / 'main.png',
+                '--out', iconset / f'icon_{size}x{size}{suffix}.png', capture_output=True)
+    run('iconutil', '-c', 'icns', iconset, '-o', target)
+    shutil.rmtree(work)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--p1', type=Path, required=True, help='PrePoMax-X.app of P1 (Python, meshers, Gmsh, licenses)')
     p.add_argument('--solver', type=Path, default=ROOT / 'X/Build/artifacts/solver-m2/solver')
     p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
+    p.add_argument('--original', type=Path, required=True,
+                   help='the extracted PrePoMax 3.0.1 release (materials.lib, Models, Tools/abqodb_to_ccxfrd.py)')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--zip', action='store_true')
@@ -177,6 +215,16 @@ def main():
     shutil.copy2(app / 'PrePoMax', app / 'PrePoMax.com')
     for leftover in ('settings.bin', 'history.pmh', 'PrePoMaxX.runtime.json'):
         (app / leftover).unlink(missing_ok=True)
+    copy_ui_resources(app / 'resources')
+
+    # The release's data files beside the original program, which the repository does not hold: the material library
+    # (FrmMaterialLibrary reads StartupPath/materials.lib), the example models and the Abaqus ODB conversion script
+    original = a.original.resolve()
+    if not (original / 'PrePoMax.exe').is_file():
+        raise SystemExit(f'{original} is not an extracted PrePoMax release')
+    shutil.copy2(original / 'materials.lib', app / 'materials.lib')
+    shutil.copytree(original / 'Models', app / 'Models')
+    release_files = {str(f.relative_to(app)): sha(f) for f in [app / 'materials.lib', *sorted((app / 'Models').rglob('*'))] if f.is_file()}
 
     # Python without PyQt6 and VTK's Python modules (the Avalonia front end needs neither)
     python = package['components']['python']
@@ -200,6 +248,10 @@ def main():
     shutil.copy2(lpsolve, res / 'tools/GmshCaller' / lpsolve.name)
     tools['\\lib\\GmshCaller.exe'] = {'path': 'tools/GmshCaller/GmshCaller', 'sha256': sha(res / 'tools/GmshCaller/GmshCaller')}
     shutil.copytree(a.quadwild.resolve(), res / 'tools/QuadWild')
+    (res / 'tools/Tools').mkdir()
+    shutil.copy2(original / 'Tools/abqodb_to_ccxfrd.py', res / 'tools/Tools/abqodb_to_ccxfrd.py')
+    tools['\\Tools\\abqodb_to_ccxfrd.py'] = {'path': 'tools/Tools/abqodb_to_ccxfrd.py', 'sha256': sha(res / 'tools/Tools/abqodb_to_ccxfrd.py')}
+    release_files['tools/Tools/abqodb_to_ccxfrd.py'] = tools['\\Tools\\abqodb_to_ccxfrd.py']['sha256']
     for exe in ('quadwild.exe', 'quad_from_patches.exe'):
         tools['\\Meshers\\QuadWild\\' + exe] = {'path': 'tools/QuadWild/' + exe, 'sha256': sha(res / 'tools/QuadWild' / exe)}
     gmsh = package['components']['gmsh']
@@ -226,6 +278,7 @@ def main():
 
     # Launcher, manifest, Info.plist
     shutil.copy2(ROOT / 'X/App/bundle_launch.py', res / 'launch.py')
+    make_icns(ROOT / 'PrePoMax/main.ico', res / 'PrePoMax-X.icns', a.output.resolve() / 'icon-work')
     build_id = revision[:12] + '-' + hashlib.sha256(b''.join(sha(f).encode() for f in sorted(app.rglob('*')) if f.is_file())).hexdigest()[:12]
     (res / 'bundle.json').write_text(json.dumps({
         'schemaVersion': 1, 'name': 'PrePoMax-X', 'target': 'osx-arm64', 'build': build_id, 'source': revision,
@@ -233,7 +286,9 @@ def main():
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],
         'solver': {'registry': 'solver/build-registry.json', 'id': solver_id, 'directory': 'solver/bin'},
-        'missing': {'PARDISO': 'the Intel MKL PARDISO solver has no macOS ARM64 build (use SPOOLES)'},
+        'release': {'version': '3.0.1', 'files': release_files},
+        'missing': {'PARDISO': 'the Intel MKL PARDISO solver has no macOS ARM64 build (use SPOOLES)',
+                    'BidirectionalMeshConverter': 'Tools/BidirectionalMeshConverter.exe of the release is Windows-only'},
     }, indent=2) + '\n')
     macos = bundle / 'Contents/MacOS'
     macos.mkdir(parents=True)
@@ -246,6 +301,7 @@ def main():
 <dict>
 	<key>CFBundleDisplayName</key><string>PrePoMax-X</string>
 	<key>CFBundleExecutable</key><string>PrePoMax-X</string>
+	<key>CFBundleIconFile</key><string>PrePoMax-X</string>
 	<key>CFBundleIdentifier</key><string>org.prepomax-x.desktop</string>
 	<key>CFBundleName</key><string>PrePoMax-X</string>
 	<key>CFBundlePackageType</key><string>APPL</string>

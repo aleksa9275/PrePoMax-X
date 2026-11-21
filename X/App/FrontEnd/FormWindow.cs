@@ -42,6 +42,8 @@ namespace PrePoMaxX.FrontEnd
             _client.Background = form.BackColor.A > 0 ? Ui.Brush(form.BackColor) : Look.Control;
             Background = Look.Control;
             Title = form.Text;
+            // The original forms carry the application's icon (on macOS this is also the Dock icon of the process)
+            if (Ui.AppIcon != null) Icon = Ui.AppIcon;
             if (main)
             {
                 Ui.Main = this;

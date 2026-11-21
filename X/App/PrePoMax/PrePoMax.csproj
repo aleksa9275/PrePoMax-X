@@ -24,6 +24,26 @@
     <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
     <ProjectReference Include="../FrontEnd/FrontEnd.csproj" />
   </ItemGroup>
+  <!-- The original post-build files (PrePoMax.csproj PostBuildEvent and Build/PythonApiHelp.targets): the agent skill
+       and the Python API help page beside the application, generated with the same Markdig version upstream uses -->
+  <ItemGroup>
+    <PackageDownload Include="Markdig" Version="[1.3.2]" />
+    <None Include="$(RepositoryRoot)AgentSkill/prepomax/SKILL.md" Link="Help/Python/SKILL.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Import Project="$(RepositoryRoot)PrePoMax/Build/PythonApiHelp.targets" />
+  <PropertyGroup>
+    <PythonApiHelpSource>$(RepositoryRoot)Python_API_Overview.md</PythonApiHelpSource>
+    <PythonApiHelpStyle>$(RepositoryRoot)PrePoMax/Help/Python/Python_API_Overview.css</PythonApiHelpStyle>
+    <PythonApiHelpMarkdigAssembly>$(NuGetPackageRoot)markdig/1.3.2/lib/netstandard2.0/Markdig.dll</PythonApiHelpMarkdigAssembly>
+  </PropertyGroup>
+  <!-- OutDir is set after the project body; the original's $(TargetDir) output is resolved when the target runs -->
+  <Target Name="PythonApiHelpOutputPath" BeforeTargets="GeneratePythonApiHelp">
+    <PropertyGroup><PythonApiHelpOutput>$(TargetDir)Help/Python/Python_API_Overview.html</PythonApiHelpOutput></PropertyGroup>
+  </Target>
+  <Target Name="PublishPythonApiHelp" AfterTargets="Publish">
+    <GeneratePythonApiHelpHtml SourcePath="$(PythonApiHelpSource)" StylePath="$(PythonApiHelpStyle)"
+                               OutputPath="$(PublishDir)Help/Python/Python_API_Overview.html" />
+  </Target>
   <!-- The 3D view: libvtkNative and the VTK libraries beside vtkControl.dll (X/Build/Vtk/build.py runtime folder), as
        for the workbench -->
   <ItemGroup Condition="'$(VtkNativeRuntime)' != ''">
