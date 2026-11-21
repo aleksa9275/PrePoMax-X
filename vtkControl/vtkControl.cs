@@ -3998,7 +3998,7 @@ namespace vtkControl
         public void SyncNativeMirror()
         {
             if (_nativeMirror == null) return;
-            _nativeMirror.SetSize(Math.Max(1, _nativeHost.ClientSize.Width), Math.Max(1, _nativeHost.ClientSize.Height));
+            _nativeHost.SyncViewSize();
             _nativeMirror.SetBackground(_gradientBackground, _backgroundTop, _backgroundBottom);
             _nativeMirror.SetSmoothing(_pointSmoothing, _lineSmoothing);
             _nativeMirror.SetEdgesVisibility(_edgesVisibility);

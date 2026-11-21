@@ -124,13 +124,18 @@ UI fine; three findings:
 - **The view starts small until the window is resized.** VTK's view was fitted to the control's size while
   Avalonia's native host view still had its first frame (1×1); Avalonia places the host after that layout pass. The
   view is fitted again once the host has its frame (`VtkNativeHost.FitView`, traced with
-  `PREPOMAXX_TRACE_VIEW_SIZE=1`: host and view 1123×592). The maintainer: still small. The frames were right; the
-  OpenGL context kept its first surface (AppKit tells a context nothing when its view's superview changes, and VTK
-  updates it only when it resizes the view itself). After the fit the current context, VTK's, is updated
-  (`CocoaPassThrough.UpdateCurrentContext`); not yet confirmed on screen (no screen capture here).
-- Re-check: the analysis with SPOOLES runs and its results open. **The output window started scrolled to the
-  right**: it scrolled to its last place while narrow (or before layout) and never again on resize. The code view
-  now uses the model's size before layout and shows a read-only view's last place again when its size changes.
+  `PREPOMAXX_TRACE_VIEW_SIZE=1`: host and view 1123×592). The maintainer: still small, **after opening a model**.
+  A capture of the app's own window (`PREPOMAXX_WINDOW_CAPTURE`, the terminal has no screen recording permission)
+  showed VTK drawing a quarter of the view: upstream's `vtkControl.SyncNativeMirror` (on SetBackground, which
+  opening a model calls) set the view's size from `ClientSize` in control units, which are pixels on Windows and
+  half the device pixels on a Retina Mac. The host now sets that size in its own units (`VtkNativeHost.SyncViewSize`,
+  both hosts; the Windows one unchanged in effect).
+- Re-check: the analysis with SPOOLES runs and its results open. **The output window scrolled to the right**: the
+  original output box wraps its lines at the control width (`WordWrap`, rows after the first indented past the date,
+  `WordWrapIndent` 20); the Avalonia code view drew every line unwrapped and scrolled to the end of the long 2.5.1
+  compatibility line. The code view now lays out wrapped rows as FastColoredTextBox does (breaks between words) and
+  maps clicks back to the text box's line coordinates, so links still work. Confirmed in a window capture after
+  opening the maintainer's model: view full size, output wrapped.
 
 After these: probe 16/16, `check.py` 7/7.
 

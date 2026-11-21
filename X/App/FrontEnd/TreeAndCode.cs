@@ -308,6 +308,69 @@ namespace PrePoMaxX.FrontEnd
 
         double LineHeight => _charHeight + _code.LineInterval;
 
+        // Rows: a line is one row, or several when the text box wraps its lines (WordWrap, as the output window):
+        // FastColoredTextBox breaks a line between words at the control width and indents the rows after the
+        // first by WordWrapIndent characters
+        struct Row { public int Line, Start, End; }
+        readonly List<Row> _rows = new List<Row>();
+        int[] _firstRow = new int[0];
+        double _wrapIndent;
+        bool Wrapped => _code.WordWrap;
+        static bool WordChar(char c) => char.IsLetterOrDigit(c) || c == '_';
+
+        void LayoutRows(double viewWidth)
+        {
+            _rows.Clear();
+            int lines = _code.LinesCount;
+            if (_firstRow.Length != lines) _firstRow = new int[lines];
+            int max = Wrapped ? Math.Max(1, (int)Math.Floor((viewWidth - GutterWidth - 3) / _charWidth)) : int.MaxValue;
+            int indent = Wrapped ? Math.Max(0, Math.Min(_code.WordWrapIndent, max - 1)) : 0;
+            _wrapIndent = indent * _charWidth;
+            for (int i = 0; i < lines; i++)
+            {
+                _firstRow[i] = _rows.Count;
+                string text = _code.GetLineText(i);
+                int start = 0, width = max;
+                while (text.Length - start > width)
+                {
+                    int cut = start + width, k = cut;
+                    while (k > start && WordChar(text[k - 1]) && WordChar(text[k])) k--;
+                    if (k == start) k = cut;
+                    _rows.Add(new Row { Line = i, Start = start, End = k });
+                    start = k;
+                    width = Math.Max(1, max - indent);
+                }
+                _rows.Add(new Row { Line = i, Start = start, End = text.Length });
+            }
+        }
+
+        int RowOf(FastColoredTextBoxNS.Place place)
+        {
+            if (_rows.Count == 0) return 0;
+            int line = Math.Max(0, Math.Min(_firstRow.Length - 1, place.iLine));
+            int r = _firstRow.Length == 0 ? 0 : _firstRow[line];
+            while (r + 1 < _rows.Count && _rows[r + 1].Line == line && _rows[r + 1].Start <= place.iChar) r++;
+            return r;
+        }
+
+        /// <summary>The x of the row's first character on the surface.</summary>
+        double RowLeft(Row row) => GutterWidth + 3 - _horizontal.Value + (row.Start > 0 ? _wrapIndent : 0);
+
+        /// <summary>A point of the surface in the text box's own coordinates, where every line is one row: the text
+        /// box finds the place of a point (PointToPlace, links, selection) from them.</summary>
+        (int, int) ModelPoint(Point point)
+        {
+            if (_rows.Count == 0) return ((int)point.X, (int)point.Y);
+            double y = point.Y + _vertical.Value;
+            int r = Math.Max(0, Math.Min(_rows.Count - 1, (int)(y / LineHeight)));
+            Row row = _rows[r];
+            double within = Math.Max(0, y - r * LineHeight);
+            double column = Math.Max(row.Start, Math.Min(row.End, row.Start + (point.X - RowLeft(row)) / _charWidth));
+            int x = (int)Math.Round(_code.LeftIndent + _code.Paddings.Left + column * _code.CharWidth - _code.HorizontalScrollValue);
+            int modelLine = _code.CharHeight + _code.LineInterval;
+            return (x, row.Line * modelLine - _code.VerticalScrollValue + (int)Math.Min(within, Math.Max(0, _code.CharHeight - 1)));
+        }
+
         double GutterWidth
         {
             get
@@ -340,13 +403,15 @@ namespace PrePoMaxX.FrontEnd
             _syncing = true;
             try
             {
-                _vertical.Maximum = Math.Max(0, lines * LineHeight - viewHeight + LineHeight);
+                LayoutRows(viewWidth);
+                _vertical.Maximum = Math.Max(0, _rows.Count * LineHeight - viewHeight + LineHeight);
                 if (follow) _vertical.Value = _vertical.Maximum;
                 _vertical.SmallChange = LineHeight;
                 _vertical.LargeChange = Math.Max(LineHeight, viewHeight);
                 _vertical.ViewportSize = Math.Max(LineHeight, viewHeight);
-                int longest = lines < 20000 ? Enumerable.Range(0, lines).Select(i => _code.GetLineText(i).Length).DefaultIfEmpty(0).Max() : 400;
-                _horizontal.Maximum = Math.Max(0, GutterWidth + longest * _charWidth + 40 - viewWidth);
+                int longest = Wrapped ? 0 : lines < 20000 ? Enumerable.Range(0, lines).Select(i => _code.GetLineText(i).Length).DefaultIfEmpty(0).Max() : 400;
+                _horizontal.Maximum = Wrapped ? 0 : Math.Max(0, GutterWidth + longest * _charWidth + 40 - viewWidth);
+                if (Wrapped) _horizontal.Value = 0;
                 _horizontal.ViewportSize = Math.Max(1, viewWidth);
                 _horizontal.LargeChange = Math.Max(1, viewWidth);
                 _horizontal.IsVisible = _horizontal.Maximum > 0;
@@ -360,14 +425,14 @@ namespace PrePoMaxX.FrontEnd
         void ScrollToCaret(FastColoredTextBoxNS.Place caret)
         {
             UpdateMetrics();
-            double top = caret.iLine * LineHeight;
+            double top = RowOf(caret) * LineHeight;
             double viewHeight = Math.Max(0, (Bounds.Height > 0 ? Bounds.Height : _code.ClientSize.Height) - (_horizontal.IsVisible ? 14 : 0));
             if (top < _vertical.Value) _vertical.Value = top;
             else if (top + LineHeight > _vertical.Value + viewHeight) _vertical.Value = Math.Min(_vertical.Maximum, top + LineHeight - viewHeight);
             double x = GutterWidth + caret.iChar * _charWidth;
             double viewWidth = Math.Max(0, (Bounds.Width > 0 ? Bounds.Width : _code.ClientSize.Width) - 14);
             // A place that fits from the left edge shows the line from its start
-            if (viewWidth <= 40) { }
+            if (viewWidth <= 40 || Wrapped) { }
             else if (x < viewWidth - 40) _horizontal.Value = 0;
             else if (x < _horizontal.Value + GutterWidth) _horizontal.Value = Math.Max(0, x - GutterWidth - 20);
             else if (x > _horizontal.Value + viewWidth - 10) _horizontal.Value = Math.Min(_horizontal.Maximum, x - viewWidth + 40);
@@ -422,9 +487,9 @@ namespace PrePoMaxX.FrontEnd
                 if (!c.Enabled) context.FillRectangle(new SolidColorBrush(Color.FromArgb(12, 0, 0, 0)), new Rect(Bounds.Size));
                 double lineHeight = o.LineHeight, cw = o._charWidth;
                 double top = o._vertical.Value, gutter = o.GutterWidth;
-                double left = gutter + 3 - o._horizontal.Value;
+                var rows = o._rows;
                 int first = Math.Max(0, (int)(top / lineHeight));
-                int last = Math.Min(c.LinesCount - 1, (int)((top + Bounds.Height) / lineHeight) + 1);
+                int last = Math.Min(rows.Count - 1, (int)((top + Bounds.Height) / lineHeight) + 1);
                 var selection = c.Selection;
                 var start = selection.Start; var end = selection.End;
                 if (start.iLine > end.iLine || start.iLine == end.iLine && start.iChar > end.iChar) { var t = start; start = end; end = t; }
@@ -436,9 +501,12 @@ namespace PrePoMaxX.FrontEnd
                 var bookmarks = new HashSet<int>(c.Bookmarks.Select(b => b.LineIndex));
                 bool emptySelection = start.iLine == end.iLine && start.iChar == end.iChar;
                 using (context.PushClip(new Rect(gutter, 0, Math.Max(0, Bounds.Width - gutter), Bounds.Height)))
-                    for (int i = first; i <= last; i++)
+                    for (int r = first; r <= last; r++)
                     {
-                        double y = i * lineHeight - top;
+                        var row = rows[r];
+                        int i = row.Line;
+                        bool lastRowOfLine = r + 1 >= rows.Count || rows[r + 1].Line != i;
+                        double y = r * lineHeight - top, left = o.RowLeft(row);
                         if (currentLine != null && i == c.Selection.Start.iLine && emptySelection)
                             context.FillRectangle(currentLine, new Rect(0, y, Bounds.Width, lineHeight));
                         string text = c.GetLineText(i);
@@ -446,12 +514,15 @@ namespace PrePoMaxX.FrontEnd
                         for (int k = 0; k + 5 < runs.Length; k += 6)
                         {
                             int s = runs[k], n = runs[k + 1], fore = runs[k + 2], bg = runs[k + 3], style = runs[k + 4], marker = runs[k + 5];
-                            double x = left + s * cw;
-                            var rect = new Rect(x, y, n * cw, lineHeight);
+                            // The part of the run on this row (a run past the text, a marker at the end, on the last row)
+                            int from = Math.Max(s, row.Start), to = lastRowOfLine ? s + n : Math.Min(s + n, row.End);
+                            if (to <= from) continue;
+                            double x = left + (from - row.Start) * cw;
+                            var rect = new Rect(x, y, Math.Max(0, to - from) * cw, lineHeight);
                             if (bg != 0) context.FillRectangle(Argb(bg), rect);
                             if (marker != 0) context.DrawRectangle(Argb(marker), null, rect.Deflate(0.5), 3, 3);
-                            if (s >= text.Length) continue;
-                            string part = text.Substring(s, Math.Min(n, text.Length - s));
+                            if (from >= text.Length) continue;
+                            string part = text.Substring(from, Math.Min(to, text.Length) - from);
                             var typeface = new Typeface(Look.Monospace, (style & 2) != 0 ? FontStyle.Italic : FontStyle.Normal, (style & 1) != 0 ? FontWeight.Bold : FontWeight.Normal);
                             var formatted = new FormattedText(part, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, typeface, o._fontSize, fore != 0 ? Argb(fore) : foreDefault);
                             if ((style & 4) != 0) formatted.SetTextDecorations(TextDecorations.Underline);
@@ -459,20 +530,22 @@ namespace PrePoMaxX.FrontEnd
                         }
                         if (!emptySelection && start.iLine <= i && i <= end.iLine)
                         {
-                            int a = i == start.iLine ? start.iChar : 0;
-                            int b = i == end.iLine ? end.iChar : text.Length + 1;
-                            context.FillRectangle(selectionBrush, new Rect(left + a * cw, y, Math.Max(0, b - a) * cw, lineHeight));
+                            int a = Math.Max(row.Start, i == start.iLine ? start.iChar : 0);
+                            int b = Math.Min(lastRowOfLine ? text.Length + 1 : row.End, i == end.iLine ? end.iChar : text.Length + 1);
+                            if (b > a) context.FillRectangle(selectionBrush, new Rect(left + (a - row.Start) * cw, y, (b - a) * cw, lineHeight));
                         }
                     }
-                // Gutter: line numbers and bookmarks
+                // Gutter: line numbers and bookmarks, on the first row of a line
                 if (gutter > 0)
                 {
                     context.FillRectangle(back, new Rect(0, 0, gutter, Bounds.Height));
                     IBrush numbers = c.LineNumberColor.IsEmpty ? Brushes.Teal : Ui.Brush(c.LineNumberColor);
                     IBrush mark = c.BookmarkColor.IsEmpty ? Brushes.PowderBlue : Ui.Brush(c.BookmarkColor);
-                    for (int i = first; i <= last; i++)
+                    for (int r = first; r <= last; r++)
                     {
-                        double y = i * lineHeight - top;
+                        if (rows[r].Start > 0) continue;
+                        int i = rows[r].Line;
+                        double y = r * lineHeight - top;
                         if (bookmarks.Contains(i)) context.FillRectangle(mark, new Rect(1, y + 1, 6, lineHeight - 2));
                         var number = new FormattedText((i + 1).ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, o._typeface, o._fontSize, numbers);
                         context.DrawText(number, new Point(gutter - 6 - number.Width, y + (lineHeight - o._charHeight) / 2));
@@ -480,15 +553,17 @@ namespace PrePoMaxX.FrontEnd
                     context.DrawLine(new Pen(c.ServiceLinesColor.IsEmpty ? Brushes.Silver : Ui.Brush(c.ServiceLinesColor)), new Point(gutter + 0.5, 0), new Point(gutter + 0.5, Bounds.Height));
                 }
                 // Caret
-                if (IsFocused && _caretOn && c.CaretVisible)
+                if (IsFocused && _caretOn && c.CaretVisible && rows.Count > 0)
                 {
                     var caret = c.Selection.Start;
-                    double x = left + caret.iChar * cw, y = caret.iLine * lineHeight - top;
+                    int r = o.RowOf(caret);
+                    var row = rows[r];
+                    double x = o.RowLeft(row) + (caret.iChar - row.Start) * cw, y = r * lineHeight - top;
                     context.FillRectangle(c.CaretColor.IsEmpty ? Brushes.Black : Ui.Brush(c.CaretColor), new Rect(x, y, c.IsReplaceMode ? cw : 2, lineHeight));
                 }
             }
 
-            (int, int) Place(PointerEventArgs e) { Point p = e.GetPosition(this); return ((int)p.X, (int)p.Y); }
+            (int, int) Place(PointerEventArgs e) => _owner.ModelPoint(e.GetPosition(this));
 
             protected override void OnPointerPressed(PointerPressedEventArgs e)
             {
@@ -516,7 +591,12 @@ namespace PrePoMaxX.FrontEnd
                 var (x, y) = Place(e);
                 var button = Keyboard.Button(e.GetCurrentPoint(this).Properties.PointerUpdateKind);
                 Ui.Input(() => { Code.RaiseMouse("up", button, 1, x, y); Code.RaiseMouse("click", button, 1, x, y); });
-                if (button == WinForms.MouseButtons.Right && Code.ContextMenuStrip != null) Ui.Input(() => Code.ContextMenuStrip.Show(Code, new System.Drawing.Point(x, y)));
+                if (button == WinForms.MouseButtons.Right && Code.ContextMenuStrip != null)
+                {
+                    // The menu opens where the click was on this surface
+                    Point at = e.GetPosition(this);
+                    Ui.Input(() => Code.ContextMenuStrip.Show(Code, new System.Drawing.Point((int)at.X, (int)at.Y)));
+                }
                 InvalidateVisual();
             }
             protected override void OnPointerWheelChanged(PointerWheelEventArgs e)

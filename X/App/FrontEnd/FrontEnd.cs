@@ -114,6 +114,7 @@ namespace PrePoMaxX.FrontEnd
                 foreach (Exception error in Context.Drain()) Console.Error.WriteLine(error);
                 if (!s_changes.IsEmpty) Sync();
             }).Start();
+            WindowCapture.Start();
         }
 
         // Notifications ---------------------------------------------------------------------------------------------------

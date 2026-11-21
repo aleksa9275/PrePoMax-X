@@ -116,6 +116,12 @@ namespace vtkControl.Native
         {
             if (_view != null) _view.Render();
         }
+        /// <summary>The size of the view in the units the view uses: device pixels on macOS (VTK's Cocoa view renders
+        /// DeviceScale pixels per control unit), as OnResize gives it.</summary>
+        public void SyncViewSize()
+        {
+            if (_view != null) _view.SetSize(Device(Math.Max(1, ClientSize.Width)), Device(Math.Max(1, ClientSize.Height)));
+        }
         /// <summary>macOS with FitViewToHost: fits VTK's view to the host view again. A front end that places its
         /// native host view after the control has its size (Avalonia lays the host out after the model's resize) calls
         /// it once the host view has its frame; until then VTK's view keeps the host's earlier, smaller frame.</summary>
@@ -124,10 +130,8 @@ namespace vtkControl.Native
             if (_view == null || !FitViewToHost || !OperatingSystem.IsMacOS() || Handle == IntPtr.Zero ||
                 ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
             CocoaPassThrough.FitSubviews(Handle, ClientSize.Width, ClientSize.Height);
-            _view.Render();     // makes VTK's context current
-            bool updated = CocoaPassThrough.UpdateCurrentContext(Handle);
-            if (updated) _view.Render();
-            if (TraceSize) Console.WriteLine("[view size] fit " + CocoaPassThrough.DescribeFrames(Handle) + (updated ? " context updated" : " no context"));
+            _view.Render();
+            if (TraceSize) Console.WriteLine("[view size] fit " + CocoaPassThrough.DescribeFrames(Handle));
         }
     }
 
@@ -176,19 +180,6 @@ namespace vtkControl.Native
         private struct NSRect { public double X; public double Y; public double Width; public double Height; }
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendRect(IntPtr receiver, IntPtr selector, NSRect rect);
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern NSRect GetRect(IntPtr receiver, IntPtr selector);
-        /// <summary>An OpenGL context keeps the surface of its view's last update: a view whose superview the front end
-        /// resizes or moves keeps its own frame, so AppKit tells nobody, and the view shows its earlier, smaller
-        /// surface until VTK resizes it. Updates the current context (VTK's after a render) when it draws into a
-        /// subview of the host view.</summary>
-        public static bool UpdateCurrentContext(IntPtr hostView)
-        {
-            IntPtr context = Send(objc_getClass("NSOpenGLContext"), sel_registerName("currentContext"));
-            if (context == IntPtr.Zero) return false;
-            IntPtr view = Send(context, sel_registerName("view"));
-            if (view == IntPtr.Zero || Send(view, sel_registerName("superview")) != hostView) return false;
-            Send(context, sel_registerName("update"));
-            return true;
-        }
         /// <summary>Tracing: the frames of a host view and its subviews (arm64: structures return in registers).</summary>
         public static string DescribeFrames(IntPtr hostView)
         {

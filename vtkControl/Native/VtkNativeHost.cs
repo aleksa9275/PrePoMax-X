@@ -78,6 +78,11 @@ namespace vtkControl.Native
         {
             if (_view != null) _view.Render();
         }
+        // The size of the view in the units the view uses (pixels of this window)
+        public void SyncViewSize()
+        {
+            if (_view != null) _view.SetSize(Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height));
+        }
         // A click on the ActiViz view was a click on vtkControl, which took the focus of the form; a click on the
         // OpenGL window passes the form by, which kept the control focused before, a tool strip or the search box of the
         // model tree, and so ignored the keys of the view (the space to hide and show). The control takes the focus

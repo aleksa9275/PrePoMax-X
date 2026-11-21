@@ -30,5 +30,8 @@ PREPOMAXX_UI_PROBE=avalonia PREPOMAXX_UI_PROBE_OUTPUT=<dir>/probe <app folder>/P
 
 The report (`probe.json`, view and window images) covers the checks of `X/UI/app_gui_probe.py` and those of M3-1a: a
 drag turns the view, FrmMaterial's property grid, Escape through the key hook, the view's context menu at the click
-point in control units, a modal form, tool button states. `PREPOMAXX_TRACE_FRONT_END=1` traces start-up and every sync.
+point in control units, a modal form, tool button states. `PREPOMAXX_TRACE_FRONT_END=1` traces start-up and every sync. `PREPOMAXX_TRACE_VIEW_SIZE=1` traces the
+view's sizes and native frames. `PREPOMAXX_WINDOW_CAPTURE=<prefix> PREPOMAXX_WINDOW_CAPTURE_AT=<seconds,...>` saves
+images of the app's own windows as the screen shows them, the VTK view included (macOS lets an app capture its own
+windows without the screen recording permission).
 Builds set `AVALONIA_TELEMETRY_OPTOUT=1` (Avalonia's build telemetry).
