@@ -44,3 +44,14 @@ The GUI probe of the original main window on Avalonia: `PREPOMAXX_UI_PROBE=avalo
 <app folder>/PrePoMax -f <model> -u <units>` ([FrontEnd](FrontEnd/README.md)); on Qt: `PREPOMAXX_UI_PROBE=X/UI/app_gui_probe.py PREPOMAXX_UI_PROBE_OUTPUT=<file>
 <app folder>/PrePoMax -f <model> -u <units>`. `PREPOMAXX_TRACE_EXCEPTIONS=1` prints every exception with its stack (the
 original prints only the message of the one that ends a run).
+
+The probe areas (the workbench's form-level checks on the real app: forms, geometry, results, elements):
+`python3 X/App/FrontEnd/run_probe_areas.py --app <app folder> --output DIR` (or `--launcher
+PrePoMax-X.app/Contents/MacOS/PrePoMax-X`). The per-form bounds comparison with the original: `X/App/Bounds`
+(`Windows/BoundsWindows.csproj` on WinForms with the original `PrePoMax.exe`, `Bounds.csproj` on FormsCompat,
+`compare.py`).
+
+`PrePoMax-X.app` for macOS ARM64 without PyQt: `python3 X/App/package_mac.py --p1 <P1 PrePoMax-X.app> --output DIR
+--zip` — the application self-contained, CPython without PyQt6/VTK-Python, the meshers, Gmsh, QuadWild and the
+relocated CalculiX; its launcher (`bundle_launch.py`) clones the app into `~/Library/Application Support/PrePoMax-X`
+and runs the original Configure step there.

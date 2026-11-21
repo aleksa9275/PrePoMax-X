@@ -139,8 +139,35 @@ UI fine; three findings:
 
 After these: probe 16/16, `check.py` 7/7.
 
+## M3-1a close-out (21 November)
+
+All four open points closed; M3-1a is done on macOS ARM64.
+
+- **Layout and the bounds comparison.** `X/App/Bounds` dumps every original form's control bounds on WinForms
+  (net48, the original 3.0.1) and on FormsCompat (X/App); [evidence](m3-1a-bounds/README.md). The reference ran in
+  CrossOver on **Wine Mono** (no Microsoft .NET Framework in the bottle): 66 forms, 566 controls, 108 differences,
+  all from Mono's fonts, frame and tab handling; 15 forms need a live controller on both sides. It found four
+  FormsCompat gaps, fixed: Minimum/MaximumSize (the splash stayed expanded), the 300 × 300 form default, relayout
+  on `Padding`, docking in `DisplayRectangle` (group box caption, scrollable padding); the table layout gained cell
+  borders and WinForms' percent rounding. The Windows-authoritative run is the same tool on the M3 Windows runner.
+- **The workbench probe areas** on the real app ([evidence](m3-1a-probe-areas/summary.json)):
+  `PREPOMAXX_UI_PROBE_AREA` with `run_probe_areas.py` — forms 120 (menu parity in every view; every create form
+  through its original entry point at its designer size, every visible control mirrored at its bounds, Cancel
+  changing nothing; FrmStep, FrmAmplitude data grid, FrmEditCommands), geometry 4 (CAD import, Netgen), results 9
+  (CalculiX through FrmMonitor, results controls, contour view), elements 5. Found and fixed: windows of forms that
+  change nothing after `Show` opened at Avalonia's default size (NaN width never compared unequal).
+- **Polish.** The triad's shaft is scaled to the display as its labels are (`vtkn_triad_set_shaft_length`, native
+  default unchanged on Windows). The start-up stall did not occur in 13 consecutive runs since the renderer's
+  callbacks are guarded (not reproduced; not shown gone). Resize: programmatic resize captures show no offset or
+  stretch; a live drag is the maintainer's check. `PREPOMAXX_WINDOW_CAPTURE` saves the app's own windows (the VTK
+  view included) for visual checks without the screen recording permission.
+- **`PrePoMax-X.app` without PyQt** (`X/App/package_mac.py`, source `73c75b8a`): X/App self-contained (no .NET install),
+  CPython without PyQt6/VTK-Python, P1's meshers and Gmsh, GmshCaller, QuadWild, the local app's CalculiX relocated
+  with its libraries; ad-hoc signed; 615 MB, zip 195 MiB. In a clean environment (no `dotnet` on PATH) the bundle and
+  the unpacked zip pass the base probe 16/16 and the four areas (120 + 4 + 9 + 5). Published as a preview on the
+  branch `release/macos-arm64-preview` (binary only, README with the status).
+
 ## Next
 
-The maintainer chose Avalonia and macOS first (D067). M3-1a: the renderer moves into X/App on macOS and must match
-and better M2's Qt front end (steps in [REMAINING_WORK.md](../REMAINING_WORK.md)); M3-1b: Linux on the local Podman
-machine. This report continues with M3-1a.
+M3-1b: Linux on the local Podman machine (ARM64: Xvfb probes, VNC for the maintainer), then PyQt retired from the
+packages (D067).
