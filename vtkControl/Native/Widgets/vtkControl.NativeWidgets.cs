@@ -176,8 +176,8 @@ namespace vtkControl
                     break;
                 case 24:
                     style_RightButtonPressEvent(GetMirroredWidget((int)e.Values[2]),
-                                                new MouseEventArgs(MouseButtons.Right, 1, (int)e.Values[0],
-                                                                   (int)e.Values[1], 0));
+                                                new MouseEventArgs(MouseButtons.Right, 1, VtkNativeView.ToControlUnits(e.Values[0]),
+                                                                   VtkNativeView.ToControlUnits(e.Values[1]), 0));
                     break;
                 case 25:
                     RotationPointChanged?.Invoke(new double[] { e.Values[0], e.Values[1], e.Values[2] });

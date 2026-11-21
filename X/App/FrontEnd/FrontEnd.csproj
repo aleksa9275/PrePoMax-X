@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The front end of the original application on macOS and Linux (M3-1a, D065/D067): the original forms, compiled
+       whole on the WinForms control model (X/UI/FormsCompat), drawn by Avalonia in the application's own .NET runtime.
+       PrePoMax.dll (X/App/PrePoMax) hands Application.Run's main form to it (XRuntime). -->
+  <PropertyGroup>
+    <AssemblyName>PrePoMaxX.FrontEnd</AssemblyName><RootNamespace>PrePoMaxX.FrontEnd</RootNamespace>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="*.cs" />
+    <PackageReference Include="Avalonia" Version="[11.3.23]" />
+    <PackageReference Include="Avalonia.Desktop" Version="[11.3.23]" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="[11.3.23]" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="[11.3.23]" />
+    <ProjectReference Include="../../Domain/CaeGlobals/CaeGlobals.csproj" />
+    <ProjectReference Include="../../Domain/vtkControl/vtkControl.csproj" />
+    <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
+  </ItemGroup>
+</Project>

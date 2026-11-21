@@ -4,7 +4,7 @@ Started 20 November 2026, macOS ARM64. In progress.
 
 ## Toolkit spike
 
-The spike ([X/Spike/FrontEnd](../../X/Spike/FrontEnd/README.md)) runs the original `Program.Main` of X/App with an
+The spike (`X/Spike/FrontEnd`, removed when its renderer moved into X/App; see git history) ran the original `Program.Main` of X/App with an
 Avalonia 11.3.23 front end in one .NET runtime. It was measured with `-f` on the one-element solid fixture
 (`editable-solid-workflow/runs/bridge/baseline/mesh.inp`) on macOS ARM64, unattended (`PREPOMAXX_SPIKE_PROBE`).
 
@@ -44,6 +44,49 @@ PyQt, meshers, lp_solve), GmshCaller from the current sources, QuadWild and the 
 Checked: upstream's analysis, result and composite scripts through it pass 10 of 11 (the failure is the known
 Windows-only `Api_View_Results`), and the Qt main-window probe passes 9 of 9. Until the Avalonia renderer covers the
 forms, property grid and data grids, this is the front end for real work.
+
+## M3-1a: the front end in X/App (21 November)
+
+The renderer moved from the spike into X/App as `PrePoMaxX.FrontEnd` ([README](../../X/App/FrontEnd/README.md)),
+the C# successor of the Qt renderer: PrePoMax.dll hands `Application.Run`'s main form to it; the Qt renderer stays
+selectable (`"frontEnd": "qt"`, `PREPOMAXX_FRONT_END=qt`). Ported from the Qt renderer, reusing the model's own
+layout and behaviour: every control kind of the Qt renderer (check/radio/combo/numeric boxes, track/scroll/progress
+bars, pictures, link labels, group boxes, tabs, splitters, list views), menus with DropDownOpening, tool strips with
+the checked state, drop-down buttons, combo and text boxes, the status strip, context menus shown by the original
+(`ContextMenuStrip.Show`), menu shortcuts, the original key hook for every key, Enter/Escape as dialog keys, focus
+(`Enter`/`Leave`), activation (`Form.ActiveForm`), the tree view and FastColoredTextBox (code editors, the output
+window, autocomplete) drawn from the model's rows and lines, data grids on the model's geometry (selection, editing,
+keys, clipboard), the property grid with the original converters and UITypeEditors, the paint replay on Avalonia's
+DrawingContext, ZedGraph plots, message boxes, file/folder/colour dialogs, timers, text measurement and the
+clipboard; a compact WinForms-like light theme with the Windows 10 system colours (.NET's table on macOS has the
+Windows XP ones). Design change against the D067 plan: data grids and the code editor are drawn from the model (as in
+Qt) rather than Avalonia's DataGrid and AvaloniaEdit, which would duplicate behaviour the model already has.
+
+Found and fixed on the way: a sync storm (the output window reported its scroll position each sync, which the model
+notifies); the output window not following its newest message (FormsCompat's `DoRangeVisible` now names its target;
+a read-only view at its end stays there); model tree icons (a designer image list's images are in a serialized `.resx`
+stream that is never read; its keys are the original icon file names, which the front end resolves).
+
+The spike's gaps from the manual check: Escape now ends the query and closes the forms (the window that is activated
+makes its form `Form.ActiveForm`, which FrmMain's key hook requires); tool buttons show their checked and hovered
+state; the view's context menus (annotation, legend, viewport) open, so "remove annotation" is reachable; their
+position is in control units: vtkControl now gives the original its view mouse events (right click, widget double
+clicks) in control units and converts back to device pixels only for the scalar bar's hit test (D066's rule: device
+pixels stay inside the widget wrappers).
+
+**Probe** (`PREPOMAXX_UI_PROBE=avalonia`, macOS ARM64, `-f` one-element solid): 16 of 16 — the 9 checks of the Qt app
+probe (menus, strips, view, import, tree, view image, FrmMaterial from the menu) and a drag turning the view,
+FrmMaterial's property grid after adding Elastic, Escape through the key hook, the view's context menu at the click
+point in control units (562, 295 for 561.5, 296), a modal form through the nested loop, tool button states.
+Five consecutive unattended runs from the app folder: 16/16 each; the intermittent start-up stall (2 of 7 spike
+runs) did not occur in them, which does not show it is gone (open). `python3 X/Checks/check.py`: all 7 areas pass. A local app folder: `X/App/local_app.py --front-end avalonia`
+(default) builds `X/Build/artifacts/app-mac-avalonia`; the Qt folder `app-mac` is left as it is.
+
+Not done in M3-1a yet: the dotnet/winforms layout engines and the per-form bounds comparison with 3.0.1; the eight
+workbench GUI probe areas (they drive the Qt workbench, not X/App: their FrmMain parts are covered by this probe, the
+form-level checks need porting); the macOS `.app` bundle without PyQt (the app folder still uses the P1 package's
+Python, which carries PyQt, though the Avalonia front end does not load it); the triad's arrow length; view resize
+flicker; the maintainer's manual check and a real project.
 
 ## Next
 

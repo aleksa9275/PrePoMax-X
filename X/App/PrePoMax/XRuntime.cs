@@ -3,9 +3,10 @@
 // the explicit runtime profile of this installation (PrePoMaxX.runtime.json beside PrePoMax.dll, or the file
 // PREPOMAXX_RUNTIME names): the CPython 3.12 profile, the native tool manifest and the patched Gmsh library. Nothing
 // is discovered through PATH; a profile that is named but invalid stops the start.
-// Application.Run of the original Program shows the main form through the Qt renderer (X/UI/main_form.py, the "ui"
-// folder of the runtime profile) on the embedded CPython; a run with -g No - the original places its window off
-// screen - runs the headless message loop instead.
+// Application.Run of the original Program shows the main form through the Avalonia front end (X/App/FrontEnd, M3-1a,
+// D067) in this runtime; the M2 Qt renderer (X/UI/main_form.py on the embedded CPython, the "ui" folder of the runtime
+// profile) is chosen with "frontEnd": "qt" in the profile or PREPOMAXX_FRONT_END=qt. A run with -g No - the original
+// places its window off screen - runs the headless message loop instead.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,7 +38,7 @@ namespace PrePoMaxX.App
             if (File.Exists(file)) Apply(file);
             Application.RunHandler = Run;
         }
-        static string s_ui;
+        static string s_ui, s_frontEnd;
         [System.Runtime.InteropServices.DllImport("libSystem.dylib")] static extern int pthread_main_np();
         /// <summary>Program -g No: StartPosition Manual at (-32000, -32000), not in the task bar (Program.Run).</summary>
         static bool IsHiddenRun(Form form) =>
@@ -61,7 +62,16 @@ namespace PrePoMaxX.App
             }
             if (Environment.GetEnvironmentVariable("PREPOMAXX_TRACE_EXCEPTIONS") == "1")
                 Console.Error.WriteLine("[run] thread " + Environment.CurrentManagedThreadId + " main " + (OperatingSystem.IsMacOS() ? pthread_main_np() : -1));
-            if (s_ui == null) throw new InvalidOperationException("The user interface needs the \"ui\" folder in " + FileName + "; use -g No without it.");
+            string probe = Environment.GetEnvironmentVariable("PREPOMAXX_UI_PROBE");
+            string frontEnd = Environment.GetEnvironmentVariable("PREPOMAXX_FRONT_END") ?? s_frontEnd ??
+                              (probe != null && probe.EndsWith(".py", StringComparison.Ordinal) ? "qt" : "avalonia");
+            if (frontEnd != "qt")
+            {
+                if (probe == "avalonia") PrePoMaxX.FrontEnd.AvaloniaFrontEnd.ProbeOutput = Environment.GetEnvironmentVariable("PREPOMAXX_UI_PROBE_OUTPUT");
+                PrePoMaxX.FrontEnd.AvaloniaFrontEnd.Run(mainForm);
+                return;
+            }
+            if (s_ui == null) throw new InvalidOperationException("The Qt front end needs the \"ui\" folder in " + FileName + ".");
             string script = Path.Combine(s_ui, "main_form.py");
             PythonEngineManager.EnsureNativeHostInitialized();
             using (Py.GIL())
@@ -89,6 +99,7 @@ namespace PrePoMaxX.App
             if (root.TryGetProperty("python", out JsonElement python)) PythonEngineManager.NativeRuntimeProfile = Absolute(python.GetString());
             if (root.TryGetProperty("nativeTools", out JsonElement tools)) NativeTools.Configure(Absolute(tools.GetString()));
             if (root.TryGetProperty("ui", out JsonElement ui)) s_ui = Absolute(ui.GetString());
+            if (root.TryGetProperty("frontEnd", out JsonElement frontEnd)) s_frontEnd = frontEnd.GetString();
             // GmshCommon reads the library of the patched Gmsh from the environment (also in GmshCaller, a child process)
             if (root.TryGetProperty("gmshLibrary", out JsonElement gmsh) &&
                 string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PREPOMAXX_GMSH_LIBRARY")))

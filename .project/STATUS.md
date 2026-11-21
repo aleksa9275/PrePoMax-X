@@ -52,7 +52,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
-| M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | next: spike done on macOS ARM64 (real input, Retina, overlays D066) |
+| M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | in progress: `X/App/FrontEnd` is the default front end; Avalonia app probe 16/16 (5 runs); layout engines, bounds comparison, workbench probe areas, .app bundle and the maintainer's check open |
 | M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | after M3-1a |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
@@ -60,13 +60,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Next step
 
-**M3-1a** (D067, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)): the Avalonia renderer moves
-from the spike into X/App on macOS — every control kind, tool strip states, context menus, keys, paint replay,
-property grid, data grids, code editor, dialogs; the dotnet/winforms layout engines and the bounds comparison; the
-start-up stall; the probes on Avalonia; a macOS app without PyQt. Done when the probes pass and the maintainer runs a
-real project in it. Meanwhile real projects run in the Qt front end (`X/App/local_app.py`). Then **M3-1b**: Linux on
-the local Podman machine. Open: B014, the automation server on Unix, B013's round trip with the original 3.0.1, a
-3.0.1 CrossOver bottle for the bounds comparison (download decision), Linux QuadWild.
+**M3-1a** (D067, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)): the Avalonia front end is in
+X/App (`X/App/FrontEnd`, default; Qt with `PREPOMAXX_FRONT_END=qt`) with every control kind of the Qt renderer, menus,
+tool strip states, context menus, the key hook, focus, property grid, data grids, code editor, paint replay, plots
+and dialogs; its probe passes 16/16. Local app: `X/Build/artifacts/app-mac-avalonia/PrePoMax-X.command` (the Qt folder
+`app-mac` is unchanged). Next: the maintainer's manual check and a real project in it; then the dotnet/winforms layout
+engines and the bounds comparison, the workbench probe areas' form checks on Avalonia, the start-up stall (not seen
+in 5 runs), view resize flicker, the triad, a macOS `.app` without PyQt. Then **M3-1b**: Linux on the local Podman
+machine. Open: B014, the automation server on Unix, B013's round trip with the original 3.0.1, a 3.0.1 CrossOver
+bottle for the bounds comparison (download decision), Linux QuadWild.
 
 ## Environment
 

@@ -97,7 +97,8 @@ namespace vtkControl.Native
         {
             if (e.Event != VtkNativeEvent.WidgetDoubleClick || e.Values.Length < 3) return;
             if ((int)e.Values[0] != _widgetId) return;
-            MouseDoubleClick?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 2, (int)e.Values[1], (int)e.Values[2], 0));
+            MouseDoubleClick?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 2, VtkNativeView.ToControlUnits(e.Values[1]),
+                                                              VtkNativeView.ToControlUnits(e.Values[2]), 0));
         }
 
 
@@ -233,6 +234,9 @@ namespace vtkControl.Native
             rectangle = Rectangle.Empty;
             valueText = null;
             minimum = _editMinValue;
+            // The point comes from a mouse event in control units; the hit test is in the view's device pixels
+            x = VtkNativeView.ToDevice(x);
+            y = VtkNativeView.ToDevice(y);
             maximum = _editMaxValue;
             //
             if (!_visibility || double.IsNaN(minimum) || double.IsNaN(maximum)) return false;

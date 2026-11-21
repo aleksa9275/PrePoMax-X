@@ -66,8 +66,8 @@ namespace vtkControl.Native
             if (e.Values.Length < 2 || (int)e.Values[0] != _widgetId) return;
             int eventId = (int)e.Event;
             if (e.Event == VtkNativeEvent.WidgetDoubleClick && e.Values.Length >= 3)
-                MouseDoubleClick?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 2, (int)e.Values[1],
-                                                                  (int)e.Values[2], 0));
+                MouseDoubleClick?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 2, VtkNativeView.ToControlUnits(e.Values[1]),
+                                                                  VtkNativeView.ToControlUnits(e.Values[2]), 0));
             else if (eventId == TargetClickedEvent) TargetClicked?.Invoke((VtkNativeTriadTarget)(int)e.Values[1]);
             else if (eventId == HoverChangedEvent) HoverChanged?.Invoke(e.Values[1] != 0);
         }

@@ -1228,10 +1228,12 @@ namespace FastColoredTextBoxNS
         public virtual void OnUndoRedoStateChanged() => UndoRedoStateChanged?.Invoke(this, EventArgs.Empty);
 
         // View
-        public void DoCaretVisible() => Notify("ScrollToCaret");
-        public void DoSelectionVisible() => Notify("ScrollToCaret");
+        /// <summary>The place the renderer scrolls into view on "ScrollToCaret": the caret, or the range DoRangeVisible names.</summary>
+        public Place ScrollTarget { get; private set; }
+        public void DoCaretVisible() { ScrollTarget = Selection.Start; Notify("ScrollToCaret"); }
+        public void DoSelectionVisible() { ScrollTarget = Selection.Start; Notify("ScrollToCaret"); }
         public void DoRangeVisible(Range range) => DoRangeVisible(range, false);
-        public void DoRangeVisible(Range range, bool tryToCentre) => Notify("ScrollToCaret");
+        public void DoRangeVisible(Range range, bool tryToCentre) { ScrollTarget = range.End; Notify("ScrollToCaret"); }
         public void Navigate(int iLine)
         {
             if (iLine >= LinesCount) return;

@@ -32,6 +32,9 @@ namespace vtkControl.Native
         public static double DisplayScale { get; set; } = 1;
         internal static double ToDevice(double value) { return value * DisplayScale; }
         internal static int ToDevice(int value) { return (int)Math.Round(value * DisplayScale); }
+        /// <summary>A display coordinate of the view (device pixels) in control units, as the original's mouse events
+        /// carry them.</summary>
+        internal static int ToControlUnits(double value) { return (int)Math.Round(value / DisplayScale); }
         internal static double ToControl(double value) { return value / DisplayScale; }
         internal static System.Drawing.Rectangle ToControl(int[] values)
         {

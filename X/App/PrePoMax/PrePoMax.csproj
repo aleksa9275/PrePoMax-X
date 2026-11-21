@@ -22,6 +22,7 @@
     <ProjectReference Include="../../Persistence/Persistence.csproj" />
     <ProjectReference Include="../UserControls/UserControls.csproj" />
     <ProjectReference Include="../../UI/FormsCompat/FormsCompat.csproj" />
+    <ProjectReference Include="../FrontEnd/FrontEnd.csproj" />
   </ItemGroup>
   <!-- The 3D view: libvtkNative and the VTK libraries beside vtkControl.dll (X/Build/Vtk/build.py runtime folder), as
        for the workbench -->

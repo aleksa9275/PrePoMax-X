@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Assemble a local, runnable macOS (ARM64) folder of the original application (X/App) with the Qt front end.
+"""Assemble a local, runnable macOS (ARM64) folder of the original application (X/App) with its front end: Avalonia
+(M3-1a, the default) or the M2 Qt renderer (--front-end qt).
 
     python3 X/App/local_app.py --package <PrePoMax-X.app of P1> --solver <solver folder with build-registry.json> \
         --solver-id <build id> --output X/Build/artifacts/app-mac
@@ -21,7 +22,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ENV = {**os.environ, 'DOTNET_ROLL_FORWARD': os.environ.get('DOTNET_ROLL_FORWARD', 'Major')}
+ENV = {**os.environ, 'DOTNET_ROLL_FORWARD': os.environ.get('DOTNET_ROLL_FORWARD', 'Major'), 'AVALONIA_TELEMETRY_OPTOUT': '1'}
 
 
 def run(*command, **kw):
@@ -41,6 +42,8 @@ def main():
     p.add_argument('--default-solver-type', default='Spooles')
     p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
+    p.add_argument('--front-end', choices=('avalonia', 'qt'), default='avalonia',
+                   help='Avalonia (M3-1a) or the M2 Qt renderer; PREPOMAXX_FRONT_END overrides it at start')
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     resources = a.package.resolve() / 'Contents/Resources'
@@ -59,7 +62,9 @@ def main():
     # The application folder
     if app.exists():
         shutil.rmtree(app)
-    shutil.copytree(ROOT / 'X/App/PrePoMax/bin/Release/net10.0', app)
+    # Without what runs of the build output leave there (settings, history, recovery files)
+    shutil.copytree(ROOT / 'X/App/PrePoMax/bin/Release/net10.0', app,
+                    ignore=shutil.ignore_patterns('settings.bin', 'history.pmh', '*.pmx', '*.log', 'trace.info', 'Temp'))
     shutil.copy2(app / 'PrePoMax', app / 'PrePoMax.com')
     # The 3D view: libvtkNative and the VTK libraries beside vtkControl.dll (an incremental build may skip the copy)
     for item in a.vtk_native.resolve().iterdir():
@@ -98,16 +103,22 @@ def main():
         '--gmsh-library', gmsh, '--solver', solver / 'build-registry.json', a.solver_id, solver / 'bin',
         '--default-solver-type', a.default_solver_type)
 
+    # The front end (the Qt renderer stays available through PREPOMAXX_FRONT_END=qt: the profile keeps "ui")
+    profile = app / 'PrePoMaxX.runtime.json'
+    runtime = json.loads(profile.read_text())
+    runtime['frontEnd'] = a.front_end
+    profile.write_text(json.dumps(runtime, indent=2) + '\n')
+
     # The launcher: the application with its own runtime profile; a leftover recovery file of a killed run is the
     # user's to keep, so it is not removed here
     launcher = out / 'PrePoMax-X.command'
-    launcher.write_text('#!/bin/bash\n# Starts the original PrePoMax (X/App) with the Qt front end; arguments as the original command line\n'
+    launcher.write_text(f'#!/bin/bash\n# Starts the original PrePoMax (X/App) with the {a.front_end} front end; arguments as the original command line\n'
                         'export DOTNET_ROLL_FORWARD="${DOTNET_ROLL_FORWARD:-Major}"\n'
                         f'exec dotnet "{app}/PrePoMax.dll" "$@"\n')
     launcher.chmod(launcher.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     (out / 'local-app.json').write_text(json.dumps({
         'schemaVersion': 1, 'package': str(a.package.resolve()), 'solver': str(solver), 'solverId': a.solver_id,
-        'vtkNative': str(a.vtk_native.resolve()), 'quadwild': str(a.quadwild.resolve()),
+        'frontEnd': a.front_end, 'vtkNative': str(a.vtk_native.resolve()), 'quadwild': str(a.quadwild.resolve()),
         'revision': subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
     }, indent=2) + '\n')
     print(f'Ready: {launcher}')
