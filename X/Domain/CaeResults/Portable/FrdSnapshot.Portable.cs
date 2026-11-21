@@ -51,6 +51,10 @@ namespace CaeResults
     {
         private const long PortableMaximumBytes = 64 * 1024 * 1024;
         private static readonly object PortableReadLock = new object();
+        // The bounds below belong to the bounded inspection (ReadStaticSnapshot) only. The original reader the
+        // application uses (Read, solver monitoring) keeps the original's tolerance: a failed or running analysis
+        // leaves an unclosed file, and real models exceed the inspection's record limits
+        [ThreadStatic] private static bool s_bounded;
 
         static partial void PortableElementNodeCount(int descriptor, ref int count)
         {
@@ -69,6 +73,7 @@ namespace CaeResults
 
         static partial void ValidatePortableHeader(string line)
         {
+            if (!s_bounded) return;
             if (line.StartsWith("    2C", StringComparison.Ordinal) || line.StartsWith("    3C", StringComparison.Ordinal))
             {
                 if (line.Length < 36 || !int.TryParse(line.Substring(6, 30), out int count) || count < 0 || count > 100000)
@@ -82,14 +87,17 @@ namespace CaeResults
         }
         static partial void ValidatePortableComponents(int count)
         {
+            if (!s_bounded) return;
             if (count < 1 || count > 16) throw new InvalidDataException("Portable FRD supports 1–16 components per field.");
         }
         static partial void ValidatePortableAllocation(long count)
         {
+            if (!s_bounded) return;
             if (count < 0 || count > PortableMaximumBytes) throw new InvalidDataException("FRD binary allocation exceeds bounded input size.");
         }
         static partial void ValidatePortableTail(string[] lines)
         {
+            if (!s_bounded) return;
             var pending = lines.Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
             if (pending.Length != 1 || pending[0].Trim() != "9999")
                 throw new InvalidDataException("Unclosed, truncated or trailing FRD data is not a complete result.");
@@ -102,6 +110,7 @@ namespace CaeResults
                 try
                 {
                     CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+                    s_bounded = true;
                     if (fileName == null) throw new ArgumentNullException(nameof(fileName));
                     var info = new FileInfo(fileName);
                     if (!info.Exists) throw new FileNotFoundException("FRD file not found.", fileName);
@@ -236,7 +245,7 @@ namespace CaeResults
                     }
                     return new FrdStaticSnapshot(hash, unitHeader, nodes, elements, lookup.OrderBy(p => p.Value).Select(p => p.Key).ToArray(), fields, modelSpace, scaled, declaredOriginalCount);
                 }
-                finally { CultureInfo.CurrentCulture = culture; _bemaNodeIds = null; }
+                finally { CultureInfo.CurrentCulture = culture; _bemaNodeIds = null; s_bounded = false; }
             }
         }
         private static void ValidateOrder(FrdDataSet set, int line, int count, Dictionary<int, int> lookup)

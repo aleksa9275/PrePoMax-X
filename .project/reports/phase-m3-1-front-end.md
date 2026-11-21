@@ -108,6 +108,26 @@ The maintainer then moved the Mac app to Avalonia: `X/Build/artifacts/app-mac` i
 (`local_app.py` now keeps an app folder's settings across rebuilds and sets a work directory only when none exists);
 there it passes the probe 16/16 and opens the maintainer's 2.5.1 model and STEP file without an error box.
 
+### The maintainer's second check: an analysis of the 2.5.1 model (21 November)
+
+UI fine; three findings:
+
+- **The analysis fails with "the PARDISO library is not linked"** (CalculiX exit 201). The 2.5.1 model's step keeps
+  its PARDISO solver; the local CalculiX build has SPOOLES only (D060's sole exception, D041: no silent rewrite of
+  solver choices). Expected behaviour; the user picks a solver of the build in the step. A pre-run notice is a
+  maintainer decision, not made.
+- **Opening the failed result: "Unclosed, truncated or trailing FRD data is not a complete result."** An X error:
+  the bounded FRD inspection (`ReadStaticSnapshot`) adds its limits to the original reader through partial methods,
+  and they applied to the original read path too (and its 100000-record limits to real models). They now apply only
+  inside `ReadStaticSnapshot`; the original path gives the original's own message ("The result file does not exist
+  or is empty.") for the solver's header-only file. Result tests unchanged and passing.
+- **The view starts small until the window is resized.** VTK's view was fitted to the control's size while
+  Avalonia's native host view still had its first frame (1×1); Avalonia places the host after that layout pass. The
+  view is fitted again once the host has its frame (`VtkNativeHost.FitView`, traced with
+  `PREPOMAXX_TRACE_VIEW_SIZE=1`: host and view 1123×592).
+
+After these: probe 16/16, `check.py` 7/7.
+
 ## Next
 
 The maintainer chose Avalonia and macOS first (D067). M3-1a: the renderer moves into X/App on macOS and must match

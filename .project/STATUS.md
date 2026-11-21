@@ -64,7 +64,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 X/App (`X/App/FrontEnd`, default; Qt with `PREPOMAXX_FRONT_END=qt`) with every control kind of the Qt renderer, menus,
 tool strip states, context menus, the key hook, focus, property grid, data grids, code editor, paint replay, plots
 and dialogs; its probe passes 16/16. Local app: `X/Build/artifacts/app-mac/PrePoMax-X.command`, on Avalonia since
-21 November (the maintainer moved the Mac app to Avalonia; Qt only with `PREPOMAXX_FRONT_END=qt`). Next: the maintainer's manual check and a real project in it; then the dotnet/winforms layout
+21 November (the maintainer moved the Mac app to Avalonia; Qt only with `PREPOMAXX_FRONT_END=qt`). The maintainer's checks found three issues, fixed (a PARDISO step of a 2.5.1 model needs a SPOOLES-build solver choice). Next: the dotnet/winforms layout
 engines and the bounds comparison, the workbench probe areas' form checks on Avalonia, the start-up stall (not seen
 in 5 runs), view resize flicker, the triad, a macOS `.app` without PyQt. Then **M3-1b**: Linux on the local Podman
 machine. Open: B014, the automation server on Unix, B013's round trip with the original 3.0.1, a 3.0.1 CrossOver

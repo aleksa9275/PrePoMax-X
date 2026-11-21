@@ -38,6 +38,8 @@ namespace vtkControl.Native
         /// front end whose host view is not flipped (Avalonia) needs it: VTK places its view from its parent's height
         /// and keeps its bottom-left corner when it resizes it.</summary>
         public static bool FitViewToHost;
+        private static readonly bool TraceSize = Environment.GetEnvironmentVariable("PREPOMAXX_TRACE_VIEW_SIZE") == "1";
+        private void Trace(string what) { if (TraceSize) Console.WriteLine("[view size] " + what + " client " + ClientSize.Width + "x" + ClientSize.Height + " scale " + DeviceScale); }
         private static int Device(int size) => OperatingSystem.IsMacOS() ? Math.Max(1, (int)Math.Round(size * DeviceScale)) : size;
         public VtkNativeHost()
         {
@@ -69,6 +71,7 @@ namespace vtkControl.Native
             }
             // The overlays vtkControl places in control units are drawn in the device pixels the view gets
             if (OperatingSystem.IsMacOS()) VtkNativeView.DisplayScale = DeviceScale;
+            Trace("create");
             _view = VtkNativeView.CreateEmbedded(Handle, Device(Math.Max(1, ClientSize.Width)), Device(Math.Max(1, ClientSize.Height)));
             if (OperatingSystem.IsMacOS())
             {
@@ -99,17 +102,30 @@ namespace vtkControl.Native
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+            Trace("resize" + (_view == null ? " (no view)" : ""));
             if (_view != null && ClientSize.Width > 0 && ClientSize.Height > 0)
             {
                 _view.SetSize(Device(ClientSize.Width), Device(ClientSize.Height));
                 if (FitViewToHost && OperatingSystem.IsMacOS() && Handle != IntPtr.Zero)
                     CocoaPassThrough.FitSubviews(Handle, ClientSize.Width, ClientSize.Height);
                 _view.Render();
+                if (TraceSize && OperatingSystem.IsMacOS() && Handle != IntPtr.Zero) Console.WriteLine("[view size] resized " + CocoaPassThrough.DescribeFrames(Handle));
             }
         }
         protected override void OnPaint(PaintEventArgs e)
         {
             if (_view != null) _view.Render();
+        }
+        /// <summary>macOS with FitViewToHost: fits VTK's view to the host view again. A front end that places its
+        /// native host view after the control has its size (Avalonia lays the host out after the model's resize) calls
+        /// it once the host view has its frame; until then VTK's view keeps the host's earlier, smaller frame.</summary>
+        public void FitView()
+        {
+            if (_view == null || !FitViewToHost || !OperatingSystem.IsMacOS() || Handle == IntPtr.Zero ||
+                ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
+            CocoaPassThrough.FitSubviews(Handle, ClientSize.Width, ClientSize.Height);
+            _view.Render();
+            if (TraceSize) Console.WriteLine("[view size] fit " + CocoaPassThrough.DescribeFrames(Handle));
         }
     }
 
@@ -157,6 +173,19 @@ namespace vtkControl.Native
         [StructLayout(LayoutKind.Sequential)]
         private struct NSRect { public double X; public double Y; public double Width; public double Height; }
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendRect(IntPtr receiver, IntPtr selector, NSRect rect);
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern NSRect GetRect(IntPtr receiver, IntPtr selector);
+        /// <summary>Tracing: the frames of a host view and its subviews (arm64: structures return in registers).</summary>
+        public static string DescribeFrames(IntPtr hostView)
+        {
+            string Frame(IntPtr view) { NSRect r = GetRect(view, sel_registerName("frame")); return r.X + "," + r.Y + " " + r.Width + "x" + r.Height; }
+            string text = "host " + Frame(hostView);
+            IntPtr superview = Send(hostView, sel_registerName("superview"));
+            if (superview != IntPtr.Zero) text += " in " + Frame(superview);
+            IntPtr subviews = Send(hostView, sel_registerName("subviews"));
+            ulong count = SendCount(subviews, sel_registerName("count"));
+            for (ulong i = 0; i < count; i++) text += " view " + Frame(Send(subviews, sel_registerName("objectAtIndex:"), (IntPtr)(long)i));
+            return text;
+        }
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendBool(IntPtr receiver, IntPtr selector, bool value);
         [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern bool SendRespondsTo(IntPtr receiver, IntPtr selector, IntPtr query);
         /// <summary>Places every subview (VTK's view) at the origin of the host view with the control's size in points

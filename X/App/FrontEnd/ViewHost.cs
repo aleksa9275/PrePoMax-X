@@ -68,6 +68,16 @@ namespace PrePoMaxX.FrontEnd
             Ui.RequestSync();
         }
 
+        protected override void OnSizeChanged(SizeChangedEventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (Environment.GetEnvironmentVariable("PREPOMAXX_TRACE_VIEW_SIZE") == "1")
+                Console.WriteLine("[view size] host " + e.NewSize + " model " + Control.Width + "x" + Control.Height + " attached " + _attached);
+            // Avalonia gives the native host view its new frame after this layout pass; the model's control has
+            // fitted VTK's view to its size before, inside the old frame. Fit it again once the frame is placed
+            if (_attached) Dispatcher.UIThread.Post(() => { if (_attached) Ui.Guard(() => Control.NativeHost.FitView()); }, DispatcherPriority.Background);
+        }
+
         protected override void DestroyNativeControlCore(IPlatformHandle control)
         {
             // Before Avalonia destroys the native window: the view is released while its window still exists
