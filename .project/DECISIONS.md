@@ -1,5 +1,15 @@
 # Decision register
 
+D067 — Avalonia, macOS first, 2026-11-21: after the M3-1 spike (one runtime, the native
+3D view with real input and picking, modal loops, Retina, overlays per D066 on macOS
+ARM64) the maintainer chose Avalonia for the .NET front end and its order: macOS, the
+maintainer's working machine, first, to M2's level and beyond (M3-1a); then Linux on the
+local Podman machine, Linux ARM64 with Xvfb probes and VNC for manual checks (M3-1b), as
+the UI does not depend on the CPU architecture; Linux x64 with the per-architecture
+native builds after that; Windows in M3. The Qt front end stays usable for real projects
+(`X/App/local_app.py`) until Avalonia matches it. The Avalonia version for the renderer
+(11.3.x as in the spike, or 12.x) is pinned when the renderer moves into X/App.
+
 D066 — Overlays follow the display scale, 2026-11-21: on a Retina Mac the 3D view
 draws in device pixels (sharp), while the original vtkControl places and sizes its
 overlays (scale bar, axes, legends, texts, status block) in control units. Rather than

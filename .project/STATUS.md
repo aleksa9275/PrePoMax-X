@@ -52,22 +52,21 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
-| M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | in progress: Avalonia spike passes on macOS ARM64 (real input checked by hand); Linux open |
+| M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | next: spike done on macOS ARM64 (real input, Retina, overlays D066) |
+| M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | after M3-1a |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-**M3-1** (D065, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)). The Avalonia spike
-(`X/Spike/FrontEnd`) works on macOS: one runtime, FrmMain's menus, tool strips, tree, output window, splitters,
-modal forms, and the original vtkControl with real mouse input, Retina-sharp, with the overlays scaled (D066).
-Before the toolkit decision is recorded: the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App
-(forms, property grid, data grids, context menus, tool button states, keys) with the dotnet/winforms layout
-engines and the bounds comparison; probes and packages on X/App. For real projects meanwhile:
-`X/App/local_app.py` (X/App with the Qt front end, meshers and CalculiX). Open: B014, the automation server on
-Unix, the intermittent start-up stall (Qt and Avalonia), B013's round trip with the original 3.0.1, Linux
-QuadWild.
+**M3-1a** (D067, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)): the Avalonia renderer moves
+from the spike into X/App on macOS — every control kind, tool strip states, context menus, keys, paint replay,
+property grid, data grids, code editor, dialogs; the dotnet/winforms layout engines and the bounds comparison; the
+start-up stall; the probes on Avalonia; a macOS app without PyQt. Done when the probes pass and the maintainer runs a
+real project in it. Meanwhile real projects run in the Qt front end (`X/App/local_app.py`). Then **M3-1b**: Linux on
+the local Podman machine. Open: B014, the automation server on Unix, B013's round trip with the original 3.0.1, a
+3.0.1 CrossOver bottle for the bounds comparison (download decision), Linux QuadWild.
 
 ## Environment
 

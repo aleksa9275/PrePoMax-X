@@ -47,6 +47,6 @@ forms, property grid and data grids, this is the front end for real work.
 
 ## Next
 
-The X11 run on Linux ARM64; the start-up stall; then the decision is recorded and the renderer moves into
-X/App: the generic control mirror with the dotnet/winforms layout engines, paint replay, the property grid, data grids
-and the code editor; the bounds comparison; probes and packages on X/App.
+The maintainer chose Avalonia and macOS first (D067). M3-1a: the renderer moves into X/App on macOS and must match
+and better M2's Qt front end (steps in [REMAINING_WORK.md](../REMAINING_WORK.md)); M3-1b: Linux on the local Podman
+machine. This report continues with M3-1a.
