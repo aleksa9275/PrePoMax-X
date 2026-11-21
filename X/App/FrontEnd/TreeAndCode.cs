@@ -361,17 +361,28 @@ namespace PrePoMaxX.FrontEnd
         {
             UpdateMetrics();
             double top = caret.iLine * LineHeight;
-            double viewHeight = Math.Max(0, Bounds.Height - (_horizontal.IsVisible ? 14 : 0));
+            double viewHeight = Math.Max(0, (Bounds.Height > 0 ? Bounds.Height : _code.ClientSize.Height) - (_horizontal.IsVisible ? 14 : 0));
             if (top < _vertical.Value) _vertical.Value = top;
             else if (top + LineHeight > _vertical.Value + viewHeight) _vertical.Value = Math.Min(_vertical.Maximum, top + LineHeight - viewHeight);
             double x = GutterWidth + caret.iChar * _charWidth;
-            double viewWidth = Math.Max(0, Bounds.Width - 14);
+            double viewWidth = Math.Max(0, (Bounds.Width > 0 ? Bounds.Width : _code.ClientSize.Width) - 14);
             // A place that fits from the left edge shows the line from its start
-            if (x < viewWidth - 40) _horizontal.Value = 0;
+            if (viewWidth <= 40) { }
+            else if (x < viewWidth - 40) _horizontal.Value = 0;
             else if (x < _horizontal.Value + GutterWidth) _horizontal.Value = Math.Max(0, x - GutterWidth - 20);
             else if (x > _horizontal.Value + viewWidth - 10) _horizontal.Value = Math.Min(_horizontal.Maximum, x - viewWidth + 40);
             ReportGeometry();
             _surface.InvalidateVisual();
+        }
+
+        protected override void OnSizeChanged(SizeChangedEventArgs e)
+        {
+            base.OnSizeChanged(e);
+            // The scroll ranges follow the size; a read-only view at its end (the output window) shows its last place
+            // again, as the model scrolled to it at the earlier, narrower width (FastColoredTextBox does on resize)
+            bool follow = _code.ReadOnly && _vertical.Value >= _vertical.Maximum - 1;
+            Rebuild();
+            if (follow) ScrollToCaret(_code.ScrollTarget);
         }
 
         void Scrolled()
