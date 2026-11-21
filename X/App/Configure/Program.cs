@@ -3,7 +3,8 @@
 // application folder (Globals.SettingsFileName, read by SettingsContainer.LoadFromFile) with the verified CalculiX
 // build and, if given, the default solver type. Every path is explicit; an existing settings file is replaced only
 // with --replace-settings, and only its solver settings change. --work-directory sets the solver's work directory
-// (created if missing): the original has none until the user sets one, and CAD import and analyses need it.
+// (created if missing) when the settings have none that exists: the original has none until the user sets one, and
+// CAD import and analyses need it; a directory the user chose is kept.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,7 +60,8 @@ try
                 throw new ArgumentException("The solver type " + solverType + " is not supported.");
             settings.Solver.CalculixDefaultSolverType = type;
         }
-        if (work != null)
+        string current = settings.Solver.WorkDirectoryForSettingsOnly;
+        if (work != null && (string.IsNullOrEmpty(current) || !Directory.Exists(current)))
         {
             Directory.CreateDirectory(Full(work));
             settings.Solver.WorkDirectoryForSettingsOnly = Full(work);

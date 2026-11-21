@@ -60,7 +60,10 @@ def main():
     run('dotnet', 'build', 'X/App/Configure/Configure.csproj', '-c', 'Release', '-v:q')
     run('dotnet', 'build', 'X/Domain/GmshCaller', '-c', 'Release', '-v:q')
 
-    # The application folder
+    # The application folder; the user's settings of an earlier build are kept (only the solver is configured again)
+    kept_settings = None
+    if (app / 'settings.bin').exists():
+        kept_settings = (app / 'settings.bin').read_bytes()
     if app.exists():
         shutil.rmtree(app)
     # Without what runs of the build output leave there (settings, history, recovery files)
@@ -80,6 +83,9 @@ def main():
     shutil.copy2(lpsolve, app / lpsolve.name)
     gmsh_caller = ROOT / 'X/Domain/GmshCaller/bin/Release/net10.0'
     shutil.copy2(lpsolve, gmsh_caller / lpsolve.name)
+
+    if kept_settings is not None:
+        (app / 'settings.bin').write_bytes(kept_settings)
 
     # Profiles: the package's Python and tools, GmshCaller and QuadWild from this repository
     if profiles.exists():
@@ -103,7 +109,8 @@ def main():
         '--python', profiles / 'python.json', '--ui', ROOT / 'X/UI', '--native-tools', profiles / 'tools.json',
         '--gmsh-library', gmsh, '--solver', solver / 'build-registry.json', a.solver_id, solver / 'bin',
         '--default-solver-type', a.default_solver_type,
-        '--work-directory', (a.work_directory or out / 'work').resolve())
+        '--work-directory', (a.work_directory or out / 'work').resolve(),
+        *(['--replace-settings'] if kept_settings is not None else []))
 
     # The front end (the Qt renderer stays available through PREPOMAXX_FRONT_END=qt: the profile keeps "ui")
     profile = app / 'PrePoMaxX.runtime.json'

@@ -80,7 +80,7 @@ FrmMaterial's property grid after adding Elastic, Escape through the key hook, t
 point in control units (562, 295 for 561.5, 296), a modal form through the nested loop, tool button states.
 Five consecutive unattended runs from the app folder: 16/16 each; the intermittent start-up stall (2 of 7 spike
 runs) did not occur in them, which does not show it is gone (open). `python3 X/Checks/check.py`: all 7 areas pass. A local app folder: `X/App/local_app.py --front-end avalonia`
-(default) builds `X/Build/artifacts/app-mac-avalonia`; the Qt folder `app-mac` is left as it is.
+(default) builds `X/Build/artifacts/app-mac`; the Qt folder `app-mac` is left as it is.
 
 Not done in M3-1a yet: the dotnet/winforms layout engines and the per-form bounds comparison with 3.0.1; the eight
 workbench GUI probe areas (they drive the Qt workbench, not X/App: their FrmMain parts are covered by this probe, the
@@ -103,6 +103,10 @@ flicker; the maintainer's manual check and a real project.
   compatibility step (a Netgen mesh setup item keeps the 2.5.1 mesh).
 
 After both: Avalonia app probe 16/16, `check.py` 7/7.
+
+The maintainer then moved the Mac app to Avalonia: `X/Build/artifacts/app-mac` is rebuilt with the Avalonia front end
+(`local_app.py` now keeps an app folder's settings across rebuilds and sets a work directory only when none exists);
+there it passes the probe 16/16 and opens the maintainer's 2.5.1 model and STEP file without an error box.
 
 ## Next
 

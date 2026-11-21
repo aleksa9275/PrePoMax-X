@@ -29,8 +29,8 @@ A local macOS folder to work with (Avalonia front end by default, `--front-end q
 CalculiX; not a release package):
 
 ```sh
-python3 X/App/local_app.py --package <P1 PrePoMax-X.app> --solver <solver folder> --solver-id <build id> --output X/Build/artifacts/app-mac-avalonia
-X/Build/artifacts/app-mac-avalonia/PrePoMax-X.command [-f <model>]
+python3 X/App/local_app.py --package <P1 PrePoMax-X.app> --solver <solver folder> --solver-id <build id> --output X/Build/artifacts/app-mac
+X/Build/artifacts/app-mac/PrePoMax-X.command [-f <model>]
 ```
 
 On macOS and Linux `PrePoMax.com` is a copy of the `PrePoMax` executable (the Windows console launcher has no
