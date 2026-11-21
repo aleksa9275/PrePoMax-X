@@ -1,0 +1,582 @@
+{
+ "success": true,
+ "checks": [
+  {
+   "name": "menu parity in the Geometry view",
+   "passed": true,
+   "detail": "Model, Property, Interaction, Distribution, Amplitude, Initial Condition, Step, Analysis disabled"
+  },
+  {
+   "name": "menu parity in the FE Model view",
+   "passed": true,
+   "detail": "Geometry, Mesh disabled"
+  },
+  {
+   "name": "menu parity in the Results view",
+   "passed": true,
+   "detail": "View, Geometry, Mesh, Model, Property, Interaction, Distribution, Amplitude, Initial Condition, Step, Analysis disabled"
+  },
+  {
+   "name": "menu parity in the FE Model view",
+   "passed": true,
+   "detail": "Geometry, Mesh disabled"
+  },
+  {
+   "name": "tsmiCreateStep enabled",
+   "passed": true,
+   "detail": "disabled"
+  },
+  {
+   "name": "FrmStep lists the original step types",
+   "passed": true,
+   "detail": "Static Step, Slip Wear Step, Frequency Step, Complex Frequency Step, Buckle Step, Modal Dynamics Step, Steady State Dynamics Step, Dynamic Step, Heat Transfer Step, Uncoupled Temperature-displacement Step, Coupled Temperature-displacement Step"
+  },
+  {
+   "name": "FrmStep with a step type: controls mirrored",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "FrmStep's property grid drawn with rows",
+   "passed": true,
+   "detail": "3 root items, selected ViewStaticStep, 8 rows"
+  },
+  {
+   "name": "OK runs the original OnApply: step created",
+   "passed": true,
+   "detail": 1
+  },
+  {
+   "name": "create entries enabled with a mesh",
+   "passed": true,
+   "detail": "tsmiCreateBoundaryLayer, tsmiCreateNodeSet, tsmiCreateElementSet, tsmiCreateSurface, tsmiCreateModelReferencePoint, tsmiCreateModelCoordinateSystem, tsmiCreateMaterial, tsmiCreateMaterialOrientation, tsmiCreateSection, tsmiCreateConstraint, tsmiCreateSurfaceInteraction, tsmiCreateContactPair, tsmiCreateDistribution, tsmiCreateAmplitude, tsmiCreateInitialCondition, tsmiCreateStep, tsmiCreateHistoryOutput, tsmiCreateFieldOutput, tsmiCreateBC, tsmiCreateLoad, tsmiCreateDefinedField, tsmiCreateAnalysis"
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer: FrmBoundaryLayer window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=350} max {Width=0, Height=0} avalonia min 334x311 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer: FrmBoundaryLayer controls mirrored at their bounds",
+   "passed": true,
+   "detail": "6 controls"
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateBoundaryLayer: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateNodeSet opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateNodeSet: FrmNodeSet window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateNodeSet: FrmNodeSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateNodeSet: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateNodeSet: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateNodeSet: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateElementSet opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateElementSet: FrmElementSet window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateElementSet: FrmElementSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateElementSet: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateElementSet: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateElementSet: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateSurface opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateSurface: FrmSurface window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateSurface: FrmSurface controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateSurface: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateSurface: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateSurface: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateModelReferencePoint opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateModelReferencePoint: FrmReferencePoint window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateModelReferencePoint: FrmReferencePoint controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateModelReferencePoint: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateModelCoordinateSystem opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateModelCoordinateSystem: FrmCoordinateSystem window at its client size",
+   "passed": true,
+   "detail": "334, 598 for {Width=334, Height=598} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=637} window W/H 334x598 state Normal fit Manual bounds 0, 0, 334, 598"
+  },
+  {
+   "name": "tsmiCreateModelCoordinateSystem: FrmCoordinateSystem controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateModelCoordinateSystem: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateMaterial opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateMaterial: FrmMaterial window at its client size",
+   "passed": true,
+   "detail": "474, 683 for {Width=474, Height=683} min {Width=430, Height=580} max {Width=0, Height=0} avalonia min 414x541 max InfinityxInfinity size {Width=490, Height=722} window W/H 474x683 state Normal fit Manual bounds 0, 0, 474, 683"
+  },
+  {
+   "name": "tsmiCreateMaterial: FrmMaterial controls mirrored at their bounds",
+   "passed": true,
+   "detail": "21 controls"
+  },
+  {
+   "name": "tsmiCreateMaterial: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation: FrmMaterialOrientation window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation: FrmMaterialOrientation controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateMaterialOrientation: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateSection opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateSection: FrmSection window at its client size",
+   "passed": true,
+   "detail": "334, 461 for {Width=334, Height=461} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=500} window W/H 334x461 state Normal fit Manual bounds 0, 0, 334, 461"
+  },
+  {
+   "name": "tsmiCreateSection: FrmSection controls mirrored at their bounds",
+   "passed": true,
+   "detail": "8 controls"
+  },
+  {
+   "name": "tsmiCreateSection: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateConstraint opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateConstraint: FrmConstraint window at its client size",
+   "passed": true,
+   "detail": "334, 511 for {Width=334, Height=511} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=550} window W/H 334x511 state Normal fit Manual bounds 0, 0, 334, 511"
+  },
+  {
+   "name": "tsmiCreateConstraint: FrmConstraint controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateConstraint: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateSurfaceInteraction opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateSurfaceInteraction: FrmSurfaceInteraction window at its client size",
+   "passed": true,
+   "detail": "384, 546 for {Width=384, Height=546} min {Width=350, Height=530} max {Width=0, Height=0} avalonia min 334x491 max InfinityxInfinity size {Width=400, Height=585} window W/H 384x546 state Normal fit Manual bounds 0, 0, 384, 546"
+  },
+  {
+   "name": "tsmiCreateSurfaceInteraction: FrmSurfaceInteraction controls mirrored at their bounds",
+   "passed": true,
+   "detail": "16 controls"
+  },
+  {
+   "name": "tsmiCreateSurfaceInteraction: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateContactPair opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateContactPair: FrmContactPair window at its client size",
+   "passed": true,
+   "detail": "334, 411 for {Width=334, Height=411} min {Width=350, Height=450} max {Width=0, Height=0} avalonia min 334x411 max InfinityxInfinity size {Width=350, Height=450} window W/H 334x411 state Normal fit Manual bounds 0, 0, 334, 411"
+  },
+  {
+   "name": "tsmiCreateContactPair: FrmContactPair controls mirrored at their bounds",
+   "passed": true,
+   "detail": "5 controls"
+  },
+  {
+   "name": "tsmiCreateContactPair: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateDistribution opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateDistribution: FrmDistribution window at its client size",
+   "passed": true,
+   "detail": "334, 461 for {Width=334, Height=461} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=500} window W/H 334x461 state Normal fit Manual bounds 0, 0, 334, 461"
+  },
+  {
+   "name": "tsmiCreateDistribution: FrmDistribution controls mirrored at their bounds",
+   "passed": true,
+   "detail": "8 controls"
+  },
+  {
+   "name": "tsmiCreateDistribution: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateAmplitude opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateAmplitude: FrmAmplitude window at its client size",
+   "passed": true,
+   "detail": "334, 461 for {Width=334, Height=461} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=500} window W/H 334x461 state Normal fit Manual bounds 0, 0, 334, 461"
+  },
+  {
+   "name": "tsmiCreateAmplitude: FrmAmplitude controls mirrored at their bounds",
+   "passed": true,
+   "detail": "8 controls"
+  },
+  {
+   "name": "tsmiCreateAmplitude: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateInitialCondition opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateInitialCondition: FrmInitialCondition window at its client size",
+   "passed": true,
+   "detail": "334, 481 for {Width=334, Height=481} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=520} window W/H 334x481 state Normal fit Manual bounds 0, 0, 334, 481"
+  },
+  {
+   "name": "tsmiCreateInitialCondition: FrmInitialCondition controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateInitialCondition: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateStep opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateStep: FrmStep window at its client size",
+   "passed": true,
+   "detail": "334, 511 for {Width=334, Height=511} min {Width=350, Height=550} max {Width=0, Height=0} avalonia min 334x511 max InfinityxInfinity size {Width=350, Height=550} window W/H 334x511 state Normal fit Manual bounds 0, 0, 334, 511"
+  },
+  {
+   "name": "tsmiCreateStep: FrmStep controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateStep: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateHistoryOutput opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateHistoryOutput: FrmHistoryOutput window at its client size",
+   "passed": true,
+   "detail": "334, 461 for {Width=334, Height=461} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=500} window W/H 334x461 state Normal fit Manual bounds 0, 0, 334, 461"
+  },
+  {
+   "name": "tsmiCreateHistoryOutput: FrmHistoryOutput controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateHistoryOutput: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateFieldOutput opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateFieldOutput: FrmFieldOutput window at its client size",
+   "passed": true,
+   "detail": "334, 461 for {Width=334, Height=461} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=500} window W/H 334x461 state Normal fit Manual bounds 0, 0, 334, 461"
+  },
+  {
+   "name": "tsmiCreateFieldOutput: FrmFieldOutput controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateFieldOutput: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateBC opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateBC: FrmBC window at its client size",
+   "passed": true,
+   "detail": "334, 561 for {Width=334, Height=561} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=600} window W/H 334x561 state Normal fit Manual bounds 0, 0, 334, 561"
+  },
+  {
+   "name": "tsmiCreateBC: FrmBC controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateBC: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateLoad opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateLoad: FrmLoad window at its client size",
+   "passed": true,
+   "detail": "354, 578 for {Width=354, Height=578} min {Width=370, Height=550} max {Width=0, Height=0} avalonia min 354x511 max InfinityxInfinity size {Width=370, Height=617} window W/H 354x578 state Normal fit Manual bounds 0, 0, 354, 578"
+  },
+  {
+   "name": "tsmiCreateLoad: FrmLoad controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateLoad: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateDefinedField opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateDefinedField: FrmDefinedField window at its client size",
+   "passed": true,
+   "detail": "334, 481 for {Width=334, Height=481} min {Width=350, Height=500} max {Width=0, Height=0} avalonia min 334x461 max InfinityxInfinity size {Width=350, Height=520} window W/H 334x481 state Normal fit Manual bounds 0, 0, 334, 481"
+  },
+  {
+   "name": "tsmiCreateDefinedField: FrmDefinedField controls mirrored at their bounds",
+   "passed": true,
+   "detail": "7 controls"
+  },
+  {
+   "name": "tsmiCreateDefinedField: FrmSelectItemSet window at its client size",
+   "passed": true,
+   "detail": "191, 286 for {Width=191, Height=286} min {Width=207, Height=325} max {Width=207, Height=325} avalonia min 191x286 max 191x286 size {Width=207, Height=325} window W/H 191x286 state Normal fit Manual bounds 0, 0, 191, 286"
+  },
+  {
+   "name": "tsmiCreateDefinedField: FrmSelectItemSet controls mirrored at their bounds",
+   "passed": true,
+   "detail": "30 controls"
+  },
+  {
+   "name": "tsmiCreateDefinedField: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateAnalysis opens a form",
+   "passed": true
+  },
+  {
+   "name": "tsmiCreateAnalysis: FrmAnalysis window at its client size",
+   "passed": true,
+   "detail": "534, 411 for {Width=534, Height=411} min {Width=550, Height=450} max {Width=0, Height=0} avalonia min 534x411 max InfinityxInfinity size {Width=550, Height=450} window W/H 534x411 state Normal fit Manual bounds 0, 0, 534, 411"
+  },
+  {
+   "name": "tsmiCreateAnalysis: FrmAnalysis controls mirrored at their bounds",
+   "passed": true,
+   "detail": "4 controls"
+  },
+  {
+   "name": "tsmiCreateAnalysis: Cancel hides the forms and changes nothing",
+   "passed": true,
+   "detail": " commands 5 -> 5"
+  },
+  {
+   "name": "tsmiCreateAmplitude enabled",
+   "passed": true,
+   "detail": "disabled"
+  },
+  {
+   "name": "FrmAmplitude's data points drawn in their tab",
+   "passed": true,
+   "detail": 2
+  },
+  {
+   "name": "a cell edit in the new row adds a data point",
+   "passed": true,
+   "detail": 3
+  },
+  {
+   "name": "FrmAmplitude with its data points: controls mirrored",
+   "passed": true,
+   "detail": "8 controls"
+  },
+  {
+   "name": "OK created the amplitude",
+   "passed": true
+  },
+  {
+   "name": "tsmiEditHistory enabled",
+   "passed": true,
+   "detail": "disabled"
+  },
+  {
+   "name": "the history grid lists every command",
+   "passed": true,
+   "detail": "6 of 6"
+  },
+  {
+   "name": "View > Python in FrmEditCommands",
+   "passed": true
+  },
+  {
+   "name": "View > Python draws the history script in the code view",
+   "passed": true,
+   "detail": "FrmEditCommands: drawn 20; model fctbPythonEditor 20 lines"
+  },
+  {
+   "name": "FrmEditCommands: controls mirrored",
+   "passed": true,
+   "detail": "14 controls"
+  }
+ ],
+ "messageBoxes": []
+}

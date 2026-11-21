@@ -1,0 +1,25 @@
+{
+ "success": true,
+ "checks": [
+  {
+   "name": "geometry parts",
+   "passed": true,
+   "detail": 1
+  },
+  {
+   "name": "Mesh > Create Mesh enabled with geometry",
+   "passed": true
+  },
+  {
+   "name": "mesh elements",
+   "passed": true,
+   "detail": 1728
+  },
+  {
+   "name": "the view shows the mesh",
+   "passed": true,
+   "detail": 31
+  }
+ ],
+ "messageBoxes": []
+}

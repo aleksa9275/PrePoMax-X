@@ -93,6 +93,8 @@ namespace PrePoMaxX.FrontEnd
         {
             if (_main) return;
             Title = Form.Text;
+            // The window opens at the form's client size (a later sync may not come: the form changes nothing after Show)
+            SyncSize();
             PlaceFromForm();
             Window owner = Services.ActiveWindow();
             if (owner == this || owner == null || !owner.IsVisible) owner = Ui.Main != null && Ui.Main.IsVisible ? Ui.Main : null;
@@ -167,7 +169,9 @@ namespace PrePoMaxX.FrontEnd
             MaxWidth = maximum.Width > 0 ? Math.Max(MinWidth, maximum.Width - WinForms.Form.FrameWidth) : double.PositiveInfinity;
             MaxHeight = maximum.Height > 0 ? Math.Max(MinHeight, maximum.Height - WinForms.Form.FrameHeight) : double.PositiveInfinity;
             var client = Form.ClientSize;
-            if (client.Width > 0 && client.Height > 0 && (Math.Abs(Width - client.Width) > 0.5 || Math.Abs(Height - client.Height) > 0.5))
+            // Width and Height are NaN until set (a comparison with NaN is false)
+            if (client.Width > 0 && client.Height > 0 && (double.IsNaN(Width) || double.IsNaN(Height) ||
+                                                          Math.Abs(Width - client.Width) > 0.5 || Math.Abs(Height - client.Height) > 0.5))
             {
                 _sizing = true;
                 try { Width = client.Width; Height = client.Height; } finally { _sizing = false; }

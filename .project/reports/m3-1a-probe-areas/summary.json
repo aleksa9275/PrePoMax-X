@@ -1,0 +1,38 @@
+{
+ "forms": {
+  "fixture": ".project/reports/editable-solid-workflow/runs/bridge/baseline/mesh.inp",
+  "exit": 0,
+  "success": true,
+  "passed": 120,
+  "checks": 120,
+  "failed": [],
+  "error": null
+ },
+ "geometry": {
+  "fixture": "X/UI/fixtures/cube.brep",
+  "exit": 0,
+  "success": true,
+  "passed": 4,
+  "checks": 4,
+  "failed": [],
+  "error": null
+ },
+ "results": {
+  "fixture": "X/Checks/artifacts/20261121T180349Z-8ce34093/controller-current/solid/project.pmx",
+  "exit": 0,
+  "success": true,
+  "passed": 9,
+  "checks": 9,
+  "failed": [],
+  "error": null
+ },
+ "elements": {
+  "fixture": "X/Analysis/StaticDeck/c3d10-force.inp",
+  "exit": 0,
+  "success": true,
+  "passed": 5,
+  "checks": 5,
+  "failed": [],
+  "error": null
+ }
+}

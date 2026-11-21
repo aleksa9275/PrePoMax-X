@@ -20,7 +20,7 @@ using WinForms = System.Windows.Forms;
 
 namespace PrePoMaxX.FrontEnd
 {
-    internal static class Probe
+    internal static partial class Probe
     {
         internal static bool Active => Ui.ProbeOutput != null;
         static readonly List<string> s_prompts = new List<string>();
@@ -33,7 +33,8 @@ namespace PrePoMaxX.FrontEnd
             lock (s_prompts) s_prompts.Add((caption ?? "") + ": " + text);
             return s_answer.HasValue && offered.Contains(s_answer.Value) ? s_answer.Value : offered[0];
         }
-        internal static WinForms.DialogResult FileDialog(WinForms.FileDialog dialog) => WinForms.DialogResult.Cancel;
+        static int s_fileDialogs;
+        internal static WinForms.DialogResult FileDialog(WinForms.FileDialog dialog) { s_fileDialogs++; return WinForms.DialogResult.Cancel; }
         internal static void ModalShown(WinForms.Form form)
         {
             if (!Active) return;
@@ -95,8 +96,16 @@ namespace PrePoMaxX.FrontEnd
                     colors.Add(BitConverter.ToInt32(pixels, (y * size.Width + x) * 4));
             return colors.Count;
         }
-        static T Field<T>(object owner, string name) where T : class =>
-            owner.GetType().GetField(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)?.GetValue(owner) as T;
+        // A private field of a base class is found on that class only
+        static T Field<T>(object owner, string name) where T : class
+        {
+            for (Type type = owner.GetType(); type != null; type = type.BaseType)
+            {
+                var field = type.GetField(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+                if (field != null) return field.GetValue(owner) as T;
+            }
+            return null;
+        }
 
         internal static void Start(FormWindow window)
         {
@@ -123,6 +132,7 @@ namespace PrePoMaxX.FrontEnd
             WinForms.Form form = window.Form;
             try
             {
+                if (s_area != null) { await RunArea(s_area, window, form, output); success = true; goto Done; }
                 await Pump(1);
                 var menu = form.MainMenuStrip;
                 Check("the original menu strip", menu != null);
@@ -207,6 +217,7 @@ namespace PrePoMaxX.FrontEnd
                 int checkedModel = All(form).OfType<WinForms.ToolStrip>().SelectMany(s => s.Items.Cast<WinForms.ToolStripItem>()).OfType<WinForms.ToolStripButton>().Count(b => b.Checked && b.Visible);
                 Check("tool buttons show the checked state", toggles.Count(b => b.IsChecked == true && b.IsEffectivelyVisible) == checkedModel, checkedModel);
                 success = true;
+            Done:;
             }
             catch (Failed) { }
             catch (Exception e) { error = e.ToString(); }

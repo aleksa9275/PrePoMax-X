@@ -1,0 +1,31 @@
+{
+ "success": true,
+ "checks": [
+  {
+   "name": "original element classes",
+   "passed": true,
+   "detail": "ParabolicTetraElement"
+  },
+  {
+   "name": "the model tree shows the deck",
+   "passed": true,
+   "detail": 40
+  },
+  {
+   "name": "the view shows the elements",
+   "passed": true,
+   "detail": 31
+  },
+  {
+   "name": "tsmiCreateElementSet enabled",
+   "passed": true,
+   "detail": "disabled"
+  },
+  {
+   "name": "FrmElementSet: controls mirrored",
+   "passed": true,
+   "detail": "5 controls"
+  }
+ ],
+ "messageBoxes": []
+}

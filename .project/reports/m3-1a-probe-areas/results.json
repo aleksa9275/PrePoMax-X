@@ -1,0 +1,52 @@
+{
+ "success": true,
+ "checks": [
+  {
+   "name": "tsmiCreateAnalysis enabled",
+   "passed": true,
+   "detail": "disabled"
+  },
+  {
+   "name": "FrmAnalysis: controls mirrored",
+   "passed": true,
+   "detail": "4 controls"
+  },
+  {
+   "name": "OK creates the analysis",
+   "passed": true,
+   "detail": "Analysis-1"
+  },
+  {
+   "name": "FrmMain.RunAnalysis",
+   "passed": true
+  },
+  {
+   "name": "FrmMonitor: controls mirrored",
+   "passed": true,
+   "detail": "8 controls"
+  },
+  {
+   "name": "the analysis completes",
+   "passed": true,
+   "detail": "OK"
+  },
+  {
+   "name": "the result controls list the variables and increments",
+   "passed": true,
+   "detail": "7 variables, 2 increments"
+  },
+  {
+   "name": "the results tree lists the fields",
+   "passed": true,
+   "detail": 88
+  },
+  {
+   "name": "the view shows the result",
+   "passed": true,
+   "detail": 52
+  }
+ ],
+ "messageBoxes": [
+  "Warning: Overwrite existing analysis files?"
+ ]
+}
