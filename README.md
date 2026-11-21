@@ -2,7 +2,7 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `73c75b8a8410fb2533b8c570e4f2698945d76a87`.
+branch of this repository at commit `e076f692b2f68c49f51504dd88f21a1c3a12ee85`.
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
 CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax 3.0.1
@@ -13,9 +13,15 @@ and the 3D view runs on upstream's VTK 9.7 native port.
 > **Status: preview for testing.** It is not a release of PrePoMax and not endorsed by the PrePoMax authors. It is
 > signed ad hoc and not notarized by Apple. It has been used on one Mac for real projects; expect rough edges.
 
+### Changes since the first upload (source `73c75b8a`)
+
+The first upload had no icons, no material library, no Python help and no example models. The app read those from
+the source tree, which a download does not have. They are now in the bundle, and the checks run with the source
+tree blocked. The app also has its own icon now. To update, replace the app; your settings are kept.
+
 ## What you get
 
-`PrePoMax-X.app` (615 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
+`PrePoMax-X.app` (664 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
 required.
 
 | Component | In the bundle |
@@ -26,17 +32,23 @@ required.
 | Meshers: Netgen (NetGenMesher, OCCT 8.0.1), Gmsh 4.13 (patched), Mmg, QuadWild | yes |
 | CAD import (STEP, IGES, BREP) | yes |
 | CPython 3.12 for PrePoMax's own Python features | yes (without PyQt) |
+| Python API help and agent skill (Help → Python) | yes, generated from this source |
+| Original icons, material library (`materials.lib`) and example models (`Models/`) of PrePoMax 3.0.1 | yes |
+| Windows-only BidirectionalMeshConverter.exe of the 3.0.1 release | no |
 | Intel MKL **PARDISO** solver | **no** (no macOS ARM64 build) |
 
 ### What has been checked
 
-All checks below were run on macOS ARM64 with this exact bundle, unpacked from the zip in a clean environment (no
-`dotnet` on the PATH).
+All checks below were run on macOS ARM64 with this exact bundle, unpacked from the zip, on a fresh data folder. The
+app ran in a macOS sandbox that blocked the source repository, Homebrew and any installed .NET. Any file the bundle
+lacked would have made a check fail.
 
-- **Main window, 16/16 checks:** menus, tool strips and the model tree; a model is imported and drawn in the 3D view,
+- **Main window, 16/16 checks:** the original icons are drawn in the menus, tool strips and model tree; menus, tool strips and the model tree; a model is imported and drawn in the 3D view,
   which can be turned with the mouse; a form opens from the menu with its property grid; Esc works; the context menu
   opens; a modal dialog opens and closes.
-- **Forms, 120/120 checks:**
+- **Forms, 124/124 checks:**
+  - all 144 menu icons and the application icon load;
+  - the material library opens with the 21 materials of `materials.lib`;
   - every menu matches the original in each view;
   - every create form opens through the original menu entry at the original size, with every control in place, and
     Cancel changes nothing;
@@ -46,6 +58,8 @@ All checks below were run on macOS ARM64 with this exact bundle, unpacked from t
   - an analysis is created and solved by CalculiX, with the original Monitor window;
   - the results open with their contours, legend and toolbar.
 - **Elements, 5/5 checks:** a CalculiX deck with quadratic tetrahedra is imported and drawn.
+- **Python API, 3 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
+  model through the API), `Test_Model_Materials_Sections` and `Test_Model_Meshing` all passed.
 - **Real projects:** a model saved by PrePoMax 2.5.1 opened, and a STEP assembly imported. Linear and nonlinear
   analyses ran with SPOOLES on 4 cores, and the results were reviewed.
 - **Layout against the original PrePoMax 3.0.1:** the size and position of every control in every form was compared

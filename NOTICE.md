@@ -5,6 +5,9 @@ macOS (Apple Silicon), with an Avalonia front end in place of Windows Forms. Thi
 ad hoc, not notarized, not a release. See `bundle.json` for the exact source commit and components.
 
 - PrePoMax: Copyright (C) 2016-2026 Matej Borovinšek, GPL-3.0 (`Licenses/PrePoMax-LICENSE`).
+- From the PrePoMax 3.0.1 release (GPL-3.0), checked by SHA-256 in `bundle.json`: the material library
+  (`materials.lib`), the example models (`Models/`) and the Abaqus ODB conversion script. The Python API help
+  (`Help/Python`) is generated from this source as upstream builds it (Markdig 1.3.2, build time only).
 - Bundled components and licenses:
   - CalculiX 2.22 (GPL-2.0) with SPOOLES 2.2 (public domain), ARPACK-ng 3.9.1 (BSD-3) and OpenBLAS (BSD-3); the
     GCC runtime libraries libgfortran, libgomp, libquadmath, libgcc_s (GPL-3.0 with the GCC Runtime Library
@@ -19,7 +22,8 @@ ad hoc, not notarized, not a release. See `bundle.json` for the exact source com
 - Corresponding source: the PrePoMax-X repository (github.com/aleksa9275/PrePoMax-X, branch
   `research/native-feasibility`) at the commit in `bundle.json`, its source locks (`ThirdParty/Sources`,
   `X/Build/*/source-lock.json`), and upstream PrePoMax (github.com/PrePoMax/PrePoMax).
-- Not included: the Intel MKL PARDISO solver (no macOS ARM64 build); use SPOOLES.
+- Not included: the Intel MKL PARDISO solver (no macOS ARM64 build; use SPOOLES) and the release's Windows-only
+  BidirectionalMeshConverter.exe.
 
 User data (the application copy with its settings, runtime profiles, the solver work folder) goes to
 `~/Library/Application Support/PrePoMax-X`. To uninstall, delete the application and that folder. An installed
