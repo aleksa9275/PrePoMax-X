@@ -30,7 +30,7 @@ namespace PrePoMaxX.FrontEndSpike
     internal sealed class SpikeApplication : Application
     {
         internal static WinForms.Form MainForm;
-        public override void Initialize() { Styles.Add(new FluentTheme()); RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Light; }
+        public override void Initialize() { Styles.Add(new FluentTheme { DensityStyle = DensityStyle.Compact }); RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Light; }
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

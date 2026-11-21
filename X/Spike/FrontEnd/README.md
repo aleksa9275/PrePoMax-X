@@ -27,7 +27,8 @@ PREPOMAXX_RUNTIME=<profile without "ui"> DOTNET_ROLL_FORWARD=Major \
   dotnet X/Spike/FrontEnd/bin/Release/net10.0/PrePoMaxX.FrontEndSpike.dll -f <model> -u MM_TON_S_C
 ```
 
-`PREPOMAXX_SPIKE_PROBE=<file.json>` makes the run unattended: after `PREPOMAXX_SPIKE_PROBE_DELAY` seconds (default 4)
+`PREPOMAXX_SPIKE_TRACE_INPUT=1` prints every input event the 3D view receives (mouse moves only while a button is
+down). `PREPOMAXX_SPIKE_PROBE=<file.json>` makes the run unattended: after `PREPOMAXX_SPIKE_PROBE_DELAY` seconds (default 4)
 it records the measurements, captures the view before and after a middle-button drag and the Avalonia part of the
 window, and closes; a modal dialog is closed by its accept button (or Close) after 1.5 s. Delete `history.pmh` from
 the output folder after a run.

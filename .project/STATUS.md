@@ -52,7 +52,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M0 | GitHub home, upstream 3.0.1 + vtkNative merged (`1e2f83f2`) | Mac ARM64 checks and UI verification pass |
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
-| M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | in progress: Avalonia spike passes on macOS ARM64 except real input (manual) and Linux |
+| M3-1 | One runtime: .NET front end replaces the Python/PyQt renderer; probes and packages on X/App (D065) | in progress: Avalonia spike passes on macOS ARM64 (real input checked by hand); Linux open |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
@@ -61,12 +61,12 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 **M3-1** (D065, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)). The toolkit spike
 (`X/Spike/FrontEnd`, Avalonia 11.3.23) runs the original Program with FrmMain, its menus, tool strips, tree, modal
-forms and the original vtkControl in a native host, on one thread and one runtime, on macOS ARM64. Before the
-toolkit decision is recorded: real mouse input over the native view on macOS (manual; synthetic events are refused)
-and the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App with the dotnet/winforms layout engines,
+forms and the original vtkControl in a native host, on one thread and one runtime, on macOS ARM64. Real mouse
+input over the view works on macOS (checked by hand, after three Cocoa fixes). Before the toolkit decision is
+recorded: the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App with the dotnet/winforms layout engines,
 the bounds comparison, probes and packages on X/App, and the Python renderer and workbench hosts are retired.
-Open: B014 (CAD/meshing results differ and vary between runs), the automation server on Unix, the intermittent Qt
-start-up stall, B013's round trip with the original 3.0.1 (no 3.0.x reference bottle on this Mac), Linux QuadWild
+Open: B014 (CAD/meshing results differ and vary between runs), the automation server on Unix, the intermittent
+start-up stall (also with Avalonia, 2 of 7 runs), B013's round trip with the original 3.0.1 (no 3.0.x reference bottle on this Mac), Linux QuadWild
 (Podman VM larger than 4 GiB or M3 CI).
 
 ## Environment

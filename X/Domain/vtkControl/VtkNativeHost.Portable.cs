@@ -30,6 +30,14 @@ namespace vtkControl.Native
         // Constructors
         // Invalidate and Refresh of the control model raise a "Refresh" notification instead of WM_PAINT; the view
         // paints on it, as the original host paints on WM_PAINT
+        /// <summary>Device pixels per control unit of a front end whose native window VTK's Cocoa view sizes in points
+        /// (VTK divides the size it is given by the backing scale): with 2 on a Retina display the view covers the host
+        /// and renders at device resolution. 1 (the default) keeps the size as given.</summary>
+        public static double DeviceScale = 1;
+        /// <summary>macOS: VTK's view is pinned to the host view's bounds (and follows them) and the host clips it. A
+        /// front end whose host view is not flipped (Avalonia) needs it; VTK places its view for a flipped one.</summary>
+        public static bool FitViewToHost;
+        private static int Device(int size) => OperatingSystem.IsMacOS() ? Math.Max(1, (int)Math.Round(size * DeviceScale)) : size;
         public VtkNativeHost()
         {
             ControlNotifications.Changed += OnControlChanged;
@@ -58,11 +66,12 @@ namespace vtkControl.Native
                 ViewCreated?.Invoke(this, EventArgs.Empty);
                 return;
             }
-            _view = VtkNativeView.CreateEmbedded(Handle, Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height));
+            _view = VtkNativeView.CreateEmbedded(Handle, Device(Math.Max(1, ClientSize.Width)), Device(Math.Max(1, ClientSize.Height)));
             if (OperatingSystem.IsMacOS())
             {
                 _view.Render();     // VTK creates its NSView at the first render
                 CocoaPassThrough.Apply(Handle);
+                if (FitViewToHost) { CocoaPassThrough.FitSubviews(Handle); _view.Render(); }
             }
             ViewCreated?.Invoke(this, EventArgs.Empty);
         }
@@ -89,7 +98,8 @@ namespace vtkControl.Native
             base.OnResize(e);
             if (_view != null && ClientSize.Width > 0 && ClientSize.Height > 0)
             {
-                _view.SetSize(ClientSize.Width, ClientSize.Height);
+                _view.SetSize(Device(ClientSize.Width), Device(ClientSize.Height));
+                if (FitViewToHost && OperatingSystem.IsMacOS() && Handle != IntPtr.Zero) CocoaPassThrough.FitSubviews(Handle);
                 _view.Render();
             }
         }
@@ -104,7 +114,7 @@ namespace vtkControl.Native
     // on the view while a form window is active would only activate the main window; Win32 passes that click on.
     // The NSView of VTK is made transparent to hit testing (hitTest: returns nil), so every click, the first one
     // too, reaches the parent - the Qt view, which accepts first clicks - and through it the interaction style.
-    internal static class CocoaPassThrough
+    public static class CocoaPassThrough
     {
         [StructLayout(LayoutKind.Sequential)]
         private struct NSPoint { public double X; public double Y; }
@@ -124,6 +134,45 @@ namespace vtkControl.Native
         private static readonly HitTest NoHit = (self, selector, point) => IntPtr.Zero;
         private static IntPtr _class;
 
+        /// <summary>Makes one view transparent to hit testing, whatever its class (a front end's native host view): a
+        /// subclass of its class answers hitTest: with nil.</summary>
+        public static void ApplyToView(IntPtr view)
+        {
+            IntPtr cls = object_getClass(view);
+            string name = "PrePoMaxXPassThrough_" + Marshal.PtrToStringAnsi(class_getName(cls));
+            IntPtr pass = objc_getClass(name);
+            if (pass == IntPtr.Zero)
+            {
+                pass = objc_allocateClassPair(cls, name, IntPtr.Zero);
+                class_addMethod(pass, sel_registerName("hitTest:"), Marshal.GetFunctionPointerForDelegate(NoHit), "@@:{CGPoint=dd}");
+                objc_registerClassPair(pass);
+            }
+            object_setClass(view, pass);
+        }
+        [DllImport(ObjC)] private static extern IntPtr class_getName(IntPtr cls);
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NSRect { public double X; public double Y; public double Width; public double Height; }
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern NSRect SendRect(IntPtr receiver, IntPtr selector);
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendRect(IntPtr receiver, IntPtr selector, NSRect rect);
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendBool(IntPtr receiver, IntPtr selector, bool value);
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern void SendULong(IntPtr receiver, IntPtr selector, ulong value);
+        [DllImport(ObjC, EntryPoint = "objc_msgSend")] private static extern bool SendRespondsTo(IntPtr receiver, IntPtr selector, IntPtr query);
+        /// <summary>Pins every subview (VTK's view) to the bounds of the host view, sizes them with it, and makes the
+        /// host clip them (macOS 14 and later no longer clip subviews by default).</summary>
+        public static void FitSubviews(IntPtr hostView)
+        {
+            NSRect bounds = SendRect(hostView, sel_registerName("bounds"));
+            IntPtr clips = sel_registerName("setClipsToBounds:");
+            if (SendRespondsTo(hostView, sel_registerName("respondsToSelector:"), clips)) SendBool(hostView, clips, true);
+            IntPtr subviews = Send(hostView, sel_registerName("subviews"));
+            ulong count = SendCount(subviews, sel_registerName("count"));
+            for (ulong i = 0; i < count; i++)
+            {
+                IntPtr view = Send(subviews, sel_registerName("objectAtIndex:"), (IntPtr)(long)i);
+                SendRect(view, sel_registerName("setFrame:"), bounds);
+                SendULong(view, sel_registerName("setAutoresizingMask:"), 18);  // NSViewWidthSizable | NSViewHeightSizable
+            }
+        }
         public static void Apply(IntPtr parentView)
         {
             IntPtr nsView = objc_getClass("NSView");

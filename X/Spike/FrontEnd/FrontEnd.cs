@@ -296,8 +296,10 @@ namespace PrePoMaxX.FrontEndSpike
                     var b = new Button { Content = button.Text, Padding = new Thickness(2), FontSize = 12 };
                     b.Click += (s, e) => _ui.Run(() => button.PerformClick());
                     return (b, () => b.Content = button.Text);
-                case WinForms.TextBox text:
-                    var box = new TextBox { Text = text.Text, FontSize = 12, Padding = new Thickness(2), MinHeight = 0 };
+                case WinForms.TextBoxBase text:
+                    // TextBox, RichTextBox and FrmMain's output window (UserControls.OutputTextBox)
+                    var box = new TextBox { Text = text.Text, FontSize = 12, Padding = new Thickness(2), MinHeight = 0,
+                        IsReadOnly = text.ReadOnly, AcceptsReturn = text.Multiline, TextWrapping = text.Multiline ? TextWrapping.Wrap : TextWrapping.NoWrap };
                     box.LostFocus += (s, e) => _ui.Run(() => text.Text = box.Text);
                     return (box, () => { if (!box.IsFocused) box.Text = text.Text; });
                 case WinForms.Label label:
@@ -379,8 +381,10 @@ namespace PrePoMaxX.FrontEndSpike
 
     /// <summary>The original vtkControl in a native child window of the Avalonia window: VTK creates its OpenGL view in
     /// it (VtkNativeHost.AttachNativeWindow); Avalonia's pointer and key events go to the interaction style.</summary>
-    internal sealed class ViewHost : NativeControlHost
+    internal sealed class ViewHost : NativeControlHost, Avalonia.Rendering.ICustomHitTest
     {
+        // Avalonia hit-tests what is drawn; the native view draws nothing in Avalonia's scene
+        public bool HitTest(Point point) => new Rect(Bounds.Size).Contains(point);
         readonly vtkControl.vtkControl _control;
         readonly Probe _probe;
         bool _attached;
@@ -396,6 +400,14 @@ namespace PrePoMaxX.FrontEndSpike
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
         {
             IPlatformHandle handle = base.CreateNativeControlCore(parent);
+            if (OperatingSystem.IsMacOS())
+            {
+                // Avalonia's native host view keeps the mouse to itself; transparent to hit testing, the clicks over the
+                // view reach Avalonia's window and this control (VTK's own view is made transparent by VtkNativeHost)
+                vtkControl.Native.CocoaPassThrough.ApplyToView(handle.Handle);
+                vtkControl.Native.VtkNativeHost.DeviceScale = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1;
+                vtkControl.Native.VtkNativeHost.FitViewToHost = true;
+            }
             _probe.Set("viewHandleDescriptor", handle.HandleDescriptor);
             Dispatcher.UIThread.Post(() => Attach(handle.Handle), DispatcherPriority.Loaded);
             return handle;
@@ -430,6 +442,11 @@ namespace PrePoMaxX.FrontEndSpike
         {
             VtkNativeView view = _attached ? _control.NativeMirror : null;
             _probe.Add("viewInputs", 1);
+            // PREPOMAXX_SPIKE_TRACE_INPUT=1: every input the view gets from Avalonia (moves only when a button is down)
+            if (TraceInput && (input != VtkNativeInput.MouseMove || _buttonDown))
+                Console.WriteLine("[view input] " + input + " at " + (int)position.X + "," + (int)position.Y + (view == null ? " (no view)" : ""));
+            if (input == VtkNativeInput.LeftButtonDown || input == VtkNativeInput.MiddleButtonDown || input == VtkNativeInput.RightButtonDown) _buttonDown = true;
+            else if (input == VtkNativeInput.LeftButtonUp || input == VtkNativeInput.MiddleButtonUp || input == VtkNativeInput.RightButtonUp) _buttonDown = false;
             if (view == null) return false;
             double ratio = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1;
             bool control = (modifiers & (KeyModifiers.Control | KeyModifiers.Meta)) != 0, shift = (modifiers & KeyModifiers.Shift) != 0;
@@ -439,6 +456,8 @@ namespace PrePoMaxX.FrontEndSpike
         }
 
         internal WinForms.Control Original => _control;
+        static readonly bool TraceInput = Environment.GetEnvironmentVariable("PREPOMAXX_SPIKE_TRACE_INPUT") == "1";
+        bool _buttonDown;
         internal bool SendForProbe(VtkNativeInput input, Point position) => Send(input, position, KeyModifiers.None);
 
         protected override void OnPointerPressed(PointerPressedEventArgs e)
