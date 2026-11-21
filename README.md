@@ -72,7 +72,6 @@ lacked would have made a check fail.
   with `the PARDISO library is not linked`: open the step and choose a different solver, such as Spooles.
 - **Windows file paths:** models from Windows keep their Windows result-file paths until they are solved again.
 - **Not notarized:** macOS blocks the app until you clear the download flag (see Install).
-- **Resizing:** the 3D view while the window is being resized has not been checked by a person yet.
 - **Build paths:** VTK and QuadWild binaries contain the source paths of the build machine. They have no effect on
   how the app works.
 - **Other platforms:** this is macOS ARM64 only. Linux comes next; Windows follows with CI.
