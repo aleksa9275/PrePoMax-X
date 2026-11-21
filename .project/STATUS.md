@@ -59,15 +59,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Next step
 
-**M3-1** (D065, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)). The toolkit spike
-(`X/Spike/FrontEnd`, Avalonia 11.3.23) runs the original Program with FrmMain, its menus, tool strips, tree, modal
-forms and the original vtkControl in a native host, on one thread and one runtime, on macOS ARM64. Real mouse
-input over the view works on macOS (checked by hand, after three Cocoa fixes). Before the toolkit decision is
-recorded: the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App with the dotnet/winforms layout engines,
-the bounds comparison, probes and packages on X/App, and the Python renderer and workbench hosts are retired.
-Open: B014 (CAD/meshing results differ and vary between runs), the automation server on Unix, the intermittent
-start-up stall (also with Avalonia, 2 of 7 runs), B013's round trip with the original 3.0.1 (no 3.0.x reference bottle on this Mac), Linux QuadWild
-(Podman VM larger than 4 GiB or M3 CI).
+**M3-1** (D065, [plan](REMAINING_WORK.md), [report](reports/phase-m3-1-front-end.md)). The Avalonia spike
+(`X/Spike/FrontEnd`) works on macOS: one runtime, FrmMain's menus, tool strips, tree, output window, splitters,
+modal forms, and the original vtkControl with real mouse input, Retina-sharp, with the overlays scaled (D066).
+Before the toolkit decision is recorded: the X11 run on Linux ARM64 (Podman). Then the renderer moves into X/App
+(forms, property grid, data grids, context menus, tool button states, keys) with the dotnet/winforms layout
+engines and the bounds comparison; probes and packages on X/App. For real projects meanwhile:
+`X/App/local_app.py` (X/App with the Qt front end, meshers and CalculiX). Open: B014, the automation server on
+Unix, the intermittent start-up stall (Qt and Avalonia), B013's round trip with the original 3.0.1, Linux
+QuadWild.
 
 ## Environment
 

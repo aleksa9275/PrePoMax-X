@@ -24,6 +24,13 @@ dotnet X/App/Configure/bin/Release/net10.0/PrePoMaxX.Configure.dll --app <app fo
   --native-tools <tools.json> --gmsh-library <libgmsh> --solver <build-registry.json> <build id> <bin> --default-solver-type Spooles
 ```
 
+A local macOS folder to work with (Qt front end, meshers and CalculiX; not a release package):
+
+```sh
+python3 X/App/local_app.py --package <P1 PrePoMax-X.app> --solver <solver folder> --solver-id <build id> --output X/Build/artifacts/app-mac
+X/Build/artifacts/app-mac/PrePoMax-X.command [-f <model>]
+```
+
 On macOS and Linux `PrePoMax.com` is a copy of the `PrePoMax` executable (the Windows console launcher has no
 counterpart there; Ctrl+C reaches the process as SIGINT). Upstream's runner then works unchanged:
 

@@ -20,6 +20,7 @@ Avalonia 11.3.23 front end in one .NET runtime. It was measured with `-f` on the
 | Linux (X11 child window) | **Not run** (Linux ARM64 via Podman/Xvfb next) |
 | Seen in the manual runs, not toolkit questions | Fixed on 21 November: FrmMain's output window had half the right side instead of its designer height — the FormsCompat SplitContainer kept a fixed panel's size only outside the form's initialization, so the output panel took all the growth from the designer size to the window size; it now follows every size change, as WinForms does (Qt front end too). The spike draws the splitter bars (draggable), the tab headers in their 24-unit row above the pages (the model tree no longer overlaps them) and the output window's messages. Open: the view's overlays (scale bar, axes) are placed and sized by the original in control units while VTK draws in device pixels, so they are misplaced (see DPI below). Fluent's controls are larger than the WinForms designer sizes |
 | DPI | The original is not DPI aware (`SetProcessDPIAware` is commented out in `Program.cs`): on a high-DPI Windows display Windows magnifies its window. On macOS, VTK drawing in points, magnified, crashed in Apple's OpenGL pixel readback (SIGBUS in `glReadPixels`), so that change was taken out. Instead (D066) the view draws in device pixels and the overlay geometry is scaled in vtkControl's C# widget wrappers by `VtkNativeView.DisplayScale` (1 on Windows); VTK's view is pinned to the control's size, never the host's bounds (which lag a layout pass and made vtkNative re-anchor the overlays against a stale size). Result on Retina: scale bar centred at the bottom, axes in the bottom-right corner, full-size text, sharp view. Open: the axes' arrows have a fixed length in vtkNative (slightly short next to their labels); mouse coordinates in the original's context-menu events are device pixels |
+| Manual check, 21 November (all seven overlay checks right) | Resizing flickers (the view scales from both sides, then settles centred): VTK's view follows the control's size one layout pass after Avalonia's host. Spike gaps, not toolkit questions: tool buttons do not show their checked state (Query stays highlighted in the original), Esc does not end the query (keys reach only the focused view), annotation removal does nothing visible. Picking works at Retina coordinates (two nodes queried correctly) |
 | Start-up stall | The intermittent stall (menus grey, `-f` import not started, no exception) also occurs with Avalonia: 2 of 7 unattended runs on 21 November. It is not specific to Qt; open |
 
 The spike found one bug of its own (a size handler running before its window had a form); it hid the start-up in a
@@ -35,6 +36,14 @@ hand-written binding layer, before any control is drawn. Avalonia is NuGet only 
 is already sufficient for everything the spike checked. **Recommendation: Avalonia**, provided the X11 run on Linux passes
 (real input on macOS passed). The Qt 6 shim is only needed if they fail without a workaround. The production pin
 (Avalonia 11.3.x or 12.1.x) is chosen when the renderer moves into X/App.
+
+## A working app for real projects (21 November)
+
+`X/App/local_app.py` assembles a local macOS folder of X/App with the Qt front end (M2) from the P1 package (Python,
+PyQt, meshers, lp_solve), GmshCaller from the current sources, QuadWild and the M2 CalculiX build, with a launcher.
+Checked: upstream's analysis, result and composite scripts through it pass 10 of 11 (the failure is the known
+Windows-only `Api_View_Results`), and the Qt main-window probe passes 9 of 9. Until the Avalonia renderer covers the
+forms, property grid and data grids, this is the front end for real work.
 
 ## Next
 
