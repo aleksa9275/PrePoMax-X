@@ -51,6 +51,21 @@ namespace PrePoMaxX.FrontEndSpike
             WinForms.Application.ExitHandler = () =>
                 (Avalonia.Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
             WinForms.ControlNotifications.Changed += Changed;
+            if (Environment.GetEnvironmentVariable("PREPOMAXX_SPIKE_TRACE_LAYOUT") == "1")
+            {
+                // Diagnosis: every change of FrmMain's view/output splitter, with the stack that made it
+                var split = (WinForms.SplitContainer)form.GetType().GetField("splitContainer2",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(form);
+                string last = null;
+                WinForms.ControlNotifications.Changed += (c, p) =>
+                {
+                    if (c != split) return;
+                    string now = "size=" + split.Size + " distance=" + split.SplitterDistance + " panel2=" + split.Panel2.Height;
+                    if (now == last) return;
+                    last = now;
+                    Console.WriteLine("[layout] " + now + "\n" + string.Join("\n", Environment.StackTrace.Split('\n').Skip(3).Take(9)));
+                };
+            }
             try
             {
                 AppBuilder.Configure<SpikeApplication>().UsePlatformDetect().LogToTrace()
@@ -309,17 +324,64 @@ namespace PrePoMaxX.FrontEndSpike
                     var nodes = new TreeView { FontSize = 12 };
                     return (nodes, () => nodes.ItemsSource = tree.Nodes.Cast<WinForms.TreeNode>().Select(TreeEntry).ToList());
                 case WinForms.TabControl tabs:
-                    var headers = new StackPanel { Orientation = Orientation.Horizontal };
-                    return (headers, () =>
+                    // The header row above the pages (FormsCompat lays the pages out below a 24-unit row)
+                    var headers = new StackPanel { Orientation = Orientation.Horizontal, Height = 24, VerticalAlignment = VerticalAlignment.Top };
+                    var tabFrame = new Canvas();
+                    tabFrame.Children.Add(headers);
+                    int selected = -2;
+                    return (tabFrame, () =>
                     {
+                        headers.Width = tabFrame.Width;
+                        if (headers.Children.Count == tabs.TabPages.Count && selected == tabs.SelectedIndex) return;
+                        selected = tabs.SelectedIndex;
                         headers.Children.Clear();
                         for (int i = 0; i < tabs.TabPages.Count; i++)
                         {
                             int index = i;
-                            var header = new Button { Content = tabs.TabPages[i].Text, FontSize = 12, Padding = new Thickness(6, 1) };
+                            var header = new Button { Content = tabs.TabPages[i].Text, FontSize = 12, Padding = new Thickness(8, 2), Height = 24,
+                                Background = i == tabs.SelectedIndex ? Brushes.White : Brushes.Gainsboro, CornerRadius = new CornerRadius(3, 3, 0, 0) };
                             header.Click += (s, e) => _ui.Run(() => tabs.SelectedIndex = index);
                             headers.Children.Add(header);
                         }
+                    });
+                case WinForms.SplitContainer split:
+                    // The splitter bar between the panels: dragging it moves the splitter (SplitContainer.UserMoveSplitter)
+                    // Above the panels (only the bar takes the mouse: the canvas has no background)
+                    var splitFrame = new Canvas { ZIndex = 1000 };
+                    bool vertical = split.Orientation == WinForms.Orientation.Vertical;
+                    var splitBar = new Border { Background = Brushes.WhiteSmoke, Cursor = new Cursor(vertical ? StandardCursorType.SizeWestEast : StandardCursorType.SizeNorthSouth) };
+                    splitFrame.Children.Add(splitBar);
+                    bool dragging = false;
+                    splitBar.PointerPressed += (s, e) => { dragging = true; e.Pointer.Capture(splitBar); e.Handled = true; };
+                    splitBar.PointerReleased += (s, e) => { dragging = false; e.Pointer.Capture(null); e.Handled = true; };
+                    splitBar.PointerMoved += (s, e) =>
+                    {
+                        if (!dragging) return;
+                        Point p = e.GetPosition(splitFrame);
+                        int distance = (int)Math.Round((vertical ? p.X : p.Y) - split.SplitterWidth / 2.0);
+                        _ui.Run(() => split.UserMoveSplitter(distance));
+                        e.Handled = true;
+                    };
+                    return (splitFrame, () =>
+                    {
+                        var r = split.SplitterRectangle;
+                        splitBar.IsVisible = !split.Panel1Collapsed && !split.Panel2Collapsed;
+                        // A few units wider than the splitter, so it is easy to take
+                        Canvas.SetLeft(splitBar, vertical ? r.X - 2 : r.X); Canvas.SetTop(splitBar, vertical ? r.Y : r.Y - 2);
+                        splitBar.Width = vertical ? r.Width + 4 : r.Width; splitBar.Height = vertical ? r.Height : r.Height + 4;
+                    });
+                case FastColoredTextBoxNS.FastColoredTextBox code:
+                    // FrmMain's output window (UserControls.OutputTextBox) and the code editors: their text, read only here
+                    var lines = new TextBox { IsReadOnly = true, FontFamily = new FontFamily("Menlo, Consolas, monospace"), FontSize = 11,
+                        TextWrapping = TextWrapping.NoWrap, AcceptsReturn = true, BorderThickness = new Thickness(0), Padding = new Thickness(4, 2), MinHeight = 0 };
+                    string shown = null;
+                    return (lines, () =>
+                    {
+                        string text = code.Text;
+                        if (text == shown) return;
+                        shown = text;
+                        lines.Text = text;
+                        lines.CaretIndex = text.Length;     // the newest message, as the original scrolls to it
                     });
                 default:
                     return (new Border { BorderBrush = Brushes.Gainsboro, BorderThickness = new Thickness(0) }, null);
@@ -405,6 +467,8 @@ namespace PrePoMaxX.FrontEndSpike
                 // Avalonia's native host view keeps the mouse to itself; transparent to hit testing, the clicks over the
                 // view reach Avalonia's window and this control (VTK's own view is made transparent by VtkNativeHost)
                 vtkControl.Native.CocoaPassThrough.ApplyToView(handle.Handle);
+                // Device pixels (sharp on Retina), the view pinned to the host. The original's overlays (scale bar, axes)
+                // are placed in control units, so they are misplaced until the DPI model is decided (M3-1 report)
                 vtkControl.Native.VtkNativeHost.DeviceScale = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1;
                 vtkControl.Native.VtkNativeHost.FitViewToHost = true;
             }
@@ -448,7 +512,8 @@ namespace PrePoMaxX.FrontEndSpike
             if (input == VtkNativeInput.LeftButtonDown || input == VtkNativeInput.MiddleButtonDown || input == VtkNativeInput.RightButtonDown) _buttonDown = true;
             else if (input == VtkNativeInput.LeftButtonUp || input == VtkNativeInput.MiddleButtonUp || input == VtkNativeInput.RightButtonUp) _buttonDown = false;
             if (view == null) return false;
-            double ratio = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1;
+            // VTK's display coordinates: device pixels (VtkNativeHost.DeviceScale)
+            double ratio = vtkControl.Native.VtkNativeHost.DeviceScale;
             bool control = (modifiers & (KeyModifiers.Control | KeyModifiers.Meta)) != 0, shift = (modifiers & KeyModifiers.Shift) != 0;
             FrontEnd.Context.Run(() => view.HandleInput(input, (int)Math.Round(position.X * ratio),
                 (int)Math.Round((Bounds.Height - position.Y) * ratio), control, shift, keyCode, symbol));

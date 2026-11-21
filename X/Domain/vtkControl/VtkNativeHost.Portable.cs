@@ -35,7 +35,8 @@ namespace vtkControl.Native
         /// and renders at device resolution. 1 (the default) keeps the size as given.</summary>
         public static double DeviceScale = 1;
         /// <summary>macOS: VTK's view is pinned to the host view's bounds (and follows them) and the host clips it. A
-        /// front end whose host view is not flipped (Avalonia) needs it; VTK places its view for a flipped one.</summary>
+        /// front end whose host view is not flipped (Avalonia) needs it: VTK places its view from its parent's height
+        /// and keeps its bottom-left corner when it resizes it.</summary>
         public static bool FitViewToHost;
         private static int Device(int size) => OperatingSystem.IsMacOS() ? Math.Max(1, (int)Math.Round(size * DeviceScale)) : size;
         public VtkNativeHost()

@@ -722,8 +722,21 @@ namespace System.Windows.Forms
         public void EndInit() { if (_init > 0) _init--; LayoutPanels(); }
         protected override void OnLayout(LayoutEventArgs levent)
         {
+            FollowSize();
+            LayoutPanels();
+            base.OnLayout(levent);
+        }
+        // Every size change, also while layout is suspended and the form initializes (WinForms: the designer sizes
+        // the container, then the form's own ClientSize grows it; FrmMain's output window below the view stays fixed)
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            FollowSize();
+            base.OnSizeChanged(e);
+        }
+        void FollowSize()
+        {
             Size size = Size;
-            if (_lastSize != Size.Empty && size != _lastSize && _init == 0)
+            if (_lastSize != Size.Empty && size != _lastSize)
             {
                 int oldExtent = _orientation == Orientation.Vertical ? _lastSize.Width : _lastSize.Height;
                 int newExtent = Extent;
@@ -732,8 +745,6 @@ namespace System.Windows.Forms
                 _distance = Math.Max(_panel1Min, Math.Min(_distance, newExtent - _panel2Min - _width));
             }
             _lastSize = size;
-            LayoutPanels();
-            base.OnLayout(levent);
         }
         void LayoutPanels()
         {
