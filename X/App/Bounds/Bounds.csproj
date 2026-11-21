@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The per-form bounds comparison, X side: X/App on FormsCompat (Windows/BoundsWindows.csproj is the original's) -->
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>PrePoMaxX.Bounds</AssemblyName><RootNamespace>PrePoMaxX.Bounds</RootNamespace></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dump.cs" />
+    <Compile Include="Program.cs" />
+    <ProjectReference Include="../PrePoMax/PrePoMax.csproj" />
+  </ItemGroup>
+</Project>

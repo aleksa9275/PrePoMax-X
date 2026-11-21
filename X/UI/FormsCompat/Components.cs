@@ -170,6 +170,10 @@ namespace System.Windows.Forms
         public TableLayoutColumnStyleCollection ColumnStyles { get; } = new TableLayoutColumnStyleCollection();
         public TableLayoutRowStyleCollection RowStyles { get; } = new TableLayoutRowStyleCollection();
         public TableLayoutPanelCellBorderStyle CellBorderStyle { get; set; }
+        // WinForms TableLayoutPanel cell border widths
+        int CellBorderWidth => CellBorderStyle == TableLayoutPanelCellBorderStyle.None ? 0 :
+                               CellBorderStyle == TableLayoutPanelCellBorderStyle.Single ? 1 :
+                               CellBorderStyle == TableLayoutPanelCellBorderStyle.Inset || CellBorderStyle == TableLayoutPanelCellBorderStyle.Outset ? 2 : 3;
         public TableLayoutPanelGrowStyle GrowStyle { get; set; } = TableLayoutPanelGrowStyle.AddRows;
         public new TableLayoutControlCollection Controls => (TableLayoutControlCollection)base.Controls;
         protected override ControlCollection CreateControlsInstance() => new TableLayoutControlCollection(this);
@@ -204,9 +208,11 @@ namespace System.Windows.Forms
                 else if (s.SizeType == SizeType.Absolute) { sizes[i] = (int)value(i); used += sizes[i]; }
                 else percent += value(i);
             }
-            int rest = Math.Max(0, total - used);
+            int rest = Math.Max(0, total - used), given = 0, last = -1;
             for (int i = 0; i < count; i++)
-                if (style(i)?.SizeType == SizeType.Percent) sizes[i] = percent > 0 ? (int)(rest * value(i) / percent) : 0;
+                if (style(i)?.SizeType == SizeType.Percent) { sizes[i] = percent > 0 ? (int)(rest * value(i) / percent) : 0; given += sizes[i]; last = i; }
+            // WinForms TableLayout: the last percent strip takes what the rounding left
+            if (last >= 0 && percent > 0) sizes[last] += rest - given;
             return sizes;
         }
         protected override void LayoutChildren()
@@ -214,16 +220,17 @@ namespace System.Windows.Forms
             int columns = Math.Max(1, ColumnCount), rows = Math.Max(1, RowCount);
             foreach (var cell in _cells.Values) { columns = Math.Max(columns, cell.Column + 1); rows = Math.Max(rows, cell.Row + 1); }
             Size client = ClientSize;
+            int border = CellBorderWidth;
             int AutoWidth(int column) { int w = 0; foreach (var p in _cells) if (p.Value.Column == column && p.Key.Visible) w = Math.Max(w, p.Key.Width + p.Key.Margin.Horizontal); return w; }
             int AutoHeight(int row) { int h = 0; foreach (var p in _cells) if (p.Value.Row == row && p.Key.Visible) h = Math.Max(h, p.Key.Height + p.Key.Margin.Vertical); return h; }
-            int[] widths = Sizes(columns, client.Width - Padding.Horizontal, i => i < ColumnStyles.Count ? ColumnStyles[i] : null, i => i < ColumnStyles.Count ? ColumnStyles[i].Width : 0, AutoWidth);
-            int[] heights = Sizes(rows, client.Height - Padding.Vertical, i => i < RowStyles.Count ? RowStyles[i] : null, i => i < RowStyles.Count ? RowStyles[i].Height : 0, AutoHeight);
+            int[] widths = Sizes(columns, client.Width - Padding.Horizontal - border * (columns + 1), i => i < ColumnStyles.Count ? ColumnStyles[i] : null, i => i < ColumnStyles.Count ? ColumnStyles[i].Width : 0, AutoWidth);
+            int[] heights = Sizes(rows, client.Height - Padding.Vertical - border * (rows + 1), i => i < RowStyles.Count ? RowStyles[i] : null, i => i < RowStyles.Count ? RowStyles[i].Height : 0, AutoHeight);
             foreach (var p in _cells)
             {
                 Control c = p.Key;
-                int x = Padding.Left, y = Padding.Top;
-                for (int i = 0; i < p.Value.Column; i++) x += widths[i];
-                for (int i = 0; i < p.Value.Row; i++) y += heights[i];
+                int x = Padding.Left + border, y = Padding.Top + border;
+                for (int i = 0; i < p.Value.Column; i++) x += widths[i] + border;
+                for (int i = 0; i < p.Value.Row; i++) y += heights[i] + border;
                 var cell = new Rectangle(x + c.Margin.Left, y + c.Margin.Top, Math.Max(0, widths[p.Value.Column] - c.Margin.Horizontal), Math.Max(0, heights[p.Value.Row] - c.Margin.Vertical));
                 if (c.Dock == DockStyle.Fill) { c.Bounds = cell; continue; }
                 bool l = (c.Anchor & AnchorStyles.Left) != 0, r = (c.Anchor & AnchorStyles.Right) != 0, t = (c.Anchor & AnchorStyles.Top) != 0, b = (c.Anchor & AnchorStyles.Bottom) != 0;

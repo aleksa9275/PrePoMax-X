@@ -236,6 +236,13 @@ namespace vtkControl.Native
         {
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_triad_update_geometry(Handle()));
         }
+        // The triad's shaft is 45 display pixels; a display of more pixels per control unit scales it as the labels
+        public const double TriadShaftLength = 45;
+        public void ScaleTriadToDisplay()
+        {
+            if (VtkNativeView.DisplayScale == 1) return;
+            VtkNativeLibrary.Check(VtkNativeMethods.vtkn_triad_set_shaft_length(Handle(), VtkNativeView.ToDevice(TriadShaftLength)));
+        }
         //
         public void Dispose()
         {

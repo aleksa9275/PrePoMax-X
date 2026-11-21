@@ -36,6 +36,38 @@ namespace PrePoMaxX.FrontEnd
                 if (!double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double seconds)) continue;
                 DispatcherTimer.RunOnce(() => CaptureAll(prefix + "-" + text.Trim() + "s"), TimeSpan.FromSeconds(seconds));
             }
+            StartResize(prefix);
+        }
+
+        /// <summary>PREPOMAXX_WINDOW_CAPTURE_RESIZE=<seconds>: from then on the main window is resized in steps and each
+        /// step captured right after the resize and once the loop has run (the frames of a live resize).</summary>
+        static void StartResize(string prefix)
+        {
+            string at = Environment.GetEnvironmentVariable("PREPOMAXX_WINDOW_CAPTURE_RESIZE");
+            if (string.IsNullOrEmpty(at) || !double.TryParse(at, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double seconds)) return;
+            DispatcherTimer.RunOnce(() =>
+            {
+                var window = Ui.Windows.Values.FirstOrDefault(w => w.IsVisible);
+                Console.WriteLine("[window capture] resize from " + window?.ClientSize);
+                if (window == null) return;
+                int step = 0;
+                double width = window.ClientSize.Width, height = window.ClientSize.Height;
+                DispatcherTimer timer = null;
+                timer = new DispatcherTimer(TimeSpan.FromMilliseconds(120), DispatcherPriority.Normal, (s, e) =>
+                {
+                    try
+                    {
+                        if (step >= 6) { timer.Stop(); return; }
+                        int n = step++;
+                        window.Width = width - 60 * (n + 1);
+                        window.Height = height - 40 * (n + 1);
+                        CaptureAll(prefix + "-resize" + n + "a");
+                        Dispatcher.UIThread.Post(() => CaptureAll(prefix + "-resize" + n + "b"), DispatcherPriority.Background);
+                    }
+                    catch (Exception error) { Console.Error.WriteLine("[window capture] " + error); timer.Stop(); }
+                });
+                timer.Start();
+            }, TimeSpan.FromSeconds(seconds));
         }
 
         static void CaptureAll(string prefix)

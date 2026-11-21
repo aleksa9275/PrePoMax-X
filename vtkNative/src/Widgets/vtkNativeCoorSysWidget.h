@@ -42,6 +42,9 @@ namespace vtkn
 
         void SetTextStyle(const vtkn_text_style& style);
         void UpdateGeometry();
+        // The shaft length in display pixels (the default 45 on a display of one pixel per unit); the rest of the
+        // triad follows it
+        void SetShaftLength(double shaftLength);
         vtkn_triad_target GetTargetAtPosition(int x, int y);
         void SetTargetClickedHandler(std::function<void(vtkn_triad_target)> handler) { TargetClicked = handler; }
         void SetHoverChangedHandler(std::function<void(bool)> handler) { HoverChanged = handler; }

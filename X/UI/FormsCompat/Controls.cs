@@ -214,7 +214,15 @@ namespace System.Windows.Forms
         public object Tag { get; set; }
         public virtual string Text { get => _text; set { value ??= ""; if (_text == value) return; _text = value; Notify(nameof(Text)); OnTextChanged(EventArgs.Empty); } }
         public Point Location { get => _location; set { if (_location == value) return; _location = value; UpdateAnchorInfo(); Notify(nameof(Location)); OnLocationChanged(EventArgs.Empty); } }
-        public virtual Size Size { get => _size; set => SetSizeCore(value); }
+        public virtual Size Size { get => _size; set => SetSizeCore(Constrain(value)); }
+        /// <summary>WinForms ApplyBoundsConstraints: a size within MinimumSize and MaximumSize (0 = no limit).</summary>
+        protected Size Constrain(Size size)
+        {
+            int w = size.Width, h = size.Height;
+            if (_maximumSize.Width > 0) w = Math.Min(w, _maximumSize.Width);
+            if (_maximumSize.Height > 0) h = Math.Min(h, _maximumSize.Height);
+            return new Size(Math.Max(w, _minimumSize.Width), Math.Max(h, _minimumSize.Height));
+        }
         protected void SetSizeCore(Size value)
         {
             if (_size == value) return;
@@ -242,9 +250,9 @@ namespace System.Windows.Forms
         {
             Size client = ClientSize;
             // WinForms DefaultLayout: docked controls in reverse z-order (last in Controls first) take their edge of
-            // the remaining client area (inside Padding); invisible controls take no space.
+            // the remaining display rectangle (DisplayRectangle); invisible controls take no space.
             Control[] children = Controls.Cast<Control>().ToArray();
-            Rectangle remaining = new Rectangle(Padding.Left, Padding.Top, Math.Max(0, client.Width - Padding.Horizontal), Math.Max(0, client.Height - Padding.Vertical));
+            Rectangle remaining = DisplayRectangle;
             for (int i = children.Length - 1; i >= 0; i--)
             {
                 Control c = children[i];
@@ -275,15 +283,41 @@ namespace System.Windows.Forms
         protected virtual Size ClientSizeCore { get => Size; set => Size = value; }
         public Rectangle ClientRectangle => new Rectangle(Point.Empty, ClientSize);
         public Rectangle Bounds { get => new Rectangle(Location, Size); set { Location = value.Location; Size = value.Size; } }
-        public Rectangle DisplayRectangle => ClientRectangle;
+        /// <summary>WinForms: the area docked children fill. A plain control's client area; a scrollable control's
+        /// inside its Padding; a group box's below its caption (see the overrides).</summary>
+        public virtual Rectangle DisplayRectangle => ClientRectangle;
         public int Left { get => Location.X; set => Location = new Point(value, Top); }
         public int Top { get => Location.Y; set => Location = new Point(Left, value); }
         public int Width { get => Size.Width; set => Size = new Size(value, Height); }
         public int Height { get => Size.Height; set => Size = new Size(Width, value); }
         public int Right => Left + Width;
         public int Bottom => Top + Height;
-        public Size MinimumSize { get; set; }
-        public Size MaximumSize { get; set; }
+        // WinForms: a new limit applies to the current size at once
+        Size _minimumSize, _maximumSize;
+        public virtual Size MinimumSize
+        {
+            get => _minimumSize;
+            set
+            {
+                _minimumSize = value;
+                if (_maximumSize.Width > 0 && _maximumSize.Width < value.Width) _maximumSize.Width = value.Width;
+                if (_maximumSize.Height > 0 && _maximumSize.Height < value.Height) _maximumSize.Height = value.Height;
+                Size constrained = Constrain(Size);
+                if (constrained != Size) Size = constrained;
+            }
+        }
+        public virtual Size MaximumSize
+        {
+            get => _maximumSize;
+            set
+            {
+                _maximumSize = value;
+                if (value.Width > 0 && _minimumSize.Width > value.Width) _minimumSize.Width = value.Width;
+                if (value.Height > 0 && _minimumSize.Height > value.Height) _minimumSize.Height = value.Height;
+                Size constrained = Constrain(Size);
+                if (constrained != Size) Size = constrained;
+            }
+        }
         public AnchorStyles Anchor { get; set; } = AnchorStyles.Top | AnchorStyles.Left;
         DockStyle _dock;
         bool _inParentLayout;
@@ -296,7 +330,19 @@ namespace System.Windows.Forms
             try { _parent.PerformLayout(); } finally { _parent._inParentLayout = false; }
         }
         public Padding Margin { get; set; } = new Padding(3);
-        public Padding Padding { get; set; }
+        // WinForms: a new padding lays the children out again (now, or when the suspended layout resumes)
+        Padding _padding;
+        public Padding Padding
+        {
+            get => _padding;
+            set
+            {
+                if (_padding.Equals(value)) return;
+                _padding = value;
+                if (_layoutSuspended != 0) _layoutDeferred = true;
+                else if (Controls.Count > 0) PerformLayout();
+            }
+        }
         public int TabIndex { get; set; }
         public bool TabStop { get; set; } = true;
         public bool AutoSize { get; set; }
@@ -627,6 +673,15 @@ namespace System.Windows.Forms
     public class ScrollableControl : Control
     {
         public ScrollableControl() { VerticalScroll = new VScrollProperties(this); HorizontalScroll = new HScrollProperties(this); }
+        // WinForms ScrollableControl.DisplayRectangle: the client area inside the padding
+        public override Rectangle DisplayRectangle
+        {
+            get
+            {
+                Size client = ClientSize;
+                return new Rectangle(Padding.Left, Padding.Top, Math.Max(0, client.Width - Padding.Horizontal), Math.Max(0, client.Height - Padding.Vertical));
+            }
+        }
         /// <summary>The scroll bars of an auto-scrolling control; the renderer reports their range and position.</summary>
         public VScrollProperties VerticalScroll { get; }
         public HScrollProperties HorizontalScroll { get; }
@@ -790,7 +845,23 @@ namespace System.Windows.Forms
     public delegate void SplitterEventHandler(object sender, SplitterEventArgs e);
     public delegate void SplitterCancelEventHandler(object sender, SplitterCancelEventArgs e);
 
-    public class GroupBox : Control { public FlatStyle FlatStyle { get; set; } }
+    public class GroupBox : Control
+    {
+        public FlatStyle FlatStyle { get; set; }
+        // WinForms GroupBox: default padding 3; children dock below the caption, one font height down
+        public GroupBox() { Padding = new Padding(3); }
+        public override Rectangle DisplayRectangle
+        {
+            get
+            {
+                // Font.Height of the caption font at 96 DPI (Segoe UI's line spacing is 1.33 em: 16 px at 9 pt)
+                int fontHeight = (int)Math.Ceiling((Font?.SizeInPoints ?? 9f) * 96 / 72 * 1.33);
+                Size client = ClientSize;
+                return new Rectangle(Padding.Left, fontHeight + Padding.Top, Math.Max(client.Width - Padding.Horizontal, 0),
+                                     Math.Max(client.Height - fontHeight - Padding.Vertical, 0));
+            }
+        }
+    }
     public class Label : Control
     {
         public bool UseCompatibleTextRendering { get; set; }

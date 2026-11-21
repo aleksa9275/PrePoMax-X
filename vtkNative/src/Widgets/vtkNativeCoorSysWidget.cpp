@@ -396,6 +396,15 @@ namespace vtkn
         if (Visibility) GenerateGeometry(false);
     }
 
+    void CoorSysWidget::SetShaftLength(double shaftLength)
+    {
+        Geometry.SetShaftLength(shaftLength);
+        double side = 2 * (Geometry.GetShaftLength() + Geometry.GetConeRadius() + 2);
+        Size[0] = side;
+        Size[1] = side;
+        OnSizeChanged();
+    }
+
     void CoorSysWidget::OnSizeChanged()
     {
         GenerateGeometry(true);

@@ -258,6 +258,8 @@ VTKN_API vtkn_status VTKN_CALL vtkn_arrow_get_leader_line(vtkn_widget widget, do
 /* The triad: the target at a display position, and the update after a camera change made without the view */
 VTKN_API vtkn_status VTKN_CALL vtkn_triad_get_target(vtkn_widget widget, int32_t x, int32_t y, int32_t* target);
 VTKN_API vtkn_status VTKN_CALL vtkn_triad_update_geometry(vtkn_widget widget);
+/* The triad's shaft length in display pixels (default 45); a display of more pixels per unit scales it */
+VTKN_API vtkn_status VTKN_CALL vtkn_triad_set_shaft_length(vtkn_widget widget, double length);
 /* The interaction style of a view: the port of vtkInteractorStyleControl. An embedded view takes its input from
    its window; an off screen view takes it from vtkn_view_handle_input, which also feeds the widgets first, as the
    window does. key_sym is the VTK key symbol ("Left", "Escape", ...) or null */

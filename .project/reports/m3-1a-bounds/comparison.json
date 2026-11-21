@@ -1,0 +1,3830 @@
+{
+ "original": "original 3.0.1.0 on WinForms (.NET Framework 4.0.30319.42000)",
+ "x": "X/App on FormsCompat (.NET 10)",
+ "tolerance": 0,
+ "onlyOriginal": [
+  "UserControls.ChildMouseWheelManagedForm"
+ ],
+ "onlyX": [],
+ "notConstructed": {
+  "PrePoMax.Forms.FrmBoundaryLayer": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmGetValue": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmMaterialLibrary": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmMergeCoincidentNodes": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmOffsetFace": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmParametersEditor": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmRemeshingParameters": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmRepairGeometry": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmSplitPartMeshUsingSurface": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmSplitPeriodicFaces": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmSurface": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmSurfaceOperation": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.Forms.FrmThickenShellMesh": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.FrmMain": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  },
+  "PrePoMax.FrmSelectItemSet": {
+   "original": "NullReferenceException: Object reference not set to an instance of an object",
+   "x": "NullReferenceException: Object reference not set to an instance of an object."
+  }
+ },
+ "forms": {
+  "PrePoMax.Forms.FrmAmplitude": {
+   "controls": 22,
+   "matched": 11,
+   "different": 2,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "tcProperties/tpDataPoints",
+     "type": "TabPage",
+     "original": [
+      4,
+      24,
+      302,
+      217
+     ],
+     "x": [
+      4,
+      24,
+      302,
+      273
+     ]
+    },
+    {
+     "path": "tcProperties/tpDataPoints/dgvData",
+     "type": "DataGridViewCopyPaste",
+     "original": [
+      3,
+      3,
+      296,
+      211
+     ],
+     "x": [
+      3,
+      3,
+      296,
+      267
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmAnalysis": {
+   "controls": 13,
+   "matched": 4,
+   "different": 0,
+   "client": {
+    "original": [
+     542,
+     416
+    ],
+    "x": [
+     534,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmAnimation": {
+   "controls": 53,
+   "matched": 39,
+   "different": 29,
+   "client": {
+    "original": [
+     312,
+     84
+    ],
+    "x": [
+     304,
+     79
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox1/numIncrementStep/#0",
+    "groupBox1/numIncrementStep/#1",
+    "groupBox1/numNumberOfAngles/#0",
+    "groupBox1/numNumberOfAngles/#1",
+    "groupBox1/numNumberOfFrames/#0",
+    "groupBox1/numNumberOfFrames/#1",
+    "groupBox2/numFramesPerSecond/#0",
+    "groupBox2/numFramesPerSecond/#1",
+    "groupBox5/numCurrFrame/#0",
+    "groupBox5/numCurrFrame/#1",
+    "groupBox5/numFirstFrame/#0",
+    "groupBox5/numFirstFrame/#1",
+    "groupBox5/numLastFrame/#0",
+    "groupBox5/numLastFrame/#1"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbColorSpectrumLimits",
+     "type": "GroupBox",
+     "original": [
+      12,
+      297,
+      289,
+      51
+     ],
+     "x": [
+      12,
+      297,
+      281,
+      51
+     ]
+    },
+    {
+     "path": "gbColorSpectrumLimits/rbLimitsAllFrames",
+     "type": "RadioButton",
+     "original": [
+      176,
+      22,
+      100,
+      19
+     ],
+     "x": [
+      176,
+      22,
+      98,
+      19
+     ]
+    },
+    {
+     "path": "groupBox1",
+     "type": "GroupBox",
+     "original": [
+      12,
+      133,
+      289,
+      101
+     ],
+     "x": [
+      12,
+      133,
+      281,
+      101
+     ]
+    },
+    {
+     "path": "groupBox1/lIncrementStep",
+     "type": "Label",
+     "original": [
+      145,
+      49,
+      84,
+      18
+     ],
+     "x": [
+      137,
+      49,
+      86,
+      15
+     ]
+    },
+    {
+     "path": "groupBox1/lNumberOfAngles",
+     "type": "Label",
+     "original": [
+      128,
+      74,
+      101,
+      18
+     ],
+     "x": [
+      120,
+      74,
+      102,
+      15
+     ]
+    },
+    {
+     "path": "groupBox1/lNumberOfFrames",
+     "type": "Label",
+     "original": [
+      127,
+      24,
+      101,
+      18
+     ],
+     "x": [
+      119,
+      24,
+      104,
+      15
+     ]
+    },
+    {
+     "path": "groupBox1/numIncrementStep",
+     "type": "NumericUpDown",
+     "original": [
+      236,
+      47,
+      45,
+      21
+     ],
+     "x": [
+      228,
+      47,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox1/numNumberOfAngles",
+     "type": "NumericUpDown",
+     "original": [
+      236,
+      72,
+      45,
+      21
+     ],
+     "x": [
+      228,
+      72,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox1/numNumberOfFrames",
+     "type": "NumericUpDown",
+     "original": [
+      236,
+      22,
+      45,
+      21
+     ],
+     "x": [
+      228,
+      22,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox1/rbHarmonic",
+     "type": "RadioButton",
+     "original": [
+      6,
+      72,
+      75,
+      19
+     ],
+     "x": [
+      6,
+      72,
+      78,
+      19
+     ]
+    },
+    {
+     "path": "groupBox1/rbTimeIncrements",
+     "type": "RadioButton",
+     "original": [
+      6,
+      47,
+      112,
+      19
+     ],
+     "x": [
+      6,
+      47,
+      113,
+      19
+     ]
+    },
+    {
+     "path": "groupBox2",
+     "type": "GroupBox",
+     "original": [
+      11,
+      240,
+      289,
+      51
+     ],
+     "x": [
+      11,
+      240,
+      281,
+      51
+     ]
+    },
+    {
+     "path": "groupBox2/label1",
+     "type": "Label",
+     "original": [
+      206,
+      24,
+      27,
+      18
+     ],
+     "x": [
+      198,
+      24,
+      26,
+      15
+     ]
+    },
+    {
+     "path": "groupBox2/numFramesPerSecond",
+     "type": "NumericUpDown",
+     "original": [
+      238,
+      22,
+      45,
+      21
+     ],
+     "x": [
+      230,
+      22,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox2/rbLoop",
+     "type": "RadioButton",
+     "original": [
+      68,
+      22,
+      50,
+      19
+     ],
+     "x": [
+      68,
+      22,
+      52,
+      19
+     ]
+    },
+    {
+     "path": "groupBox2/rbOnce",
+     "type": "RadioButton",
+     "original": [
+      6,
+      22,
+      51,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      53,
+      19
+     ]
+    },
+    {
+     "path": "groupBox2/rbSwing",
+     "type": "RadioButton",
+     "original": [
+      126,
+      22,
+      56,
+      19
+     ],
+     "x": [
+      126,
+      22,
+      57,
+      19
+     ]
+    },
+    {
+     "path": "groupBox3",
+     "type": "GroupBox",
+     "original": [
+      12,
+      -2,
+      289,
+      77
+     ],
+     "x": [
+      12,
+      -2,
+      281,
+      77
+     ]
+    },
+    {
+     "path": "groupBox3/tbarFrameSelector",
+     "type": "TrackBar",
+     "original": [
+      6,
+      49,
+      277,
+      23
+     ],
+     "x": [
+      6,
+      49,
+      269,
+      23
+     ]
+    },
+    {
+     "path": "groupBox4/cbGraphicsRam",
+     "type": "CheckBox",
+     "original": [
+      6,
+      22,
+      201,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      258,
+      19
+     ]
+    },
+    {
+     "path": "groupBox5",
+     "type": "GroupBox",
+     "original": [
+      12,
+      81,
+      289,
+      46
+     ],
+     "x": [
+      12,
+      81,
+      281,
+      46
+     ]
+    },
+    {
+     "path": "groupBox5/lCurrent",
+     "type": "Label",
+     "original": [
+      100,
+      19,
+      45,
+      18
+     ],
+     "x": [
+      92,
+      19,
+      47,
+      15
+     ]
+    },
+    {
+     "path": "groupBox5/lFirst",
+     "type": "Label",
+     "original": [
+      14,
+      19,
+      27,
+      18
+     ],
+     "x": [
+      6,
+      19,
+      29,
+      15
+     ]
+    },
+    {
+     "path": "groupBox5/lLast",
+     "type": "Label",
+     "original": [
+      205,
+      19,
+      27,
+      18
+     ],
+     "x": [
+      197,
+      19,
+      28,
+      15
+     ]
+    },
+    {
+     "path": "groupBox5/numCurrFrame",
+     "type": "NumericUpDown",
+     "original": [
+      153,
+      17,
+      45,
+      21
+     ],
+     "x": [
+      145,
+      17,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox5/numFirstFrame",
+     "type": "NumericUpDown",
+     "original": [
+      49,
+      17,
+      45,
+      21
+     ],
+     "x": [
+      41,
+      17,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox5/numLastFrame",
+     "type": "NumericUpDown",
+     "original": [
+      236,
+      17,
+      45,
+      21
+     ],
+     "x": [
+      228,
+      17,
+      45,
+      23
+     ]
+    },
+    {
+     "path": "groupBox6/cbEncoderOptions",
+     "type": "CheckBox",
+     "original": [
+      6,
+      22,
+      203,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      201,
+      19
+     ]
+    },
+    {
+     "path": "groupBox6/cbSaveAsImages",
+     "type": "CheckBox",
+     "original": [
+      6,
+      47,
+      110,
+      19
+     ],
+     "x": [
+      6,
+      47,
+      105,
+      19
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmBC": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     561
+    ],
+    "x": [
+     334,
+     561
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmCalculixKeywordEditor": {
+   "controls": 21,
+   "matched": 21,
+   "different": 5,
+   "client": {
+    "original": [
+     1034,
+     611
+    ],
+    "x": [
+     1034,
+     611
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "splitContainer1/#0/label2",
+     "type": "Label",
+     "original": [
+      3,
+      0,
+      129,
+      18
+     ],
+     "x": [
+      3,
+      0,
+      126,
+      15
+     ]
+    },
+    {
+     "path": "splitContainer1/#1/cbActive",
+     "type": "CheckBox",
+     "original": [
+      130,
+      -1,
+      56,
+      19
+     ],
+     "x": [
+      130,
+      -1,
+      59,
+      19
+     ]
+    },
+    {
+     "path": "splitContainer1/#1/cbHide",
+     "type": "CheckBox",
+     "original": [
+      166,
+      180,
+      187,
+      19
+     ],
+     "x": [
+      166,
+      180,
+      186,
+      19
+     ]
+    },
+    {
+     "path": "splitContainer1/#1/label1",
+     "type": "Label",
+     "original": [
+      3,
+      181,
+      159,
+      18
+     ],
+     "x": [
+      3,
+      181,
+      157,
+      15
+     ]
+    },
+    {
+     "path": "splitContainer1/#1/label3",
+     "type": "Label",
+     "original": [
+      3,
+      0,
+      123,
+      18
+     ],
+     "x": [
+      3,
+      0,
+      121,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmCaptureViewport": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmConstraint": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     511
+    ],
+    "x": [
+     334,
+     511
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmContactPair": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmCoordinateSystem": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     598
+    ],
+    "x": [
+     334,
+     598
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmDefinedField": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     481
+    ],
+    "x": [
+     334,
+     481
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmDistribution": {
+   "controls": 22,
+   "matched": 11,
+   "different": 2,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "tcProperties/tpDataPoints",
+     "type": "TabPage",
+     "original": [
+      4,
+      24,
+      302,
+      217
+     ],
+     "x": [
+      4,
+      24,
+      302,
+      273
+     ]
+    },
+    {
+     "path": "tcProperties/tpDataPoints/dgvData",
+     "type": "DataGridViewCopyPaste",
+     "original": [
+      3,
+      3,
+      296,
+      211
+     ],
+     "x": [
+      3,
+      3,
+      296,
+      267
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmEditCommands": {
+   "controls": 16,
+   "matched": 14,
+   "different": 1,
+   "client": {
+    "original": [
+     792,
+     466
+    ],
+    "x": [
+     784,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "splMain/#0/gbProperties/dgvCommands/#0",
+    "splMain/#0/gbProperties/dgvCommands/#1"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "msMain",
+     "type": "MenuStrip",
+     "original": [
+      0,
+      0,
+      792,
+      26
+     ],
+     "x": [
+      0,
+      0,
+      784,
+      24
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmElementQuality": {
+   "controls": 16,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#2/#2",
+    "gbProperties/propertyGrid/#2/#3",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmElementSet": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmExplodedView": {
+   "controls": 19,
+   "matched": 8,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     374
+    ],
+    "x": [
+     334,
+     374
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox3/propertyGrid/#0",
+    "groupBox3/propertyGrid/#0/#0",
+    "groupBox3/propertyGrid/#0/#1",
+    "groupBox3/propertyGrid/#1",
+    "groupBox3/propertyGrid/#1/#0",
+    "groupBox3/propertyGrid/#2",
+    "groupBox3/propertyGrid/#2/#0",
+    "groupBox3/propertyGrid/#2/#1",
+    "groupBox3/propertyGrid/#2/#2",
+    "groupBox3/propertyGrid/#2/#3",
+    "groupBox3/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmExportFileWithProperties": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmFieldOutput": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmFind": {
+   "controls": 13,
+   "matched": 13,
+   "different": 6,
+   "client": {
+    "original": [
+     222,
+     295
+    ],
+    "x": [
+     214,
+     290
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbItemData/cbAddAnnotation",
+     "type": "CheckBox",
+     "original": [
+      6,
+      22,
+      106,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      109,
+      19
+     ]
+    },
+    {
+     "path": "gbItemData/labItemId",
+     "type": "Label",
+     "original": [
+      6,
+      54,
+      40,
+      18
+     ],
+     "x": [
+      6,
+      54,
+      44,
+      15
+     ]
+    },
+    {
+     "path": "gbItemData/tbItemId",
+     "type": "NumericTextBox",
+     "original": [
+      56,
+      50,
+      72,
+      21
+     ],
+     "x": [
+      56,
+      50,
+      72,
+      23
+     ]
+    },
+    {
+     "path": "gbItemType/rbFacetElement",
+     "type": "RadioButton",
+     "original": [
+      6,
+      47,
+      100,
+      19
+     ],
+     "x": [
+      6,
+      47,
+      101,
+      19
+     ]
+    },
+    {
+     "path": "gbItemType/rbPart",
+     "type": "RadioButton",
+     "original": [
+      6,
+      122,
+      44,
+      19
+     ],
+     "x": [
+      6,
+      122,
+      46,
+      19
+     ]
+    },
+    {
+     "path": "gbItemType/rbVertexNode",
+     "type": "RadioButton",
+     "original": [
+      6,
+      22,
+      90,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      91,
+      19
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmFollowerView": {
+   "controls": 16,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     344,
+     374
+    ],
+    "x": [
+     334,
+     374
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox3/propertyGrid/#0",
+    "groupBox3/propertyGrid/#0/#0",
+    "groupBox3/propertyGrid/#0/#1",
+    "groupBox3/propertyGrid/#1",
+    "groupBox3/propertyGrid/#1/#0",
+    "groupBox3/propertyGrid/#2",
+    "groupBox3/propertyGrid/#2/#0",
+    "groupBox3/propertyGrid/#2/#1",
+    "groupBox3/propertyGrid/#2/#2",
+    "groupBox3/propertyGrid/#2/#3",
+    "groupBox3/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmGetColor": {
+   "controls": 13,
+   "matched": 4,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     216
+    ],
+    "x": [
+     334,
+     211
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmGetEnvVars": {
+   "controls": 6,
+   "matched": 4,
+   "different": 0,
+   "client": {
+    "original": [
+     412,
+     216
+    ],
+    "x": [
+     404,
+     211
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/dgvEnvironmentVariables/#0",
+    "gbProperties/dgvEnvironmentVariables/#1"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmHistoryOutput": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmInitialCondition": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     481
+    ],
+    "x": [
+     334,
+     481
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmLoad": {
+   "controls": 16,
+   "matched": 7,
+   "different": 5,
+   "client": {
+    "original": [
+     362,
+     583
+    ],
+    "x": [
+     354,
+     578
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "btnCancel",
+     "type": "Button",
+     "original": [
+      261,
+      548,
+      75,
+      23
+     ],
+     "x": [
+      261,
+      543,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "btnOK",
+     "type": "Button",
+     "original": [
+      180,
+      548,
+      75,
+      23
+     ],
+     "x": [
+      180,
+      543,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "btnOkAddNew",
+     "type": "Button",
+     "original": [
+      99,
+      548,
+      75,
+      23
+     ],
+     "x": [
+      99,
+      543,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "gbProperties",
+     "type": "GroupBox",
+     "original": [
+      12,
+      119,
+      330,
+      423
+     ],
+     "x": [
+      12,
+      119,
+      330,
+      418
+     ]
+    },
+    {
+     "path": "gbProperties/propertyGrid",
+     "type": "TabEnabledPropertyGrid",
+     "original": [
+      6,
+      22,
+      318,
+      395
+     ],
+     "x": [
+      6,
+      22,
+      318,
+      390
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmMaterial": {
+   "controls": 30,
+   "matched": 21,
+   "different": 6,
+   "client": {
+    "original": [
+     474,
+     681
+    ],
+    "x": [
+     474,
+     681
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbData/cbTemperatureDependent",
+     "type": "CheckBox",
+     "original": [
+      95,
+      105,
+      239,
+      19
+     ],
+     "x": [
+      95,
+      105,
+      235,
+      19
+     ]
+    },
+    {
+     "path": "gbData/lDescription",
+     "type": "Label",
+     "original": [
+      22,
+      51,
+      66,
+      18
+     ],
+     "x": [
+      22,
+      51,
+      67,
+      15
+     ]
+    },
+    {
+     "path": "gbData/lName",
+     "type": "Label",
+     "original": [
+      6,
+      22,
+      82,
+      18
+     ],
+     "x": [
+      6,
+      22,
+      83,
+      15
+     ]
+    },
+    {
+     "path": "gbData/tbName",
+     "type": "TextBox",
+     "original": [
+      95,
+      19,
+      350,
+      21
+     ],
+     "x": [
+      95,
+      19,
+      350,
+      23
+     ]
+    },
+    {
+     "path": "gbProperties/labAvailable",
+     "type": "Label",
+     "original": [
+      7,
+      19,
+      55,
+      18
+     ],
+     "x": [
+      7,
+      19,
+      55,
+      15
+     ]
+    },
+    {
+     "path": "gbProperties/labSelected",
+     "type": "Label",
+     "original": [
+      235,
+      19,
+      52,
+      18
+     ],
+     "x": [
+      235,
+      19,
+      51,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmMaterialOrientation": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmMeshSetupItem": {
+   "controls": 17,
+   "matched": 8,
+   "different": 0,
+   "client": {
+    "original": [
+     372,
+     476
+    ],
+    "x": [
+     364,
+     471
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmMirror": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     526
+    ],
+    "x": [
+     334,
+     526
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmModelProperties": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmMonitor": {
+   "controls": 27,
+   "matched": 23,
+   "different": 10,
+   "client": {
+    "original": [
+     742,
+     561
+    ],
+    "x": [
+     734,
+     561
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_detailTabControl/_convergenceTabPage/_convergenceGraph/hScrollBar1",
+    "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_detailTabControl/_convergenceTabPage/_convergenceGraph/vScrollBar1",
+    "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_statusTabControl/_statusTabPage/_statusGraph/hScrollBar1",
+    "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_statusTabControl/_statusTabPage/_statusGraph/vScrollBar1"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "tabControl1/tpCovergence",
+     "type": "TabPage",
+     "original": [
+      4,
+      24,
+      702,
+      326
+     ],
+     "x": [
+      4,
+      24,
+      702,
+      476
+     ]
+    },
+    {
+     "path": "tabControl1/tpCovergence/tbConvergence",
+     "type": "AutoScrollTextBox",
+     "original": [
+      9,
+      9,
+      684,
+      308
+     ],
+     "x": [
+      9,
+      9,
+      684,
+      458
+     ]
+    },
+    {
+     "path": "tabControl1/tpDatFile",
+     "type": "TabPage",
+     "original": [
+      4,
+      24,
+      702,
+      326
+     ],
+     "x": [
+      4,
+      24,
+      702,
+      476
+     ]
+    },
+    {
+     "path": "tabControl1/tpDatFile/tbDatFile",
+     "type": "AutoScrollTextBox",
+     "original": [
+      6,
+      6,
+      690,
+      314
+     ],
+     "x": [
+      6,
+      6,
+      690,
+      464
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_detailTabControl",
+     "type": "TabControl",
+     "original": [
+      4,
+      237,
+      688,
+      230
+     ],
+     "x": [
+      3,
+      237,
+      690,
+      230
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_detailTabControl/_convergenceTabPage",
+     "type": "TabPage",
+     "original": [
+      4,
+      24,
+      680,
+      202
+     ],
+     "x": [
+      4,
+      24,
+      682,
+      202
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_detailTabControl/_convergenceTabPage/_convergenceGraph",
+     "type": "ZedGraphControl",
+     "original": [
+      4,
+      3,
+      672,
+      196
+     ],
+     "x": [
+      3,
+      3,
+      676,
+      196
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_statusTabControl",
+     "type": "TabControl",
+     "original": [
+      4,
+      3,
+      688,
+      230
+     ],
+     "x": [
+      3,
+      3,
+      690,
+      230
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_statusTabControl/_statusTabPage",
+     "type": "TabPage",
+     "original": [
+      5,
+      25,
+      684,
+      137
+     ],
+     "x": [
+      4,
+      24,
+      682,
+      202
+     ]
+    },
+    {
+     "path": "tabControl1/tpProgress/analysisProgressView/_tableLayoutPanel/_statusTabControl/_statusTabPage/_statusGraph",
+     "type": "ZedGraphControl",
+     "original": [
+      4,
+      3,
+      676,
+      131
+     ],
+     "x": [
+      3,
+      3,
+      676,
+      196
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmNewModel": {
+   "controls": 21,
+   "matched": 12,
+   "different": 4,
+   "client": {
+    "original": [
+     334,
+     536
+    ],
+    "x": [
+     334,
+     536
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbModelSpace/rb2DAxisymmetric",
+     "type": "RadioButton",
+     "original": [
+      189,
+      47,
+      113,
+      19
+     ],
+     "x": [
+      189,
+      47,
+      115,
+      19
+     ]
+    },
+    {
+     "path": "gbModelSpace/rb2DPlaneStrain",
+     "type": "RadioButton",
+     "original": [
+      189,
+      22,
+      108,
+      19
+     ],
+     "x": [
+      189,
+      22,
+      104,
+      19
+     ]
+    },
+    {
+     "path": "gbModelSpace/rb2DPlaneStress",
+     "type": "RadioButton",
+     "original": [
+      6,
+      47,
+      110,
+      19
+     ],
+     "x": [
+      6,
+      47,
+      104,
+      19
+     ]
+    },
+    {
+     "path": "gbModelSpace/rb3D",
+     "type": "RadioButton",
+     "original": [
+      6,
+      22,
+      38,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      39,
+      19
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmNodeSet": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmPartProperties": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmPythonStop": {
+   "controls": 2,
+   "matched": 2,
+   "different": 0,
+   "client": {
+    "original": [
+     320,
+     93
+    ],
+    "x": [
+     320,
+     93
+    ]
+   },
+   "autoScale": {
+    "original": "6x13 current 6x13 Font",
+    "x": "6x13 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmQuery": {
+   "controls": 4,
+   "matched": 4,
+   "different": 0,
+   "client": {
+    "original": [
+     202,
+     301
+    ],
+    "x": [
+     194,
+     296
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmReferencePoint": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmRegenerate": {
+   "controls": 5,
+   "matched": 5,
+   "different": 2,
+   "client": {
+    "original": [
+     216,
+     130
+    ],
+    "x": [
+     208,
+     125
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbData/rbAll",
+     "type": "RadioButton",
+     "original": [
+      6,
+      22,
+      103,
+      19
+     ],
+     "x": [
+      6,
+      22,
+      99,
+      19
+     ]
+    },
+    {
+     "path": "gbData/rbFEModel",
+     "type": "RadioButton",
+     "original": [
+      6,
+      47,
+      142,
+      19
+     ],
+     "x": [
+      6,
+      47,
+      136,
+      19
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmResultFieldOutput": {
+   "controls": 22,
+   "matched": 11,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmResultHistoryOutput": {
+   "controls": 22,
+   "matched": 11,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     501
+    ],
+    "x": [
+     334,
+     501
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmRotate": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     446
+    ],
+    "x": [
+     334,
+     446
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmScale": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     411
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmSearchContactPairs": {
+   "controls": 38,
+   "matched": 27,
+   "different": 12,
+   "client": {
+    "original": [
+     952,
+     566
+    ],
+    "x": [
+     944,
+     561
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "gbPairs/dgvData/#0",
+    "gbPairs/dgvData/#1",
+    "gbPairs/propertyGrid/#0",
+    "gbPairs/propertyGrid/#0/#0",
+    "gbPairs/propertyGrid/#0/#1",
+    "gbPairs/propertyGrid/#1",
+    "gbPairs/propertyGrid/#1/#0",
+    "gbPairs/propertyGrid/#2",
+    "gbPairs/propertyGrid/#2/#0",
+    "gbPairs/propertyGrid/#2/#1",
+    "gbPairs/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbContactPairParameters/cbSurfaceInteraction",
+     "type": "ComboBox",
+     "original": [
+      118,
+      40,
+      155,
+      21
+     ],
+     "x": [
+      118,
+      40,
+      155,
+      23
+     ]
+    },
+    {
+     "path": "gbContactPairParameters/lAdjustMesh",
+     "type": "Label",
+     "original": [
+      39,
+      87,
+      71,
+      18
+     ],
+     "x": [
+      39,
+      87,
+      73,
+      15
+     ]
+    },
+    {
+     "path": "gbContactPairParameters/lMethod",
+     "type": "Label",
+     "original": [
+      63,
+      65,
+      45,
+      18
+     ],
+     "x": [
+      63,
+      65,
+      49,
+      15
+     ]
+    },
+    {
+     "path": "gbContactPairParameters/lSurfaceinteraction",
+     "type": "Label",
+     "original": [
+      6,
+      43,
+      106,
+      18
+     ],
+     "x": [
+      6,
+      43,
+      106,
+      15
+     ]
+    },
+    {
+     "path": "gbContactPairParameters/lType",
+     "type": "Label",
+     "original": [
+      81,
+      21,
+      31,
+      18
+     ],
+     "x": [
+      81,
+      21,
+      32,
+      15
+     ]
+    },
+    {
+     "path": "gbGeometryFilters/cbShellEdge",
+     "type": "CheckBox",
+     "original": [
+      6,
+      64,
+      82,
+      19
+     ],
+     "x": [
+      6,
+      64,
+      80,
+      19
+     ]
+    },
+    {
+     "path": "gbGeometryFilters/cbSolid",
+     "type": "CheckBox",
+     "original": [
+      6,
+      20,
+      51,
+      19
+     ],
+     "x": [
+      6,
+      20,
+      52,
+      19
+     ]
+    },
+    {
+     "path": "gbSearch/lAngle",
+     "type": "Label",
+     "original": [
+      24,
+      43,
+      36,
+      18
+     ],
+     "x": [
+      24,
+      43,
+      38,
+      15
+     ]
+    },
+    {
+     "path": "gbSearch/lDistance",
+     "type": "Label",
+     "original": [
+      10,
+      21,
+      52,
+      18
+     ],
+     "x": [
+      10,
+      21,
+      52,
+      15
+     ]
+    },
+    {
+     "path": "gbSearch/lGroupBy",
+     "type": "Label",
+     "original": [
+      6,
+      65,
+      54,
+      18
+     ],
+     "x": [
+      6,
+      65,
+      56,
+      15
+     ]
+    },
+    {
+     "path": "gbSearch/tbAngle",
+     "type": "UnitAwareTextBox",
+     "original": [
+      68,
+      40,
+      87,
+      21
+     ],
+     "x": [
+      68,
+      40,
+      87,
+      23
+     ]
+    },
+    {
+     "path": "gbSearch/tbDistance",
+     "type": "UnitAwareTextBox",
+     "original": [
+      68,
+      18,
+      87,
+      21
+     ],
+     "x": [
+      68,
+      18,
+      87,
+      23
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmSection": {
+   "controls": 25,
+   "matched": 14,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmSectionView": {
+   "controls": 19,
+   "matched": 8,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     514
+    ],
+    "x": [
+     334,
+     514
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox3/propertyGrid/#0",
+    "groupBox3/propertyGrid/#0/#0",
+    "groupBox3/propertyGrid/#0/#1",
+    "groupBox3/propertyGrid/#1",
+    "groupBox3/propertyGrid/#1/#0",
+    "groupBox3/propertyGrid/#2",
+    "groupBox3/propertyGrid/#2/#0",
+    "groupBox3/propertyGrid/#2/#1",
+    "groupBox3/propertyGrid/#2/#2",
+    "groupBox3/propertyGrid/#2/#3",
+    "groupBox3/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmSelectEntity": {
+   "controls": 8,
+   "matched": 6,
+   "different": 2,
+   "client": {
+    "original": [
+     342,
+     416
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox1/dgvNames/#0",
+    "groupBox1/dgvNames/#1"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "groupBox1/cbHighlight",
+     "type": "CheckBox",
+     "original": [
+      6,
+      331,
+      186,
+      19
+     ],
+     "x": [
+      6,
+      331,
+      188,
+      19
+     ]
+    },
+    {
+     "path": "groupBox1/label1",
+     "type": "Label",
+     "original": [
+      6,
+      19,
+      164,
+      18
+     ],
+     "x": [
+      6,
+      19,
+      163,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmSettings": {
+   "controls": 15,
+   "matched": 6,
+   "different": 0,
+   "client": {
+    "original": [
+     742,
+     466
+    ],
+    "x": [
+     734,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmSplash": {
+   "controls": 12,
+   "matched": 12,
+   "different": 1,
+   "client": {
+    "original": [
+     600,
+     280
+    ],
+    "x": [
+     600,
+     280
+    ]
+   },
+   "autoScale": {
+    "original": "6x13 current 6x13 Font",
+    "x": "6x13 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "llHomePage",
+     "type": "LinkLabel",
+     "original": [
+      3,
+      200,
+      75,
+      21
+     ],
+     "x": [
+      3,
+      200,
+      74,
+      20
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmSplitShell": {
+   "controls": 19,
+   "matched": 10,
+   "different": 0,
+   "client": {
+    "original": [
+     382,
+     476
+    ],
+    "x": [
+     374,
+     471
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmSplitSolid": {
+   "controls": 19,
+   "matched": 10,
+   "different": 0,
+   "client": {
+    "original": [
+     382,
+     476
+    ],
+    "x": [
+     374,
+     471
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmStep": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     516
+    ],
+    "x": [
+     334,
+     511
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmStepControls": {
+   "controls": 23,
+   "matched": 14,
+   "different": 2,
+   "client": {
+    "original": [
+     384,
+     546
+    ],
+    "x": [
+     384,
+     546
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbProperties/label1",
+     "type": "Label",
+     "original": [
+      6,
+      19,
+      55,
+      18
+     ],
+     "x": [
+      6,
+      19,
+      55,
+      15
+     ]
+    },
+    {
+     "path": "gbProperties/label2",
+     "type": "Label",
+     "original": [
+      183,
+      19,
+      52,
+      18
+     ],
+     "x": [
+      183,
+      19,
+      51,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmSurfaceInteraction": {
+   "controls": 25,
+   "matched": 16,
+   "different": 4,
+   "client": {
+    "original": [
+     384,
+     546
+    ],
+    "x": [
+     384,
+     546
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#0/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#1/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#0",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#2/#1",
+    "gbProperties/tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbData/lName",
+     "type": "Label",
+     "original": [
+      6,
+      22,
+      95,
+      18
+     ],
+     "x": [
+      6,
+      22,
+      97,
+      15
+     ]
+    },
+    {
+     "path": "gbData/tbName",
+     "type": "TextBox",
+     "original": [
+      109,
+      19,
+      245,
+      21
+     ],
+     "x": [
+      109,
+      19,
+      245,
+      23
+     ]
+    },
+    {
+     "path": "gbProperties/label1",
+     "type": "Label",
+     "original": [
+      6,
+      19,
+      55,
+      18
+     ],
+     "x": [
+      6,
+      19,
+      55,
+      15
+     ]
+    },
+    {
+     "path": "gbProperties/label2",
+     "type": "Label",
+     "original": [
+      177,
+      19,
+      52,
+      18
+     ],
+     "x": [
+      177,
+      19,
+      51,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmTransformation": {
+   "controls": 22,
+   "matched": 13,
+   "different": 3,
+   "client": {
+    "original": [
+     384,
+     516
+    ],
+    "x": [
+     384,
+     511
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "gbProperties/propertyGrid",
+     "type": "TabEnabledPropertyGrid",
+     "original": [
+      3,
+      17,
+      354,
+      256
+     ],
+     "x": [
+      3,
+      19,
+      354,
+      254
+     ]
+    },
+    {
+     "path": "gbTypes/labAvailable",
+     "type": "Label",
+     "original": [
+      6,
+      19,
+      55,
+      18
+     ],
+     "x": [
+      6,
+      19,
+      55,
+      15
+     ]
+    },
+    {
+     "path": "gbTypes/labSelected",
+     "type": "Label",
+     "original": [
+      177,
+      19,
+      37,
+      18
+     ],
+     "x": [
+      177,
+      19,
+      40,
+      15
+     ]
+    }
+   ]
+  },
+  "PrePoMax.Forms.FrmTranslate": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     431
+    ],
+    "x": [
+     334,
+     431
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmUserVew": {
+   "controls": 21,
+   "matched": 12,
+   "different": 0,
+   "client": {
+    "original": [
+     304,
+     521
+    ],
+    "x": [
+     304,
+     521
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "gbProperties/pgProperties/#0",
+    "gbProperties/pgProperties/#0/#0",
+    "gbProperties/pgProperties/#0/#1",
+    "gbProperties/pgProperties/#1",
+    "gbProperties/pgProperties/#1/#0",
+    "gbProperties/pgProperties/#2",
+    "gbProperties/pgProperties/#2/#0",
+    "gbProperties/pgProperties/#2/#1",
+    "gbProperties/pgProperties/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.Forms.FrmViewObjectProperties": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     416
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "PrePoMax.FrmAnalyzeGeometry": {
+   "controls": 14,
+   "matched": 14,
+   "different": 11,
+   "client": {
+    "original": [
+     368,
+     198
+    ],
+    "x": [
+     368,
+     198
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "groupBox3/cbCloseEdges",
+     "type": "CheckBox",
+     "original": [
+      6,
+      55,
+      121,
+      19
+     ],
+     "x": [
+      6,
+      55,
+      118,
+      19
+     ]
+    },
+    {
+     "path": "groupBox3/cbEdgesShorter",
+     "type": "CheckBox",
+     "original": [
+      6,
+      26,
+      126,
+      19
+     ],
+     "x": [
+      6,
+      26,
+      124,
+      19
+     ]
+    },
+    {
+     "path": "groupBox3/cbFacesSmaller",
+     "type": "CheckBox",
+     "original": [
+      6,
+      84,
+      126,
+      19
+     ],
+     "x": [
+      6,
+      84,
+      123,
+      19
+     ]
+    },
+    {
+     "path": "groupBox3/cbVerticesWithAngle",
+     "type": "CheckBox",
+     "original": [
+      6,
+      113,
+      126,
+      19
+     ],
+     "x": [
+      6,
+      113,
+      124,
+      19
+     ]
+    },
+    {
+     "path": "groupBox3/labClosestEdges",
+     "type": "Label",
+     "original": [
+      237,
+      56,
+      105,
+      18
+     ],
+     "x": [
+      237,
+      56,
+      104,
+      15
+     ]
+    },
+    {
+     "path": "groupBox3/labShortestEdge",
+     "type": "Label",
+     "original": [
+      237,
+      27,
+      105,
+      18
+     ],
+     "x": [
+      237,
+      27,
+      104,
+      15
+     ]
+    },
+    {
+     "path": "groupBox3/labSmallestFace",
+     "type": "Label",
+     "original": [
+      237,
+      85,
+      105,
+      18
+     ],
+     "x": [
+      237,
+      85,
+      104,
+      15
+     ]
+    },
+    {
+     "path": "groupBox3/tbMinEdgeLen",
+     "type": "UnitAwareTextBox",
+     "original": [
+      136,
+      24,
+      75,
+      21
+     ],
+     "x": [
+      136,
+      24,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "groupBox3/tbMinEdgesDistance",
+     "type": "UnitAwareTextBox",
+     "original": [
+      136,
+      53,
+      75,
+      21
+     ],
+     "x": [
+      136,
+      53,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "groupBox3/tbMinFaceSize",
+     "type": "UnitAwareTextBox",
+     "original": [
+      136,
+      82,
+      75,
+      21
+     ],
+     "x": [
+      136,
+      82,
+      75,
+      23
+     ]
+    },
+    {
+     "path": "groupBox3/tbVerticesWithAngle",
+     "type": "UnitAwareTextBox",
+     "original": [
+      136,
+      111,
+      75,
+      21
+     ],
+     "x": [
+      136,
+      111,
+      75,
+      23
+     ]
+    }
+   ]
+  },
+  "PrePoMax.FrmViewResultHistoryOutput": {
+   "controls": 5,
+   "matched": 3,
+   "different": 0,
+   "client": {
+    "original": [
+     292,
+     566
+    ],
+    "x": [
+     284,
+     561
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 Font",
+    "x": "7x15 Font"
+   },
+   "onlyOriginal": [
+    "groupBox3/dgvHistory/#0",
+    "groupBox3/dgvHistory/#1"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.FrmDiagramView": {
+   "controls": 4,
+   "matched": 2,
+   "different": 1,
+   "client": {
+    "original": [
+     592,
+     466
+    ],
+    "x": [
+     584,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "6x13 current 6x13 Font",
+    "x": "6x13 Font"
+   },
+   "onlyOriginal": [
+    "zedGraph/hScrollBar1",
+    "zedGraph/vScrollBar1"
+   ],
+   "onlyX": [],
+   "differences": [
+    {
+     "path": "zedGraph",
+     "type": "ZedGraphControl",
+     "original": [
+      0,
+      0,
+      592,
+      466
+     ],
+     "x": [
+      0,
+      0,
+      584,
+      461
+     ]
+    }
+   ]
+  },
+  "UserControls.FrmGetDampingRatios": {
+   "controls": 6,
+   "matched": 4,
+   "different": 0,
+   "client": {
+    "original": [
+     412,
+     216
+    ],
+    "x": [
+     404,
+     211
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/dgvData/#0",
+    "gbProperties/dgvData/#1"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.FrmProperties": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     416
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.FrmPropertyDataListView": {
+   "controls": 22,
+   "matched": 11,
+   "different": 0,
+   "client": {
+    "original": [
+     334,
+     461
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "7x15 current 7x15 None",
+    "x": "7x15 None"
+   },
+   "onlyOriginal": [
+    "tcProperties/tpDataPoints/dgvData/#0",
+    "tcProperties/tpDataPoints/dgvData/#1",
+    "tcProperties/tpProperties/propertyGrid/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#0",
+    "tcProperties/tpProperties/propertyGrid/#0/#1",
+    "tcProperties/tpProperties/propertyGrid/#1",
+    "tcProperties/tpProperties/propertyGrid/#1/#0",
+    "tcProperties/tpProperties/propertyGrid/#2",
+    "tcProperties/tpProperties/propertyGrid/#2/#0",
+    "tcProperties/tpProperties/propertyGrid/#2/#1",
+    "tcProperties/tpProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.FrmPropertyListView": {
+   "controls": 16,
+   "matched": 7,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     466
+    ],
+    "x": [
+     334,
+     461
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.FrmXYPlotSettings": {
+   "controls": 14,
+   "matched": 5,
+   "different": 0,
+   "client": {
+    "original": [
+     342,
+     416
+    ],
+    "x": [
+     334,
+     411
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 None",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [
+    "gbProperties/propertyGrid/#0",
+    "gbProperties/propertyGrid/#0/#0",
+    "gbProperties/propertyGrid/#0/#1",
+    "gbProperties/propertyGrid/#1",
+    "gbProperties/propertyGrid/#1/#0",
+    "gbProperties/propertyGrid/#2",
+    "gbProperties/propertyGrid/#2/#0",
+    "gbProperties/propertyGrid/#2/#1",
+    "gbProperties/propertyGrid/#3"
+   ],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.MainMouseWheelManagedForm": {
+   "controls": 0,
+   "matched": 0,
+   "different": 0,
+   "client": {
+    "original": [
+     292,
+     266
+    ],
+    "x": [
+     284,
+     261
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 Inherit",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": []
+  },
+  "UserControls.PrePoMaxChildForm": {
+   "controls": 0,
+   "matched": 0,
+   "different": 0,
+   "client": {
+    "original": [
+     292,
+     266
+    ],
+    "x": [
+     284,
+     261
+    ]
+   },
+   "autoScale": {
+    "original": "0x0 current 0x0 Inherit",
+    "x": "0x0 None"
+   },
+   "onlyOriginal": [],
+   "onlyX": [],
+   "differences": []
+  }
+ },
+ "totals": {
+  "forms": 66,
+  "controls": 566,
+  "different": 108,
+  "formsIdentical": 1,
+  "clientDifferent": 30,
+  "notConstructed": 15
+ }
+}

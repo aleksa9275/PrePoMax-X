@@ -62,6 +62,7 @@ namespace vtkControl
             MirrorWidget(NativeProbeName, _probeWidget, VtkNativeWidgetKind.Text);
             VtkNativeWidget triad = MirrorWidget(NativeTriadName, _coorSysWidget, VtkNativeWidgetKind.Triad);
             triad.TargetClicked += NativeMirrorTriad_TargetClicked;
+            triad.ScaleTriadToDisplay();
             foreach (var entry in _arrowWidgets) MirrorArrowWidget(entry.Key, entry.Value);
         }
         private VtkNativeWidget MirrorWidget(string name, vtkMaxBorderWidget widget, VtkNativeWidgetKind kind)

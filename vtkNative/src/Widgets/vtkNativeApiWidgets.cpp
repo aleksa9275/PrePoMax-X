@@ -491,6 +491,15 @@ extern "C"
         });
     }
 
+    vtkn_status VTKN_CALL vtkn_triad_set_shaft_length(vtkn_widget widget, double length)
+    {
+        return GuardVtk([&]() {
+            Require(length > 0, "The shaft length must be positive.");
+            Widget::FromHandle(widget)->As<CoorSysWidget>(VTKN_WIDGET_TRIAD).SetShaftLength(length);
+            return VTKN_OK;
+        });
+    }
+
     vtkn_status VTKN_CALL vtkn_view_set_widget_highlight(vtkn_view view, int32_t enabled,
                                                          int32_t local_highlight_enabled)
     {

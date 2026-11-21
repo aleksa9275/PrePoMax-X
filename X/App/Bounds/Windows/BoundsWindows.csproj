@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The per-form bounds comparison, original side: .NET Framework 4.8 WinForms, loads the original PrePoMax.exe
+       by path (builds anywhere with the reference assemblies package; runs on Windows or in CrossOver) -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PrePoMaxX.BoundsWindows</AssemblyName>
+    <RootNamespace>PrePoMaxX.Bounds</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Dump.cs" />
+    <Compile Include="ProgramWindows.cs" />
+    <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

@@ -17,13 +17,46 @@ namespace System.Windows.Forms
         bool _closing;
 
         public static IReadOnlyList<Form> OpenForms => openForms;
-        public Form() { SetVisibleCore(false); }
-        public override Size Size { get => base.Size; set { _clientSize = new Size(Math.Max(0, value.Width - FrameWidth), Math.Max(0, value.Height - FrameHeight)); SetSizeCore(value); } }
-        protected override Size ClientSizeCore { get => _clientSize; set { _clientSize = value; SetSizeCore(new Size(value.Width + FrameWidth, value.Height + FrameHeight)); } }
-        // WinForms sizable window frame at 96 DPI (Windows 10): 16 px horizontally, 39 px vertically.
+        // WinForms Form.DefaultSize: 300 x 300
+        public Form() { SetVisibleCore(false); Size = new Size(300, 300); }
+        public override Size Size
+        {
+            get => base.Size;
+            set
+            {
+                value = Constrain(value);
+                _clientSize = new Size(Math.Max(0, value.Width - FrameX), Math.Max(0, value.Height - FrameY));
+                SetSizeCore(value);
+            }
+        }
+        protected override Size ClientSizeCore
+        {
+            get => _clientSize;
+            set
+            {
+                Size size = Constrain(new Size(value.Width + FrameX, value.Height + FrameY));
+                _clientSize = new Size(Math.Max(0, size.Width - FrameX), Math.Max(0, size.Height - FrameY));
+                SetSizeCore(size);
+            }
+        }
+        // WinForms sizable window frame at 96 DPI (Windows 10): 16 px horizontally, 39 px vertically; none without a border
         public const int FrameWidth = 16, FrameHeight = 39;
+        int FrameX => _formBorderStyle == FormBorderStyle.None ? 0 : FrameWidth;
+        int FrameY => _formBorderStyle == FormBorderStyle.None ? 0 : FrameHeight;
         public FormStartPosition StartPosition { get; set; } = FormStartPosition.WindowsDefaultLocation;
-        public FormBorderStyle FormBorderStyle { get; set; } = FormBorderStyle.Sizable;
+        // A new border keeps the client size (the designer sets ClientSize first), as WinForms does before the window exists
+        FormBorderStyle _formBorderStyle = FormBorderStyle.Sizable;
+        public FormBorderStyle FormBorderStyle
+        {
+            get => _formBorderStyle;
+            set
+            {
+                if (_formBorderStyle == value) return;
+                Size client = _clientSize;
+                _formBorderStyle = value;
+                ClientSizeCore = client;
+            }
+        }
         public bool MaximizeBox { get; set; } = true;
         public bool MinimizeBox { get; set; } = true;
         public bool ControlBox { get; set; } = true;
@@ -552,7 +585,7 @@ namespace System.Windows.Forms
         public event DrawItemEventHandler DrawItem;
         public Rectangle GetTabRect(int index) => new Rectangle(index * 80, 0, 80, 24);
         /// <summary>WinForms page area at 96 DPI with Segoe UI 9 pt tabs: 4 px border, 24 px tab row.</summary>
-        public new Rectangle DisplayRectangle => new Rectangle(4, 24, Math.Max(0, Width - 8), Math.Max(0, Height - 28));
+        public override Rectangle DisplayRectangle => new Rectangle(4, 24, Math.Max(0, Width - 8), Math.Max(0, Height - 28));
         protected override void LayoutChildren() { foreach (TabPage page in TabPages) page.Bounds = DisplayRectangle; }
         // WinForms TabControl.ControlCollection: a TabPage added or removed through Controls (designer code) is
         // added to or removed from TabPages.
