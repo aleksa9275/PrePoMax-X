@@ -19,7 +19,9 @@ The original formatter has no size limits, so limits scale with the input:
 at most one record per byte (floor two million) and eight array slots per byte
 (floor 32 million), 64 GiB per graph and 256 reconstruction levels. Writing is
 limited only by the 64 GiB graph bound and NRBF's Int32 array lengths. Trailing data, unknown types/assemblies/data members,
-unknown Type metadata and delegate payloads are rejected. These are NRBF graph
+unknown Type metadata and delegate payloads are rejected. A field the file does not have (a file written by an
+older version, e.g. 2.5.1) keeps its default value, as the original's BinaryFormatter leaves it with its default
+(simple) assembly format. These are NRBF graph
 limits, not a promise about arbitrary compressed PMX file resource usage.
 
 One framework type is converted rather than allowlisted (B013): the `System.IO.FileInfo` that

@@ -2,7 +2,8 @@
 // profile, the Qt user interface folder, the native tool manifest, the patched Gmsh library) and, with --solver, the original settings file of the
 // application folder (Globals.SettingsFileName, read by SettingsContainer.LoadFromFile) with the verified CalculiX
 // build and, if given, the default solver type. Every path is explicit; an existing settings file is replaced only
-// with --replace-settings, and only its solver settings change.
+// with --replace-settings, and only its solver settings change. --work-directory sets the solver's work directory
+// (created if missing): the original has none until the user sets one, and CAD import and analyses need it.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +11,8 @@ using System.Text.Json;
 using PrePoMax;
 
 const string usage = "Usage: PrePoMaxX.Configure --app DIRECTORY --python PROFILE [--ui X/UI] [--native-tools MANIFEST] [--gmsh-library LIBRARY]\n" +
-                     "       [--solver REGISTRY BUILD_ID DIRECTORY] [--default-solver-type TYPE] [--replace-settings]";
-string app = null, python = null, ui = null, tools = null, gmsh = null, solverType = null;
+                     "       [--solver REGISTRY BUILD_ID DIRECTORY] [--default-solver-type TYPE] [--work-directory DIRECTORY] [--replace-settings]";
+string app = null, python = null, ui = null, tools = null, gmsh = null, solverType = null, work = null;
 string[] solver = null;
 bool replace = false;
 for (int i = 0; i < args.Length; i++)
@@ -23,6 +24,7 @@ for (int i = 0; i < args.Length; i++)
     else if (args[i] == "--gmsh-library" && i + 1 < args.Length) gmsh = args[++i];
     else if (args[i] == "--default-solver-type" && i + 1 < args.Length) solverType = args[++i];
     else if (args[i] == "--solver" && i + 3 < args.Length) { solver = args[(i + 1)..(i + 4)]; i += 3; }
+    else if (args[i] == "--work-directory" && i + 1 < args.Length) work = args[++i];
     else if (args[i] == "--replace-settings") replace = true;
     else { Console.Error.WriteLine(usage); return 2; }
 }
@@ -43,7 +45,7 @@ try
     string runtimeFile = Path.Combine(app, "PrePoMaxX.runtime.json");
     File.WriteAllText(runtimeFile, JsonSerializer.Serialize(runtime, new JsonSerializerOptions { WriteIndented = true }) + "\n");
     Console.WriteLine("wrote " + runtimeFile);
-    if (solver != null || solverType != null)
+    if (solver != null || solverType != null || work != null)
     {
         string settingsFile = Path.Combine(app, Globals.SettingsFileName);
         if (File.Exists(settingsFile) && !replace) throw new IOException(settingsFile + " exists; use --replace-settings to change its solver settings.");
@@ -57,8 +59,14 @@ try
                 throw new ArgumentException("The solver type " + solverType + " is not supported.");
             settings.Solver.CalculixDefaultSolverType = type;
         }
+        if (work != null)
+        {
+            Directory.CreateDirectory(Full(work));
+            settings.Solver.WorkDirectoryForSettingsOnly = Full(work);
+        }
         settings.SaveToFile(settingsFile);
-        Console.WriteLine("wrote " + settingsFile + " (CalculiX " + settings.Solver.CalculixExe + ", " + settings.Solver.CalculixDefaultSolverType + ")");
+        Console.WriteLine("wrote " + settingsFile + " (CalculiX " + settings.Solver.CalculixExe + ", " + settings.Solver.CalculixDefaultSolverType +
+                          ", work directory " + settings.Solver.WorkDirectoryForSettingsOnly + ")");
     }
     return 0;
 }

@@ -182,8 +182,9 @@ public sealed class RestrictedNrbfSerializer : IBinaryObjectSerializer
                         if(!fields.TryGetValue(name,out var field))throw new SerializationException("Unknown member "+runtimeType.FullName+"."+name);
                         field.SetValue(instance,Coerce(Convert(cls.GetRawValue(name)),field.FieldType));
                     }
-                    foreach(var field in fields.Values)
-                        if(!cls.HasMember(field.Name) && !field.IsDefined(typeof(OptionalFieldAttribute),false))throw new SerializationException("Missing required member "+runtimeType.FullName+"."+field.Name);
+                    // A field the file does not have (a file of an older version) keeps its default value, as the original's
+                    // BinaryFormatter leaves it with its default assembly format (Simple); only the full format throws
+
                 }
                 filling.Remove(record.Id);filled.Add(record.Id);return instance;
             }

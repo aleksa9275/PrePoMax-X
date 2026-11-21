@@ -366,7 +366,9 @@ namespace PrePoMaxX.FrontEnd
             else if (top + LineHeight > _vertical.Value + viewHeight) _vertical.Value = Math.Min(_vertical.Maximum, top + LineHeight - viewHeight);
             double x = GutterWidth + caret.iChar * _charWidth;
             double viewWidth = Math.Max(0, Bounds.Width - 14);
-            if (x < _horizontal.Value + GutterWidth) _horizontal.Value = Math.Max(0, x - GutterWidth - 20);
+            // A place that fits from the left edge shows the line from its start
+            if (x < viewWidth - 40) _horizontal.Value = 0;
+            else if (x < _horizontal.Value + GutterWidth) _horizontal.Value = Math.Max(0, x - GutterWidth - 20);
             else if (x > _horizontal.Value + viewWidth - 10) _horizontal.Value = Math.Min(_horizontal.Maximum, x - viewWidth + 40);
             ReportGeometry();
             _surface.InvalidateVisual();

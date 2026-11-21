@@ -88,6 +88,22 @@ form-level checks need porting); the macOS `.app` bundle without PyQt (the app f
 Python, which carries PyQt, though the Avalonia front end does not load it); the triad's arrow length; view resize
 flicker; the maintainer's manual check and a real project.
 
+### The maintainer's first check (21 November)
+
+"Very promising"; two failures, neither in the front end (the Qt front end fails the same way):
+
+- **STEP import**: "The work directory does not exist." The original has no work directory until the user sets one
+  (Settings → Solver), and CAD import and analyses need it. `Configure --work-directory` now sets it and
+  `local_app.py` uses `<output>/work` (outside `app/`, which a rebuild replaces). The maintainer's STEP file imports
+  (`Shell_part-1`, NetgenMesher split and visualization).
+- **A 2.5.1 `.pmx`**: "corrupt or incompatible". The restricted PMX reader required every field of the current type,
+  and 3.0.1's `CommandsCollection` has `_postprocessingDeclined`, which 2.5.1 did not write. The original's
+  BinaryFormatter (default simple assembly format) leaves such a field at its default; the reader now does the same
+  (types, limits and identity checks unchanged). The maintainer's 2.5.1 bridge model opens, with 3.0.1's own
+  compatibility step (a Netgen mesh setup item keeps the 2.5.1 mesh).
+
+After both: Avalonia app probe 16/16, `check.py` 7/7.
+
 ## Next
 
 The maintainer chose Avalonia and macOS first (D067). M3-1a: the renderer moves into X/App on macOS and must match

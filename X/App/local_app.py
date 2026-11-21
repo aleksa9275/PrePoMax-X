@@ -44,6 +44,7 @@ def main():
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
     p.add_argument('--front-end', choices=('avalonia', 'qt'), default='avalonia',
                    help='Avalonia (M3-1a) or the M2 Qt renderer; PREPOMAXX_FRONT_END overrides it at start')
+    p.add_argument('--work-directory', type=Path, help='The solver work directory (default: <output>/work)')
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     resources = a.package.resolve() / 'Contents/Resources'
@@ -101,7 +102,8 @@ def main():
     run('dotnet', ROOT / 'X/App/Configure/bin/Release/net10.0/PrePoMaxX.Configure.dll', '--app', app,
         '--python', profiles / 'python.json', '--ui', ROOT / 'X/UI', '--native-tools', profiles / 'tools.json',
         '--gmsh-library', gmsh, '--solver', solver / 'build-registry.json', a.solver_id, solver / 'bin',
-        '--default-solver-type', a.default_solver_type)
+        '--default-solver-type', a.default_solver_type,
+        '--work-directory', (a.work_directory or out / 'work').resolve())
 
     # The front end (the Qt renderer stays available through PREPOMAXX_FRONT_END=qt: the profile keeps "ui")
     profile = app / 'PrePoMaxX.runtime.json'
