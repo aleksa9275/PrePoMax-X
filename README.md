@@ -2,7 +2,7 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `e076f692b2f68c49f51504dd88f21a1c3a12ee85`.
+branch of this repository at commit `6c776763` (full: see `bundle.json` inside the app).
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
 CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax 3.0.1
@@ -13,7 +13,17 @@ and the 3D view runs on upstream's VTK 9.7 native port.
 > **Status: preview for testing.** It is not a release of PrePoMax and not endorsed by the PrePoMax authors. It is
 > signed ad hoc and not notarized by Apple. It has been used on one Mac for real projects; expect rough edges.
 
-### Changes since the first upload (source `73c75b8a`)
+A Linux ARM64 preview of the same app is on the branch
+[`release/linux-arm64-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-arm64-preview).
+
+### Changes in preview 3 (source `6c776763`, 22 November)
+
+- **Right click on a part** opens the part's menu again. On Retina displays the click was picked at half its
+  coordinates, so the view's menu opened instead, or a different part was picked.
+- **.NET runtime 10.0.14**, the project's pinned version. Preview 2 had shipped 10.0.15 by mistake.
+- The app is checked with four of upstream's Python tests, and with upstream's full suite (see below).
+
+### Changes in preview 2 (source `e076f692`)
 
 The first upload had no icons, no material library, no Python help and no example models. The app read those from
 the source tree, which a download does not have. They are now in the bundle, and the checks run with the source
@@ -21,7 +31,7 @@ tree blocked. The app also has its own icon now. To update, replace the app; you
 
 ## What you get
 
-`PrePoMax-X.app` (664 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
+`PrePoMax-X.app` (665 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
 required.
 
 | Component | In the bundle |
@@ -43,9 +53,10 @@ All checks below were run on macOS ARM64 with this exact bundle, unpacked from t
 app ran in a macOS sandbox that blocked the source repository, Homebrew and any installed .NET. Any file the bundle
 lacked would have made a check fail.
 
-- **Main window, 16/16 checks:** the original icons are drawn in the menus, tool strips and model tree; menus, tool strips and the model tree; a model is imported and drawn in the 3D view,
-  which can be turned with the mouse; a form opens from the menu with its property grid; Esc works; the context menu
-  opens; a modal dialog opens and closes.
+- **Main window, 16/16 checks:** the original menus, tool strips and model tree with their icons; a model is
+  imported and drawn in the 3D view, which can be turned with the mouse; a form opens from the menu with its property
+  grid; Esc works; a right click opens the view's menu on empty space and the part's menu on a part, where clicked; a
+  modal dialog opens and closes.
 - **Forms, 124/124 checks:**
   - all 144 menu icons and the application icon load;
   - the material library opens with the 21 materials of `materials.lib`;
@@ -58,10 +69,15 @@ lacked would have made a check fail.
   - an analysis is created and solved by CalculiX, with the original Monitor window;
   - the results open with their contours, legend and toolbar.
 - **Elements, 5/5 checks:** a CalculiX deck with quadratic tetrahedra is imported and drawn.
-- **Python API, 3 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
-  model through the API), `Test_Model_Materials_Sections` and `Test_Model_Meshing` all passed.
+- **Python API, 4 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
+  model through the API), `Test_Model_Materials_Sections`, `Test_Model_Meshing` and
+  `Test_Model_Meshing_QuadWild_Transfinite` all passed.
+- **Upstream's full test suite** (`Run_Tests.py`, 81 runs): **61 pass**. The others need Windows (environment
+  variables, PowerShell, named mutexes) or the automation server, which does not run on macOS or Linux yet. Some read
+  PrePoMax's source code, which a download does not have. Nine show known CAD/meshing differences from the Windows
+  original, which are being investigated.
 - **Real projects:** a model saved by PrePoMax 2.5.1 opened, and a STEP assembly imported. Linear and nonlinear
-  analyses ran with SPOOLES on 4 cores, and the results were reviewed.
+  analyses ran with SPOOLES on 4 cores, and the results were reviewed. Live window resizing was checked by hand.
 - **Layout against the original PrePoMax 3.0.1:** the size and position of every control in every form was compared
   with the original. That original ran under CrossOver/Wine, so this is evidence only, not the Windows reference. All
   108 remaining differences come from Wine's own Windows Forms and fonts.
@@ -74,7 +90,7 @@ lacked would have made a check fail.
 - **Not notarized:** macOS blocks the app until you clear the download flag (see Install).
 - **Build paths:** VTK and QuadWild binaries contain the source paths of the build machine. They have no effect on
   how the app works.
-- **Other platforms:** this is macOS ARM64 only. Linux comes next; Windows follows with CI.
+- **Other platforms:** this is macOS ARM64. Linux ARM64 has its own preview branch; Linux x64 and Windows follow with CI.
 
 ## Install
 
