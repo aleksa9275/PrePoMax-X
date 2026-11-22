@@ -12,6 +12,9 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   Podman session). Upstream's full suite: 61 of 81 on macOS and 60 of 81 on Linux on the same layout. The PyQt
   workbench, the Qt front end and the Headless host are retired. B015 (Retina right-click pick) is fixed. The
   maintainer checked the Linux app over VNC on 22 November: everything looks good and works.
+  Published 22 November as binary previews: `release/macos-arm64-preview` preview 3 (`2f8ca0ba`, source
+  `6c776763`) and `release/linux-arm64-preview` (`baef284f`, source `bf56de9c`). The macOS branch was deleted by
+  mistake during that publication (an empty refspec) and restored at the maintainer's commit `e7e56bba` first.
   [Report](reports/phase-m3-1-front-end.md).
 - **M2: the original application compiled whole** (`X/App`): the whole `PrePoMax` and `UserControls` assemblies —
   Controller, Commands, all 73 forms, FrmMain and the original `Program` — on the headless WinForms model. The
@@ -79,7 +82,6 @@ Still open:
 - B014, and the automation server on Unix;
 - B013's round trip with the original 3.0.1, and the 15 forms that need a live controller for the bounds comparison;
 - a VTK/QuadWild rebuild without build paths in the binaries; notarization (release);
-- the macOS preview's refresh (B015, .NET pin);
 - the retired-era `X/Desktop` preview (cleanup, M5).
 
 ## Environment

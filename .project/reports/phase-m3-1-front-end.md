@@ -243,6 +243,15 @@ approved for M3-1b: Ubuntu packages, the .NET runtime pack, and the locked sourc
   (`X/Build/python-requirements`). `X/App/verify-app.py` replaces `X/UI/verify-ui.py` as check area `app`. X/UI
   keeps the control model, the original-form generator and its outputs. `check.py`: 7 of 7 areas pass.
 - **The maintainer's check over VNC** (22 November): everything looks good and works.
+- **Published** (22 November, at the maintainer's request):
+  - `release/linux-arm64-preview` (`baef284f`): the tar.gz from `bf56de9c` in three parts, with checksums and a
+    README. Minimum system: glibc 2.38 and GCC 13's libstdc++ (Ubuntu 24.04, Debian 13, Fedora 39), from the
+    binaries' symbol versions.
+  - `release/macos-arm64-preview` preview 3 (`2f8ca0ba`, the bundle from `6c776763`).
+  - A publish script with an empty commit variable pushed `:refs/heads/release/macos-arm64-preview` and deleted
+    that branch. The branch had moved to the maintainer's GitHub web edit `e7e56bba`, which this checkout lacked,
+    so `commit-tree` failed. It was restored at `e7e56bba` with the maintainer's permission before preview 3 was
+    added on top. Publish scripts now check the commit and the remote head first.
 - **Not done here:**
   - Linux x64 (per-architecture native builds, D059);
   - rebuilding every native component from source on a clean host (M3 CI);
