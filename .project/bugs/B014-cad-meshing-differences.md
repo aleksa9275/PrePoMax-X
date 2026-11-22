@@ -22,3 +22,8 @@ Geometry_Transform failed; alone, both then failed (Geometry_Transform: a compou
 reproducible from run to run, not only order-dependent. Next: run each with the original 3.0.1 (CrossOver, then Windows) on
 the same inputs, compare the intermediate BREP/.vol/.msh files, and separate native-build differences from port
 defects. Never relax the scripts' tolerances (D061).
+
+22 November (M3-1b): the same failures on Linux ARM64 (P1 Linux natives, Ubuntu 24.04), upstream's full suite
+through the Linux package. The failing set equals macOS's on the same layout, except Geometry_Transform, which
+failed on Linux and passed on macOS in that run (60/81 and 61/81). These are the same builds' differences on
+both Unix targets, not a platform-specific defect.

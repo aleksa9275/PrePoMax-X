@@ -2,8 +2,16 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (19 November 2026)
+## Where we are (22 November 2026)
 
+- **M3-1: one runtime for the front end, macOS and Linux ARM64** (D065, D067). The original application (`X/App`) runs
+  on Avalonia in its own .NET runtime with the original `vtkControl` in a native host (Cocoa, X11). Packages: a
+  macOS `PrePoMax-X.app` (`X/App/package_mac.py`) and a Linux folder and tar.gz (`X/App/package_linux.py`), with no
+  PyQt and no installed .NET. Both pass the app probe (16/16) and the probe areas (124 + 4 + 9 + 5). Both also pass
+  four upstream Python tests including QuadWild, with the repository out of reach (macOS `sandbox-exec`, Linux a
+  Podman session). Upstream's full suite: 61 of 81 on macOS and 60 of 81 on Linux on the same layout. The PyQt
+  workbench, the Qt front end and the Headless host are retired. B015 (Retina right-click pick) is fixed.
+  [Report](reports/phase-m3-1-front-end.md).
 - **M2: the original application compiled whole** (`X/App`): the whole `PrePoMax` and `UserControls` assemblies —
   Controller, Commands, all 73 forms, FrmMain and the original `Program` — on the headless WinForms model. The
   original command line runs upstream's composite scripts through upstream's own runner (4 of 4 pass, including the
@@ -53,20 +61,26 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
 | M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | done on macOS ARM64: app probe 16/16, probe areas 124+4+9+5 (bundle checked with the repository blocked), bounds comparison with 3.0.1 (Wine Mono evidence), the maintainer's real project, `PrePoMax-X.app` without PyQt (preview branch `release/macos-arm64-preview`) |
-| M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | after M3-1a |
+| M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check pending |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-**M3-1b** (D067, [plan](REMAINING_WORK.md)): the same app on Linux via the local Podman machine (ARM64): Avalonia's
-X11 native host with VTK's X11 view, the probe and the four probe areas under Xvfb, the maintainer's check over VNC,
-QuadWild on Linux; then PyQt and the workbench retired. M3-1a closed 21 November ([report](reports/phase-m3-1-front-end.md)):
-the Mac app is `X/Build/artifacts/app-mac` (local) and `PrePoMax-X.app` (`X/App/package_mac.py`; preview on the branch
-`release/macos-arm64-preview`). Open: B014, the automation server on Unix, B013's round trip with the original
-3.0.1, the bounds comparison on a Windows runner (M3 CI), the 15 forms that need a live controller for it, a live
-resize-flicker check, a VTK/QuadWild rebuild without build paths in the binaries, notarization (release), Linux QuadWild.
+**M3** ([plan](REMAINING_WORK.md)): GitHub Actions for win-x64, linux-x64, linux-arm64 and osx-arm64:
+- component builds (`X/Build/build_ui.py`), `X/Checks/check.py`, and the X/App packages with their probes (Linux in the
+  `X/Build/Linux` images);
+- the bounds comparison on Windows;
+- the front end's first Windows run (Win32 native host).
+
+Still open:
+- the maintainer's check of the Linux app over VNC;
+- B014, and the automation server on Unix;
+- B013's round trip with the original 3.0.1, and the 15 forms that need a live controller for the bounds comparison;
+- a VTK/QuadWild rebuild without build paths in the binaries; notarization (release);
+- the macOS preview's refresh (B015, .NET pin);
+- the retired-era `X/Desktop` preview (cleanup, M5).
 
 ## Environment
 
@@ -74,13 +88,14 @@ resize-flicker check, a VTK/QuadWild rebuild without build paths in the binaries
   archive. Branch `research/native-feasibility`; `[skip ci]` until CI exists.
 - This Mac: .NET SDK 11.0.100 only (runtime 11.0.0); net10.0 projects build with it and checks run with
   `DOTNET_ROLL_FORWARD=Major`. Packages ship self-contained .NET 10.0.14. Homebrew Python 3.15.
-- UI runtime for verification: the P1 macOS app in the former GitLab working copy,
-  `~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages/PrePoMax-X.app` (git-ignored there), and the
-  vtkNative runtime `X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime` (`X/Build/Vtk/build.py`):
-  `python3 X/UI/verify-ui.py --output <dir>/verify.json --package <that app> --vtk-native <runtime> --gui`.
-  Linux ARM64: the same in Ubuntu 24.04 (Podman) with the P1 Linux tar.gz and
-  `X/Build/artifacts/vtk-linux-arm64/vtkNative/runtime`, under `xvfb-run` with `LIBGL_ALWAYS_SOFTWARE=1`.
-- VTK 9.7.1 (vtkNative), PyQt6 6.10.0 / Qt 6.10.2, Python.NET 3.1.0, CPython 3.12.14 in packages; patched
-  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned. Latest local candidate: `X/Build/artifacts/ui-m1` (macOS
-  app with vtkNative, CalculiX missing). CalculiX for macOS rebuilt in `X/Build/artifacts/solver-m2`; QuadWild for macOS in
-  `X/Build/artifacts/quadwild-mac-arm64` (Linux ARM64 needs a Podman VM with more than 4 GiB).
+- Verification of the app: `python3 X/App/verify-app.py --output <dir>/app.json --launcher <package launcher> --scripts`
+  (macOS: the `.app`'s `Contents/MacOS/PrePoMax-X`, best under `sandbox-exec` with the repository denied; Linux: start
+  a session with `python3 X/Build/Linux/session.py start --package <PrePoMax-X folder> --work <dir>` and pass
+  `<dir>/launch.sh`). Native components come from the P1 packages in the former GitLab working copy
+  (`~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages`). Podman machine `prepomax-podman` (8 CPUs,
+  15 GiB, 93 GB).
+- VTK 9.7.1 (vtkNative), Avalonia 11.3.23, Python.NET 3.1.0, CPython 3.12.14 with numpy in packages; patched
+  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned. Local working app: `X/Build/artifacts/app-mac`
+  (`X/App/local_app.py`). Native runtimes in `X/Build/artifacts`: CalculiX for macOS `solver-m2`, QuadWild
+  `quadwild-mac-arm64` and `quadwild-linux-arm64`, vtkNative `vtk-mac-arm64` and `vtknative-linux-arm64-m3` (on M1's
+  VTK in `vtk-linux-arm64/vtk`).

@@ -1,6 +1,6 @@
 # M3-1 — one runtime for the front end (D065)
 
-Started 20 November 2026, macOS ARM64. In progress.
+Started 20 November 2026 on macOS ARM64; M3-1a closed 21 November, M3-1b (Linux ARM64) closed 22 November.
 
 ## Toolkit spike
 
@@ -186,7 +186,70 @@ All four open points closed; M3-1a is done on macOS ARM64.
   Netgen prints `Get neighbourpoints failed` during `Test_Model_Meshing`. The test passes; whether Windows 3.0.1
   prints it too is not checked yet.
 
+## M3-1b: Linux ARM64 and PyQt retired (22 November)
+
+On the maintainer's Podman machine `prepomax-podman` (Fedora 44, libkrun, 8 CPUs, 15 GiB, 93 GB), with downloads
+approved for M3-1b: Ubuntu packages, the .NET runtime pack, and the locked sources.
+
+- **Images** (`X/Build/Linux`):
+  - `Containerfile.build`: Ubuntu 24.04 with the recipes' build packages and patchelf.
+  - `Containerfile.run`: a plain Ubuntu 24.04 desktop with Xvfb, Mesa llvmpipe, Openbox, x11vnc and ImageMagick
+    for screenshots; no .NET and no development packages.
+  - `session.py` runs a package in the desktop image for the probes, or for a person over VNC (localhost only,
+    password). Only the package and a work folder are mounted, so the app under test cannot read the repository.
+- **Native builds:**
+  - vtkNative rebuilt for Linux ARM64 against M1's VTK 9.7.1. It adds M3-1a's `vtkn_triad_set_shaft_length`.
+  - QuadWild built from the locked fork revision (`df747a1`) with its recipe. The Linux QuadWild that M2 left
+    open is done.
+- **Package** (`X/App/package_linux.py`), the same content as the macOS bundle:
+  - X/App self-contained for `linux-arm64`, Avalonia X11, the original resources, help, material library, examples
+    and `PrePoMax.com`;
+  - Python, meshers, Gmsh, lib3mf and CalculiX from the P1 Linux package, checked against its manifest; Python's
+    `share/terminfo` is left out (case-only duplicate names; interactive terminals only);
+  - a desktop entry with an install script;
+  - data kept in `~/.local/share/PrePoMax-X`.
+  - Build-machine run paths are stripped only from this repository's builds, and every fingerprint is checked
+    again after packaging. That check caught an early version of the stripper that had touched `libgmsh`.
+  - 799 MB unpacked; the tar.gz is 259 MiB.
+- **Front end on X11.** It worked on the first start: 13 of 14 app checks, with the 3D view in Avalonia's native
+  control host and the host pumping VTK's X11 events. On Linux the default font is now one with Segoe UI's widths
+  when installed (Liberation Sans, Arimo); with DejaVu Sans, "Displacements" was cut off.
+- **B015, found by Linux.** A right click on a part picked in control units, so on Retina it picked at half the
+  coordinates and opened the wrong menu. Fixed in `vtkControl.cs` with a no-op on Windows. The app probe now checks
+  both context menus, and macOS fails it with the old dll.
+- **.NET runtime.** The macOS preview had shipped .NET 10.0.15: the packager did not pass the project's pin, so the
+  SDK took its newest patch. Both packagers now take `runtimeFrameworkVersion` from `X/Build/targets.json`
+  (10.0.14) and check the published output against it.
+- **Verified on the unpacked Linux tar.gz** in the session, with the repository not mounted:
+  - app probe 16/16 and probe areas 124 + 4 + 9 + 5;
+  - upstream's Test_Analysis, Materials_Sections, Meshing and Meshing_QuadWild_Transfinite (`verify-app.py
+    --scripts`);
+  - QuadWild itself ran: remeshing, field and patches.
+  The macOS bundle from the same commit passes the same set under `sandbox-exec`, with .NET 10.0.14.
+- **Upstream's full suite** (`Run_Tests.py --exe .../PrePoMax.com`, the scripts copied out of the repository):
+  - Linux ARM64 passes 60 of 81, macOS ARM64 61 of 81 on the same layout. The one difference is
+    Geometry_Transform, which B014 records as not reproducible from run to run.
+  - The 64 of 20 November included three scripts that read the repository's C# sources (the two audits,
+    Three_Block_Mapping); this layout keeps the repository out of reach.
+  - The rest are as in M2: Windows-only test content (`TEMP`/`LOCALAPPDATA`, PowerShell, named mutexes), the
+    automation server on Unix, and B014's meshing differences.
+- **Retired (D065):**
+  - the PyQt workbench (X/UI's Qt files, `OriginalFormHost`/`OriginalViewHost`, the workbench probes and
+    generators);
+  - the Qt front end of X/App (`frontEnd: qt`, Configure `--ui`, `local_app.py --front-end`);
+  - the Headless host and `run-upstream-scripts.py` (upstream's own runner drives X/App);
+  - the P1 workbench launcher.
+  `package_ui.py` now assembles only the native components, with numpy as the only Python wheel
+  (`X/Build/python-requirements`). `X/App/verify-app.py` replaces `X/UI/verify-ui.py` as check area `app`. X/UI
+  keeps the control model, the original-form generator and its outputs. `check.py`: 7 of 7 areas pass.
+- **Not done here:**
+  - the maintainer's check over VNC (offered when M3-1b closed);
+  - Linux x64 (per-architecture native builds, D059);
+  - rebuilding every native component from source on a clean host (M3 CI);
+  - the older `X/Desktop` preview with its own PyQt requirements (not packaged; a cleanup candidate for M5).
+
 ## Next
 
-M3-1b: Linux on the local Podman machine (ARM64: Xvfb probes, VNC for the maintainer), then PyQt retired from the
-packages (D067).
+M3: GitHub Actions for the four targets: component builds (`build_ui.py`), `check.py`, the packages and their probes
+(macOS natively, Linux in `X/Build/Linux` images), the bounds comparison on Windows, and the front end's first Windows
+run (Win32 native host).
