@@ -150,6 +150,7 @@ def main():
     shutil.copy2(a.vtk_native.resolve() / 'VTK-Copyright.txt', root / 'Licenses/VTK-Copyright.txt')
     notice = (ROOT / 'X/App/bundle_NOTICE.md').read_text().replace('@DOTNET@', DOTNET_RUNTIME)
     notice = notice.replace('macOS ARM64', a.target).replace('macOS (Apple Silicon)', 'Linux (' + a.target + ')') \
+        .replace('**preview build**: signed\nad hoc, not notarized, not a release.', '**preview build**, not a\nrelease.') \
         .replace('`~/Library/Application Support/PrePoMax-X`', '`~/.local/share/PrePoMax-X`')
     (root / 'NOTICE.md').write_text(notice)
 
@@ -173,6 +174,8 @@ def main():
     build_id = revision[:12] + '-' + hashlib.sha256(b''.join(sha(f).encode() for f in sorted(app.rglob('*')) if f.is_file())).hexdigest()[:12]
     (root / 'bundle.json').write_text(json.dumps({
         'schemaVersion': 1, 'name': 'PrePoMax-X', 'target': a.target, 'build': build_id, 'source': revision,
+        'sourceDirty': bool(subprocess.run(['git', 'status', '--porcelain', '--untracked-files=no', '--', '.', ':!**/.DS_Store'],
+                                           cwd=ROOT, capture_output=True, text=True).stdout.strip()),
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],

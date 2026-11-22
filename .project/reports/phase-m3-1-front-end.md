@@ -242,8 +242,8 @@ approved for M3-1b: Ubuntu packages, the .NET runtime pack, and the locked sourc
   `package_ui.py` now assembles only the native components, with numpy as the only Python wheel
   (`X/Build/python-requirements`). `X/App/verify-app.py` replaces `X/UI/verify-ui.py` as check area `app`. X/UI
   keeps the control model, the original-form generator and its outputs. `check.py`: 7 of 7 areas pass.
+- **The maintainer's check over VNC** (22 November): everything looks good and works.
 - **Not done here:**
-  - the maintainer's check over VNC (offered when M3-1b closed);
   - Linux x64 (per-architecture native builds, D059);
   - rebuilding every native component from source on a clean host (M3 CI);
   - the older `X/Desktop` preview with its own PyQt requirements (not packaged; a cleanup candidate for M5).

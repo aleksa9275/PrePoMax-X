@@ -10,7 +10,8 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   PyQt and no installed .NET. Both pass the app probe (16/16) and the probe areas (124 + 4 + 9 + 5). Both also pass
   four upstream Python tests including QuadWild, with the repository out of reach (macOS `sandbox-exec`, Linux a
   Podman session). Upstream's full suite: 61 of 81 on macOS and 60 of 81 on Linux on the same layout. The PyQt
-  workbench, the Qt front end and the Headless host are retired. B015 (Retina right-click pick) is fixed.
+  workbench, the Qt front end and the Headless host are retired. B015 (Retina right-click pick) is fixed. The
+  maintainer checked the Linux app over VNC on 22 November: everything looks good and works.
   [Report](reports/phase-m3-1-front-end.md).
 - **M2: the original application compiled whole** (`X/App`): the whole `PrePoMax` and `UserControls` assemblies —
   Controller, Commands, all 73 forms, FrmMain and the original `Program` — on the headless WinForms model. The
@@ -61,7 +62,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M1 | VTK 9.7, vtkNative on macOS/Linux, original vtkControl in Qt | Mac and Linux ARM64 GUI probes pass on the original renderer |
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
 | M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | done on macOS ARM64: app probe 16/16, probe areas 124+4+9+5 (bundle checked with the repository blocked), bounds comparison with 3.0.1 (Wine Mono evidence), the maintainer's real project, `PrePoMax-X.app` without PyQt (preview branch `release/macos-arm64-preview`) |
-| M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check pending |
+| M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check passed |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
@@ -75,7 +76,6 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 - the front end's first Windows run (Win32 native host).
 
 Still open:
-- the maintainer's check of the Linux app over VNC;
 - B014, and the automation server on Unix;
 - B013's round trip with the original 3.0.1, and the 15 forms that need a live controller for the bounds comparison;
 - a VTK/QuadWild rebuild without build paths in the binaries; notarization (release);
