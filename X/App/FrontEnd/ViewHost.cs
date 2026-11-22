@@ -58,6 +58,8 @@ namespace PrePoMaxX.FrontEnd
                 Control.NativeHost.AttachNativeWindow(window);
                 Control.RaiseLoad();
                 Control.EnableNativeMirror(true);
+                if (TraceInput && Control.NativeMirror != null)
+                    Control.NativeMirror.NativeEvent += (s, e) => Console.WriteLine("[view event] " + (int)e.Event + " " + string.Join(",", e.Values ?? new double[0]));
             });
             if (OperatingSystem.IsLinux())
             {

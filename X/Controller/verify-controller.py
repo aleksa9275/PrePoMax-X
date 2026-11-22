@@ -60,9 +60,7 @@ def main():
         if args.python_profile:
             run('embedded-python',['dotnet',runner,'--python',args.python_profile.resolve()])
             run('spatial-replay',['dotnet',runner,'--spatial',args.python_profile.resolve()])
-            script=folder/'api.py'
-            script.write_text("assert pmx.model.nodes.count == 8\nassert pmx.model.elements.count == 1\npmx.save("+repr(str(folder/'api.pmx'))+")\n")
-            run('script-host',['dotnet',binary('Headless','PrePoMaxX.Headless.dll'),'run',script,folder/'script-work',args.python_profile.resolve(),folder/'solid/project.pmx'])
+            # Scripts through the original command line run on X/App (X/App/verify-app.py, upstream's Run_Tests.py)
         else:report['pending'].append('Embedded Python/native spatial replay: no explicit profile supplied')
         if args.three_mf_library and args.python_profile:
             library=args.three_mf_library.resolve()

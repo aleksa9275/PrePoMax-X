@@ -18,7 +18,7 @@ ROOT = HERE.parents[1]
 AREAS = {
     "domain": "X/Domain/verify-domain.py",
     "controller": "X/Controller/verify-controller.py",
-    "ui": "X/UI/verify-ui.py",
+    "app": "X/App/verify-app.py",
     "core": "X/Core/verify.py",
     "analysis": "X/Analysis/verify-analysis.py",
     "execution": "X/Execution/verify-execution.py",

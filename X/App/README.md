@@ -10,9 +10,9 @@ assembly, on the headless WinForms control model (`X/UI/FormsCompat`) and the do
   replaced by portable ones); `--check` fails on drift.
 - `PrePoMax/XRuntime.cs` runs before `Program.Main`: the PMX type allowlist, executables checked by their execute
   permission, and the runtime profile `PrePoMaxX.runtime.json` beside `PrePoMax.dll` (or `PREPOMAXX_RUNTIME`):
-  `python` (CPython 3.12 profile), `ui` (the `X/UI` folder), `nativeTools` (tool manifest), `gmshLibrary`.
-  `Application.Run(FrmMain)` shows FrmMain through the Avalonia front end (`FrontEnd/`, M3-1a; the M2 Qt renderer
-  `X/UI/main_form.py` with `"frontEnd": "qt"` in the profile or `PREPOMAXX_FRONT_END=qt`); with `-g No` it runs the headless
+  `python` (CPython 3.12 profile), `nativeTools` (tool manifest), `gmshLibrary`.
+  `Application.Run(FrmMain)` shows FrmMain through the Avalonia front end (`FrontEnd/`, M3-1a; the M2 Qt renderer was
+  retired in M3-1b, D065); with `-g No` it runs the headless
   message loop instead, and FrmMain's vtkControl draws off screen (as the hidden original window does on Windows), so
   the vtkNative runtime is needed in both cases. lp_solve (`lpsolve55.dll.dylib` / `.so`) goes beside the assemblies
   and beside GmshCaller, as in the packages.
@@ -21,12 +21,11 @@ assembly, on the headless WinForms control model (`X/UI/FormsCompat`) and the do
 
 ```sh
 dotnet build X/App/PrePoMax/PrePoMax.csproj -c Release -p:VtkNativeRuntime=$PWD/X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime
-dotnet X/App/Configure/bin/Release/net10.0/PrePoMaxX.Configure.dll --app <app folder> --python <python.json> --ui $PWD/X/UI \
+dotnet X/App/Configure/bin/Release/net10.0/PrePoMaxX.Configure.dll --app <app folder> --python <python.json> \
   --native-tools <tools.json> --gmsh-library <libgmsh> --solver <build-registry.json> <build id> <bin> --default-solver-type Spooles
 ```
 
-A local macOS folder to work with (Avalonia front end by default, `--front-end qt` for the M2 one; meshers and
-CalculiX; not a release package):
+A local macOS folder to work with (meshers and CalculiX; not a release package):
 
 ```sh
 python3 X/App/local_app.py --package <P1 PrePoMax-X.app> --solver <solver folder> --solver-id <build id> --output X/Build/artifacts/app-mac
@@ -41,17 +40,30 @@ python3 APIs/Python/Test_Scripts/Run_Tests.py --exe <app folder>/PrePoMax.com --
 ```
 
 The GUI probe of the original main window on Avalonia: `PREPOMAXX_UI_PROBE=avalonia PREPOMAXX_UI_PROBE_OUTPUT=<file>
-<app folder>/PrePoMax -f <model> -u <units>` ([FrontEnd](FrontEnd/README.md)); on Qt: `PREPOMAXX_UI_PROBE=X/UI/app_gui_probe.py PREPOMAXX_UI_PROBE_OUTPUT=<file>
-<app folder>/PrePoMax -f <model> -u <units>`. `PREPOMAXX_TRACE_EXCEPTIONS=1` prints every exception with its stack (the
+<app folder>/PrePoMax -f <model> -u <units>` ([FrontEnd](FrontEnd/README.md)). `PREPOMAXX_TRACE_EXCEPTIONS=1` prints every exception with its stack (the
 original prints only the message of the one that ends a run).
 
-The probe areas (the workbench's form-level checks on the real app: forms, geometry, results, elements):
+The probe areas (the retired workbench's form-level checks, on the real app: forms, geometry, results, elements):
 `python3 X/App/FrontEnd/run_probe_areas.py --app <app folder> --output DIR` (or `--launcher
 PrePoMax-X.app/Contents/MacOS/PrePoMax-X`). The per-form bounds comparison with the original: `X/App/Bounds`
 (`Windows/BoundsWindows.csproj` on WinForms with the original `PrePoMax.exe`, `Bounds.csproj` on FormsCompat,
 `compare.py`).
 
-`PrePoMax-X.app` for macOS ARM64 without PyQt: `python3 X/App/package_mac.py --p1 <P1 PrePoMax-X.app> --output DIR
---zip` — the application self-contained, CPython without PyQt6/VTK-Python, the meshers, Gmsh, QuadWild and the
-relocated CalculiX; its launcher (`bundle_launch.py`) clones the app into `~/Library/Application Support/PrePoMax-X`
-and runs the original Configure step there.
+Packages (no PyQt, no installed .NET; the native components come from `X/Build/package_ui.py` or a P1 package):
+
+- macOS ARM64: `python3 X/App/package_mac.py --p1 <components> --original <PrePoMax 3.0.1 release> --output DIR --zip`
+  makes `PrePoMax-X.app`; its launcher (`bundle_launch.py`) clones the app into `~/Library/Application Support/PrePoMax-X`
+  and runs the original Configure step there.
+- Linux (ARM64; x64 with the per-architecture native builds): `python3 X/App/package_linux.py --p1 <components
+  tar.gz> --original <release> --output DIR --archive` makes `PrePoMax-X/` and `PrePoMax-X-linux-arm64.tar.gz`
+  (data in `~/.local/share/PrePoMax-X`; `share/install-desktop-entry.sh` adds the menu entry). Build the vtkNative
+  and QuadWild runtimes for Linux in the build container (`X/Build/Linux/Containerfile.build`).
+
+Both pin the .NET runtime of `X/Build/targets.json`, ship the original icons, help, material library and example
+models, and check every native fingerprint after packaging.
+
+Checks (`X/Checks/check.py` area `app`): `python3 X/App/verify-app.py --output OUT.json [--launcher L --scripts]` —
+sources and build, and with a launcher the app probe, the four probe areas and four of upstream's Python tests. On
+Linux a Podman session gives the display (`X/Build/Linux/session.py start --package DIR --work W`, then
+`--launcher W/launch.sh`; `--vnc` for a person's check over `vnc://localhost:5901`). The session mounts only the
+package and the work folder, so the repository is out of reach of the app under test.

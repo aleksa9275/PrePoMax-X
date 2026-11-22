@@ -1,6 +1,0 @@
-# X/UI runtime wheels for osx-arm64 (CPython 3.12), hash-pinned from PyPI. The UI imports only these;
-# install with: pip install --require-hashes --only-binary=:all: --no-deps -r <this file>
-PyQt6==6.10.0 --hash=sha256:0eb82f152a83a8ae39f7d3ba580829ff7c0e8179d19d70f396853c10c8ddc5ac
-PyQt6-Qt6==6.10.2 --hash=sha256:6dda853a8db1b8d1a2ddbbe76cc6c3aa86614cad14056bd3c0435d8feea73b2d
-PyQt6-sip==13.13.0 --hash=sha256:da1a8e350b927c281d4f155fb3b84859e6e8c04ea36fe159cf9b939ee957d151
-numpy==2.3.5 --hash=sha256:ee3888d9ff7c14604052b2ca5535a30216aa0a58e948cdd3eeb8d3415f638769 --hash=sha256:612a95a17655e213502f60cfb9bf9408efdc9eb1d5f50535cc6eb365d11b42b5

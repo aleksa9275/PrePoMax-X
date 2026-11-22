@@ -11,9 +11,9 @@ using System.IO;
 using System.Text.Json;
 using PrePoMax;
 
-const string usage = "Usage: PrePoMaxX.Configure --app DIRECTORY --python PROFILE [--ui X/UI] [--native-tools MANIFEST] [--gmsh-library LIBRARY]\n" +
+const string usage = "Usage: PrePoMaxX.Configure --app DIRECTORY --python PROFILE [--native-tools MANIFEST] [--gmsh-library LIBRARY]\n" +
                      "       [--solver REGISTRY BUILD_ID DIRECTORY] [--default-solver-type TYPE] [--work-directory DIRECTORY] [--replace-settings]";
-string app = null, python = null, ui = null, tools = null, gmsh = null, solverType = null, work = null;
+string app = null, python = null, tools = null, gmsh = null, solverType = null, work = null;
 string[] solver = null;
 bool replace = false;
 for (int i = 0; i < args.Length; i++)
@@ -21,7 +21,6 @@ for (int i = 0; i < args.Length; i++)
     if (args[i] == "--app" && i + 1 < args.Length) app = args[++i];
     else if (args[i] == "--python" && i + 1 < args.Length) python = args[++i];
     else if (args[i] == "--native-tools" && i + 1 < args.Length) tools = args[++i];
-    else if (args[i] == "--ui" && i + 1 < args.Length) ui = args[++i];
     else if (args[i] == "--gmsh-library" && i + 1 < args.Length) gmsh = args[++i];
     else if (args[i] == "--default-solver-type" && i + 1 < args.Length) solverType = args[++i];
     else if (args[i] == "--solver" && i + 3 < args.Length) { solver = args[(i + 1)..(i + 4)]; i += 3; }
@@ -37,11 +36,6 @@ try
     if (!File.Exists(Path.Combine(app, "PrePoMax.dll"))) throw new FileNotFoundException("No PrePoMax.dll in " + app);
     var runtime = new Dictionary<string, object> { ["schemaVersion"] = 1, ["python"] = Full(python) };
     if (tools != null) runtime["nativeTools"] = Full(tools);
-    if (ui != null)
-    {
-        if (!File.Exists(Path.Combine(Full(ui), "main_form.py"))) throw new FileNotFoundException("No main_form.py in " + ui);
-        runtime["ui"] = Full(ui);
-    }
     if (gmsh != null) runtime["gmshLibrary"] = Full(gmsh);
     string runtimeFile = Path.Combine(app, "PrePoMaxX.runtime.json");
     File.WriteAllText(runtimeFile, JsonSerializer.Serialize(runtime, new JsonSerializerOptions { WriteIndented = true }) + "\n");

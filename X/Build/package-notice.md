@@ -14,7 +14,7 @@ signed for distribution or notarized, and it is not a release.
 - Exact component versions, fingerprints and what is **not** included are listed in `package.json`
   (`missing`). Corresponding sources: the PrePoMax-X repository at the recorded `source` commit and the source
   locks it names (`ThirdParty/Sources/source-lock.json`, `X/Build/*/source-lock.json`,
-  `X/Build/python-runtime-lock.json`, `X/UI/requirements/`).
+  `X/Build/python-runtime-lock.json`, `X/Build/python-requirements/`).
 
 Start: macOS `PrePoMax-X.app`; Linux `./PrePoMax-X`; Windows `PrePoMax-X.cmd`. User data (runtime profiles,
 working folder) goes to the PrePoMax-X data folder (macOS `~/Library/Application Support/PrePoMax-X`, Linux

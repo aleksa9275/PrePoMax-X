@@ -16,7 +16,7 @@ ad hoc, not notarized, not a release. See `bundle.json` for the exact source com
     exception); NetGenMesher (GPL-3.0) with Netgen 5.3.1 (LGPL-2.1) and OpenCASCADE 8.0.1; Mmg 5.5.2/5.7.0
     (LGPL-3.0); QuadWild-BiMDF 0.0.2, modified (GPL-3.0); lp_solve 5.5.2.11 (LGPL-2.1); lib3mf 2.4.1 (BSD-2).
   - VTK 9.7 (BSD-3, `Licenses/VTK-Copyright.txt`) through upstream PrePoMax's vtkNative (GPL-3.0).
-  - .NET 10.0.14 runtime (MIT, `Licenses/dotnet`), Avalonia 11.3.23 (MIT, `Licenses/avalonia`), SkiaSharp 2.88.9
+  - .NET @DOTNET@ runtime (MIT, `Licenses/dotnet`), Avalonia 11.3.23 (MIT, `Licenses/avalonia`), SkiaSharp 2.88.9
     and HarfBuzzSharp 8.3.1.1 (MIT, `Licenses/skiasharp`, `Licenses/harfbuzzsharp`).
   - CPython 3.12.14 (PSF-2.0) and NumPy 2.3.5 (BSD-3), license files under `python/`.
 - Corresponding source: the PrePoMax-X repository (github.com/aleksa9275/PrePoMax-X, branch

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Assemble a local, runnable macOS (ARM64) folder of the original application (X/App) with its front end: Avalonia
-(M3-1a, the default) or the M2 Qt renderer (--front-end qt).
+"""Assemble a local, runnable macOS (ARM64) folder of the original application (X/App) with its Avalonia front end
+(M3-1a; the M2 Qt renderer was retired in M3-1b).
 
     python3 X/App/local_app.py --package <PrePoMax-X.app of P1> --solver <solver folder with build-registry.json> \
         --solver-id <build id> --output X/Build/artifacts/app-mac
 
-The P1 package supplies CPython 3.12 with PyQt6, Netgen, Mmg, Gmsh, lib3mf and lp_solve; this repository supplies
+The P1 package supplies CPython 3.12, Netgen, Mmg, Gmsh, lib3mf and lp_solve; this repository supplies
 X/App (built here), GmshCaller (built from the current sources), QuadWild (X/Build/QuadWild) and the vtkNative
 runtime (X/Build/Vtk). The output holds app/ (PrePoMax, PrePoMax.com, PrePoMaxX.runtime.json, settings.bin),
 profiles/ (python.json, tools.json) and PrePoMax-X.command, which starts the application. Nothing is installed or
@@ -42,8 +42,6 @@ def main():
     p.add_argument('--default-solver-type', default='Spooles')
     p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
-    p.add_argument('--front-end', choices=('avalonia', 'qt'), default='avalonia',
-                   help='Avalonia (M3-1a) or the M2 Qt renderer; PREPOMAXX_FRONT_END overrides it at start')
     p.add_argument('--work-directory', type=Path, help='The solver work directory (default: <output>/work)')
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
@@ -106,28 +104,22 @@ def main():
         raise SystemExit('Gmsh does not match the package manifest')
     solver = a.solver.resolve()
     run('dotnet', ROOT / 'X/App/Configure/bin/Release/net10.0/PrePoMaxX.Configure.dll', '--app', app,
-        '--python', profiles / 'python.json', '--ui', ROOT / 'X/UI', '--native-tools', profiles / 'tools.json',
+        '--python', profiles / 'python.json', '--native-tools', profiles / 'tools.json',
         '--gmsh-library', gmsh, '--solver', solver / 'build-registry.json', a.solver_id, solver / 'bin',
         '--default-solver-type', a.default_solver_type,
         '--work-directory', (a.work_directory or out / 'work').resolve(),
         *(['--replace-settings'] if kept_settings is not None else []))
 
-    # The front end (the Qt renderer stays available through PREPOMAXX_FRONT_END=qt: the profile keeps "ui")
-    profile = app / 'PrePoMaxX.runtime.json'
-    runtime = json.loads(profile.read_text())
-    runtime['frontEnd'] = a.front_end
-    profile.write_text(json.dumps(runtime, indent=2) + '\n')
-
     # The launcher: the application with its own runtime profile; a leftover recovery file of a killed run is the
     # user's to keep, so it is not removed here
     launcher = out / 'PrePoMax-X.command'
-    launcher.write_text(f'#!/bin/bash\n# Starts the original PrePoMax (X/App) with the {a.front_end} front end; arguments as the original command line\n'
+    launcher.write_text(f'#!/bin/bash\n# Starts the original PrePoMax (X/App) with the Avalonia front end; arguments as the original command line\n'
                         'export DOTNET_ROLL_FORWARD="${DOTNET_ROLL_FORWARD:-Major}"\n'
                         f'exec dotnet "{app}/PrePoMax.dll" "$@"\n')
     launcher.chmod(launcher.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     (out / 'local-app.json').write_text(json.dumps({
         'schemaVersion': 1, 'package': str(a.package.resolve()), 'solver': str(solver), 'solverId': a.solver_id,
-        'frontEnd': a.front_end, 'vtkNative': str(a.vtk_native.resolve()), 'quadwild': str(a.quadwild.resolve()),
+        'frontEnd': 'avalonia', 'vtkNative': str(a.vtk_native.resolve()), 'quadwild': str(a.quadwild.resolve()),
         'revision': subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True).stdout.strip(),
     }, indent=2) + '\n')
     print(f'Ready: {launcher}')

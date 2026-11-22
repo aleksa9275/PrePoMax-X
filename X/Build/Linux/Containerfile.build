@@ -1,0 +1,8 @@
+# PrePoMax-X Linux build environment (M3-1b): the native recipes of X/Build (VTK/vtkNative, QuadWild) on
+# Ubuntu 24.04, the base of the P1 Linux tools. The repository is mounted at /src.
+FROM docker.io/library/ubuntu:24.04
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      build-essential cmake git python3 ca-certificates file patchelf \
+      libx11-dev libxt-dev libxcursor-dev libgl-dev \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src

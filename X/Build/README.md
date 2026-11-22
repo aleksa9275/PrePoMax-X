@@ -1,31 +1,36 @@
-# PrePoMax-X desktop packages (X/UI)
+# PrePoMax-X native components and packages
 
-The current desktop is X/UI (original Controller, forms and engineering code on .NET 10, Qt/VTK
-presentation). One command builds every native input for a target from its pinned recipe and packages it:
+The application is `X/App` (the original PrePoMax compiled whole on .NET 10 with the Avalonia front end). Its
+packages are made by `X/App/package_mac.py` (`PrePoMax-X.app`) and `X/App/package_linux.py` (folder and tar.gz)
+from two inputs: X/App itself and a set of **native components** built here. One command builds every native
+component for a target from its pinned recipe and assembles them:
 
-    python3 X/Build/build_ui.py --target osx-arm64 --workspace /abs/ws-mac --jobs 8      # -> dmg
-    python3 X/Build/build_ui.py --target linux-x64 --workspace /abs/ws-linux --jobs 8   # -> tar.gz
-    python3 X/Build/build_ui.py --target win-x64 --workspace /abs/ws-win                # -> zip
+    python3 X/Build/build_ui.py --target osx-arm64 --workspace /abs/ws-mac --jobs 8
+    python3 X/Build/build_ui.py --target linux-arm64 --workspace /abs/ws-linux --jobs 8
+    python3 X/Build/build_ui.py --target win-x64 --workspace /abs/ws-win
 
 Stages: `LpSolve/` (lp_solve 5.5.2.11), `Mmg/` (mmgs 5.5.2, mmg3d 5.7.0), lib3mf 2.4.1 (official
 library or source build), `Gmsh/` (patched 4.13.0 + OCCT 7.7.0), `NativeCad/` (Netgen + OCCT 8.0.1), the
 CalculiX solver (`build.py ... --component solver`), then `package_ui.py`. Stages are resumable per
 workspace. Run each target on a matching native host (Linux x64: Podman on Windows, D059; Linux ARM64: the
-local Podman machine). The Linux host needs the solver tools listed below plus `patchelf`, .NET 10 SDK and
-CPython 3.12 to run the scripts. Windows takes the vendored ThirdParty binaries (Netgen, Mmg, QuadWild,
-lp_solve) and may be packaged from any host; its Gmsh (MSVC build of the patched 4.13.0) and CalculiX are
-pending and listed as missing.
+local Podman machine with `Linux/Containerfile.build`). The Linux host needs the solver tools listed below plus
+`patchelf`, .NET 10 SDK and CPython 3.12 to run the scripts. Windows takes the vendored ThirdParty binaries (Netgen,
+Mmg, QuadWild, lp_solve) and may be assembled from any host; its Gmsh (MSVC build of the patched 4.13.0) and
+CalculiX are pending and listed as missing. The 3D view (`Vtk/`, vtkNative) and QuadWild (`QuadWild/`) are built
+with their own recipes and handed to the X/App packagers.
 
 `package_ui.py` can also be given prebuilt inputs (`--netgen`, `--gmsh-library`, `--lib3mf`, `--lpsolve`,
-`--mmg`, `--solver-build`). The payload holds a self-contained .NET 10.0.14 host, CPython 3.12.14
-(python-build-standalone, `python-runtime-lock.json`) with the hash-pinned wheels of
-`X/UI/requirements/<target>.txt`, the native tools, the relocated solver, X/UI with the original resources
-it reads, `launch.py`, `package.json` (versions, fingerprints, **missing** components) and notices.
-`launch.py` writes the absolute runtime profiles to the user data folder and starts the host;
-`launch.py --profiles DIR` writes them for `X/UI/verify-ui.py` (repository verification with a package's
-runtime; see `DIR/verify-arguments.json`). The GUI probes ship as self-checks, e.g.
-`PrePoMax-X --results-probe DIR` (real solve) or `--geometry-probe DIR` (CAD, meshers).
-QuadWild has no macOS/Linux build (modified fork, source not in the repository).
+`--mmg`, `--solver-build`). Its output holds CPython 3.12.14 (python-build-standalone, `python-runtime-lock.json`)
+with the hash-pinned wheels of `python-requirements/<target>.txt` (numpy), the native tools, the relocated solver,
+lp_solve, `package.json` (versions, fingerprints, **missing** components) and notices. Until M3-1b it also packaged
+the Qt workbench (X/UI with PyQt6, its .NET host and `package_launch.py`); that went with the Qt front end (D065).
+The P1 packages (`PrePoMax-X.app`, `PrePoMax-X-linux-arm64.tar.gz` of that time) still serve as component inputs:
+the X/App packagers take their Python, tools and solver, checked against their manifests, and leave PyQt and VTK's
+Python modules out.
+
+Linux (`Linux/`): `Containerfile.build` (the build environment of the recipes and `strip_rpaths.py`),
+`Containerfile.run` (a plain Ubuntu 24.04 desktop: Xvfb, Mesa, Openbox, x11vnc, no development packages) and
+`session.py`, which runs a package in it for the probes or for a person over VNC.
 
 # Earlier shared target builds
 

@@ -94,8 +94,10 @@ namespace PrePoMaxX.FrontEnd
             Step("run");
             try
             {
-                AppBuilder.Configure<FrontEndApplication>().UsePlatformDetect().LogToTrace()
-                    .StartWithClassicDesktopLifetime(new string[0], ShutdownMode.OnMainWindowClose);
+                AppBuilder builder = AppBuilder.Configure<FrontEndApplication>().UsePlatformDetect().LogToTrace();
+                string family = Look.LayoutFamily();
+                if (family != null) builder = builder.With(new FontManagerOptions { DefaultFamilyName = family });
+                builder.StartWithClassicDesktopLifetime(new string[0], ShutdownMode.OnMainWindowClose);
             }
             finally
             {

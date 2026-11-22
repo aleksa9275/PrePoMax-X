@@ -683,7 +683,9 @@ namespace vtkControl
             }
             else
             {
-                string pickedActorName = NativeMirrorPickPoint(e.Location.X, e.Location.Y, out _, out _);
+                // The event is in control units (the menus' units); the pick takes device pixels as the others do (D066)
+                string pickedActorName = NativeMirrorPickPoint(VtkNativeView.ToDevice(e.Location.X),
+                                                               VtkNativeView.ToDevice(e.Location.Y), out _, out _);
                 if (pickedActorName != null)
                 {
                     Controller_ActorsPicked?.Invoke(e, ModifierKeys, new string[] { pickedActorName });

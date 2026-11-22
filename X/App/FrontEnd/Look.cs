@@ -26,6 +26,17 @@ namespace PrePoMaxX.FrontEnd
         public static readonly IBrush CheckedBorder = new SolidColorBrush(Color.FromRgb(0x99, 0xD1, 0xFF));
         public static readonly IBrush GrayText = new SolidColorBrush(Color.FromRgb(0x6D, 0x6D, 0x6D));
         public static readonly Typeface Typeface = new Typeface(FontFamily.Default);
+        /// <summary>Linux: the default family when one with Segoe UI's widths is installed (the forms' designer bounds
+        /// are made for it; Liberation Sans and Arimo have Arial's metrics, close to Segoe UI, where DejaVu Sans, the
+        /// usual default, is wider). macOS keeps its system font, which fits the bounds.</summary>
+        public static string LayoutFamily()
+        {
+            if (!System.OperatingSystem.IsLinux()) return null;
+            var installed = new System.Collections.Generic.HashSet<string>(SkiaSharp.SKFontManager.Default.GetFontFamilies());
+            foreach (string family in new[] { "Segoe UI", "Liberation Sans", "Arimo" })
+                if (installed.Contains(family)) return family;
+            return null;
+        }
         public static readonly FontFamily Monospace = new FontFamily("Menlo, Consolas, DejaVu Sans Mono, monospace");
 
         static Style S<T>(System.Func<Selector, Selector> selector, params (AvaloniaProperty, object)[] setters)

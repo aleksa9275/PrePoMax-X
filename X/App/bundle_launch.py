@@ -1,8 +1,10 @@
-"""PrePoMax-X.app launcher (Contents/Resources/launch.py, run by the bundled CPython in isolated mode).
+"""PrePoMax-X launcher (macOS PrePoMax-X.app/Contents/Resources/launch.py, Linux PrePoMax-X/launch.py), run by the
+bundled CPython in isolated mode.
 
 The original application keeps its settings beside itself (Application.StartupPath), and the runtime profile takes
-absolute paths, so the bundle does not run in place: the application folder is cloned into the user's data folder
-(~/Library/Application Support/PrePoMax-X; PREPOMAXX_DATA overrides it) when the bundle is new or was updated, and
+absolute paths, so the package does not run in place: the application folder is cloned into the user's data folder
+(macOS ~/Library/Application Support/PrePoMax-X, Linux $XDG_DATA_HOME or ~/.local/share/PrePoMax-X; PREPOMAXX_DATA
+overrides it) when the package is new or was updated, and
 the original Configure step writes the runtime profile for the bundle's location (again when the bundle moves).
 The user's settings.bin survives updates. Arguments go to the original command line (-f FILE ...).
 """
@@ -18,7 +20,12 @@ HERE = Path(__file__).resolve().parent
 
 def main():
     bundle = json.loads((HERE / 'bundle.json').read_text())
-    data = Path(os.environ.get('PREPOMAXX_DATA') or Path.home() / 'Library/Application Support/PrePoMax-X')
+    if os.environ.get('PREPOMAXX_DATA'):
+        data = Path(os.environ['PREPOMAXX_DATA'])
+    elif sys.platform == 'darwin':
+        data = Path.home() / 'Library/Application Support/PrePoMax-X'
+    else:
+        data = Path(os.environ.get('XDG_DATA_HOME') or Path.home() / '.local/share') / 'PrePoMax-X'
     app, profiles, work = data / 'app', data / 'profiles', data / 'work'
     for folder in (data, profiles, work):
         folder.mkdir(parents=True, exist_ok=True)
@@ -29,8 +36,9 @@ def main():
     if fresh:
         if app.exists():
             shutil.rmtree(app)
-        # A clone on APFS (cp -c) costs no space; a plain copy elsewhere
-        if subprocess.run(['cp', '-cR', str(HERE / 'app'), str(app)]).returncode != 0:
+        # A clone (APFS cp -c, Btrfs/XFS reflink) costs no space; a plain copy elsewhere
+        clone = ['cp', '-cR'] if sys.platform == 'darwin' else ['cp', '-a', '--reflink=auto']
+        if subprocess.run([*clone, str(HERE / 'app'), str(app)]).returncode != 0:
             shutil.copytree(HERE / 'app', app, symlinks=True)
         if kept is not None:
             settings.write_bytes(kept)
@@ -54,7 +62,11 @@ def main():
         if code != 0:
             raise SystemExit(f'PrePoMax-X: the configuration step failed ({code})')
         located.write_text(str(HERE))
-    os.execv(str(app / 'PrePoMax'), [str(app / 'PrePoMax'), *sys.argv[1:]])
+    # A desktop or file manager passes the file alone; the original command line names it with -f
+    arguments = sys.argv[1:]
+    if len(arguments) == 1 and not arguments[0].startswith('-'):
+        arguments = ['-f', arguments[0]]
+    os.execv(str(app / 'PrePoMax'), [str(app / 'PrePoMax'), *arguments])
 
 
 if __name__ == '__main__':

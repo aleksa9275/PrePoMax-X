@@ -1,0 +1,4 @@
+# Python wheels of the PrePoMax-X package for win-x64 (CPython 3.12), hash-pinned from PyPI: numpy for the
+# original's Python features (PyQt6 and VTK's wheels went with the Qt workbench in M3-1b, D065).
+# install with: pip install --require-hashes --only-binary=:all: --no-deps -r <this file>
+numpy==2.3.5 --hash=sha256:86945f2ee6d10cdfd67bcb4069c1662dd711f7e2a4343db5cecec06b87cf31aa

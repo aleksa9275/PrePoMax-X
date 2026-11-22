@@ -25,6 +25,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 NUGET = Path.home() / '.nuget/packages'
+# The .NET runtime the packages ship: the project's pin (X/Build/targets.json; without it the SDK takes the newest patch
+# it can restore). The published output is checked against it (check_runtime)
+DOTNET_RUNTIME = json.loads((ROOT / 'X/Build/targets.json').read_text())['runtimeFrameworkVersion']
 
 
 MIT = """{0}
@@ -142,6 +145,13 @@ def strip_absolute_rpaths(folder):
                 run('codesign', '--force', '-s', '-', path)
 
 
+def check_runtime(app, target):
+    """The published application carries the pinned runtime pack."""
+    deps = (app / 'PrePoMax.deps.json').read_text()
+    if f'runtimepack.Microsoft.NETCore.App.Runtime.{target}/{DOTNET_RUNTIME}' not in deps:
+        raise SystemExit(f'the published runtime is not .NET {DOTNET_RUNTIME}')
+
+
 def copy_ui_resources(target):
     """The original images the front end reads at run time (FrontEnd.Bitmap/Named), at their repository-relative paths:
     the icon folders searched by name, and every image file and .resx named by the compiled designer code."""
@@ -180,7 +190,7 @@ def make_icns(icon, target, work):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('--p1', type=Path, required=True, help='PrePoMax-X.app of P1 (Python, meshers, Gmsh, licenses)')
+    p.add_argument('--p1', type=Path, required=True, help='the native components: X/Build/package_ui.py output folder (or the P1 PrePoMax-X.app)')
     p.add_argument('--solver', type=Path, default=ROOT / 'X/Build/artifacts/solver-m2/solver')
     p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
     p.add_argument('--original', type=Path, required=True,
@@ -189,7 +199,8 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--zip', action='store_true')
     a = p.parse_args()
-    p1 = a.p1.resolve() / 'Contents/Resources'
+    # P1's PrePoMax-X.app (Contents/Resources) or a component folder of X/Build/package_ui.py
+    p1 = a.p1.resolve() / 'Contents/Resources' if (a.p1 / 'Contents/Resources').is_dir() else a.p1.resolve()
     package = json.loads((p1 / 'package.json').read_text())
     bundle = a.output.resolve() / 'PrePoMax-X.app'
     if bundle.exists():
@@ -200,9 +211,11 @@ def main():
 
     # The application, self-contained; the build machine's paths are mapped out of the assemblies
     publish = ['-c', 'Release', '-r', 'osx-arm64', '--self-contained', 'true', '-v:q', '-p:DebugType=none',
+               f'-p:RuntimeFrameworkVersion={DOTNET_RUNTIME}',
                f'-p:PathMap={ROOT}=/PrePoMax-X', f'-p:VtkNativeRuntime={a.vtk_native.resolve()}']
     run('dotnet', 'publish', ROOT / 'X/App/PrePoMax/PrePoMax.csproj', '-o', app, *publish)
     run('dotnet', 'publish', ROOT / 'X/App/Configure/Configure.csproj', '-o', app, *publish)
+    check_runtime(app, 'osx-arm64')
     for item in a.vtk_native.resolve().iterdir():
         if item.is_file() and not item.name.startswith('vtkControl.'):
             if (app / item.name).exists() or (app / item.name).is_symlink():
@@ -264,7 +277,7 @@ def main():
     # Licenses and notices
     shutil.copytree(p1 / 'Licenses', res / 'Licenses')
     shutil.copy2(ROOT / 'LICENSE', res / 'Licenses/PrePoMax-LICENSE')
-    extra = {'dotnet': NUGET / 'microsoft.netcore.app.runtime.osx-arm64/10.0.14', 'skiasharp': NUGET / 'skiasharp/2.88.9',
+    extra = {'dotnet': NUGET / f'microsoft.netcore.app.runtime.osx-arm64/{DOTNET_RUNTIME}', 'skiasharp': NUGET / 'skiasharp/2.88.9',
              'harfbuzzsharp': NUGET / 'harfbuzzsharp/8.3.1.1'}
     for name, folder in extra.items():
         (res / 'Licenses' / name).mkdir()
@@ -274,7 +287,7 @@ def main():
     (res / 'Licenses/avalonia').mkdir()
     (res / 'Licenses/avalonia/LICENSE.md').write_text(MIT.format('Avalonia 11.3.23 (github.com/AvaloniaUI/Avalonia)', 'Copyright (c) AvaloniaUI OÜ All Rights Reserved'))
     shutil.copy2(a.vtk_native.resolve() / 'VTK-Copyright.txt', res / 'Licenses/VTK-Copyright.txt')
-    shutil.copy2(ROOT / 'X/App/bundle_NOTICE.md', res / 'NOTICE.md')
+    (res / 'NOTICE.md').write_text((ROOT / 'X/App/bundle_NOTICE.md').read_text().replace('@DOTNET@', DOTNET_RUNTIME))
 
     # Launcher, manifest, Info.plist
     shutil.copy2(ROOT / 'X/App/bundle_launch.py', res / 'launch.py')
@@ -319,6 +332,12 @@ def main():
             manifest.write_text(text.replace(str(ROOT), 'PrePoMax-X').replace(str(Path.home()), '~'))
     strip_absolute_rpaths(bundle)
     run('codesign', '--force', '--deep', '-s', '-', bundle)
+    # Every fingerprint the runtime checks still holds after relocation and signing
+    changed = [ident for ident, tool in tools.items() if sha(res / tool['path']) != tool['sha256']]
+    changed += [gmsh['file']] if sha(res / gmsh['file']) != gmsh['sha256'] else []
+    changed += [python['library']] if sha(res / python['library']) != python['librarySha256'] else []
+    if changed:
+        raise SystemExit(f'fingerprinted files changed while packaging: {changed}')
     print('Bundle:', bundle, subprocess.run(['du', '-sh', str(bundle)], capture_output=True, text=True).stdout.split()[0])
     if a.zip:
         archive = a.output.resolve() / 'PrePoMax-X-macos-arm64.zip'

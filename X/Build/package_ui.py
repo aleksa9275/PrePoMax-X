@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-"""Package the PrePoMax-X desktop (X/UI: the original Controller, forms and engineering code on .NET 10 with the
-Qt/VTK presentation) for one target, from explicitly named, fingerprinted inputs.
+"""Assemble the native components of a PrePoMax-X package for one target, from explicitly named, fingerprinted
+inputs (the input of X/App/package_mac.py and X/App/package_linux.py: --p1).
 
     python3 X/Build/package_ui.py --target osx-arm64 --output /abs/new-output --cache /abs/download-cache \
         --netgen <NativeCad runtime> --gmsh-library <libgmsh.4.13.0.dylib> --lib3mf <lib3mf 2.4.1 library> \
         --lpsolve <X/Build/LpSolve runtime library> --mmg <X/Build/Mmg runtime> --solver-build <CalculiX build> \
-        --format dmg
+        --format tar.gz
 
-The payload layout is the same on every target:
+The layout is the same on every target:
 
-    app/        self-contained .NET 10.0.14 publication of the workbench host (+ lp_solve for CaeMesh)
-    tools/      GmshCaller (self-contained, + lp_solve), gmsh, Netgen, Mmg, lib3mf (what was supplied)
+    app/        lp_solve (the folder of the application, where CaeMesh loads it)
+    tools/      gmsh, Netgen, Mmg, lib3mf, QuadWild (what was supplied)
     solver/     the relocated CalculiX build with its registry
-    python/     CPython 3.12.14 (python-build-standalone) with the hash-pinned UI wheels
-    ui/         X/UI and the original resources it reads, at their repository-relative paths
-    launch.py   writes the absolute runtime profiles to the user's data folder and starts the host
+    python/     CPython 3.12.14 (python-build-standalone) with the hash-pinned wheels of X/Build/python-requirements
+                (numpy, for the original's Python features)
     package.json, Licenses/, NOTICE.md
 
 Inputs that are not supplied are recorded as missing in package.json; nothing is substituted. QuadWild on macOS/Linux
 is the runtime X/Build/QuadWild builds from the published fork (--quadwild); Windows layouts take the vendored
-ThirdParty binaries. The package is a local test build: ad-hoc signed on
-macOS, no notarization or installer.
+ThirdParty binaries. Until M3-1b this also packaged the Qt workbench (X/UI, retired with PyQt, D065); the application,
+GmshCaller and the 3D view now come from X/App's packagers.
 """
 import argparse
 import hashlib
@@ -95,7 +94,7 @@ def python_runtime(runner, target, cache, destination):
     shutil.move(destination.parent / 'python-extract' / 'python', destination)
     (destination.parent / 'python-extract').rmdir()
     interpreter = destination / entry['interpreter']
-    requirements = ROOT / 'X/UI/requirements' / (target + '.txt')
+    requirements = HERE / 'python-requirements' / (target + '.txt')
     pip = ['install', '--disable-pip-version-check', '--no-cache-dir', '--require-hashes', '--only-binary=:all:',
            '--no-deps', '-r', requirements]
     if target.startswith('win') and sys.platform != 'win32':
@@ -105,38 +104,6 @@ def python_runtime(runner, target, cache, destination):
     else:
         runner.run([interpreter, '-I', '-m', 'pip'] + pip, 'pip-install')
     return entry
-
-
-def ui_files():
-    """X/UI sources and the repository files the UI and the compiled original forms read at run time."""
-    files = set()
-    ui = ROOT / 'X/UI'
-    for path in ui.iterdir():
-        if path.is_file() and path.suffix in ('.py', '.json') and not path.name.startswith(('generate-', 'verify-', 'audit-')):
-            files.add(path)
-    # The Cocoa event helper of the view probes lives with the earlier desktop (imported by X/UI/view_probe.py)
-    files.add(ROOT / 'X/Desktop/viewport_probe.py')
-    # The GUI probes ship as self-checks (workbench.py --forms-probe DIR etc.) with their small public fixtures
-    files.update(p for p in (ROOT / 'X/Analysis/StaticDeck').glob('*') if p.suffix in ('.inp', '.json'))
-    files.add(ROOT / '.project/reports/windows-reference/fixtures/definitions.inp')
-    for folder in ('ImageList', 'Icons', 'fixtures'):
-        if (ui / folder).is_dir():
-            files.update(p for p in (ui / folder).rglob('*') if p.is_file())
-    for folder in ('PrePoMax/Icons', 'PrePoMax/Resources', 'UserControls/Resources'):
-        if (ROOT / folder).is_dir():
-            files.update(p for p in (ROOT / folder).rglob('*') if p.is_file())
-    generated = (ui / 'Workbench/OriginalForms').rglob('*.g.cs')
-    for path in generated:
-        text = path.read_text(encoding='utf-8')
-        for relative in re.findall(r'ResxResources\("([^"]+)"\)', text) + re.findall(r'new System\.Windows\.Forms\.ImageResource\("[^"]*", "([^"]+)"\)', text):
-            files.add(ROOT / relative)
-    # Original .resx files of the compiled forms and the main menu/toolbar/tree resources
-    for resx in ('PrePoMax/Properties/Resources.resx', 'UserControls/Properties/Resources.resx', 'PrePoMax/Forms/frmMain.resx'):
-        files.add(ROOT / resx)
-    missing = [str(p.relative_to(ROOT)) for p in files if not p.is_file()]
-    if missing:
-        raise SystemExit('UI resources missing: ' + ', '.join(sorted(missing)[:10]))
-    return sorted(files)
 
 
 def copy_tree(source, destination):
@@ -149,14 +116,13 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--cache', type=Path, required=True, help='download cache (CPython archive)')
     p.add_argument('--quadwild', type=Path, help='QuadWild runtime folder from X/Build/QuadWild (macOS/Linux)')
-    p.add_argument('--vtk-native', type=Path, help='vtkNative runtime folder from X/Build/Vtk (the 3D view; Windows: vtkNative build runtime)')
     p.add_argument('--netgen', type=Path, help='NativeCad runtime folder (bin/NetGenMesher, lib/)')
     p.add_argument('--gmsh-library', type=Path, help='patched Gmsh 4.13.0 library with gmsh-build.json beside it')
     p.add_argument('--lib3mf', type=Path, help='lib3mf 2.4.1 library')
     p.add_argument('--lpsolve', type=Path, help='lp_solve 5.5.2.11 library from X/Build/LpSolve')
     p.add_argument('--mmg', type=Path, help='X/Build/Mmg runtime folder (mmgs, mmg3d)')
     p.add_argument('--solver-build', type=Path, help='verified native CalculiX build (build-registry.json)')
-    p.add_argument('--format', choices=['folder', 'app', 'dmg', 'tar.gz', 'zip'], default='folder')
+    p.add_argument('--format', choices=['folder', 'tar.gz', 'zip'], default='folder')
     a = p.parse_args()
     target = a.target
     windows = target.startswith('win')
@@ -176,29 +142,14 @@ def main():
     except (OSError, subprocess.CalledProcessError):
         manifest['source'] = None
 
-    # .NET hosts
-    publish(runner, 'X/UI/Workbench/Workbench.csproj', target, stage / 'app', 'workbench')
-    publish(runner, 'X/Domain/GmshCaller/GmshCaller.csproj', target, stage / 'tools/GmshCaller', 'gmshcaller')
+    (stage / 'app').mkdir(parents=True)
     exe = '.exe' if windows else ''
-    manifest['components']['dotnet'] = {'runtime': CATALOG['runtimeFrameworkVersion'], 'host': 'app/PrePoMaxX.Workbench' + exe}
-    tools = {'\\lib\\GmshCaller.exe': f'tools/GmshCaller/GmshCaller{exe}'}
+    tools = {}
 
-    # The 3D view: libvtkNative and VTK 9.7.1 beside vtkControl.dll (the original lib folder practice)
-    if a.vtk_native:
-        receipt = json.loads((a.vtk_native / 'vtk-build.json').read_text())
-        copied = [f for f in sorted(a.vtk_native.iterdir()) if f.is_file()]
-        for f in copied:
-            shutil.copy2(f, stage / 'app' / f.name, follow_symlinks=False)
-        manifest['components']['vtkNative'] = {'vtk': receipt['vtk']['version'], 'files': len(copied),
-                                               'receipt': 'app/vtk-build.json', 'receiptSha256': sha(a.vtk_native / 'vtk-build.json')}
-    else:
-        manifest['missing']['vtkNative'] = 'not supplied: the 3D view (vtkControl on vtkNative) cannot start'
-
-    # lp_solve next to GmshCaller and the application assemblies (CaeMesh)
+    # lp_solve beside the application assemblies (CaeMesh); the packagers also put it beside GmshCaller
     lpsolve = a.lpsolve or (ROOT / 'ThirdParty/lpsolve/lpsolve55.dll' if windows else None)
     if lpsolve:
-        for folder in ('app', 'tools/GmshCaller'):
-            shutil.copy2(lpsolve, stage / folder / lpsolve.name)
+        shutil.copy2(lpsolve, stage / 'app' / lpsolve.name)
         manifest['components']['lpsolve'] = {'version': '5.5.2.11', 'file': lpsolve.name, 'sha256': sha(lpsolve)}
     else:
         manifest['missing']['lpsolve'] = 'not supplied: Gmsh interval assignment (default shell meshing, compound sweep) fails'
@@ -296,15 +247,7 @@ def main():
                                         'librarySha256': sha(stage / 'python' / entry['library']),
                                         'moduleDirectories': ['python/' + d for d in entry['moduleDirectories']],
                                         'interpreter': 'python/' + entry['interpreter'],
-                                        'wheels': 'X/UI/requirements/' + target + '.txt'}
-
-    # UI sources and original resources
-    files = ui_files()
-    for path in files:
-        destination = stage / 'ui' / path.relative_to(ROOT)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(path, destination)
-    manifest['components']['ui'] = {'files': len(files), 'script': 'ui/X/UI/workbench.py'}
+                                        'wheels': 'X/Build/python-requirements/' + target + '.txt'}
 
     # Licenses and notices
     copy_tree(ROOT / 'Licenses', stage / 'Licenses')
@@ -313,21 +256,10 @@ def main():
 
     manifest['tools'] = {k: {'path': v, 'sha256': sha(stage / v)} for k, v in tools.items()}
     manifest['solver'] = solver
-    shutil.copy2(HERE / 'package_launch.py', stage / 'launch.py')
     (stage / 'package.json').write_text(json.dumps(manifest, indent=2) + '\n')
-    entry_points(stage, target)
+    manifest['kind'] = 'components'
     result = finish(runner, stage, target, a.format)
     print(json.dumps({'package': str(result), 'missing': manifest['missing']}, indent=2))
-
-
-def entry_points(stage, target):
-    if target.startswith('win'):
-        (stage / f'{NAME}.cmd').write_text('@echo off\r\n"%~dp0python\\python.exe" -I "%~dp0launch.py" %*\r\n')
-        return
-    launcher = stage / NAME
-    launcher.write_text('#!/bin/sh\nHERE="$(cd "$(dirname "$0")" && pwd)"\n'
-                        'exec "$HERE/python/bin/python3" -I "$HERE/launch.py" "$@"\n')
-    launcher.chmod(0o755)
 
 
 def finish(runner, stage, target, package_format):
@@ -341,34 +273,7 @@ def finish(runner, stage, target, package_format):
         with tarfile.open(str(base) + '.tar.gz', 'w:gz') as tar:
             tar.add(stage, arcname=NAME)
         return Path(str(base) + '.tar.gz')
-    # macOS application bundle: Contents/Resources holds the payload, Contents/MacOS the launcher
-    app = runner.output / 'dist' / f'{NAME}.app'
-    (app / 'Contents/MacOS').mkdir(parents=True)
-    shutil.move(str(stage), app / 'Contents/Resources')
-    launcher = app / 'Contents/MacOS' / NAME
-    launcher.write_text('#!/bin/sh\nRES="$(cd "$(dirname "$0")/../Resources" && pwd)"\n'
-                        'exec "$RES/python/bin/python3" -I "$RES/launch.py" "$@"\n')
-    launcher.chmod(0o755)
-    (app / 'Contents/Resources' / NAME).unlink()
-    plist = {'CFBundleName': NAME, 'CFBundleDisplayName': NAME, 'CFBundleIdentifier': 'org.prepomax-x.desktop',
-             'CFBundleExecutable': NAME, 'CFBundlePackageType': 'APPL', 'CFBundleShortVersionString': '3.0.0',
-             'CFBundleVersion': '3.0.0', 'LSMinimumSystemVersion': '13.0', 'NSHighResolutionCapable': True}
-    import plistlib
-    with open(app / 'Contents/Info.plist', 'wb') as out:
-        plistlib.dump(plist, out)
-    runner.run(['codesign', '--force', '--deep', '--sign', '-', app], 'codesign')
-    runner.run(['codesign', '--verify', '--deep', '--strict', app], 'codesign-verify')
-    if package_format == 'app':
-        return app
-    dmg = runner.output / 'dist' / f'{NAME}-{target}.dmg'
-    folder = runner.output / 'dmg-root'
-    folder.mkdir()
-    shutil.move(str(app), folder / app.name)
-    os.symlink('/Applications', folder / 'Applications')
-    shutil.copy2(HERE / 'package-notice.md', folder / 'README.md')
-    runner.run(['hdiutil', 'create', '-volname', NAME, '-srcfolder', folder, '-ov', '-format', 'UDZO', dmg], 'hdiutil')
-    return dmg
-
+    raise SystemExit(f'unknown format {package_format}')
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,11 @@
+# PrePoMax-X Linux desktop test environment (M3-1b): a plain Ubuntu 24.04 desktop session without development
+# packages or .NET, for the probes (Xvfb, Mesa software OpenGL) and the maintainer's check over VNC (x11vnc, Openbox).
+FROM docker.io/library/ubuntu:24.04
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      xvfb x11vnc openbox xauth x11-utils imagemagick \
+      libgl1 libglx-mesa0 libgl1-mesa-dri libx11-6 libxt6t64 libxcursor1 libxrandr2 libxi6 libice6 libsm6 \
+      libfontconfig1 fonts-dejavu-core fonts-liberation libicu74 python3 ca-certificates procps \
+    && rm -rf /var/lib/apt/lists/*
+RUN useradd -m -s /bin/bash user
+USER user
+WORKDIR /home/user

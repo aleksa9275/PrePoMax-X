@@ -2,8 +2,11 @@
 
 `PrePoMaxX.FrontEnd` draws the original application of X/App with Avalonia 11.3.23 in the application's own .NET
 runtime: no CPython, no pythonnet, no GIL in the drawing path. `XRuntime` (PrePoMax.dll) hands `Application.Run`'s
-main form to `AvaloniaFrontEnd.Run`; the M2 Qt renderer (`X/UI/main_form.py`) stays selectable with `"frontEnd": "qt"`
-in the runtime profile or `PREPOMAXX_FRONT_END=qt` (a `PREPOMAXX_UI_PROBE` that names a `.py` probe also selects it).
+main form to `AvaloniaFrontEnd.Run`. It is the only front end since M3-1b, which retired the M2 Qt renderer
+(`X/UI/main_form.py`, D065). It runs on macOS (Cocoa) and Linux (X11): on X11 the 3D view is VTK's X11 window inside
+the Avalonia window (a native control host), and the host pumps its events (`ProcessEvents`). On Linux the default
+font is one with Segoe UI's widths when installed (Liberation Sans, Arimo; `Look.LayoutFamily`), as the forms'
+designer bounds expect.
 
 The original forms run unchanged on the headless WinForms control model (`X/UI/FormsCompat`), which lays the controls
 out and owns all behaviour. The front end mirrors it (the C# successor of `original_forms.py`, `original_controls.py`

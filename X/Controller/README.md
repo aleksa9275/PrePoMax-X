@@ -17,23 +17,10 @@ editors belong to Phase C. Required queries are explicit; missing services throw
 For contour 3MF output, supply the renderer's `ExportLookupTable`; optional
 `ExportUpDirection` controls the original writer's orientation argument.
 
-The development command-line host executes original recorded Python commands:
-
-```sh
-dotnet X/Controller/Headless/bin/Debug/net10.0/PrePoMaxX.Headless.dll \
-  run script.py /absolute/work /absolute/python-profile.json /absolute/project.pmx
-```
-
-It does not replace the original application's CLI/RPC/MCP servers or GUI.
-Options after the positional arguments follow the original batch start: `--unit-system UNITS`
-(an imported file starts a new 3D model in that unit system, as `-f FILE -u UNITS`), `--script-args "..."`,
-`--solver REGISTRY BUILD_ID DIRECTORY` (a verified CalculiX build) and `--default-solver-type TYPE` (Settings -
-Solver; the original default PARDISO is unavailable off Windows, D060, so a run states its substitute).
-
-`python3 X/Controller/run-upstream-scripts.py --output DIR --python-profile P --native-tools T [--solver ...]
-[--default-solver-type Spooles] [--filter Composite]` runs upstream's `APIs/Python/Test_Scripts` on this host,
-reading each script's command line with upstream's `Run_Tests.py`. Runs that need the original command line
-(batch run reports, the automation server, scripts starting `PrePoMax.com`) are reported pending.
+Python scripts run through the original command line of the whole application, `X/App` (`PrePoMax.com -f FILE -u
+UNITS --script SCRIPT -g No`). Upstream's `APIs/Python/Test_Scripts` run with upstream's own runner,
+`Run_Tests.py --exe <app>/PrePoMax.com`, and `X/App/verify-app.py --scripts` runs four of them on a package. The
+development host `Headless` and `run-upstream-scripts.py` were retired in M3-1b (D065).
 Original script-recording guards still apply (including new/open inside a recorded
 script). Use `HeadlessSession.Open`, `Controller.New` and other original methods
 for embedding. Configure one runtime profile per process before starting work;

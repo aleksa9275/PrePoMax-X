@@ -197,17 +197,39 @@ namespace PrePoMaxX.FrontEnd
                 Ui.Input(() => WinForms.LowLevelKeyboardHook.Raise(WinForms.Keys.Escape, false));
                 await Pump(1);
                 Check("Escape closes the forms (key hook)", !material.Visible);
-                // The view's context menu: a right click in the view opens the original menu where it was clicked
-                host.SendForProbe(VtkNativeInput.MouseMove, centre);
-                host.SendForProbe(VtkNativeInput.RightButtonDown, centre);
-                host.SendForProbe(VtkNativeInput.RightButtonUp, centre);
-                await Pump(1);
+                // The view's context menus, where the click was (control units): on empty space the view's menu, on a
+                // part the part's menu (the original picks the part under the right click, in device pixels)
+                async Task<System.Drawing.Point?> RightClick(Point at, WinForms.ContextMenuStrip strip)
+                {
+                    host.SendForProbe(VtkNativeInput.MouseMove, at);
+                    host.SendForProbe(VtkNativeInput.RightButtonDown, at);
+                    host.SendForProbe(VtkNativeInput.RightButtonUp, at);
+                    await Pump(1);
+                    System.Drawing.Point? shown = strip != null && strip.Visible ? strip.ShownAt : (System.Drawing.Point?)null;
+                    if (strip != null) Ui.Input(() => strip.Close());
+                    await Pump(0.5);
+                    return shown;
+                }
+                bool Near(System.Drawing.Point? shown, Point at) => shown.HasValue && Math.Abs(shown.Value.X - at.X) <= 3 && Math.Abs(shown.Value.Y - at.Y) <= 3;
                 var cms = Field<WinForms.ContextMenuStrip>(form, "_cmsViewport");
-                var at = cms?.ShownAt ?? System.Drawing.Point.Empty;
-                Check("the view's context menu opens", cms != null && cms.Visible, cms?.Visible);
-                Check("in control units", Math.Abs(at.X - centre.X) <= 3 && Math.Abs(at.Y - centre.Y) <= 3, at + " vs " + centre);
-                Ui.Input(() => cms.Close());
-                await Pump(0.5);
+                var empty = new Point(40, 40);
+                var shownEmpty = await RightClick(empty, cms);
+                Check("the view's context menu opens on empty space, where clicked", Near(shownEmpty, empty), shownEmpty + " vs " + empty);
+                double scale = VtkNativeHost.DeviceScale;
+                Point? onPart = null;
+                for (int i = 1; i < 8 && onPart == null; i++)
+                    for (int j = 1; j < 8 && onPart == null; j++)
+                    {
+                        var candidate = new Point(host.Bounds.Width * i / 8, host.Bounds.Height * j / 8);
+                        if (host.Control.NativeMirror.PickPoint((int)Math.Round(candidate.X * scale), (int)Math.Round((host.Bounds.Height - candidate.Y) * scale),
+                                                                5, false, null, out _, out _, out string part, out _) && part != null)
+                            onPart = candidate;
+                    }
+                var tree = All(form).FirstOrDefault(c => c.GetType().Name == "ModelTree");
+                var partMenu = tree == null ? null : Field<WinForms.ContextMenuStrip>(tree, "cmsTree");
+                var shownPart = onPart.HasValue ? await RightClick(onPart.Value, partMenu) : null;
+                Check("a right click on a part opens the part's menu, where clicked", onPart.HasValue && Near(shownPart, onPart.Value),
+                      (onPart.HasValue ? "part at " + onPart.Value : "no part found") + "; shown " + shownPart);
                 // A modal form (Help - About) through the nested loop
                 var about = Walk(menu.Items.Cast<WinForms.ToolStripItem>()).FirstOrDefault(i => i.Name == "tsmiAbout");
                 if (about != null)
