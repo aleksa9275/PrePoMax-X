@@ -208,6 +208,9 @@ def main():
     res = bundle / 'Contents/Resources'
     app = res / 'app'
     revision = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    # Uncommitted changes, before the publish rewrites the lock files (Finder's .DS_Store files do not count)
+    dirty = bool(subprocess.run(['git', 'status', '--porcelain', '--untracked-files=no', '--', '.', ':!**/.DS_Store'],
+                                cwd=ROOT, capture_output=True, text=True).stdout.strip())
 
     # The application, self-contained; the build machine's paths are mapped out of the assemblies
     publish = ['-c', 'Release', '-r', 'osx-arm64', '--self-contained', 'true', '-v:q', '-p:DebugType=none',
@@ -295,8 +298,7 @@ def main():
     build_id = revision[:12] + '-' + hashlib.sha256(b''.join(sha(f).encode() for f in sorted(app.rglob('*')) if f.is_file())).hexdigest()[:12]
     (res / 'bundle.json').write_text(json.dumps({
         'schemaVersion': 1, 'name': 'PrePoMax-X', 'target': 'osx-arm64', 'build': build_id, 'source': revision,
-        'sourceDirty': bool(subprocess.run(['git', 'status', '--porcelain', '--untracked-files=no', '--', '.', ':!**/.DS_Store'],
-                                           cwd=ROOT, capture_output=True, text=True).stdout.strip()),
+        'sourceDirty': dirty,
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],
