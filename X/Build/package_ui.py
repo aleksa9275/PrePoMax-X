@@ -4,12 +4,12 @@ inputs (the input of X/App/package_mac.py and X/App/package_linux.py: --p1).
 
     python3 X/Build/package_ui.py --target osx-arm64 --output /abs/new-output --cache /abs/download-cache \
         --netgen <NativeCad runtime> --gmsh-library <libgmsh.4.13.0.dylib> --lib3mf <lib3mf 2.4.1 library> \
-        --lpsolve <X/Build/LpSolve runtime library> --mmg <X/Build/Mmg runtime> --solver-build <CalculiX build> \
+        --highs <X/Build/Highs runtime library> --mmg <X/Build/Mmg runtime> --solver-build <CalculiX build> \
         --format tar.gz
 
 The layout is the same on every target:
 
-    app/        lp_solve (the folder of the application, where CaeMesh loads it)
+    app/        HiGHS (the folder of the application, where CaeMesh loads it)
     tools/      gmsh, Netgen, Mmg, lib3mf, QuadWild (what was supplied)
     solver/     the relocated CalculiX build with its registry
     python/     CPython 3.12.14 (python-build-standalone) with the hash-pinned wheels of X/Build/python-requirements
@@ -119,7 +119,7 @@ def main():
     p.add_argument('--netgen', type=Path, help='NativeCad runtime folder (bin/NetGenMesher, lib/)')
     p.add_argument('--gmsh-library', type=Path, help='patched Gmsh 4.13.0 library with gmsh-build.json beside it')
     p.add_argument('--lib3mf', type=Path, help='lib3mf 2.4.1 library')
-    p.add_argument('--lpsolve', type=Path, help='lp_solve 5.5.2.11 library from X/Build/LpSolve')
+    p.add_argument('--highs', type=Path, help='HiGHS 1.16.0 library from X/Build/Highs (3.0.2 replaced lp_solve)')
     p.add_argument('--mmg', type=Path, help='X/Build/Mmg runtime folder (mmgs, mmg3d)')
     p.add_argument('--solver-build', type=Path, help='verified native CalculiX build (build-registry.json)')
     p.add_argument('--format', choices=['folder', 'tar.gz', 'zip'], default='folder')
@@ -146,13 +146,13 @@ def main():
     exe = '.exe' if windows else ''
     tools = {}
 
-    # lp_solve beside the application assemblies (CaeMesh); the packagers also put it beside GmshCaller
-    lpsolve = a.lpsolve or (ROOT / 'ThirdParty/lpsolve/lpsolve55.dll' if windows else None)
-    if lpsolve:
-        shutil.copy2(lpsolve, stage / 'app' / lpsolve.name)
-        manifest['components']['lpsolve'] = {'version': '5.5.2.11', 'file': lpsolve.name, 'sha256': sha(lpsolve)}
+    # HiGHS beside the application assemblies (CaeMesh); the packagers also put it beside GmshCaller (3.0.2)
+    highs = a.highs or (ROOT / 'ThirdParty/highs/highs.dll' if windows else None)
+    if highs:
+        shutil.copy2(highs, stage / 'app' / highs.name)
+        manifest['components']['highs'] = {'version': '1.16.0', 'file': highs.name, 'sha256': sha(highs)}
     else:
-        manifest['missing']['lpsolve'] = 'not supplied: Gmsh interval assignment (default shell meshing, compound sweep) fails'
+        manifest['missing']['highs'] = 'not supplied: Gmsh interval assignment (default shell meshing, compound sweep) fails'
 
     # Gmsh
     if a.gmsh_library:

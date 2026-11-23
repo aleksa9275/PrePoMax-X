@@ -4,9 +4,9 @@ Maintainer direction, 3 November 2026: follow upstream releases and maintain
 open-source macOS/Linux packages even if upstream does not accept the
 contribution. Required Windows support and the shared-source rule remain. Record
 the exact upstream commit and feature/behavior delta for each sync; release
-numbering alone is insufficient. Current target (D063): upstream `master` at
-`1e2f83f2` (3.0.1 + `vtkNative`), behavioural reference the 3.0.1 release
-`51bca35a`.
+numbering alone is insufficient. Current target (D063, D068): upstream `master` at
+`6703b1cb` (version 3.0.2, not released yet), behavioural reference the 3.0.1 release
+`51bca35a` until 3.0.2 is released.
 
 ## Repository lanes
 
@@ -21,7 +21,10 @@ history; `x/main` is a separate reviewed integration lane created when needed.
 
 Syncs merge a pinned upstream commit into the development branch with a reviewed
 merge commit (no rebasing of published work): 3.0.1 was merged at `1e2f83f2`
-([M0 report](reports/phase-m0-upstream-3.0.1.md)).
+([M0 report](reports/phase-m0-upstream-3.0.1.md)), 3.0.2 at `6703b1cb`
+([M3-0 report](reports/phase-m3-0-upstream-3.0.2.md)). The sync script refuses a working tree with modified
+Finder `.DS_Store` files; the same verified fast-forward of local `master` can then be made with
+`git update-ref refs/heads/master <new> <old>` after `git merge-base --is-ancestor`.
 
 The repository is not shallow. Fetches preserve full history and tags. Do not
 replace upstream history with periodic source snapshots, synthetic squashed

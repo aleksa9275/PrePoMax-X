@@ -39,12 +39,6 @@ continues to require an exact decoded Windows scene and currently reports a
 failure for the native visualization differences. Neither check closes the
 original tetrahedron engineering gate.
 
-Enable this explicit native research profile in the desktop:
-
-    /path/to/desktop/python X/Desktop/viewport.py model.step \
-      --cad-native /tmp/native-cad/runtime
-
-The background importer checks the build receipt and native runtime before
-and after conversion, supports all emitted parts and preserves cancellation.
-CAD remains read-only. The native meshing experiment writes real `.vol` meshes;
-desktop mesh authoring, analysis assignment and general CAD editing are next.
+The runtime folder (`bin/NetGenMesher`, `lib/`, `licenses/`, `build-receipt.json`) is what the X/App packagers
+take with `--netgen` (3.0.2: NetgenMesher `01e30ce0`). The earlier Qt desktop research profile that loaded it
+(`X/Desktop`) was retired with the 3.0.2 sync.

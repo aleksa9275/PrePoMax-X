@@ -5,7 +5,7 @@
 
 Stages (each into <workspace>/<stage>, resumable: a finished stage is reused):
 
-    lpsolve   X/Build/LpSolve/build.py        lp_solve 5.5.2.11
+    highs     X/Build/Highs/build.py          HiGHS 1.16.0 (3.0.2; lp_solve before)
     mmg       X/Build/Mmg/build.py            mmgs 5.5.2, mmg3d 5.7.0
     lib3mf    official 2.4.1 library (macOS) / 2.4.1 source build (Linux)
     gmsh      X/Build/Gmsh/build.py           patched Gmsh 4.13.0 + static OCCT 7.7.0
@@ -23,6 +23,7 @@ compilers come from the host (recorded in each receipt). Use a dedicated workspa
 import argparse
 import hashlib
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -62,7 +63,20 @@ def fetch(cache, archive, url, digest):
 
 def run(command, cwd=None):
     print('$', ' '.join(str(c) for c in command), flush=True)
-    subprocess.run([str(c) for c in command], check=True, cwd=cwd)
+    subprocess.run([str(c) for c in command], check=True, cwd=cwd, env=REPRODUCIBLE_ENV)
+
+
+# Release basics: the compilers map the repository and the workspace to fixed names, so no build path of the build
+# host ends up in a binary (__FILE__ in assertions and error messages); CMake and make take these at configure time
+def reproducible_env(*roots):
+    maps = ' '.join(f'-ffile-prefix-map={Path(r).resolve()}=/{name}' for r, name in roots)
+    env = dict(os.environ)
+    for key in ('CFLAGS', 'CXXFLAGS', 'FFLAGS', 'FCFLAGS', 'OBJCFLAGS'):
+        env[key] = (env.get(key, '') + ' ' + maps).strip()
+    return env
+
+
+REPRODUCIBLE_ENV = dict(os.environ)
 
 
 def stage(workspace, name, build):
@@ -90,6 +104,8 @@ def main():
     a = p.parse_args()
     workspace = a.workspace.resolve()
     workspace.mkdir(parents=True, exist_ok=True)
+    global REPRODUCIBLE_ENV
+    REPRODUCIBLE_ENV = reproducible_env((ROOT, 'PrePoMax-X'), (workspace, 'workspace'))
     cache = workspace / 'downloads'
     skip = {s for s in a.skip.split(',') if s}
     target = a.target
@@ -105,10 +121,11 @@ def main():
             return {'library': str(library), 'sha256': sha(library)}
         inputs['--lib3mf'] = stage(workspace, 'lib3mf', lib3mf_windows)['library']
     if target != 'win-x64':
-        if 'lpsolve' not in skip:
-            r = stage(workspace, 'lpsolve', lambda out: (run([py, HERE / 'LpSolve/build.py', '--archive-cache', cache, '--output', out]),
-                      {'library': str(next((out / 'runtime').glob('lpsolve55.dll.*')))})[1])
-            inputs['--lpsolve'] = r['library']
+        if 'highs' not in skip:
+            r = stage(workspace, 'highs', lambda out: (run([py, HERE / 'Highs/build.py', '--archive-cache', cache, '--output', out,
+                                                            '--jobs', a.jobs]),
+                      {'library': str(next((out / 'runtime').glob('highs.dll.*')))})[1])
+            inputs['--highs'] = r['library']
         if 'mmg' not in skip:
             r = stage(workspace, 'mmg', lambda out: (run([py, HERE / 'Mmg/build.py', '--archive-cache', cache, '--output', out,
                                                           '--jobs', a.jobs]), {'runtime': str(out / 'runtime')})[1])

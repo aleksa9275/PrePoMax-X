@@ -289,6 +289,7 @@ PrePoMax|PrePoMax.Commands.PostprocessCommand
 PrePoMax|PrePoMax.Commands.PreprocessCommand
 PrePoMax|PrePoMax.Commands.RegenerateTypeEnum
 PrePoMax|PrePoMax.Commands.SaveCommand
+PrePoMax|PrePoMax.Controller
 PrePoMax|PrePoMax.DensityDataPoint
 PrePoMax|PrePoMax.EdgeAnnotation
 PrePoMax|PrePoMax.EdgesVisibilitiesCollection

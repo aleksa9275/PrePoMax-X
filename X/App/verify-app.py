@@ -10,7 +10,9 @@ Always: the generated original form classes and domain source lists are current 
 PrePoMax-X.app/Contents/MacOS/PrePoMax-X, or a Linux session's launch.sh from X/Build/Linux/session.py) and a display:
 the app probe and the four probe areas (FrontEnd/run_probe_areas.py), the fixtures copied out of the repository.
 --scripts adds upstream's Python API tests Test_Analysis, Test_Model_Materials_Sections, Test_Model_Meshing and
-Test_Model_Meshing_QuadWild_Transfinite through the original command line (-g No). Without a launcher the GUI and
+Test_Model_Meshing_QuadWild_Transfinite through the original command line (-g No). --legacy-pmx DIR opens every
+.pmx there (files of older versions, e.g. the release's example models) through the original command line and checks
+the model came in (read by upstream's legacy reader under the type allowlist). Without a launcher the GUI and
 script checks are reported as pending, never as passed.
 """
 import argparse
@@ -31,6 +33,16 @@ SCRIPTS = ('Test_Analysis:cube.inp', 'Test_Model_Materials_Sections:cube.inp', '
            'Test_Model_Meshing_QuadWild_Transfinite:box_and_cylinder.brep')
 
 
+LEGACY_CHECK = '''# Records what the model opened from a file of an older version holds (verify-app.py --legacy-pmx)
+import json, os
+m = pmx.model
+summary = {"name": m.name, "units": m.properties.unit_system, "parts": len(list(m.parts)),
+           "materials": len(list(m.materials)), "steps": len(list(m.steps))}
+with open(os.environ["PREPOMAXX_LEGACY_RESULT"], "w") as stream:
+    json.dump(summary, stream)
+'''
+
+
 def sha(path):
     with open(path, 'rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
@@ -43,6 +55,7 @@ def main():
     p.add_argument('--expect-architecture')
     p.add_argument('--launcher', type=Path)
     p.add_argument('--scripts', action='store_true')
+    p.add_argument('--legacy-pmx', type=Path, help='a folder of .pmx files written by older versions')
     a = p.parse_args()
     output = a.output.resolve()
     folder = output.with_suffix('')
@@ -108,6 +121,31 @@ def main():
                                            '--script', scripts / (name + '.py'), '-g', 'No', '-x', 'Yes', '-w', work], timeout=1000)
             else:
                 report['pending'].append("upstream's Python API tests: --scripts not given")
+            if a.legacy_pmx:
+                legacy = folder / 'legacy'
+                if legacy.exists():
+                    shutil.rmtree(legacy)
+                legacy.mkdir()
+                checker = legacy / 'legacy_open.py'
+                checker.write_text(LEGACY_CHECK)
+                report['legacyPmx'] = []
+                for source in sorted(a.legacy_pmx.resolve().glob('*.pmx')):
+                    copy = legacy / source.name
+                    shutil.copy2(source, copy)
+                    result = legacy / (source.stem + '.json')
+                    work = legacy / ('work-' + source.stem)
+                    work.mkdir()
+                    env['PREPOMAXX_LEGACY_RESULT'] = str(result)
+                    run('legacy-' + source.stem, ['timeout', '-s', 'KILL', '600', launcher, '-f', copy, '--script', checker,
+                                                  '-g', 'No', '-x', 'Yes', '-w', work], timeout=650)
+                    env.pop('PREPOMAXX_LEGACY_RESULT')
+                    opened = json.loads(result.read_text()) if result.exists() else {'parts': 0}
+                    opened['file'] = source.name
+                    report['legacyPmx'].append(opened)
+                    if not opened.get('parts'):
+                        raise RuntimeError('legacy file not read: ' + source.name)
+            else:
+                report['pending'].append('files of older versions: --legacy-pmx not given')
         else:
             report['pending'].append('app probe, probe areas and scripts: no --launcher (a package and a display)')
         report['success'] = True

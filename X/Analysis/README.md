@@ -50,8 +50,8 @@ CalculiX numeric-field overflow (B005). Mesh-only exchange remains G17.
 `StaticDeck/c3d10-force.inp` and `c3d10-force.json` are a force-driven analytical
 unit tetrahedron with four free displacement unknowns. Use them with the same
 `build-static`/`run-static` commands as the cube. Curved CAD fixture generation,
-real solves and original-result checks are in
-`X/Desktop/verify_quadratic_analysis.py`; this is test preparation, not a second
+real solves and original-result checks were in the retired
+`X/Desktop/verify_quadratic_analysis.py` (git history); this is test preparation, not a second
 product engineering implementation. Original/source/PMX/release gates remain.
 
 This source-linked superset builds original CaeGlobals/CaeMesh/CaeResults/

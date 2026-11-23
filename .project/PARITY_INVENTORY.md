@@ -47,9 +47,9 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 111 | 111 | 111 | 110 | 0 |
-| Commands | 242 | 242 | 239 | 232 | 0 |
-| Forms | 73 | 73 | 72 | 71 | 0 |
+| Model and mesh features | 119 | 119 | 111 | 110 | 0 |
+| Commands | 243 | 243 | 239 | 232 | 0 |
+| Forms | 74 | 74 | 72 | 71 | 0 |
 
 ## Model and mesh features
 
@@ -159,11 +159,13 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Item | Status |
 |---|---|
 | BodyFlux | ABC |
+| BodyForce | A |
 | CFlux | ABC |
 | CLoad | ABC |
 | CentrifLoad | ABC |
 | DFlux | ABC |
 | DLoad | ABC |
+| EdgeLoad | A |
 | FilmHeatTransfer | ABC |
 | GravityLoad | ABC |
 | HydrostaticPressure | ABC |
@@ -238,11 +240,17 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
+| Cap | A |
 | Gmsh | ABC |
+| Lens | A |
 | Mmg | ABC |
 | Netgen | ABC |
+| Quad | A |
 | QuadWild | ABC |
+| Ring | A |
+| Submap | A |
 | Transfinite | ABC |
+| Tube | A |
 
 ## Commands
 
@@ -338,6 +346,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | CAddModelReferencePoint | ABC |
 | CAddNodeSet | ABC |
 | CAddSurface | ABC |
+| CChangeElementOrder | A |
 | CConvertElementSetsToMeshParts | ABC |
 | CCreateBoundaryLayer | ABC |
 | CCreateElementSetFromElementQuality | ABC |
@@ -678,6 +687,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 |---|---|
 | FrmBoundaryLayer | ABC |
 | FrmCalculixKeywordEditor | ABC |
+| FrmChangeElementOrder | A |
 | FrmModelProperties | ABC |
 | FrmRemeshingParameters | ABC |
 | FrmSplitPartMeshUsingSurface | ABC |

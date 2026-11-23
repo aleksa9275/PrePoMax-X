@@ -1,17 +1,18 @@
 # PrePoMax-X — contributor and agent instructions
 
-PrePoMax-X ports PrePoMax 3.0.1 to native Windows x64, macOS ARM64 (Apple
+PrePoMax-X ports PrePoMax 3.0.2 to native Windows x64, macOS ARM64 (Apple
 Silicon), Linux x64 and Linux ARM64. Start every session with
 [`.project/STATUS.md`](.project/STATUS.md) (current phase, next step) and
-[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D064. History before
+[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D068. History before
 8 November 2026 lives in `.project/history/`; it is reference, not instructions.
 
 ## Goal and strategy
 
-- **Target (D063):** upstream `master` pinned per sync (now `1e2f83f2`: release
-  3.0.1 plus upstream's native VTK port `vtkNative`); the 3.0.1 release is the
-  behavioural reference. The viewport moves to the original `vtkControl` on
-  `vtkNative` (M1).
+- **Target (D063, D068):** upstream `master` pinned per sync (now `6703b1cb`:
+  version 3.0.2, not yet released); the 3.0.1 release stays the Windows
+  behavioural reference until 3.0.2 is released. The viewport is the original
+  `vtkControl` on `vtkNative`. Files of older versions are read by upstream's
+  legacy reader with every type bound by our allowlist.
 - **Final scope (D060):** identical PrePoMax functionality — every mesh
   type, mesher, calculation, model feature, result tool, PMX round-trip and
   automation surface — on all four targets with installers. The unavailable
@@ -35,7 +36,7 @@ Silicon), Linux x64 and Linux ARM64. Start every session with
   (C# 7.3, no new package references there) and be minimal; put platform code
   behind small interfaces or in `X/`.
 - Never enable unrestricted deserialization; original PMX reading uses an
-  explicit type allowlist. Never change mesher/solver versions silently.
+  explicit type allowlist (X/Persistence AllowlistBinder over PrePoMax.LegacyImport). Never change mesher/solver versions silently.
 - Never copy partial builds over an installed original application.
 
 ## Git and publication

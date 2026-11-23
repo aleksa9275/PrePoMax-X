@@ -62,7 +62,7 @@ internal static class PersistenceChecks
         Reject("unknown framework type",()=>Legacy(Class("System.Diagnostics.Process",Assembly("System"))));
         Reject("unknown assembly",()=>Legacy(Class("CaeGlobals.NamedClass","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
         Reject("spoofed comparer assembly",()=>Legacy(Class("System.OrdinalComparer","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
-        Reject("application type outside the allowlist",()=>Legacy(Class("PrePoMax.Controller",Assembly("PrePoMax"))));
+        Reject("application type outside the allowlist",()=>Legacy(Class("PrePoMax.FrmMain",Assembly("PrePoMax"))));
         Check("delegate payload never activated",Legacy(Class("System.DelegateSerializationHolder",null))==null);
         // The binder alone resolves: a name it does not bind is not looked up by the reader
         using(var stream=new MemoryStream(Class("System.Diagnostics.Process",Assembly("System")),false))

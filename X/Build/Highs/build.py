@@ -72,6 +72,17 @@ def main():
     runtime = a.output / 'runtime'
     runtime.mkdir()
     shutil.copy2(built[0], runtime / name)
+    # The library comes from the build tree: drop the build tree's rpath (HiGHS sets it itself), keep the install one
+    if system == 'Darwin':
+        for line in subprocess.run(['otool', '-l', str(runtime / name)], capture_output=True, text=True).stdout.splitlines():
+            if line.strip().startswith('path /'):
+                subprocess.run(['install_name_tool', '-delete_rpath', line.split()[1], str(runtime / name)], check=True)
+    else:
+        subprocess.run(['patchelf', '--set-rpath', '$ORIGIN', str(runtime / name)], check=True)
+    leaked = [line for line in subprocess.run(['strings', '-a', str(runtime / name)], capture_output=True, text=True).stdout.splitlines()
+              if str(a.output.resolve()) in line or str(HERE.parents[2]) in line]
+    if leaked:
+        raise SystemExit(f'build paths left in the library: {leaked[:3]}')
     if system == 'Darwin':
         subprocess.run(['install_name_tool', '-id', '@rpath/' + name, str(runtime / name)], check=True)
         subprocess.run(['codesign', '--force', '--sign', '-', str(runtime / name)], check=True)

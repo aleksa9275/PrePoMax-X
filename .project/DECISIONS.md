@@ -1,5 +1,15 @@
 # Decision register
 
+D068 — Sync with upstream 3.0.2 before CI, 2026-11-23: upstream moved 51 commits past
+the 3.0.1 pin (version 3.0.2 at `6703b1cb`, not released yet), among them a new storage
+format without BinaryFormatter, HiGHS instead of lp_solve and new meshers. The maintainer
+chose to sync before M3 CI, together with housekeeping and release basics, and to
+have a macOS build on 3.0.2 before asking upstream about collaboration. Files of
+older versions are read by upstream's own legacy reader (PrePoMax.LegacyImport) with a
+small opt-in hook so every type a file names is bound by our reviewed allowlist (never
+unrestricted deserialization); our own NRBF reader is retired. The 3.0.1 release stays
+the Windows behavioural reference until 3.0.2 is released.
+
 D067 — Avalonia, macOS first, 2026-11-21: after the M3-1 spike (one runtime, the native
 3D view with real input and picking, modal loops, Retina, overlays per D066 on macOS
 ARM64) the maintainer chose Avalonia for the .NET front end and its order: macOS, the

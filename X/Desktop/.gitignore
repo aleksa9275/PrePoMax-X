@@ -1,7 +1,0 @@
-artifacts/
-**/bin/
-**/obj/
-__pycache__/
-*.spec
-build/
-dist/

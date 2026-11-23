@@ -145,6 +145,19 @@ def strip_absolute_rpaths(folder):
                 run('codesign', '--force', '-s', '-', path)
 
 
+def build_paths(folder):
+    """Release gate: the files that still hold a path of this build host (sources compiled in by __FILE__, rpaths).
+    A release requires none; the native recipes map them away when built through X/Build/build_ui.py."""
+    needles = [str(ROOT).encode(), str(Path.home()).encode()]
+    found = []
+    for f in sorted(folder.rglob('*')):
+        if f.is_file() and not f.is_symlink():
+            data = f.read_bytes()
+            if any(n in data for n in needles):
+                found.append(f.relative_to(folder).as_posix())
+    return found
+
+
 def check_runtime(app, target):
     """The published application carries the pinned runtime pack."""
     deps = (app / 'PrePoMax.deps.json').read_text()
@@ -312,7 +325,7 @@ def main():
     build_id = revision[:12] + '-' + hashlib.sha256(b''.join(sha(f).encode() for f in sorted(app.rglob('*')) if f.is_file())).hexdigest()[:12]
     (res / 'bundle.json').write_text(json.dumps({
         'schemaVersion': 1, 'name': 'PrePoMax-X', 'target': 'osx-arm64', 'build': build_id, 'source': revision,
-        'sourceDirty': dirty,
+        'sourceDirty': dirty, 'buildPaths': build_paths(res),
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],

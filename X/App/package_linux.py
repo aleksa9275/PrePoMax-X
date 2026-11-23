@@ -9,7 +9,7 @@ PrePoMax-X/
   PrePoMax-X   the launcher (sh): runs launch.py with the bundled CPython
   launch.py    X/App/bundle_launch.py: clones app/ into ~/.local/share/PrePoMax-X and configures it
   app/         X/App published self-contained for the target (.NET runtime included), the vtkNative runtime,
-               lp_solve, the original's resources, help and release data, and the original Configure step
+               HiGHS, the original's resources, help and release data, and the original Configure step
   python/      CPython 3.12 of P1, without PyQt6 and VTK's Python modules
   tools/       Netgen, Mmg, Gmsh and lib3mf of P1 (checked against its manifest), GmshCaller published from this
                repository, QuadWild (X/Build/QuadWild for the target), the ODB conversion script of the release
@@ -27,7 +27,7 @@ import subprocess
 import tarfile
 from pathlib import Path
 
-from package_mac import DOTNET_RUNTIME, MIT, NUGET, ROOT, check_runtime, copy_ui_resources, run, sha
+from package_mac import DOTNET_RUNTIME, MIT, NUGET, ROOT, build_paths, check_runtime, copy_ui_resources, run, sha
 
 BUILD_IMAGE = 'prepomax-x-build:24.04'
 
@@ -39,6 +39,9 @@ def main():
                    help='the extracted PrePoMax 3.0.1 release (materials.lib, Models, Tools/abqodb_to_ccxfrd.py)')
     p.add_argument('--target', default='linux-arm64', choices=('linux-arm64', 'linux-x64'))
     p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtknative-linux-arm64-m3/vtkNative/runtime')
+    p.add_argument('--highs', type=Path, required=True,
+                   help='HiGHS 1.16.0 (highs.dll.so) from X/Build/Highs on Linux (3.0.2 replaced lp_solve by HiGHS)')
+    p.add_argument('--netgen', type=Path, help='a NetGenMesher runtime of X/Build/NativeCad (default: the one of --p1)')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-linux-arm64/runtime')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--archive', action='store_true')
@@ -78,10 +81,12 @@ def main():
             if (app / item.name).exists() or (app / item.name).is_symlink():
                 (app / item.name).unlink()
             shutil.copy2(item, app / item.name, follow_symlinks=False)
-    lpsolve = p1 / 'app' / package['components']['lpsolve']['file']
-    if sha(lpsolve) != package['components']['lpsolve']['sha256']:
-        raise SystemExit('lp_solve does not match the P1 manifest')
-    shutil.copy2(lpsolve, app / lpsolve.name)
+    # HiGHS (3.0.2): beside the assemblies and GmshCaller, as the original PostBuildEvent places highs.dll
+    highs = a.highs.resolve()
+    highs_receipt = json.loads((highs.parent / 'highs-build.json').read_text())
+    if highs_receipt['librarySha256'] != sha(highs):
+        raise SystemExit('HiGHS does not match its build receipt')
+    shutil.copy2(highs, app / highs.name)
     # The original's console entry (PrePoMax.com, upstream's PrePoMaxCmd) is the same executable here
     shutil.copy2(app / 'PrePoMax', app / 'PrePoMax.com')
     for leftover in ('settings.bin', 'history.pmh', 'PrePoMaxX.runtime.json'):
@@ -109,15 +114,20 @@ def main():
     # Tools: P1's meshers and Gmsh (checked), GmshCaller, QuadWild and the ODB script
     tools = {}
     for ident, tool in package['tools'].items():
-        if ident.endswith('GmshCaller.exe'):
+        if ident.endswith('GmshCaller.exe') or (a.netgen and ident.endswith('NetGenMesher.exe')):
             continue
         if sha(p1 / tool['path']) != tool['sha256']:
             raise SystemExit(f'{tool["path"]} does not match the P1 manifest')
         tools[ident] = {'path': tool['path'], 'sha256': tool['sha256']}
-    for name in ('Netgen', 'Mmg', 'gmsh', 'lib3mf'):
+    for name in ('Mmg', 'gmsh', 'lib3mf') + (() if a.netgen else ('Netgen',)):
         shutil.copytree(p1 / 'tools' / name, root / 'tools' / name, symlinks=True)
+    if a.netgen:
+        shutil.copytree(a.netgen.resolve(), root / 'tools/Netgen', symlinks=True,
+                        ignore=shutil.ignore_patterns('*.json', 'include', 'cmake'))
+        tools['\\Meshers\\Netgen\\NetGenMesher.exe'] = {'path': 'tools/Netgen/bin/NetGenMesher',
+                                                         'sha256': sha(root / 'tools/Netgen/bin/NetGenMesher')}
     run('dotnet', 'publish', ROOT / 'X/Domain/GmshCaller', '-o', root / 'tools/GmshCaller', *publish)
-    shutil.copy2(lpsolve, root / 'tools/GmshCaller' / lpsolve.name)
+    shutil.copy2(highs, root / 'tools/GmshCaller' / highs.name)
     tools['\\lib\\GmshCaller.exe'] = {'path': 'tools/GmshCaller/GmshCaller', 'sha256': sha(root / 'tools/GmshCaller/GmshCaller')}
     quadwild = json.loads((a.quadwild.resolve() / 'quadwild-build.json').read_text())
     shutil.copytree(a.quadwild.resolve(), root / 'tools/QuadWild', symlinks=True)
@@ -177,7 +187,7 @@ def main():
     build_id = revision[:12] + '-' + hashlib.sha256(b''.join(sha(f).encode() for f in sorted(app.rglob('*')) if f.is_file())).hexdigest()[:12]
     (root / 'bundle.json').write_text(json.dumps({
         'schemaVersion': 1, 'name': 'PrePoMax-X', 'target': a.target, 'build': build_id, 'source': revision,
-        'sourceDirty': dirty,
+        'sourceDirty': dirty, 'buildPaths': build_paths(root),
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],
