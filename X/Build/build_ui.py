@@ -183,7 +183,8 @@ def main():
         shutil.rmtree(out)
     command = [py, HERE / 'package_ui.py', '--target', target, '--output', out, '--cache', cache, '--format', package_format]
     for key, value in inputs.items():
-        command += [key, value]
+        if key != '--vtk-native':   # the 3D view goes to the X/App packagers, which take it directly
+            command += [key, value]
     run(command)
 
 
