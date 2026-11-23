@@ -1,11 +1,11 @@
 # PrePoMax-X for macOS ARM64 (preview)
 
-PrePoMax-X runs the original PrePoMax 3.0.1 — its engineering code, Controller, forms and 3D view — natively on
+PrePoMax-X runs the original PrePoMax 3.0.2 (upstream `master`, see `bundle.json`) — its engineering code, Controller, forms and 3D view — natively on
 macOS (Apple Silicon), with an Avalonia front end in place of Windows Forms. This is a **preview build**: signed
 ad hoc, not notarized, not a release. See `bundle.json` for the exact source commit and components.
 
 - PrePoMax: Copyright (C) 2016-2026 Matej Borovinšek, GPL-3.0 (`Licenses/PrePoMax-LICENSE`).
-- From the PrePoMax 3.0.1 release (GPL-3.0), checked by SHA-256 in `bundle.json`: the material library
+- From the PrePoMax 3.0.1 release (GPL-3.0; 3.0.2 is not released yet), checked by SHA-256 in `bundle.json`: the material library
   (`materials.lib`), the example models (`Models/`) and the Abaqus ODB conversion script. The Python API help
   (`Help/Python`) is generated from this source as upstream builds it (Markdig 1.3.2, build time only).
 - Bundled components and licenses:
@@ -13,8 +13,9 @@ ad hoc, not notarized, not a release. See `bundle.json` for the exact source com
     GCC runtime libraries libgfortran, libgomp, libquadmath, libgcc_s (GPL-3.0 with the GCC Runtime Library
     Exception) and libomp (Apache-2.0 with LLVM exceptions) beside it (`solver/relocation.json`).
   - Gmsh 4.13.0, patched (GPL-2.0-or-later with exceptions) with OpenCASCADE (LGPL-2.1 with the Open CASCADE
-    exception); NetGenMesher (GPL-3.0) with Netgen 5.3.1 (LGPL-2.1) and OpenCASCADE 8.0.1; Mmg 5.5.2/5.7.0
-    (LGPL-3.0); QuadWild-BiMDF 0.0.2, modified (GPL-3.0); lp_solve 5.5.2.11 (LGPL-2.1); lib3mf 2.4.1 (BSD-2).
+    exception); NetGenMesher (GPL-3.0) with Netgen 5.3.1 (LGPL-2.1) and OpenCASCADE 8.0.1, from the published NetgenMesher
+    source (`bundle.json` names the revision); Mmg 5.5.2/5.7.0
+    (LGPL-3.0); QuadWild-BiMDF 0.0.2, modified (GPL-3.0); HiGHS 1.16.0 (MIT, `Licenses/highs`); lib3mf 2.4.1 (BSD-2).
   - VTK 9.7 (BSD-3, `Licenses/VTK-Copyright.txt`) through upstream PrePoMax's vtkNative (GPL-3.0).
   - .NET 10.0.14 runtime (MIT, `Licenses/dotnet`), Avalonia 11.3.23 (MIT, `Licenses/avalonia`), SkiaSharp 2.88.9
     and HarfBuzzSharp 8.3.1.1 (MIT, `Licenses/skiasharp`, `Licenses/harfbuzzsharp`).

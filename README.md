@@ -2,19 +2,30 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `6c776763` (full: see `bundle.json` inside the app).
+branch of this repository at commit `c3a0cb88` (full: see `bundle.json` inside the app).
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
-CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax 3.0.1
-code runs unchanged on .NET 10. That covers its models, meshing, analysis set-up, result handling, forms and 3D view.
+CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax code
+(3.0.2, upstream `master` at `6703b1cb`, not released by upstream yet) runs unchanged on .NET 10. That covers its models, meshing, analysis set-up, result handling, forms and 3D view.
 Only the Windows-specific layer is replaced: Windows Forms becomes a cross-platform control model drawn with Avalonia,
 and the 3D view runs on upstream's VTK 9.7 native port.
 
 > **Status: preview for testing.** It is not a release of PrePoMax and not endorsed by the PrePoMax authors. It is
 > signed ad hoc and not notarized by Apple. It has been used on one Mac for real projects; expect rough edges.
 
-A Linux ARM64 preview of the same app is on the branch
-[`release/linux-arm64-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-arm64-preview).
+A Linux preview of the same app (x86-64 and ARM64, built from source with one command) is on the branch
+[`release/linux-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-preview).
+
+### Changes in preview 4 (source `c3a0cb88`, 23 November)
+
+- **PrePoMax 3.0.2** (upstream `master` `6703b1cb`): the new project storage, HiGHS for element counts, structured
+  quad meshing of submapped, lens, tube, ring and cap faces, Change Element Order, body force and edge loads, Show
+  Nodes in the view, and upstream's fixes.
+- **Projects from older versions** are read by upstream's new reader. Every type a file names is checked against a
+  reviewed list. Checked with PrePoMax 3.0.1's example models and a 2.5.1 project. Projects saved by this preview
+  are in the 3.0.2 format, which older PrePoMax versions cannot open.
+- Netgen from the published NetgenMesher source `01e30ce0`. Upstream's own 3.0.2 Netgen carries one more change
+  (pyramids at right-angle inside corners) that is not published yet.
 
 ### Changes in preview 3 (source `6c776763`, 22 November)
 
@@ -31,19 +42,19 @@ tree blocked. The app also has its own icon now. To update, replace the app; you
 
 ## What you get
 
-`PrePoMax-X.app` (665 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
+`PrePoMax-X.app` (675 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
 required.
 
 | Component | In the bundle |
 |---|---|
-| PrePoMax 3.0.1 (original code), Avalonia front end | yes |
+| PrePoMax 3.0.2 (original code), Avalonia front end | yes |
 | 3D view (VTK 9.7 through upstream's vtkNative) | yes |
 | CalculiX 2.22 with **SPOOLES** (multi-threaded), ARPACK, OpenBLAS | yes |
-| Meshers: Netgen (NetGenMesher, OCCT 8.0.1), Gmsh 4.13 (patched), Mmg, QuadWild | yes |
+| Meshers: Netgen (NetGenMesher, OCCT 8.0.1), Gmsh 4.13 (patched), Mmg, QuadWild; HiGHS 1.16 for element counts | yes |
 | CAD import (STEP, IGES, BREP) | yes |
 | CPython 3.12 for PrePoMax's own Python features | yes (without PyQt) |
 | Python API help and agent skill (Help → Python) | yes, generated from this source |
-| Original icons, material library (`materials.lib`) and example models (`Models/`) of PrePoMax 3.0.1 | yes |
+| Original icons, material library (`materials.lib`) and example models (`Models/`) of the PrePoMax 3.0.1 release | yes |
 | Windows-only BidirectionalMeshConverter.exe of the 3.0.1 release | no |
 | Intel MKL **PARDISO** solver | **no** (no macOS ARM64 build) |
 
@@ -72,10 +83,13 @@ lacked would have made a check fail.
 - **Python API, 4 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
   model through the API), `Test_Model_Materials_Sections`, `Test_Model_Meshing` and
   `Test_Model_Meshing_QuadWild_Transfinite` all passed.
-- **Upstream's full test suite** (`Run_Tests.py`, 81 runs): **61 pass**. The others need Windows (environment
-  variables, PowerShell, named mutexes) or the automation server, which does not run on macOS or Linux yet. Some read
-  PrePoMax's source code, which a download does not have. Nine show known CAD/meshing differences from the Windows
-  original, which are being investigated.
+- **Projects from older versions:** PrePoMax 3.0.1's example models (`Profile`, `Bearing_bracket`) and a 2.5.1
+  project open with their parts, materials, steps and units.
+- **Upstream's full 3.0.2 test suite** (`Run_Tests.py`, 108 runs; on the bundle just before the reader fixes, which
+  no suite script touches): **77 pass** (preview 3: 61 of 81). The others need Windows (environment variables,
+  PowerShell, named pipes) or the automation server, which does not run on macOS or Linux yet, or read PrePoMax's
+  source code. About 20, mostly new 3.0.2 meshing tests, give meshes or loads that differ from upstream's Windows
+  baselines; they are being investigated (B016 in the source repository).
 - **Real projects:** a model saved by PrePoMax 2.5.1 opened, and a STEP assembly imported. Linear and nonlinear
   analyses ran with SPOOLES on 4 cores, and the results were reviewed. Live window resizing was checked by hand.
 - **Layout against the original PrePoMax 3.0.1:** the size and position of every control in every form was compared
@@ -88,9 +102,11 @@ lacked would have made a check fail.
   with `the PARDISO library is not linked`: open the step and choose a different solver, such as Spooles.
 - **Windows file paths:** models from Windows keep their Windows result-file paths until they are solved again.
 - **Not notarized:** macOS blocks the app until you clear the download flag (see Install).
-- **Build paths:** VTK and QuadWild binaries contain the source paths of the build machine. They have no effect on
-  how the app works.
-- **Other platforms:** this is macOS ARM64. Linux ARM64 has its own preview branch; Linux x64 and Windows follow with CI.
+- **3.0.2 meshing and loads:** some of upstream's new 3.0.2 tests give different meshes or loads than on Windows (see
+  above). Check new structured meshes, body forces and edge loads before relying on them.
+- **Build paths:** some binaries (VTK, OCCT, QuadWild, CalculiX) contain the source paths of the build machine. They
+  have no effect on how the app works.
+- **Other platforms:** this is macOS ARM64. Linux has its own preview branch; Windows follows with CI.
 
 ## Install
 
