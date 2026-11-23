@@ -13,7 +13,8 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   binary (`PASTIX_MIXED_PRECISION=0` fixes both). Multithreaded SPOOLES races on ARM64 (B022, ThreadSanitizer), so
   ARM64 keeps the serial SPOOLES; x86-64 builds keep it multithreaded. `build_ui.py`: `pastix` stage and stage
   fingerprints. Dark appearance: a toolbar toggle switching the running app, the viewport in warm light greys, light
-  unchanged. [Report](reports/phase-m3-2-solver-appearance.md).
+  unchanged. Published as macOS preview 5 (`release/macos-arm64-preview` `38b23b8c`, source `8aa5e082`).
+  [Report](reports/phase-m3-2-solver-appearance.md).
 - **M3-0: upstream 3.0.2** (D068). Upstream `master` `6703b1cb` (version 3.0.2, not released yet; 51 commits on
   `1e2f83f2`) is merged (`d5f3b24c`): storage without BinaryFormatter, HiGHS instead of lp_solve, new structured quad
   meshers, Change Element Order, body force and edge loads, Show Nodes. Files of older versions are read by upstream's

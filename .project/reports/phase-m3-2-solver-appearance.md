@@ -85,3 +85,9 @@ Homebrew and .NET denied, on a fresh HOME:
 - Dark appearance: forms probe 120/121 in dark and light alike on the local app; the live switch captured before and
   after (panels, tree, icons, view).
 - Not run: upstream's full suite on this package (B016 unchanged); Linux.
+
+## Publication (23 November, the maintainer's request)
+
+macOS preview 5 on `release/macos-arm64-preview` (`38b23b8c`, source `8aa5e082`, zip `4f14c44d…`). The published
+bundle was rebuilt from the clean commit after the checks above; it differs from the checked one only in the embedded
+revision (`bundle.json`, `Info.plist`, the version string of four assemblies), and its app probe passed 16/16 again.
