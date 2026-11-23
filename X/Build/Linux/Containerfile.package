@@ -1,0 +1,13 @@
+# PrePoMax-X Linux package build environment: everything X/Build/Linux/build-package.sh needs to build the whole
+# Linux package from source on x86-64 or ARM64 (the native recipes of X/Build, the .NET 10 SDK, the packagers).
+FROM docker.io/library/ubuntu:24.04
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      build-essential gfortran cmake git python3 ca-certificates curl file patchelf pkg-config unzip zip xz-utils \
+      libopenblas-dev zlib1g-dev libx11-dev libxt-dev libxcursor-dev libgl-dev libglu1-mesa-dev libicu74 \
+    && rm -rf /var/lib/apt/lists/*
+# .NET 10 SDK (Microsoft's install script); the packages ship the pinned runtime 10.0.14 they publish against
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
+    && bash /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet && rm /tmp/dotnet-install.sh
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+WORKDIR /src

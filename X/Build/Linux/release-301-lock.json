@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "name": "PrePoMax 3.0.1 release (upstream, Windows)",
+  "use": "materials.lib, Models/ and Tools/abqodb_to_ccxfrd.py beside the program, as the original release has them",
+  "url": "https://prepomax.fs.um.si/Files/Downloads/PrePoMax%20v3.0.1%20dev.zip",
+  "archive": "PrePoMax v3.0.1 dev.zip",
+  "sha256": "76b3aae4cdef2c91e1a15fba46c0b924b63d59c76bb840937e2dab96e283cce8",
+  "folder": "PrePoMax v3.0.1 dev"
+}

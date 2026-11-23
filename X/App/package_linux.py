@@ -22,7 +22,9 @@ patchelf). --archive writes PrePoMax-X-<target>.tar.gz beside the folder.
 import argparse
 import hashlib
 import json
+import platform
 import shutil
+import sys
 import subprocess
 import tarfile
 from pathlib import Path
@@ -210,8 +212,12 @@ def main():
 
     # Build-machine run paths out of this repository's ELF builds (patchelf in the build container); P1's checked
     # files keep their fingerprints
-    run('podman', 'run', '--rm', '-v', f'{root}:/package', '-v', f'{ROOT / "X/Build/Linux"}:/tools:ro', BUILD_IMAGE,
-        'python3', '/tools/strip_rpaths.py', '/package/app', '/package/tools/QuadWild')
+    if platform.system() == 'Linux' and shutil.which('patchelf'):
+        # Already in a Linux build environment (X/Build/Linux/build-package.sh)
+        run(sys.executable, ROOT / 'X/Build/Linux/strip_rpaths.py', root / 'app', root / 'tools/QuadWild')
+    else:
+        run('podman', 'run', '--rm', '-v', f'{root}:/package', '-v', f'{ROOT / "X/Build/Linux"}:/tools:ro', BUILD_IMAGE,
+            'python3', '/tools/strip_rpaths.py', '/package/app', '/package/tools/QuadWild')
     # Every fingerprint the runtime checks still holds after the packaging steps
     changed = [ident for ident, tool in tools.items() if sha(root / tool['path']) != tool['sha256']]
     changed += [gmsh['file']] if sha(root / gmsh['file']) != gmsh['sha256'] else []
