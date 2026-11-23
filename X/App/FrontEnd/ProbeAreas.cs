@@ -204,6 +204,27 @@ namespace PrePoMaxX.FrontEnd
             Press(amplitude, "btnOK");
             await Pump(1);
             Check("OK created the amplitude", ((System.Collections.ICollection)c.GetAmplitudeNames()).Count >= 1 && !amplitude.Visible);
+            // CalculiX environment variables (Settings - CalculiX): the original FrmGetEnvVars binds a list, and its Active
+            // column is a WinForms check box column that a click flips (PASTIX_MIXED_PRECISION on/off)
+            Type variableType = Type.GetType("CaeJob.EnvironmentVariable, CaeJob", true);
+            var variables = (System.Collections.IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(variableType));
+            variables.Add(Activator.CreateInstance(variableType, "PASTIX_MIXED_PRECISION", "0"));
+            bool Active() => (bool)variableType.GetProperty("Active").GetValue(variables[0]);
+            var envForm = (WinForms.Form)Activator.CreateInstance(Type.GetType("PrePoMax.Forms.FrmGetEnvVars, PrePoMax", true), variables);
+            Ui.Input(() => envForm.Show());
+            await Pump(0.5);
+            var envGrid = All(envForm).OfType<WinForms.DataGridView>().First();
+            var activeColumn = envGrid.Columns.Cast<WinForms.DataGridViewColumn>().FirstOrDefault(col => col.DataPropertyName == "Active");
+            var envDrawn = Ui.Windows[envForm].GetVisualDescendants().OfType<DataGridView>().FirstOrDefault(g => g.IsEffectivelyVisible);
+            Check("FrmGetEnvVars: Active is a check box column, drawn", activeColumn is WinForms.DataGridViewCheckBoxColumn && envDrawn != null,
+                  activeColumn?.GetType().Name);
+            bool wasActive = Active();
+            Ui.Input(() => envGrid.ToggleCheckByUser(0, activeColumn.Index));
+            bool afterOff = Active();
+            Ui.Input(() => envGrid.ToggleCheckByUser(0, activeColumn.Index));
+            Check("FrmGetEnvVars: a click switches a variable off and on", wasActive && !afterOff && Active(), wasActive + " " + afterOff + " " + Active());
+            Ui.Input(() => envForm.Close());
+            await Pump(0.3);
             // The original material library beside the application (materials.lib), read through the type allowlist; the
             // original shows it modally (ShowDialog), so it is inspected while open and then cancelled
             string libraryFile = Path.Combine(WinForms.Application.StartupPath, "materials.lib");

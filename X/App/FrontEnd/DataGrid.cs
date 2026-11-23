@@ -100,6 +100,17 @@ namespace PrePoMaxX.FrontEnd
                 return alignment != WinForms.DataGridViewContentAlignment.NotSet ? alignment : Grid.DefaultCellStyle.Alignment;
             }
 
+            // A WinForms check box cell: a 13-unit box centred in the cell, ticked when the value is true
+            static void DrawCheck(DrawingContext context, Rect cell, bool isChecked, bool disabled)
+            {
+                var box = new Rect(cell.Center.X - 6.5, cell.Center.Y - 6.5, 13, 13);
+                context.FillRectangle(disabled ? new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xF0)) : Brushes.White, box);
+                context.DrawRectangle(new Pen(new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33)), 1), box.Deflate(0.5));
+                if (!isChecked) return;
+                var tick = new Pen(disabled ? Brushes.Gray : Brushes.Black, 2);
+                context.DrawLine(tick, new Point(box.X + 3, box.Y + 6.5), new Point(box.X + 5.5, box.Y + 9.5));
+                context.DrawLine(tick, new Point(box.X + 5.5, box.Y + 9.5), new Point(box.X + 10, box.Y + 3.5));
+            }
             void DrawText(DrawingContext context, string text, Rect rect, WinForms.DataGridViewContentAlignment alignment, IBrush brush, bool bold = false)
             {
                 if (string.IsNullOrEmpty(text) || rect.Width <= 4) return;
@@ -139,7 +150,9 @@ namespace PrePoMaxX.FrontEnd
                         IBrush back = isSelected ? Look.Highlight : Brush(style?.BackColor ?? System.Drawing.Color.Empty, Brush(column.DefaultCellStyle.BackColor, cellBack));
                         IBrush fore = isSelected ? Brushes.White : Brush(style?.ForeColor ?? System.Drawing.Color.Empty, Brush(column.DefaultCellStyle.ForeColor, cellFore));
                         context.FillRectangle(back, rect);
-                        if (!(_editor != null && grid.IsCurrentCellInEditMode && current.X == c && current.Y == r))
+                        if (column is WinForms.DataGridViewCheckBoxColumn)
+                            DrawCheck(context, rect, string.Equals(grid.GetCellText(r, c), bool.TrueString, StringComparison.OrdinalIgnoreCase), column.ReadOnly || grid.ReadOnly);
+                        else if (!(_editor != null && grid.IsCurrentCellInEditMode && current.X == c && current.Y == r))
                             DrawText(context, grid.GetCellText(r, c), rect, CellAlignment(c), fore);
                         context.DrawLine(gridPen, new Point(rect.Right - 0.5, rect.Top), new Point(rect.Right - 0.5, rect.Bottom));
                         context.DrawLine(gridPen, new Point(rect.Left, rect.Bottom - 0.5), new Point(rect.Right, rect.Bottom - 0.5));
@@ -252,6 +265,14 @@ namespace PrePoMaxX.FrontEnd
                     Select(cells, at.Item1, at.Item2);
                 }
                 else { _anchor = at; Select(new[] { at }, at.Item1, at.Item2); }
+                // A click on a check box cell flips it (WinForms: CellContentClick on the box commits the new value)
+                if (!control && !shift && Grid.Columns[at.Item2] is WinForms.DataGridViewCheckBoxColumn)
+                {
+                    Ui.Input(() => Grid.ToggleCheckByUser(at.Item1, at.Item2));
+                    InvalidateVisual();
+                    e.Handled = true;
+                    return;
+                }
                 _dragging = true;
                 e.Pointer.Capture(this);
                 e.Handled = true;
