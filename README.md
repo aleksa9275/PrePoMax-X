@@ -2,7 +2,7 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `c3a0cb88` (full: see `bundle.json` inside the app).
+branch of this repository at commit `8aa5e082` (full: see `bundle.json` inside the app).
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
 CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax code
@@ -15,6 +15,20 @@ and the 3D view runs on upstream's VTK 9.7 native port.
 
 A Linux preview of the same app (x86-64 and ARM64, built from source with one command) is on the branch
 [`release/linux-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-preview).
+
+### Changes in preview 5 (source `8aa5e082`, 23 November)
+
+- **PaStiX works.** CalculiX is now built as CalculiX's own 8-byte-integer recipe with PaStiX (step → Solver type),
+  multithreaded with the number of processors set in Settings → CalculiX. As in CalculiX on Windows, PaStiX's
+  default mixed precision can give wrong results on thin shells (checked: the original Windows solver gives the same
+  wrong result). Set the environment variable `PASTIX_MIXED_PRECISION` to `0` in Settings → CalculiX for those; its
+  Active check box can now be switched on and off.
+- **User materials from shared libraries** (CalculiX external behaviours, for example MFront), as in the Windows build.
+- **Dark appearance**: the half-circle button at the right end of the top tool bar switches between light and dark
+  while the app runs. The 3D view gets a warm light grey background in dark mode; your Graphics settings are kept.
+- **SPOOLES runs on one core on Apple Silicon.** Its multithreaded mode, which the Windows build uses, gave wrong
+  eigenvalues in some runs on Apple Silicon (a thread-safety problem in SPOOLES that Intel CPUs hide). For
+  multithreaded solving use PaStiX. (Preview 4's notes called SPOOLES multithreaded; it was not.)
 
 ### Changes in preview 4 (source `c3a0cb88`, 23 November)
 
@@ -42,20 +56,20 @@ tree blocked. The app also has its own icon now. To update, replace the app; you
 
 ## What you get
 
-`PrePoMax-X.app` (675 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
+`PrePoMax-X.app` (670 MB unpacked), with everything it needs inside. No .NET, Python or Homebrew installation is
 required.
 
 | Component | In the bundle |
 |---|---|
 | PrePoMax 3.0.2 (original code), Avalonia front end | yes |
 | 3D view (VTK 9.7 through upstream's vtkNative) | yes |
-| CalculiX 2.22 with **SPOOLES** (multi-threaded), ARPACK, OpenBLAS | yes |
+| CalculiX 2.22 (8-byte integers) with **PaStiX** (multithreaded), **SPOOLES** (one core), ARPACK, OpenBLAS; user material libraries | yes |
 | Meshers: Netgen (NetGenMesher, OCCT 8.0.1), Gmsh 4.13 (patched), Mmg, QuadWild; HiGHS 1.16 for element counts | yes |
 | CAD import (STEP, IGES, BREP) | yes |
 | CPython 3.12 for PrePoMax's own Python features | yes (without PyQt) |
 | Python API help and agent skill (Help → Python) | yes, generated from this source |
 | Original icons, material library (`materials.lib`) and example models (`Models/`) of the PrePoMax 3.0.1 release | yes |
-| Windows-only BidirectionalMeshConverter.exe of the 3.0.1 release | no |
+| Tools → Bidirectional Mesh Converter (a Windows-only third-party tool of the 3.0.1 release, no public source) | no |
 | Intel MKL **PARDISO** solver | **no** (no macOS ARM64 build) |
 
 ### What has been checked
@@ -68,30 +82,37 @@ lacked would have made a check fail.
   imported and drawn in the 3D view, which can be turned with the mouse; a form opens from the menu with its property
   grid; Esc works; a right click opens the view's menu on empty space and the part's menu on a part, where clicked; a
   modal dialog opens and closes.
-- **Forms, 124/124 checks:**
+- **Forms, 126/126 checks:**
   - all 144 menu icons and the application icon load;
   - the material library opens with the 21 materials of `materials.lib`;
   - every menu matches the original in each view;
   - every create form opens through the original menu entry at the original size, with every control in place, and
     Cancel changes nothing;
-  - a step, an amplitude (through the data grid) and the command history editor were created or used.
+  - a step, an amplitude (through the data grid) and the command history editor were created or used;
+  - the CalculiX environment variables' Active check box switches on and off.
 - **Geometry, 4/4 checks:** CAD import and Netgen meshing.
 - **Results, 9/9 checks:**
   - an analysis is created and solved by CalculiX, with the original Monitor window;
   - the results open with their contours, legend and toolbar.
 - **Elements, 5/5 checks:** a CalculiX deck with quadratic tetrahedra is imported and drawn.
+- **Solvers** (the bundled CalculiX, run with Homebrew blocked): a solid cantilever (static, nonlinear geometry,
+  eigenfrequencies) and a thin clamped plate, each solved with SPOOLES, PaStiX and PaStiX with
+  `PASTIX_MIXED_PRECISION=0`. PaStiX ran on 4 threads and agreed with SPOOLES (displacements within 3e-10,
+  frequencies equal), except the thin plate with mixed precision, which is wrong exactly as with the original Windows
+  solver; with `PASTIX_MIXED_PRECISION=0` it agrees. PaStiX on 8 threads gave the same result in 10 of 10 repeated
+  runs.
 - **Python API, 4 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
   model through the API), `Test_Model_Materials_Sections`, `Test_Model_Meshing` and
   `Test_Model_Meshing_QuadWild_Transfinite` all passed.
 - **Projects from older versions:** PrePoMax 3.0.1's example models (`Profile`, `Bearing_bracket`) and a 2.5.1
   project open with their parts, materials, steps and units.
-- **Upstream's full 3.0.2 test suite** (`Run_Tests.py`, 108 runs; on the bundle just before the reader fixes, which
-  no suite script touches): **77 pass** (preview 3: 61 of 81). The others need Windows (environment variables,
+- **Upstream's full 3.0.2 test suite** (`Run_Tests.py`, 108 runs; on preview 4's bundle just before the reader fixes,
+  which no suite script touches; not rerun for preview 5): **77 pass** (preview 3: 61 of 81). The others need Windows (environment variables,
   PowerShell, named pipes) or the automation server, which does not run on macOS or Linux yet, or read PrePoMax's
   source code. About 20, mostly new 3.0.2 meshing tests, give meshes or loads that differ from upstream's Windows
   baselines; they are being investigated (B016 in the source repository).
 - **Real projects:** a model saved by PrePoMax 2.5.1 opened, and a STEP assembly imported. Linear and nonlinear
-  analyses ran with SPOOLES on 4 cores, and the results were reviewed. Live window resizing was checked by hand.
+  analyses ran with SPOOLES, and the results were reviewed (preview 4). Live window resizing was checked by hand.
 - **Layout against the original PrePoMax 3.0.1:** the size and position of every control in every form was compared
   with the original. That original ran under CrossOver/Wine, so this is evidence only, not the Windows reference. All
   108 remaining differences come from Wine's own Windows Forms and fonts.
@@ -99,7 +120,9 @@ lacked would have made a check fail.
 ### Known limitations
 
 - **PARDISO is not available.** New analyses default to SPOOLES. Steps saved by Windows PrePoMax with PARDISO stop
-  with `the PARDISO library is not linked`: open the step and choose a different solver, such as Spooles.
+  with `the PARDISO library is not linked`: open the step and choose a different solver, such as PaStiX or Spooles.
+- **PaStiX on thin shells:** set `PASTIX_MIXED_PRECISION` to `0` (see above), as on Windows.
+- **SPOOLES uses one core** on Apple Silicon (see above); PaStiX uses all you allow.
 - **Windows file paths:** models from Windows keep their Windows result-file paths until they are solved again.
 - **Not notarized:** macOS blocks the app until you clear the download flag (see Install).
 - **3.0.2 meshing and loads:** some of upstream's new 3.0.2 tests give different meshes or loads than on Windows (see
