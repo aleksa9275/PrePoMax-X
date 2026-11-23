@@ -16,7 +16,7 @@ mkdir -p /work/downloads
 echo "$digest  /work/downloads/$archive" | sha256sum -c -
 rm -rf /work/release && mkdir -p /work/release && unzip -q "/work/downloads/$archive" -d /work/release
 # The application, packaged with those components
-python3 X/App/package_linux.py --target "$target" --p1 "/work/ws/package/PrePoMax-X-$target.tar.gz" \
+python3 X/App/package_linux.py --target "$target" --p1 "/work/ws/package/dist/PrePoMax-X-$target.tar.gz" \
     --original "/work/release/$folder" --vtk-native /work/ws/vtk/vtkNative/runtime \
     --highs "$(ls /work/ws/highs/runtime/highs.dll.so)" --netgen /work/ws/netgen/runtime \
     --quadwild /work/ws/quadwild/runtime --output /work/out --archive
