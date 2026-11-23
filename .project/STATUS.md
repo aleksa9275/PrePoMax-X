@@ -14,7 +14,9 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   `sandbox-exec`: app probe 16/16, probe areas 124+4+9+5, older files open; upstream's suite (102 scripts): 77 of 108 (3.0.1: 61 of 81; B016 to triage). Housekeeping: X/Desktop and its
   packaging, the lp_solve recipe and the Qt-era plan items retired. Release basics: build paths mapped in
   `build_ui.py`, `bundle.json` `buildPaths` (61 files in this bundle, from components built before the maps).
-  [Report](reports/phase-m3-0-upstream-3.0.2.md).
+  Published 23 November: macOS preview 4, the Linux preview (`release/linux-preview`: build kit for x86-64/ARM64
+  and the ARM64 package, verified like the macOS one; x86-64 not built yet), tag `preview-3.0.2-1`, `master` at
+  upstream 3.0.2; `release/linux-arm64-preview` removed. [Report](reports/phase-m3-0-upstream-3.0.2.md).
 - **M3-1: one runtime for the front end, macOS and Linux ARM64** (D065, D067). The original application (`X/App`) runs
   on Avalonia in its own .NET runtime with the original `vtkControl` in a native host (Cocoa, X11). Packages: a
   macOS `PrePoMax-X.app` (`X/App/package_mac.py`) and a Linux folder and tar.gz (`X/App/package_linux.py`), with no
@@ -77,7 +79,7 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
 | M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | done on macOS ARM64: app probe 16/16, probe areas 124+4+9+5 (bundle checked with the repository blocked), bounds comparison with 3.0.1 (Wine Mono evidence), the maintainer's real project, `PrePoMax-X.app` without PyQt (preview branch `release/macos-arm64-preview`) |
 | M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check passed |
-| M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen, vtkNative; housekeeping; release basics (D068) | done on macOS ARM64 (checks, package probes, suite 77/108 with B016 open); Linux ARM64 package on 3.0.2 open |
+| M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen, vtkNative; housekeeping; release basics (D068) | done: macOS and Linux ARM64 packages verified and published (suite 77/108, B016 open); Linux x86-64 kit untested |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
@@ -86,8 +88,8 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 1. The maintainer asks upstream about collaboration (with the macOS 3.0.2 build); open questions for upstream: the
    NetgenMesher revision behind 3.0.2's `nglib.dll`, the legacy-reader hook and the GmshCommon additions.
-2. Linux ARM64 on 3.0.2: HiGHS, Netgen `01e30ce0` and vtkNative for Linux in the build image, `package_linux.py`,
-   session probes.
+2. Testers' feedback (enable issues on the fork); the first x86-64 run of `X/Build/Linux/build-package.sh`; B016
+   triage (four possible port defects first).
 3. **M3** ([plan](REMAINING_WORK.md)): GitHub Actions for win-x64, linux-x64, linux-arm64 and osx-arm64 — every native
    component from source through `build_ui.py` (no build paths), `check.py`, the packages and their probes; Windows
    first: the front end's Win32 native host, MSVC Gmsh/CalculiX, the bounds comparison.

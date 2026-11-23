@@ -106,9 +106,28 @@ unknown assembly, spoofed comparer assembly, application type outside the list, 
   upstream runner self-test, and new 3.0.2 meshing/load tests whose results differ from the Windows baselines — four
   of them (offset face, shell types, body force, edge load) to check first as possible port defects.
 
+## Publication (23 November, maintainer's approval)
+
+- `origin/master` fast-forwarded to upstream `6703b1cb`; source tag `preview-3.0.2-1` (`a0eebd50`).
+- macOS preview 4 on `release/macos-arm64-preview` (`6c645979`, bundle from `c3a0cb88`, zip `e514ccad…`).
+- **Linux build kit** (`X/Build/Linux/build-package.sh`, `Containerfile.package`, `build-inside.sh`): one command
+  builds the whole Linux package from source in Podman or Docker for the machine's architecture (x86-64 or ARM64):
+  every native component through `build_ui.py` (prefix maps), the PrePoMax 3.0.1 release data from
+  prepomax.fs.um.si (pinned SHA-256, byte-identical to the reference copy), `package_linux.py`. Its first run from
+  scratch found five gaps, fixed on the way (lib3mf's flat archive, `--vtk-native` to the wrong packager, Python's
+  terminfo on case-insensitive volumes, the `dist/` path, the lock files the publish rewrites). Run on ARM64 in the
+  local Podman machine (about 3 hours): package from `a0eebd50` (not dirty), `buildPaths` only the VTK receipt, two pip
+  script shebangs and ARPACK's Fortran source paths in `ccx` (container paths); in the Ubuntu 24.04 session without
+  the repository: app probe 16/16, probe areas 124 + 4 + 9 + 5, the four upstream scripts and the three older files.
+  **x86-64 has not been built or run.**
+- `release/linux-preview` (`b5b382b0`): the build instructions and the ARM64 package (tar.gz `b186def8…`);
+  `release/linux-arm64-preview` (3.0.1) deleted at the maintainer's request.
+- `PREPOMAX-X-TESTING.md` for testers. Issues are disabled on the fork (GitHub's default): the maintainer enables
+  them before the forum post.
+
 ## Next
 
-- Linux ARM64 on 3.0.2 (HiGHS, Netgen, vtkNative for Linux; the package and session probes).
+- The first x86-64 build of the Linux kit (testers, or Podman on Windows per D059).
 - Ask upstream (the maintainer's step): collaboration, the NetgenMesher revision behind 3.0.2's `nglib.dll`, the
   legacy-reader hook and the GmshCommon additions as possible upstream changes.
 - M3: GitHub Actions for the four targets, Windows first.

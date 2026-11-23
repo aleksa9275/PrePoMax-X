@@ -12,7 +12,7 @@ phase reports, `.project/bugs/` and the [backlog](reports/deferred-correctness-i
 | M1 | VTK 9.7 recipe, vtkNative on macOS/Linux, the original vtkControl ([M1](reports/phase-m1-original-vtkcontrol.md)) | GUI probes on the original renderer | done |
 | M2 | 3.0.1 composites, every form compiled whole, FrmMain and Program ([M2](reports/phase-m2-composites-painting.md)) | composite scripts through the original command line | done (macOS); Linux QuadWild done in M3-1b |
 | M3-1 | One runtime: Avalonia front end, macOS (a) then Linux ARM64 (b), PyQt retired ([M3-1](reports/phase-m3-1-front-end.md)) | probes on both, the maintainer's real project and VNC check | done 22 November; previews published |
-| M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen re-pin, vtkNative; housekeeping and release basics ([M3-0](reports/phase-m3-0-upstream-3.0.2.md)) | checks, the macOS package probes and upstream's suite on 3.0.2 | macOS done 23 November; Linux ARM64 package on 3.0.2 open |
+| M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen re-pin, vtkNative; housekeeping and release basics ([M3-0](reports/phase-m3-0-upstream-3.0.2.md)) | checks, the macOS package probes and upstream's suite on 3.0.2 | done 23 November: macOS and Linux ARM64 verified and published; Linux x86-64 untested |
 | M3 | GitHub Actions for win-x64, linux-x64, linux-arm64, osx-arm64: `build_ui.py` (every native component from source on a clean host, build paths mapped), `check.py`, the packages and their probes; Windows MSVC Gmsh and CalculiX; the Avalonia front end's first Windows run (Win32 native host); the bounds comparison on Windows | four packages built and tested in CI | planned |
 | M4 | Original-app comparison through upstream's Python API test scripts on the original (Windows runner) and on X; analysis/meshing matrices | V evidence | planned |
 | M5 | D061 fixes and warnings, clean organization (discussed first), installers, signing, notices, maintainer sign-off, upstream PR(s) | release | planned |
@@ -20,9 +20,8 @@ phase reports, `.project/bugs/` and the [backlog](reports/deferred-correctness-i
 ## Open items
 
 Platform and packaging:
-- **Linux ARM64 on 3.0.2**: HiGHS (`X/Build/Highs` in the `Linux/Containerfile.build` image), NetgenMesher `01e30ce0`
-  and vtkNative rebuilt for Linux, then `package_linux.py` and the session probes; Linux x64 with the per-architecture
-  native builds (D059, Podman on Windows).
+- **Linux x86-64**: the build kit (`X/Build/Linux/build-package.sh`) has run only on ARM64; its first x86-64 run
+  (testers, or Podman on Windows per D059).
 - **Windows**: never run yet (front end, Win32 native host, MSVC Gmsh/CalculiX, bounds comparison) — M3.
 - **Netgen**: 3.0.2's `nglib.dll` carries a change not yet in the published NetgenMesher (pyramids at right-angle
   inside corners, upstream `42974ee7`); the published `01e30ce0` is pinned. Ask upstream for the revision.
