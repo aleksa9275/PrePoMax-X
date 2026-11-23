@@ -110,9 +110,10 @@ Still open: B014 and the automation server on Unix; B013's round trip with the o
   (`~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages`). Podman machine `prepomax-podman` (8 CPUs,
   15 GiB, 93 GB).
 - VTK 9.7.1 (vtkNative), Avalonia 11.3.23, Python.NET 3.1.0, CPython 3.12.14 with numpy in packages; patched
-  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1, HiGHS 1.16.0, NetgenMesher `01e30ce0` pinned. Local working app:
-  `X/Build/artifacts/app-mac` (`X/App/local_app.py`; still 3.0.1). Native runtimes in `X/Build/artifacts`: CalculiX
-  for macOS `solver-m2`, QuadWild `quadwild-mac-arm64` and `quadwild-linux-arm64`, HiGHS `highs-mac-arm64`, Netgen
-  `netgen-mac-arm64-302` (runtime, and its OCCT install for reuse), vtkNative 3.0.2 `vtk-mac-arm64-302` on M1's VTK in
-  `vtk-m1/vtk`, and `vtknative-linux-arm64-m3` (3.0.1) on `vtk-linux-arm64/vtk`. The 3.0.2 macOS package:
-  `mac-302`. Old-file check: `Runner --open-legacy <files>` (X/Controller/Runner).
+  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1, HiGHS 1.16.0, NetgenMesher `01e30ce0` pinned. Kept in `X/Build/artifacts`
+  (cleanup 23 November) are only the macOS packaging inputs: VTK prefix `vtk-m1/vtk`, vtkNative `vtk-mac-arm64-302`,
+  Netgen `netgen-mac-arm64-302` (with its OCCT install), HiGHS `highs-mac-arm64`, QuadWild `quadwild-mac-arm64`,
+  CalculiX `solver-m2`, the download cache, and `app-mac/app/settings.bin` and `app-mac/work` (the maintainer's
+  settings and jobs; `X/App/local_app.py` rebuilds the local app around them). Linux packages come from
+  `X/Build/Linux/build-package.sh` (Podman image `prepomax-x-package-build:1`; tests in `prepomax-x-run:24.04`).
+  Old-file check: `Runner --open-legacy <files>` (X/Controller/Runner).
