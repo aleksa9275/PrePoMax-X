@@ -34,7 +34,7 @@ Platform and packaging:
 Parity and correctness (after parity, D061, unless noted):
 - B013's round trip with the original Windows application; the 15 forms that need a live controller for the bounds
   comparison.
-- Recorded bugs: B006–B012, B014; D029 quadratic tetrahedron quadrature (the quadratic pyramid classification was
+- Recorded bugs: B006–B012, B014, B016 (3.0.2 suite failures, triage first); D029 quadratic tetrahedron quadrature (the quadratic pyramid classification was
   fixed upstream in 3.0.2). Port defects reachable on macOS/Linux: `GmshAPI.cs` `Thread.Abort()` in the Gmsh error
   path, registry/WMI queries in `Tools.cs`/`AnalysisJob.cs`, the GDI calls of `XYPlotCurveSettings.cs`,
   `DynamicTypeDescriptor` `ReflectionOnlyLoad`.

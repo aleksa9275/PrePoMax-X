@@ -2,8 +2,19 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (22 November 2026)
+## Where we are (23 November 2026)
 
+- **M3-0: upstream 3.0.2** (D068). Upstream `master` `6703b1cb` (version 3.0.2, not released yet; 51 commits on
+  `1e2f83f2`) is merged (`d5f3b24c`): storage without BinaryFormatter, HiGHS instead of lp_solve, new structured quad
+  meshers, Change Element Order, body force and edge loads, Show Nodes. Files of older versions are read by upstream's
+  `PrePoMax.LegacyImport` with an opt-in hook so every type goes through our allowlist (the X build fails closed); our
+  own NRBF reader is retired. Real files open again (the 3.0.1 example models, the maintainer's 2.5.1 model).
+  Original-area divergence 175 files (was 192). HiGHS 1.16.0 recipe, NetgenMesher re-pinned to the published
+  `01e30ce0`, vtkNative rebuilt. All six non-app check areas pass; the macOS package from `c3a0cb88` passes under
+  `sandbox-exec`: app probe 16/16, probe areas 124+4+9+5, older files open; upstream's suite (102 scripts): 77 of 108 (3.0.1: 61 of 81; B016 to triage). Housekeeping: X/Desktop and its
+  packaging, the lp_solve recipe and the Qt-era plan items retired. Release basics: build paths mapped in
+  `build_ui.py`, `bundle.json` `buildPaths` (61 files in this bundle, from components built before the maps).
+  [Report](reports/phase-m3-0-upstream-3.0.2.md).
 - **M3-1: one runtime for the front end, macOS and Linux ARM64** (D065, D067). The original application (`X/App`) runs
   on Avalonia in its own .NET runtime with the original `vtkControl` in a native host (Cocoa, X11). Packages: a
   macOS `PrePoMax-X.app` (`X/App/package_mac.py`) and a Linux folder and tar.gz (`X/App/package_linux.py`), with no
@@ -66,23 +77,22 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M2 | 3.0.1 features, FrmMain whole, Netgen/QuadWild from the published sources | done on macOS ARM64: every form compiled whole, composite scripts pass via the original command line, full upstream suite 63/81; Linux QuadWild open |
 | M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | done on macOS ARM64: app probe 16/16, probe areas 124+4+9+5 (bundle checked with the repository blocked), bounds comparison with 3.0.1 (Wine Mono evidence), the maintainer's real project, `PrePoMax-X.app` without PyQt (preview branch `release/macos-arm64-preview`) |
 | M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check passed |
+| M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen, vtkNative; housekeeping; release basics (D068) | done on macOS ARM64 (checks, package probes, suite 77/108 with B016 open); Linux ARM64 package on 3.0.2 open |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
-**M3** ([plan](REMAINING_WORK.md)): GitHub Actions for win-x64, linux-x64, linux-arm64 and osx-arm64:
-- component builds (`X/Build/build_ui.py`), `X/Checks/check.py`, and the X/App packages with their probes (Linux in the
-  `X/Build/Linux` images);
-- the bounds comparison on Windows;
-- the front end's first Windows run (Win32 native host).
+1. The maintainer asks upstream about collaboration (with the macOS 3.0.2 build); open questions for upstream: the
+   NetgenMesher revision behind 3.0.2's `nglib.dll`, the legacy-reader hook and the GmshCommon additions.
+2. Linux ARM64 on 3.0.2: HiGHS, Netgen `01e30ce0` and vtkNative for Linux in the build image, `package_linux.py`,
+   session probes.
+3. **M3** ([plan](REMAINING_WORK.md)): GitHub Actions for win-x64, linux-x64, linux-arm64 and osx-arm64 — every native
+   component from source through `build_ui.py` (no build paths), `check.py`, the packages and their probes; Windows
+   first: the front end's Win32 native host, MSVC Gmsh/CalculiX, the bounds comparison.
 
-Still open:
-- B014, and the automation server on Unix;
-- B013's round trip with the original 3.0.1, and the 15 forms that need a live controller for the bounds comparison;
-- a VTK/QuadWild rebuild without build paths in the binaries; notarization (release);
-- the retired-era `X/Desktop` preview (cleanup, M5).
+Still open: B014 and the automation server on Unix; B013's round trip with the original; notarization (release).
 
 ## Environment
 
@@ -90,14 +100,17 @@ Still open:
   archive. Branch `research/native-feasibility`; `[skip ci]` until CI exists.
 - This Mac: .NET SDK 11.0.100 only (runtime 11.0.0); net10.0 projects build with it and checks run with
   `DOTNET_ROLL_FORWARD=Major`. Packages ship self-contained .NET 10.0.14. Homebrew Python 3.15.
-- Verification of the app: `python3 X/App/verify-app.py --output <dir>/app.json --launcher <package launcher> --scripts`
+- Verification of the app: `python3 X/App/verify-app.py --output <dir>/app.json --launcher <package launcher> --scripts
+  --legacy-pmx <folder of older .pmx files>`
   (macOS: the `.app`'s `Contents/MacOS/PrePoMax-X`, best under `sandbox-exec` with the repository denied; Linux: start
   a session with `python3 X/Build/Linux/session.py start --package <PrePoMax-X folder> --work <dir>` and pass
   `<dir>/launch.sh`). Native components come from the P1 packages in the former GitLab working copy
   (`~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages`). Podman machine `prepomax-podman` (8 CPUs,
   15 GiB, 93 GB).
 - VTK 9.7.1 (vtkNative), Avalonia 11.3.23, Python.NET 3.1.0, CPython 3.12.14 with numpy in packages; patched
-  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1 pinned. Local working app: `X/Build/artifacts/app-mac`
-  (`X/App/local_app.py`). Native runtimes in `X/Build/artifacts`: CalculiX for macOS `solver-m2`, QuadWild
-  `quadwild-mac-arm64` and `quadwild-linux-arm64`, vtkNative `vtk-mac-arm64` and `vtknative-linux-arm64-m3` (on M1's
-  VTK in `vtk-linux-arm64/vtk`).
+  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1, HiGHS 1.16.0, NetgenMesher `01e30ce0` pinned. Local working app:
+  `X/Build/artifacts/app-mac` (`X/App/local_app.py`; still 3.0.1). Native runtimes in `X/Build/artifacts`: CalculiX
+  for macOS `solver-m2`, QuadWild `quadwild-mac-arm64` and `quadwild-linux-arm64`, HiGHS `highs-mac-arm64`, Netgen
+  `netgen-mac-arm64-302` (runtime, and its OCCT install for reuse), vtkNative 3.0.2 `vtk-mac-arm64-302` on M1's VTK in
+  `vtk-m1/vtk`, and `vtknative-linux-arm64-m3` (3.0.1) on `vtk-linux-arm64/vtk`. The 3.0.2 macOS package:
+  `mac-302`. Old-file check: `Runner --open-legacy <files>` (X/Controller/Runner).

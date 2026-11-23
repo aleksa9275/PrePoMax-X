@@ -47,8 +47,8 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Area | Items | A | B | C | V |
 |---|---|---|---|---|---|
-| Model and mesh features | 119 | 119 | 111 | 110 | 0 |
-| Commands | 243 | 243 | 239 | 232 | 0 |
+| Model and mesh features | 119 | 119 | 114 | 110 | 0 |
+| Commands | 243 | 243 | 240 | 232 | 0 |
 | Forms | 74 | 74 | 72 | 71 | 0 |
 
 ## Model and mesh features
@@ -240,9 +240,9 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 
 | Item | Status |
 |---|---|
-| Cap | A |
+| Cap | AB |
 | Gmsh | ABC |
-| Lens | A |
+| Lens | AB |
 | Mmg | ABC |
 | Netgen | ABC |
 | Quad | A |
@@ -250,7 +250,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | Ring | A |
 | Submap | A |
 | Transfinite | ABC |
-| Tube | A |
+| Tube | AB |
 
 ## Commands
 
@@ -346,7 +346,7 @@ evidence are ABC (A: the original class builds, B: it runs without WinForms, C: 
 | CAddModelReferencePoint | ABC |
 | CAddNodeSet | ABC |
 | CAddSurface | ABC |
-| CChangeElementOrder | A |
+| CChangeElementOrder | AB |
 | CConvertElementSetsToMeshParts | ABC |
 | CCreateBoundaryLayer | ABC |
 | CCreateElementSetFromElementQuality | ABC |
