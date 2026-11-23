@@ -34,7 +34,10 @@ public sealed class NrbfTypePolicy
             // upstream's reader sets its OriginalPath and FullPath fields, no constructor runs
             typeof(System.IO.FileInfo)};
         foreach(Type type in framework) AddFramework(type);
-        foreach(string name in new[]{"System.Collections.Generic.GenericEqualityComparer`1","System.Collections.Generic.ObjectEqualityComparer`1","System.Collections.Generic.EnumEqualityComparer`1","System.Collections.Generic.NullableEqualityComparer`1","System.Collections.Generic.GenericComparer`1","System.Collections.Generic.ObjectComparer`1"})
+        // The string comparers of dictionaries (net48 System.OrdinalComparer with _ignoreCase; .NET keeps the type, forwarded from
+        // mscorlib, and its two subclasses), rebuilt by upstream's legacy reader from their fields
+        foreach(string name in new[]{"System.Collections.Generic.GenericEqualityComparer`1","System.Collections.Generic.ObjectEqualityComparer`1","System.Collections.Generic.EnumEqualityComparer`1","System.Collections.Generic.NullableEqualityComparer`1","System.Collections.Generic.GenericComparer`1","System.Collections.Generic.ObjectComparer`1",
+            "System.OrdinalComparer","System.OrdinalIgnoreCaseComparer","System.OrdinalCaseSensitiveComparer"})
             AddFramework(typeof(object).Assembly.GetType(name,true));
         // Framework assembly identities used by net48 PMX payloads.
         foreach(string name in new[]{"mscorlib","System","System.Core","System.Private.CoreLib"})assemblies[name]=typeof(object).Assembly;
@@ -62,7 +65,23 @@ public sealed class NrbfTypePolicy
             try {simple=new AssemblyName(assemblyName).Name;}catch(Exception e) {throw new SerializationException("Invalid assembly name.",e);}
             if(simple!=null && applicationAssemblies.TryGetValue(simple,out var application) && application.GetType(typeName,false)==null)return null;
         }
-        return ResolveCore(typeName+", "+assemblyName,true);
+        return DefaultComparer(ResolveCore(typeName+", "+assemblyName,true));
+    }
+    // A dictionary of a net48 file keeps the default comparer of its key type as net48 names it (GenericEqualityComparer<string>
+    // and the like); .NET has other default comparer types (StringEqualityComparer for string). Bound to the runtime's own
+    // default comparer type, the dictionary keeps "the default comparer", as on net48, also for upstream's storage codec.
+    static readonly string[] EqualityDefaults={"System.Collections.Generic.GenericEqualityComparer`1","System.Collections.Generic.ObjectEqualityComparer`1",
+        "System.Collections.Generic.EnumEqualityComparer`1","System.Collections.Generic.NullableEqualityComparer`1"};
+    static readonly string[] OrderDefaults={"System.Collections.Generic.GenericComparer`1","System.Collections.Generic.ObjectComparer`1"};
+    static Type DefaultComparer(Type type)
+    {
+        if(type==null || !type.IsConstructedGenericType || type.Assembly!=typeof(object).Assembly)return type;
+        string definition=type.GetGenericTypeDefinition().FullName;Type argument=type.GenericTypeArguments[0];
+        if(EqualityDefaults.Contains(definition))
+            return typeof(EqualityComparer<>).MakeGenericType(argument).GetProperty("Default").GetValue(null).GetType();
+        if(OrderDefaults.Contains(definition))
+            return typeof(Comparer<>).MakeGenericType(argument).GetProperty("Default").GetValue(null).GetType();
+        return type;
     }
     public Type ResolveMetadata(string qualifiedName) => ResolveCore(qualifiedName,true);
     Type ResolveCore(string qualifiedName,bool metadata)

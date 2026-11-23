@@ -63,6 +63,10 @@ internal static class PersistenceChecks
         Reject("unknown assembly",()=>Legacy(Class("CaeGlobals.NamedClass","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
         Reject("spoofed comparer assembly",()=>Legacy(Class("System.OrdinalComparer","Untrusted.Assembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")));
         Reject("application type outside the allowlist",()=>Legacy(Class("PrePoMax.FrmMain",Assembly("PrePoMax"))));
+        var comparer=Legacy(OrdinalComparer(true)) as StringComparer;
+        Check("legacy net48 OrdinalComparer (ignore case)",comparer!=null && comparer.Equals("Steel","STEEL") && comparer.GetHashCode("Steel")==comparer.GetHashCode("STEEL"));
+        comparer=Legacy(OrdinalComparer(false)) as StringComparer;
+        Check("legacy net48 OrdinalComparer (case sensitive)",comparer!=null && !comparer.Equals("Steel","STEEL"));
         Check("delegate payload never activated",Legacy(Class("System.DelegateSerializationHolder",null))==null);
         // The binder alone resolves: a name it does not bind is not looked up by the reader
         using(var stream=new MemoryStream(Class("System.Diagnostics.Process",Assembly("System")),false))
@@ -73,6 +77,15 @@ internal static class PersistenceChecks
         return checks.ToArray();
     }
     sealed class NullBinder : SerializationBinder {public override Type BindToType(string assemblyName,string typeName)=>null;}
+    // The record net48 writes for StringComparer.Ordinal(IgnoreCase): System.OrdinalComparer, mscorlib, one Boolean member
+    static byte[] OrdinalComparer(bool ignoreCase)
+    {
+        using var output=new MemoryStream();using var writer=new BinaryWriter(output,Encoding.UTF8,true);
+        writer.Write((byte)0);writer.Write(1);writer.Write(-1);writer.Write(1);writer.Write(0);
+        writer.Write((byte)4);writer.Write(1);writer.Write("System.OrdinalComparer");writer.Write(1);writer.Write("_ignoreCase");
+        writer.Write((byte)0);writer.Write((byte)1);   // BinaryType Primitive, PrimitiveType Boolean
+        writer.Write(ignoreCase);writer.Write((byte)11);writer.Flush();return output.ToArray();
+    }
     static string Assembly(string name) => name+", Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
     // One NRBF class record (MS-NRBF 2.3.2.3/2.3.2.4) with string members, as the binary formatter writes it
     static byte[] Class(string name,string assembly,params (string Name,string Value)[] members)

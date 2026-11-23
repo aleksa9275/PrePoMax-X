@@ -42,6 +42,21 @@ try
  var controller=new Controller(form);
  Console.WriteLine("Controller initialized");
  SettingsContainer.IsSaveDisabled=true;
+ // --open-legacy <file.pmx>...: files of older versions through the original Controller (upstream's legacy reader,
+ // every type bound by the allowlist); prints what each model holds and stops
+ if(args.Length>1 && args[0]=="--open-legacy")
+ {
+  var opened=new List<object>();
+  foreach(string file in args.Skip(1))
+  {
+   controller.New();controller.Open(Path.GetFullPath(file));
+   var model=controller.Model;
+   opened.Add(new {file=Path.GetFileName(file),parts=model.Mesh?.Parts.Count??0,geometryParts=model.Geometry?.Parts.Count??0,
+                   materials=model.Materials.Count,steps=model.StepCollection.StepsList.Count,units=model.UnitSystem?.UnitSystemType.ToString()});
+  }
+  Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new {success=true,opened}));
+  return;
+ }
  controller.New();
  controller.AddMaterialCommand(new Material("Steel"));
  if(!controller.Model.Materials.ContainsKey("Steel"))throw new Exception("Material command failed");
