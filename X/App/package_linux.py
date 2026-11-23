@@ -193,6 +193,9 @@ def main():
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],
+        'netgen': (json.loads((a.netgen.resolve() / 'build-receipt.json').read_text())['netgenRevision'] if a.netgen
+                   else 'the NetGenMesher of --p1'),
+        'highs': {'version': highs_receipt['version'], 'commit': highs_receipt['commit'], 'file': 'app/' + highs.name},
         'solver': {'registry': 'solver/build-registry.json', 'id': solver_id, 'directory': 'solver/bin'},
         'quadwild': {'repository': quadwild['source']['repository'], 'revision': quadwild['source']['revision']},
         'release': {'version': '3.0.1', 'files': release_files},

@@ -19,6 +19,7 @@ The bundle is signed ad hoc (not notarized). --zip writes PrePoMax-X-macos-arm64
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -148,7 +149,12 @@ def strip_absolute_rpaths(folder):
 def build_paths(folder):
     """Release gate: the files that still hold a path of this build host (sources compiled in by __FILE__, rpaths).
     A release requires none; the native recipes map them away when built through X/Build/build_ui.py."""
-    needles = [str(ROOT).encode(), str(Path.home()).encode()]
+    # The repository's own folders, the home folder and a build workspace (PREPOMAXX_BUILD_WORKSPACE, the Linux build
+    # kit); the repository root alone is too short in the build container (/src) and matches third-party strings
+    paths = [ROOT / 'X', ROOT / 'ThirdParty', ROOT / 'CaeGlobals', ROOT / 'vtkNative', Path.home()]
+    if os.environ.get('PREPOMAXX_BUILD_WORKSPACE'):
+        paths.append(Path(os.environ['PREPOMAXX_BUILD_WORKSPACE']))
+    needles = [(str(p) + '/').encode() for p in paths if len(str(p)) > 5]
     found = []
     for f in sorted(folder.rglob('*')):
         if f.is_file() and not f.is_symlink():
