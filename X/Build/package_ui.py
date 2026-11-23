@@ -89,8 +89,11 @@ def python_runtime(runner, target, cache, destination):
         urllib.request.urlretrieve(url, archive)
     if sha(archive) != entry['sha256']:
         raise SystemExit(f'{archive}: SHA-256 differs from python-runtime-lock.json')
+    # Python's terminal database (share/terminfo) has names that differ only in case, which a case-insensitive volume
+    # cannot hold; PrePoMax runs Python scripts, never an interactive terminal (as in X/App/package_linux.py)
     with tarfile.open(archive) as tar:
-        tar.extractall(destination.parent / 'python-extract', filter='data')
+        members = [m for m in tar.getmembers() if '/share/terminfo' not in m.name]
+        tar.extractall(destination.parent / 'python-extract', members=members, filter='data')
     shutil.move(destination.parent / 'python-extract' / 'python', destination)
     (destination.parent / 'python-extract').rmdir()
     interpreter = destination / entry['interpreter']
