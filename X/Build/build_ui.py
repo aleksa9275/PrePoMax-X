@@ -142,7 +142,9 @@ def main():
                     archive = fetch(cache, **{k: LIB3MF['source'][k] for k in ('archive', 'url')}, digest=LIB3MF['source']['sha256'])
                     with zipfile.ZipFile(archive) as z:
                         z.extractall(out / 'source')
-                    source = next(p.parent for p in (out / 'source').rglob('CMakeLists.txt') if p.parent.parent == out / 'source')
+                    # The release archive unpacks flat (CMakeLists.txt at its root) or into one folder
+                    source = out / 'source' if (out / 'source/CMakeLists.txt').is_file() else \
+                        next(p.parent for p in sorted((out / 'source').glob('*/CMakeLists.txt')))
                     run(['cmake', '-S', source, '-B', out / 'build', '-DCMAKE_BUILD_TYPE=Release', '-DLIB3MF_TESTS=OFF',
                          '-DCMAKE_INSTALL_PREFIX=' + str(out / 'runtime'), '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'])
                     run(['cmake', '--build', out / 'build', '-j', a.jobs])
