@@ -298,7 +298,9 @@ namespace PrePoMaxX.FrontEnd
             return value.ToString("F" + digits, CultureInfo.InvariantCulture);
         }
 
-        static IBrush B(D.Color color, IBrush fallback = null) => color.IsEmpty || color.A == 0 ? fallback ?? Brushes.Black : Ui.Brush(color);
+        static IBrush B(D.Color color, IBrush fallback = null) => color.IsEmpty || color.A == 0 ? fallback ?? Look.Text : Ui.Brush(color);
+        /// <summary>Lines, text and curves of a plot (lightened in the dark appearance; curves keep their hue).</summary>
+        static IBrush F(D.Color color, IBrush fallback = null) => color.IsEmpty || color.A == 0 ? fallback ?? Look.Text : Ui.Fore(color);
         static FormattedText Text(string text, IBrush brush, bool bold = false) =>
             new FormattedText(text ?? "", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, bold ? new Typeface(FontFamily.Default, FontStyle.Normal, FontWeight.Bold) : Look.Typeface, Look.FontSize, brush);
 
@@ -306,8 +308,8 @@ namespace PrePoMaxX.FrontEnd
         {
             ZedGraph.GraphPane pane = _control.GraphPane;
             var curves = pane.CurveList.Cast<ZedGraph.CurveItem>().Where(c => c.IsVisible).ToList();
-            context.FillRectangle(pane.Fill.Type != ZedGraph.FillType.None ? B(pane.Fill.Color, Brushes.White) : Brushes.White, new Rect(Bounds.Size));
-            double lineHeight = Text("Xg", Brushes.Black).Height;
+            context.FillRectangle(pane.Fill.Type != ZedGraph.FillType.None ? B(pane.Fill.Color, Look.Window) : Look.Window, new Rect(Bounds.Size));
+            double lineHeight = Text("Xg", Look.Text).Height;
             bool y2 = pane.Y2Axis.IsVisible;
             bool legend = pane.Legend.IsVisible && curves.Count > 0;
             double top = 12 + (legend ? lineHeight + 8 : 0);
@@ -315,7 +317,7 @@ namespace PrePoMaxX.FrontEnd
             int titleLines = Math.Max(1, xTitle.Split('\n').Length);
             double left = 70, right = y2 ? 70 : 20, bottom = (1 + titleLines) * lineHeight + 16;
             var plot = new Rect(left, top, Math.Max(10, Bounds.Width - left - right), Math.Max(10, Bounds.Height - top - bottom));
-            context.FillRectangle(B(pane.Chart.Fill.Color, Brushes.White), plot);
+            context.FillRectangle(B(pane.Chart.Fill.Color, Look.Window), plot);
             bool logX = pane.XAxis.Type == ZedGraph.AxisType.Log, logY = pane.YAxis.Type == ZedGraph.AxisType.Log, logY2 = pane.Y2Axis.Type == ZedGraph.AxisType.Log;
             var px = Map(pane.XAxis.Scale, plot.Left, plot.Right, logX);
             var py = Map(pane.YAxis.Scale, plot.Bottom, plot.Top, logY);
@@ -325,17 +327,17 @@ namespace PrePoMaxX.FrontEnd
             // Grids (dotted, as ZedGraph's dash 1/5)
             var dotted = new DashStyle(new double[] { 1, 5 }, 0);
             if (pane.XAxis.MajorGrid.IsVisible)
-                foreach (double v in xt) { double p = px(v); if (!double.IsNaN(p)) context.DrawLine(new Pen(B(pane.XAxis.MajorGrid.Color), 1, dotted), new Point(p, plot.Top), new Point(p, plot.Bottom)); }
+                foreach (double v in xt) { double p = px(v); if (!double.IsNaN(p)) context.DrawLine(new Pen(F(pane.XAxis.MajorGrid.Color), 1, dotted), new Point(p, plot.Top), new Point(p, plot.Bottom)); }
             if (pane.YAxis.MajorGrid.IsVisible)
-                foreach (double v in yt) { double p = py(v); if (!double.IsNaN(p)) context.DrawLine(new Pen(B(pane.YAxis.MajorGrid.Color), 1, dotted), new Point(plot.Left, p), new Point(plot.Right, p)); }
-            var black = new Pen(Brushes.Black, 1);
+                foreach (double v in yt) { double p = py(v); if (!double.IsNaN(p)) context.DrawLine(new Pen(F(pane.YAxis.MajorGrid.Color), 1, dotted), new Point(plot.Left, p), new Point(plot.Right, p)); }
+            var black = new Pen(Look.Text, 1);
             context.DrawRectangle(null, black, plot);
             foreach (double v in xt)
             {
                 double p = px(v);
                 if (double.IsNaN(p)) continue;
                 context.DrawLine(black, new Point(p, plot.Bottom), new Point(p, plot.Bottom - 5));
-                var t = Text(Label(v, pane.XAxis.Scale.MajorStep, logX), Brushes.Black);
+                var t = Text(Label(v, pane.XAxis.Scale.MajorStep, logX), Look.Text);
                 context.DrawText(t, new Point(p - t.Width / 2, plot.Bottom + 4));
             }
             foreach (double v in yt)
@@ -343,7 +345,7 @@ namespace PrePoMaxX.FrontEnd
                 double p = py(v);
                 if (double.IsNaN(p)) continue;
                 context.DrawLine(black, new Point(plot.Left, p), new Point(plot.Left + 5, p));
-                var t = Text(Label(v, pane.YAxis.Scale.MajorStep, logY), Brushes.Black);
+                var t = Text(Label(v, pane.YAxis.Scale.MajorStep, logY), Look.Text);
                 context.DrawText(t, new Point(plot.Left - t.Width - 6, p - t.Height / 2));
             }
             foreach (double v in y2t)
@@ -351,16 +353,16 @@ namespace PrePoMaxX.FrontEnd
                 double p = py2(v);
                 if (double.IsNaN(p)) continue;
                 context.DrawLine(black, new Point(plot.Right, p), new Point(plot.Right - 5, p));
-                var t = Text(Label(v, pane.Y2Axis.Scale.MajorStep, logY2), Brushes.Black);
+                var t = Text(Label(v, pane.Y2Axis.Scale.MajorStep, logY2), Look.Text);
                 context.DrawText(t, new Point(plot.Right + 6, p - t.Height / 2));
             }
-            var title = Text(xTitle, Brushes.Black, true);
+            var title = Text(xTitle, Look.Text, true);
             title.MaxTextWidth = plot.Width; title.TextAlignment = TextAlignment.Center;
             context.DrawText(title, new Point(plot.Left, plot.Bottom + lineHeight + 6));
             foreach (var (text, x, angle) in new[] { (pane.YAxis.Title.Text ?? "", 14.0, -90.0), (y2 ? pane.Y2Axis.Title.Text ?? "" : "", Bounds.Width - 14, 90.0) })
             {
                 if (string.IsNullOrEmpty(text)) continue;
-                var t = Text(text, Brushes.Black, true);
+                var t = Text(text, Look.Text, true);
                 t.MaxTextWidth = plot.Height; t.TextAlignment = TextAlignment.Center;
                 using (context.PushTransform(Matrix.CreateTranslation(-plot.Height / 2, -lineHeight / 2) * Matrix.CreateRotation(angle * Math.PI / 180) * Matrix.CreateTranslation(x, plot.Center.Y)))
                     context.DrawText(t, new Point(0, 0));
@@ -368,7 +370,7 @@ namespace PrePoMaxX.FrontEnd
             using (context.PushClip(plot.Inflate(4)))
                 foreach (var curve in curves)
                 {
-                    IBrush color = B(curve.Color);
+                    IBrush color = F(curve.Color);
                     var line = (curve as ZedGraph.LineItem)?.Line;
                     var pen = new Pen(color, line?.Width ?? 1, line != null ? Painting.Pen(new D.Pen(curve.Color) { DashStyle = line.Style }).DashStyle : null);
                     var map = curve.IsY2Axis ? py2 : py;
@@ -394,21 +396,21 @@ namespace PrePoMaxX.FrontEnd
                     var symbol = (curve as ZedGraph.LineItem)?.Symbol;
                     if (symbol != null && symbol.IsVisible && symbol.Type != ZedGraph.SymbolType.None)
                     {
-                        IBrush fill = symbol.Fill.Type != ZedGraph.FillType.None ? B(symbol.Fill.Color, Brushes.White) : Brushes.White;
+                        IBrush fill = symbol.Fill.Type != ZedGraph.FillType.None ? B(symbol.Fill.Color, Look.Window) : Look.Window;
                         double radius = symbol.Size / 2.0;
                         foreach (var s in segments) foreach (var p in s) context.DrawEllipse(fill, new Pen(color, 1), p, radius, radius);
                     }
                 }
             if (legend)
             {
-                var entries = curves.Where(c => !string.IsNullOrEmpty(c.Label.Text)).Select(c => (B(c.Color), Text(c.Label.Text, Brushes.Black))).ToList();
+                var entries = curves.Where(c => !string.IsNullOrEmpty(c.Label.Text)).Select(c => (F(c.Color), Text(c.Label.Text, Look.Text))).ToList();
                 double total = entries.Sum(e => 34 + e.Item2.Width + 12);
                 double x = pane.Legend.Position == ZedGraph.LegendPos.TopCenter ? plot.Center.X - total / 2 : plot.Left;
                 double y = 8 + lineHeight / 2;
                 foreach (var (color, text) in entries)
                 {
                     context.DrawLine(new Pen(color, 1), new Point(x, y), new Point(x + 28, y));
-                    context.DrawEllipse(Brushes.White, new Pen(color, 1), new Point(x + 14, y), 3.5, 3.5);
+                    context.DrawEllipse(Look.Window, new Pen(color, 1), new Point(x + 14, y), 3.5, 3.5);
                     context.DrawText(text, new Point(x + 34, y - text.Height / 2));
                     x += 34 + text.Width + 12;
                 }

@@ -1,6 +1,6 @@
 # Remaining work to full completion (D060)
 
-Updated 23 November 2026 after M3-0 (upstream 3.0.2). Replace, don't append. Evidence for each item is in the
+Updated 23 November 2026 after M3-2 (PaStiX, the solver audit, the dark appearance). Replace, don't append. Evidence for each item is in the
 phase reports, `.project/bugs/` and the [backlog](reports/deferred-correctness-improvements.md). History of this plan
 (the Qt-era items C1–C12, P1) is in git and `.project/history/`.
 
@@ -13,11 +13,20 @@ phase reports, `.project/bugs/` and the [backlog](reports/deferred-correctness-i
 | M2 | 3.0.1 composites, every form compiled whole, FrmMain and Program ([M2](reports/phase-m2-composites-painting.md)) | composite scripts through the original command line | done (macOS); Linux QuadWild done in M3-1b |
 | M3-1 | One runtime: Avalonia front end, macOS (a) then Linux ARM64 (b), PyQt retired ([M3-1](reports/phase-m3-1-front-end.md)) | probes on both, the maintainer's real project and VNC check | done 22 November; previews published |
 | M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen re-pin, vtkNative; housekeeping and release basics ([M3-0](reports/phase-m3-0-upstream-3.0.2.md)) | checks, the macOS package probes and upstream's suite on 3.0.2 | done 23 November: macOS and Linux ARM64 verified and published; Linux x86-64 untested |
+| M3-2 | The solver as the Windows release builds it (PaStiX, external behaviours; D070), the dark appearance (D069), macOS ([M3-2](reports/phase-m3-2-solver-appearance.md)) | solver comparison and package checks on macOS | done on macOS ARM64; Linux after macOS is complete and local Forgejo CI exists |
 | M3 | GitHub Actions for win-x64, linux-x64, linux-arm64, osx-arm64: `build_ui.py` (every native component from source on a clean host, build paths mapped), `check.py`, the packages and their probes; Windows MSVC Gmsh and CalculiX; the Avalonia front end's first Windows run (Win32 native host); the bounds comparison on Windows | four packages built and tested in CI | planned |
 | M4 | Original-app comparison through upstream's Python API test scripts on the original (Windows runner) and on X; analysis/meshing matrices | V evidence | planned |
 | M5 | D061 fixes and warnings, clean organization (discussed first), installers, signing, notices, maintainer sign-off, upstream PR(s) | release | planned |
 
 ## Open items
+
+Solver and tools (D070):
+- **B022**: SPOOLES's multithreaded mode races on ARM64 (ThreadSanitizer: 127 races); ARM64 builds use the serial
+  SPOOLES and PaStiX for multithreading. A real fix (synchronize SPOOLES's MT layer) is to discuss.
+- **B021**: Tools - Bidirectional Mesh Converter (third-party Windows PyInstaller tool, no public source): ask
+  upstream for the source and licence.
+- Linux: the `pastix` stage of `build_ui.py` and the i8 solver have not run on Linux (the kit's image may need flex,
+  bison and zlib headers); the appearance toggle on Linux.
 
 Platform and packaging:
 - **Linux x86-64**: the build kit (`X/Build/Linux/build-package.sh`) has run only on ARM64; its first x86-64 run

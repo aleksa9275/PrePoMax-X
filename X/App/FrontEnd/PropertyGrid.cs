@@ -22,9 +22,9 @@ namespace PrePoMaxX.FrontEnd
         const double RowHeight = 20;
         const string MissingValueTip = "Select at least one item.";   // UserControls/ProperyGrid/MySite.cs MissingValueToolTip
         static readonly Type MissingValues = Type.GetType("UserControls.IMissingPropertyValues, UserControls", false);
-        static readonly IBrush CategoryBack = new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xF0));
-        static readonly IBrush LineBrush = new SolidColorBrush(Color.FromRgb(0xE6, 0xE6, 0xE6));
-        static readonly IBrush ReadOnlyText = new SolidColorBrush(Color.FromRgb(80, 80, 80));
+        static IBrush CategoryBack => Look.Control;
+        static IBrush LineBrush => Look.GridLine;
+        static IBrush ReadOnlyText => Look.ReadOnlyText;
 
         readonly WinForms.PropertyGrid _grid;
         readonly StackPanel _rows = new StackPanel();
@@ -58,7 +58,7 @@ namespace PrePoMaxX.FrontEnd
             DockPanel.SetDock(_help, Dock.Bottom);
             Children.Add(_help);
             _scroll = new ScrollViewer { Content = _rows, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                                         Background = Brushes.White };
+                                         Background = Look.Window };
             Children.Add(new Border { Child = _scroll, BorderBrush = Look.LightFrame, BorderThickness = new Thickness(1) });
             Rebuild();
         }
@@ -134,7 +134,7 @@ namespace PrePoMaxX.FrontEnd
             row.Label = new TextBlock { Text = Ui.Visible(item.Label), VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis,
                                         FontWeight = category ? FontWeight.Bold : FontWeight.Normal };
             var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(2 + level * 12, 0, 0, 0), Children = { glyph } };
-            var visual = new Border { Height = RowHeight, BorderBrush = LineBrush, BorderThickness = new Thickness(0, 0, 0, 1), Background = category ? CategoryBack : Brushes.White };
+            var visual = new Border { Height = RowHeight, BorderBrush = LineBrush, BorderThickness = new Thickness(0, 0, 0, 1), Background = category ? CategoryBack : Look.Window };
             row.Visual = visual;
             if (category)
             {
@@ -147,7 +147,7 @@ namespace PrePoMaxX.FrontEnd
                 if (missing)
                 {
                     // 3.0.1 missing values (IMissingPropertyValues): the red dot with its tooltip and the value in red
-                    head.Children.Add(new Avalonia.Controls.Shapes.Ellipse { Width = 7, Height = 7, Fill = Brushes.Red, Margin = new Thickness(0, 0, 3, 0), VerticalAlignment = VerticalAlignment.Center });
+                    head.Children.Add(new Avalonia.Controls.Shapes.Ellipse { Width = 7, Height = 7, Fill = Look.Error, Margin = new Thickness(0, 0, 3, 0), VerticalAlignment = VerticalAlignment.Center });
                     ToolTip.SetTip(visual, MissingValueTip);
                 }
                 head.Children.Add(row.Label);
@@ -187,9 +187,9 @@ namespace PrePoMaxX.FrontEnd
             string[] choices = Ui.Guard(() => _grid.GetStandardValues(item, out exclusive)) ?? new string[0];
             string editor = EditorName(descriptor);
             bool canEdit = Ui.Guard(() => _grid.CanEditText(item));
-            IBrush fore = missing ? Brushes.Red : Brushes.Black;
+            IBrush fore = missing ? Look.Error : Look.Text;
             if (readOnly || !canEdit && choices.Length == 0 && editor == null)
-                return new TextBlock { Text = text, Foreground = missing ? Brushes.Red : ReadOnlyText, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0),
+                return new TextBlock { Text = text, Foreground = missing ? Look.Error : ReadOnlyText, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0),
                                        TextTrimming = TextTrimming.CharacterEllipsis };
             var panel = new DockPanel { LastChildFill = true };
             if (editor != null)
@@ -266,11 +266,11 @@ namespace PrePoMaxX.FrontEnd
 
         void Highlight(Row row)
         {
-            if (_selected != null && _selected.Label != null) { _selected.Label.Foreground = Brushes.Black; (_selected.Label.Parent?.Parent as Border ?? _selected.Label.Parent as Border)?.SetValue(Border.BackgroundProperty, null); }
+            if (_selected != null && _selected.Label != null) { _selected.Label.Foreground = Look.Text; (_selected.Label.Parent?.Parent as Border ?? _selected.Label.Parent as Border)?.SetValue(Border.BackgroundProperty, null); }
             _selected = row;
             if (row?.Label != null && row.Item.GridItemType != WinForms.GridItemType.Category)
             {
-                row.Label.Foreground = Brushes.White;
+                row.Label.Foreground = Look.HighlightText;
                 if (row.Label.Parent?.Parent is Border labelCell) labelCell.Background = Look.Highlight;
             }
         }

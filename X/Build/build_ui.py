@@ -12,8 +12,12 @@ Stages (each into <workspace>/<stage>, resumable: a finished stage is reused):
     netgen    X/Build/NativeCad/build.py      original Netgen wrapper + OCCT 8.0.1
     quadwild  X/Build/QuadWild/build.py       PrePoMax's QuadWild-BiMDF fork (the 3.0.1 revision)
     vtk       X/Build/Vtk/build.py            VTK 9.7.1 + the original vtkNative (the 3D view)
-    solver    X/Build/build.py ... solver     CalculiX 2.22, SPOOLES, ARPACK-ng, OpenBLAS
+    pastix    X/Build/Pastix/build.py         OpenBLAS ILP64, hwloc, Scotch, PaRSEC, PaStiX4CalculiX (i8, static)
+    solver    X/Build/build.py ... solver     CalculiX 2.22 i8: PaStiX, multithreaded SPOOLES, ARPACK-ng (D070)
     package   X/Build/package_ui.py
+
+A finished stage (done.json) is reused while its fingerprint holds: the SHA-256 of its recipe files and source locks
+(STAGE_INPUTS) and of the stages it builds on. A changed recipe rebuilds that stage and the ones after it.
 
 Run it on a native host of the target (Linux x64: Podman on Windows per D059; Linux ARM64: the local Podman
 machine; macOS ARM64: the Mac). For win-x64 the native stages are the vendored ThirdParty Windows binaries and
@@ -79,17 +83,45 @@ def reproducible_env(*roots):
 REPRODUCIBLE_ENV = dict(os.environ)
 
 
+# The files that define each stage's result (beside this script); a stage's fingerprint also covers those it uses
+STAGE_INPUTS = {
+    'highs': ['X/Build/Highs'], 'mmg': ['X/Build/Mmg'], 'lib3mf': [], 'gmsh': ['X/Build/Gmsh'],
+    'netgen': ['X/Build/NativeCad', 'ThirdParty/Sources/NetgenMesher/source-lock.json', 'ThirdParty/Sources/source-lock.json'],
+    'quadwild': ['X/Build/QuadWild'], 'vtk': ['X/Build/Vtk'], 'pastix': ['X/Build/Pastix/build.py', 'X/Build/Pastix/source-lock.json'],
+    'solver': ['X/Build/build.py', 'X/Build/targets.json', 'ThirdParty/Build/calculix-cpu.py', 'ThirdParty/Build/platforms',
+               'ThirdParty/Sources/source-lock.json'],
+}
+STAGE_USES = {'solver': ['pastix']}
+
+
+def fingerprint(name):
+    digest = hashlib.sha256(name.encode())
+    for entry in STAGE_INPUTS.get(name, []):
+        path = ROOT / entry
+        files = sorted(p for p in path.rglob('*') if p.is_file() and '__pycache__' not in p.parts) if path.is_dir() else [path]
+        for file in files:
+            if file.exists():
+                digest.update(str(file.relative_to(ROOT)).encode() + b'\0' + sha(file).encode())
+    for used in STAGE_USES.get(name, []):
+        digest.update(fingerprint(used).encode())
+    return digest.hexdigest()
+
+
 def stage(workspace, name, build):
-    """Runs build(output) once; a stage with done.json is reused."""
+    """Runs build(output) once; a stage with done.json and the same fingerprint is reused."""
     output = workspace / name
     done = output / 'done.json'
+    mark = fingerprint(name)
     if done.exists():
-        print(f'[{name}] reused', flush=True)
-        return json.loads(done.read_text())
+        result = json.loads(done.read_text())
+        if result.get('fingerprint') == mark:
+            print(f'[{name}] reused', flush=True)
+            return result
+        print(f'[{name}] recipe changed: rebuilding', flush=True)
     if output.exists():
         shutil.rmtree(output)
     print(f'[{name}] building', flush=True)
-    result = build(output)
+    result = dict(build(output), fingerprint=mark)
     done.write_text(json.dumps(result, indent=2) + '\n')
     return result
 
@@ -173,9 +205,14 @@ def main():
             r = stage(workspace, 'vtk', lambda out: (run([py, HERE / 'Vtk/build.py', '--archive-cache', cache, '--output', out,
                                                           '--jobs', a.jobs]), {'runtime': str(out / 'vtkNative/runtime')})[1])
             inputs['--vtk-native'] = r['runtime']
+        pastix = None
+        if 'pastix' not in skip:
+            pastix = stage(workspace, 'pastix', lambda out: (run([py, HERE / 'Pastix/build.py', '--archive-cache', cache, '--output', out,
+                                                                  '--jobs', a.jobs]), {'prefix': str(out / 'prefix')})[1])['prefix']
         if 'solver' not in skip:
             r = stage(workspace, 'solver', lambda out: (run([py, HERE / 'build.py', 'build', '--target', target, '--component', 'solver',
-                                                             '--jobs', a.jobs, '--output', out]), {'build': str(out / 'solver')})[1])
+                                                             '--jobs', a.jobs, '--output', out] + (['--pastix', pastix] if pastix else [])),
+                                                        {'build': str(out / 'solver')})[1])
             inputs['--solver-build'] = r['build']
     package_format = a.format or {'osx-arm64': 'dmg', 'win-x64': 'zip'}.get(target, 'tar.gz')
     out = workspace / 'package'

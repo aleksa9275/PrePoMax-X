@@ -34,6 +34,19 @@ namespace PrePoMaxX.FrontEnd
         bool _closingFromModel, _sizing, _shownOnce;
         WinForms.Control _focusedControl;
         internal IEnumerable<KeyValuePair<WinForms.Control, Mirror>> Mirrors => _mirrors;
+        internal bool IsMain => _main;
+
+        /// <summary>After an appearance switch: the form's own colours again, every mirror updated, everything redrawn
+        /// (the shared brushes changed colour; drawn controls read the palette when they render).</summary>
+        internal void Restyle()
+        {
+            _client.Background = Form.BackColor.A > 0 ? Ui.Brush(Form.BackColor) : Look.Control;
+            foreach (Mirror mirror in _mirrors.Values)
+                try { mirror.Content?.Update(); } catch (Exception e) { Console.Error.WriteLine(e); }
+            foreach (Visual visual in this.GetVisualDescendants()) visual.InvalidateVisual();
+            foreach (var toggle in this.GetVisualDescendants().OfType<AppearanceToggle>()) toggle.Tip();
+            InvalidateVisual();
+        }
 
         public FormWindow(WinForms.Form form, bool main)
         {

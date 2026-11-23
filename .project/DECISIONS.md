@@ -1,5 +1,32 @@
 # Decision register
 
+D070 — The solver as the Windows release builds it, multithreaded, 2026-11-23: PaStiX
+was missing (B018) and an audit of the original ccx_dynamic.exe found two more gaps (B019
+external behaviours, B020 serial SPOOLES), so D060's "PARDISO is the only exception" was not
+true of our packages. The maintainer asked for the PaStiX build, for all solvers multithreaded,
+and for certainty that PARDISO is the only missing piece. CalculiX 2.22 is now built as
+Makefile_i8 with Makefile_MFront's flags: 8-byte integers, PaStiX4CalculiX (Scotch, PaRSEC,
+hwloc, OpenBLAS ILP64, all static, multithreaded), external behaviours; Makefile_MT's
+multithreaded SPOOLES on x86-64 only: on ARM64 it returns wrong results in some runs (B022,
+ThreadSanitizer: unsynchronized hand-over in SPOOLES 2.2), so ARM64 keeps the serial SPOOLES
+and PaStiX is its multithreaded direct solver. PaStiX comes from the CUDA-optional branch of the contributor whose work CalculiX's
+PaStiX repository merged (Kabbone/PaStiX4CalculiX `cudaless`): Dhondtguido's tree cannot be
+built without CUDA. BLAS inside PaStiX stays sequential, as CalculiX sets it for MKL; PaStiX (and SPOOLES on
+x86-64) take PrePoMax's CPU setting (OMP_NUM_THREADS). The Bidirectional Mesh Converter (B021)
+is a separate gap outside the solver. macOS first; Linux after macOS is complete and local
+Forgejo CI exists.
+
+D069 — A dark appearance, 2026-11-23: the maintainer asked for a dark theme in the manner of
+the Claude apps (warm greys, not black) although the original has none: an exception to
+D061's order, like D066. The front end draws the original forms, so the theme lives there
+(X/App/FrontEnd/Theme.cs): system colours map to the palette, the original's fixed greys and
+whites are inverted at the drawing, colours with a hue (part colours, curves, swatches) keep
+their values, dark outlines of the original icons are lightened. The toggle is one button at
+the right end of the main window's first tool strip row, as the maintainer placed it; it
+switches the running application. The choice is PrePoMax-X's own setting
+(appearance.json, PREPOMAXX_THEME), not the original's settings, so settings and PMX files
+stay those of Windows PrePoMax. Light stays the default. macOS first.
+
 D068 — Sync with upstream 3.0.2 before CI, 2026-11-23: upstream moved 51 commits past
 the 3.0.1 pin (version 3.0.2 at `6703b1cb`, not released yet), among them a new storage
 format without BinaryFormatter, HiGHS instead of lp_solve and new meshers. The maintainer

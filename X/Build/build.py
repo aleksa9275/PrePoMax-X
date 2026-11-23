@@ -97,6 +97,7 @@ def main(argv=None):
     parser.add_argument("--component", choices=["solver"], default="solver")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--jobs", type=int, default=6)
+    parser.add_argument("--pastix", type=Path, help="the prefix of X/Build/Pastix/build.py (the i8 solver with PaStiX)")
     args = parser.parse_args(argv)
     target = catalog()["targets"][args.target]
     if args.action == "plan":
@@ -113,7 +114,7 @@ def main(argv=None):
         build = Build(args.target, args.output)
         build.identity()
         build.run([sys.executable, ROOT / "ThirdParty/Build/calculix-cpu.py", "--target", args.target,
-            "--output", build.output / "solver", "--jobs", args.jobs])
+            "--output", build.output / "solver", "--jobs", args.jobs] + (["--pastix", args.pastix] if args.pastix else []))
         build.report.update(kind="native-cpu-solver-build", solverBuild="solver/build-report.json",
             nativeExecution=False, scope="Build only; execute common workflow separately")
         build.report["success"] = True

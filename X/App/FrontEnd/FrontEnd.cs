@@ -19,6 +19,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CaeGlobals;
 using WinForms = System.Windows.Forms;
 
@@ -40,7 +41,10 @@ namespace PrePoMaxX.FrontEnd
             Styles.Add(new FluentTheme { DensityStyle = DensityStyle.Compact });
             Styles.Add(new Avalonia.Markup.Xaml.Styling.StyleInclude(new Uri("avares://PrePoMaxX.FrontEnd/"))
                 { Source = new Uri("avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml") });
-            RequestedThemeVariant = ThemeVariant.Light;
+            UiTheme.Load(PlatformSettings);
+            RequestedThemeVariant = UiTheme.Dark ? ThemeVariant.Dark : ThemeVariant.Light;
+            UiTheme.Accent(this);
+            Look.Init();
             Look.Add(Styles);
         }
         public override void OnFrameworkInitializationCompleted()
@@ -117,6 +121,16 @@ namespace PrePoMaxX.FrontEnd
                 if (!s_changes.IsEmpty) Sync();
             }).Start();
             WindowCapture.Start();
+            // Unattended check of the appearance toggle: PREPOMAXX_PROBE_TOGGLE_APPEARANCE_AT=<seconds> clicks it once
+            if (double.TryParse(Environment.GetEnvironmentVariable("PREPOMAXX_PROBE_TOGGLE_APPEARANCE_AT"),
+                                System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double at))
+                DispatcherTimer.RunOnce(() =>
+                {
+                    AppearanceToggle toggle = Main?.GetVisualDescendants().OfType<AppearanceToggle>().FirstOrDefault();
+                    Console.Error.WriteLine("[appearance probe] toggle " + (toggle == null ? "missing" : "clicked"));
+                    toggle?.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+                    Console.Error.WriteLine("[appearance probe] dark " + UiTheme.Dark);
+                }, TimeSpan.FromSeconds(at));
         }
 
         // Notifications ---------------------------------------------------------------------------------------------------
@@ -332,39 +346,99 @@ namespace PrePoMaxX.FrontEnd
             return null;
         }
 
+        static readonly List<(WeakReference<Image> View, Bitmap Light)> s_icons = new List<(WeakReference<Image>, Bitmap)>();
+        static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Bitmap, Bitmap> s_darkIcons =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<Bitmap, Bitmap>();
+
         internal static Image Icon(System.Drawing.Image image, double size = 16)
         {
             Bitmap bitmap = Bitmap(image);
-            return bitmap == null ? null : new Image { Source = bitmap, Width = size, Height = size, Stretch = Stretch.Uniform };
+            if (bitmap == null) return null;
+            var view = new Image { Source = Themed(bitmap), Width = size, Height = size, Stretch = Stretch.Uniform };
+            lock (s_icons) s_icons.Add((new WeakReference<Image>(view), bitmap));
+            return view;
+        }
+
+        /// <summary>An icon of the original in the current appearance: in the dark one its black and dark grey outlines
+        /// and glyphs are lightened (they are drawn for light backgrounds); colours and alpha stay.</summary>
+        internal static Bitmap Themed(Bitmap bitmap)
+        {
+            if (bitmap == null || !UiTheme.Dark) return bitmap;
+            return s_darkIcons.GetValue(bitmap, DarkIcon);
+        }
+
+        static unsafe Bitmap DarkIcon(Bitmap light)
+        {
+            try
+            {
+                PixelSize size = light.PixelSize;
+                var dark = new WriteableBitmap(size, light.Dpi, Avalonia.Platform.PixelFormat.Bgra8888, Avalonia.Platform.AlphaFormat.Unpremul);
+                using (var buffer = dark.Lock())
+                {
+                    light.CopyPixels(buffer, Avalonia.Platform.AlphaFormat.Unpremul);
+                    for (int y = 0; y < size.Height; y++)
+                    {
+                        byte* row = (byte*)buffer.Address + y * buffer.RowBytes;
+                        for (int x = 0; x < size.Width; x++)
+                        {
+                            byte* p = row + 4 * x;
+                            if (p[3] == 0) continue;
+                            int b = p[0], g = p[1], r = p[2];
+                            int max = Math.Max(r, Math.Max(g, b)), min = Math.Min(r, Math.Min(g, b));
+                            double l = (max + min) / 510.0;
+                            if (max - min > 40 || l > 0.45) continue;   // coloured or light: kept
+                            // Dark greys toward the text colour: black becomes #E6E4DD, mid grey stays near mid grey
+                            double t = 1 - l / 0.45;
+                            p[2] = (byte)(r + t * (0xE6 - r)); p[1] = (byte)(g + t * (0xE4 - g)); p[0] = (byte)(b + t * (0xDD - b));
+                        }
+                    }
+                }
+                return dark;
+            }
+            catch (Exception e) { if (Trace) Console.Error.WriteLine(e); return light; }
+        }
+
+        static void RestyleIcons()
+        {
+            lock (s_icons)
+            {
+                s_icons.RemoveAll(i => !i.View.TryGetTarget(out _));
+                foreach (var (view, light) in s_icons)
+                    if (view.TryGetTarget(out Image image)) image.Source = Themed(light);
+            }
+        }
+
+        /// <summary>Every open window after an appearance switch.</summary>
+        internal static void Restyle()
+        {
+            var windows = new HashSet<FormWindow>(Windows.Values);
+            if (Main != null) windows.Add(Main);
+            RestyleIcons();
+            foreach (FormWindow window in windows) window.Restyle();
+            // The 3D view takes its background again (VtkNativeView.BackgroundFilter) and redraws
+            foreach (FormWindow window in windows)
+                foreach (ViewHost view in window.GetVisualDescendants().OfType<ViewHost>())
+                    Guard(() => { view.Control.SyncNativeMirror(); view.Control.AdjustCameraDistanceAndClippingRedraw(); });
         }
 
         internal static IBrush Brush(System.Drawing.Color color) => new SolidColorBrush(ToColor(color));
+        /// <summary>A colour of the original drawn as text or lines (UiTheme.Fore in the dark appearance).</summary>
+        internal static IBrush Fore(System.Drawing.Color color) => new SolidColorBrush(ToForeColor(color));
         /// <summary>A colour; system colours are those of Windows 10, which the original is designed with (.NET's table
-        /// on macOS and Linux has the Windows XP values).</summary>
+        /// on macOS and Linux has the Windows XP values), in the current appearance; fixed colours as backgrounds
+        /// (UiTheme.Back).</summary>
         internal static Color ToColor(System.Drawing.Color color)
         {
-            if (color.IsSystemColor)
-                switch (color.ToKnownColor())
-                {
-                    case System.Drawing.KnownColor.Control: case System.Drawing.KnownColor.ButtonFace: case System.Drawing.KnownColor.Menu:
-                    case System.Drawing.KnownColor.MenuBar: return Color.FromRgb(0xF0, 0xF0, 0xF0);
-                    case System.Drawing.KnownColor.Window: case System.Drawing.KnownColor.ControlLightLight: case System.Drawing.KnownColor.ButtonHighlight:
-                    case System.Drawing.KnownColor.HighlightText: return Colors.White;
-                    case System.Drawing.KnownColor.ControlText: case System.Drawing.KnownColor.WindowText: case System.Drawing.KnownColor.MenuText:
-                    case System.Drawing.KnownColor.InfoText: return Colors.Black;
-                    case System.Drawing.KnownColor.ControlDark: case System.Drawing.KnownColor.ButtonShadow: return Color.FromRgb(0xA0, 0xA0, 0xA0);
-                    case System.Drawing.KnownColor.ControlDarkDark: return Color.FromRgb(0x69, 0x69, 0x69);
-                    case System.Drawing.KnownColor.ControlLight: return Color.FromRgb(0xE3, 0xE3, 0xE3);
-                    case System.Drawing.KnownColor.Highlight: case System.Drawing.KnownColor.HotTrack: return Color.FromRgb(0x00, 0x78, 0xD7);
-                    case System.Drawing.KnownColor.GrayText: return Color.FromRgb(0x6D, 0x6D, 0x6D);
-                    case System.Drawing.KnownColor.AppWorkspace: return Color.FromRgb(0xAB, 0xAB, 0xAB);
-                    case System.Drawing.KnownColor.Info: return Color.FromRgb(0xFF, 0xFF, 0xE1);
-                    case System.Drawing.KnownColor.ActiveCaption: return Color.FromRgb(0x99, 0xB4, 0xD1);
-                    case System.Drawing.KnownColor.InactiveBorder: return Color.FromRgb(0xF4, 0xF7, 0xFC);
-                    case System.Drawing.KnownColor.ScrollBar: return Color.FromRgb(0xC8, 0xC8, 0xC8);
-                }
-            return Color.FromArgb(color.A, color.R, color.G, color.B);
+            if (color.IsSystemColor && UiTheme.SystemColor(color.ToKnownColor()) is Color system) return system;
+            return UiTheme.Back(Color.FromArgb(color.A, color.R, color.G, color.B));
         }
+        internal static Color ToForeColor(System.Drawing.Color color)
+        {
+            if (color.IsSystemColor && UiTheme.SystemColor(color.ToKnownColor()) is Color system) return system;
+            return UiTheme.Fore(Color.FromArgb(color.A, color.R, color.G, color.B));
+        }
+        /// <summary>A data colour (a part's or curve's colour, a swatch): its own value in every appearance.</summary>
+        internal static Color ToDataColor(System.Drawing.Color color) => Color.FromArgb(color.A, color.R, color.G, color.B);
         internal static string Visible(string text) => WinForms.OrderedNameComparer.Visible(text ?? "");
         /// <summary>A WinForms text with '&' mnemonics as an Avalonia access text ('_').</summary>
         internal static string AccessText(string text) =>

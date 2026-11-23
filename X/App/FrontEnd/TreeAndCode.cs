@@ -113,7 +113,7 @@ namespace PrePoMaxX.FrontEnd
             Point _lastPosition;
             bool _double;
             TextBox _editor;
-            public Surface(TreeViewView owner) { _owner = owner; Focusable = true; ClipToBounds = true; Background = Brushes.White; }
+            public Surface(TreeViewView owner) { _owner = owner; Focusable = true; ClipToBounds = true; Background = Look.Window; }
             WinForms.TreeView Tree => _owner._tree;
             internal TextBox Editor
             {
@@ -139,19 +139,19 @@ namespace PrePoMaxX.FrontEnd
                 System.Drawing.Image image = null;
                 if (!string.IsNullOrEmpty(key) && images.Images.ContainsKey(key)) image = images.Images[key];
                 else if (index >= 0 && index < images.Images.Count) image = images.Images[index];
-                else if (images.ImageStream != null) return Ui.Named(key);
-                return Ui.Bitmap(image);
+                else if (images.ImageStream != null) return Ui.Themed(Ui.Named(key));
+                return Ui.Themed(Ui.Bitmap(image));
             }
 
             protected override void Draw(DrawingContext context)
             {
                 var tree = Tree;
-                context.FillRectangle(tree.BackColor.A > 0 && tree.BackColor != System.Drawing.SystemColors.Control ? Ui.Brush(tree.BackColor) : Brushes.White, new Rect(Bounds.Size));
+                context.FillRectangle(tree.BackColor.A > 0 && tree.BackColor != System.Drawing.SystemColors.Control ? Ui.Brush(tree.BackColor) : Look.Window, new Rect(Bounds.Size));
                 var rows = tree.RenderRows();
                 int top = tree.TopRow, height = tree.ItemHeight, indent = tree.Indent;
                 var selected = tree.SelectedNode;
                 var gray = new Pen(new SolidColorBrush(Color.FromRgb(150, 150, 150)), 1);
-                var black = new Pen(Brushes.Black, 1);
+                var black = new Pen(Look.Text, 1);
                 for (int i = top; i < rows.Length; i++)
                 {
                     var node = rows[i];
@@ -161,7 +161,7 @@ namespace PrePoMaxX.FrontEnd
                     if (node.Nodes.Count > 0 && tree.ShowPlusMinus)
                     {
                         var box = new Rect(x - indent / 2 - 4 + 0.5, y + height / 2 - 4 + 0.5, 8, 8);
-                        context.DrawRectangle(Brushes.White, gray, box);
+                        context.DrawRectangle(Look.Window, gray, box);
                         context.DrawLine(black, new Point(box.Left + 2, box.Center.Y), new Point(box.Right - 2, box.Center.Y));
                         if (!node.IsExpanded) context.DrawLine(black, new Point(box.Center.X, box.Top + 2), new Point(box.Center.X, box.Bottom - 2));
                     }
@@ -173,9 +173,9 @@ namespace PrePoMaxX.FrontEnd
                     }
                     var b = node.Bounds;
                     IBrush back = node.BackColor.IsEmpty || node.BackColor.A == 0 ? null : Ui.Brush(node.BackColor);
-                    IBrush fore = !node.ForeColor.IsEmpty && node.ForeColor.A > 0 ? Ui.Brush(node.ForeColor) :
-                                  tree.ForeColor.A > 0 ? Ui.Brush(tree.ForeColor) : Brushes.Black;
-                    if (node == selected && back == null && (IsFocused || !tree.HideSelection)) { back = Look.Highlight; fore = Brushes.White; }
+                    IBrush fore = !node.ForeColor.IsEmpty && node.ForeColor.A > 0 ? Ui.Fore(node.ForeColor) :
+                                  tree.ForeColor.A > 0 ? Ui.Fore(tree.ForeColor) : Look.Text;
+                    if (node == selected && back == null && (IsFocused || !tree.HideSelection)) { back = Look.Highlight; fore = Look.HighlightText; }
                     if (back != null) context.FillRectangle(back, new Rect(b.X, b.Y, b.Width, b.Height));
                     var text = new FormattedText(node.Text ?? "", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                                                  node.NodeFont != null && node.NodeFont.Bold ? new Typeface(FontFamily.Default, FontStyle.Normal, FontWeight.Bold) : Look.Typeface, Look.FontSize, fore);
@@ -477,12 +477,14 @@ namespace PrePoMaxX.FrontEnd
             protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) { base.OnDetachedFromVisualTree(e); _blink.Stop(); }
 
             static IBrush Argb(int value) => new SolidColorBrush(Color.FromUInt32(unchecked((uint)value)));
+            static IBrush ForeArgb(int value) => new SolidColorBrush(UiTheme.Fore(Color.FromUInt32(unchecked((uint)value))));
+            static IBrush BackArgb(int value) => new SolidColorBrush(UiTheme.Back(Color.FromUInt32(unchecked((uint)value))));
 
             public override void Render(DrawingContext context)
             {
                 var c = Code;
                 var o = _owner;
-                IBrush back = c.BackColor.IsEmpty ? Brushes.White : new SolidColorBrush(Color.FromRgb(c.BackColor.R, c.BackColor.G, c.BackColor.B));
+                IBrush back = c.BackColor.IsEmpty ? Look.Window : new SolidColorBrush(UiTheme.Back(Color.FromRgb(c.BackColor.R, c.BackColor.G, c.BackColor.B)));
                 context.FillRectangle(back, new Rect(Bounds.Size));
                 if (!c.Enabled) context.FillRectangle(new SolidColorBrush(Color.FromArgb(12, 0, 0, 0)), new Rect(Bounds.Size));
                 double lineHeight = o.LineHeight, cw = o._charWidth;
@@ -493,7 +495,7 @@ namespace PrePoMaxX.FrontEnd
                 var selection = c.Selection;
                 var start = selection.Start; var end = selection.End;
                 if (start.iLine > end.iLine || start.iLine == end.iLine && start.iChar > end.iChar) { var t = start; start = end; end = t; }
-                IBrush foreDefault = new SolidColorBrush(Color.FromRgb(c.ForeColor.R, c.ForeColor.G, c.ForeColor.B));
+                IBrush foreDefault = new SolidColorBrush(UiTheme.Fore(Color.FromRgb(c.ForeColor.R, c.ForeColor.G, c.ForeColor.B)));
                 IBrush currentLine = c.CurrentLineColor.IsEmpty || c.CurrentLineColor.A == 0 ? null : Ui.Brush(c.CurrentLineColor);
                 Color selectionColor = c.SelectionColor.IsEmpty ? Color.FromArgb(60, 0, 0, 255) : Ui.ToColor(c.SelectionColor);
                 if (selectionColor.A == 255) selectionColor = Color.FromArgb(60, selectionColor.R, selectionColor.G, selectionColor.B);
@@ -519,12 +521,12 @@ namespace PrePoMaxX.FrontEnd
                             if (to <= from) continue;
                             double x = left + (from - row.Start) * cw;
                             var rect = new Rect(x, y, Math.Max(0, to - from) * cw, lineHeight);
-                            if (bg != 0) context.FillRectangle(Argb(bg), rect);
-                            if (marker != 0) context.DrawRectangle(Argb(marker), null, rect.Deflate(0.5), 3, 3);
+                            if (bg != 0) context.FillRectangle(BackArgb(bg), rect);
+                            if (marker != 0) context.DrawRectangle(BackArgb(marker), null, rect.Deflate(0.5), 3, 3);
                             if (from >= text.Length) continue;
                             string part = text.Substring(from, Math.Min(to, text.Length) - from);
                             var typeface = new Typeface(Look.Monospace, (style & 2) != 0 ? FontStyle.Italic : FontStyle.Normal, (style & 1) != 0 ? FontWeight.Bold : FontWeight.Normal);
-                            var formatted = new FormattedText(part, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, typeface, o._fontSize, fore != 0 ? Argb(fore) : foreDefault);
+                            var formatted = new FormattedText(part, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, typeface, o._fontSize, fore != 0 ? ForeArgb(fore) : foreDefault);
                             if ((style & 4) != 0) formatted.SetTextDecorations(TextDecorations.Underline);
                             context.DrawText(formatted, new Point(x, y + (lineHeight - o._charHeight) / 2));
                         }
@@ -539,7 +541,7 @@ namespace PrePoMaxX.FrontEnd
                 if (gutter > 0)
                 {
                     context.FillRectangle(back, new Rect(0, 0, gutter, Bounds.Height));
-                    IBrush numbers = c.LineNumberColor.IsEmpty ? Brushes.Teal : Ui.Brush(c.LineNumberColor);
+                    IBrush numbers = c.LineNumberColor.IsEmpty ? Brushes.Teal : Ui.Fore(c.LineNumberColor);
                     IBrush mark = c.BookmarkColor.IsEmpty ? Brushes.PowderBlue : Ui.Brush(c.BookmarkColor);
                     for (int r = first; r <= last; r++)
                     {
@@ -550,7 +552,7 @@ namespace PrePoMaxX.FrontEnd
                         var number = new FormattedText((i + 1).ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, o._typeface, o._fontSize, numbers);
                         context.DrawText(number, new Point(gutter - 6 - number.Width, y + (lineHeight - o._charHeight) / 2));
                     }
-                    context.DrawLine(new Pen(c.ServiceLinesColor.IsEmpty ? Brushes.Silver : Ui.Brush(c.ServiceLinesColor)), new Point(gutter + 0.5, 0), new Point(gutter + 0.5, Bounds.Height));
+                    context.DrawLine(new Pen(c.ServiceLinesColor.IsEmpty ? Brushes.Silver : Ui.Fore(c.ServiceLinesColor)), new Point(gutter + 0.5, 0), new Point(gutter + 0.5, Bounds.Height));
                 }
                 // Caret
                 if (IsFocused && _caretOn && c.CaretVisible && rows.Count > 0)
@@ -559,7 +561,7 @@ namespace PrePoMaxX.FrontEnd
                     int r = o.RowOf(caret);
                     var row = rows[r];
                     double x = o.RowLeft(row) + (caret.iChar - row.Start) * cw, y = r * lineHeight - top;
-                    context.FillRectangle(c.CaretColor.IsEmpty ? Brushes.Black : Ui.Brush(c.CaretColor), new Rect(x, y, c.IsReplaceMode ? cw : 2, lineHeight));
+                    context.FillRectangle(c.CaretColor.IsEmpty ? Look.Text : Ui.Fore(c.CaretColor), new Rect(x, y, c.IsReplaceMode ? cw : 2, lineHeight));
                 }
             }
 
@@ -669,7 +671,7 @@ namespace PrePoMaxX.FrontEnd
             if (kind == "Close") { if (s_menu == menu && s_popup != null) s_popup.IsOpen = false; return; }
             if (s_popup == null)
             {
-                s_list = new ListBox { FontFamily = Look.Monospace, FontSize = 12, MaxHeight = 180, MinWidth = 120, Focusable = false, Background = Brushes.White };
+                s_list = new ListBox { FontFamily = Look.Monospace, FontSize = 12, MaxHeight = 180, MinWidth = 120, Focusable = false, Background = Look.Window };
                 s_list.AddHandler(InputElement.PointerPressedEvent, (s, e) =>
                 {
                     int index = s_list.SelectedIndex;

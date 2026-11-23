@@ -222,7 +222,7 @@ namespace PrePoMaxX.FrontEnd
                     return (holder, () =>
                     {
                         if (block.Text != label.Text) block.Text = label.Text;
-                        block.Foreground = label.Enabled ? (label.ForeColor == System.Drawing.SystemColors.ControlText ? Brushes.Black : Ui.Brush(label.ForeColor)) : Look.GrayText;
+                        block.Foreground = label.Enabled ? (label.ForeColor == System.Drawing.SystemColors.ControlText ? Look.Text : Ui.Fore(label.ForeColor)) : Look.GrayText;
                         Tip(holder, item);
                     });
                 }

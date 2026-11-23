@@ -18,8 +18,17 @@ Both are built from the tag [`preview-3.0.2-1`](https://github.com/aleksa9275/Pr
 ## What to test
 
 Your own models and everyday work: opening projects (also from older PrePoMax versions), CAD import, meshing, setting
-up and solving analyses with CalculiX (SPOOLES; PARDISO is Windows-only), results, and the Python features. The x86-64
-Linux build and real Linux desktops (GPU drivers, Wayland, HiDPI) have not been tested yet; those reports help most.
+up and solving analyses with CalculiX, results, and the Python features. The x86-64 Linux build and real Linux desktops
+(GPU drivers, Wayland, HiDPI) have not been tested yet; those reports help most.
+
+New in macOS preview 5:
+- **PaStiX** works (Step - Solver type), multithreaded with the CPU count of Tools - Settings - CalculiX. As in
+  CalculiX on Windows, its default mixed precision can give wrong results on thin shells: set the environment
+  variable `PASTIX_MIXED_PRECISION` to `0` there (its Active check box works now). SPOOLES runs on one thread on
+  Apple Silicon (its multithreaded mode gives wrong results there); PARDISO is Windows-only.
+- User materials from shared libraries (CalculiX external behaviours, e.g. MFront) are supported by the solver.
+- **Dark appearance**: the half-circle button at the right end of the top tool bar switches between light and dark.
+- Not on macOS/Linux: Tools - Bidirectional Mesh Converter (a Windows-only tool of the release).
 
 ## Report problems
 

@@ -119,10 +119,14 @@ namespace vtkControl.Native
         {
             SetBackground(true, topRgb, bottomRgb);
         }
+        /// <summary>PrePoMax-X (D069): a host may replace the background colours (the dark appearance); the settings
+        /// keep theirs.</summary>
+        public static Func<double[], double[]> BackgroundFilter;
         public void SetBackground(bool gradient, double[] topRgb, double[] bottomRgb)
         {
             CheckLength(topRgb, 3, "topRgb");
             CheckLength(bottomRgb, 3, "bottomRgb");
+            if (BackgroundFilter != null) { topRgb = BackgroundFilter(topRgb); bottomRgb = BackgroundFilter(bottomRgb); }
             VtkNativeLibrary.Check(VtkNativeMethods.vtkn_view_set_background(Handle(), gradient ? 1 : 0, topRgb,
                                                                               bottomRgb));
         }

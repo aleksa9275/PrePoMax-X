@@ -83,9 +83,10 @@ namespace PrePoMaxX.FrontEnd
             TextBox _editor;
             (int Row, int Column, string Text)? _reopen;
 
-            public Surface(DataGridView owner) { _owner = owner; Focusable = true; ClipToBounds = true; Background = Brushes.White; }
+            public Surface(DataGridView owner) { _owner = owner; Focusable = true; ClipToBounds = true; Background = Look.Window; }
 
             static IBrush Brush(System.Drawing.Color color, IBrush fallback) => color.IsEmpty || color.A == 0 ? fallback : Ui.Brush(color);
+            static IBrush Fore(System.Drawing.Color color, IBrush fallback) => color.IsEmpty || color.A == 0 ? fallback : Ui.Fore(color);
 
             static (TextAlignment, VerticalAlignment) Align(WinForms.DataGridViewContentAlignment alignment)
             {
@@ -104,10 +105,10 @@ namespace PrePoMaxX.FrontEnd
             static void DrawCheck(DrawingContext context, Rect cell, bool isChecked, bool disabled)
             {
                 var box = new Rect(cell.Center.X - 6.5, cell.Center.Y - 6.5, 13, 13);
-                context.FillRectangle(disabled ? new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xF0)) : Brushes.White, box);
-                context.DrawRectangle(new Pen(new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33)), 1), box.Deflate(0.5));
+                context.FillRectangle(disabled ? Look.Control : Look.Window, box);
+                context.DrawRectangle(new Pen(UiTheme.Dark ? Look.ReadOnlyText : new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33)), 1), box.Deflate(0.5));
                 if (!isChecked) return;
-                var tick = new Pen(disabled ? Brushes.Gray : Brushes.Black, 2);
+                var tick = new Pen(disabled ? Brushes.Gray : Look.Text, 2);
                 context.DrawLine(tick, new Point(box.X + 3, box.Y + 6.5), new Point(box.X + 5.5, box.Y + 9.5));
                 context.DrawLine(tick, new Point(box.X + 5.5, box.Y + 9.5), new Point(box.X + 10, box.Y + 3.5));
             }
@@ -127,14 +128,14 @@ namespace PrePoMaxX.FrontEnd
             protected override void Draw(DrawingContext context)
             {
                 var grid = Grid;
-                context.FillRectangle(Brush(grid.BackgroundColor, Brushes.White), new Rect(Bounds.Size));
+                context.FillRectangle(Brush(grid.BackgroundColor, Look.Window), new Rect(Bounds.Size));
                 var gridPen = new Pen(Brush(grid.GridColor, Look.LightFrame), 1);
-                var headerFace = new SolidColorBrush(Color.FromRgb(0xF7, 0xF7, 0xF7));
+                var headerFace = Look.HeaderFace;
                 var selected = new HashSet<(int, int)>(grid.SelectionRows.Zip(grid.SelectionColumns, (r, c) => (r, c)));
                 var current = grid.CurrentCellAddress;
                 int columns = grid.Columns.Count;
-                IBrush cellBack = Brush(grid.DefaultCellStyle.BackColor, Brushes.White);
-                IBrush cellFore = Brush(grid.DefaultCellStyle.ForeColor, Brushes.Black);
+                IBrush cellBack = Brush(grid.DefaultCellStyle.BackColor, Look.Window);
+                IBrush cellFore = Fore(grid.DefaultCellStyle.ForeColor, Look.Text);
                 for (int r = Math.Max(0, grid.FirstDisplayedScrollingRowIndex); r < grid.RowCount; r++)
                 {
                     var rowRect = grid.GetRowDisplayRectangle(r, false);
@@ -148,7 +149,7 @@ namespace PrePoMaxX.FrontEnd
                         bool isSelected = selected.Contains((r, c));
                         var style = grid.Rows[r].Cells[c].Style;
                         IBrush back = isSelected ? Look.Highlight : Brush(style?.BackColor ?? System.Drawing.Color.Empty, Brush(column.DefaultCellStyle.BackColor, cellBack));
-                        IBrush fore = isSelected ? Brushes.White : Brush(style?.ForeColor ?? System.Drawing.Color.Empty, Brush(column.DefaultCellStyle.ForeColor, cellFore));
+                        IBrush fore = isSelected ? Look.HighlightText : Fore(style?.ForeColor ?? System.Drawing.Color.Empty, Fore(column.DefaultCellStyle.ForeColor, cellFore));
                         context.FillRectangle(back, rect);
                         if (column is WinForms.DataGridViewCheckBoxColumn)
                             DrawCheck(context, rect, string.Equals(grid.GetCellText(r, c), bool.TrueString, StringComparison.OrdinalIgnoreCase), column.ReadOnly || grid.ReadOnly);
@@ -156,15 +157,15 @@ namespace PrePoMaxX.FrontEnd
                             DrawText(context, grid.GetCellText(r, c), rect, CellAlignment(c), fore);
                         context.DrawLine(gridPen, new Point(rect.Right - 0.5, rect.Top), new Point(rect.Right - 0.5, rect.Bottom));
                         context.DrawLine(gridPen, new Point(rect.Left, rect.Bottom - 0.5), new Point(rect.Right, rect.Bottom - 0.5));
-                        if (current.X == c && current.Y == r && IsFocused) context.DrawRectangle(new Pen(Brushes.Black, 1, DashStyle.Dot), rect.Deflate(1.5));
+                        if (current.X == c && current.Y == r && IsFocused) context.DrawRectangle(new Pen(Look.Text, 1, DashStyle.Dot), rect.Deflate(1.5));
                     }
                     if (grid.RowHeadersVisible)
                     {
                         Rect head = R(grid.GetCellDisplayRectangle(-1, r, false));
-                        context.FillRectangle(_headerRows.Contains(r) || current.Y == r ? new SolidColorBrush(Color.FromRgb(0xD9, 0xEB, 0xF9)) : headerFace, head);
+                        context.FillRectangle(_headerRows.Contains(r) || current.Y == r ? Look.HeaderCurrent : headerFace, head);
                         context.DrawRectangle(gridPen, head.Deflate(0.5));
                         string mark = r == grid.NewRowIndex ? "*" : current.Y == r ? "▶" : "";
-                        DrawText(context, mark, head, WinForms.DataGridViewContentAlignment.MiddleCenter, Brushes.Black);
+                        DrawText(context, mark, head, WinForms.DataGridViewContentAlignment.MiddleCenter, Look.Text);
                     }
                 }
                 if (grid.ColumnHeadersVisible)
@@ -177,7 +178,7 @@ namespace PrePoMaxX.FrontEnd
                         context.FillRectangle(headerFace, rect);
                         context.DrawRectangle(gridPen, rect.Deflate(0.5));
                         var alignment = column.HeaderCell.Style.Alignment;
-                        DrawText(context, column.HeaderText, rect, alignment == WinForms.DataGridViewContentAlignment.NotSet ? WinForms.DataGridViewContentAlignment.MiddleLeft : alignment, Brushes.Black);
+                        DrawText(context, column.HeaderText, rect, alignment == WinForms.DataGridViewContentAlignment.NotSet ? WinForms.DataGridViewContentAlignment.MiddleLeft : alignment, Look.Text);
                     }
                     if (grid.RowHeadersVisible)
                     {

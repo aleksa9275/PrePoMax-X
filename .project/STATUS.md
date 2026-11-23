@@ -4,6 +4,16 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 
 ## Where we are (23 November 2026)
 
+- **M3-2: the solver as the Windows release builds it; the dark appearance** (D069, D070; macOS ARM64). The maintainer
+  found PaStiX missing (B018); an audit of the release's `ccx_dynamic.exe` and native files found more gaps than
+  PARDISO: external behaviours (B019, fixed), multithreaded SPOOLES (B020) and the Bidirectional Mesh Converter
+  (B021, no public source). CalculiX is now built i8 with PaStiX4CalculiX (its CUDA-optional branch; OpenBLAS ILP64,
+  hwloc, Scotch, PaRSEC static; `X/Build/Pastix`), multithreaded, and with external behaviours; PaStiX agrees with
+  SPOOLES (`X/Build/Pastix/verify_solvers.py`), and its mixed-precision failure on thin shells matches the Windows
+  binary (`PASTIX_MIXED_PRECISION=0` fixes both). Multithreaded SPOOLES races on ARM64 (B022, ThreadSanitizer), so
+  ARM64 keeps the serial SPOOLES; x86-64 builds keep it multithreaded. `build_ui.py`: `pastix` stage and stage
+  fingerprints. Dark appearance: a toolbar toggle switching the running app, the viewport in warm light greys, light
+  unchanged. [Report](reports/phase-m3-2-solver-appearance.md).
 - **M3-0: upstream 3.0.2** (D068). Upstream `master` `6703b1cb` (version 3.0.2, not released yet; 51 commits on
   `1e2f83f2`) is merged (`d5f3b24c`): storage without BinaryFormatter, HiGHS instead of lp_solve, new structured quad
   meshers, Change Element Order, body force and edge loads, Show Nodes. Files of older versions are read by upstream's
@@ -80,12 +90,15 @@ _Replace this file as work progresses; history is in git and `.project/history/`
 | M3-1a | Avalonia front end for X/App on macOS, M2's Qt front end matched and bettered (D065, D067) | done on macOS ARM64: app probe 16/16, probe areas 124+4+9+5 (bundle checked with the repository blocked), bounds comparison with 3.0.1 (Wine Mono evidence), the maintainer's real project, `PrePoMax-X.app` without PyQt (preview branch `release/macos-arm64-preview`) |
 | M3-1b | The same on Linux via the local Podman machine (ARM64; Xvfb probes, VNC), then retire PyQt | done on Linux ARM64: app probe 16/16 and probe areas 124+4+9+5 in a Podman session without the repository, upstream suite 60/81 (macOS 61/81, same layout), QuadWild on Linux, Linux package without PyQt; PyQt workbench, Qt front end and Headless host retired; the maintainer's VNC check passed |
 | M3-0 | Upstream 3.0.2 (`6703b1cb`): storage, HiGHS, Netgen, vtkNative; housekeeping; release basics (D068) | done: macOS and Linux ARM64 packages verified and published (suite 77/108, B016 open); Linux x86-64 kit untested |
+| M3-2 | PaStiX, external behaviours, solver audit (D070); dark appearance (D069) | done on macOS ARM64 (see report); Linux after macOS is complete and local Forgejo CI exists |
 | M3–M5 | CI; original comparison; fixes, installers, release | planned |
 | Fixes | Recorded numerical/original bugs and warnings | after parity |
 | Release | Four targets, installers, signing, sources/notices | later |
 
 ## Next step
 
+0. Finish macOS (the maintainer's order, D070): B022 (SPOOLES MT on ARM64) to discuss; B016 triage; B021 needs
+   upstream. Then local Forgejo CI, then Linux (PaStiX stage and the appearance toggle untested there).
 1. The maintainer asks upstream about collaboration (with the macOS 3.0.2 build); open questions for upstream: the
    NetgenMesher revision behind 3.0.2's `nglib.dll`, the legacy-reader hook and the GmshCommon additions.
 2. Testers' feedback (enable issues on the fork); the first x86-64 run of `X/Build/Linux/build-package.sh`; B016
@@ -110,10 +123,11 @@ Still open: B014 and the automation server on Unix; B013's round trip with the o
   (`~/Documents/GitLab/pre-po-max-x/X/Build/artifacts/ui-packages`). Podman machine `prepomax-podman` (8 CPUs,
   15 GiB, 93 GB).
 - VTK 9.7.1 (vtkNative), Avalonia 11.3.23, Python.NET 3.1.0, CPython 3.12.14 with numpy in packages; patched
-  Gmsh 4.13.0, CalculiX 2.22, lib3mf 2.4.1, HiGHS 1.16.0, NetgenMesher `01e30ce0` pinned. Kept in `X/Build/artifacts`
+  Gmsh 4.13.0, CalculiX 2.22 (i8, PaStiX4CalculiX `1b15d792`), lib3mf 2.4.1, HiGHS 1.16.0, NetgenMesher `01e30ce0` pinned. Kept in `X/Build/artifacts`
   (cleanup 23 November) are only the macOS packaging inputs: VTK prefix `vtk-m1/vtk`, vtkNative `vtk-mac-arm64-302`,
   Netgen `netgen-mac-arm64-302` (with its OCCT install), HiGHS `highs-mac-arm64`, QuadWild `quadwild-mac-arm64`,
-  CalculiX `solver-m2`, the download cache, and `app-mac/app/settings.bin` and `app-mac/work` (the maintainer's
+  CalculiX `solver-pastix-dev` (i8, PaStiX; `solver-m2` the previous SPOOLES-only build) with the PaStiX stack
+  `pastix-dev`, the download cache, and `app-mac/app/settings.bin` and `app-mac/work` (the maintainer's
   settings and jobs; `X/App/local_app.py` rebuilds the local app around them). Linux packages come from
   `X/Build/Linux/build-package.sh` (Podman image `prepomax-x-package-build:1`; tests in `prepomax-x-run:24.04`).
   Old-file check: `Runner --open-legacy <files>` (X/Controller/Runner).

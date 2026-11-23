@@ -43,6 +43,9 @@ namespace PrePoMaxX.FrontEnd
                 case vtkControl.vtkControl view: return new Created(new ViewHost(view), null, true);
                 case WinForms.MenuStrip menu: return new Created(new MenuStripView(menu), null, true);
                 case WinForms.ToolStrip strip: return new Created(new ToolStripView(strip), null, true);
+                case WinForms.ToolStripPanel panel when window != null && window.IsMain && panel.Parent is WinForms.ToolStripContainer container
+                                                         && container.TopToolStripPanel == panel:
+                    return TopToolStripPanel(panel);
                 case WinForms.PropertyGrid grid: return new Created(new PropertyGridView(grid), null, true);
                 case WinForms.ListView list: return new Created(new ListViewView(list), null, true);
                 case WinForms.DataGridView grid: return new Created(new DataGridView(grid), null, true);
@@ -73,7 +76,7 @@ namespace PrePoMaxX.FrontEnd
         static IBrush BackOf(WinForms.Control control) =>
             control.BackColor.A == 0 || control.BackColor == System.Drawing.SystemColors.Control ? null : Ui.Brush(control.BackColor);
         static IBrush ForeOf(WinForms.Control control) =>
-            control.ForeColor == System.Drawing.SystemColors.ControlText ? null : Ui.Brush(control.ForeColor);
+            control.ForeColor == System.Drawing.SystemColors.ControlText ? null : Ui.Fore(control.ForeColor);
 
         static Created Container(WinForms.Control control)
         {
@@ -81,6 +84,23 @@ namespace PrePoMaxX.FrontEnd
             WinForms.BorderStyle style = control is WinForms.Panel panel ? panel.BorderStyle : control is WinForms.UserControl user ? user.BorderStyle : WinForms.BorderStyle.None;
             if (style != WinForms.BorderStyle.None) { border.BorderBrush = style == WinForms.BorderStyle.FixedSingle ? Look.Frame : Look.ButtonBorder; border.BorderThickness = new Thickness(1); }
             return new Created(border, new Updater(() => border.Background = BackOf(control)));
+        }
+
+        /// <summary>The main window's top tool strip panel, with the appearance toggle at the right end of its first row
+        /// (behind the strips, which leave that end free).</summary>
+        static Created TopToolStripPanel(WinForms.ToolStripPanel panel)
+        {
+            var grid = new Grid();
+            var toggle = new AppearanceToggle();
+            grid.Children.Add(toggle);
+            return new Created(grid, new Updater(() =>
+            {
+                grid.Background = BackOf(panel);
+                int top = int.MaxValue, height = 0;
+                foreach (WinForms.Control strip in panel.Controls)
+                    if (strip.Visible && strip.Top <= top) { height = strip.Top < top ? strip.Height : Math.Max(height, strip.Height); top = strip.Top; }
+                toggle.Height = height > 0 ? height : 25;
+            }));
         }
 
         // Buttons -------------------------------------------------------------------------------------------------------
@@ -166,14 +186,14 @@ namespace PrePoMaxX.FrontEnd
             {
                 string text = control.UseMnemonic ? (control.Text ?? "").Replace("&&", "\u0001").Replace("&", "").Replace("\u0001", "&") : control.Text;
                 if (block.Text != text) block.Text = text;
-                block.Foreground = ForeOf(control) ?? (control.Enabled ? Brushes.Black : Look.GrayText);
+                block.Foreground = ForeOf(control) ?? (control.Enabled ? Look.Text : Look.GrayText);
                 border.Background = BackOf(control);
             });
         }
 
         static Created LinkLabel(WinForms.LinkLabel control)
         {
-            var block = new TextBlock { Foreground = Ui.Brush(control.LinkColor), TextDecorations = TextDecorations.Underline, Cursor = new Cursor(StandardCursorType.Hand) };
+            var block = new TextBlock { Foreground = Ui.Fore(control.LinkColor), TextDecorations = TextDecorations.Underline, Cursor = new Cursor(StandardCursorType.Hand) };
             block.PointerReleased += (s, e) => Ui.Input(control.RaiseLinkClicked);
             return Leaf(block, () => block.Text = control.Text);
         }
@@ -466,7 +486,7 @@ namespace PrePoMaxX.FrontEnd
                 var rect = new Rect(2, y, Math.Max(0, Bounds.Width - 4), row);
                 if (item.BackColor.A > 0) context.FillRectangle(Ui.Brush(item.BackColor), rect);
                 var text = new FormattedText(item.Text ?? "", System.Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Look.Typeface, Look.FontSize,
-                                             item.ForeColor.A > 0 ? Ui.Brush(item.ForeColor) : Brushes.Black);
+                                             item.ForeColor.A > 0 ? Ui.Fore(item.ForeColor) : Look.Text);
                 context.DrawText(text, new Point(6, y + (row - text.Height) / 2));
             }
             context.DrawRectangle(new Pen(Look.ButtonBorder), new Rect(Bounds.Size).Deflate(0.5));

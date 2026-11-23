@@ -3,7 +3,7 @@
 PrePoMax-X ports PrePoMax 3.0.2 to native Windows x64, macOS ARM64 (Apple
 Silicon), Linux x64 and Linux ARM64. Start every session with
 [`.project/STATUS.md`](.project/STATUS.md) (current phase, next step) and
-[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D068. History before
+[`.project/DECISIONS.md`](.project/DECISIONS.md) D057–D070. History before
 8 November 2026 lives in `.project/history/`; it is reference, not instructions.
 
 ## Goal and strategy

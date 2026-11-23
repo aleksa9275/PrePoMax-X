@@ -10,7 +10,7 @@ Contents/Resources:
   python/   CPython 3.12 of P1 for the original's Python features, without PyQt6 and VTK's Python modules
   tools/    Netgen, Mmg, Gmsh and lib3mf of P1 (checked against its manifest), GmshCaller published self-contained,
             QuadWild from X/Build/artifacts/quadwild-mac-arm64
-  solver/   the CalculiX build of the local app (X/Build/artifacts/solver-m2), its Homebrew libraries copied beside
+  solver/   the CalculiX build (ThirdParty/Build/calculix-cpu.py; --pastix: i8 with PaStiX, D070), its Homebrew libraries copied beside
             it and their load paths made relative (relocation.json records the original fingerprints)
   launch.py X/App/bundle_launch.py: clones app/ into ~/Library/Application Support/PrePoMax-X and configures it
   Licenses/ the license texts; NOTICE.md lists the components
@@ -313,6 +313,8 @@ def main():
     shutil.copy2(ROOT / 'LICENSE', res / 'Licenses/PrePoMax-LICENSE')
     shutil.rmtree(res / 'Licenses/lpsolve', ignore_errors=True)   # 3.0.2 has no lp_solve
     shutil.copytree(ROOT / 'Licenses/highs', res / 'Licenses/highs')
+    if (a.solver.resolve() / 'licenses').is_dir():   # the solver's static libraries (the PaStiX stack, D070)
+        shutil.copytree(a.solver.resolve() / 'licenses', res / 'Licenses/solver')
     extra = {'dotnet': NUGET / f'microsoft.netcore.app.runtime.osx-arm64/{DOTNET_RUNTIME}', 'skiasharp': NUGET / 'skiasharp/2.88.9',
              'harfbuzzsharp': NUGET / 'harfbuzzsharp/8.3.1.1'}
     for name, folder in extra.items():
@@ -341,8 +343,9 @@ def main():
         'solver': {'registry': 'solver/build-registry.json', 'id': solver_id, 'directory': 'solver/bin'},
         'release': {'version': '3.0.1', 'note': 'materials.lib, Models and Tools of the latest release (3.0.2 has none yet)',
                     'files': release_files},
-        'missing': {'PARDISO': 'the Intel MKL PARDISO solver has no macOS ARM64 build (use SPOOLES)',
-                    'BidirectionalMeshConverter': 'Tools/BidirectionalMeshConverter.exe of the release is Windows-only'},
+        'missing': {'PARDISO': 'the Intel MKL PARDISO solver has no macOS ARM64 build (use PaStiX or SPOOLES)',
+                    'BidirectionalMeshConverter': 'Tools/BidirectionalMeshConverter.exe of the release is a Windows-only '
+                                                  'third-party build without public source (B021)'},
     }, indent=2) + '\n')
     macos = bundle / 'Contents/MacOS'
     macos.mkdir(parents=True)

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "note": "The PaStiX stack of CalculiX 2.22 (README.INSTALL, Makefile_i8, make_*.sh): every library with 8-byte integers, in this order. CUDA is left out (NVIDIA only).",
+  "sources": {
+    "openblas": {
+      "version": "0.3.34",
+      "archive": "OpenBLAS-0.3.34.tar.gz",
+      "url": "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.34/OpenBLAS-0.3.34.tar.gz",
+      "sha256": "cd7e129868320cc2d033afa920e31202dfe0b8066a5b66661900ccc0f197dfed",
+      "license": "BSD-3-Clause"
+    },
+    "hwloc": {
+      "version": "2.1.0",
+      "archive": "hwloc-2.1.0.tar.bz2",
+      "url": "https://download.open-mpi.org/release/hwloc/v2.1/hwloc-2.1.0.tar.bz2",
+      "sha256": "19429752f772cf68321196970ffb10dafd7e02ab38d2b3382b157c78efd10862",
+      "license": "BSD-3-Clause"
+    },
+    "scotch": {
+      "version": "6.0.8",
+      "archive": "scotch-v6.0.8.tar.gz",
+      "url": "https://gitlab.inria.fr/scotch/scotch/-/archive/v6.0.8/scotch-v6.0.8.tar.gz",
+      "sha256": "9457c1e7c30f073686cc217345b5a96af4166d6abbf148af84cdbab4e144b299",
+      "license": "CeCILL-C"
+    },
+    "parsec": {
+      "version": "mfaverge fork, master",
+      "git": "https://bitbucket.org/mfaverge/parsec.git",
+      "commit": "83ff82ec9176513c912d46114ca6ae211a2720ee",
+      "tree": "23a29430e6a890ec8c8884011c8a1c7a18e9bd83",
+      "license": "BSD-3-Clause"
+    },
+    "pastix": {
+      "version": "PaStiX4CalculiX (PaStiX 6.0.1 for CalculiX), the CUDA-optional branch",
+      "git": "https://github.com/Kabbone/PaStiX4CalculiX.git",
+      "commit": "1b15d792bdf5c6ac4e89e377766668f225b5a4d4",
+      "tree": "1d2fde6f30e8d4a7acc929292d1edb4d269885e0",
+      "basedOn": "github.com/Dhondtguido/PaStiX4CalculiX d6b493bc (the repository CalculiX 2.22's README.INSTALL names; same tree as Kabbone 95e25cc4)",
+      "note": "Dhondtguido's tree calls cuBLAS outside the GPU kernels and cannot build without CUDA; branch cudaless adds 5 commits by the same contributor that make CUDA and PaRSEC optional. The CPU path CalculiX uses (Scotch ordering, PaRSEC scheduler, GMRES refinement) is unchanged.",
+      "license": "CeCILL-C"
+    }
+  }
+}

@@ -5,6 +5,7 @@
   <PropertyGroup>
     <AssemblyName>PrePoMaxX.FrontEnd</AssemblyName><RootNamespace>PrePoMaxX.FrontEnd</RootNamespace>
     <OutputType>Library</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="*.cs" />

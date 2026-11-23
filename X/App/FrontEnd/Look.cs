@@ -1,6 +1,6 @@
-// A compact light theme close to the WinForms look the original forms are designed for: Segoe UI 9 pt at 96 DPI is
+// A compact theme close to the WinForms look the original forms are designed for: Segoe UI 9 pt at 96 DPI is
 // 12 px text in 23 px buttons, 20 px text boxes and 21 px combo boxes; Fluent's touch-friendly minimum sizes would
-// not fit the designer bounds, so they are removed and the paddings narrowed.
+// not fit the designer bounds, so they are removed and the paddings narrowed. Colours: Theme (light or dark).
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -14,17 +14,25 @@ namespace PrePoMaxX.FrontEnd
     internal static class Look
     {
         public const double FontSize = 12;
-        public static readonly IBrush Control = new SolidColorBrush(Color.FromRgb(0xF0, 0xF0, 0xF0));
-        public static readonly IBrush Window = Brushes.White;
-        public static readonly IBrush ButtonFace = new SolidColorBrush(Color.FromRgb(0xE1, 0xE1, 0xE1));
-        public static readonly IBrush ButtonBorder = new SolidColorBrush(Color.FromRgb(0xAD, 0xAD, 0xAD));
-        public static readonly IBrush Frame = new SolidColorBrush(Color.FromRgb(0x7A, 0x7A, 0x7A));
-        public static readonly IBrush LightFrame = new SolidColorBrush(Color.FromRgb(0xDC, 0xDC, 0xDC));
-        public static readonly IBrush Highlight = new SolidColorBrush(Color.FromRgb(0x00, 0x78, 0xD7));
-        public static readonly IBrush HoverFace = new SolidColorBrush(Color.FromRgb(0xE5, 0xF1, 0xFB));
-        public static readonly IBrush CheckedFace = new SolidColorBrush(Color.FromRgb(0xCC, 0xE8, 0xFF));
-        public static readonly IBrush CheckedBorder = new SolidColorBrush(Color.FromRgb(0x99, 0xD1, 0xFF));
-        public static readonly IBrush GrayText = new SolidColorBrush(Color.FromRgb(0x6D, 0x6D, 0x6D));
+        public static IBrush Control, Window, ButtonFace, ButtonBorder, Frame, LightFrame, Highlight, HighlightText, HoverFace,
+            CheckedFace, CheckedBorder, GrayText, Text, HeaderFace, HeaderCurrent, GridLine, ReadOnlyText, Error, Warning, Link;
+
+        /// <summary>The brushes of the appearance (UiTheme.Load first). They are the same objects in every appearance:
+        /// Init gives them the colours of the current one, so what uses them follows a switch.</summary>
+        public static void Init()
+        {
+            IBrush B(ref IBrush brush, Color color)
+            {
+                if (brush is SolidColorBrush solid) solid.Color = color; else brush = new SolidColorBrush(color);
+                return brush;
+            }
+            B(ref Control, UiTheme.Control); B(ref Window, UiTheme.Window); B(ref ButtonFace, UiTheme.ButtonFace); B(ref ButtonBorder, UiTheme.ButtonBorder);
+            B(ref Frame, UiTheme.Frame); B(ref LightFrame, UiTheme.LightFrame); B(ref Highlight, UiTheme.Highlight); B(ref HighlightText, UiTheme.HighlightText);
+            B(ref HoverFace, UiTheme.HoverFace); B(ref CheckedFace, UiTheme.CheckedFace); B(ref CheckedBorder, UiTheme.CheckedBorder);
+            B(ref GrayText, UiTheme.GrayText); B(ref Text, UiTheme.Text); B(ref HeaderFace, UiTheme.HeaderFace); B(ref HeaderCurrent, UiTheme.HeaderCurrent);
+            B(ref GridLine, UiTheme.GridLine); B(ref ReadOnlyText, UiTheme.ReadOnlyText); B(ref Error, UiTheme.Error); B(ref Warning, UiTheme.Warning);
+            B(ref Link, UiTheme.Link);
+        }
         public static readonly Typeface Typeface = new Typeface(FontFamily.Default);
         /// <summary>Linux: the default family when one with Segoe UI's widths is installed (the forms' designer bounds
         /// are made for it; Liberation Sans and Arimo have Arial's metrics, close to Segoe UI, where DejaVu Sans, the
