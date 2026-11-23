@@ -9,7 +9,7 @@ staged self-contained hosts without an external dotnet command. See
 [shared commands](../../X/Build/README.md) and actual task 0041 results. Historical
 Mac-only wording below describes the initial task 0038 proof, not all new recipes.
 
-First implemented target: macOS ARM64, CalculiX **2.22**, serial SPOOLES 2.2,
+First implemented target (task 0038; now i8 with PaStiX and multithreaded SPOOLES, D070): macOS ARM64, CalculiX **2.22**, serial SPOOLES 2.2,
 static ARPACK-ng 3.9.1 int32 and OpenBLAS LP64. This explicit research profile
 does not replace the default Windows reference registry or choose a production
 solver default. Core source/version and precision stay unchanged.

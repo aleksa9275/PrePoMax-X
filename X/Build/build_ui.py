@@ -89,6 +89,7 @@ STAGE_INPUTS = {
     'netgen': ['X/Build/NativeCad', 'ThirdParty/Sources/NetgenMesher/source-lock.json', 'ThirdParty/Sources/source-lock.json'],
     'quadwild': ['X/Build/QuadWild'], 'vtk': ['X/Build/Vtk'], 'pastix': ['X/Build/Pastix/build.py', 'X/Build/Pastix/source-lock.json'],
     'solver': ['X/Build/build.py', 'X/Build/targets.json', 'ThirdParty/Build/calculix-cpu.py', 'ThirdParty/Build/platforms',
+               'ThirdParty/Build/patches',
                'ThirdParty/Sources/source-lock.json'],
 }
 STAGE_USES = {'solver': ['pastix']}

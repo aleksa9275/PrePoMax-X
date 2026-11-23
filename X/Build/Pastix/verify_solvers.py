@@ -163,7 +163,7 @@ def main():
             if run.returncode == 0 and dat.exists():
                 entry['values'] = frequencies(dat) if 'frequency' in case else displacements(dat)
             # Every direct solver runs multithreaded: SPOOLES's MT variant and PaStiX report the threads they use
-            # (SPOOLES is serial on ARM64, B022: --spooles-threads 1; it then reports "Using 1 cpu for spooles")
+            # (--spooles-threads 1 checks a serial SPOOLES build, which reports "Using 1 cpu for spooles")
             spooles = re.findall(r'Using up to (\d+) cpu\(s\) for spooles', log) or re.findall(r'Using (1) cpu for spooles', log)
             pastix = re.findall(r'Number of threads per process:\s+(\d+)', log)
             found = pastix if solver == 'PASTIX' else spooles

@@ -126,15 +126,18 @@ def main():
         assert count > 0
         path.write_text(text.replace("IVinit(nfront, NULL)", "IVinit(nfront, 0)"))
         report["patches"].append({"path": "SPOOLES/ETree/src/transform.c", "change": "integer zero instead of NULL for IVinit value", "occurrences": count})
+        # The multithreaded SPOOLES of CalculiX's Makefile_MT (USE_MT), as in the Windows build. SPOOLES 2.2 hands data
+        # between its threads through lists and flags that are safe only with x86's ordered stores; the patch makes
+        # them safe on ARM64 too (B022: wrong eigenvalues in 3 of 8 runs on Apple Silicon without it).
+        patch = ROOT / "ThirdParty/Build/patches/spooles-2.2-mt-memory-order.patch"
+        run(["patch", "-p1", "--forward", "-i", patch], spooles)
+        report["patches"].append({"path": "SPOOLES ChvList, SubMtxList, FrontMtx/solveUtil.c, MT/solveMT.c",
+                                  "change": "B022: lists always locked, thread flags with acquire/release order",
+                                  "patch": str(patch.relative_to(ROOT)), "sha256": sha(patch)})
         run(["make", "lib", f"CC={args.cc}", "CFLAGS=-O2 -std=gnu89", "RANLIB=ranlib"], spooles)
-        # The multithreaded SPOOLES of CalculiX's Makefile_MT (USE_MT), as in the Windows build, on x86-64 only: its
-        # threads hand data over through unsynchronized flags and list heads (ThreadSanitizer: 127 races in the MT
-        # factorization and solve), which x86's ordered stores hide; on ARM64 eigenvalues come out wrong in 3 of 8 runs
-        # (B022). ARM64 keeps the serial SPOOLES; PaStiX is the multithreaded direct solver there.
-        spooles_mt = target["architecture"] == "X64"
-        if spooles_mt:
-            run(["make", "lib", f"CC={args.cc}", "CFLAGS=-O2 -std=gnu89", "RANLIB=ranlib"], spooles / "MT")
-        report["spoolesThreads"] = "multithreaded (USE_MT)" if spooles_mt else "serial (B022: SPOOLES MT is not safe on ARM64)"
+        run(["make", "lib", f"CC={args.cc}", "CFLAGS=-O2 -std=gnu89", "RANLIB=ranlib"], spooles / "MT")
+        spooles_mt = True
+        report["spoolesThreads"] = "multithreaded (USE_MT, B022 memory-order patch)"
         arpack_build = sources / "arpack-build"
         run(["cmake", "-S", ROOT / "ThirdParty/Sources/ARPACK-ng/3.9.1/src", "-B", arpack_build,
             "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_C_COMPILER={args.cc}", f"-DCMAKE_Fortran_COMPILER={args.fc}",

@@ -1,0 +1,257 @@
+PrePoMax-X B022: SPOOLES 2.2's multithreaded factorization and solve on weakly ordered CPUs (ARM64).
+
+SPOOLES hands fronts and solution blocks between threads through ChvList/SubMtxList and char flags. Lists with
+one producer thread skipped their lock, and the lists' state and the solve's frontIsDone/IsDone flags were read
+with plain loads. That is correct only under x86's ordered stores: on Apple Silicon a reader could see a list's
+count reach zero before the object added last, and lose that aggregate (wrong eigenvalues in 3 of 8 runs).
+The lists now always use their lock when they have one; the flags are release stores and acquire loads (GCC builtins).
+Applied by ThirdParty/Build/calculix-cpu.py with patch -p1 in the SPOOLES source folder.
+
+--- a/ChvList/src/util.c
++++ b/ChvList/src/util.c
+@@ -27,6 +27,17 @@
+    fprintf(stderr, "\n fatal error in ChvList_isListNonempty(%p,%d)"
+            "\n bad input\n", chvlist, ilist) ;
+ }
++if ( chvlist->lock != NULL ) {
++/*
++   PrePoMax-X (B022): read under the lock, so the reader sees the
++   objects other threads added (ARM64 does not order plain loads)
++*/
++   int   rc ;
++   Lock_lock(chvlist->lock) ;
++   rc = (chvlist->heads[ilist] != NULL) ;
++   Lock_unlock(chvlist->lock) ;
++   return(rc) ;
++}
+ return(chvlist->heads[ilist] != NULL) ; }
+ 
+ /*--------------------------------------------------------------------*/
+@@ -54,6 +65,15 @@
+ }
+ if ( chvlist->counts == NULL ) {
+    return(1) ;
++} else if ( chvlist->lock != NULL ) {
++/*
++   PrePoMax-X (B022): read under the lock (see isListNonempty)
++*/
++   int   rc ;
++   Lock_lock(chvlist->lock) ;
++   rc = (chvlist->counts[ilist] == 0) ;
++   Lock_unlock(chvlist->lock) ;
++   return(rc) ;
+ } else {
+    return(chvlist->counts[ilist] == 0) ;
+ }
+@@ -92,8 +112,7 @@
+         chvlist, chv, ilist) ;
+ fflush(stdout) ;
+ #endif
+-if ( chvlist->lock != NULL
+-   && (chvlist->flags == NULL || chvlist->flags[ilist] == 'Y' ) ) {
++if ( chvlist->lock != NULL ) { /* PrePoMax-X (B022): always lock, the flags assumed x86 ordering */
+ /*
+    --------------------------------------------------
+    we must lock the list to (possibly) add the object
+@@ -163,10 +182,8 @@
+ fprintf(stdout, "\n ChvList %p : get list %d", chvlist, ilist) ;
+ fflush(stdout) ;
+ #endif
+-if ( chvlist->heads[ilist] != NULL ) {
+-   if ( chvlist->lock == NULL
+-     || (chvlist->flags != NULL && chvlist->flags[ilist] == 'N')
+-     || (chvlist->counts != NULL && chvlist->counts[ilist] == 0) ) {
++if ( chvlist->lock != NULL || chvlist->heads[ilist] != NULL ) { /* PrePoMax-X (B022) */
++   if ( chvlist->lock == NULL ) {
+ /*
+       ------------------------
+       no need to lock the list
+--- a/FrontMtx/src/solveUtil.c
++++ b/FrontMtx/src/solveUtil.c
+@@ -198,7 +198,7 @@
+    -----------------------------------------------------
+ */
+    if ( owners == NULL || owners[J] == myid ) {
+-      frontIsDone[J] = 'Y'  ;
++      __atomic_store_n(&frontIsDone[J], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+    }
+    status[J] = 'F' ;
+    return ;
+@@ -304,7 +304,7 @@
+ */
+       p_agg[J]       = NULL ;
+       p_mtx[J]       = BJ   ;
+-      frontIsDone[J] = 'Y'  ;
++      __atomic_store_n(&frontIsDone[J], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+    } else if ( BJ != NULL ) {
+ /*
+       --------------------------------------
+@@ -366,7 +366,7 @@
+       p_mtx[J] = NULL ;
+       p_agg[J] = BJ   ;
+    }
+-   frontIsDone[J] = 'Y' ;
++   __atomic_store_n(&frontIsDone[J], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+ }
+ return ; }
+ 
+@@ -411,7 +411,7 @@
+    -----------------------------------------------------
+ */
+    if ( owners == NULL || owners[J] == myid ) {
+-      frontIsDone[J] = 'Y'  ;
++      __atomic_store_n(&frontIsDone[J], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+    }
+    status[J] = 'F' ;
+    return ;
+@@ -512,7 +512,7 @@
+ */
+       p_agg[J]       = NULL ;
+       p_mtx[J]       = ZJ   ;
+-      frontIsDone[J] = 'Y'  ;
++      __atomic_store_n(&frontIsDone[J], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+    } else if ( ZJ != NULL ) {
+ /*
+       --------------------------------------
+@@ -758,7 +758,7 @@
+               I, frontIsDone[I], I, p_mtx[I]) ;
+       fflush(msgFile) ;
+    }
+-   if ( frontIsDone[I] == 'Y' ) {
++   if ( __atomic_load_n(&frontIsDone[I], __ATOMIC_ACQUIRE) == 'Y' ) { /* PrePoMax-X (B022) */
+       if ( (YI = p_mtx[I]) != NULL ) {
+ /*
+          --------------------------------
+@@ -930,7 +930,7 @@
+               "\n\n frontIsDone[%d] = %c", K, frontIsDone[K]) ;
+       fflush(msgFile) ;
+    }
+-   if ( frontIsDone[K] == 'Y' ) {
++   if ( __atomic_load_n(&frontIsDone[K], __ATOMIC_ACQUIRE) == 'Y' ) { /* PrePoMax-X (B022) */
+       if ( (XK = p_mtx[K]) != NULL ) {
+ /*
+          --------------------------------
+--- a/MT/src/solveMT.c
++++ b/MT/src/solveMT.c
+@@ -497,7 +497,7 @@
+    all processes wait here until all are done
+    ------------------------------------------
+ */
+-lowerIsDone[myid] = 'Y' ;
++__atomic_store_n(&lowerIsDone[myid], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+ do {
+    if ( msglvl > 2 ) {
+       fprintf(msgFile, "\n\n 1. checking out lowerIsDone[] vector: ") ;
+@@ -509,7 +509,7 @@
+          fprintf(msgFile, " %c", lowerIsDone[iproc]) ;
+          fflush(msgFile) ;
+       }
+-      if ( lowerIsDone[iproc] != 'Y' ) {
++      if ( __atomic_load_n(&lowerIsDone[iproc], __ATOMIC_ACQUIRE) != 'Y' ) { /* PrePoMax-X (B022) */
+          everybodyDone = 0 ;
+          break ;
+       }
+@@ -530,7 +530,7 @@
+       set frontIsDone[J] to 'N' to be ready for the backward solve
+       ------------------------------------------------------------
+ */
+-      frontIsDone[J] = 'N' ;
++      __atomic_store_n(&frontIsDone[J], 'N', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+    }
+ }
+ MARKTIME(t2) ;
+@@ -540,7 +540,7 @@
+    all processes wait here until all are done
+    ------------------------------------------
+ */
+-diagIsDone[myid] = 'Y' ;
++__atomic_store_n(&diagIsDone[myid], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+ do {
+    if ( msglvl > 2 ) {
+       fprintf(msgFile, "\n\n 2. checking out diagIsDone[] vector: ") ;
+@@ -552,7 +552,7 @@
+          fprintf(msgFile, " %c", diagIsDone[iproc]) ;
+          fflush(msgFile) ;
+       }
+-      if ( diagIsDone[iproc] != 'Y' ) {
++      if ( __atomic_load_n(&diagIsDone[iproc], __ATOMIC_ACQUIRE) != 'Y' ) { /* PrePoMax-X (B022) */
+          everybodyDone = 0 ;
+          break ;
+       }
+@@ -650,7 +650,7 @@
+    all processes wait here until all are done
+    ------------------------------------------
+ */
+-upperIsDone[myid] = 'Y' ;
++__atomic_store_n(&upperIsDone[myid], 'Y', __ATOMIC_RELEASE) ; /* PrePoMax-X (B022) */
+ do {
+    if ( msglvl > 2 ) {
+       fprintf(msgFile, "\n\n 2. checking out upperIsDone[] vector: ") ;
+@@ -662,7 +662,7 @@
+          fprintf(msgFile, " %c", upperIsDone[iproc]) ;
+          fflush(msgFile) ;
+       }
+-      if ( upperIsDone[iproc] != 'Y' ) {
++      if ( __atomic_load_n(&upperIsDone[iproc], __ATOMIC_ACQUIRE) != 'Y' ) { /* PrePoMax-X (B022) */
+          everybodyDone = 0 ;
+          break ;
+       }
+--- a/SubMtxList/src/util.c
++++ b/SubMtxList/src/util.c
+@@ -28,6 +28,17 @@
+            "\n fatal error in SubMtxList_isListNonempty(%p,%d)"
+            "\n bad input\n", list, ilist) ;
+ }
++if ( list->lock != NULL ) {
++/*
++   PrePoMax-X (B022): read under the lock, so the reader sees the
++   objects other threads added (ARM64 does not order plain loads)
++*/
++   int   rc ;
++   Lock_lock(list->lock) ;
++   rc = (list->heads[ilist] != NULL) ;
++   Lock_unlock(list->lock) ;
++   return(rc) ;
++}
+ return(list->heads[ilist] != NULL) ; }
+ 
+ /*--------------------------------------------------------------------*/
+@@ -55,6 +66,15 @@
+ }
+ if ( list->counts == NULL ) {
+    return(1) ;
++} else if ( list->lock != NULL ) {
++/*
++   PrePoMax-X (B022): read under the lock (see isListNonempty)
++*/
++   int   rc ;
++   Lock_lock(list->lock) ;
++   rc = (list->counts[ilist] == 0) ;
++   Lock_unlock(list->lock) ;
++   return(rc) ;
+ } else {
+    return(list->counts[ilist] == 0) ;
+ }
+@@ -91,8 +111,7 @@
+         list, mtx, ilist) ;
+ fflush(stdout) ;
+ #endif
+-if ( list->lock != NULL
+-   && (list->flags == NULL || list->flags[ilist] == 'Y' ) ) {
++if ( list->lock != NULL ) { /* PrePoMax-X (B022): always lock, the flags assumed x86 ordering */
+ /*
+    --------------------------------------------------
+    we must lock the list to (possibly) add the object
+@@ -162,10 +181,8 @@
+ fprintf(stdout, "\n SubMtxList %p : get list %d", list, ilist) ;
+ fflush(stdout) ;
+ #endif
+-if ( list->heads[ilist] != NULL ) {
+-   if ( list->lock == NULL
+-     || (list->flags != NULL && list->flags[ilist] == 'N')
+-     || (list->counts != NULL && list->counts[ilist] == 0) ) {
++if ( list->lock != NULL || list->heads[ilist] != NULL ) { /* PrePoMax-X (B022) */
++   if ( list->lock == NULL ) {
+ /*
+       ------------------------
+       no need to lock the list

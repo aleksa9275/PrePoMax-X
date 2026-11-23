@@ -11,7 +11,7 @@ release; `Globals.cs` paths):
 
 | | Windows release | previews (≤ 4) | now (macOS ARM64) |
 |---|---|---|---|
-| SPOOLES | multithreaded (`USE_MT`) | serial | serial (B022), multithreaded on x86-64 builds |
+| SPOOLES | multithreaded (`USE_MT`) | serial | multithreaded (B022 fixed, preview 6) |
 | PaStiX (PaStiX4CalculiX, i8) | linked, CUDA stubbed | missing (B018) | linked, multithreaded |
 | PARDISO (MKL) | linked | missing | missing (D060's exception) |
 | external behaviours (user UMAT/MFront libraries) | linked | missing (B019) | linked |
@@ -55,6 +55,13 @@ threads, 10 of 10 with 8); the Windows binary is stable on the same deck (Rosett
 127 data races in SPOOLES 2.2's MT factorization and solve (unsynchronized flags, list heads, counters). Fencing the
 44 flag sites was not enough. ARM64 builds therefore keep the serial SPOOLES (correct, as the previews had), PaStiX is
 their multithreaded direct solver, and x86-64 builds keep `USE_MT`. A real fix is B022 (to discuss).
+
+Update (same day, the maintainer's request; preview 6): B022 is fixed. The cause is SPOOLES's lists that skip their
+lock when one thread contributes (that thread is not the reader) and plain-load flags in the solve. The patch
+`ThirdParty/Build/patches/spooles-2.2-mt-memory-order.patch` locks the lists whenever they have a lock and makes the
+flags release/acquire; ARM64 builds use `USE_MT` again. 20 of 20 repeated runs (4 and 8 threads) match the serial
+SPOOLES and PaStiX; ThreadSanitizer 11 reports (timing and entry-count statistics only) instead of 127. Details in
+B022.
 
 The thin plate with PaStiX's default mixed precision gives a wrong result (0.27 for 65.1; the iterative refinement does
 not converge) — the forum thread's case. The original Windows `ccx_dynamic.exe` gives the same wrong result (0.32) and

@@ -21,8 +21,6 @@ phase reports, `.project/bugs/` and the [backlog](reports/deferred-correctness-i
 ## Open items
 
 Solver and tools (D070):
-- **B022**: SPOOLES's multithreaded mode races on ARM64 (ThreadSanitizer: 127 races); ARM64 builds use the serial
-  SPOOLES and PaStiX for multithreading. A real fix (synchronize SPOOLES's MT layer) is to discuss.
 - **B021**: Tools - Bidirectional Mesh Converter (third-party Windows PyInstaller tool, no public source): ask
   upstream for the source and licence.
 - Linux: the `pastix` stage of `build_ui.py` and the i8 solver have not run on Linux (the kit's image may need flex,

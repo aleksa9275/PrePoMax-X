@@ -7,9 +7,9 @@ true of our packages. The maintainer asked for the PaStiX build, for all solvers
 and for certainty that PARDISO is the only missing piece. CalculiX 2.22 is now built as
 Makefile_i8 with Makefile_MFront's flags: 8-byte integers, PaStiX4CalculiX (Scotch, PaRSEC,
 hwloc, OpenBLAS ILP64, all static, multithreaded), external behaviours; Makefile_MT's
-multithreaded SPOOLES on x86-64 only: on ARM64 it returns wrong results in some runs (B022,
-ThreadSanitizer: unsynchronized hand-over in SPOOLES 2.2), so ARM64 keeps the serial SPOOLES
-and PaStiX is its multithreaded direct solver. PaStiX comes from the CUDA-optional branch of the contributor whose work CalculiX's
+multithreaded SPOOLES on every target: on ARM64 it returned wrong results in some runs (B022,
+an unsynchronized hand-over in SPOOLES 2.2 that x86 hides); at the maintainer's request it is
+fixed by a reviewable patch to SPOOLES (`ThirdParty/Build/patches`), not by a serial build. PaStiX comes from the CUDA-optional branch of the contributor whose work CalculiX's
 PaStiX repository merged (Kabbone/PaStiX4CalculiX `cudaless`): Dhondtguido's tree cannot be
 built without CUDA. BLAS inside PaStiX stays sequential, as CalculiX sets it for MKL; PaStiX (and SPOOLES on
 x86-64) take PrePoMax's CPU setting (OMP_NUM_THREADS). The Bidirectional Mesh Converter (B021)
