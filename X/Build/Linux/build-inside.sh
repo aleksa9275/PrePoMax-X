@@ -15,10 +15,15 @@ mkdir -p /work/downloads
 [ -f "/work/downloads/$archive" ] || curl -fsSL -o "/work/downloads/$archive" "$url"
 echo "$digest  /work/downloads/$archive" | sha256sum -c -
 rm -rf /work/release && mkdir -p /work/release && unzip -q "/work/downloads/$archive" -d /work/release
+# Publishing for the target adds its section to the committed NuGet lock files; they are restored before and after
+# packaging, so the package records the checkout as it was cloned (not dirty) and a rerun starts from it
+restore_locks() { git ls-files -m -- '*packages.lock.json' | xargs -r git checkout -- ; }
+restore_locks
 # The application, packaged with those components (bundle.json lists any file still holding a build path)
 export PREPOMAXX_BUILD_WORKSPACE=/work/ws
 python3 X/App/package_linux.py --target "$target" --p1 "/work/ws/package/dist/PrePoMax-X-$target.tar.gz" \
     --original "/work/release/$folder" --vtk-native /work/ws/vtk/vtkNative/runtime \
     --highs "$(ls /work/ws/highs/runtime/highs.dll.so)" --netgen /work/ws/netgen/runtime \
     --quadwild /work/ws/quadwild/runtime --output /work/out --archive
+restore_locks
 echo "== Done: /work/out/PrePoMax-X (folder) and /work/out/PrePoMax-X-$target.tar.gz"

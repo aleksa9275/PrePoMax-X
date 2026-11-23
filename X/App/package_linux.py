@@ -221,6 +221,10 @@ def main():
     else:
         run('podman', 'run', '--rm', '-v', f'{root}:/package', '-v', f'{ROOT / "X/Build/Linux"}:/tools:ro', BUILD_IMAGE,
             'python3', '/tools/strip_rpaths.py', '/package/app', '/package/tools/QuadWild')
+    # The build-path gate after the run paths are gone
+    manifest = json.loads((root / 'bundle.json').read_text())
+    manifest['buildPaths'] = build_paths(root)
+    (root / 'bundle.json').write_text(json.dumps(manifest, indent=2) + '\n')
     # Every fingerprint the runtime checks still holds after the packaging steps
     changed = [ident for ident, tool in tools.items() if sha(root / tool['path']) != tool['sha256']]
     changed += [gmsh['file']] if sha(root / gmsh['file']) != gmsh['sha256'] else []
