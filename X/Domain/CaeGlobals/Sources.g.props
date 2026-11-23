@@ -28,8 +28,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs" Link="DynamicTypeDescriptor/StandardValueAttribute.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/ExceptionTools.cs" Link="ExceptionTools.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Extensions.cs" Link="Extensions.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/BinarySerialization.cs" Link="BinarySerialization.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/Extensions.Calculix.cs" Link="Extensions.Calculix.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IContainsEquations.cs" Link="IContainsEquations.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMasterSlaveMultiRegion.cs" Link="IMasterSlaveMultiRegion.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/IMultiRegion.cs" Link="IMultiRegion.cs" />
@@ -50,7 +48,6 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/vtkSelectItem.cs" Link="Selection/Enums/vtkSelectItem.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Enums/vtkSelectOperation.cs" Link="Selection/Enums/vtkSelectOperation.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Selection.cs" Link="Selection/Selection.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/Selection.Legacy.cs" Link="Selection/Selection.Legacy.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNode.cs" Link="Selection/SelectionNode.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNodeIds.cs" Link="Selection/SelectionNodeIds.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Selection/SelectionNodeInvert.cs" Link="Selection/SelectionNodeInvert.cs" />
@@ -64,12 +61,56 @@
     <Compile Include="$(RepositoryRoot)CaeGlobals/JsonWriter.cs" Link="JsonWriter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/PromptRefusedException.cs" Link="PromptRefusedException.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/IObjectSerializer.cs" Link="Serialization/IObjectSerializer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/IPmxFormatter.cs" Link="Serialization/IPmxFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/LegacyReadReport.cs" Link="Serialization/LegacyReadReport.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/ObjectSerializer.cs" Link="Serialization/ObjectSerializer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxArrayFormatter.cs" Link="Serialization/PmxArrayFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxBufferWriter.cs" Link="Serialization/PmxBufferWriter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxClassPlan.cs" Link="Serialization/PmxClassPlan.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxComparerCodec.cs" Link="Serialization/PmxComparerCodec.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxDelegateFormatter.cs" Link="Serialization/PmxDelegateFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxDictionaryFormatter.cs" Link="Serialization/PmxDictionaryFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxDrawingFormatter.cs" Link="Serialization/PmxDrawingFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxEnumFormatter.cs" Link="Serialization/PmxEnumFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxFileInfoFormatter.cs" Link="Serialization/PmxFileInfoFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxFormatter.cs" Link="Serialization/PmxFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxFormatterCache.cs" Link="Serialization/PmxFormatterCache.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxFormatterResolver.cs" Link="Serialization/PmxFormatterResolver.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxGraphComparer.cs" Link="Serialization/PmxGraphComparer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxHashSetFormatter.cs" Link="Serialization/PmxHashSetFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxKeyAttribute.cs" Link="Serialization/PmxKeyAttribute.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxKeyValuePairFormatter.cs" Link="Serialization/PmxKeyValuePairFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxLinkedListFormatter.cs" Link="Serialization/PmxLinkedListFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxListFormatter.cs" Link="Serialization/PmxListFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxMember.cs" Link="Serialization/PmxMember.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxMultiArrayFormatter.cs" Link="Serialization/PmxMultiArrayFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxNullableFormatter.cs" Link="Serialization/PmxNullableFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxObjectFormatter.cs" Link="Serialization/PmxObjectFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxObjectSerializer.cs" Link="Serialization/PmxObjectSerializer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxPrimitiveFormatter.cs" Link="Serialization/PmxPrimitiveFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxQueueFormatter.cs" Link="Serialization/PmxQueueFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxReadContext.cs" Link="Serialization/PmxReadContext.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxReferenceComparer.cs" Link="Serialization/PmxReferenceComparer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxSortedDictionaryFormatter.cs" Link="Serialization/PmxSortedDictionaryFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxStackFormatter.cs" Link="Serialization/PmxStackFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxStorageException.cs" Link="Serialization/PmxStorageException.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxStructFormatter.cs" Link="Serialization/PmxStructFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxTypeAttribute.cs" Link="Serialization/PmxTypeAttribute.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxTypeCodec.cs" Link="Serialization/PmxTypeCodec.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxTypeFormatter.cs" Link="Serialization/PmxTypeFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxTypeRegistry.cs" Link="Serialization/PmxTypeRegistry.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxTypedMember.cs" Link="Serialization/PmxTypedMember.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxUnsupportedFormatter.cs" Link="Serialization/PmxUnsupportedFormatter.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Serialization/PmxWriteContext.cs" Link="Serialization/PmxWriteContext.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Storage/PmxChunk.cs" Link="Storage/PmxChunk.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Storage/PmxContainer.cs" Link="Storage/PmxContainer.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Storage/PmxCrc32.cs" Link="Storage/PmxCrc32.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Storage/PmxJournal.cs" Link="Storage/PmxJournal.cs" />
+    <Compile Include="$(RepositoryRoot)CaeGlobals/Storage/PmxJsonSerializer.cs" Link="Storage/PmxJsonSerializer.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/StringCompressor.cs" Link="StringCompressor.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/StringSplitter.cs" Link="StringSplitter.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/MessageBoxes.cs" Link="MessageBoxes.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/RenamedTypeSerializationBinder.cs" Link="RenamedTypeSerializationBinder.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.Equations.cs" Link="Tools.Equations.cs" />
-    <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.Results.cs" Link="Tools.Results.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Tools.cs" Link="Tools.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/Comparers/CompareObjects.cs" Link="Comparers/CompareObjects.cs" />
     <Compile Include="$(RepositoryRoot)CaeGlobals/CommonClasses/UniqueQueue.cs" Link="CommonClasses/UniqueQueue.cs" />

@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-SOURCES = REPO / "ThirdParty/Sources/NetgenMesher/c5ecb0ba"
+SOURCES = REPO / "ThirdParty/Sources/NetgenMesher/01e30ce0"
 
 
 def sha(path):

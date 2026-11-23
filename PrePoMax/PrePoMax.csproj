@@ -256,6 +256,7 @@
     <Compile Include="Commands\0050_Model\02_Tools\CFindEdgesByAngleForModelPartsCommand.cs" />
     <Compile Include="Commands\0050_Model\02_Tools\CRemeshElements.cs" />
     <Compile Include="Commands\0050_Model\02_Tools\CSplitPartMeshUsingSurface.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CChangeElementOrder.cs" />
     <Compile Include="Commands\0050_Model\02_Tools\CThickenShellMesh.cs" />
     <Compile Include="Commands\0050_Model\02_Tools\CUpdateNodalCoordinatesFromFile.cs" />
     <Compile Include="Commands\0050_Model\03_Mesh\01_Node\CMergeCoincidentNodes.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Commands\00_Base\ICommandAsynchronous.cs" />
     <Compile Include="Commands\00_Base\IExportFileCommand.cs" />
     <Compile Include="Commands\00_Base\IFileCommand.cs" />
+    <Compile Include="Commands\00_Base\ILoadNamesCommand.cs" />
     <Compile Include="Commands\00_Base\IFileDependentCommand.cs" />
     <Compile Include="Commands\00_Base\IImportFileCommand.cs" />
     <Compile Include="Commands\00_Base\SaveCommand.cs" />
@@ -472,6 +474,7 @@
     <Compile Include="Commands\_Compatibility\v2.1.0\CReplaceReferencePoint.cs" />
     <Compile Include="Commands\_Compatibility\v2.1.0\CShowReferencePoints.cs" />
     <Compile Include="Commands\_Compatibility\v2.2.0\CDeleteStlPartFacesCommand.cs" />
+    <Compile Include="PmxDocument.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="RuntimePaths.cs" />
     <Compile Include="RuntimeInitialization.cs" />
@@ -591,6 +594,10 @@
     <Compile Include="Forms\21_FEModel\FrmSplitPartMeshUsingSurface.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\21_FEModel\FrmChangeElementOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\ViewChangeElementOrder.cs" />
     <Compile Include="Forms\21_FEModel\FrmThickenShellMesh.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -774,6 +781,8 @@
     <Compile Include="Forms\55_Load\ViewFilmHeatTransfer.cs" />
     <Compile Include="Forms\55_Load\ViewDFlux.cs" />
     <Compile Include="Forms\55_Load\ViewBodyFlux.cs" />
+    <Compile Include="Forms\55_Load\ViewBodyForce.cs" />
+    <Compile Include="Forms\55_Load\ViewEdgeLoad.cs" />
     <Compile Include="Forms\55_Load\ViewRadiationHeatTransfer.cs" />
     <Compile Include="Forms\55_Load\ViewShellEdgeLoad.cs" />
     <Compile Include="Forms\56_DefinedField\FrmDefinedField.cs">
@@ -998,6 +1007,7 @@
     </Compile>
     <Compile Include="Forms\FrmMain.Plotting.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
@@ -1337,6 +1347,10 @@
       <Project>{bca7c65b-cc0b-48ca-b852-49255bd3851d}</Project>
       <Name>CaeResults</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PrePoMax.LegacyImport\PrePoMax.LegacyImport.csproj">
+      <Project>{5a398a3e-3f33-4fe4-b383-f4494938b452}</Project>
+      <Name>PrePoMax.LegacyImport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UserControls\UserControls.csproj">
       <Project>{74ea83fb-2743-49ee-85a8-5b42cbce19b3}</Project>
       <Name>UserControls</Name>
@@ -1426,6 +1440,7 @@
     <None Include="Icons\View\ElementEdges.ico" />
     <None Include="Icons\View\ModelEdges.ico" />
     <None Include="Icons\View\NoEdges.ico" />
+    <None Include="Icons\View\Nodes.ico" />
     <None Include="Icons\Mesh\Node_set.ico" />
     <None Include="Icons\Mesh\Element_set.ico" />
     <None Include="Icons\Mesh\Surface.ico" />
@@ -1481,6 +1496,8 @@
       <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
     </ItemGroup>
     <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" />
+    <!-- No stored type or field may change its meaning - see PmxTool\SchemaSnapshot.cs -->
+    <Exec Command="&quot;$(TargetDir)lib\PmxTool.exe&quot; schema --check &quot;$(SolutionDir)Schema_Snapshot.txt&quot;" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>del *.dll.config
@@ -1504,8 +1521,10 @@ rem VTK native pilot: vtkNative.dll and the VTK 9.7 DLLs it loads sit beside vtk
 IF EXIST "$(SolutionDir)vtkNative\build\runtime\vtkNative.dll" xcopy /D /Y /Q "$(SolutionDir)vtkNative\build\runtime\*.dll" "$(TargetDir)lib\"
 IF EXIST "$(TargetDir)lib\vtkNative.dll" xcopy /E /I /Y /Q "$(SolutionDir)Licenses\vtk" "$(TargetDir)lib\vtk-licenses"
 
-rem lp_solve solves the element counts of the edges; it sits next to GmshCaller.exe, which loads it
-copy "$(SolutionDir)ThirdParty\lpsolve\lpsolve55.dll" "$(TargetDir)lib\lpsolve55.dll"
+rem HiGHS solves the element counts of the edges and the ways of sweeping; it sits next to GmshCaller.exe, which loads it
+copy "$(SolutionDir)ThirdParty\highs\highs.dll" "$(TargetDir)lib\highs.dll"
+IF EXIST "$(TargetDir)lib\lpsolve55.dll" del "$(TargetDir)lib\lpsolve55.dll"
+IF EXIST "$(TargetDir)lib\lpsolve-LGPL-2.1.txt" del "$(TargetDir)lib\lpsolve-LGPL-2.1.txt"
 
 rem Mmg binaries are vendored in ThirdParty so a build produces a working Meshers\Mmg
 IF NOT EXIST "$(TargetDir)Meshers\Mmg\" mkdir "$(TargetDir)Meshers\Mmg\"
@@ -1524,7 +1543,8 @@ rem License texts that must travel with the distributed binaries
 copy "$(SolutionDir)LICENSE" "$(TargetDir)LICENSE"
 IF EXIST "$(TargetDir)lib\gmsh-*.dll" copy "$(SolutionDir)Licenses\gmsh\LICENSE.txt" "$(TargetDir)lib\gmsh-LICENSE.txt"
 IF EXIST "$(TargetDir)lib\gmsh-*.dll" copy "$(SolutionDir)Licenses\gmsh\CREDITS.txt" "$(TargetDir)lib\gmsh-CREDITS.txt"
-IF EXIST "$(TargetDir)lib\lpsolve55.dll" copy "$(SolutionDir)Licenses\lpsolve\LGPL-2.1.txt" "$(TargetDir)lib\lpsolve-LGPL-2.1.txt"
+IF EXIST "$(TargetDir)lib\highs.dll" copy "$(SolutionDir)Licenses\highs\LICENSE.txt" "$(TargetDir)lib\highs-LICENSE.txt"
+IF EXIST "$(TargetDir)lib\highs.dll" copy "$(SolutionDir)Licenses\highs\NOTICE.md" "$(TargetDir)lib\highs-NOTICE.md"
 IF EXIST "$(TargetDir)Meshers\Mmg\mmgs.exe" copy "$(SolutionDir)Licenses\mmg\LICENSE" "$(TargetDir)Meshers\Mmg\LICENSE"
 IF EXIST "$(TargetDir)Meshers\Mmg\mmgs.exe" copy "$(SolutionDir)Licenses\mmg\COPYING.LESSER" "$(TargetDir)Meshers\Mmg\COPYING.LESSER"
 IF EXIST "$(TargetDir)Meshers\Mmg\mmgs.exe" copy "$(SolutionDir)Licenses\mmg\COPYING" "$(TargetDir)Meshers\Mmg\COPYING"
@@ -1542,11 +1562,17 @@ IF NOT EXIST "$(TargetDir)Help\Python\" mkdir "$(TargetDir)Help\Python\"
 copy "$(SolutionDir)AgentSkill\prepomax\SKILL.md" "$(TargetDir)Help\Python\SKILL.md"
 
 IF EXIST "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe" copy "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe" "$(TargetDir)lib"
+rem GmshCaller reads its data with the storage serializer, whose dependencies need the binding redirects of its config
+IF EXIST "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe.config" copy "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe.config" "$(TargetDir)lib"
 
 rem PrePoMaxCmd is the console subsystem launcher deployed as PrePoMax.com so that a command line run
 rem keeps the shell waiting and receives the exit code - see PrePoMaxCmd\Program.cs
 copy "$(SolutionDir)PrePoMaxCmd\bin\x64\$(ConfigurationName)\PrePoMaxCmd.exe" "$(TargetDir)PrePoMax.com"
 IF EXIST "$(TargetDir)PrePoMax.com.config" del "$(TargetDir)PrePoMax.com.config"
+
+rem PmxTool sits next to the assemblies, where AfterBuild runs its check of Schema_Snapshot.txt
+copy "$(SolutionDir)PmxTool\bin\x64\$(ConfigurationName)\PmxTool.exe" "$(TargetDir)lib\PmxTool.exe"
+copy "$(SolutionDir)PmxTool\bin\x64\$(ConfigurationName)\PmxTool.exe.config" "$(TargetDir)lib\PmxTool.exe.config"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

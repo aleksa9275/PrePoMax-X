@@ -34,8 +34,8 @@ using static CaeGlobals.Geometry2;
 
 namespace CaeResults
 {
-    [Serializable]
-    public class FeResults : ISerializable
+    [PmxType(5008)]
+    public class FeResults
     {
         // Variables                                                                                                                
         [NonSerialized]
@@ -139,19 +139,20 @@ namespace CaeResults
                            FOComponentNames.ME12, FOComponentNames.ME23, FOComponentNames.ME13 }
         };
         //
-        private string _hashName;
-        private string _fileName;
-        private FeMesh _mesh;
-        private CaeGlobals.OrderedDictionary<string, ResultFieldOutput> _resultFieldOutputs;
-        private ShellResultData _shellResultData;
-        private CaeGlobals.OrderedDictionary<string, ResultHistoryOutput> _resultHistoryOutputs;
+        [PmxKey(0)] private string _hashName;
+        [PmxKey(1)] private string _fileName;
+        [PmxKey(2)] private FeMesh _mesh;
+        [PmxKey(3)] private CaeGlobals.OrderedDictionary<string, ResultFieldOutput> _resultFieldOutputs;
+        [PmxKey(4)] private ShellResultData _shellResultData;
+        [PmxKey(5)] private CaeGlobals.OrderedDictionary<string, ResultHistoryOutput> _resultHistoryOutputs;
         [NonSerialized]
         private HistoryResults _history;
-        private DateTime _dateTime;
-        private UnitSystem _unitSystem;
-        private string _deformationFieldOutputName;
-        private ComplexResultTypeEnum _complexResultType;
-        private float _complexAngleDeg;
+        [PmxKey(6)] private DateTime _dateTime;
+        [PmxKey(7)] private UnitSystem _unitSystem;
+        [PmxKey(8)] private string _deformationFieldOutputName;
+        [PmxKey(9)] private ComplexResultTypeEnum _complexResultType;
+        [PmxKey(10)] private float _complexAngleDeg;
+        [PmxKey(11)]
         private string _modelSpace;                             // null for a results file whose heading does not name it
 
 
@@ -290,28 +291,11 @@ namespace CaeResults
             //
             return rhofi;
         }
-        // ISerialization
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Using typeof() works also for null fields
-            info.AddValue("_hashName", _hashName, typeof(string));
-            info.AddValue("_fileName", _fileName, typeof(string));
-            info.AddValue("_mesh", _mesh, typeof(FeMesh));
-            info.AddValue("_resultFieldOutputs", _resultFieldOutputs, typeof(CaeGlobals.OrderedDictionary<string, ResultFieldOutput>));
-            info.AddValue("_resultHistoryOutputs", _resultHistoryOutputs, typeof(CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>));
-            //info.AddValue("_history", _history, typeof(HistoryResults)); - not needed - Compatibility for version v2.3.5
-            info.AddValue("_dateTime", _dateTime, typeof(DateTime));
-            info.AddValue("_unitSystem", _unitSystem, typeof(UnitSystem));
-            info.AddValue("_deformationFieldOutputName", _deformationFieldOutputName, typeof(string));
-            info.AddValue("_complexResultType", _complexResultType, typeof(ComplexResultTypeEnum));
-            info.AddValue("_complexAngleDeg", _complexAngleDeg, typeof(float));
-            info.AddValue("_modelSpace", _modelSpace, typeof(string));
-            info.AddValue("_shellResultData", _shellResultData, typeof(ShellResultData));
-        }
 
 
         // Static methods                                                                                                           
-        public static void WriteToFileStream(FeResults results, FileStream fileStream, CompressionLevel compressionLevel)
+        public static void WriteToFileStream(FeResults results, Stream fileStream, CompressionLevel compressionLevel,
+                                             bool compressBlocks = true)
         {
             if (results == null)
             {
@@ -346,7 +330,8 @@ namespace CaeResults
                     bw.Flush();
                     bw.BaseStream.Position = 0;
                     // Compress the writer
-                    byte[] compressedData = Tools.Compress(bw.BaseStream, compressionLevel);
+                    byte[] compressedData = compressBlocks ? Tools.Compress(bw.BaseStream, compressionLevel) :
+                                                            ((MemoryStream)bw.BaseStream).ToArray();
                     // Write the length of the compressed data
                     Tools.WriteIntToFileStream(fileStream, compressedData.Length);
                     // Write the compressed data
@@ -383,7 +368,8 @@ namespace CaeResults
                             bw.Flush();
                             bw.BaseStream.Position = 0;
                             // Compress the writer
-                            byte[] compressedData = Tools.Compress(bw.BaseStream, compressionLevel);
+                            byte[] compressedData = compressBlocks ? Tools.Compress(bw.BaseStream, compressionLevel) :
+                                                                    ((MemoryStream)bw.BaseStream).ToArray();
                             // Write the length of the compressed data
                             Tools.WriteIntToFileStream(fileStream, compressedData.Length);
                             // Write the compressed data
@@ -408,11 +394,11 @@ namespace CaeResults
                     // Write the history state
                     Tools.WriteIntToFileStream(fileStream, 1);
                     //
-                    HistoryResults.WriteToFileStream(results._history, fileStream, compressionLevel);
+                    HistoryResults.WriteToFileStream(results._history, fileStream, compressionLevel, compressBlocks);
                 }
             }
         }
-        public static void ReadFromFileStream(FeResults results, FileStream fileStream, int version)
+        public static void ReadFromFileStream(FeResults results, Stream fileStream, int version, bool blocksCompressed = true)
         {
             int numItems;
             int numOfBytes;
@@ -430,7 +416,7 @@ namespace CaeResults
                 fileStream.Read(compressedData, 0, compressedData.Length);
                 //
                 using (MemoryStream memoryStream = new MemoryStream(compressedData))
-                using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream)))
+                using (BinaryReader br = new BinaryReader(blocksCompressed ? Tools.Decompress(memoryStream) : memoryStream))
                 {
                     FeMesh.ReadFromBinaryReader(results.Mesh, br, version);
                     //
@@ -458,7 +444,7 @@ namespace CaeResults
                         fileStream.Read(compressedData, 0, compressedData.Length);
                         //
                         using (MemoryStream memoryStream = new MemoryStream(compressedData))
-                        using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream)))
+                        using (BinaryReader br = new BinaryReader(blocksCompressed ? Tools.Decompress(memoryStream) : memoryStream))
                         {
                             try
                             {
@@ -493,7 +479,7 @@ namespace CaeResults
                     exists = Tools.ReadIntFromFileStream(fileStream);
                     if (exists == 1)
                     {
-                        results._history = HistoryResults.ReadFromFileStream(fileStream, version);
+                        results._history = HistoryResults.ReadFromFileStream(fileStream, version, blocksCompressed);
                     }
                 }
             }
@@ -2065,6 +2051,14 @@ namespace CaeResults
                     case FOFieldNames.ForcePerArea:
                         unitConverter = new StringPressureConverter();
                         unitAbbreviation = _unitSystem.PressureUnitAbbreviation;
+                        break;
+                    case FOFieldNames.ForcePerVolume:
+                        unitConverter = new StringForcePerVolumeConverter();
+                        unitAbbreviation = _unitSystem.ForceUnitAbbreviation + "/" + _unitSystem.VolumeUnitAbbreviation;
+                        break;
+                    case FOFieldNames.ForcePerLength:
+                        unitConverter = new StringForcePerLengthConverter();
+                        unitAbbreviation = _unitSystem.ForcePerLengthUnitAbbreviation;
                         break;
                     // Preview
                     case FOFieldNames.PrescribedDisp:
@@ -4908,8 +4902,8 @@ namespace CaeResults
             if (axes == null) return null;
             //
             int count = axes[0].Length;
-            float[][] values = new float[5][];
-            for (int i = 0; i < 5; i++)
+            float[][] values = new float[6][];
+            for (int i = 0; i < values.Length; i++)
             {
                 values[i] = new float[count];
                 for (int j = 0; j < count; j++) values[i][j] = float.NaN;
@@ -4935,19 +4929,24 @@ namespace CaeResults
                 values[1][resultNodeId] = (float)reserveFactor;
                 values[2][resultNodeId] = mode;
             }
-            SetMaxFailureIndexOverLayers(values[0], values[3], values[4]);
+            SetExtremesOverLayers(values[0], values[1], values[3], values[4], values[5]);
             return values;
         }
-        // The largest failure index of all layers of a shell element, at the nodes of every one of its layers, and the
-        // layer it is reached in; a node takes the largest of the shell elements around it
-        private void SetMaxFailureIndexOverLayers(float[] failureIndices, float[] maxFailureIndices, float[] criticalLayers)
+        // The largest failure index and the smallest reserve factor of all layers of a shell element, at the nodes of
+        // every one of its layers, and the layer the smallest reserve factor is reached in, which is the layer that
+        // fails first; a node takes the most critical of the shell elements around it
+        private void SetExtremesOverLayers(float[] failureIndices, float[] reserveFactors, float[] maxFailureIndices,
+                                           float[] criticalLayers, float[] minReserveFactors)
         {
             Dictionary<int, float> shellMaxIndices = new Dictionary<int, float>();
             Dictionary<int, int> shellCriticalLayers = new Dictionary<int, int>();
+            Dictionary<int, float> shellMinReserveFactors = new Dictionary<int, float>();
             FeElement element;
             int resultNodeId;
             float index;
+            float reserveFactor;
             float shellMaxIndex;
+            float shellMinReserveFactor;
             foreach (var entry in _shellResultData.Elements)
             {
                 if (!_mesh.Elements.TryGetValue(entry.Key, out element)) continue;
@@ -4956,11 +4955,15 @@ namespace CaeResults
                 {
                     if (!TryGetResultNodeId(nodeId, out resultNodeId)) continue;
                     index = failureIndices[resultNodeId];
-                    if (float.IsNaN(index)) continue;
-                    //
-                    if (!shellMaxIndices.TryGetValue(entry.Value.ShellElementId, out shellMaxIndex) || index > shellMaxIndex)
-                    {
+                    if (!float.IsNaN(index) &&
+                        (!shellMaxIndices.TryGetValue(entry.Value.ShellElementId, out shellMaxIndex) || index > shellMaxIndex))
                         shellMaxIndices[entry.Value.ShellElementId] = index;
+                    reserveFactor = reserveFactors[resultNodeId];
+                    if (!float.IsNaN(reserveFactor) &&
+                        (!shellMinReserveFactors.TryGetValue(entry.Value.ShellElementId, out shellMinReserveFactor) ||
+                         reserveFactor < shellMinReserveFactor))
+                    {
+                        shellMinReserveFactors[entry.Value.ShellElementId] = reserveFactor;
                         shellCriticalLayers[entry.Value.ShellElementId] = entry.Value.LayerNumber;
                     }
                 }
@@ -4972,10 +4975,14 @@ namespace CaeResults
                 //
                 foreach (ShellResultElement layer in entry.Value)
                 {
-                    if (!shellMaxIndices.TryGetValue(layer.ShellElementId, out shellMaxIndex)) continue;
-                    if (float.IsNaN(maxFailureIndices[resultNodeId]) || shellMaxIndex > maxFailureIndices[resultNodeId])
-                    {
+                    if (shellMaxIndices.TryGetValue(layer.ShellElementId, out shellMaxIndex) &&
+                        (float.IsNaN(maxFailureIndices[resultNodeId]) || shellMaxIndex > maxFailureIndices[resultNodeId]))
                         maxFailureIndices[resultNodeId] = shellMaxIndex;
+                    if (shellMinReserveFactors.TryGetValue(layer.ShellElementId, out shellMinReserveFactor) &&
+                        (float.IsNaN(minReserveFactors[resultNodeId]) ||
+                         shellMinReserveFactor < minReserveFactors[resultNodeId]))
+                    {
+                        minReserveFactors[resultNodeId] = shellMinReserveFactor;
                         criticalLayers[resultNodeId] = shellCriticalLayers[layer.ShellElementId];
                     }
                 }

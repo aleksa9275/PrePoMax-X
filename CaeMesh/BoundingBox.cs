@@ -60,15 +60,26 @@ namespace CaeMesh
         }
     }
 
-    [Serializable]
-    public partial class BoundingBox
+    [PmxType(2000)]
+    public class BoundingBox
     {
         // Variables                                                                                                                
+        [PmxKey(0)] public double MinX;
+        [PmxKey(1)] public double MinY;
+        [PmxKey(2)] public double MinZ;
         //
-        public object Tag;
+        [PmxKey(3)] public double MaxX;
+        [PmxKey(4)] public double MaxY;
+        [PmxKey(5)] public double MaxZ;
+        //
+        [PmxKey(6)] public object Tag;
 
 
         // Constructors                                                                                                             
+        public BoundingBox()
+        {
+            Reset();
+        }
         public BoundingBox(double[] bounds)
         {
             MinX = bounds[0];
@@ -213,6 +224,15 @@ namespace CaeMesh
 
 
         // Methods                                                                                                                  
+        public void Reset()
+        {
+            MinX = double.MaxValue;
+            MinY = double.MaxValue;
+            MinZ = double.MaxValue;
+            MaxX = -double.MaxValue;
+            MaxY = -double.MaxValue;
+            MaxZ = -double.MaxValue;
+        }
         public void AddOffset(double[] offset)
         {
             MinX += offset[0];
@@ -320,6 +340,17 @@ namespace CaeMesh
             //
             if (box.MaxZ > MaxZ) MaxZ = box.MaxZ;
             if (box.MinZ < MinZ) MinZ = box.MinZ;
+        }
+        public void IncludeNode(FeNode node)
+        {
+            if (node.X > MaxX) MaxX = node.X;
+            if (node.X < MinX) MinX = node.X;
+            //
+            if (node.Y > MaxY) MaxY = node.Y;
+            if (node.Y < MinY) MinY = node.Y;
+            //
+            if (node.Z > MaxZ) MaxZ = node.Z;
+            if (node.Z < MinZ) MinZ = node.Z;
         }
         //
         public bool Intersects(BoundingBox box, double relativeOffset = 0)
@@ -560,6 +591,10 @@ namespace CaeMesh
         public double GetZSize()
         {
             return MaxZ - MinZ;
+        }
+        public double GetDiagonal()
+        {
+            return Math.Sqrt(Math.Pow(MaxX - MinX, 2) + Math.Pow(MaxY - MinY, 2) + Math.Pow(MaxZ - MinZ, 2));
         }
         public double GetVolume()
         {

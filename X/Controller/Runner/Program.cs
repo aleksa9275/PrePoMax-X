@@ -11,14 +11,15 @@ Assembly[] assemblies={typeof(Controller).Assembly,typeof(FeModel).Assembly,type
 if(args.Length>0 && args[0]=="--catalog")
 {
  foreach(var a in assemblies)
-  foreach(var t in a.GetTypes().Where(t=>t.IsSerializable && !t.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute),false) && !typeof(Delegate).IsAssignableFrom(t)).OrderBy(t=>t.FullName,StringComparer.Ordinal))Console.WriteLine(a.GetName().Name+"|"+t.FullName);
+  foreach(var t in a.GetTypes().Where(t=>(t.IsSerializable || t.IsDefined(typeof(PmxTypeAttribute),false)) && !t.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute),false) && !typeof(Delegate).IsAssignableFrom(t)).OrderBy(t=>t.FullName,StringComparer.Ordinal))Console.WriteLine(a.GetName().Name+"|"+t.FullName);
  foreach(var a in assemblies)foreach(var t in a.GetTypes().Where(t=>t.IsInterface).OrderBy(t=>t.FullName,StringComparer.Ordinal))Console.WriteLine("@"+a.GetName().Name+"|"+t.FullName);
  foreach(var t in typeof(NamedClass).Assembly.GetTypes().Where(t=>typeof(System.ComponentModel.TypeConverter).IsAssignableFrom(t)).OrderBy(t=>t.FullName,StringComparer.Ordinal))Console.WriteLine("@"+t.Assembly.GetName().Name+"|"+t.FullName);
  return;
 }
 var names=File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(),"X/Persistence/allowed-types.txt"));
 var policy=new NrbfTypePolicy(assemblies,names);
-BinarySerialization.Factory=()=>new RestrictedNrbfSerializer(policy);
+PrePoMax.LegacyImport.LegacyReader.RestrictingBinder=new AllowlistBinder(policy);
+ObjectSerializer.LegacyReader=PrePoMax.LegacyImport.LegacyReader.Read;
 try
 {
  if(args.Length>0 && args[0]=="--persistence")Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new {success=true,checks=PersistenceChecks.Run(policy)}));

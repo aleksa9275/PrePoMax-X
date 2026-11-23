@@ -47,20 +47,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Compile Include="Steps\HeatTransferStep.Legacy.cs" />
-    <Compile Include="Steps\BoundaryConditions\TemperatureBC.Legacy.cs" />
-    <Compile Include="InitialConditions\InitialTemperature.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\BC\CalTemperatureBC.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\InitialConditions\CalInitialTemperature.Legacy.cs" />
-    <Compile Include="Steps\DefinedFields\DefinedTemperature.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\DefinedField\CalDefinedTemperature.Legacy.cs" />
-    <Compile Include="ModelProperties.Legacy.cs" />
-    <Compile Include="Steps\DynamicStep.Legacy.cs" />
-    <Compile Include="Steps\ModalDynamicsStep.Legacy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Steps\Loads\VariablePressure.Legacy.cs" />
-    <Compile Include="Steps\Loads\DLoad.Legacy.cs" />
     <Compile Include="Amplitudes\Amplitude.cs" />
     <Compile Include="Amplitudes\AmplitudeTabular.cs" />
     <Compile Include="Constraints\PointSpringData.cs" />
@@ -75,7 +66,6 @@
     <Compile Include="Distributions\DistributionFromFile.cs" />
     <Compile Include="Distributions\DistributionFromEquation.cs" />
     <Compile Include="Distributions\MappedDistribution.cs" />
-    <Compile Include="Distributions\Distribution.Legacy.cs" />
     <Compile Include="Distributions\Distribution.cs" />
     <Compile Include="FileInOut\Input\Mmg\MmgFileReader.cs" />
     <Compile Include="FileInOut\Input\ObjFileReader\ObjFileReader.cs" />
@@ -142,11 +132,12 @@
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalContactPrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalElPrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalSectionPrint.cs" />
-    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalNodePrint.Legacy.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\HistoryOutput\CalNodePrint.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\ModelDefinition\CalSubmodel.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalCFlux.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalBodyFlux.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalBodyForce.cs" />
+    <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalEdgeLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalVariablePressureLoad.cs" />
     <Compile Include="FileInOut\Output\Calculix\Keywords\Step\Load\CalLoadEnums.cs" />
@@ -197,7 +188,6 @@
     <Compile Include="Steps\BoundaryConditions\TemperatureBC.cs" />
     <Compile Include="Steps\BoundaryConditions\FixedBC.cs" />
     <Compile Include="Steps\BoundaryConditions\SubmodelBC.cs" />
-    <Compile Include="Steps\BoundaryConditions\DisplacementRotation.Legacy.cs" />
     <Compile Include="Steps\BoundaryConditions\DisplacementRotation.cs" />
     <Compile Include="Steps\BoundaryConditions\BoundaryCondition.cs" />
     <Compile Include="Constraints\Tie.cs" />
@@ -247,7 +237,6 @@
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\VisFileReader.GeometryData.cs" />
     <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.cs" />
-    <Compile Include="FileInOut\Input\VisFileReader\GeometryMetadataReader.Parts.cs" />
     <Compile Include="FileInOut\Input\Netgen\NetgenVolKeywords.cs" />
     <Compile Include="FileInOut\Input\StlGeomFile\StlFileReader.cs" />
     <Compile Include="FileInOut\Common\ElementsToImport.cs" />
@@ -318,6 +307,8 @@
     <Compile Include="Steps\Loads\CentrifLoad.cs" />
     <Compile Include="Steps\Loads\CFlux.cs" />
     <Compile Include="Steps\Loads\BodyFlux.cs" />
+    <Compile Include="Steps\Loads\BodyForce.cs" />
+    <Compile Include="Steps\Loads\EdgeLoad.cs" />
     <Compile Include="Steps\Loads\FilmHeatTransfer.cs" />
     <Compile Include="Steps\Loads\DFlux.cs" />
     <Compile Include="Steps\Loads\RadiationHeatTransfer.cs" />
@@ -344,11 +335,7 @@
     <Compile Include="Steps\InitialStep.cs" />
     <Compile Include="Steps\FrequencyStep.cs" />
     <Compile Include="Steps\HeatTransferStep.cs" />
-    <Compile Include="Steps\StaticStep.Legacy.cs" />
-    <Compile Include="Steps\FrequencyStep.Legacy.cs" />
-    <Compile Include="Steps\BuckleStep.Legacy.cs" />
     <Compile Include="Steps\StaticStep.cs" />
-    <Compile Include="Steps\Step.Legacy.cs" />
     <Compile Include="Steps\Step.cs">
       <SubType>Code</SubType>
     </Compile>

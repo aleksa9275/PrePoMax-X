@@ -19,12 +19,12 @@ using System.Threading.Tasks;
 
 namespace PrePoMax
 {
-    [Serializable]
+    [PmxType(10498)]
     public abstract class ViewResultFieldOutput
     {
         // Variables                                                                                                                
-        protected ResultFieldOutput _resultFieldOutput;
-        protected DynamicCustomTypeDescriptor _dctd = null;
+        [PmxKey(0)] protected ResultFieldOutput _resultFieldOutput;
+        [PmxKey(1)] protected DynamicCustomTypeDescriptor _dctd = null;
 
 
         // Properties                                                                                                               

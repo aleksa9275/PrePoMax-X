@@ -71,7 +71,8 @@ namespace vtkControl.Native
             if (_view != null && ClientSize.Width > 0 && ClientSize.Height > 0)
             {
                 _view.SetSize(ClientSize.Width, ClientSize.Height);
-                _view.Render();
+                // A drag raises many resize events; the paint they invalidate is merged into one render of the model
+                Invalidate();
             }
         }
         protected override void OnPaint(PaintEventArgs e)

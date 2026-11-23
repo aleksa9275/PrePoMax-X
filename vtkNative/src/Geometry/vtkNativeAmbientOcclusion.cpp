@@ -275,7 +275,7 @@ namespace vtkn
             if (previousPass != nullptr) previousPass->ReleaseGraphicsResources(RenderWindow);
         }
         // vtkSSAOPass clears its own framebuffer only when this flag is set
-        Renderer->SetUseSSAO(AmbientOcclusion);
+        Renderer->SetUseSSAO(SsaoPass != nullptr);
         UpdateAmbientOcclusionRadius();
         ApplySupersampledPixelSizes();
     }

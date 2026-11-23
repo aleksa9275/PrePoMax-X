@@ -13,12 +13,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using CaeGlobals;
 
 
 namespace CaeModel
 {
-    [Serializable]
-    public class UncoupledTempDispStep : HeatTransferStep, ISerializable
+    [PmxType(3282)]
+    public class UncoupledTempDispStep : HeatTransferStep
     {
         // Variables                                                                                                                
 
@@ -72,10 +73,12 @@ namespace CaeModel
                 loadType == typeof(HydrostaticPressure) ||
                 loadType == typeof(ImportedPressure) ||
                 loadType == typeof(STLoad) ||
+                loadType == typeof(EdgeLoad) ||
                 loadType == typeof(ImportedSTLoad) ||
                 loadType == typeof(ShellEdgeLoad) ||
                 loadType == typeof(GravityLoad) ||
                 loadType == typeof(CentrifLoad) ||
+                loadType == typeof(BodyForce) ||
                 loadType == typeof(PreTensionLoad) ||
                 loadType == typeof(CFlux) ||
                 loadType == typeof(DFlux) ||
@@ -91,11 +94,6 @@ namespace CaeModel
         {
             if (definedField is DefinedTemperature) return false;
             else throw new NotSupportedException();
-        }
-        // ISerialization
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
         }
     }
 }

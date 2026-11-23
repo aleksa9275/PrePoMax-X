@@ -13,16 +13,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using CaeGlobals;
 
 
 namespace CaeModel
 {
-    [Serializable]
-    public partial class HeatTransferStep : StaticStep, ISerializable
+    [PmxType(3242)]
+    public class HeatTransferStep : StaticStep
     {
         // Variables                                                                                                                
-        private bool _steadyState;                  //ISerializable
-        private double _deltmx;                     //ISerializable
+        [PmxKey(0)] private bool _steadyState;                  //ISerializable
+        [PmxKey(1)] private double _deltmx;                     //ISerializable
 
 
         // Properties                                                                                                               
@@ -72,14 +73,48 @@ namespace CaeModel
         {
             return false;
         }
-        // ISerialization
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        public override bool IsBoundaryConditionSupported(BoundaryCondition boundaryCondition)
         {
-            // Using typeof() works also for null fields
-            base.GetObjectData(info, context);
-            //
-            info.AddValue("_steadyState", _steadyState, typeof(bool));
-            info.AddValue("_deltmx", _deltmx, typeof(double));
+            if (boundaryCondition is FixedBC || 
+                boundaryCondition is DisplacementRotation || 
+                boundaryCondition is SubmodelBC)
+                return false;
+            else if (boundaryCondition is TemperatureBC)
+                return true;
+            else throw new NotSupportedException();
+        }
+        public override bool IsLoadTypeSupported(Type loadType)
+        {
+            if (loadType == typeof(CLoad) ||
+                loadType == typeof(MomentLoad) ||
+                loadType == typeof(DLoad) ||
+                loadType == typeof(HydrostaticPressure) ||
+                loadType == typeof(ImportedPressure) ||
+                loadType == typeof(STLoad) ||
+                loadType == typeof(EdgeLoad) ||
+                loadType == typeof(ImportedSTLoad) ||
+                loadType == typeof(ShellEdgeLoad) ||
+                loadType == typeof(GravityLoad) ||
+                loadType == typeof(CentrifLoad) ||
+                loadType == typeof(BodyForce) ||
+                loadType == typeof(PreTensionLoad))
+            {
+                return false;
+            }
+            else if (loadType == typeof(CFlux) ||
+                     loadType == typeof(DFlux) ||
+                     loadType == typeof(BodyFlux) ||
+                     loadType == typeof(FilmHeatTransfer) ||
+                     loadType == typeof(RadiationHeatTransfer))
+            {
+                return true;
+            }
+            else throw new NotSupportedException();
+        }
+        public override bool IsDefinedFieldSupported(DefinedField definedField)
+        {
+            if (definedField is DefinedTemperature) return false;
+            else throw new NotSupportedException();
         }
     }
 }

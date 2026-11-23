@@ -5,7 +5,7 @@ PyQt and no installed .NET needed.
   python3 X/App/package_mac.py --p1 <PrePoMax-X.app of P1> --output DIR [--zip]
 
 Contents/Resources:
-  app/      X/App published self-contained for osx-arm64 (.NET runtime included), the vtkNative runtime, lp_solve,
+  app/      X/App published self-contained for osx-arm64 (.NET runtime included), the vtkNative runtime, HiGHS,
             and the original Configure step (PrePoMaxX.Configure) that writes the runtime profile at first start
   python/   CPython 3.12 of P1 for the original's Python features, without PyQt6 and VTK's Python modules
   tools/    Netgen, Mmg, Gmsh and lib3mf of P1 (checked against its manifest), GmshCaller published self-contained,
@@ -192,7 +192,11 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--p1', type=Path, required=True, help='the native components: X/Build/package_ui.py output folder (or the P1 PrePoMax-X.app)')
     p.add_argument('--solver', type=Path, default=ROOT / 'X/Build/artifacts/solver-m2/solver')
-    p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
+    p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64-302/vtkNative/runtime')
+    p.add_argument('--highs', type=Path, default=ROOT / 'X/Build/artifacts/highs-mac-arm64/runtime/highs.dll.dylib',
+                   help='HiGHS 1.16.0 from X/Build/Highs (3.0.2 replaced lp_solve by HiGHS)')
+    p.add_argument('--netgen', type=Path, help='a NetGenMesher runtime of X/Build/NativeCad (bin, lib, licenses); '
+                   'default: the one of --p1')
     p.add_argument('--original', type=Path, required=True,
                    help='the extracted PrePoMax 3.0.1 release (materials.lib, Models, Tools/abqodb_to_ccxfrd.py)')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
@@ -224,10 +228,12 @@ def main():
             if (app / item.name).exists() or (app / item.name).is_symlink():
                 (app / item.name).unlink()
             shutil.copy2(item, app / item.name, follow_symlinks=False)
-    lpsolve = p1 / 'app' / package['components']['lpsolve']['file']
-    if sha(lpsolve) != package['components']['lpsolve']['sha256']:
-        raise SystemExit('lp_solve does not match the P1 manifest')
-    shutil.copy2(lpsolve, app / lpsolve.name)
+    # HiGHS (3.0.2): beside the assemblies and GmshCaller, as the original PostBuildEvent places highs.dll
+    highs = a.highs.resolve()
+    highs_receipt = json.loads((highs.parent / 'highs-build.json').read_text())
+    if highs_receipt['librarySha256'] != sha(highs):
+        raise SystemExit('HiGHS does not match its build receipt')
+    shutil.copy2(highs, app / highs.name)
     shutil.copy2(app / 'PrePoMax', app / 'PrePoMax.com')
     for leftover in ('settings.bin', 'history.pmh', 'PrePoMaxX.runtime.json'):
         (app / leftover).unlink(missing_ok=True)
@@ -253,15 +259,21 @@ def main():
     # Tools: P1's meshers and Gmsh (checked), GmshCaller and QuadWild from this repository
     tools = {}
     for ident, tool in package['tools'].items():
-        if ident.endswith('GmshCaller.exe'):
+        if ident.endswith('GmshCaller.exe') or (a.netgen and ident.endswith('NetGenMesher.exe')):
             continue
         if sha(p1 / tool['path']) != tool['sha256']:
             raise SystemExit(f'{tool["path"]} does not match the P1 manifest')
         tools[ident] = {'path': tool['path'], 'sha256': tool['sha256']}
-    for name in ('Netgen', 'Mmg', 'gmsh', 'lib3mf'):
+    for name in ('Mmg', 'gmsh', 'lib3mf') + (() if a.netgen else ('Netgen',)):
         shutil.copytree(p1 / 'tools' / name, res / 'tools' / name, symlinks=True)
+    if a.netgen:
+        netgen = a.netgen.resolve()
+        shutil.copytree(netgen, res / 'tools/Netgen', symlinks=True,
+                        ignore=shutil.ignore_patterns('*.json', 'include', 'cmake'))
+        tools['\\Meshers\\Netgen\\NetGenMesher.exe'] = {'path': 'tools/Netgen/bin/NetGenMesher',
+                                                         'sha256': sha(res / 'tools/Netgen/bin/NetGenMesher')}
     run('dotnet', 'publish', ROOT / 'X/Domain/GmshCaller', '-o', res / 'tools/GmshCaller', *publish)
-    shutil.copy2(lpsolve, res / 'tools/GmshCaller' / lpsolve.name)
+    shutil.copy2(highs, res / 'tools/GmshCaller' / highs.name)
     tools['\\lib\\GmshCaller.exe'] = {'path': 'tools/GmshCaller/GmshCaller', 'sha256': sha(res / 'tools/GmshCaller/GmshCaller')}
     shutil.copytree(a.quadwild.resolve(), res / 'tools/QuadWild')
     (res / 'tools/Tools').mkdir()
@@ -280,6 +292,8 @@ def main():
     # Licenses and notices
     shutil.copytree(p1 / 'Licenses', res / 'Licenses')
     shutil.copy2(ROOT / 'LICENSE', res / 'Licenses/PrePoMax-LICENSE')
+    shutil.rmtree(res / 'Licenses/lpsolve', ignore_errors=True)   # 3.0.2 has no lp_solve
+    shutil.copytree(ROOT / 'Licenses/highs', res / 'Licenses/highs')
     extra = {'dotnet': NUGET / f'microsoft.netcore.app.runtime.osx-arm64/{DOTNET_RUNTIME}', 'skiasharp': NUGET / 'skiasharp/2.88.9',
              'harfbuzzsharp': NUGET / 'harfbuzzsharp/8.3.1.1'}
     for name, folder in extra.items():
@@ -302,8 +316,12 @@ def main():
         'frontEnd': 'avalonia', 'python': {'version': python['version'], 'home': 'python', 'library': python['library'],
                                            'librarySha256': python['librarySha256'], 'moduleDirectories': python['moduleDirectories']},
         'tools': tools, 'gmsh': gmsh['file'],
+        'netgen': (json.loads((a.netgen.resolve() / 'build-receipt.json').read_text())['netgenRevision'] if a.netgen
+                   else 'the NetGenMesher of --p1 (c5ecb0ba3782b91649e06823e858480f6fe33aeb)'),
+        'highs': {'version': highs_receipt['version'], 'commit': highs_receipt['commit'], 'file': 'app/' + highs.name},
         'solver': {'registry': 'solver/build-registry.json', 'id': solver_id, 'directory': 'solver/bin'},
-        'release': {'version': '3.0.1', 'files': release_files},
+        'release': {'version': '3.0.1', 'note': 'materials.lib, Models and Tools of the latest release (3.0.2 has none yet)',
+                    'files': release_files},
         'missing': {'PARDISO': 'the Intel MKL PARDISO solver has no macOS ARM64 build (use SPOOLES)',
                     'BidirectionalMeshConverter': 'Tools/BidirectionalMeshConverter.exe of the release is Windows-only'},
     }, indent=2) + '\n')

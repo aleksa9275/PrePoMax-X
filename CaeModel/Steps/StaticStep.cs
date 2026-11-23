@@ -13,19 +13,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using CaeGlobals;
 
 
 namespace CaeModel
 {
-    [Serializable]
-    public partial class StaticStep : Step, ISerializable
+    [PmxType(3276)]
+    public class StaticStep : Step
     {
         // Variables                                                                                                                
-        private double _timePeriod;                 //ISerializable
-        private double _initialTimeIncrement;       //ISerializable
-        private double _minTimeIncrement;           //ISerializable
-        private double _maxTimeIncrement;           //ISerializable
-        private bool _direct;                       //ISerializable
+        [PmxKey(0)] private double _timePeriod;                 //ISerializable
+        [PmxKey(1)] private double _initialTimeIncrement;       //ISerializable
+        [PmxKey(2)] private double _minTimeIncrement;           //ISerializable
+        [PmxKey(3)] private double _maxTimeIncrement;           //ISerializable
+        [PmxKey(4)] private bool _direct;                       //ISerializable
 
 
         // Properties                                                                                                               
@@ -131,17 +132,48 @@ namespace CaeModel
         {
             return false;
         }
-        // ISerialization
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        public override bool IsBoundaryConditionSupported(BoundaryCondition boundaryCondition)
         {
-            // Using typeof() works also for null fields
-            base.GetObjectData(info, context);
-            //
-            info.AddValue("_timePeriod", _timePeriod, typeof(double));
-            info.AddValue("_initialTimeIncrement", _initialTimeIncrement, typeof(double));
-            info.AddValue("_minTimeIncrement", _minTimeIncrement, typeof(double));
-            info.AddValue("_maxTimeIncrement", _maxTimeIncrement, typeof(double));
-            info.AddValue("_direct", _direct, typeof(bool));
+            if (boundaryCondition is FixedBC ||
+                boundaryCondition is DisplacementRotation ||
+                boundaryCondition is SubmodelBC)
+                return true;
+            else if (boundaryCondition is TemperatureBC)
+                return false;
+            else throw new NotSupportedException();
+        }
+        public override bool IsLoadTypeSupported(Type loadType)
+        {
+            if (loadType == typeof(CLoad) ||
+                loadType == typeof(MomentLoad) ||
+                loadType == typeof(DLoad) ||
+                loadType == typeof(HydrostaticPressure) ||
+                loadType == typeof(ImportedPressure) ||
+                loadType == typeof(STLoad) ||
+                loadType == typeof(EdgeLoad) ||
+                loadType == typeof(ImportedSTLoad) ||
+                loadType == typeof(ShellEdgeLoad) ||
+                loadType == typeof(GravityLoad) ||
+                loadType == typeof(CentrifLoad) ||
+                loadType == typeof(BodyForce) ||
+                loadType == typeof(PreTensionLoad))
+            {
+                return true;
+            }
+            else if (loadType == typeof(CFlux) ||
+                     loadType == typeof(DFlux) ||
+                     loadType == typeof(BodyFlux) ||
+                     loadType == typeof(FilmHeatTransfer) ||
+                     loadType == typeof(RadiationHeatTransfer))
+            {
+                return false;
+            }
+            else throw new NotSupportedException();
+        }
+        public override bool IsDefinedFieldSupported(DefinedField definedField)
+        {
+            if (definedField is DefinedTemperature) return true;
+            else throw new NotSupportedException();
         }
     }
 }

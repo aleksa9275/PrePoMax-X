@@ -33,7 +33,6 @@
     <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputs/HistoryResultSet.cs" Link="HistoryOutputs/HistoryResultSet.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputs/HistoryResults.cs" Link="HistoryOutputs/HistoryResults.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputs/HistoryResultEntries.cs" Link="HistoryOutputs/HistoryResultEntries.cs" />
-    <Compile Include="$(RepositoryRoot)CaeResults/HistoryOutputs/HistoryResultEntries.Legacy.cs" Link="HistoryOutputs/HistoryResultEntries.Legacy.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/FieldComponent.cs" Link="FieldOutput/FieldComponent.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FieldOutput/FieldData.cs" Link="FieldOutput/FieldData.cs" />
     <Compile Include="$(RepositoryRoot)CaeResults/FileInOut/Input/CalculiX/DatDataSet.cs" Link="FileInOut/Input/CalculiX/DatDataSet.cs" />

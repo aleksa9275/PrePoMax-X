@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="WinFormsCompat/WinFormsCompat.csproj" />
   <Project Path="CaeGlobals/CaeGlobals.csproj" />
+  <Project Path="PrePoMax.LegacyImport/PrePoMax.LegacyImport.csproj" />
   <Project Path="GmshCommon/GmshCommon.csproj" />
   <Project Path="CaeMesh/CaeMesh.csproj" />
   <Project Path="vtkControl/vtkControl.csproj" />

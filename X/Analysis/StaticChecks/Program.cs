@@ -62,10 +62,12 @@ Check("original input mesh IDs and topology survive full export",()=>{
 });
 Check("original assembly and serialized field identities",()=>{
     Type[] types={typeof(Selection),typeof(CoordinateSystem),typeof(Section),typeof(SolidSection),typeof(Step),typeof(StaticStep),typeof(Load),typeof(CLoad),typeof(BoundaryCondition),typeof(DisplacementRotation)};
-    foreach(Type t in types){string owner=t.Namespace=="CaeGlobals"?"CaeGlobals":t.Namespace=="CaeMesh"?"CaeMesh":"CaeModel";Require(t.Assembly.GetName().Name==owner&&t.IsDefined(typeof(SerializableAttribute),false));}
-    var info=new SerializationInfo(typeof(StaticStep),new FormatterConverter());baseline.Step.GetObjectData(info,new StreamingContext());
-    Require(info.GetValue("_boundaryConditions",typeof(CaeGlobals.OrderedDictionary<string,BoundaryCondition>)) is CaeGlobals.OrderedDictionary<string,BoundaryCondition>);
-    Require(info.GetValue("_loads",typeof(CaeGlobals.OrderedDictionary<string,Load>)) is CaeGlobals.OrderedDictionary<string,Load>);
+    // 3.0.2: upstream's storage marks the stored types [PmxType] and their stored fields [PmxKey] (3.0.1: [Serializable], GetObjectData)
+    foreach(Type t in types){string owner=t.Namespace=="CaeGlobals"?"CaeGlobals":t.Namespace=="CaeMesh"?"CaeMesh":"CaeModel";Require(t.Assembly.GetName().Name==owner&&t.IsDefined(typeof(PmxTypeAttribute),false));}
+    var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+    var bcs=typeof(Step).GetField("_boundaryConditions",flags);var loads=typeof(Step).GetField("_loads",flags);
+    Require(bcs.IsDefined(typeof(PmxKeyAttribute),false)&&bcs.GetValue(baseline.Step) is CaeGlobals.OrderedDictionary<string,BoundaryCondition>);
+    Require(loads.IsDefined(typeof(PmxKeyAttribute),false)&&loads.GetValue(baseline.Step) is CaeGlobals.OrderedDictionary<string,Load>);
 });
 Check("read and write do not select unsafe serialization",()=>{
     // The original Selection copy constructor deep-copies with BinaryFormatter. It is part of the whole

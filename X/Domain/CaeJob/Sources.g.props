@@ -6,7 +6,6 @@
     <Compile Include="$(RepositoryRoot)CaeJob/CalculixMonitorData.cs" Link="CalculixMonitorData.cs" />
     <Compile Include="$(RepositoryRoot)CaeJob/EnvironmentVariable.cs" Link="EnvironmentVariable.cs" />
     <Compile Include="$(RepositoryRoot)CaeJob/ExecutableJob.cs" Link="ExecutableJob.cs" />
-    <Compile Include="$(RepositoryRoot)CaeJob/JobStatus.cs" Link="JobStatus.cs" />
     <Compile Include="$(RepositoryRoot)CaeJob/AnalysisJob.cs" Link="AnalysisJob.cs" />
     <Compile Include="$(RepositoryRoot)CaeJob/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />
     <Compile Include="$(RepositoryRoot)CaeJob/ExecutableJob.Portable.cs" Link="X/ExecutableJob.Portable.cs" /> <!-- Cross-platform process boundary (existing PrePoMax-X file) -->

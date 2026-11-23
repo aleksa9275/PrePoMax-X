@@ -29,7 +29,6 @@ using System.Security.Cryptography;
 
 namespace FileInOut.Output
 {
-    [Serializable]
     public static class CalculixFileWriter
     {
         // Variables                                                                                                                
@@ -1589,6 +1588,8 @@ namespace FileInOut.Output
                 !(keyword is CalVariablePressureLoad) &&
                 !(keyword is CalImportedPressureLoad) &&
                 !(keyword is CalSTLoad) &&
+                !(keyword is CalEdgeLoad) &&
+                !(keyword is CalBodyForce cbf && cbf.CanHideData) &&
                 !(keyword is CalDefinedTemperature dt && dt.CanHideData) &&
                 !(keyword is CalAdditional))
             {
@@ -3158,6 +3159,16 @@ namespace FileInOut.Output
                     //
                     CalCentrifLoad cLoad = new CalCentrifLoad(cflClone, complexLoadType);
                     parent.AddKeyword(cLoad);
+                }
+                else if (load is BodyForce bfl)
+                {
+                    CalBodyForce bForce = new CalBodyForce(model, bfl, complexLoadType);
+                    parent.AddKeyword(bForce);
+                }
+                else if (load is EdgeLoad edl)
+                {
+                    CalEdgeLoad eLoad = new CalEdgeLoad(model, edl, complexLoadType);
+                    parent.AddKeyword(eLoad);
                 }
                 else if (load is PreTensionLoad ptl)
                 {

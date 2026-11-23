@@ -103,8 +103,10 @@ Check("original nonelastic material types callable", () => {
     foreach(var value in p)value.CheckEquations();
 });
 Check("original elastic serializable field contract without unsafe serializer", () => {
-    var e=Elastic(Material());var info=new SerializationInfo(typeof(Elastic),new FormatterConverter());
-    e.GetObjectData(info,new StreamingContext());Require(info.MemberCount==1 && info.GetValue("_youngsPoissonsTemp",typeof(EquationContainer[][])) is EquationContainer[][]);
+    // 3.0.2: the one stored field is [PmxKey]; files of older versions give it to the original constructor
+    var e=Elastic(Material());var field=typeof(Elastic).GetField("_youngsPoissonsTemp",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
+    Require(field.IsDefined(typeof(CaeGlobals.PmxKeyAttribute),false)&&field.GetValue(e) is EquationContainer[][]);
+    var info=new SerializationInfo(typeof(Elastic),new FormatterConverter());info.AddValue("_youngsPoissonsTemp",field.GetValue(e),typeof(EquationContainer[][]));
     var restored=new Elastic(info,new StreamingContext());Near(restored.YoungsPoissonsTemp[0][0].Value,210000);
 });
 Check("original legacy elastic constructor contract", () => {
@@ -141,7 +143,8 @@ Check("material field array corruption rejected", () => {var m=Material();Elasti
 var types = new[]{typeof(EquationContainer),typeof(EquationString),typeof(MyNCalc),typeof(CaeGlobals.OrderedDictionary<string,object>),typeof(Material),typeof(Elastic),typeof(MaterialProperty),typeof(ElasticEngineeringConstants),typeof(ElasticLamina),typeof(MaterialDeckWriter)};
 Check("original assembly identities and serialized type markers", () => {
     foreach(var t in types){string owner=t.Namespace=="CaeGlobals"?"CaeGlobals":"CaeModel";Require(t.Assembly.GetName().Name==owner && t.Assembly.GetName().Version==new Version(1,0,0,0));}
-    Require(typeof(ISerializable).IsAssignableFrom(typeof(Elastic)) && typeof(Elastic).IsDefined(typeof(SerializableAttribute)));
+    // 3.0.2: [PmxType] marks the stored type; the original (SerializationInfo, StreamingContext) constructor stays for older files
+    Require(typeof(Elastic).IsDefined(typeof(PmxTypeAttribute)) && typeof(Elastic).GetConstructor(new[]{typeof(SerializationInfo),typeof(StreamingContext)})!=null);
 });
 var assemblies=new[]{typeof(EquationContainer).Assembly,typeof(FeNode).Assembly,typeof(Material).Assembly};
 Check("expanded assemblies have no desktop platform references", () => {

@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "System.Formats.Nrbf": {
+        "type": "Direct",
+        "requested": "[10.0.14, 10.0.14]",
+        "resolved": "10.0.14",
+        "contentHash": "pl9R3NfEKEYnU9Dj74AKRpe3tFQEA4tcLepHLOUQVT2vAyTW6E+WeKS3+JydxYnig4hXtLOrLNDcBkUNzm+9FA=="
+      },
+      "ExtendedNumerics.BigDecimal": {
+        "type": "Transitive",
+        "resolved": "2025.1001.2.129",
+        "contentHash": "+woGT1lsBtwkntOpx2EZbdbySv0aWPefE0vrfvclxVdbi4oa2bbtphFPWgMiQe+kRCPICbfFJwp6w1DuR7Ge2Q=="
+      },
+      "MessagePack": {
+        "type": "Transitive",
+        "resolved": "3.1.12",
+        "contentHash": "m1QEsd59gUj82ji5tEQbZiyjV6y0F7cYfGVhil6pAlNZpyzR7ze9TucMu4lPpi8cZAV8aNl3D9/T9J1HbFz15Q==",
+        "dependencies": {
+          "MessagePack.Annotations": "3.1.12",
+          "MessagePackAnalyzer": "3.1.12",
+          "Microsoft.NET.StringTools": "17.11.4"
+        }
+      },
+      "MessagePack.Annotations": {
+        "type": "Transitive",
+        "resolved": "3.1.12",
+        "contentHash": "LdI67sY7F3KK+JsrG02+DP1XFkowaZSoyfL2M88hjm1MOOsjf8amBLAJolV+zxoPUZf3uGbKzq1cMQD8PlpSpA=="
+      },
+      "MessagePackAnalyzer": {
+        "type": "Transitive",
+        "resolved": "3.1.12",
+        "contentHash": "iNSNatPh6bafRUbkQKlClExjpPpd8hiZgfZsodGf7bheIlkizGbMzsJ2mPui8jOHRe4Ky9eg5ou/fFzI7CT3fg=="
+      },
+      "Microsoft.NET.StringTools": {
+        "type": "Transitive",
+        "resolved": "17.11.4",
+        "contentHash": "mudqUHhNpeqIdJoUx2YDWZO/I9uEDYVowan89R6wsomfnUJQk6HteoQTlNjZDixhT2B4IXMkMtgZtoceIjLRmA=="
+      },
+      "ncalc": {
+        "type": "Transitive",
+        "resolved": "1.3.8",
+        "contentHash": "T3kt6mWc70x3Ex5PxOmuILy563CGAdoAnyknXX7Du2/SXs2T94hNwc5CVwZcwCu5/A2ZBZhnHnc5dpcqCRGQ0A=="
+      },
+      "Parlot": {
+        "type": "Transitive",
+        "resolved": "0.0.28",
+        "contentHash": "EQ9vOeuPP9qOApZ2WNaPtNaeyKhG+uul4p6/MwfCB9NB1Wn8ZuxJWDRF38QnffT2NmXWk/pz6tko+aNAAiua4A=="
+      },
+      "System.CodeDom": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "QWERdKi/tQAx+MbrPxTGcpchqMANnVXNiv2r2tILBBB38E74buD+fABSUhozZ1G9kjbadFB0m+HPFMkhJPeFvA=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "dependencies": {
+          "System.CodeDom": "10.0.0"
+        }
+      },
+      "UnitsNet": {
+        "type": "Transitive",
+        "resolved": "4.89.1",
+        "contentHash": "B9+ViJEjcgmwRxRH2lZTc7FolLHHPET9UYPNr5uoFkt80q+iKKO1iPD6+YpG9zrOSBJjKHmDgswb9QnqWolj+g=="
+      },
+      "ZstdSharp.Port": {
+        "type": "Transitive",
+        "resolved": "0.8.5",
+        "contentHash": "TR4j17WeVSEb3ncgL2NqlXEqcy04I+Kk9CaebNDplUeL8XOgjkZ7fP4Wg4grBdPLIqsV86p2QaXTkZoRMVOsew=="
+      },
+      "caeglobals": {
+        "type": "Project",
+        "dependencies": {
+          "ExtendedNumerics.BigDecimal": "[2025.1001.2.129, 2025.1001.2.129]",
+          "MessagePack": "[3.1.12, 3.1.12]",
+          "Parlot": "[0.0.28, 0.0.28]",
+          "PrePoMaxX.WinFormsCompat": "[1.0.0, )",
+          "System.Management": "[10.0.0, 10.0.0]",
+          "UnitsNet": "[4.89.1, 4.89.1]",
+          "ZstdSharp.Port": "[0.8.5, 0.8.5]",
+          "ncalc": "[1.3.8, 1.3.8]"
+        }
+      },
+      "PrePoMaxX.WinFormsCompat": {
+        "type": "Project"
+      }
+    }
+  }
+}

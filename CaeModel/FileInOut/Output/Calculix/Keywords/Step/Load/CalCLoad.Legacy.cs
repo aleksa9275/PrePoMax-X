@@ -20,7 +20,6 @@ namespace FileInOut.Output.Calculix
 {
     internal partial class CalCLoad
     {
-        private FeMesh _mesh;
         public CalCLoad(FeMesh mesh, CLoad load, Dictionary<string, CalReferencePoint> referencePoints,
                         ComplexLoadTypeEnum complexLoadType)
             : this(load, referencePoints, complexLoadType)

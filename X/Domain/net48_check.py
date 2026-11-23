@@ -21,7 +21,10 @@ ROOT = Path(__file__).resolve().parents[2]
 NS = {"m": "http://schemas.microsoft.com/developer/msbuild/2003"}
 PACKAGES = {
     "CaeGlobals": [("ncalc", "1.3.8"), ("UnitsNet", "4.89.1"), ("ExtendedNumerics.BigDecimal", "2025.1001.2.129"),
-                   ("Parlot", "0.0.28")],
+                   ("Parlot", "0.0.28"), ("MessagePack", "3.1.12"), ("ZstdSharp.Port", "0.8.5"),
+                   ("System.Collections.Immutable", "9.0.11")],
+    "PrePoMax.LegacyImport": [("System.Formats.Nrbf", "9.0.11"), ("System.Reflection.Metadata", "9.0.11"),
+                              ("System.Collections.Immutable", "9.0.11")],
     "CaeJob": [],
 }
 REFERENCES = ["System.Windows.Forms", "System.Design", "System.Drawing.Design", "System.Management", "System.Numerics",
@@ -36,7 +39,7 @@ def project(name: str, folder: Path) -> Path:
     lines = ['<Project Sdk="Microsoft.NET.Sdk">', "  <PropertyGroup>",
              f"    <TargetFramework>net48</TargetFramework><LangVersion>7.3</LangVersion><AssemblyName>{name}</AssemblyName>",
              "    <EnableDefaultCompileItems>false</EnableDefaultCompileItems><GenerateAssemblyInfo>false</GenerateAssemblyInfo>",
-             "    <AllowUnsafeBlocks>true</AllowUnsafeBlocks><NoWarn>CS0618;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;CS0067</NoWarn>",
+             "    <AllowUnsafeBlocks>true</AllowUnsafeBlocks><NoWarn>CS0618;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;CS0067;SYSLIB5005</NoWarn>",
              "  </PropertyGroup>", "  <ItemGroup>"]
     lines += [f'    <Compile Include="{ROOT / name / c}" />' for c in compile_items]
     lines += [f'    <EmbeddedResource Include="{ROOT / name / r}" />' for r in resources]

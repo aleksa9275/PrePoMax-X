@@ -5,26 +5,34 @@ namespace PrePoMaxX.Persistence;
 
 /// <summary>Only compiled, explicitly named application data types and a small
 /// set of BCL value/collection types can be reconstructed. Payload names never
-/// cause Assembly.Load, arbitrary activation, delegates or object replacement.</summary>
+/// cause Assembly.Load, arbitrary activation, delegates or object replacement.
+/// Since 3.0.2 upstream's legacy reader (PrePoMax.LegacyImport) reconstructs the
+/// files; it asks this policy for every type through <see cref="AllowlistBinder"/>.</summary>
 public sealed class NrbfTypePolicy
 {
     readonly HashSet<Type> frameworkTypes = new();
     readonly Dictionary<string,Type> types = new(StringComparer.Ordinal);
     readonly Dictionary<string,Type> metadataTypes = new(StringComparer.Ordinal);
     readonly Dictionary<string,Assembly> assemblies = new(StringComparer.Ordinal);
+    readonly Dictionary<string,Assembly> applicationAssemblies = new(StringComparer.Ordinal);
     public NrbfTypePolicy(IEnumerable<Assembly> applicationAssemblies, IEnumerable<string> allowlist)
     {
         var app = applicationAssemblies.ToDictionary(a=>a.GetName().Name,StringComparer.Ordinal);
+        foreach(var pair in app)this.applicationAssemblies[pair.Key]=pair.Value;
         foreach(string entry in allowlist.Where(l=>l.Length>0 && !l.StartsWith("#")))
         {
             int separator=entry.IndexOf('|');
             bool metadata=entry.StartsWith("@");
             string assembly=entry[(metadata?1:0)..separator], name=entry[(separator+1)..];
             Type type=app[assembly].GetType(name,throwOnError:true);
-            if((!metadata && !type.IsSerializable) || typeof(Delegate).IsAssignableFrom(type))throw new SerializationException("Not a serializable data type: "+entry);
+            // 3.0.2 replaced [Serializable] by [PmxType] on the stored types; delegates stay refused
+            if(typeof(Delegate).IsAssignableFrom(type))throw new SerializationException("Not a data type: "+entry);
             (metadata?metadataTypes:types).Add(assembly+"|"+name,type); assemblies[assembly]=type.Assembly;
         }
-        Type[] framework = {typeof(System.IO.Compression.CompressionLevel),typeof(object),typeof(Type),typeof(string),typeof(bool),typeof(byte),typeof(sbyte),typeof(short),typeof(ushort),typeof(int),typeof(uint),typeof(long),typeof(ulong),typeof(float),typeof(double),typeof(decimal),typeof(char),typeof(DateTime),typeof(TimeSpan),typeof(Guid),typeof(System.Drawing.Color),typeof(System.Drawing.Point),typeof(System.Drawing.PointF),typeof(System.Drawing.Size),typeof(System.Drawing.SizeF),typeof(System.Drawing.Rectangle),typeof(System.Drawing.RectangleF),typeof(List<>),typeof(Dictionary<,>),typeof(HashSet<>),typeof(KeyValuePair<,>),typeof(Queue<>),typeof(Stack<>),typeof(LinkedList<>),typeof(Tuple<>),typeof(Tuple<,>),typeof(Tuple<,,>),typeof(ValueTuple<,>),typeof(ValueTuple<,,>),typeof(Nullable<>),typeof(System.Collections.ArrayList),typeof(System.Collections.Hashtable)};
+        Type[] framework = {typeof(System.IO.Compression.CompressionLevel),typeof(object),typeof(Type),typeof(string),typeof(bool),typeof(byte),typeof(sbyte),typeof(short),typeof(ushort),typeof(int),typeof(uint),typeof(long),typeof(ulong),typeof(float),typeof(double),typeof(decimal),typeof(char),typeof(DateTime),typeof(TimeSpan),typeof(Guid),typeof(System.Drawing.Color),typeof(System.Drawing.Point),typeof(System.Drawing.PointF),typeof(System.Drawing.Size),typeof(System.Drawing.SizeF),typeof(System.Drawing.Rectangle),typeof(System.Drawing.RectangleF),typeof(List<>),typeof(Dictionary<,>),typeof(HashSet<>),typeof(KeyValuePair<,>),typeof(Queue<>),typeof(Stack<>),typeof(LinkedList<>),typeof(Tuple<>),typeof(Tuple<,>),typeof(Tuple<,,>),typeof(ValueTuple<,>),typeof(ValueTuple<,,>),typeof(Nullable<>),typeof(System.Collections.ArrayList),typeof(System.Collections.Hashtable),
+            // B013: DistributionFromFile, ImportedPressure and ImportedSTLoad keep the FileInfo of their file (_oldFileInfo);
+            // upstream's reader sets its OriginalPath and FullPath fields, no constructor runs
+            typeof(System.IO.FileInfo)};
         foreach(Type type in framework) AddFramework(type);
         foreach(string name in new[]{"System.Collections.Generic.GenericEqualityComparer`1","System.Collections.Generic.ObjectEqualityComparer`1","System.Collections.Generic.EnumEqualityComparer`1","System.Collections.Generic.NullableEqualityComparer`1","System.Collections.Generic.GenericComparer`1","System.Collections.Generic.ObjectComparer`1"})
             AddFramework(typeof(object).Assembly.GetType(name,true));
@@ -42,6 +50,20 @@ public sealed class NrbfTypePolicy
         assemblies[type.Assembly.GetName().Name]=type.Assembly;
     }
     public Type Resolve(string qualifiedName) => ResolveCore(qualifiedName,false);
+    /// <summary>The type a file names, for upstream's legacy reader. A name of an application assembly that no longer
+    /// has that type (and no rename) is a removed type: null, which the reader drops and reports as the original
+    /// does. Every other name must be allowlisted (data types and Type metadata), else SerializationException.</summary>
+    public Type Bind(string assemblyName,string typeName)
+    {
+        if(assemblyName==null || typeName==null || assemblyName.Length+typeName.Length>16384)throw new SerializationException("Type name limit exceeded.");
+        if(typeName.IndexOf('[')<0 && PrePoMax.LegacyImport.RenamedTypeSerializationBinder.GetRenamedTypeName(typeName)==null)
+        {
+            string simple;
+            try {simple=new AssemblyName(assemblyName).Name;}catch(Exception e) {throw new SerializationException("Invalid assembly name.",e);}
+            if(simple!=null && applicationAssemblies.TryGetValue(simple,out var application) && application.GetType(typeName,false)==null)return null;
+        }
+        return ResolveCore(typeName+", "+assemblyName,true);
+    }
     public Type ResolveMetadata(string qualifiedName) => ResolveCore(qualifiedName,true);
     Type ResolveCore(string qualifiedName,bool metadata)
     {
@@ -57,7 +79,7 @@ public sealed class NrbfTypePolicy
     }
     Type Find(Assembly assembly,string name,bool metadata)
     {
-        string renamed=CaeGlobals.RenamedTypeSerializationBinder.GetRenamedTypeName(name);
+        string renamed=PrePoMax.LegacyImport.RenamedTypeSerializationBinder.GetRenamedTypeName(name);
         if(renamed!=null)return metadata?ResolveMetadata(renamed):Resolve(renamed);
         string key=assembly?.GetName().Name+"|"+name;
         if(types.TryGetValue(key,out var type) || metadataTypes.TryGetValue(key,out type))return type;

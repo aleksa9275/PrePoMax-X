@@ -25,7 +25,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace CaeModel
 {
-    [Serializable]
+    [PmxType(3188)]
     public enum ModelType
     {
         [StandardValue("General", DisplayName = "General model")]
@@ -36,7 +36,7 @@ namespace CaeModel
         SlipWearModel
     }
     //
-    [Serializable]
+    [PmxType(3189)]
     public enum ModelSpaceEnum
     {
         [StandardValue("Undefined", Visible = false)]
@@ -51,25 +51,114 @@ namespace CaeModel
         Axisymmetric = 4
     }    
     //
+    public static class ExtensionMethods
+    {
+        // ModelSpaceEnum
+        public static bool IsTwoD(this ModelSpaceEnum modelSpace)
+        {
+            return (int)modelSpace > 1; // 2, 3 or 4 is 2D
+        }
+        //
+        public static Dictionary<Type, HashSet<Enum>> GetAvailableElementTypes(this ModelSpaceEnum modelSpace,
+                                                                               bool allowMixedModel)
+        {            
+            List<Type> elementTypes = new List<Type>();
+            elementTypes.Add(typeof(FeElementTypeLinearTria));
+            elementTypes.Add(typeof(FeElementTypeParabolicTria));
+            elementTypes.Add(typeof(FeElementTypeLinearQuad));
+            elementTypes.Add(typeof(FeElementTypeParabolicQuad));
+            elementTypes.Add(typeof(FeElementTypeLinearTetra));
+            elementTypes.Add(typeof(FeElementTypeParabolicTetra));
+            elementTypes.Add(typeof(FeElementTypeLinearWedge));
+            elementTypes.Add(typeof(FeElementTypeParabolicWedge));
+            elementTypes.Add(typeof(FeElementTypeLinearHexa));
+            elementTypes.Add(typeof(FeElementTypeParabolicHexa));
+            //
+            int type = 0;
+            if (modelSpace == ModelSpaceEnum.ThreeD) type = 1;
+            else if (modelSpace == ModelSpaceEnum.PlaneStress) type = 2;
+            else if (modelSpace == ModelSpaceEnum.PlaneStrain) type = 3;
+            else if (modelSpace == ModelSpaceEnum.Axisymmetric) type = 4;
+            HashSet<Enum> elementEnums;
+            Dictionary<Type, HashSet<Enum>> elementTypeEnums = new Dictionary<Type, HashSet<Enum>>();
+            //
+            foreach (Type elementType in elementTypes)
+            {
+                foreach (var item in Enum.GetValues(elementType))
+                {
+                    if ((int)item / 10 == type || (allowMixedModel && type == 4 && (int)item / 10 == 2))
+                    {
+                        if (elementTypeEnums.TryGetValue(elementType, out elementEnums)) elementEnums.Add((Enum)item);
+                        else elementTypeEnums.Add(elementType, new HashSet<Enum>() { (Enum)item });
+                    }
+                }
+            }
+            //
+            return elementTypeEnums;
+        }
+        //
+        public static Dictionary<Type, HashSet<string>> GetUnavailableElementTypeNames(this ModelSpaceEnum modelSpace)
+        {
+            List<Type> elementTypes = new List<Type>();
+            elementTypes.Add(typeof(FeElementTypeLinearTria));
+            elementTypes.Add(typeof(FeElementTypeParabolicTria));
+            elementTypes.Add(typeof(FeElementTypeLinearQuad));
+            elementTypes.Add(typeof(FeElementTypeParabolicQuad));
+            elementTypes.Add(typeof(FeElementTypeLinearTetra));
+            elementTypes.Add(typeof(FeElementTypeParabolicTetra));
+            elementTypes.Add(typeof(FeElementTypeLinearWedge));
+            elementTypes.Add(typeof(FeElementTypeParabolicWedge));
+            elementTypes.Add(typeof(FeElementTypeLinearHexa));
+            elementTypes.Add(typeof(FeElementTypeParabolicHexa));
+            //
+            int type = 0;
+            if (modelSpace == ModelSpaceEnum.ThreeD) type = 1;
+            else if (modelSpace == ModelSpaceEnum.PlaneStress) type = 2;
+            else if (modelSpace == ModelSpaceEnum.PlaneStrain) type = 3;
+            else if (modelSpace == ModelSpaceEnum.Axisymmetric) type = 4;
+            HashSet<string> elementEnums;
+            Dictionary<Type, HashSet<string>> unavailableElementTypeNames = new Dictionary<Type, HashSet<string>>();
+            //
+            foreach (Type elementType in elementTypes)
+            {
+                foreach (var item in Enum.GetValues(elementType))
+                {
+                    // Remove all elements of the wrong type
+                    if ((int)item > 0 && (int)item / 10 != type) 
+                    {
+                        // For axisymmetric models allow plane stress elements
+                        if (type == 4 && (int)item > 0 && (int)item / 10 == 2) continue;
+                        //
+                        if (unavailableElementTypeNames.TryGetValue(elementType, out elementEnums))
+                            elementEnums.Add(item.ToString());
+                        else
+                            unavailableElementTypeNames.Add(elementType, new HashSet<string>() { item.ToString() });
+                    }
+                }
+            }
+            //
+            return unavailableElementTypeNames;
+        }
+    }
     //
-    [Serializable]
-    public class ModelProperties : ISerializable, IContainsEquations
+    [PmxType(3190)]
+    public class ModelProperties : IContainsEquations
     {
         // Variables                                                                                                                
-        private ModelSpaceEnum _modelSpace;                 //ISerializable
-        private ModelType _modelType;                       //ISerializable
+        [PmxKey(0)] private ModelSpaceEnum _modelSpace;                 //ISerializable
+        [PmxKey(1)] private ModelType _modelType;                       //ISerializable
         // Submodel
-        private string _globalResultsFileName;              //ISerializable
+        [PmxKey(2)] private string _globalResultsFileName;              //ISerializable
         // Slip wear model
-        private SlipWearResultsEnum _slipWearResults;       //ISerializable
-        private EquationContainer _numberOfCycles;          //ISerializable
-        private EquationContainer _cyclesIncrement;         //ISerializable
-        private EquationContainer _numOfSmoothingSteps;     //ISerializable
-        private bool _bdmRemeshing;                         //ISerializable
+        [PmxKey(3)] private SlipWearResultsEnum _slipWearResults;       //ISerializable
+        [PmxKey(4)] private EquationContainer _numberOfCycles;          //ISerializable
+        [PmxKey(5)] private EquationContainer _cyclesIncrement;         //ISerializable
+        [PmxKey(6)] private EquationContainer _numOfSmoothingSteps;     //ISerializable
+        [PmxKey(7)] private bool _bdmRemeshing;                         //ISerializable
         //
-        private double _absoluteZero;                       //ISerializable
-        private double _stefanBoltzmann;                    //ISerializable
-        private double _newtonGravity;                      //ISerializable
+        [PmxKey(8)] private double _absoluteZero;                       //ISerializable
+        [PmxKey(9)] private double _stefanBoltzmann;                    //ISerializable
+        [PmxKey(10)] private double _newtonGravity;                      //ISerializable
 
 
         // Properties                                                                                                               
@@ -167,6 +256,13 @@ namespace CaeModel
 
 
         // Methods                                                                                                                  
+        [OnDeserialized]
+        private void RestoreEquationCallbacks(StreamingContext context)
+        {
+            SetNumOfCycles(_numberOfCycles, false);
+            SetCyclesIncrement(_cyclesIncrement, false);
+            SetNumOfSmoothingSteps(_numOfSmoothingSteps, false);
+        }
         private void SetNumOfCycles(EquationContainer value, bool checkEquation = true)
         {
             EquationContainer.SetAndCheck(ref _numberOfCycles, value, CheckLessThanOne, checkEquation);
@@ -208,22 +304,6 @@ namespace CaeModel
                 return true;
             }
             catch (Exception ex) { return false; }
-        }
-        // ISerialization
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Using typeof() works also for null fields
-            info.AddValue("ModelSpace", _modelSpace, typeof(ModelSpaceEnum));
-            info.AddValue("ModelType", _modelType, typeof(ModelType));
-            info.AddValue("GlobalResultsFileName", _globalResultsFileName, typeof(string));
-            info.AddValue("SlipWearResults", _slipWearResults, typeof(SlipWearResultsEnum));
-            info.AddValue("_numberOfCycles", _numberOfCycles, typeof(EquationContainer));
-            info.AddValue("_cyclesIncrement", _cyclesIncrement, typeof(EquationContainer));
-            info.AddValue("_numOfSmoothingSteps", _numOfSmoothingSteps, typeof(EquationContainer));
-            info.AddValue("_bdmRemeshing", _bdmRemeshing, typeof(bool));
-            info.AddValue("AbsoluteZero", _absoluteZero, typeof(double));
-            info.AddValue("StefanBoltzmann", _stefanBoltzmann, typeof(double));
-            info.AddValue("NewtonGravity", _newtonGravity, typeof(double));
         }
     }
 }

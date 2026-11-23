@@ -49,9 +49,11 @@ def validate_data(result, reference):
     if len(contracts["types"]) != len(owners) or {row["name"] for row in contracts["types"]} != set(owners):
         raise ValueError("Shared data type closure changed")
     for row in contracts["types"]:
-        owner, public, serializable = owners[row["name"]]
+        # 3.0.2 (upstream storage): the stored types carry [PmxType] where 3.0.1 had [Serializable]; none keeps
+        # [Serializable]. The Windows reference was observed on 3.0.1 (re-observe on Windows for 3.0.2, M3/M4).
+        owner, public, stored = owners[row["name"]]
         identity = row["name"] + ", " + owner + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-        if row["identity"] != identity or row["isPublic"] != public or row["serializable"] != serializable:
+        if row["identity"] != identity or row["isPublic"] != public or row["stored"] != stored or row["serializable"]:
             raise ValueError("Shared type identity/visibility/serialization marker changed: " + row["name"])
     if not contracts["metadataImplementsOriginalInterfaces"]:
         raise ValueError("Metadata serialization interfaces changed")
@@ -64,7 +66,9 @@ def validate_data(result, reference):
     # Application.DoEvents (GmshAPI); the portable headless control model provides it.
     allowed = {"CaeGlobals", "CaeMesh", "CaeResults", "GmshCommon", "vtkControl", "PrePoMaxX.WinFormsCompat", "PrePoMaxX.FormsCompat",
                "NCalc", "UnitsNet", "ExtendedNumerics.BigDecimal", "Parlot", "PriorityQueue", "Microsoft.CSharp",
-               "Microsoft.Win32.Registry", "netstandard", "mscorlib"}
+               "Microsoft.Win32.Registry", "netstandard", "mscorlib",
+               # 3.0.2: upstream's storage serializer (CaeGlobals/Serialization) on MessagePack with Zstandard
+               "MessagePack", "ZstdSharp"}
     for assembly in contracts["assemblies"]:
         if any(not (name in allowed or name == "System" or name.startswith("System.")) or
                any(token in name for token in ("System.Windows.Forms", "Presentation", "Kitware"))
@@ -162,7 +166,8 @@ def main():
             elements = report["elementTests"]
             if not elements["success"] or elements["passed"] != 95 or elements["failed"] or elements["runtime"]["architecture"] != native_arch:
                 raise ValueError("Accepted element-kernel checks failed or did not all execute")
-            if len(elements["openCorrectnessChecks"]) != 2 or elements["fullyAccepted"] or any(c["passed"] for c in elements["openCorrectnessChecks"]):
+            # 3.0.2 fixed the quadratic pyramid classification (D029); the quadratic tetrahedron integral stays open
+            if len(elements["openCorrectnessChecks"]) != 1 or elements["fullyAccepted"] or any(c["passed"] for c in elements["openCorrectnessChecks"]):
                 raise ValueError("Unresolved original-source correctness checks must remain explicit")
             measure_cli = work / "build/bin/MeasureMesh/release/PrePoMaxX.MeasureMesh.dll"
             measure_sample = HERE / "MeasureMesh/unit-tetra.json"

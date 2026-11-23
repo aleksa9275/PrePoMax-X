@@ -92,7 +92,6 @@
     <Compile Include="HistoryOutputs\HistoryResultSet.cs" />
     <Compile Include="HistoryOutputs\HistoryResults.cs" />
     <Compile Include="HistoryOutputs\HistoryResultEntries.cs" />
-    <Compile Include="HistoryOutputs\HistoryResultEntries.Legacy.cs" />
     <Compile Include="FieldOutput\FieldComponent.cs" />
     <Compile Include="FieldOutput\FieldData.cs" />
     <Compile Include="FileInOut\Input\CalculiX\DatDataSet.cs" />

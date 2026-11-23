@@ -18,12 +18,12 @@ using CaeMesh;
 
 namespace CaeModel
 {
-    [Serializable]
+    [PmxType(3193)]
     public class EquationParameterCollection
     {
         // Variables                                                                                                                
-        private CaeGlobals.OrderedDictionary<string, EquationParameter> _parameters;
-        private CaeGlobals.OrderedDictionary<string, EquationParameter> _overriddenParameters;
+        [PmxKey(0)] private CaeGlobals.OrderedDictionary<string, EquationParameter> _parameters;
+        [PmxKey(1)] private CaeGlobals.OrderedDictionary<string, EquationParameter> _overriddenParameters;
 
 
         // Properties                                                                                                               

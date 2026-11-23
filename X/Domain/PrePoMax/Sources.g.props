@@ -641,5 +641,11 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/Commands/0062_MaterialOrientation/CRemoveMaterialOrientations.cs" Link="Commands/0062_MaterialOrientation/CRemoveMaterialOrientations.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Commands/0062_MaterialOrientation/CReplaceMaterialOrientation.cs" Link="Commands/0062_MaterialOrientation/CReplaceMaterialOrientation.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/42_MaterialOrientation/ViewMaterialOrientation.cs" Link="Forms/42_MaterialOrientation/ViewMaterialOrientation.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Commands/00_Base/ILoadNamesCommand.cs" Link="Commands/00_Base/ILoadNamesCommand.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/PmxDocument.cs" Link="PmxDocument.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Commands/0050_Model/02_Tools/CChangeElementOrder.cs" Link="Commands/0050_Model/02_Tools/CChangeElementOrder.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/21_FEModel/ViewChangeElementOrder.cs" Link="Forms/21_FEModel/ViewChangeElementOrder.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewBodyForce.cs" Link="Forms/55_Load/ViewBodyForce.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewEdgeLoad.cs" Link="Forms/55_Load/ViewEdgeLoad.cs" />
   </ItemGroup>
 </Project>

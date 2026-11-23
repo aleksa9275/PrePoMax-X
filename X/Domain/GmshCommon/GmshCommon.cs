@@ -69,6 +69,8 @@ namespace GmshCommon
             [DllImport(Lib)] internal static extern int gmshModelAddDiscreteEntity(int dim, int tag, int[] boundary, UIntPtr boundary_n, out int ierr);
             [DllImport(Lib)] internal static extern void gmshModelRemoveEntities(int[] dimTags, UIntPtr dimTags_n, int recursive, out int ierr);
             [DllImport(Lib)] internal static extern void gmshModelSetVisibility(int[] dimTags, UIntPtr dimTags_n, int value, int recursive, out int ierr);
+            [DllImport(Lib)] internal static extern void gmshModelGetVisibility(int dim, int tag, out int value, out int ierr);
+            [DllImport(Lib)] internal static extern void gmshModelReparametrizeOnSurface(int dim, int tag, double[] parametricCoord, UIntPtr parametricCoord_n, int surfaceTag, out IntPtr surfaceParametricCoord, out UIntPtr surfaceParametricCoord_n, int which, out int ierr);
             [DllImport(Lib)] internal static extern void gmshModelGetType(int dim, int tag, out IntPtr entityType, out int ierr);
             [DllImport(Lib)] internal static extern void gmshModelGetValue(int dim, int tag, double[] parametricCoord, UIntPtr parametricCoord_n, out IntPtr coord, out UIntPtr coord_n, out int ierr);
             [DllImport(Lib)] internal static extern void gmshModelGetNormal(int tag, double[] parametricCoord, UIntPtr parametricCoord_n, out IntPtr normals, out UIntPtr normals_n, out int ierr);
@@ -417,6 +419,10 @@ namespace GmshCommon
                 int[] f = Flatten(tags);
                 Native.gmshModelSetVisibility(f, N(f), value, recursive ? 1 : 0, out int ierr); Check(ierr);
             }
+            public static int GetVisibility(int dim, int tag)
+            {
+                Native.gmshModelGetVisibility(dim, tag, out int value, out int ierr); Check(ierr); return value;
+            }
             public static string GetType(int dim, int tag)
             {
                 Native.gmshModelGetType(dim, tag, out IntPtr value, out int ierr); Check(ierr); return TakeString(value);
@@ -447,6 +453,14 @@ namespace GmshCommon
                 Check(ierr);
                 min = TakeDoubles(pMin, nMin);
                 max = TakeDoubles(pMax, nMax);
+            }
+            public static void ReparametrizeOnSurface(int dim, int tag, double[] parametricCoord, int surfaceTag,
+                                                      out double[] surfaceParametricCoord, int which)
+            {
+                Native.gmshModelReparametrizeOnSurface(dim, tag, parametricCoord, N(parametricCoord), surfaceTag, out IntPtr p,
+                                                       out UIntPtr np, which, out int ierr);
+                Check(ierr);
+                surfaceParametricCoord = TakeDoubles(p, np);
             }
             public static int IsInside(int dim, int tag, double[] coord, bool parametric)
             {
@@ -633,6 +647,16 @@ namespace GmshCommon
                     Check(ierr);
                     coord = TakeDoubles(pc, nc);
                     TakeDoubles(pp, np); // Original: parametric coordinates are not returned
+                    nodeTags = TakeSizes(pt, nt);
+                }
+                // GmshCommon.h 3.0.2: the nodes of a curve without its boundary, with their parametric coordinates
+                public static void GetCurveNodes(int tag, out IntPtr[] nodeTags, out double[] coord, out double[] parameters)
+                {
+                    Native.gmshModelMeshGetNodes(out IntPtr pt, out UIntPtr nt, out IntPtr pc, out UIntPtr nc, out IntPtr pp,
+                                                 out UIntPtr np, 1, tag, 0, 1, out int ierr);
+                    Check(ierr);
+                    coord = TakeDoubles(pc, nc);
+                    parameters = TakeDoubles(pp, np);
                     nodeTags = TakeSizes(pt, nt);
                 }
                 public static void GetElement(IntPtr elementTag, int elementType, out IntPtr[] nodeTags, out int dim,

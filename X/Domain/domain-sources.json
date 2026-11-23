@@ -23,6 +23,13 @@
         "X/Domain/CaeGlobals/Portable/MessageBoxManager.Portable.cs": "Message box button texts without the user32 hook"
       }
     },
+    "PrePoMax.LegacyImport": {
+      "project": "PrePoMax.LegacyImport/PrePoMax.LegacyImport.csproj",
+      "exclude": {},
+      "add": {
+        "X/Domain/PrePoMax.LegacyImport/FailClosed.Portable.cs": "Fails closed until the host installs the type allowlist binder (never unrestricted deserialization)"
+      }
+    },
     "CaeMesh": {
       "project": "CaeMesh/CaeMesh.csproj",
       "exclude": {},
@@ -728,7 +735,13 @@
         "Commands/0062_MaterialOrientation/CDuplicateMaterialOrientations.cs",
         "Commands/0062_MaterialOrientation/CRemoveMaterialOrientations.cs",
         "Commands/0062_MaterialOrientation/CReplaceMaterialOrientation.cs",
-        "Forms/42_MaterialOrientation/ViewMaterialOrientation.cs"
+        "Forms/42_MaterialOrientation/ViewMaterialOrientation.cs",
+        "Commands/00_Base/ILoadNamesCommand.cs",
+        "PmxDocument.cs",
+        "Commands/0050_Model/02_Tools/CChangeElementOrder.cs",
+        "Forms/21_FEModel/ViewChangeElementOrder.cs",
+        "Forms/55_Load/ViewBodyForce.cs",
+        "Forms/55_Load/ViewEdgeLoad.cs"
       ],
       "exclude": {},
       "add": {}

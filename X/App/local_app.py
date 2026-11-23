@@ -5,9 +5,9 @@
     python3 X/App/local_app.py --package <PrePoMax-X.app of P1> --solver <solver folder with build-registry.json> \
         --solver-id <build id> --output X/Build/artifacts/app-mac
 
-The P1 package supplies CPython 3.12, Netgen, Mmg, Gmsh, lib3mf and lp_solve; this repository supplies
-X/App (built here), GmshCaller (built from the current sources), QuadWild (X/Build/QuadWild) and the vtkNative
-runtime (X/Build/Vtk). The output holds app/ (PrePoMax, PrePoMax.com, PrePoMaxX.runtime.json, settings.bin),
+The P1 package supplies CPython 3.12, Netgen, Mmg, Gmsh and lib3mf; this repository supplies X/App (built
+here), GmshCaller (built from the current sources), QuadWild (X/Build/QuadWild), HiGHS (X/Build/Highs, 3.0.2),
+optionally Netgen (X/Build/NativeCad, --netgen) and the vtkNative runtime (X/Build/Vtk). The output holds app/ (PrePoMax, PrePoMax.com, PrePoMaxX.runtime.json, settings.bin),
 profiles/ (python.json, tools.json) and PrePoMax-X.command, which starts the application. Nothing is installed or
 copied over an existing application; the output folder is replaced only below it. A local working folder, not a
 release package (P1/M5).
@@ -40,7 +40,9 @@ def main():
     p.add_argument('--solver', type=Path, required=True, help='Solver folder with build-registry.json and bin/')
     p.add_argument('--solver-id', required=True)
     p.add_argument('--default-solver-type', default='Spooles')
-    p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64/vtkNative/runtime')
+    p.add_argument('--vtk-native', type=Path, default=ROOT / 'X/Build/artifacts/vtk-mac-arm64-302/vtkNative/runtime')
+    p.add_argument('--highs', type=Path, default=ROOT / 'X/Build/artifacts/highs-mac-arm64/runtime/highs.dll.dylib')
+    p.add_argument('--netgen', type=Path, help='a NetGenMesher runtime of X/Build/NativeCad (default: the package\'s)')
     p.add_argument('--quadwild', type=Path, default=ROOT / 'X/Build/artifacts/quadwild-mac-arm64/runtime')
     p.add_argument('--work-directory', type=Path, help='The solver work directory (default: <output>/work)')
     p.add_argument('--output', type=Path, required=True)
@@ -74,13 +76,13 @@ def main():
             shutil.copy2(item, app / item.name, follow_symlinks=False)
     if not (app / 'libvtkNative.dylib').exists():
         raise SystemExit('The vtkNative runtime has no libvtkNative.dylib')
-    lpsolve = resources / package['components']['lpsolve']['file'] if (resources / package['components']['lpsolve']['file']).exists() \
-        else resources / 'app' / package['components']['lpsolve']['file']
-    if sha(lpsolve) != package['components']['lpsolve']['sha256']:
-        raise SystemExit('lp_solve does not match the package manifest')
-    shutil.copy2(lpsolve, app / lpsolve.name)
+    # HiGHS (3.0.2 replaced lp_solve): beside the assemblies and GmshCaller
+    highs = a.highs.resolve()
+    if json.loads((highs.parent / 'highs-build.json').read_text())['librarySha256'] != sha(highs):
+        raise SystemExit('HiGHS does not match its build receipt')
+    shutil.copy2(highs, app / highs.name)
     gmsh_caller = ROOT / 'X/Domain/GmshCaller/bin/Release/net10.0'
-    shutil.copy2(lpsolve, gmsh_caller / lpsolve.name)
+    shutil.copy2(highs, gmsh_caller / highs.name)
 
     if kept_settings is not None:
         (app / 'settings.bin').write_bytes(kept_settings)
@@ -96,6 +98,8 @@ def main():
     put('\\lib\\GmshCaller.exe', gmsh_caller / 'GmshCaller')
     put('\\Meshers\\QuadWild\\quadwild.exe', a.quadwild / 'quadwild.exe')
     put('\\Meshers\\QuadWild\\quad_from_patches.exe', a.quadwild / 'quad_from_patches.exe')
+    if a.netgen:
+        put('\\Meshers\\Netgen\\NetGenMesher.exe', a.netgen.resolve() / 'bin/NetGenMesher')
     (profiles / 'tools.json').write_text(json.dumps(tools, indent=2) + '\n')
 
     # The runtime profile and the original settings with the solver

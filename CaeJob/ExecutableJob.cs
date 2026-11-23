@@ -31,14 +31,14 @@ namespace CaeJob
     //    Failed
     //}
 
-    [Serializable]
+    [PmxType(6004)]
     public partial class ExecutableJob : NamedClass
     {
         // Variables                                                                                                                
-        protected string _workDirectory;
-        protected string _executable;
-        protected string _argument;
-        protected JobStatus _jobStatus;
+        [PmxKey(0)] protected string _workDirectory;
+        [PmxKey(1)] protected string _executable;
+        [PmxKey(2)] protected string _argument;
+        [PmxKey(3)] protected JobStatus _jobStatus;
         //
         [NonSerialized] protected Stopwatch _watch;
         [NonSerialized] protected Stopwatch _updateWatch;   // timer does not tick - use update watch

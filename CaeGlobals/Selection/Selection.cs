@@ -18,20 +18,20 @@ using System.Threading.Tasks;
 
 namespace CaeGlobals
 {
-    [Serializable]
-    public partial class Selection : ISerializable
+    [PmxType(1025)]
+    public class Selection
     {
         // Variables                                                                                                                
-        private List<SelectionNode> _nodes;                 //ISerializable
-        private vtkSelectItem _selectItem;                  //ISerializable
-        private int _currentView;                           //ISerializable
-        private int _maxNumberOfGeometryIds;                //ISerializable
-        private int _maxNumberOfItemIds;                    //ISerializable
-        private bool _limitSelectionToFirstPart;            //ISerializable
-        private bool _limitSelectionToFirstGeometryType;    //ISerializable
-        private bool _limitSelectionToFirstMesherType;      //ISerializable     // netgen or mmg
-        private bool _limitSelectionToShellEdges;           //ISerializable
-        private bool _enableShellEdgeFaceSelection;         //ISerializable
+        [PmxKey(0)] private List<SelectionNode> _nodes;                 //ISerializable
+        [PmxKey(1)] private vtkSelectItem _selectItem;                  //ISerializable
+        [PmxKey(2)] private int _currentView;                           //ISerializable
+        [PmxKey(3)] private int _maxNumberOfGeometryIds;                //ISerializable
+        [PmxKey(4)] private int _maxNumberOfItemIds;                    //ISerializable
+        [PmxKey(5)] private bool _limitSelectionToFirstPart;            //ISerializable
+        [PmxKey(6)] private bool _limitSelectionToFirstGeometryType;    //ISerializable
+        [PmxKey(7)] private bool _limitSelectionToFirstMesherType;      //ISerializable     // netgen or mmg
+        [PmxKey(8)] private bool _limitSelectionToShellEdges;           //ISerializable
+        [PmxKey(9)] private bool _enableShellEdgeFaceSelection;         //ISerializable
         
 
         // Temporary storage for speed optimization: keep current ids;
@@ -123,6 +123,29 @@ namespace CaeGlobals
             _limitSelectionToFirstMesherType = false;
             _limitSelectionToShellEdges = false;
             _enableShellEdgeFaceSelection = false;
+        }
+        public Selection(Selection selection, bool copyNodes, bool copyNodeHashes)
+        {
+            SelectionNode selectionNode;
+            _nodes = new List<SelectionNode>();
+            if (copyNodes)
+            {
+                foreach (var node in selection._nodes)
+                {
+                    selectionNode = node.DeepClone();
+                    if (copyNodeHashes) selectionNode.Hash = node.Hash;
+                    _nodes.Add(selectionNode);
+                }
+            }
+            _selectItem = selection._selectItem;
+            _currentView = selection._currentView;
+            _maxNumberOfGeometryIds = selection._maxNumberOfGeometryIds;
+            _maxNumberOfItemIds = selection._maxNumberOfItemIds;
+            _limitSelectionToFirstPart = selection._limitSelectionToFirstPart;
+            _limitSelectionToFirstGeometryType = selection._limitSelectionToFirstGeometryType;
+            _limitSelectionToFirstMesherType = selection._limitSelectionToFirstMesherType;
+            _limitSelectionToShellEdges = selection._limitSelectionToShellEdges;
+            _enableShellEdgeFaceSelection = selection._enableShellEdgeFaceSelection;
         }
         public Selection(SerializationInfo info, StreamingContext context)
         {
@@ -266,25 +289,14 @@ namespace CaeGlobals
             return true;
         }
         // Copy
+        public Selection DeepCopy(bool copyNodes, bool copyNodeHashes)
+        {
+            return new Selection(this, copyNodes, copyNodeHashes);
+        }
         public void DeepClone()
         {
             // This prevents calling DeepClone!
             throw new NotSupportedException();
-        }
-        // ISerialization
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Using typeof() works also for null fields
-            info.AddValue("_nodes", _nodes, typeof(List<SelectionNode>));
-            info.AddValue("_selectItem", _selectItem, typeof(vtkSelectItem));
-            info.AddValue("_currentView", _currentView, typeof(int));
-            info.AddValue("_maxNumberOfGeometryIds", _maxNumberOfGeometryIds, typeof(int));
-            info.AddValue("_maxNumberOfItemIds", _maxNumberOfItemIds, typeof(int));
-            info.AddValue("_limitSelectionToFirstPart", _limitSelectionToFirstPart, typeof(bool));
-            info.AddValue("_limitSelectionToFirstGeometryType", _limitSelectionToFirstGeometryType, typeof(bool));
-            info.AddValue("_limitSelectionToFirstMesherType", _limitSelectionToFirstMesherType, typeof(bool));
-            info.AddValue("_limitSelectionToShellEdges", _limitSelectionToShellEdges, typeof(bool));
-            info.AddValue("_enableShellEdgeFaceSelection", _enableShellEdgeFaceSelection, typeof(bool));
         }
     }
 }

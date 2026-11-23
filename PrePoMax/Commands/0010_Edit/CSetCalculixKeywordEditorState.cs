@@ -16,12 +16,12 @@ using Calculix = FileInOut.Output.Calculix;
 
 namespace PrePoMax.Commands
 {
-    [Serializable]
+    [PmxType(10038)]
     class CSetCalculixKeywordEditorState : PreprocessCommand
     {
         // Variables
-        private CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> _userKeywords;
-        private List<Calculix.CalculixKeywordOverride> _keywordOverrides;
+        [PmxKey(0)] private CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> _userKeywords;
+        [PmxKey(1)] private List<Calculix.CalculixKeywordOverride> _keywordOverrides;
 
 
         // Constructors

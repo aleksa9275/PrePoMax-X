@@ -19,11 +19,11 @@ using DynamicTypeDescriptor;
 
 namespace PrePoMax.Forms
 {
-    [Serializable]
+    [PmxType(10337)]
     public class ViewTetrahedralGmsh : ViewGmshSetupItem
     {
         // Variables                                                                                                                
-        private TetrahedralGmsh _tetrahedronGmsh;
+        [PmxKey(0)] private TetrahedralGmsh _tetrahedronGmsh;
 
 
         // Properties                                                                                                               
@@ -56,6 +56,7 @@ namespace PrePoMax.Forms
             //
             _dctd.GetProperty(nameof(AlgorithmRecombine)).SetIsBrowsable(false);
             _dctd.GetProperty(nameof(RecombineMinQuality)).SetIsBrowsable(false);
+            _dctd.GetProperty(nameof(TransfiniteSubmapped)).SetIsBrowsable(false);
             //
             _dctd.GetProperty(nameof(OptimizeFirstOrderShell)).SetIsBrowsable(false);
             //

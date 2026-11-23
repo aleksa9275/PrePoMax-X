@@ -80,7 +80,8 @@ def main():
                     raise ValueError('Expanded-assembly original regression failed: '+project)
                 report['regression'][project] = result
             element = report['regression']['Elements']
-            if element['fullyAccepted'] or len(element['openCorrectnessChecks']) != 2 or any(c['passed'] for c in element['openCorrectnessChecks']):
+            # 3.0.2 fixed the quadratic pyramid classification (D029); the quadratic tetrahedron integral stays open
+            if element['fullyAccepted'] or len(element['openCorrectnessChecks']) != 1 or any(c['passed'] for c in element['openCorrectnessChecks']):
                 raise ValueError('Existing correctness failures must remain explicit')
             reference = json.loads((ROOT/'.project/reports/windows-reference/data-windows-x64.json').read_text())
             data = report['regression']['Data']

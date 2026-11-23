@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "name": "HiGHS",
+  "version": "1.16.0",
+  "commit": "f3f113d230429a8c0014b12ab0dd1a3847e58c55",
+  "archive": "HiGHS-1.16.0.tar.gz",
+  "url": "https://github.com/ERGO-Code/HiGHS/archive/f3f113d230429a8c0014b12ab0dd1a3847e58c55.tar.gz",
+  "sha256": "f0448e8fc63db5f3fcba54af42309e8985535fb73f56428444a45f6c8462d4c6",
+  "license": "MIT (Licenses/highs/)",
+  "note": "The release upstream vendors as ThirdParty/highs/highs.dll (HiGHS 1.16.0, git f3f113d, 32-bit HighsInt)"
+}

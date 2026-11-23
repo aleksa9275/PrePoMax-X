@@ -79,9 +79,9 @@ internal static class Program
                 Require(element.Id==901 && element.PartId==23 && element.NodeIds.SequenceEqual(ids));
                 Require(element.GetVtkNodeIds().Order().SequenceEqual(ids.Order()) && element.GetGmshNodeIds().Order().SequenceEqual(ids.Order()));
                 Require(!ReferenceEquals(element.GetVtkNodeIds(),element.NodeIds));
-                if (type!=typeof(ParabolicPyramidElement)) Require(FeElement.IsParabolic(element)==quadratic);
+                Require(FeElement.IsParabolic(element)==quadratic);   // 3.0.2 classifies the quadratic pyramid too (D029)
                 Require(type.AssemblyQualifiedName=="CaeMesh."+name+", CaeMesh, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
-                Require(type.IsDefined(typeof(SerializableAttribute),false));
+                Require(type.IsDefined(typeof(CaeGlobals.PmxTypeAttribute),false));   // 3.0.2 storage: [PmxType] for [Serializable]
             });
             Check(name + " copy independence", () => {
                 var copy=element.DeepCopy(); Require(copy.GetType()==type && copy.Id==901 && copy.PartId==23 && copy.NodeIds.SequenceEqual(ids));
@@ -96,9 +96,8 @@ internal static class Program
             });
         }
         bool pyramidClassified=FeElement.IsParabolic(new ParabolicPyramidElement(1,Enumerable.Range(1,13).ToArray()));
-        OpenCorrectnessChecks.Add(new {name="quadratic pyramid classification",passed=pyramidClassified,expected=true,actual=pyramidClassified,
-            disposition="Original helper omits quadratic pyramid; host uses explicit type factories"});
-        Check("quadratic pyramid classifier discrepancy remains visible",()=>Require(!pyramidClassified));
+        // D029 (pyramid part): the original helper omitted the quadratic pyramid until upstream 3.0.2 (FeElement.IsParabolic)
+        Check("quadratic pyramid classified parabolic (fixed upstream in 3.0.2)",()=>Require(pyramidClassified));
         var quadNodes=new[] {new NodeInput(11,1,0,0),new NodeInput(29,3,0,0),new NodeInput(43,3,2,0),new NodeInput(71,1,2,0)};
         var quad=new MeshInput(quadNodes,new[]{new ElementInput(101,"LinearQuadrilateralElement",new[]{11,29,43,71})});
         Check("thickness integral preserves geometry", () => {var result=Measurement.Run(quad with {Scale="thickness",Thickness=0.25}).Single();Near(result.Measure,4);Near(result.Integral,1);});

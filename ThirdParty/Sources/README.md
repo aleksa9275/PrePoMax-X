@@ -9,7 +9,7 @@ ignored build/cache directories or versioned release artifacts, not source trees
 | Component | Recovered source | Correspondence / release status |
 | --- | --- | --- |
 | CalculiX CrunchiX 2.22 | [source and provenance](CalculiX/2.22/README.md) | Official source recovered; matching bundled Windows PaStiX/MKL patch/build chain and native builds remain unproven |
-| Original PrePoMax NetgenMesher / modified Netgen 5.3.1 | [source and patches](NetgenMesher/c5ecb0ba/README.md) | Newly public source pinned and retained unchanged; native OCCT 8.0.1 build and bounded CAD/meshing experiments |
+| Original PrePoMax NetgenMesher / modified Netgen 5.3.1 | [source and patches](NetgenMesher/01e30ce0/README.md) | Newly public source pinned and retained unchanged; native OCCT 8.0.1 build and bounded CAD/meshing experiments |
 
 Run `python3 ThirdParty/Sources/verify-sources.py` from any directory to check the
 pinned source-manifest bytes and every extracted file. Archive hashes identify

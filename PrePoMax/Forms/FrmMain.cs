@@ -138,6 +138,7 @@ namespace PrePoMax
         private FrmBoundaryLayer _frmBoundaryLayer;
         private FrmRemeshingParameters _frmRemeshingParameters;
         private FrmThickenShellMesh _frmThickenShellMesh;
+        private FrmChangeElementOrder _frmChangeElementOrder;
         private FrmSplitPartMeshUsingSurface _frmSplitPartMeshUsingSurface;
         private FrmMergeCoincidentNodes _frmMergeCoincidentNodes;
         private FrmElementQuality _frmElementQuality;
@@ -581,6 +582,9 @@ namespace PrePoMax
                 //
                 _frmThickenShellMesh = new FrmThickenShellMesh(_controller);
                 AddFormToAllForms(_frmThickenShellMesh);
+                //
+                _frmChangeElementOrder = new FrmChangeElementOrder(_controller);
+                AddFormToAllForms(_frmChangeElementOrder);
                 //
                 _frmSplitPartMeshUsingSurface = new FrmSplitPartMeshUsingSurface(_controller);
                 _frmSplitPartMeshUsingSurface.SplitPartMeshUsingSurface += SplitPartMeshUsingSurface;
@@ -3391,6 +3395,16 @@ namespace PrePoMax
             }
             catch { }
         }
+        private void tsmiShowNodes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _vtk.NodesVisibility = !_vtk.NodesVisibility;
+                tsbShowNodes.Checked = _vtk.NodesVisibility;
+                tsmiShowNodes.Checked = _vtk.NodesVisibility;
+            }
+            catch { }
+        }
         // Section view
         private void tsmiSectionView_Click(object sender, EventArgs e)
         {
@@ -5140,6 +5154,17 @@ namespace PrePoMax
                 ExceptionTools.Show(this, ex);
             }
         }
+        private void tsmiChangeElementOrder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ChangeElementOrder();
+            }
+            catch (Exception ex)
+            {
+                ExceptionTools.Show(this, ex);
+            }
+        }
         private void tsmiSplitPartMeshUsingSurface_Click(object sender, EventArgs e)
         {
             try
@@ -5244,6 +5269,12 @@ namespace PrePoMax
             // Data editor
             ItemSetDataEditor.SetForms(_frmSelectItemSet, true, _frmThickenShellMesh);
             ShowForm(_frmThickenShellMesh, "Thicken Shell Mesh", null);
+        }
+        private void ChangeElementOrder()
+        {
+            // Data editor
+            ItemSetDataEditor.SetForms(_frmSelectItemSet, true, _frmChangeElementOrder);
+            ShowForm(_frmChangeElementOrder, "Change Element Order", null);
         }
         private async void SplitPartMeshUsingSurface(SplitPartMeshData splitPartMeshData)
         {
@@ -10867,6 +10898,7 @@ namespace PrePoMax
             if (_frmBoundaryLayer != null && _frmBoundaryLayer.Visible) _frmBoundaryLayer.SelectionChanged(ids);
             if (_frmRemeshingParameters != null && _frmRemeshingParameters.Visible) _frmRemeshingParameters.SelectionChanged(ids);
             if (_frmThickenShellMesh != null && _frmThickenShellMesh.Visible) _frmThickenShellMesh.SelectionChanged(ids);
+            if (_frmChangeElementOrder != null && _frmChangeElementOrder.Visible) _frmChangeElementOrder.SelectionChanged(ids);
             if (_frmSplitPartMeshUsingSurface != null && _frmSplitPartMeshUsingSurface.Visible)
                 _frmSplitPartMeshUsingSurface.SelectionChanged(ids);
             if (_frmMergeCoincidentNodes != null && _frmMergeCoincidentNodes.Visible)
@@ -11121,6 +11153,10 @@ namespace PrePoMax
         private void tsbShowNoEdges_Click(object sender, EventArgs e)
         {
             tsmiShowNoEdges_Click(null, null);
+        }
+        private void tsbShowNodes_Click(object sender, EventArgs e)
+        {
+            tsmiShowNodes_Click(null, null);
         }
         //
         private void tsbSectionView_MouseUp(object sender, MouseEventArgs e)

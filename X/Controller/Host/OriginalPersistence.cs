@@ -15,7 +15,9 @@ namespace PrePoMax
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             RuntimeInitialization.SetCultureAndLanguage();
-            BinarySerialization.Factory=()=>new RestrictedNrbfSerializer(policy.Value);
+            // Files of older versions (binary formatter): upstream's legacy reader, every type through the allowlist
+            PrePoMax.LegacyImport.LegacyReader.RestrictingBinder=new AllowlistBinder(policy.Value);
+            ObjectSerializer.LegacyReader=PrePoMax.LegacyImport.LegacyReader.Read;
         }
         static NrbfTypePolicy CreatePolicy()
         {

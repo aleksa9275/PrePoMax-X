@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Upstream's reader of the files PrePoMax wrote with the binary formatter (3.0.2). The X hosts set
+       LegacyReader.RestrictingBinder (X/Persistence), so a file can only name allowlisted types. -->
+  <PropertyGroup><AssemblyName>PrePoMax.LegacyImport</AssemblyName><RootNamespace>PrePoMax.LegacyImport</RootNamespace></PropertyGroup>
+  <Import Project="Sources.g.props" />
+  <ItemGroup>
+    <PackageReference Include="System.Formats.Nrbf" Version="[10.0.14]" />
+    <ProjectReference Include="../CaeGlobals/CaeGlobals.csproj" />
+  </ItemGroup>
+</Project>

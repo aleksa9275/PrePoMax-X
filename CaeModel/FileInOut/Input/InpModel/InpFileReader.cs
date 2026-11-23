@@ -20,6 +20,7 @@ using FileInOut.Output.Calculix;
 
 namespace FileInOut.Input
 {
+    [PmxType(3038)]
     static public partial class InpFileReader
     {
         // Variables                                                                                                                

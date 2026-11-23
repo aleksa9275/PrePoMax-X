@@ -45,9 +45,15 @@ internal static class Program
     }
     private static SerializationInfo Info(GeometryMetadata data)
     {
-        // Framework metadata API only: no BinaryFormatter, file deserialization or type binder is invoked.
+        // 3.0.2 stores the metadata with upstream's storage serializer: its OnSerializing callback makes the same
+        // entity block the binary formatter was given, under the same four stored field names ([PmxKey]). No
+        // BinaryFormatter, file deserialization or type binder is invoked.
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        typeof(GeometryMetadata).GetMethod("OnSerializing", flags).Invoke(data, new object[] { new StreamingContext() });
         var info = new SerializationInfo(typeof(GeometryMetadata), new FormatterConverter());
-        data.GetObjectData(info, new StreamingContext());
+        foreach (var field in typeof(GeometryMetadata).GetFields(flags).Where(f => f.IsDefined(typeof(PmxKeyAttribute), false)))
+            info.AddValue(field.Name, field.GetValue(data), field.FieldType);
+        typeof(GeometryMetadata).GetMethod("OnSerialized", flags).Invoke(data, new object[] { new StreamingContext() });
         return info;
     }
     private sealed class ReconstructedMetadata : GeometryMetadata

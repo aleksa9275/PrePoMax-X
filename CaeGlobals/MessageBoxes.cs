@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using DynamicTypeDescriptor;
 using System.Linq.Expressions;
@@ -23,7 +22,6 @@ using System.Drawing;
 
 namespace CaeGlobals
 {
-    [Serializable]
     public static partial class MessageBoxes
     {
         // MessageBox

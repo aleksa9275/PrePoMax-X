@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Windows.Forms;
@@ -34,48 +33,35 @@ namespace CaeGlobals
         // Deep clone
         public static T DeepClone<T>(this T a)
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                IBinaryObjectSerializer formatter = BinarySerialization.Create();
-                formatter.Serialize(stream, a);
-                stream.Position = 0;
-                return (T)formatter.Deserialize(stream);
-            }
+            return ObjectSerializer.Default.Clone(a);
         }
         // Save clone to File
         public static void DumpToFile<T>(this T a, string fileName)
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                IBinaryObjectSerializer formatter = BinarySerialization.Create();
-                formatter.Serialize(stream, a);
+                ObjectSerializer.Default.Serialize(stream, a);
                 stream.Position = 0;
                 //
-                FileStream fs = new FileStream(fileName, FileMode.Create);
-                //
-                stream.WriteTo(fs);
-                fs.Close();
+                using (FileStream fs = new FileStream(fileName, FileMode.Create)) stream.WriteTo(fs);
             }
         }
         public static T LoadFromFile<T>(string fileName)
         {
             using (FileStream fs = new FileStream(fileName, FileMode.Open))
             {
-                IBinaryObjectSerializer formatter = BinarySerialization.Create();
-                return (T)formatter.Deserialize(fs);
+                return (T)ObjectSerializer.Default.Deserialize(fs);
             }
         }
         public static void DumpToStream<T>(this T a, BinaryWriter bw)
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                IBinaryObjectSerializer formatter = BinarySerialization.Create();
-                formatter.Serialize(stream, a);
+                ObjectSerializer.Default.Serialize(stream, a);
                 stream.Position = 0;
-
+                //
                 long length = stream.Length;
                 bw.Write(length);
-                //stream.WriteTo(bw.BaseStream);
                 stream.CopyTo(bw.BaseStream);
             }
         }
@@ -154,6 +140,19 @@ namespace CaeGlobals
                 n++;
                 newKey = key + separator + n + postFix;
                 if (!dictionary.ContainsKey(newKey)) break;
+            }
+            return newKey;
+        }
+        public static string GetNextNumberedKey(this HashSet<string> hashSet, string key,
+                                                string postFix = "", string separator = "-")
+        {
+            int n = 0;
+            string newKey;
+            while (true)
+            {
+                n++;
+                newKey = key + separator + n + postFix;
+                if (!hashSet.Contains(newKey)) break;
             }
             return newKey;
         }
@@ -367,7 +366,30 @@ namespace CaeGlobals
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
         // vtkSelectBy
+        public static bool IsGeometryBased(this vtkSelectBy selectBy)
+        {
+            return selectBy == vtkSelectBy.Geometry ||
+                   selectBy == vtkSelectBy.GeometryVertex ||
+                   selectBy == vtkSelectBy.GeometryEdge ||
+                   selectBy == vtkSelectBy.GeometrySurface ||
+                   selectBy == vtkSelectBy.GeometryEdgeAngle ||
+                   selectBy == vtkSelectBy.GeometrySurfaceAngle ||
+                   selectBy == vtkSelectBy.GeometryPart;
+        }
         // Double
+        public static string ToCalculiX16String(this double value, bool enforceSeparator = false)
+        {
+            string result = value.ToString().ToUpper();
+            if (result.Length > 16) result = value.ToString("E8");
+            else if (enforceSeparator && !result.Contains("."))
+            {
+                int location = result.IndexOf("E");
+                // The first letter must not be E so > 0
+                if (location > 0) result = result.Insert(location, ".");
+                else result += ".";
+            }
+            return result;
+        }
         // String[]
         public static string ToRows(this string[] names, int maxRows = 30)
         {
@@ -418,6 +440,30 @@ namespace CaeGlobals
                 {
                     //Pull out the description value
                     return ((DescriptionAttribute)attrs[0]).Description;
+                }
+            }
+            //If we have no description attribute, just return the ToString of the enum
+            return enumerationValue.ToString();
+        }
+        public static string GetDisplayedName<T>(this T enumerationValue) where T : struct
+        {
+            Type type = enumerationValue.GetType();
+            if (!type.IsEnum)
+            {
+                throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+            }
+
+            //Tries to find a DescriptionAttribute for a potential friendly name
+            //for the enum
+            MemberInfo[] memberInfo = type.GetMember(enumerationValue.ToString());
+            if (memberInfo != null && memberInfo.Length > 0)
+            {
+                object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DynamicTypeDescriptor.StandardValueAttribute), false);
+
+                if (attrs != null && attrs.Length > 0)
+                {
+                    //Pull out the description value
+                    return ((DynamicTypeDescriptor.StandardValueAttribute)attrs[0]).DisplayName;
                 }
             }
             //If we have no description attribute, just return the ToString of the enum
