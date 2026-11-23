@@ -98,3 +98,10 @@ Homebrew and .NET denied, on a fresh HOME:
 macOS preview 5 on `release/macos-arm64-preview` (`38b23b8c`, source `8aa5e082`, zip `4f14c44d…`). The published
 bundle was rebuilt from the clean commit after the checks above; it differs from the checked one only in the embedded
 revision (`bundle.json`, `Info.plist`, the version string of four assemblies), and its app probe passed 16/16 again.
+
+macOS preview 6 on `release/macos-arm64-preview` (`fef674d0`, source `5e612cb5`, zip `94a8c1df…`): B022's fix.
+The package, unpacked, under the same `sandbox-exec` denials on a fresh HOME: `verify-app.py --scripts --legacy-pmx`
+12 of 12 steps (app probe 16/16; forms 126/126, geometry 4/4, results 9/9, elements 5/5; the four upstream scripts;
+Profile and Bearing_bracket open); `verify_solvers.py` on the bundled ccx with 4 and with 8 threads: SPOOLES and PaStiX
+report all threads, every case passes except the recorded thin-plate/mixed-precision one. The ccx is byte-identical
+across two builds (`87f99211…`). Not run: upstream's full suite (B016 unchanged).
