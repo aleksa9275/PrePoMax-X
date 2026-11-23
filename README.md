@@ -2,7 +2,7 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `8aa5e082` (full: see `bundle.json` inside the app).
+branch of this repository at commit `5e612cb5` (full: see `bundle.json` inside the app).
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
 CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax code
@@ -15,6 +15,17 @@ and the 3D view runs on upstream's VTK 9.7 native port.
 
 A Linux preview of the same app (x86-64 and ARM64, built from source with one command) is on the branch
 [`release/linux-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-preview).
+
+### Changes in preview 6 (source `5e612cb5`, 23 November)
+
+- **SPOOLES is multithreaded on Apple Silicon**, as in the Windows build, using the number of processors set in
+  Settings → CalculiX. Its multithreaded mode had a thread-safety bug that Intel CPUs hide: some threads handed
+  their work to others without locking, so on Apple Silicon a thread could read a result before it was complete.
+  Preview 5 therefore ran SPOOLES on one core. A small patch to SPOOLES fixes that bug; SPOOLES's arithmetic is
+  unchanged. The patch is
+  [`ThirdParty/Build/patches/spooles-2.2-mt-memory-order.patch`](https://github.com/aleksa9275/PrePoMax-X/blob/research/native-feasibility/ThirdParty/Build/patches/spooles-2.2-mt-memory-order.patch),
+  and the build recipe that applies it is `ThirdParty/Build/calculix-cpu.py`; the bug and its evidence are
+  `.project/bugs/B022-spooles-mt-arm64.md`.
 
 ### Changes in preview 5 (source `8aa5e082`, 23 November)
 
@@ -63,7 +74,7 @@ required.
 |---|---|
 | PrePoMax 3.0.2 (original code), Avalonia front end | yes |
 | 3D view (VTK 9.7 through upstream's vtkNative) | yes |
-| CalculiX 2.22 (8-byte integers) with **PaStiX** (multithreaded), **SPOOLES** (one core), ARPACK, OpenBLAS; user material libraries | yes |
+| CalculiX 2.22 (8-byte integers) with **PaStiX** (multithreaded), **SPOOLES** (multithreaded), ARPACK, OpenBLAS; user material libraries | yes |
 | Meshers: Netgen (NetGenMesher, OCCT 8.0.1), Gmsh 4.13 (patched), Mmg, QuadWild; HiGHS 1.16 for element counts | yes |
 | CAD import (STEP, IGES, BREP) | yes |
 | CPython 3.12 for PrePoMax's own Python features | yes (without PyQt) |
@@ -97,10 +108,11 @@ lacked would have made a check fail.
 - **Elements, 5/5 checks:** a CalculiX deck with quadratic tetrahedra is imported and drawn.
 - **Solvers** (the bundled CalculiX, run with Homebrew blocked): a solid cantilever (static, nonlinear geometry,
   eigenfrequencies) and a thin clamped plate, each solved with SPOOLES, PaStiX and PaStiX with
-  `PASTIX_MIXED_PRECISION=0`. PaStiX ran on 4 threads and agreed with SPOOLES (displacements within 3e-10,
-  frequencies equal), except the thin plate with mixed precision, which is wrong exactly as with the original Windows
-  solver; with `PASTIX_MIXED_PRECISION=0` it agrees. PaStiX on 8 threads gave the same result in 10 of 10 repeated
-  runs.
+  `PASTIX_MIXED_PRECISION=0`, on 4 and on 8 threads. SPOOLES and PaStiX each used all the threads allowed and agreed
+  (displacements within 3e-10, frequencies equal), except the thin plate with PaStiX's mixed precision, which is
+  wrong exactly as with the original Windows solver; with `PASTIX_MIXED_PRECISION=0` it agrees. Multithreaded
+  SPOOLES gave the serial SPOOLES's frequencies in 20 of 20 repeated runs on 4 and 8 threads (before the fix: wrong in
+  10 of 10 runs on 8 threads).
 - **Python API, 4 of upstream's test scripts** (`--script`, no GUI): `Test_Analysis` (builds, solves and reads a
   model through the API), `Test_Model_Materials_Sections`, `Test_Model_Meshing` and
   `Test_Model_Meshing_QuadWild_Transfinite` all passed.
@@ -122,7 +134,6 @@ lacked would have made a check fail.
 - **PARDISO is not available.** New analyses default to SPOOLES. Steps saved by Windows PrePoMax with PARDISO stop
   with `the PARDISO library is not linked`: open the step and choose a different solver, such as PaStiX or Spooles.
 - **PaStiX on thin shells:** set `PASTIX_MIXED_PRECISION` to `0` (see above), as on Windows.
-- **SPOOLES uses one core** on Apple Silicon (see above); PaStiX uses all you allow.
 - **Windows file paths:** models from Windows keep their Windows result-file paths until they are solved again.
 - **Not notarized:** macOS blocks the app until you clear the download flag (see Install).
 - **3.0.2 meshing and loads:** some of upstream's new 3.0.2 tests give different meshes or loads than on Windows (see
