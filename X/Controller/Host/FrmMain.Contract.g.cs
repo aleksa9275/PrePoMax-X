@@ -1187,6 +1187,15 @@ public void SetWidgetHighlightEnabled(bool enabled)
     };
     InvokePresentation("SetWidgetHighlightEnabled", args);
 }
+public void SetTextFont(string familyName, int fontSize)
+{
+    var args = new object[]
+    {
+        familyName,
+        fontSize
+    };
+    InvokePresentation("SetTextFont", args);
+}
 public void SetSelectionDistance(int distanceInPixels)
 {
     var args = new object[]
@@ -1269,6 +1278,14 @@ public void SetColorBarColorsAndLabels(Color[] colors, string[] labels)
         labels
     };
     InvokePresentation("SetColorBarColorsAndLabels", args);
+}
+public void SetColorBarTitle(string title)
+{
+    var args = new object[]
+    {
+        title
+    };
+    InvokePresentation("SetColorBarTitle", args);
 }
 public void AddColorBarColorsAndLabels(Color[] colors, string[] labels)
 {

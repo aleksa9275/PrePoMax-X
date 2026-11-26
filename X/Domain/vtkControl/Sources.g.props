@@ -29,6 +29,7 @@
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Widgets/VtkNativeScalarBarColors.cs" Link="Native/Widgets/VtkNativeScalarBarColors.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/VtkNativeStatus.cs" Link="Native/VtkNativeStatus.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Widgets/VtkNativeTextStyle.cs" Link="Native/Widgets/VtkNativeTextStyle.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Native/Widgets/VtkNativeViewFont.cs" Link="Native/Widgets/VtkNativeViewFont.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Widgets/VtkNativeValueLabel.cs" Link="Native/Widgets/VtkNativeValueLabel.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/VtkNativeView.cs" Link="Native/VtkNativeView.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/vtkControl.NativeView.cs" Link="Native/vtkControl.NativeView.cs" />
@@ -40,6 +41,7 @@
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeSectionView.cs" Link="Native/Geometry/VtkNativeSectionView.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeColorSpectrum.cs" Link="Native/Geometry/VtkNativeColorSpectrum.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeExtremeNodes.cs" Link="Native/Geometry/VtkNativeExtremeNodes.cs" />
+    <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeElementQuality.cs" Link="Native/Geometry/VtkNativeElementQuality.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeExportActor.cs" Link="Native/Geometry/VtkNativeExportActor.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeSymbol.cs" Link="Native/Geometry/VtkNativeSymbol.cs" />
     <Compile Include="$(RepositoryRoot)vtkControl/Native/Geometry/VtkNativeSymbolParameters.cs" Link="Native/Geometry/VtkNativeSymbolParameters.cs" />
@@ -99,5 +101,6 @@
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/Legacy/LegacyPolyTopology.cs" Link="X/LegacyPolyTopology.cs" /> <!-- Cell topology conversion of the ActiViz-era vtkMaxActor (3.0.0), used by the headless spatial queries (no view) -->
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/Legacy/PolyDataSink.cs" Link="X/PolyDataSink.cs" /> <!-- Nonrendering data sink for the ActiViz-era topology conversion of the headless spatial queries -->
     <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/AviWriter.Portable.cs" Link="X/AviWriter.Portable.cs" /> <!-- AVI writer of vtkControl without Video for Windows (uncompressed 24-bit DIB frames) -->
+    <Compile Include="$(RepositoryRoot)X/Domain/vtkControl/VtkNativeViewFont.Portable.cs" Link="X/VtkNativeViewFont.Portable.cs" /> <!-- Font files of the view text from the macOS and Linux font folders, keyed by their registry-style names -->
   </ItemGroup>
 </Project>

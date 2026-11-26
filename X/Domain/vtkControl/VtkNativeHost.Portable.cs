@@ -15,6 +15,7 @@ namespace vtkControl.Native
     {
         // Variables
         private VtkNativeView _view;
+        private bool _paintSuspended;
 
 
         // Events
@@ -25,6 +26,8 @@ namespace vtkControl.Native
         public VtkNativeView View { get { return _view; } }
         // The original returns the Win32 child window of VTK to give it the keyboard; Qt does that on these platforms
         public IntPtr ViewWindow { get { return IntPtr.Zero; } }
+        // As the original (3.0.2): no paint shows a half built scene; the owner invalidates the host when it is complete
+        public bool PaintSuspended { get { return _paintSuspended; } set { _paintSuspended = value; } }
 
 
         // Constructors
@@ -114,7 +117,7 @@ namespace vtkControl.Native
         }
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (_view != null) _view.Render();
+            if (_view != null && !_paintSuspended) _view.Render();
         }
         /// <summary>The size of the view in the units the view uses: device pixels on macOS (VTK's Cocoa view renders
         /// DeviceScale pixels per control unit), as OnResize gives it.</summary>

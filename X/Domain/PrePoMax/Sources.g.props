@@ -516,6 +516,8 @@
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewFilmHeatTransfer.cs" Link="Forms/55_Load/ViewFilmHeatTransfer.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewGravityLoad.cs" Link="Forms/55_Load/ViewGravityLoad.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewHydrostaticPressureLoad.cs" Link="Forms/55_Load/ViewHydrostaticPressureLoad.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/PressureLoadTypeEnum.cs" Link="Forms/55_Load/PressureLoadTypeEnum.cs" />
+    <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/IViewPressureLoad.cs" Link="Forms/55_Load/IViewPressureLoad.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewLoad.cs" Link="Forms/55_Load/ViewLoad.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewMomentLoad.cs" Link="Forms/55_Load/ViewMomentLoad.cs" />
     <Compile Include="$(RepositoryRoot)PrePoMax/Forms/55_Load/ViewPreTensionLoad.cs" Link="Forms/55_Load/ViewPreTensionLoad.cs" />

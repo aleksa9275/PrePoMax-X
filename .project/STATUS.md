@@ -2,8 +2,17 @@
 
 _Replace this file as work progresses; history is in git and `.project/history/`._
 
-## Where we are (23 November 2026)
+## Where we are (26 November 2026)
 
+- **M3-3: upstream `58b6a6a1`, macOS first** (in progress). Upstream rewrote its history after 3.0.2 (same files,
+  new IDs: `6703b1cb` = `72a4cb06`); `2a5ca73a` records that (no file changes), `055b6b76` merges the 16 new commits
+  without conflicts. `master` stays at `6703b1cb` (only a force push would make it mirror upstream again). Port: the
+  view font (Windows registry, `windows.h`) split into `VtkNativeViewFont.Windows.cs` and a portable lookup in
+  `X/Domain/vtkControl`, POSIX branch in `vtkNativeFonts.cpp` (macOS draws Arial from the system files); in-place
+  editor rewrites (B023 open: not laid exactly over the view text); `PaintSuspended`, new sources, host contract,
+  retired enum out of the allowlist. vtkNative rebuilt (`artifacts/vtk-mac-arm64-303`). macOS ARM64 local app:
+  check.py six areas pass; `verify-app.py --scripts --legacy-pmx` 12/12 (forms 126/126). Next: preview 7 package.
+  F002 (Accelerate behind PARDISO) recorded as a deferred wishlist item.
 - **M3-2: the solver as the Windows release builds it; the dark appearance** (D069, D070; macOS ARM64). The maintainer
   found PaStiX missing (B018); an audit of the release's `ccx_dynamic.exe` and native files found more gaps than
   PARDISO: external behaviours (B019, fixed), multithreaded SPOOLES (B020) and the Bidirectional Mesh Converter

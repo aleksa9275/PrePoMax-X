@@ -243,6 +243,20 @@ REWRITES = [
     (r'PostMessage\(Handle, WM_VSCROLL, \(IntPtr\)SB_TOP, IntPtr\.Zero\);',
      r'BeginInvoke((System.Windows.Forms.MethodInvoker)VerticalScrollToTop); // WM_VSCROLL SB_TOP, posted',
      'ViewportEditorRichTextBox: the posted scroll to the top runs after the current message, as the posted WM_VSCROLL does.'),
+    # ViewportEditorRichTextBox (3.0.2, upstream 58b6a6a1): the editor laid over the text of the view by rich edit and
+    # GDI metrics. The renderer draws the box as a text box of its own, so these give the box's own layout instead
+    (r'\[DllImport\("user32", CharSet = CharSet\.Auto\)\]\n(\s*)private static extern IntPtr SendMessage\(HandleRef hWnd, int msg, int wParam, ref RECT lParam\);',
+     r'// user32 SendMessage EM_GETRECT (rewritten, see header)\n\1private static IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref RECT lParam) { System.Drawing.Size size = ((Control)hWnd.Wrapper).ClientSize; lParam = new RECT { Left = 0, Top = 0, Right = size.Width, Bottom = size.Height }; return IntPtr.Zero; }',
+     'ViewportEditorRichTextBox reads the formatting rectangle of the rich edit (EM_GETRECT); the renderer formats over the whole client area.'),
+    (r'\[DllImport\("user32", CharSet = CharSet\.Auto\)\]\n(\s*)private static extern IntPtr SendMessage\(HandleRef hWnd, int msg, int wParam, IntPtr lParam\);',
+     r'// user32 SendMessage WM_SETREDRAW (rewritten, see header)\n\1private static IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, IntPtr lParam) => IntPtr.Zero;',
+     'ViewportEditorRichTextBox stops the drawing of the rich edit (WM_SETREDRAW) while it formats; the renderer draws after the call anyway.'),
+    (r'\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool HideCaret\(IntPtr hWnd\);\n(\s*)\[DllImport\("user32\.dll"\)\]\n(\s*)private static extern bool ShowCaret\(IntPtr hWnd\);',
+     r'// user32 HideCaret, ShowCaret (rewritten, see header)\n\1private static bool HideCaret(IntPtr hWnd) => false;\n\2//\n\3private static bool ShowCaret(IntPtr hWnd) => true;',
+     'ViewportEditorRichTextBox hides the Win32 caret while it formats; the renderer owns its caret.'),
+    (r'(private int GetFontDescent\(\)\n(\s*)\{\n)\s*using \(Graphics graphics = CreateGraphics\(\)\)\n[\s\S]*?graphics\.ReleaseHdc\(deviceContext\);\n\s*\}\n\s*\}\n(\s*)\}',
+     r'\1\2    return (int)Math.Ceiling(Font.Size * 0.212f); // GDI tmDescent (rewritten, see header)\n\3}',
+     'ViewportEditorRichTextBox reads the GDI descent of its font (GetTextMetrics); the descent of Arial, 0.212 of the em size, stands in for it.'),
     (r'(?<![\w.])MethodInvoker\b', 'System.Windows.Forms.MethodInvoker',
      '.NET adds System.Reflection.MethodInvoker (net48 has none); the original means the WinForms delegate.'),
 ]

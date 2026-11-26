@@ -81,7 +81,8 @@
         "Native/VtkNativeHost.cs": "Win32 child window and focus messages; X/Domain/vtkControl/VtkNativeHost.Portable.cs takes the native window of a Qt widget",
         "Native/VtkNativeLibrary.Windows.cs": "LoadLibraryEx of kernel32; X/Domain/vtkControl/VtkNativeLibrary.Portable.cs loads libvtkNative through NativeLibrary",
         "vtkMax/LookupTable/vtkMaxLookupTable.Windows.cs": "System.Drawing.Bitmap is Windows only on .NET; X/Domain/vtkControl/TexturePng.cs writes the same texture",
-        "Tools/AviWriter.cs": "Video for Windows (avifil32); X/Domain/vtkControl/AviWriter.Portable.cs writes the same frames uncompressed"
+        "Tools/AviWriter.cs": "Video for Windows (avifil32); X/Domain/vtkControl/AviWriter.Portable.cs writes the same frames uncompressed",
+        "Native/Widgets/VtkNativeViewFont.Windows.cs": "Installed families (System.Drawing) and the font registry; X/Domain/vtkControl/VtkNativeViewFont.Portable.cs reads the same names from the font files"
       },
       "add": {
         "X/Domain/vtkControl/VtkNativeHost.Portable.cs": "Native view host on the native window of a Qt widget (macOS NSView, X11 window)",
@@ -90,7 +91,8 @@
         "X/Domain/vtkControl/Legacy/vtkSelectionGeometry.cs": "Closest-edge picking of the ActiViz-era vtkControl (3.0.0), used by the headless spatial queries (no view)",
         "X/Domain/vtkControl/Legacy/LegacyPolyTopology.cs": "Cell topology conversion of the ActiViz-era vtkMaxActor (3.0.0), used by the headless spatial queries (no view)",
         "X/Domain/vtkControl/Legacy/PolyDataSink.cs": "Nonrendering data sink for the ActiViz-era topology conversion of the headless spatial queries",
-        "X/Domain/vtkControl/AviWriter.Portable.cs": "AVI writer of vtkControl without Video for Windows (uncompressed 24-bit DIB frames)"
+        "X/Domain/vtkControl/AviWriter.Portable.cs": "AVI writer of vtkControl without Video for Windows (uncompressed 24-bit DIB frames)",
+        "X/Domain/vtkControl/VtkNativeViewFont.Portable.cs": "Font files of the view text from the macOS and Linux font folders, keyed by their registry-style names"
       }
     },
     "PrePoMax": {
@@ -611,6 +613,8 @@
         "Forms/55_Load/ViewFilmHeatTransfer.cs",
         "Forms/55_Load/ViewGravityLoad.cs",
         "Forms/55_Load/ViewHydrostaticPressureLoad.cs",
+        "Forms/55_Load/PressureLoadTypeEnum.cs",
+        "Forms/55_Load/IViewPressureLoad.cs",
         "Forms/55_Load/ViewLoad.cs",
         "Forms/55_Load/ViewMomentLoad.cs",
         "Forms/55_Load/ViewPreTensionLoad.cs",

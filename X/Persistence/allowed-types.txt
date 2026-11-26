@@ -720,7 +720,6 @@ CaeMesh|CaeMesh.GmshAlgorithmRecombineEnum
 CaeMesh|CaeMesh.GmshCommandEnum
 CaeMesh|CaeMesh.GmshData
 CaeMesh|CaeMesh.GmshEdge
-CaeMesh|CaeMesh.GmshElementQualityMetricEnum
 CaeMesh|CaeMesh.GmshIdLocation
 CaeMesh|CaeMesh.GmshOptimizeFirstOrderShellEnum
 CaeMesh|CaeMesh.GmshOptimizeFirstOrderSolidEnum

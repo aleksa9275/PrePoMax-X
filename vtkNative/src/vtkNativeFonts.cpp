@@ -5,10 +5,14 @@
 #include "vtkNativeFonts.h"
 #include "vtkNativeError.h"
 
-#ifndef NOMINMAX
-#  define NOMINMAX
+#ifdef _WIN32
+#  ifndef NOMINMAX
+#    define NOMINMAX
+#  endif
+#  include <windows.h>
+#else
+#  include <sys/stat.h>
 #endif
-#include <windows.h>
 
 namespace vtkn
 {
@@ -17,6 +21,7 @@ namespace vtkn
         std::string Files[4];
         unsigned int Generation = 0;
 
+#ifdef _WIN32
         std::wstring ToWide(const std::string& text)
         {
             int length = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.c_str(), -1, nullptr, 0);
@@ -56,6 +61,17 @@ namespace vtkn
             }
             return std::string(path.begin(), path.end());
         }
+#else
+        // PrePoMax-X: FreeType opens UTF-8 paths as they are on macOS and Linux
+        std::string ToFontPath(const std::string& utf8Path)
+        {
+            if (utf8Path.empty()) return std::string();
+            struct stat status;
+            if (stat(utf8Path.c_str(), &status) != 0 || !S_ISREG(status.st_mode))
+                throw Error(VTKN_ERROR_INVALID_ARGUMENT, "The font file does not exist: " + utf8Path);
+            return utf8Path;
+        }
+#endif
     }
 
     void Fonts::SetFiles(const std::string (&files)[4])

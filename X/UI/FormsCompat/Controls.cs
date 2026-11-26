@@ -977,6 +977,17 @@ namespace System.Windows.Forms
             for (int i = 0; i < Math.Min(index, text.Length); i++) if (text[i] == '\n') line++;
             return line;
         }
+        /// <summary>The top left corner of a character in the client area: lines end at line feeds and are a font height
+        /// apart; the column is the measured width of the line before the character.</summary>
+        public Point GetPositionFromCharIndex(int index)
+        {
+            string text = Text ?? "";
+            index = Math.Max(0, Math.Min(index, text.Length));
+            int lineStart = index == 0 ? 0 : text.LastIndexOf('\n', index - 1) + 1;
+            string before = text.Substring(lineStart, index - lineStart).TrimEnd('\r');
+            int x = before.Length == 0 ? 0 : TextRenderer.MeasureText(before, Font).Width;
+            return new Point(x, GetLineFromCharIndex(index) * Font.Height);
+        }
         public int GetFirstCharIndexFromLine(int lineNumber)
         {
             string text = Text;

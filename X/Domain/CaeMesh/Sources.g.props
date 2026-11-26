@@ -102,7 +102,7 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Base/SplitPartMeshData.cs" Link="Meshing/Base/SplitPartMeshData.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Base/ThickenShellMesh.cs" Link="Meshing/Base/ThickenShellMesh.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/GmshCommandEnum.cs" Link="Meshing/Gmsh/Enums/GmshCommandEnum.cs" />
-    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/GmshElementQualityMetricEnum.cs" Link="Meshing/Gmsh/Enums/GmshElementQualityMetricEnum.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Enums/ElementQualityMetricEnum.cs" Link="Enums/ElementQualityMetricEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/GmshOptimizeFirstOrderShellEnum.cs" Link="Meshing/Gmsh/Enums/GmshOptimizeFirstOrderShellEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/GmshOptimizeHighOrderEnum.cs" Link="Meshing/Gmsh/Enums/GmshOptimizeHighOrderEnum.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/Enums/GmshOptimizeFirstOrderSolidEnum.cs" Link="Meshing/Gmsh/Enums/GmshOptimizeFirstOrderSolidEnum.cs" />
@@ -129,6 +129,10 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshCapMesher.cs" Link="Meshing/Gmsh/GmshCapMesher.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshLensGrid.cs" Link="Meshing/Gmsh/GmshLensGrid.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshLensMesher.cs" Link="Meshing/Gmsh/GmshLensMesher.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshMirrorDetector.cs" Link="Meshing/Gmsh/GmshMirrorDetector.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshMirrorNodes.cs" Link="Meshing/Gmsh/GmshMirrorNodes.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshMirrorPlane.cs" Link="Meshing/Gmsh/GmshMirrorPlane.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshMirrorSplits.cs" Link="Meshing/Gmsh/GmshMirrorSplits.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshPoleChart.cs" Link="Meshing/Gmsh/GmshPoleChart.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshQuadMesher.cs" Link="Meshing/Gmsh/GmshQuadMesher.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Gmsh/GmshRingMesher.cs" Link="Meshing/Gmsh/GmshRingMesher.cs" />
@@ -156,6 +160,7 @@
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/TransfiniteFaceDetector.cs" Link="Meshing/Transfinite/TransfiniteFaceDetector.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/TransfiniteSidePair.cs" Link="Meshing/Transfinite/TransfiniteSidePair.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/FourSidedMapping.cs" Link="Meshing/Transfinite/FourSidedMapping.cs" />
+    <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/MirrorCountRows.cs" Link="Meshing/Transfinite/MirrorCountRows.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/ThreeBlockGrid.cs" Link="Meshing/Transfinite/ThreeBlockGrid.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/ThreeBlockMapping.cs" Link="Meshing/Transfinite/ThreeBlockMapping.cs" />
     <Compile Include="$(RepositoryRoot)CaeMesh/Meshing/Transfinite/TransfiniteSideTriple.cs" Link="Meshing/Transfinite/TransfiniteSideTriple.cs" />

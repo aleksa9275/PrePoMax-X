@@ -9,16 +9,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Text;
 using System.IO;
-using Microsoft.Win32;
 
 namespace vtkControl.Native
 {
     // The font of the text of the views: a Windows font the views draw from its files and the forms by its name, so
     // that both show the same glyphs at the same size
-    public static class VtkNativeViewFont
+    public static partial class VtkNativeViewFont
     {
         // Variables
         public const string PreferredFamilyName = "Segoe UI Semilight";
@@ -28,7 +25,6 @@ namespace vtkControl.Native
         public const int MinimumSize = 8;
         public const int MaximumSize = 48;
         public const double LineSpacing = 1.5;
-        private const string FontsKeyName = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts";
         private static readonly string[][] StyleNames = new string[][]
         {
             new string[] { "", " Regular" }, new string[] { " Bold" }, new string[] { " Italic" },
@@ -74,12 +70,9 @@ namespace vtkControl.Native
         {
             Dictionary<string, string> registeredFonts = GetRegisteredFonts();
             List<string> familyNames = new List<string>();
-            using (InstalledFontCollection installedFonts = new InstalledFontCollection())
+            foreach (string familyName in GetInstalledFamilyNames())
             {
-                foreach (FontFamily family in installedFonts.Families)
-                {
-                    if (FindFontFiles(family.Name, registeredFonts)[0] != null) familyNames.Add(family.Name);
-                }
+                if (FindFontFiles(familyName, registeredFonts)[0] != null) familyNames.Add(familyName);
             }
             familyNames.Sort(StringComparer.OrdinalIgnoreCase);
             return familyNames.ToArray();
@@ -132,28 +125,6 @@ namespace vtkControl.Native
                     return false;
             }
             return true;
-        }
-        // The font files of the registry by their registered names, the per user fonts before the machine fonts
-        private static Dictionary<string, string> GetRegisteredFonts()
-        {
-            Dictionary<string, string> registeredFonts =
-                new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            string fontsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
-            foreach (RegistryKey root in new RegistryKey[] { Registry.CurrentUser, Registry.LocalMachine })
-            {
-                using (RegistryKey key = root.OpenSubKey(FontsKeyName))
-                {
-                    if (key == null) continue;
-                    foreach (string name in key.GetValueNames())
-                    {
-                        string fileName = key.GetValue(name) as string;
-                        if (string.IsNullOrEmpty(fileName) || registeredFonts.ContainsKey(name)) continue;
-                        registeredFonts.Add(name, Path.IsPathRooted(fileName) ? fileName
-                                                                              : Path.Combine(fontsFolder, fileName));
-                    }
-                }
-            }
-            return registeredFonts;
         }
         // The files of the regular, bold, italic and bold italic style; a font collection holds more than one face
         // and the views read only the first, so only single font files count
