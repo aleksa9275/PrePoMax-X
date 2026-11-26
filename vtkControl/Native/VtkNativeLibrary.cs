@@ -72,6 +72,7 @@ namespace vtkControl.Native
                 //
                 _logCallback = OnLog;
                 Check(VtkNativeMethods.vtkn_set_log_callback(_logCallback, IntPtr.Zero));
+                VtkNativeViewFont.Install();
                 _loaded = true;
             }
         }

@@ -102,7 +102,8 @@ namespace vtkControl
         private void MirrorWidgetHighlight()
         {
             if (_nativeMirror == null || (_nativeAreas & VtkNativeArea.Widgets) == 0) return;
-            _nativeMirror.SetWidgetHighlight(_widgetHighlightEnabled, _widgetInteractionEnabled);
+            _nativeMirror.SetWidgetHighlight(_widgetHighlightEnabled && !_widgetHighlightSuspended,
+                                             _widgetInteractionEnabled);
         }
         // The mouse settings of the style
         private void MirrorInteractionSettings()
@@ -202,8 +203,7 @@ namespace vtkControl
                                    new int[] { (int)e.Values[2], (int)e.Values[3] }, true);
                     break;
                 case 31:
-                    if (!_widgetHighlightLocked) _nativeMirror.SetWidgetHighlight(_widgetHighlightEnabled,
-                                                                                  _widgetInteractionEnabled);
+                    if (!_widgetHighlightLocked) MirrorWidgetHighlight();
                     break;
             }
         }

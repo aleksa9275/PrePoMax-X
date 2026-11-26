@@ -96,6 +96,7 @@
     <Compile Include="Native\Widgets\VtkNativeScalarBarColors.cs" />
     <Compile Include="Native\VtkNativeStatus.cs" />
     <Compile Include="Native\Widgets\VtkNativeTextStyle.cs" />
+    <Compile Include="Native\Widgets\VtkNativeViewFont.cs" />
     <Compile Include="Native\Widgets\VtkNativeValueLabel.cs" />
     <Compile Include="Native\VtkNativeView.cs" />
     <Compile Include="Native\vtkControl.NativeView.cs">
@@ -111,6 +112,7 @@
     <Compile Include="Native\Geometry\VtkNativeSectionView.cs" />
     <Compile Include="Native\Geometry\VtkNativeColorSpectrum.cs" />
     <Compile Include="Native\Geometry\VtkNativeExtremeNodes.cs" />
+    <Compile Include="Native\Geometry\VtkNativeElementQuality.cs" />
     <Compile Include="Native\Geometry\VtkNativeExportActor.cs" />
     <Compile Include="Native\Geometry\VtkNativeSymbol.cs" />
     <Compile Include="Native\Geometry\VtkNativeSymbolParameters.cs" />

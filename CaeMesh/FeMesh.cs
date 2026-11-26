@@ -1471,13 +1471,23 @@ namespace CaeMesh
             (int, int) edgeKey;
             Dictionary<(int, int), int> newEdgeMidNodeIds = new Dictionary<(int, int), int>();
             Dictionary<int, (int, int)> partNewMidNodeIdEdgeKey = new Dictionary<int, (int, int)>();
+            Dictionary<int, (int, int)> partExistingMidNodeIdEdgeKey = new Dictionary<int, (int, int)>();
             foreach (var meshPart in meshParts)
             {
                 partNewMidNodeIdEdgeKey.Clear();
+                partExistingMidNodeIdEdgeKey.Clear();
                 foreach (var elementId in meshPart.Labels)
                 {
                     element = _elements[elementId];
-                    if (FeElement.IsParabolic(element)) continue;
+                    if (FeElement.IsParabolic(element))
+                    {
+                        foreach (var indices in GetEdgeMidNodeIndices(element))
+                        {
+                            partExistingMidNodeIdEdgeKey[element.NodeIds[indices[2]]] =
+                                GetEdgeKey(element.NodeIds[indices[0]], element.NodeIds[indices[1]]);
+                        }
+                        continue;
+                    }
                     //
                     edgeMidNodeIndices = GetEdgeMidNodeIndices(element);
                     nodeIds = new int[element.NodeIds.Length + edgeMidNodeIndices.Length];
@@ -1501,10 +1511,23 @@ namespace CaeMesh
                 }
                 //
                 ChangeVisualizationOrder(meshPart, edgeMidNodeIds, null);
-                //
-                if (projectMidNodesToGeometry != null && partNewMidNodeIdEdgeKey.Count > 0)
-                    numberOfProjectedNodes += ProjectMidNodesToGeometry(meshPart, partNewMidNodeIdEdgeKey,
-                                                                        projectMidNodesToGeometry);
+                // The midside nodes of the elements that were parabolic already are projected to the geometry again or
+                // moved back to the middle of the straight element edges
+                if (projectMidNodesToGeometry == null)
+                {
+                    foreach (var entry in partExistingMidNodeIdEdgeKey)
+                    {
+                        _nodes[entry.Key] = new FeNode(entry.Key, GetMidNodeCoor(_nodes[entry.Value.Item1],
+                                                                                 _nodes[entry.Value.Item2]));
+                    }
+                }
+                else
+                {
+                    foreach (var entry in partExistingMidNodeIdEdgeKey) partNewMidNodeIdEdgeKey[entry.Key] = entry.Value;
+                    if (partNewMidNodeIdEdgeKey.Count > 0)
+                        numberOfProjectedNodes += ProjectMidNodesToGeometry(meshPart, partNewMidNodeIdEdgeKey,
+                                                                            projectMidNodesToGeometry);
+                }
             }
             //
             AddMidNodesToNodeSets(newEdgeMidNodeIds);
@@ -1542,6 +1565,7 @@ namespace CaeMesh
             // the edge lies on, and the node stays in the middle
             int numberOfProjectedNodes = 0;
             double edgeLength;
+            double[] midCoor;
             (int, int) edgeKey;
             foreach (var entry in nodeIdProjectedCoor)
             {
@@ -1549,8 +1573,8 @@ namespace CaeMesh
                     entry.Value.Length != 3) continue;
                 //
                 edgeLength = GetDistance(_nodes[edgeKey.Item1].Coor, _nodes[edgeKey.Item2].Coor);
-                if (GetDistance(_nodes[entry.Key].Coor, entry.Value) > MaxMidNodeProjectionToEdgeLength * edgeLength)
-                    continue;
+                midCoor = GetMidNodeCoor(_nodes[edgeKey.Item1], _nodes[edgeKey.Item2]);
+                if (GetDistance(midCoor, entry.Value) > MaxMidNodeProjectionToEdgeLength * edgeLength) continue;
                 //
                 _nodes[entry.Key] = new FeNode(entry.Key, entry.Value);
                 numberOfProjectedNodes++;
@@ -4959,7 +4983,8 @@ namespace CaeMesh
             if (sweepMesh != null && sweepMesh.BlockSourceSurfaceIds != null)
             {
                 HashSet<int> sourceSurfaceIds = new HashSet<int>(sweepMesh.BlockSourceSurfaceIds.SelectMany(ids => ids));
-                gmshData.TransfiniteFaces = GetTransfiniteFacesForGmsh(partNames, sweepMesh, sourceSurfaceIds);
+                HashSet<int> structuredFaceIds = GetSweepStructuredFaceIds(partNames, sourceSurfaceIds);
+                gmshData.TransfiniteFaces = GetTransfiniteFacesForGmsh(partNames, sweepMesh, structuredFaceIds);
                 if (sweepMesh.TransfiniteSubmapped)
                 {
                     gmshData.SubmapFaces = GetSubmapFacesForGmsh(partNames, sweepMesh, gmshData.TransfiniteFaces,
@@ -4968,6 +4993,21 @@ namespace CaeMesh
                     gmshData.LensFaces = GetLensFacesForGmsh(partNames, sweepMesh, sourceSurfaceIds);
                 }
             }
+        }
+        /// <summary>
+        /// The faces of a sweep that may be structured: every face of the parts. Which cells the sweep leaves to
+        /// tetrahedra shows only once its blocks are built, so the sweep takes of the faces that are not sources the
+        /// ones that bound no block, and leaves the others to its walls and targets.
+        /// </summary>
+        private HashSet<int> GetSweepStructuredFaceIds(string[] partNames, HashSet<int> sourceSurfaceIds)
+        {
+            HashSet<int> faceIds = new HashSet<int>(sourceSurfaceIds);
+            foreach (var partName in partNames)
+            {
+                BasePart part = _parts[partName];
+                for (int i = 0; i < part.Visualization.FaceCount; i++) faceIds.Add(GmshTopologyId(i, part.PartId));
+            }
+            return faceIds;
         }
         /// <summary>
         /// The structured faces of the parts by the one definition all meshers follow, with gmsh topology ids: of the
@@ -5043,7 +5083,7 @@ namespace CaeMesh
             for (int k = 0; k < edgeIds.Length; k++) edgeIds[k] = GmshTopologyId(loop.EdgeIds[k], partId);
             return new SubmapFace(faceId, loop.VertexNodeIds.ToArray(), edgeIds, loop.EdgeDirections.ToArray(),
                                   loop.VertexAnglesDeg.ToArray(), loop.EdgeTurns == null ? null : loop.EdgeTurns.ToArray(),
-                                  holes, loop.IsRound);
+                                  holes, loop.IsRound, loop.HasUnequalRoundEdges);
         }
         /// <summary>
         /// The ring faces with gmsh topology ids, other than the structured faces already found: of the shells, or, where
