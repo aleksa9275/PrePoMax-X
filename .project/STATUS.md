@@ -11,7 +11,13 @@ _Replace this file as work progresses; history is in git and `.project/history/`
   `X/Domain/vtkControl`, POSIX branch in `vtkNativeFonts.cpp` (macOS draws Arial from the system files); in-place
   editor rewrites (B023 open: not laid exactly over the view text); `PaintSuspended`, new sources, host contract,
   retired enum out of the allowlist. vtkNative rebuilt (`artifacts/vtk-mac-arm64-303`). macOS ARM64 local app:
-  check.py six areas pass; `verify-app.py --scripts --legacy-pmx` 12/12 (forms 126/126). Next: preview 7 package.
+  check.py six areas pass; `verify-app.py --scripts --legacy-pmx` 12/12 (forms 126/126). Published as macOS
+  preview 7 (`release/macos-arm64-preview` `3b91189b`, source `f759bf90`, zip `ad46753a…`); the unpacked package under
+  `sandbox-exec` (repository, Homebrew, .NET denied; fresh HOME): `verify-app.py --scripts --legacy-pmx` 12/12 (app probe
+  16/16; forms 126/126, geometry 4/4, results 9/9, elements 5/5), `verify_solvers.py` on 4 and 8 threads as preview 6
+  (only the recorded thin-plate mixed-precision case differs); ccx unchanged (`87f99211…`). The 3.0.1 release data
+  (`materials.lib`, Models, the ODB script) came from preview 6's bundle, all 67 files checked against its `bundle.json`
+  (the extracted release in /tmp had been cleaned). Not run: upstream's full suite. Next: Linux.
   F002 (Accelerate behind PARDISO) recorded as a deferred wishlist item.
 - **M3-2: the solver as the Windows release builds it; the dark appearance** (D069, D070; macOS ARM64). The maintainer
   found PaStiX missing (B018); an audit of the release's `ccx_dynamic.exe` and native files found more gaps than
