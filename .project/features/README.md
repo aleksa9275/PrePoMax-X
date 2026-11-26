@@ -18,3 +18,4 @@ Priority and scheduling remain unset unless the maintainer assigns them.
 | ID | Proposal | Status | Initial scope |
 |---|---|---|---|
 | F001 | [Automatic shell-junction connectivity](F001-automatic-shell-connectivity.md) | Proposed | Shell T-profile attached to a plate; remove manual compound-part preparation where practical |
+| F002 | [Apple Accelerate behind the PARDISO option](F002-accelerate-behind-pardiso.md) | Deferred | macOS wishlist: divergent; must be marked in the release and the software |
