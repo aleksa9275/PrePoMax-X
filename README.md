@@ -2,11 +2,11 @@
 
 This branch holds a **binary preview** of PrePoMax-X for macOS on Apple Silicon (ARM64). It contains no source
 code. The source is the [`research/native-feasibility`](https://github.com/aleksa9275/PrePoMax-X/tree/research/native-feasibility)
-branch of this repository at commit `5e612cb5` (full: see `bundle.json` inside the app).
+branch of this repository at commit `f759bf90` (full: see `bundle.json` inside the app).
 
 PrePoMax-X ports [PrePoMax](https://github.com/PrePoMax/PrePoMax), the open-source pre- and post-processor for the
 CalculiX finite element solver, to macOS, Linux and Windows. This is **not** a rewrite: the original PrePoMax code
-(3.0.2, upstream `master` at `6703b1cb`, not released by upstream yet) runs unchanged on .NET 10. That covers its models, meshing, analysis set-up, result handling, forms and 3D view.
+(3.0.2, upstream `master` at `58b6a6a1`, not released by upstream yet) runs unchanged on .NET 10. That covers its models, meshing, analysis set-up, result handling, forms and 3D view.
 Only the Windows-specific layer is replaced: Windows Forms becomes a cross-platform control model drawn with Avalonia,
 and the 3D view runs on upstream's VTK 9.7 native port.
 
@@ -15,6 +15,19 @@ and the 3D view runs on upstream's VTK 9.7 native port.
 
 A Linux preview of the same app (x86-64 and ARM64, built from source with one command) is on the branch
 [`release/linux-preview`](https://github.com/aleksa9275/PrePoMax-X/tree/release/linux-preview).
+
+### Changes in preview 7 (source `f759bf90`, 26 November)
+
+- **Upstream's work after 3.0.2** (upstream `master` `58b6a6a1`, 16 commits):
+  - **Element quality:** the standard quality metrics, the mesh coloured by element quality, and an editable colour bar
+    title.
+  - **Pressure loads:** pressure, hydrostatic pressure and imported pressure are now one Pressure load type.
+  - **Structured meshing:** sweeps, mirrored parts and round holes are meshed better.
+  - **Change Element Order:** midside nodes are projected or straightened for parts that are already parabolic.
+  - **View text** is drawn with a chosen system font: Segoe UI where it is installed, otherwise Arial, which comes with
+    macOS.
+- **The in-place text editor** (annotations, legend limits, colour bar title) opens at the text's position but is not
+  yet laid exactly over the view text as on Windows (B023 in the source repository). Editing works.
 
 ### Changes in preview 6 (source `5e612cb5`, 23 November)
 
@@ -119,7 +132,7 @@ lacked would have made a check fail.
 - **Projects from older versions:** PrePoMax 3.0.1's example models (`Profile`, `Bearing_bracket`) and a 2.5.1
   project open with their parts, materials, steps and units.
 - **Upstream's full 3.0.2 test suite** (`Run_Tests.py`, 108 runs; on preview 4's bundle just before the reader fixes,
-  which no suite script touches; not rerun for preview 5): **77 pass** (preview 3: 61 of 81). The others need Windows (environment variables,
+  which no suite script touches; not rerun since): **77 pass** (preview 3: 61 of 81). The others need Windows (environment variables,
   PowerShell, named pipes) or the automation server, which does not run on macOS or Linux yet, or read PrePoMax's
   source code. About 20, mostly new 3.0.2 meshing tests, give meshes or loads that differ from upstream's Windows
   baselines; they are being investigated (B016 in the source repository).
